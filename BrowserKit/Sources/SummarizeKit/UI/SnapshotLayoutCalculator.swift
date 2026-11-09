@@ -37,6 +37,9 @@ protocol SnapshotLayoutCalculator {
 
     /// Calculate transform for the `viewDidAppear` state
     func calculateViewDidAppearTransform(context: LayoutContext) -> CGAffineTransform
+
+    /// Calculate transform for lifting the background blobs to the top half, above the loading and info snapshot
+    func calculateBlobsTransform(context: LayoutContext) -> CGAffineTransform
 }
 
 /// Default implementation of `SnapshotLayoutCalculator`
@@ -45,11 +48,13 @@ struct DefaultSnapshotLayoutCalculator: SnapshotLayoutCalculator {
         let summaryTransformBottomPaddingPortrait: CGFloat
         let transformPercentagePortrait: CGFloat
         let transformPercentageLandscape: CGFloat
+        let tabSnapshotCornerRadius: CGFloat
 
         static let `default` = Configuration(
             summaryTransformBottomPaddingPortrait: 110.0,
             transformPercentagePortrait: 0.5,
-            transformPercentageLandscape: 1.0
+            transformPercentageLandscape: 1.0,
+            tabSnapshotCornerRadius: DefaultAnimationController.tabSnapshotCornerRadius
         )
     }
 
@@ -98,6 +103,13 @@ struct DefaultSnapshotLayoutCalculator: SnapshotLayoutCalculator {
         configuration.transformPercentageLandscape :
         configuration.transformPercentagePortrait
         return CGAffineTransform(translationX: 0, y: context.viewSize.height * multiplier)
+    }
+
+    func calculateBlobsTransform(context: LayoutContext) -> CGAffineTransform {
+        guard !context.isLandscapeLayout else { return .identity }
+        let snapshotTop = context.viewSize.height * configuration.transformPercentagePortrait
+        let y = -snapshotTop + configuration.tabSnapshotCornerRadius + context.tabSnapshotTopOffset
+        return CGAffineTransform(translationX: 0, y: y)
     }
 
     private func calculateHiddenTransform(context: LayoutContext) -> CGAffineTransform {

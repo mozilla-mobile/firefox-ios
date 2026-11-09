@@ -186,7 +186,7 @@ public final class SummarizeController: UIViewController, Themeable {
     override public func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         guard !isShowingSummary else { return }
-        backgroundEffectView.moveBlobsToTopHalf()
+        backgroundEffectView.transformBlobs(snapshotLayoutCalculator.calculateBlobsTransform(context: layoutContext))
     }
 
     override public func viewDidAppear(_ animated: Bool) {
@@ -235,10 +235,10 @@ public final class SummarizeController: UIViewController, Themeable {
     private func setupTitleAnimation() {
         summaryView.onTitleVisibilityChange = { [weak self] isTitleVisible in
             let navigationTitleAlpha: CGFloat = isTitleVisible ? 0.0 : 1.0
-            guard let self, titleLabel.alpha != navigationTitleAlpha else { return }
+            guard self?.titleLabel.alpha != navigationTitleAlpha else { return }
             UIView.animate(withDuration: UX.titleFadeDuration) {
-                self.titleLabel.alpha = navigationTitleAlpha
-                self.titleLabel.text = isTitleVisible ? nil : self.webView.title
+                self?.titleLabel.alpha = navigationTitleAlpha
+                self?.titleLabel.text = isTitleVisible ? nil : self?.webView.title
             }
         }
     }
@@ -333,6 +333,7 @@ public final class SummarizeController: UIViewController, Themeable {
     }
 
     private func summarize() {
+        backgroundEffectView.setBlobsPaused(false)
         loadingStackView.alpha = 1.0
         startShimmeringLoadingLabel()
         infoView.alpha = 0.0

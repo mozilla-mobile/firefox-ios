@@ -33,13 +33,14 @@ protocol AnimationController {
 
 /// The controller responsible to animate the states of `SummarizeController`
 struct DefaultAnimationController: AnimationController {
+    static let tabSnapshotCornerRadius: CGFloat = 32.0
+
     private enum UX {
         @MainActor // `CAMediaTimingFunction` is not Sendable, so isolate it to the main actor
         static let initialTransformTimingCurve = CAMediaTimingFunction(controlPoints: 1, 0, 0, 1)
         static let snapshotTranslationKeyPath = "transform.translation.y"
         static let snapshotAnimationKey = "snapshotAnimation"
         static let initialTransformAnimationDuration = 0.9
-        static let tabSnapshotCornerRadius: CGFloat = 32.0
         static let animationDuration: CGFloat = 0.3
     }
 
@@ -66,7 +67,7 @@ struct DefaultAnimationController: AnimationController {
         snapshotContainer.transform = snapshotTransform
 
         UIView.animate(withDuration: UX.initialTransformAnimationDuration) {
-            snapshotView.layer.cornerRadius = UX.tabSnapshotCornerRadius
+            snapshotView.layer.cornerRadius = Self.tabSnapshotCornerRadius
             loadingStackView.alpha = 1.0
         } completion: { _ in
             completion()
@@ -81,7 +82,7 @@ struct DefaultAnimationController: AnimationController {
         // Animate the summary view only if it wasn't showed yet
         guard summaryView.alpha == 0.0 else { return }
         triggerImpactHaptics()
-        backgroundView.showResult()
+        backgroundView.showResult(blobsRevealDelay: UX.animationDuration)
 
         UIView.animate(withDuration: UX.animationDuration) {
             borderOverlayController.willMove(toParent: nil)
@@ -108,6 +109,7 @@ struct DefaultAnimationController: AnimationController {
     ) {
         loadingStackView.alpha = 0
         backgroundView.hideResult(duration: UX.animationDuration)
+        backgroundView.setBlobsPaused(true)
         UIView.animate(withDuration: UX.animationDuration) {
             summaryView.alpha = 0.0
             infoView.alpha = 1.0
