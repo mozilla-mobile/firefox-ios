@@ -27,6 +27,7 @@ public final class AIAnswerCardView: UIView, ThemeApplicable {
     }
     private let headerLabel: UILabel = .build {
         $0.font = FXFontStyles.Bold.caption1.scaledFont()
+        $0.numberOfLines = 0
         $0.adjustsFontForContentSizeCategory = true
     }
     private let bodyLabel: UILabel = .build {
