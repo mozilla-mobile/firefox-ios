@@ -82,6 +82,15 @@ final class SettingScreen {
         okButton.waitAndTap()
     }
 
+    /// From the Settings root, opens Data Management and then Website Data.
+    func openWebsiteData() {
+        let settingsTable = sel.SETTINGS_TABLE.element(in: app)
+        let dataManagementCell = settingsTable.cells[sel.CLEAR_DATA_CELL.value]
+        BaseTestCase().scrollToElement(dataManagementCell, swipeableElement: settingsTable)
+        dataManagementCell.waitAndTap()
+        sel.WEBSITE_DATA_CELL.element(in: app).waitAndTap()
+    }
+
     func tryTapClearPrivateDataButton() {
         clearDataCell.waitAndTap()
     }

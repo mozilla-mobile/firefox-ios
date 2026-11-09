@@ -328,8 +328,36 @@ extension XCUIElement {
 
     /// Mean relative luminance of the element's on-screen pixels, from 0 (black) to 1 (white).
     func averageLuminance() -> Double {
-        guard let image = screenshot().image.cgImage else { return 0 }
-        let side = 32
+        let pixels = sampledRGBAPixels()
+        guard !pixels.isEmpty else { return 0 }
+        var total = 0.0
+        for offset in stride(from: 0, to: pixels.count, by: 4) {
+            total += 0.2126 * Double(pixels[offset])
+                + 0.7152 * Double(pixels[offset + 1])
+                + 0.0722 * Double(pixels[offset + 2])
+        }
+        return total / Double(pixels.count / 4) / 255
+    }
+
+    /// Share of the element's on-screen pixels whose HSV saturation is above `threshold`, from 0 to 1.
+    /// Near 0 means the element is drawn in grays or pale tints only.
+    func saturatedPixelRatio(threshold: Double = 0.3) -> Double {
+        let pixels = sampledRGBAPixels()
+        guard !pixels.isEmpty else { return 0 }
+        var saturated = 0
+        for offset in stride(from: 0, to: pixels.count, by: 4) {
+            let channels = pixels[offset..<offset + 3].map { Double($0) }
+            guard let maximum = channels.max(), let minimum = channels.min(), maximum > 0 else { continue }
+            if (maximum - minimum) / maximum > threshold {
+                saturated += 1
+            }
+        }
+        return Double(saturated) / Double(pixels.count / 4)
+    }
+
+    /// The element's screenshot scaled down to `side` x `side` RGBA bytes, or empty if it can't be drawn.
+    private func sampledRGBAPixels(side: Int = 32) -> [UInt8] {
+        guard let image = screenshot().image.cgImage else { return [] }
         var pixels = [UInt8](repeating: 0, count: side * side * 4)
         let drawn = pixels.withUnsafeMutableBytes { buffer -> Bool in
             guard let context = CGContext(
@@ -344,14 +372,7 @@ extension XCUIElement {
             context.draw(image, in: CGRect(x: 0, y: 0, width: side, height: side))
             return true
         }
-        guard drawn else { return 0 }
-        var total = 0.0
-        for offset in stride(from: 0, to: pixels.count, by: 4) {
-            total += 0.2126 * Double(pixels[offset])
-                + 0.7152 * Double(pixels[offset + 1])
-                + 0.0722 * Double(pixels[offset + 2])
-        }
-        return total / Double(side * side) / 255
+        return drawn ? pixels : []
     }
 
     /// Waits until `averageLuminance()` satisfies `condition`. Returns false on timeout instead of failing.

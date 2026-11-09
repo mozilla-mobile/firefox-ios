@@ -23,6 +23,7 @@ protocol SettingsSelectorsSet {
     var CREDIT_CARDS_CELL: Selector { get }
     var ADDRESS_CELL: Selector { get }
     var CLEAR_PRIVATE_DATA_CELL: Selector { get }
+    var WEBSITE_DATA_CELL: Selector { get }
     var ALERT_OK_BUTTON: Selector { get }
 
     // Display / Theme
@@ -188,6 +189,12 @@ struct SettingsSelectors: SettingsSelectorsSet {
     let CLEAR_PRIVATE_DATA_CELL = Selector.tableCellById(
         "ClearPrivateData",
         description: "Cell to initiate clearing private data",
+        groups: ["settings", "privacy"]
+    )
+
+    let WEBSITE_DATA_CELL = Selector.tableCellById(
+        AccessibilityIdentifiers.Settings.ClearData.websiteDataSection,
+        description: "Data Management cell that opens Website Data",
         groups: ["settings", "privacy"]
     )
 
@@ -447,7 +454,7 @@ struct SettingsSelectors: SettingsSelectorsSet {
         [SETTINGS_TABLE, MAIN_SETTINGS_TABLE, DONE_BUTTON, SETTINGS_TITLE, AUTOFILLS_PASSWORDS_CELL, CLEAR_DATA_CELL,
          CLOSE_PRIVATE_TABS_SWITCH, CONTENT_BLOCKER_CELL, NOTIFICATIONS_CELL,
          PRIVACY_POLICY_CELL, LOGINS_CELL, CREDIT_CARDS_CELL, ADDRESS_CELL,
-         CLEAR_PRIVATE_DATA_CELL, ALERT_OK_BUTTON, NEW_TAB_CELL, TITLE, TABLE, BROWSING_LINKS_SECTION,
+         CLEAR_PRIVATE_DATA_CELL, WEBSITE_DATA_CELL, ALERT_OK_BUTTON, NEW_TAB_CELL, TITLE, TABLE, BROWSING_LINKS_SECTION,
          NAVIGATIONBAR, CONNECT_SETTING, BLOCK_POPUPS_SWITCH, TOOLBAR_CELL, BOTTOM_TOOLBAR_BUTTON, TOP_TOOLBAR_BUTTON,
          NAVIGATION_TOOLBAR_HOME_BUTTON, NAVIGATION_TOOLBAR_NEW_TAB_BUTTON, DEFAULT_BROWSER_CELL,
          SEARCH_CELL, BROWSING_CELL_TITLE, BLOCK_IMAGES_SWITCH_TITLE, NO_IMAGE_MODE_STATUS_SWITCH,

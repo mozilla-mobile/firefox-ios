@@ -21,10 +21,13 @@ protocol TrackingProtectionSelectorsSet {
     var PANEL_CLOSE_BUTTON: Selector { get }
     var PANEL_TRACKING_PROTECTION_SWITCH: Selector { get }
     var PANEL_PRIVACY_SETTINGS_BUTTON: Selector { get }
+    var PANEL_FOX_IMAGE: Selector { get }
     var PANEL_CONNECTION_DETAILS_TITLE: Selector { get }
     var PANEL_CONNECTION_DETAILS_STATUS: Selector { get }
     var PANEL_TRACKERS_BUTTON: Selector { get }
     var PANEL_CLEAR_COOKIES_BUTTON: Selector { get }
+    var CLEAR_COOKIES_ALERT: Selector { get }
+    var CLEAR_COOKIES_TOAST: Selector { get }
     var SETTINGS_NAVIGATION_BAR: Selector { get }
     var SETTINGS_BACK_BUTTON: Selector { get }
     var SETTINGS_DONE_BUTTON: Selector { get }
@@ -146,6 +149,12 @@ struct TrackingProtectionSelectors: TrackingProtectionSelectorsSet {
         groups: ["privacy", "trackingProtection"]
     )
 
+    let PANEL_FOX_IMAGE = Selector.imageById(
+        IDs.mainScreen.foxImage,
+        description: "Fox illustration in the tracking protection panel, grayscale when protections are off",
+        groups: ["privacy", "trackingProtection"]
+    )
+
     let PANEL_CONNECTION_DETAILS_TITLE = Selector.staticTextId(
         IDs.mainScreen.connectionDetailsTitleLabel,
         description: "Title next to the fox illustration in the tracking protection panel",
@@ -167,6 +176,18 @@ struct TrackingProtectionSelectors: TrackingProtectionSelectorsSet {
     let PANEL_CLEAR_COOKIES_BUTTON = Selector.buttonId(
         IDs.mainScreen.clearCookiesButton,
         description: "Clear cookies and site data button in the tracking protection panel",
+        groups: ["privacy", "trackingProtection"]
+    )
+
+    let CLEAR_COOKIES_ALERT = Selector.alertByTitle(
+        String.Menu.EnhancedTrackingProtection.clearDataAlertTitle,
+        description: "Confirmation alert opened by Clear cookies and site data",
+        groups: ["privacy", "trackingProtection"]
+    )
+
+    let CLEAR_COOKIES_TOAST = Selector.staticTextByLabel(
+        String.Menu.EnhancedTrackingProtection.clearDataToastMessage,
+        description: "Toast shown after clearing cookies and site data from the panel",
         groups: ["privacy", "trackingProtection"]
     )
 
@@ -206,8 +227,8 @@ struct TrackingProtectionSelectors: TrackingProtectionSelectorsSet {
          DETAILS_CERTIFICATES_BUTTON, CERTIFICATES_TITLE_LABEL, CERTIFICATES_TABLE, PANEL_TITLE_LABEL,
          PANEL_SUBTITLE_LABEL,
          PANEL_CLOSE_BUTTON, PANEL_TRACKING_PROTECTION_SWITCH, PANEL_PRIVACY_SETTINGS_BUTTON,
-         PANEL_CONNECTION_DETAILS_TITLE, PANEL_CONNECTION_DETAILS_STATUS, PANEL_TRACKERS_BUTTON,
-         PANEL_CLEAR_COOKIES_BUTTON,
+         PANEL_FOX_IMAGE, PANEL_CONNECTION_DETAILS_TITLE, PANEL_CONNECTION_DETAILS_STATUS, PANEL_TRACKERS_BUTTON,
+         PANEL_CLEAR_COOKIES_BUTTON, CLEAR_COOKIES_ALERT, CLEAR_COOKIES_TOAST,
          SETTINGS_NAVIGATION_BAR, SETTINGS_BACK_BUTTON, SETTINGS_DONE_BUTTON, SETTINGS_STANDARD_CELL,
          SETTINGS_STRICT_CELL]
     }
