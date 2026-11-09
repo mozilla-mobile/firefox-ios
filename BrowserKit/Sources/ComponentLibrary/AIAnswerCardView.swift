@@ -107,7 +107,6 @@ public final class AIAnswerCardView: UIView, ThemeApplicable {
     private func applyAccessibilityIdentifiers(headerA11yId: String?, bodyA11yId: String?) {
         headerLabel.accessibilityIdentifier = headerA11yId
         bodyLabel.accessibilityIdentifier = bodyA11yId
-        setNeedsLayout()
     }
 
     /// Fills the header text with the AI gradient, since a label can't take a gradient text color directly.
