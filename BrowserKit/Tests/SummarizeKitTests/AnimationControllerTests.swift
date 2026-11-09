@@ -8,8 +8,7 @@ import ComponentLibrary
 
 @MainActor
 final class AnimationControllerTests: XCTestCase {
-    private var loadingLabel: UILabel!
-    private var loadingLogoView: UIView!
+    private var loadingStackView: UIView!
     private var parentViewController: UIViewController!
     private var snapshotContainer: UIView!
     private var snapshotView: UIView!
@@ -21,8 +20,7 @@ final class AnimationControllerTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        loadingLabel = UILabel()
-        loadingLogoView = UIView()
+        loadingStackView = UIView()
         parentViewController = UIViewController()
         snapshotContainer = UIView()
         snapshotView = UIView()
@@ -33,8 +31,7 @@ final class AnimationControllerTests: XCTestCase {
     }
 
     override func tearDown() async throws {
-        loadingLabel = nil
-        loadingLogoView = nil
+        loadingStackView = nil
         parentViewController = nil
         snapshotContainer = nil
         snapshotView = nil
@@ -51,8 +48,7 @@ final class AnimationControllerTests: XCTestCase {
         controller.animateViewDidAppear(snapshotTransform: transform) {}
 
         XCTAssertEqual(snapshotContainer.transform, transform)
-        XCTAssertEqual(loadingLabel.alpha, 1.0)
-        XCTAssertEqual(loadingLogoView.alpha, 1.0)
+        XCTAssertEqual(loadingStackView.alpha, 1.0)
         XCTAssertNotEqual(snapshotView.layer.cornerRadius, 0.0)
     }
 
@@ -72,8 +68,7 @@ final class AnimationControllerTests: XCTestCase {
             }) {}
 
         XCTAssertEqual(summaryView.alpha, 1.0)
-        XCTAssertEqual(loadingLabel.alpha, 0.0)
-        XCTAssertEqual(loadingLogoView.alpha, 0.0)
+        XCTAssertEqual(loadingStackView.alpha, 0.0)
         XCTAssertEqual(snapshotContainer.transform, transform)
         XCTAssertTrue(applyThemeCalled)
         XCTAssertNil(borderOverlayController.parent)
@@ -102,8 +97,7 @@ final class AnimationControllerTests: XCTestCase {
 
         XCTAssertEqual(infoView.alpha, 1.0)
         XCTAssertEqual(summaryView.alpha, 0.0)
-        XCTAssertEqual(loadingLabel.alpha, 0.0)
-        XCTAssertEqual(loadingLogoView.alpha, 0.0)
+        XCTAssertEqual(loadingStackView.alpha, 0.0)
         XCTAssertEqual(snapshotContainer.transform, transform)
     }
 
@@ -122,8 +116,7 @@ final class AnimationControllerTests: XCTestCase {
         controller.animateToDismiss(snapshotTransform: transform) {}
 
         XCTAssertEqual(infoView.alpha, 0.0)
-        XCTAssertEqual(loadingLabel.alpha, 0.0)
-        XCTAssertEqual(loadingLogoView.alpha, 0.0)
+        XCTAssertEqual(loadingStackView.alpha, 0.0)
         XCTAssertEqual(snapshotContainer.transform, transform)
         XCTAssertEqual(snapshotView.layer.cornerRadius, 0.0)
     }
@@ -132,8 +125,7 @@ final class AnimationControllerTests: XCTestCase {
 
     private func createSubject() -> DefaultAnimationController {
         return DefaultAnimationController(
-            loadingLabel: loadingLabel,
-            loadingLogoView: loadingLogoView,
+            loadingStackView: loadingStackView,
             snapshotContainer: snapshotContainer,
             snapshotView: snapshotView,
             summaryView: summaryView,

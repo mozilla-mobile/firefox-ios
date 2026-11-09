@@ -35,8 +35,7 @@ public final class SummarizeController: UIViewController, Themeable {
     }
 
     lazy var animationController: AnimationController = DefaultAnimationController(
-        loadingLabel: loadingLabel,
-        loadingLogoView: loadingLogoView,
+        loadingStackView: loadingStackView,
         snapshotContainer: tabSnapshotContainer,
         snapshotView: tabSnapshot,
         summaryView: summaryView,
@@ -60,7 +59,6 @@ public final class SummarizeController: UIViewController, Themeable {
     // MARK: - UI properties
     private let loadingLabel: UILabel = .build {
         $0.font = FXFontStyles.Bold.subheadline.scaledFont()
-        $0.alpha = 0
         $0.numberOfLines = 0
         $0.textAlignment = .center
         $0.adjustsFontForContentSizeCategory = true
@@ -68,13 +66,12 @@ public final class SummarizeController: UIViewController, Themeable {
     private let loadingLogoView: UIImageView = .build {
         $0.image = UIImage(named: StandardImageIdentifiers.Large.logoFirefox)?.withRenderingMode(.alwaysTemplate)
         $0.contentMode = .scaleAspectFit
-        $0.alpha = 0
-        $0.isAccessibilityElement = false
     }
     private lazy var loadingStackView: UIStackView = .build {
         $0.axis = .vertical
         $0.alignment = .center
         $0.spacing = UX.loadingStackSpacing
+        $0.alpha = 0
         $0.addArrangedSubview(self.loadingLogoView)
         $0.addArrangedSubview(self.loadingLabel)
     }
@@ -271,7 +268,7 @@ public final class SummarizeController: UIViewController, Themeable {
 
         makeTopHalfBoundGuideBottomAnchor()
         backgroundEffectView.pinToSuperview()
-//        setContentScrollView(summaryView.scrollView, for: .top)
+        setContentScrollView(summaryView.scrollView, for: .top)
         NSLayoutConstraint.activate([
             topHalfBoundGuide.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             topHalfBoundGuide.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -336,8 +333,7 @@ public final class SummarizeController: UIViewController, Themeable {
     }
 
     private func summarize() {
-        loadingLabel.alpha = 1.0
-        loadingLogoView.alpha = 1.0
+        loadingStackView.alpha = 1.0
         startShimmeringLoadingLabel()
         infoView.alpha = 0.0
         viewModel.summarize(
@@ -358,6 +354,7 @@ public final class SummarizeController: UIViewController, Themeable {
         isShowingSummary = true
         tabSnapshotContainer.addGestureRecognizer(tabSnapshotPanGesture)
         configureSummaryView(summary: summary)
+        loadingLabel.stopShimmering()
 
         animationController.animateToSummary(
             snapshotTransform: snapshotLayoutCalculator.calculateSummaryTransform(context: layoutContext),

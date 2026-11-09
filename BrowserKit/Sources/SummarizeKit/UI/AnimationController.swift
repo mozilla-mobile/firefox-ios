@@ -43,8 +43,7 @@ struct DefaultAnimationController: AnimationController {
         static let animationDuration: CGFloat = 0.3
     }
 
-    let loadingLabel: UILabel
-    let loadingLogoView: UIView
+    let loadingStackView: UIView
     let snapshotContainer: UIView
     let snapshotView: UIView
     let summaryView: UIView
@@ -68,8 +67,7 @@ struct DefaultAnimationController: AnimationController {
 
         UIView.animate(withDuration: UX.initialTransformAnimationDuration) {
             snapshotView.layer.cornerRadius = UX.tabSnapshotCornerRadius
-            loadingLabel.alpha = 1.0
-            loadingLogoView.alpha = 1.0
+            loadingStackView.alpha = 1.0
         } completion: { _ in
             completion()
         }
@@ -91,9 +89,7 @@ struct DefaultAnimationController: AnimationController {
             borderOverlayController.removeFromParent()
             snapshotContainer.transform = snapshotTransform
             summaryView.alpha = 1.0
-            loadingLabel.alpha = 0.0
-            loadingLogoView.alpha = 0.0
-            loadingLabel.stopShimmering()
+            loadingStackView.alpha = 0.0
             applyTheme()
         } completion: { _ in
             completion()
@@ -110,8 +106,7 @@ struct DefaultAnimationController: AnimationController {
         snapshotTransform: CGAffineTransform,
         completion: @escaping () -> Void
     ) {
-        loadingLabel.alpha = 0
-        loadingLogoView.alpha = 0
+        loadingStackView.alpha = 0
         backgroundView.hideResult(duration: UX.animationDuration)
         UIView.animate(withDuration: UX.animationDuration) {
             summaryView.alpha = 0.0
@@ -135,8 +130,7 @@ struct DefaultAnimationController: AnimationController {
     ) {
         UIView.animate(withDuration: UX.animationDuration) {
             infoView.alpha = 0.0
-            loadingLabel.alpha = 0.0
-            loadingLogoView.alpha = 0.0
+            loadingStackView.alpha = 0.0
             snapshotContainer.transform = snapshotTransform
             snapshotView.layer.cornerRadius = 0.0
         } completion: { _ in
