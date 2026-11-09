@@ -7,7 +7,7 @@ import UIKit
 
 final class SummaryTitleCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private enum UX {
-        static let topPadding: CGFloat = 34.0
+        static let topPadding: CGFloat = 32.0
         static let bottomPadding: CGFloat = 24.0
         static let horizontalPadding: CGFloat = 44.0
     }

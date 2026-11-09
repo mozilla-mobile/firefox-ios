@@ -27,7 +27,7 @@ final class QuickAnswersContentView: UIView, UIScrollViewDelegate, ThemeApplicab
         static let audioWaveformSize = CGSize(width: 18.0, height: 25.0)
         static let audioWaveformTopPadding: CGFloat = 36.0
         static let audioWaveformBottomSpacing: CGFloat = 36.0
-        static let resultTranscriptTopPadding: CGFloat = 34.0
+        static let resultTranscriptTopPadding: CGFloat = 32.0
         /// Added to `horizontalPadding` so the transcript sits 44pt from the edges.
         static let transcriptExtraHorizontalPadding: CGFloat = 20.0
         /// Moves the transcript up so it sits `resultTranscriptTopPadding` from the top once the waveform is hidden.

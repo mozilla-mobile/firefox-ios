@@ -305,6 +305,7 @@ public final class AIBackgroundEffectView: UIView, ThemeApplicable {
     private enum UX {
         static let resultBlobsAlpha: CGFloat = 0.5
         static let resultFadeDuration: TimeInterval = 0.3
+        static let blobsRevealDuration: TimeInterval = 0.2
         static let presentationBlobsOffset: CGFloat = 50.0
         static let topTrailingGlowOpacities: [CGFloat] = [0.25, 0.1, 0.0]
         /// Vertical wash laid over the blobs once a result is shown, so the answer stays readable.
@@ -380,8 +381,6 @@ public final class AIBackgroundEffectView: UIView, ThemeApplicable {
         topTrailingGlow.endPoint = CGPoint(x: 0.0, y: 1.0)
     }
 
-    /// Moves the blobs up to fill the top half of the view, until `showResult()` is called. Portrait only, so it
-    /// has to be called again when the view size changes.
     public func transformBlobs(_ transform: CGAffineTransform) {
         blobsHostingController.view.transform = transform
     }
@@ -396,7 +395,7 @@ public final class AIBackgroundEffectView: UIView, ThemeApplicable {
         UIView.animate(withDuration: UX.resultFadeDuration, delay: 0.0, options: .curveEaseInOut) { [self] in
             resultWash.alpha = 1.0
         }
-        UIView.animate(withDuration: 0.2, delay: blobsRevealDelay, options: .curveEaseInOut) {
+        UIView.animate(withDuration: UX.blobsRevealDuration, delay: blobsRevealDelay, options: .curveEaseInOut) {
             blobsView.alpha = UX.resultBlobsAlpha
         }
     }
