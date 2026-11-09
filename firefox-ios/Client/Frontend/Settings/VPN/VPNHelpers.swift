@@ -11,6 +11,7 @@ enum VPNHelpers {
         static let horizontalPadding: CGFloat = 16
         static let rowVerticalPadding: CGFloat = 12
         static let cardCornerRadius: CGFloat = 26
+        static let loadingSpacing: CGFloat = 8
         static let warningUsageThreshold = 0.75
         static let fullUsageOpacity: CGFloat = 0.75
     }
@@ -25,6 +26,17 @@ enum VPNHelpers {
         VStack(alignment: .leading, spacing: 0, content: content)
             .background(theme.colors.layer5.color)
             .clipShape(RoundedRectangle(cornerRadius: UX.cardCornerRadius))
+    }
+
+    @MainActor
+    static func loadingIndicator(text: String, theme: Theme) -> some View {
+        HStack(spacing: UX.loadingSpacing) {
+            ProgressView()
+                .accessibilityHidden(true)
+            Text(text)
+                .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
+                .foregroundStyle(theme.colors.textSecondary.color)
+        }
     }
 
     // MARK: - Data Usage

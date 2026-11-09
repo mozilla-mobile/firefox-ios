@@ -25,12 +25,14 @@ final class VPNSettingsViewController: UIViewController {
 
     init(
         windowUUID: WindowUUID,
-        themeManager: ThemeManager = AppContainer.shared.resolve()
+        prefs: Prefs,
+        themeManager: ThemeManager = AppContainer.shared.resolve(),
+        localeProvider: LocaleProvider = SystemLocaleProvider()
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         // TODO: FXIOS-16876 The view model will be held by VPNManager so it can be shared with VPNSetting
-        self.viewModel = VPNSettingsViewModel()
+        self.viewModel = VPNSettingsViewModel(prefs: prefs, localeProvider: localeProvider)
         super.init(nibName: nil, bundle: nil)
     }
 
