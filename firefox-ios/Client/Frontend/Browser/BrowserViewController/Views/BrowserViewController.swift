@@ -401,8 +401,9 @@ class BrowserViewController: UIViewController,
         && header.arrangedSubviews.isEmpty
     }
 
-    /// If find in page is on we do not add the spacer since we will pin the find in page bar
-    /// to the keyboard and we will cover the address bar.
+    /// If find in page is on we skip pushing the above keyboard container to mimic
+    /// what happens on the newer system find in page bar where no spacer is added,
+    /// the address bar is covered, and the bar follows the keyboard.
     private var shouldPushAboveKeyboardContainer: Bool {
         return isBottomSearchBar && tabManager.selectedTab?.isFindInPageMode != true
     }
