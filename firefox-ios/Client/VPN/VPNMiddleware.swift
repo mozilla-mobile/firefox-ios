@@ -23,7 +23,10 @@ final class VPNMiddleware {
         self.userPreferences = userPreferences
         self.vpnManager = vpnManager
         Task { [weak self] in
-            await self?.observeVPNEvents()
+            guard let events = self?.vpnManager?.events else { return }
+            for await event in events {
+                self?.handleVPNEvent(event)
+            }
         }
     }
 
@@ -46,13 +49,6 @@ final class VPNMiddleware {
 
     lazy var legacyProvider: LegacyMiddlewareClosure<AppState> = { state, action in
         // Does not handle any legacy actions
-    }
-
-    private func observeVPNEvents() async {
-        guard let events = vpnManager?.events else { return }
-        for await event in events {
-            handleVPNEvent(event)
-        }
     }
 
     private func handleVPNEvent(_ event: VPNEvent) {

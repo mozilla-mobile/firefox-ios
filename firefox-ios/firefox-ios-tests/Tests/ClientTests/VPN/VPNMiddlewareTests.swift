@@ -70,6 +70,7 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
 
         subject.vpnProvider.modernMiddleware(AppState(), VPNModernAction.start, firstWindowUUID)
         await fulfillment(of: [started, preferenceSet], timeout: 0.2)
+//        withExtendedLifetime(subject) {}
 
         XCTAssertNil(mockUserPreferences.boolPreferences[.vpnFeature])
     }
@@ -214,12 +215,14 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     private func createSubject() -> VPNMiddleware {
-        return VPNMiddleware(
+        let subject = VPNMiddleware(
             windowManager: windowManager,
             logger: MockLogger(),
             userPreferences: mockUserPreferences,
             vpnManager: mockVPNManager
         )
+        trackForMemoryLeaks(subject)
+        return subject
     }
 
     private func yieldAndWaitForDispatch(_ event: VPNEvent, subject: VPNMiddleware) async throws {
