@@ -20,7 +20,6 @@ class TrackingProtectionModel {
     var contentBlockerStats: TPPageStats?
     var certificates = [Certificate]()
     let url: URL
-    var connectionSecure: Bool
     let globalETPIsEnabled: Bool
     var selectedTab: Tab?
 
@@ -85,7 +84,11 @@ class TrackingProtectionModel {
     }
 
     var websiteTitle: String {
-        return originalURL.baseDomain ?? ""
+        return url.isReaderModeURL ? "Reader Mode DO NOT FORGET LOCALIZE" : originalURL.baseDomain ?? ""
+    }
+
+    var connectionSecure: Bool {
+        selectedTab?.isSecure ?? false
     }
 
     let secureStatusString = String.Menu.EnhancedTrackingProtection.connectionSecureLabel
@@ -136,14 +139,12 @@ class TrackingProtectionModel {
 
     init(userDefaults: UserDefaultsInterface?,
          url: URL,
-         connectionSecure: Bool,
          globalETPIsEnabled: Bool,
          contentBlockerStatus: BlockerStatus,
          contentBlockerStats: TPPageStats?,
          selectedTab: Tab?) {
         self.userDefaults = userDefaults
         self.url = url
-        self.connectionSecure = connectionSecure
         self.globalETPIsEnabled = globalETPIsEnabled
         self.contentBlockerStatus = contentBlockerStatus
         self.contentBlockerStats = contentBlockerStats

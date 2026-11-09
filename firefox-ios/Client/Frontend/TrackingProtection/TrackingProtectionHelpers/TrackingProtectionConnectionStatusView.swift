@@ -140,14 +140,12 @@ final class TrackingProtectionConnectionStatusView: UIView, ThemeApplicable {
 
     func setConnectionStatus(image: UIImage,
                              text: String,
-                             isConnectionSecure: Bool,
                              theme: Theme,
-                             isInternalCertErrorURL: Bool,
-                             isManuallyTrusted: Bool) {
+                             shouldBeTappable: Bool) {
         connectionStatusImage.image = image
         connectionStatusLabel.text = text
         connectionButton.accessibilityLabel = text
         connectionStatusImage.tintColor = theme.colors.iconSecondary
-        connectionDetailArrow.isHidden = !isConnectionSecure && !isInternalCertErrorURL && !isManuallyTrusted
+        connectionDetailArrow.isHidden = !shouldBeTappable
     }
 }

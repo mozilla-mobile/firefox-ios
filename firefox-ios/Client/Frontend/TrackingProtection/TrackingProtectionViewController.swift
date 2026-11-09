@@ -127,6 +127,16 @@ class TrackingProtectionViewController: UIViewController,
 
     private var protectionViewTopConstraint: NSLayoutConstraint?
 
+    private var shouldConnectionStatusBeTappable: Bool {
+        let isReaderMode = model.selectedTab?.url?.isReaderModeURL == true
+        let isCertError = InternalURL(model.selectedTab?.url)?.isCertificateErrorURL == true
+        let isSecure = model.selectedTab?.isSecure ?? false
+        let origin = CertStore.origin(for: model.originalURL) ?? ""
+        let isManuallyTrusted = profile?.certStore.hasCertificate(forOrigin: origin) ?? false
+
+        return !isReaderMode && (isCertError || isSecure || isManuallyTrusted)
+    }
+
     // MARK: - View lifecycle
 
     init(viewModel: TrackingProtectionModel,
@@ -413,6 +423,7 @@ class TrackingProtectionViewController: UIViewController,
         constraints.append(contentsOf: trackersConnectionConstraints)
         trackersView.trackersButtonCallback = { [weak self] in
             guard let self,
+                  model.selectedTab?.url?.isReaderModeURL == false,
                   let trackersBlocked = model.contentBlockerStats?.total,
                   trackersBlocked > 0 else {
                 return
@@ -425,13 +436,7 @@ class TrackingProtectionViewController: UIViewController,
             )
         }
         connectionStatusView.connectionStatusButtonCallback = { [weak self] in
-            guard let self else { return }
-
-            let isCertificateErrorPage = InternalURL(model.url)?.isCertificateErrorURL ?? false
-
-            guard InternalURL(model.url) == nil || isCertificateErrorPage else {
-                return
-            }
+            guard let self, shouldConnectionStatusBeTappable else { return }
 
             store.dispatch(
                 TrackingProtectionAction(
@@ -547,16 +552,10 @@ class TrackingProtectionViewController: UIViewController,
     }
 
     private func updateConnectionStatus() {
-        let isInternalCertErrorURL = InternalURL(model.url)?.isCertificateErrorURL ?? false
-        let origin = CertStore.origin(for: model.originalURL) ?? ""
-        let isManuallyTrusted = profile?.certStore.hasCertificate(forOrigin: origin) ?? false
-        model.connectionSecure = model.selectedTab?.webView?.hasOnlySecureContent ?? false
         connectionStatusView.setConnectionStatus(image: model.getConnectionStatusImage(themeType: currentTheme().type),
                                                  text: model.connectionStatusString,
-                                                 isConnectionSecure: model.connectionSecure,
                                                  theme: currentTheme(),
-                                                 isInternalCertErrorURL: isInternalCertErrorURL,
-                                                 isManuallyTrusted: isManuallyTrusted)
+                                                 shouldBeTappable: shouldConnectionStatusBeTappable)
         connectionDetailsHeaderView.setupDetails(title: model.connectionDetailsTitle,
                                                  status: model.connectionDetailsHeader,
                                                  image: model.connectionDetailsImage)

@@ -575,7 +575,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
     private func didLoadTabPeek(tabID: TabUUID, uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
         let tab = tabManager?.getTabForUUID(uuid: tabID)
-        let urlString = tab?.url?.absoluteString ?? ""
+        let urlString = tab?.url?.saveableURL.absoluteString ?? ""
 
         getIsBookmarked(url: urlString, dataQueue: .main) { isBookmarked in
             // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
@@ -756,7 +756,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
         for tabURL: URL?,
         dataLoadingCompletion: (@MainActor (ProfileTabInfo) -> Void)?
     ) {
-        guard let tabURL = tabURL, let url = absoluteStringFrom(tabURL) else {
+        guard let tabURL = tabURL else {
             dataLoadingCompletion?(
                 ProfileTabInfo(
                     isBookmarked: false,
@@ -766,6 +766,8 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
             )
             return
         }
+
+        let url = tabURL.saveableURL.absoluteString
 
         let group = DispatchGroup()
         let dataQueue = DispatchQueue.global()
@@ -956,13 +958,20 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
             title = selectedTab.displayTitle
         }
 
+        let subtitle: String?
+        if selectedTab.url?.isReaderModeURL == true {
+            subtitle = "Reader Mode (Do not forget to localize)"
+        } else {
+            subtitle = selectedTab.url?.siteURL.baseDomain
+        }
+
         store.dispatch(
             MainMenuAction(
                 windowUUID: windowUUID,
                 actionType: MainMenuActionType.updateSiteProtectionsHeader,
                 siteProtectionsData: SiteProtectionsData(
                     title: title,
-                    subtitle: selectedTab.url?.siteURL.baseDomain,
+                    subtitle: subtitle,
                     image: selectedTab.url?.siteURL.absoluteString,
                     state: getSiteProtectionState(for: selectedTab)
                 )
@@ -976,9 +985,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
               !ContentBlocker.shared.isSafelisted(url: url),
               isContentBlockingConfigEnabled else { return .off }
 
-        let hasSecureContent = selectedTab.currentWebView()?.hasOnlySecureContent ?? false
-
-        if !hasSecureContent {
+        if !selectedTab.isSecure {
             return .notSecure
         }
 
@@ -1006,14 +1013,17 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
     private func createShareItem(with tabID: TabUUID, and uuid: WindowUUID) -> ShareItem? {
         let tabManager = tabManager(for: uuid)
         guard let tab = tabManager?.getTabForUUID(uuid: tabID),
-              let url = tab.url?.siteURL.absoluteString, !url.isEmpty
+              let url = tab.url,
+                  !url.saveableURL.absoluteString.isEmpty
         else { return nil }
 
+        let urlToBookmark = url.saveableURL.absoluteString
+
         var title = tab.displayTitle.trimmingCharacters(in: .whitespacesAndNewlines)
-        if title.isEmpty || InternalURL(tab.url)?.isErrorPage == true {
-            title = url
+        if title.isEmpty || InternalURL(url)?.isErrorPage == true {
+            title = urlToBookmark
         }
-        return ShareItem(url: url, title: title)
+        return ShareItem(url: urlToBookmark, title: title)
     }
 
     private func addToBookmarks(_ shareItem: ShareItem?) {
@@ -1035,10 +1045,13 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
     func removeBookmark(with tabID: TabUUID, uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
         guard let tab = tabManager?.getTabForUUID(uuid: tabID),
-              let url = tab.url?.absoluteString, !url.isEmpty
+              let url = tab.url,
+                  !url.saveableURL.absoluteString.isEmpty
         else { return }
 
-        profile.places.deleteBookmarksWithURL(url: url)
+        let urlToBookmark = url.saveableURL.absoluteString
+
+        profile.places.deleteBookmarksWithURL(url: urlToBookmark)
             .uponQueue(.main) { result in
                 // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
                 MainActor.assumeIsolated {
@@ -1052,7 +1065,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
         let tabManager = tabManager(for: uuid)
         guard let tabID = tabID,
               let tab = tabManager?.getTabForUUID(uuid: tabID),
-              let url = tab.url?.displayURL?.absoluteString
+              let url = tab.url?.saveableURL.absoluteString
         else { return }
 
         let site = Site.createBasicSite(url: url, title: tab.displayTitle)
@@ -1071,7 +1084,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
         let tabManager = tabManager(for: uuid)
         guard let tabID = tabID,
               let tab = tabManager?.getTabForUUID(uuid: tabID),
-              let url = tab.url?.displayURL?.absoluteString
+              let url = tab.url?.saveableURL.absoluteString
         else { return }
 
         let site = Site.createBasicSite(url: url, title: tab.displayTitle)
