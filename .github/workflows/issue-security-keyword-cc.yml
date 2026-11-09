@@ -27,7 +27,7 @@ jobs:
         shell: bash
         env:
           # Case-insensitive, matched at the start of a word (e.g. "attack" also matches "attacker")
-          KEYWORDS: '(^|[^[:alnum:]_])(spoof|security|vulnerab|attack|malicious)'
+          KEYWORDS: '(^|[^[:alnum:]_])(spoof|security|vulnerab|attack|malicious|xss|uxss)'
           COMMENT: '+cc @mattreaganmozilla'
         run: |
           set -euo pipefail
