@@ -33,7 +33,7 @@ protocol AnimationController {
 
 /// The controller responsible to animate the states of `SummarizeController`
 struct DefaultAnimationController: AnimationController {
-    static let tabSnapshotCornerRadius: CGFloat = 32.0
+    nonisolated static let tabSnapshotCornerRadius: CGFloat = 32.0
 
     private enum UX {
         @MainActor // `CAMediaTimingFunction` is not Sendable, so isolate it to the main actor
@@ -108,13 +108,13 @@ struct DefaultAnimationController: AnimationController {
         completion: @escaping () -> Void
     ) {
         loadingStackView.alpha = 0
-        backgroundView.hideResult(duration: UX.animationDuration)
-        backgroundView.setBlobsPaused(true)
         UIView.animate(withDuration: UX.animationDuration) {
             summaryView.alpha = 0.0
             infoView.alpha = 1.0
             snapshotContainer.transform = snapshotTransform
         } completion: { _ in
+            backgroundView.hideResult(duration: UX.animationDuration)
+            backgroundView.setBlobsPaused(true)
             completion()
         }
     }
