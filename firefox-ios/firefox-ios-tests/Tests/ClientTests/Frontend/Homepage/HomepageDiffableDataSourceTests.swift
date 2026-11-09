@@ -381,6 +381,52 @@ final class HomepageDiffableDataSourceTests: XCTestCase, FeatureFlagTestUtility 
     }
 
     @MainActor
+    func test_updateSnapshot_withEmptyMerinoResponse_omitsPocketSection() throws {
+        let dataSource = try XCTUnwrap(diffableDataSource)
+
+        let state = HomepageState.reducer.legacyReducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            MerinoAction(
+                merinoStoryResponse: MerinoStoryResponse(stories: []),
+                windowUUID: .XCTestDefaultUUID,
+                actionType: MerinoMiddlewareActionType.retrievedUpdatedHomepageStories
+            )
+        )
+
+        dataSource.updateSnapshot(state: state, jumpBackInDisplayConfig: mockSectionConfig)
+
+        let snapshot = dataSource.snapshot()
+        XCTAssertFalse(snapshot.sectionIdentifiers.contains(.pocket(nil)))
+    }
+
+    @MainActor
+    func test_updateSnapshot_withEmptyThenPopulatedMerinoResponse_returnsPocketStories() throws {
+        let dataSource = try XCTUnwrap(diffableDataSource)
+
+        let emptyState = HomepageState.reducer.legacyReducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            MerinoAction(
+                merinoStoryResponse: MerinoStoryResponse(stories: []),
+                windowUUID: .XCTestDefaultUUID,
+                actionType: MerinoMiddlewareActionType.retrievedUpdatedHomepageStories
+            )
+        )
+        let populatedState = HomepageState.reducer.legacyReducer(
+            emptyState,
+            MerinoAction(
+                merinoStoryResponse: MerinoStoryResponse(stories: createStories()),
+                windowUUID: .XCTestDefaultUUID,
+                actionType: MerinoMiddlewareActionType.retrievedUpdatedHomepageStories
+            )
+        )
+
+        dataSource.updateSnapshot(state: populatedState, jumpBackInDisplayConfig: mockSectionConfig)
+
+        let snapshot = dataSource.snapshot()
+        XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(nil)), 20)
+    }
+
+    @MainActor
     func test_updateSnapshot_withValidState_returnMessageCard() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
         let configuration = MessageCardConfiguration(
