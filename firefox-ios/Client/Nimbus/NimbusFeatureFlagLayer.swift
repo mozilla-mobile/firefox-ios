@@ -344,6 +344,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
     }
 
     private func checkTranslationFeature() -> Bool {
+        // This guard should be kept when removing the feature flag since translations are not
+        // eligible on older iOS versions due to bregamot using WASM SIMD instructions.
+        guard #available(iOS 16.4, *) else { return false }
         return nimbus.features.translationsFeature.value().enabled
     }
 
