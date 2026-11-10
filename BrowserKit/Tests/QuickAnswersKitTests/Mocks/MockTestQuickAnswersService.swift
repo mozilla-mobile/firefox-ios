@@ -5,6 +5,7 @@
 @testable import QuickAnswersKit
 
 final class MockTestQuickAnswersService: QuickAnswersService, @unchecked Sendable {
+    var conversation: QuickAnswersConversation = MockQuickAnswersConversation()
     var speechResults: [SpeechResult] = []
     var searchResult: Result<SearchResult, ResultsServiceError> = .success(.empty())
     var speechErrorToThrow: SpeechError?

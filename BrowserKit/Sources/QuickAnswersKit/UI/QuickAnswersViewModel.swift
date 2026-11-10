@@ -19,13 +19,19 @@ final class QuickAnswersViewModel {
     private let service: QuickAnswersService?
     private let telemetry: QuickAnswersTelemetry
     private let store: Store
-    private let conversation: QuickAnswersConversation
-    private var latestSnapshot: QuickAnswersSessionSnapshot?
+    private let isReturningToAnswer: Bool
     private var recordVoiceTask: Task<Void, Never>?
     private var searchResultTask: Task<Void, Never>?
-    let feature: QuickAnswersFeature
-    let restoredSession: QuickAnswersSessionSnapshot?
     var onStateChange: ((State) -> Void)?
+
+    var feature: QuickAnswersFeature {
+        return store.feature
+    }
+
+    /// The answered session the user is returning to, if any.
+    var restoredSession: QuickAnswersSessionSnapshot? {
+        return isReturningToAnswer ? store.latestSession : nil
+    }
 
     /// The user-facing name of the model backing the request.
     var modelDisplayName: String {
@@ -47,10 +53,6 @@ final class QuickAnswersViewModel {
     /// Whether the opt-in is required and shown as a sheet over the browser rather than inline.
     var isOptInSheetRequired: Bool {
         return isOptInRequired && feature.isOptInRedesignEnabled
-    }
-
-    var hasParkedSession: Bool {
-        return store.latestSession != nil
     }
 
     init(
@@ -75,20 +77,20 @@ final class QuickAnswersViewModel {
                 isReturnToAnswerEnabled: false
             )
         )
-        let store = Store(prefs: prefs, sessionStorage: sessionStorage)
-        let restoredSession = isReturningToAnswer && configFetcher.feature.isReturnToAnswerEnabled
-            ? store.latestSession
-            : nil
-        store.removeAllSessions()
-        let conversation = restoredSession?.conversation ?? DefaultQuickAnswersConversation()
+        let store = Store(prefs: prefs, sessionStorage: sessionStorage, feature: configFetcher.feature)
+        let restoredSession = isReturningToAnswer ? store.latestSession : nil
+        if restoredSession == nil {
+            store.removeAllSessions()
+        }
         self.telemetry = telemetry
         self.store = store
-        self.feature = configFetcher.feature
-        self.restoredSession = restoredSession
-        self.latestSnapshot = restoredSession
-        self.conversation = conversation
+        self.isReturningToAnswer = isReturningToAnswer
         do {
-            self.service = try makeService(prefs, configFetcher, conversation)
+            self.service = try makeService(
+                prefs,
+                configFetcher,
+                restoredSession?.conversation ?? DefaultQuickAnswersConversation()
+            )
         } catch {
             self.service = nil
         }
@@ -198,10 +200,12 @@ final class QuickAnswersViewModel {
         switch searchResult {
         case .success(let searchResult):
             telemetry.resultsCompleted(outcome: true, errorType: nil, model: model, isFollowUp: isFollowUp)
-            latestSnapshot = QuickAnswersSessionSnapshot(
-                question: result.text,
-                result: searchResult,
-                conversation: conversation
+            store.saveSession(
+                QuickAnswersSessionSnapshot(
+                    question: result.text,
+                    result: searchResult,
+                    conversation: service.conversation
+                )
             )
             onStateChange?(.showSearchResult(searchResult, nil))
         case .failure(let error):
@@ -215,13 +219,11 @@ final class QuickAnswersViewModel {
         }
     }
 
-    /// Records the tap and tears down the flow, saving the answered session when the user can return to it.
-    /// - Returns: Whether the session was saved.
+    /// Records the tap and tears down the flow.
+    /// - Returns: Whether there is an answered session the user can return to.
     func handleCitationTap() -> Bool {
         telemetry.citationTapped()
         dismiss()
-        guard feature.isReturnToAnswerEnabled, let latestSnapshot else { return false }
-        store.saveSession(latestSnapshot)
-        return true
+        return store.latestSession != nil
     }
 }

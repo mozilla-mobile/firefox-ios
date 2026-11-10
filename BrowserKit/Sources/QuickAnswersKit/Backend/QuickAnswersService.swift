@@ -30,6 +30,9 @@ struct SearchResult: Equatable {
 }
 
 protocol QuickAnswersService: Sendable {
+    /// The conversation the service accumulates follow-up context in.
+    var conversation: QuickAnswersConversation { get }
+
     /// Starts the voice record operation and return a stream with the accumulated results from the speech.
     func record() async throws -> AsyncThrowingStream<SpeechResult, Error>
 

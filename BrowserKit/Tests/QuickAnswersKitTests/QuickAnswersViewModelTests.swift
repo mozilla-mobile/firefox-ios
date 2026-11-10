@@ -299,13 +299,13 @@ final class QuickAnswersViewModelTests: XCTestCase {
 
     // MARK: - Return To Answer Tests
 
-    func test_init_returningToAnswerWithSavedSession_restoresIt_andRemovesAllSessions() {
+    func test_init_returningToAnswerWithSavedSession_restoresIt_andKeepsItStored() {
         sessionStorage.latestSession = makeSnapshot(question: "Saved question")
 
         let subject = createSubject(isReturnToAnswerEnabled: true, isReturningToAnswer: true)
 
         XCTAssertEqual(subject.restoredSession?.question, "Saved question")
-        XCTAssertNil(sessionStorage.latestSession)
+        XCTAssertEqual(sessionStorage.latestSession?.question, "Saved question")
     }
 
     func test_init_notReturningToAnswer_doesNotRestore_andRemovesAllSessions() {
@@ -342,33 +342,38 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertTrue((capturedConversation as AnyObject?) === conversation)
     }
 
-    func test_hasParkedSession_withStoredSession_isTrue() {
-        let subject = createSubject()
+    func test_searchResult_withFlagOn_savesSessionWithServiceConversation() {
+        let conversation = MockQuickAnswersConversation()
+        mockService.conversation = conversation
+        let subject = createSubject(prefs: optInCompletedPrefs(), isReturnToAnswerEnabled: true)
 
-        sessionStorage.latestSession = makeSnapshot(question: "Saved question")
+        answerQuestion("Hello world", with: subject)
 
-        XCTAssertTrue(subject.hasParkedSession)
+        XCTAssertEqual(sessionStorage.latestSession?.question, "Hello world")
+        XCTAssertEqual(sessionStorage.latestSession?.result.resultText, "Answer")
+        XCTAssertTrue((sessionStorage.latestSession?.conversation as AnyObject?) === conversation)
     }
 
-    func test_handleCitationTap_withFlagOn_savesLatestSnapshot_andReturnsTrue() {
+    func test_searchResult_withFlagOff_doesNotSaveSession() {
+        let subject = createSubject(prefs: optInCompletedPrefs(), isReturnToAnswerEnabled: false)
+
+        answerQuestion("Hello world", with: subject)
+
+        XCTAssertNil(sessionStorage.latestSession)
+    }
+
+    func test_handleCitationTap_withAnsweredSession_returnsTrue() {
         let subject = createSubject(prefs: optInCompletedPrefs(), isReturnToAnswerEnabled: true)
         answerQuestion("Hello world", with: subject)
 
-        let didSave = subject.handleCitationTap()
-
-        XCTAssertTrue(didSave)
-        XCTAssertEqual(sessionStorage.latestSession?.question, "Hello world")
-        XCTAssertEqual(sessionStorage.latestSession?.result.resultText, "Answer")
+        XCTAssertTrue(subject.handleCitationTap())
     }
 
-    func test_handleCitationTap_withFlagOff_doesNotSave_andReturnsFalse() {
+    func test_handleCitationTap_withFlagOff_returnsFalse() {
         let subject = createSubject(prefs: optInCompletedPrefs(), isReturnToAnswerEnabled: false)
         answerQuestion("Hello world", with: subject)
 
-        let didSave = subject.handleCitationTap()
-
-        XCTAssertFalse(didSave)
-        XCTAssertNil(sessionStorage.latestSession)
+        XCTAssertFalse(subject.handleCitationTap())
     }
 
     func test_handleCitationTap_recordsCitationTappedAndClosed() {

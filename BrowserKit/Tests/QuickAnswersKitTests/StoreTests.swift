@@ -31,8 +31,8 @@ struct StoreTests {
     }
 
     @Test
-    func test_saveSession_setsLatestSession() {
-        let subject = createSubject()
+    func test_saveSession_withFlagOn_setsLatestSession() {
+        let subject = createSubject(isReturnToAnswerEnabled: true)
 
         subject.saveSession(makeSnapshot(question: "Question"))
 
@@ -41,8 +41,26 @@ struct StoreTests {
     }
 
     @Test
+    func test_saveSession_withFlagOff_doesNotSave() {
+        let subject = createSubject(isReturnToAnswerEnabled: false)
+
+        subject.saveSession(makeSnapshot(question: "Question"))
+
+        #expect(subject.latestSession == nil)
+        #expect(sessionStorage.latestSession == nil)
+    }
+
+    @Test
+    func test_latestSession_withFlagOff_returnsNil() {
+        sessionStorage.latestSession = makeSnapshot(question: "Question")
+        let subject = createSubject(isReturnToAnswerEnabled: false)
+
+        #expect(subject.latestSession == nil)
+    }
+
+    @Test
     func test_removeAllSessions_clearsLatestSession() {
-        let subject = createSubject()
+        let subject = createSubject(isReturnToAnswerEnabled: true)
         subject.saveSession(makeSnapshot(question: "Question"))
 
         subject.removeAllSessions()
@@ -59,8 +77,17 @@ struct StoreTests {
         )
     }
 
-    private func createSubject() -> Store {
-        let subject = Store(prefs: prefs, sessionStorage: sessionStorage)
+    private func createSubject(isReturnToAnswerEnabled: Bool = false) -> Store {
+        let subject = Store(
+            prefs: prefs,
+            sessionStorage: sessionStorage,
+            feature: QuickAnswersFeature(
+                model: .exa,
+                isOptInRedesignEnabled: false,
+                isFollowUpEnabled: false,
+                isReturnToAnswerEnabled: isReturnToAnswerEnabled
+            )
+        )
         return subject
     }
 }
