@@ -807,12 +807,7 @@ class BrowserViewController: UIViewController,
 
         guard showWarningBadge != shouldShowWarningBadge else { return }
 
-        let action = ToolbarAction(
-            showMenuWarningBadge: showWarningBadge,
-            windowUUID: self.windowUUID,
-            actionType: ToolbarActionType.showMenuWarningBadge
-        )
-        store.dispatch(action)
+        store.dispatch(ToolbarModernAction.showMenuWarningBadge(isShown: showWarningBadge), forWindowUUID: windowUUID)
     }
 
     private func updateAddressToolbarContainerPosition(for traitCollection: UITraitCollection) {

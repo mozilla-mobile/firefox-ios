@@ -8,6 +8,7 @@ import Storage
 import XCTest
 import Glean
 import Common
+import Redux
 import Shared
 
 @testable import Client
@@ -763,24 +764,23 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
         subject.startNavigationButtonDoubleTapTimer()
 
-        XCTAssertNil(
-            mockStore.dispatchedActions.compactMap { $0 as? ToolbarAction }.first {
-                ($0.actionType as? ToolbarActionType) == .navigationButtonDoubleTapped
-            }
-        )
+        XCTAssertFalse(mockStore.dispatchedModernActions.contains(where: isNavigationButtonDoubleTapped))
     }
 
     @MainActor
-    func testStartNavigationButtonDoubleTapTimer_doubleTap_dispatchesDoubleTap() throws {
+    func testStartNavigationButtonDoubleTapTimer_doubleTap_dispatchesDoubleTap() {
         let subject = createSubject()
         subject.startNavigationButtonDoubleTapTimer()
         let firstScheduledTimer = subject.navigationHintDoubleTapTimer
         subject.startNavigationButtonDoubleTapTimer()
         firstScheduledTimer?.invalidate()
 
-        let action = try XCTUnwrap(mockStore.dispatchedActions.compactMap { $0 as? ToolbarAction }.last)
-        let actionType = try XCTUnwrap(action.actionType as? ToolbarActionType)
-        XCTAssertEqual(actionType, .navigationButtonDoubleTapped)
+        XCTAssertTrue(mockStore.dispatchedModernActions.contains(where: isNavigationButtonDoubleTapped))
+    }
+
+    private func isNavigationButtonDoubleTapped(_ action: ModernAction) -> Bool {
+        guard case .navigationHintAvailabilityChanged(let canShow) = action as? ToolbarModernAction else { return false }
+        return canShow
     }
 
     // MARK: - Key commands
