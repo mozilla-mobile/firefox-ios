@@ -13,7 +13,7 @@ public enum AIBackgroundBlobsMotion {
     /// A faster drift that advances in steps, each eased with a `cubic-bezier(0, 0, 0, 1)` curve.
     case stepped
 
-    fileprivate struct UX {
+    fileprivate enum UX {
         static let steppedSpeedMultiplier: TimeInterval = 2.5
         static let steppedStepDuration: TimeInterval = 1.0
     }
