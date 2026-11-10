@@ -167,7 +167,7 @@ class BrowsingPDFTests: BaseTestCase {
         topSites.longPressOnPinnedSite(named: bookmarkLabel)
 
         // Remove the pinned site via the context menu.
-        contextMenu.unpinFromTopSites()
+        topSites.tapUnpin()
 
         // 5. Verify the item has been unpinned.
         topSites.assertTopSiteDoesNotExist(named: bookmarkLabel)

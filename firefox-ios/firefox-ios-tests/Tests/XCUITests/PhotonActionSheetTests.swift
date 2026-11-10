@@ -32,6 +32,7 @@ class PhotonActionSheetTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306849
     // Smoketest
+    // This is not a PhotonActionSheet anymore, should probably be moved somewhere that makes sense
     func testPinToShortcuts() {
         app.launch()
         navigator.nowAt(HomePanelsScreen)
@@ -55,7 +56,7 @@ class PhotonActionSheetTests: BaseTestCase {
 
         // Remove pin
         topSitesScreen.longPressOnPinnedSite(named: TestLabels.exampleDomain)
-        topSitesScreen.tapPinSlashIcon()
+        topSitesScreen.tapUnpin()
         topSitesScreen.assertTopSiteNotPinned(named: TestLabels.exampleDomain)
         topSitesScreen.assertTopSiteDoesNotExist(named: TestLabels.exampleDomain)
     }
