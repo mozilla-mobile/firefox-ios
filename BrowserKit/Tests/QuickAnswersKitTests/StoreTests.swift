@@ -59,6 +59,24 @@ struct StoreTests {
     }
 
     @Test
+    func test_init_notReturningToAnswer_removesStoredSession() {
+        sessionStorage.latestSession = makeSnapshot(question: "Question")
+
+        _ = createSubject(isReturnToAnswerEnabled: true, isReturningToAnswer: false)
+
+        #expect(sessionStorage.latestSession == nil)
+    }
+
+    @Test
+    func test_init_returningToAnswer_keepsStoredSession() {
+        sessionStorage.latestSession = makeSnapshot(question: "Question")
+
+        _ = createSubject(isReturnToAnswerEnabled: true, isReturningToAnswer: true)
+
+        #expect(sessionStorage.latestSession?.question == "Question")
+    }
+
+    @Test
     func test_restoredSession_returningWithFlagOn_returnsLatestSession() {
         sessionStorage.latestSession = makeSnapshot(question: "Question")
         let subject = createSubject(isReturnToAnswerEnabled: true, isReturningToAnswer: true)
@@ -80,16 +98,6 @@ struct StoreTests {
         let subject = createSubject(isReturnToAnswerEnabled: false, isReturningToAnswer: true)
 
         #expect(subject.restoredSession == nil)
-    }
-
-    @Test
-    func test_removeAllSessions_clearsLatestSession() {
-        let subject = createSubject(isReturnToAnswerEnabled: true)
-        subject.saveSession(makeSnapshot(question: "Question"))
-
-        subject.removeAllSessions()
-
-        #expect(subject.latestSession == nil)
     }
 
     // MARK: - Helper

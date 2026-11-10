@@ -308,12 +308,13 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(sessionStorage.latestSession?.question, "Saved question")
     }
 
-    func test_init_notReturningToAnswer_doesNotRestore() {
+    func test_init_notReturningToAnswer_doesNotRestore_andRemovesAllSessions() {
         sessionStorage.latestSession = makeSnapshot(question: "Saved question")
 
         let subject = createSubject(isReturnToAnswerEnabled: true, isReturningToAnswer: false)
 
         XCTAssertNil(subject.restoredSession)
+        XCTAssertNil(sessionStorage.latestSession)
     }
 
     func test_init_returningToAnswerWithFlagOff_doesNotRestore() {
@@ -373,15 +374,6 @@ final class QuickAnswersViewModelTests: XCTestCase {
         answerQuestion("Hello world", with: subject)
 
         XCTAssertFalse(subject.handleCitationTap())
-    }
-
-    func test_dismiss_removesAllSessions() {
-        sessionStorage.latestSession = makeSnapshot(question: "Saved question")
-        let subject = createSubject(isReturnToAnswerEnabled: true)
-
-        subject.dismiss()
-
-        XCTAssertNil(sessionStorage.latestSession)
     }
 
     func test_handleCitationTap_keepsSession() {
