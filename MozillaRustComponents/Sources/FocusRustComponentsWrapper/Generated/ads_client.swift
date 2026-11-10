@@ -910,6 +910,12 @@ public protocol MozAdsClientBuilderProtocol: AnyObject, Sendable {
      */
     func telemetry(telemetry: MozAdsTelemetry)  -> MozAdsClientBuilder
     
+    /**
+     * The browser's user agent, sent to MARS on OHTTP requests when the
+     * preflight returns none. Defaults to viaduct's global default user agent.
+     */
+    func userAgent(userAgent: String)  -> MozAdsClientBuilder
+    
 }
 /**
  * Configures and builds a [`MozAdsClient`].
@@ -1029,6 +1035,20 @@ open func telemetry(telemetry: MozAdsTelemetry) -> MozAdsClientBuilder  {
     uniffi_ads_client_fn_method_mozadsclientbuilder_telemetry(
             self.uniffiCloneHandle(),
         FfiConverterCallbackInterfaceMozAdsTelemetry_lower(telemetry),uniffiCallStatus
+    )
+})
+}
+    
+    /**
+     * The browser's user agent, sent to MARS on OHTTP requests when the
+     * preflight returns none. Defaults to viaduct's global default user agent.
+     */
+open func userAgent(userAgent: String) -> MozAdsClientBuilder  {
+    return try!  FfiConverterTypeMozAdsClientBuilder_lift(try! rustCall() {
+        uniffiCallStatus in
+    uniffi_ads_client_fn_method_mozadsclientbuilder_user_agent(
+            self.uniffiCloneHandle(),
+        FfiConverterString.lower(userAgent),uniffiCallStatus
     )
 })
 }
@@ -3356,6 +3376,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_ads_client_checksum_method_mozadsclientbuilder_telemetry() != 29539) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_ads_client_checksum_method_mozadsclientbuilder_user_agent() != 51123) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_ads_client_checksum_constructor_mozadsclientbuilder_new() != 48831) {

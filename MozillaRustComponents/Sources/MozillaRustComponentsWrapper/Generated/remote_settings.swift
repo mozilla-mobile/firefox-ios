@@ -2095,6 +2095,10 @@ public enum SyncStatus: Equatable, Hashable {
      */
     case signatureError
     /**
+     * The certificate chain URL is unreachable or has invalid content-type.
+     */
+    case certificateError
+    /**
      * Server error (5xx status)
      */
     case serverError
@@ -2133,9 +2137,11 @@ public struct FfiConverterTypeSyncStatus: FfiConverterRustBuffer {
         
         case 5: return .signatureError
         
-        case 6: return .serverError
+        case 6: return .certificateError
         
-        case 7: return .unknownError
+        case 7: return .serverError
+        
+        case 8: return .unknownError
         
         default: throw UniffiInternalError.unexpectedEnumCase
         }
@@ -2165,12 +2171,16 @@ public struct FfiConverterTypeSyncStatus: FfiConverterRustBuffer {
             writeInt(&buf, Int32(5))
         
         
-        case .serverError:
+        case .certificateError:
             writeInt(&buf, Int32(6))
         
         
-        case .unknownError:
+        case .serverError:
             writeInt(&buf, Int32(7))
+        
+        
+        case .unknownError:
+            writeInt(&buf, Int32(8))
         
         }
     }
