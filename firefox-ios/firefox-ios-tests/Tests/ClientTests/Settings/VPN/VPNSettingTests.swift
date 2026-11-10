@@ -7,17 +7,18 @@ import Shared
 import XCTest
 @testable import Client
 
+@available(iOS 17.0, *)
 @MainActor
 final class VPNSettingTests: XCTestCase {
     private var delegate: MockSettingsFlowDelegate!
     private var settings: SettingsTableViewController!
-    private var userPreferences: MockUserFeaturePreferences!
+    private var vpnManager: MockVPNManager!
 
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         delegate = MockSettingsFlowDelegate()
-        userPreferences = MockUserFeaturePreferences()
+        vpnManager = MockVPNManager()
         settings = SettingsTableViewController(
             style: .plain,
             windowUUID: .XCTestDefaultUUID,
@@ -28,7 +29,7 @@ final class VPNSettingTests: XCTestCase {
     override func tearDown() async throws {
         delegate = nil
         settings = nil
-        userPreferences = nil
+        vpnManager = nil
         DependencyHelperMock().reset()
         try await super.tearDown()
     }
@@ -48,20 +49,20 @@ final class VPNSettingTests: XCTestCase {
     // MARK: - Status
 
     func test_status_whenVPNLimitReached_isPaused() {
-        setVPNEnabled(false)
-        let subject = createSubject(dataUsage: VPNDataUsage(usedDataInGB: 5, dataLimitInGB: 5))
+        vpnManager.isLimitReached = true
+        let subject = createSubject()
         XCTAssertEqual(subject.status?.string, .VPN.Settings.StatusPaused)
     }
 
     func test_status_whenVPNEnabledAndUnderLimit_isOn() {
-        setVPNEnabled(true)
-        let subject = createSubject(dataUsage: VPNDataUsage(usedDataInGB: 2, dataLimitInGB: 5))
+        vpnManager.isRunning = true
+        let subject = createSubject()
         XCTAssertEqual(subject.status?.string, .VPN.Settings.StatusOn)
     }
 
     func test_status_whenVPNOffAndUnderLimit_isOff() {
-        setVPNEnabled(false)
-        let subject = createSubject(dataUsage: VPNDataUsage(usedDataInGB: 4, dataLimitInGB: 5))
+        vpnManager.isRunning = false
+        let subject = createSubject()
         XCTAssertEqual(subject.status?.string, .VPN.Settings.StatusOff)
     }
 
@@ -94,18 +95,13 @@ final class VPNSettingTests: XCTestCase {
 
     // MARK: - Helpers
 
-    private func createSubject(dataUsage: VPNDataUsage = .placeholder) -> VPNSetting {
+    private func createSubject() -> VPNSetting {
         let subject = VPNSetting(
             settings: settings,
             settingsDelegate: delegate,
-            userPreferences: userPreferences,
-            dataUsage: dataUsage
+            vpnManager: vpnManager
         )
         trackForMemoryLeaks(subject)
         return subject
-    }
-
-    private func setVPNEnabled(_ isEnabled: Bool) {
-        userPreferences.setPreferenceFor(.vpnFeature, to: isEnabled)
     }
 }

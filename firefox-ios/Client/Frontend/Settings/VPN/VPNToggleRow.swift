@@ -26,6 +26,7 @@ struct VPNToggleRow: View {
             }
         }
         .toggleStyle(SwitchToggleStyle(tint: theme.colors.actionPrimary.color))
+        .disabled(viewModel.isVPNConnecting)
         .accessibilityIdentifier(AccessibilityIdentifiers.Settings.VPN.vpnToggle)
         .accessibilityValue(viewModel.accessibilityValue)
         .padding(.horizontal, VPNHelpers.UX.horizontalPadding)

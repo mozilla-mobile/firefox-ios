@@ -12,9 +12,6 @@ struct VPNLocationsView: ThemeableView {
         static let outerPadding: CGFloat = 16
         static let sectionSpacing: CGFloat = 16
         static let rowTextSpacing: CGFloat = 4
-        // TODO: FXIOS-16876 Replace the simulated delay and sample list
-        static let simulatedLoadingNanoseconds: UInt64 = 2_000_000_000
-        static let sampleCountryCodes = ["CA", "DE", "FR", "GB", "JP", "NL", "SE", "US"]
     }
 
     @State var theme: Theme
@@ -107,15 +104,13 @@ struct VPNLocationsView: ThemeableView {
 
     // MARK: - Actions
 
+    // this is only called from a Task
     private func loadLocations() async {
         guard isLoadingCountries else { return }
-        do {
-            try await Task.sleep(nanoseconds: UX.simulatedLoadingNanoseconds)
-        } catch {
-            return
-        }
+        let loadedCountryCodes = await viewModel.loadCountryCodes()
+        guard !Task.isCancelled else { return }
         withAnimation {
-            countryCodes = viewModel.sortedByName(UX.sampleCountryCodes)
+            countryCodes = loadedCountryCodes
             isLoadingCountries = false
         }
     }

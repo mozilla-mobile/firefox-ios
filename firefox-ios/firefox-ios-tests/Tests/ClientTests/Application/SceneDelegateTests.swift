@@ -14,6 +14,7 @@ final class SceneDelegateTests: XCTestCase, FeatureFlaggable {
     override func setUp() async throws {
         try await super.setUp()
         AppEventQueue.reset()
+        AppEventQueue.signal(event: .vpnReconnect)
         DependencyHelperMock().bootstrapDependencies()
         mockSessionManager = MockAppSessionManager()
         mockGleanWrapper = MockGleanWrapper()
