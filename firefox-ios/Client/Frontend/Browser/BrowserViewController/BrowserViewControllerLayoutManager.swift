@@ -95,11 +95,13 @@ final class BrowserViewControllerLayoutManager {
     func updateHeaderBarLayout(isBottomSearchBar: Bool, addressToolbar: UIView) -> UILayoutGuide? {
         var guide: UILayoutGuide?
         #if compiler(>=6.4)
+        let traits = parentView.traitCollection
         if #available(iOS 27.1, *),
            !isBottomSearchBar,
            !addressToolbar.isHidden,
            addressToolbar.isDescendant(of: parentView),
-           parentView.traitCollection.userInterfaceIdiom == .phone {
+           traits.userInterfaceIdiom == .phone,
+           traits.hasVerticalSystemBar || traits.duoExpanded {
             // Use the iOS 27.1 bar layout API to keep address controls clear of iPhone Duo's status area.
             // Only the region's center is used. The region is at least the height the status bar items are
             // centered in, and a larger extent grows it downward, moving the center away from them.
