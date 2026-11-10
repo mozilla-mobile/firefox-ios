@@ -24,6 +24,7 @@ struct Store {
         self.feature = feature
         self.isReturningToAnswer = isReturningToAnswer
         if !isReturningToAnswer {
+            // Only a return to answer may read a stored session, so any other start drops it.
             sessionStorage.removeAll()
         }
     }
