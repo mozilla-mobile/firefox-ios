@@ -87,7 +87,7 @@ class TrackingProtectionModel {
         return url.isReaderModeURL ? .MainMenu.SiteProtection.ReaderModeSubtitle : originalURL.baseDomain ?? ""
     }
 
-    var connectionSecure: Bool {
+    var isConnectionSecure: Bool {
         selectedTab?.isSecure ?? false
     }
 
