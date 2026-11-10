@@ -34,12 +34,13 @@ final class VPNMiddleware {
         }
     }
 
-    /// Only creates a manager where `ProxyConfiguration` is available and the feature is enabled.
+    /// Only returns a manager where `ProxyConfiguration` is available and the feature is enabled.
+    /// Resolved from the container so the middleware and VPN settings share the same connection.
     static func makeVPNManager(
         featureFlags: FeatureFlagProviding = AppContainer.shared.resolve()
     ) -> VPNRunnable? {
         guard #available(iOS 17.0, *), featureFlags.isEnabled(.vpnFeature) else { return nil }
-        return VPNManager()
+        return AppContainer.shared.resolve() as VPNRunnable
     }
 
     private var selectedCountryCode: String? {

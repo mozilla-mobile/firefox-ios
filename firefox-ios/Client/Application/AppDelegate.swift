@@ -162,6 +162,10 @@ class AppDelegate: UIResponder,
         }
 
         if #available(iOS 17.0, *) {
+            reconnectVPNIfNeeded()
+        }
+
+        if #available(iOS 17.0, *) {
             ResetTipsSetting.resetDatastoreIfNeeded(prefs: profile.prefs)
             do {
                 try Tips.configure()
@@ -387,6 +391,29 @@ class AppDelegate: UIResponder,
         wallpaperMetadataQueue.async {
             let wallpaperManager = WallpaperManager()
             wallpaperManager.checkForUpdates()
+        }
+    }
+
+    // reconnect if the VPN was on when the app was last closed, tab restore waits on .vpnReconnect
+    private func reconnectVPNIfNeeded() {
+        let userPreferences: UserFeaturePreferring = AppContainer.shared.resolve()
+        guard #available(iOS 17.0, *),
+              featureFlagsProvider.isEnabled(.vpnFeature),
+              userPreferences.getPreferenceFor(.vpnFeature) else {
+            AppEventQueue.signal(event: .vpnReconnect)
+            return
+        }
+        let vpnManager: VPNRunnable = AppContainer.shared.resolve()
+        AppEventQueue.started(.vpnReconnect)
+        Task {
+            do {
+                try await vpnManager.start(
+                    countryCode: profile.prefs.stringForKey(PrefsKeys.VPNSettings.selectedCountryCode)
+                )
+            } catch {
+                logger.log("VPN reconnect failed: \(error)", level: .warning, category: .vpn)
+            }
+            AppEventQueue.completed(.vpnReconnect)
         }
     }
 

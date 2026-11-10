@@ -12,6 +12,7 @@ import VPNKit
 /// flat selection API. Records are Country-rooted: Country → City → Server → Protocol.
 protocol VPNServerManaging: Sendable {
     func selectServer(countryCode: String?, environment: VPNEnvironment) async -> VPNServerSelection?
+    func listCountries() async -> [VPNServerManager.Country]
 }
 
 struct VPNServerSelection {

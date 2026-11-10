@@ -1144,7 +1144,11 @@ class BrowserViewController: UIViewController,
 
         setupEssentialUI()
         subscribeToRedux()
-        tabManager.restoreTabs()
+        AppEventQueue.wait(for: .vpnReconnect) { [weak self] in
+            ensureMainThread { [weak self] in
+                self?.tabManager.restoreTabs()
+            }
+        }
         updateAddressToolbarContainerPosition(for: traitCollection)
         if isTabScrollRefactoringEnabled {
             setupToolbarAnimator()
