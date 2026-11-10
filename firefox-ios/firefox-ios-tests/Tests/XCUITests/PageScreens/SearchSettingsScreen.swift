@@ -226,7 +226,12 @@ final class SearchSettingsScreen {
     private func tapOnSwitch(_ selector: Selector) {
         let toggle = selector.element(in: app)
         BaseTestCase().scrollToElement(toggle, isHittable: true)
+        let initialValue = toggle.value as? String
         toggle.waitAndTap()
+        // A tap landing while the table still decelerates from the scroll only stops it
+        if toggle.value as? String == initialValue {
+            toggle.waitAndTap()
+        }
     }
 
     /// A row's title and description are set on its switch as one accessibility label, so that is
