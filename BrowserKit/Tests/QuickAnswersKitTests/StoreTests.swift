@@ -59,6 +59,30 @@ struct StoreTests {
     }
 
     @Test
+    func test_restoredSession_returningWithFlagOn_returnsLatestSession() {
+        sessionStorage.latestSession = makeSnapshot(question: "Question")
+        let subject = createSubject(isReturnToAnswerEnabled: true, isReturningToAnswer: true)
+
+        #expect(subject.restoredSession?.question == "Question")
+    }
+
+    @Test
+    func test_restoredSession_notReturning_returnsNil() {
+        sessionStorage.latestSession = makeSnapshot(question: "Question")
+        let subject = createSubject(isReturnToAnswerEnabled: true, isReturningToAnswer: false)
+
+        #expect(subject.restoredSession == nil)
+    }
+
+    @Test
+    func test_restoredSession_returningWithFlagOff_returnsNil() {
+        sessionStorage.latestSession = makeSnapshot(question: "Question")
+        let subject = createSubject(isReturnToAnswerEnabled: false, isReturningToAnswer: true)
+
+        #expect(subject.restoredSession == nil)
+    }
+
+    @Test
     func test_removeAllSessions_clearsLatestSession() {
         let subject = createSubject(isReturnToAnswerEnabled: true)
         subject.saveSession(makeSnapshot(question: "Question"))
@@ -77,7 +101,10 @@ struct StoreTests {
         )
     }
 
-    private func createSubject(isReturnToAnswerEnabled: Bool = false) -> Store {
+    private func createSubject(
+        isReturnToAnswerEnabled: Bool = false,
+        isReturningToAnswer: Bool = false
+    ) -> Store {
         let subject = Store(
             prefs: prefs,
             sessionStorage: sessionStorage,
@@ -86,7 +113,8 @@ struct StoreTests {
                 isOptInRedesignEnabled: false,
                 isFollowUpEnabled: false,
                 isReturnToAnswerEnabled: isReturnToAnswerEnabled
-            )
+            ),
+            isReturningToAnswer: isReturningToAnswer
         )
         return subject
     }
