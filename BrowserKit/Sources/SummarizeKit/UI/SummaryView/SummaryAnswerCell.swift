@@ -7,7 +7,7 @@ import ComponentLibrary
 import UIKit
 
 final class SummaryAnswerCell: UITableViewCell, ReusableCell, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let horizontalPadding: CGFloat = 24.0
     }
 
