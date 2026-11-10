@@ -17,7 +17,7 @@ final class VPNServerManagerTests: XCTestCase {
 
         let result = await subject.selectServer()
 
-        XCTAssertEqual(try XCTUnwrap(result).hostname, "rec.example")
+        XCTAssertEqual(try XCTUnwrap(result).server.hostname, "rec.example")
     }
 
     func testSelectServer_withCountryCode_returnsServerFromThatCountry() async throws {
@@ -28,9 +28,9 @@ final class VPNServerManagerTests: XCTestCase {
 
         let result = await subject.selectServer(countryCode: "DE")
 
-        XCTAssertEqual(result?.hostname, "de.example")
-        XCTAssertEqual(result?.city, "BER")
-        XCTAssertEqual(result?.countryCode, "DE")
+        XCTAssertEqual(result?.server.hostname, "de.example")
+        XCTAssertEqual(result?.server.city, "BER")
+        XCTAssertEqual(result?.server.countryCode, "DE")
     }
 
     func testSelectServer_requestedCountryAllQuarantined_fallsBackToRecommended() async throws {
@@ -42,7 +42,7 @@ final class VPNServerManagerTests: XCTestCase {
 
         let result = await subject.selectServer(countryCode: "DE")
 
-        XCTAssertEqual(try XCTUnwrap(result).hostname, "rec.example")
+        XCTAssertEqual(try XCTUnwrap(result).server.hostname, "rec.example")
     }
 
     func testSelectServer_requestedCountryMissing_fallsBackToRecommended() async throws {
@@ -53,7 +53,7 @@ final class VPNServerManagerTests: XCTestCase {
 
         let result = await subject.selectServer(countryCode: "FR")
 
-        XCTAssertEqual(try XCTUnwrap(result).hostname, "rec.example")
+        XCTAssertEqual(try XCTUnwrap(result).server.hostname, "rec.example")
     }
 
     func testSelectServer_noUsableRecommended_fallsBackToFirstUsableCountry() async throws {
@@ -65,7 +65,7 @@ final class VPNServerManagerTests: XCTestCase {
 
         let result = await subject.selectServer(countryCode: "FR")
 
-        XCTAssertEqual(try XCTUnwrap(result).hostname, "de.example")
+        XCTAssertEqual(try XCTUnwrap(result).server.hostname, "de.example")
     }
 
     func testSelectServer_skipsQuarantinedServersAcrossCities() async throws {
@@ -81,8 +81,8 @@ final class VPNServerManagerTests: XCTestCase {
 
         let result = await subject.selectServer()
 
-        XCTAssertEqual(result?.hostname, "b2.example")
-        XCTAssertEqual(result?.city, "B")
+        XCTAssertEqual(result?.server.hostname, "b2.example")
+        XCTAssertEqual(result?.server.city, "B")
     }
 
     func testSelectServer_allServersQuarantined_returnsNil() async {
@@ -111,8 +111,8 @@ final class VPNServerManagerTests: XCTestCase {
 
         let result = await subject.selectServer()
 
-        XCTAssertEqual(result?.hostname, "masque.example")
-        XCTAssertEqual(result?.port, 2499)
+        XCTAssertEqual(result?.server.hostname, "masque.example")
+        XCTAssertEqual(result?.server.port, 2499)
     }
 
     func testSelectServer_masqueWithoutHostOrPort_fallsBackToServerHostnameAndPort() async throws {
@@ -124,8 +124,8 @@ final class VPNServerManagerTests: XCTestCase {
 
         let result = await subject.selectServer()
 
-        XCTAssertEqual(result?.hostname, "rec.example")
-        XCTAssertEqual(result?.port, 8443)
+        XCTAssertEqual(result?.server.hostname, "rec.example")
+        XCTAssertEqual(result?.server.port, 8443)
     }
 
     func testSelectServer_withoutAnyPort_defaultsTo443() async throws {
@@ -135,7 +135,7 @@ final class VPNServerManagerTests: XCTestCase {
 
         let result = await subject.selectServer()
 
-        XCTAssertEqual(result?.port, 443)
+        XCTAssertEqual(result?.server.port, 443)
     }
 
     func testSelectServer_portOutOfRange_isClamped() async throws {
@@ -145,7 +145,7 @@ final class VPNServerManagerTests: XCTestCase {
 
         let result = await subject.selectServer()
 
-        XCTAssertEqual(result?.port, UInt16.max)
+        XCTAssertEqual(result?.server.port, UInt16.max)
     }
 
     func testSelectServer_noRecords_returnsNil() async {
