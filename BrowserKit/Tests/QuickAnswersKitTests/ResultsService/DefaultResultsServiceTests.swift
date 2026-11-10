@@ -271,7 +271,8 @@ struct DefaultResultsServiceTests {
         configFetcher.feature = QuickAnswersFeature(
             model: model,
             isOptInRedesignEnabled: false,
-            isFollowUpEnabled: isFollowUpEnabled
+            isFollowUpEnabled: isFollowUpEnabled,
+            isReturnToAnswerEnabled: false
         )
         let subject = DefaultResultsService(
             client: client,

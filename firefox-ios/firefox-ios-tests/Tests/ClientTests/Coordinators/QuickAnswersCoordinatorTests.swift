@@ -127,7 +127,12 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
 
         XCTAssertEqual(
             subject.resolvedFeature(),
-            QuickAnswersKit.QuickAnswersFeature(model: .liner, isOptInRedesignEnabled: true)
+            QuickAnswersKit.QuickAnswersFeature(
+                model: .liner,
+                isOptInRedesignEnabled: true,
+                isFollowUpEnabled: false,
+                isReturnToAnswerEnabled: false
+            )
         )
     }
 
@@ -137,7 +142,12 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
 
         XCTAssertEqual(
             subject.resolvedFeature(),
-            QuickAnswersKit.QuickAnswersFeature(model: .exa, isOptInRedesignEnabled: false)
+            QuickAnswersKit.QuickAnswersFeature(
+                model: .exa,
+                isOptInRedesignEnabled: false,
+                isFollowUpEnabled: false,
+                isReturnToAnswerEnabled: false
+            )
         )
     }
 
@@ -148,7 +158,12 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
 
         XCTAssertEqual(
             subject.resolvedFeature(),
-            QuickAnswersKit.QuickAnswersFeature(model: .exa, isOptInRedesignEnabled: false, isFollowUpEnabled: true)
+            QuickAnswersKit.QuickAnswersFeature(
+                model: .exa,
+                isOptInRedesignEnabled: false,
+                isFollowUpEnabled: true,
+                isReturnToAnswerEnabled: false
+            )
         )
     }
 
@@ -159,7 +174,12 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
 
         XCTAssertEqual(
             subject.resolvedFeature(),
-            QuickAnswersKit.QuickAnswersFeature(model: .exa, isOptInRedesignEnabled: false, isReturnToAnswerEnabled: true)
+            QuickAnswersKit.QuickAnswersFeature(
+                model: .exa,
+                isOptInRedesignEnabled: false,
+                isFollowUpEnabled: false,
+                isReturnToAnswerEnabled: true
+            )
         )
     }
 
