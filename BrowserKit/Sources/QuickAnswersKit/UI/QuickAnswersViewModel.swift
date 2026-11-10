@@ -121,6 +121,11 @@ final class QuickAnswersViewModel {
 
     /// Tears down the flow when the view is being dismissed, recording the relevant telemetry.
     func dismiss() {
+        tearDown()
+        store.removeAllSessions()
+    }
+
+    private func tearDown() {
         // if the opt-in is not completed at time of dismissal stopRecording triggers permission request, thus
         // we'd show a permission alert on dismissal which we don't want.
         // TODO: FXIOS-16224 - add isRecording parameter to transcription engine to perform clean up only when needed
@@ -221,7 +226,7 @@ final class QuickAnswersViewModel {
     /// - Returns: Whether there is an answered session the user can return to.
     func handleCitationTap() -> Bool {
         telemetry.citationTapped()
-        dismiss()
+        tearDown()
         return store.latestSession != nil
     }
 }
