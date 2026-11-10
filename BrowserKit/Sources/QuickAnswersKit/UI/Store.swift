@@ -23,6 +23,9 @@ struct Store {
         self.sessionStorage = sessionStorage
         self.feature = feature
         self.isReturningToAnswer = isReturningToAnswer
+        if !isReturningToAnswer {
+            sessionStorage.removeAll()
+        }
     }
 
     /// Whether the user has accepted the Quick Answers opt-in.
@@ -49,9 +52,5 @@ struct Store {
     func saveSession(_ session: QuickAnswersSessionSnapshot) {
         guard feature.isReturnToAnswerEnabled else { return }
         sessionStorage.latestSession = session
-    }
-
-    func removeAllSessions() {
-        sessionStorage.removeAll()
     }
 }
