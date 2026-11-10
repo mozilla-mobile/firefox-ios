@@ -15,6 +15,8 @@ enum VPNEvent: Equatable {
     /// A pass was applied, either on start or rotation.
     case passUpdated(VPNProxyPass)
     case rotationFailed
+    /// The selected location had no usable server, so a fallback server was used instead.
+    case selectedLocationUnavailable
 }
 
 @MainActor
@@ -96,9 +98,10 @@ final class VPNManager: VPNRunnable {
         let pass = try await guardian.getPass()
 
         // TODO: FXIOS-16873 When we implement location selection it will be passed in here
-        guard let server = await serverManager.selectServer(countryCode: nil, environment: environment) else {
+        guard let selection = await serverManager.selectServer(countryCode: nil, environment: environment) else {
             throw VPNError.noServerFound
         }
+        let server = selection.server
 
         self.logger.log(
             "Got Guardian proxy pass — expires \(pass.expiresAt), usage \(String(describing: pass.usage)); server \(server.hostname):\(server.port) (\(server.city), \(server.countryCode))",
@@ -110,6 +113,9 @@ final class VPNManager: VPNRunnable {
         self.activeServer = server
         self.startPassRotation(after: pass)
         self.eventsContinuation.yield(.passUpdated(pass))
+        if selection.didFallBack {
+            self.eventsContinuation.yield(.selectedLocationUnavailable)
+        }
     }
 
     func stop() async {

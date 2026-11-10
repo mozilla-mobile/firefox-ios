@@ -11,7 +11,13 @@ import VPNKit
 /// uses — see `toolkit/components/ipprotection/IPProtectionServerlist.sys.mjs`) and exposes a
 /// flat selection API. Records are Country-rooted: Country → City → Server → Protocol.
 protocol VPNServerManaging: Sendable {
-    func selectServer(countryCode: String?, environment: VPNEnvironment) async -> VPNGuardian.Server?
+    func selectServer(countryCode: String?, environment: VPNEnvironment) async -> VPNServerSelection?
+}
+
+struct VPNServerSelection {
+    let server: VPNGuardian.Server
+    /// The requested country had no usable server.
+    let didFallBack: Bool
 }
 
 final class VPNServerManager: VPNServerManaging {
@@ -67,23 +73,31 @@ final class VPNServerManager: VPNServerManaging {
     /// The "REC" step also covers a requested country whose servers are all quarantined, or one
     /// that has since been dropped from the collection, so a stale selection degrades to
     /// Recommended rather than to whatever country happens to be first in record order.
-    func selectServer(countryCode: String? = nil, environment: VPNEnvironment = .prod) async -> VPNGuardian.Server? {
+    func selectServer(countryCode: String? = nil, environment: VPNEnvironment = .prod) async -> VPNServerSelection? {
         // There is no location information for staging so we fall back to the hardcoded staging server
         guard environment != .stage else {
-            return Self.stagingServer
+            return VPNServerSelection(server: Self.stagingServer, didFallBack: false)
         }
         let countries = await decodeCountries()
-        let preferred = countryCode ?? VPNServerManager.recommendedCountryCode
-        if let pick = pickServer(in: countries.first(where: { $0.code == preferred })) {
-            return pick
+
+        // User has selected a country and the server is available
+        if let preferred = countryCode,
+            let pick = pickServer(in: countries.first(where: { $0.code == preferred })) {
+            return VPNServerSelection(server: pick, didFallBack: false)
         }
-        if preferred != VPNServerManager.recommendedCountryCode,
-           let pick = pickServer(in: countries.first(where: { $0.code == VPNServerManager.recommendedCountryCode })) {
-            return pick
+
+        let didFallBack = countryCode != nil
+
+        // Fall back to recommended if no server is picked
+        if let pick = pickServer(in: countries.first(where: { $0.code == VPNServerManager.recommendedCountryCode })) {
+            return VPNServerSelection(server: pick, didFallBack: didFallBack)
         }
+
+        // If recommended is not available, try to find any server
         for country in countries {
-            if let pick = pickServer(in: country) { return pick }
+            if let pick = pickServer(in: country) { return VPNServerSelection(server: pick, didFallBack: didFallBack) }
         }
+
         return nil
     }
 

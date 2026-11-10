@@ -58,6 +58,9 @@ final class VPNMiddleware {
             dispatchAlert(.showDataLimitAlert(dataLimitBytes: usage.max))
         case .rotationFailed:
             dispatchAlert(.showFailureAlert)
+        case .selectedLocationUnavailable:
+            // TODO: FXIOS-16876 wire up location selection errors
+            break
         }
     }
 
