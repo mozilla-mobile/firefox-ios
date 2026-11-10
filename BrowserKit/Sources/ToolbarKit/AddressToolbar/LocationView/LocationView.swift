@@ -497,7 +497,6 @@ final class LocationView: UIView,
     }
 
     private func restoreLocationViewSize() {
-        urlTextField.isUserInteractionEnabled = isEditing
         isUserInteractionEnabled = true
         UIView.animate(
             withDuration: UX.identityResetAnimationDuration,
