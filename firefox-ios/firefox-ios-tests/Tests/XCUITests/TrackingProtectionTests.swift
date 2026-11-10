@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import XCTest
 
 // Urls
@@ -21,6 +22,7 @@ class TrackingProtectionTests: BaseTestCase {
     var settingsScreen: SettingScreen!
     var toolbarScreen: ToolbarScreen!
     var mainMenuScreen: MainMenuScreen!
+    var websiteDataScreen: WebsiteDataScreen!
 
     override func setUp() async throws {
         try await super.setUp()
@@ -29,6 +31,7 @@ class TrackingProtectionTests: BaseTestCase {
         settingsScreen = SettingScreen(app: app)
         toolbarScreen = ToolbarScreen(app: app)
         mainMenuScreen = MainMenuScreen(app: app)
+        websiteDataScreen = WebsiteDataScreen(app: app)
     }
 
     override func tearDown() async throws {
@@ -295,6 +298,52 @@ class TrackingProtectionTests: BaseTestCase {
         trackingProtectionScreen.closePanel()
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3168488
+    // Regression
+    func testSecureConnectionButtonWithProtectionsOff() {
+        if iPad() {
+            app.launch()
+        } else {
+            launchIntoSettings()
+            settingsScreen.navigateToToolbarSettings()
+            settingsScreen.selectTopToolbar()
+            settingsScreen.tapBackToSettings()
+            settingsScreen.closeSettingsWithDoneButton()
+        }
+        browserScreen.navigateToURLAndAssertAddressBarContains("https://www.mozilla.org/", host: "mozilla.org")
+        waitUntilPageLoad()
+
+        // Step 1: with ETP off, "Secure connection" is shown under the grayed out fox
+        openConnectionPanel()
+        restoreProtectionsIfTestFails(url: "https://www.mozilla.org/", host: "mozilla.org")
+        trackingProtectionScreen.tapPanelTrackingProtectionSwitch()
+        trackingProtectionScreen.assertPanelTrackingProtectionSwitchValue(isOn: false)
+        trackingProtectionScreen.assertSecureConnectionIsBelowGrayedOutFox()
+
+        // Step 2: the connection details screen opens
+        trackingProtectionScreen.tapConnectionSecurityStatus()
+        trackingProtectionScreen.assertSecureConnectionDetailsStructure(domain: "mozilla.org")
+
+        // Step 3: "x" closes the sheet
+        trackingProtectionScreen.closeConnectionDetails()
+        trackingProtectionScreen.assertPanelDismissed()
+
+        // Step 4: repeat steps 1-2, ETP stays off for the site so the switch isn't tapped again
+        openConnectionPanel()
+        trackingProtectionScreen.assertPanelTrackingProtectionSwitchValue(isOn: false)
+        trackingProtectionScreen.assertSecureConnectionIsBelowGrayedOutFox()
+        trackingProtectionScreen.tapConnectionSecurityStatus()
+        trackingProtectionScreen.assertSecureConnectionDetailsStructure(domain: "mozilla.org")
+
+        trackingProtectionScreen.tapConnectionDetailsBack()
+        trackingProtectionScreen.assertPanelMainScreenDisplayed()
+
+        // The safelist outlives ClearProfile, so turn protections back on for the tests that follow
+        trackingProtectionScreen.tapPanelTrackingProtectionSwitch()
+        trackingProtectionScreen.assertPanelTrackingProtectionSwitchValue(isOn: true)
+        trackingProtectionScreen.closePanel()
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/3168482
     // Regression
     func testSecurityCertificateLink() {
@@ -323,6 +372,54 @@ class TrackingProtectionTests: BaseTestCase {
         trackingProtectionScreen.tapConnectionDetailsBack()
         trackingProtectionScreen.assertConnectionDetailsDisplayed()
         trackingProtectionScreen.tapConnectionDetailsBack()
+        trackingProtectionScreen.assertPanelMainScreenDisplayed()
+        trackingProtectionScreen.closePanel()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3168483
+    // Regression
+    func testClearCookiesAndSiteDataButton() {
+        // localhost has no base domain, so Clear does nothing for it; it stands in for the untouched site
+        let keptSiteURL = path(forTestPage: TestPages.cookieStore)
+        let clearedSiteURL = "http://localtest.me:\(serverPort)/test-fixture/\(TestPages.cookieStore)"
+        app.launchArguments.append(LaunchArguments.ClearWebData)
+        app.launch()
+
+        // Step 1: both sites store cookies, then the panel opens on the second one
+        logInOnCookiePage(url: keptSiteURL)
+        logInOnCookiePage(url: clearedSiteURL)
+        openConnectionPanel()
+        trackingProtectionScreen.assertPanelHeader(domain: "localtest.me")
+        trackingProtectionScreen.assertClearCookiesButtonIsBelowSwitch()
+
+        // Step 2: the confirmation alert opens over the panel
+        trackingProtectionScreen.tapClearCookiesAndSiteData()
+        trackingProtectionScreen.assertClearCookiesAlert(domain: "localtest.me")
+
+        // Step 3: "Clear" closes the alert and the panel, and the toast is shown
+        trackingProtectionScreen.confirmClearCookies()
+        trackingProtectionScreen.assertClearCookiesToastDisplayed()
+        trackingProtectionScreen.assertPanelDismissed()
+
+        // Step 4: the other site's data is untouched
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenuScreen.tapSettings()
+        settingsScreen.openWebsiteData()
+        websiteDataScreen.assertWebsiteDataRowExists(host: "localhost")
+        websiteDataScreen.navigateBackToBrowser()
+        browserScreen.navigateToURL(keptSiteURL)
+        waitUntilPageLoad()
+        browserScreen.assertCookiePageLoggedIn()
+
+        // Step 5: repeat steps 1-2, "Cancel" closes the alert and the panel stays open
+        browserScreen.navigateToURL(clearedSiteURL)
+        waitUntilPageLoad()
+        openConnectionPanel()
+        trackingProtectionScreen.assertPanelHeader(domain: "localtest.me")
+        trackingProtectionScreen.assertClearCookiesButtonIsBelowSwitch()
+        trackingProtectionScreen.tapClearCookiesAndSiteData()
+        trackingProtectionScreen.assertClearCookiesAlert(domain: "localtest.me")
+        trackingProtectionScreen.cancelClearCookies()
         trackingProtectionScreen.assertPanelMainScreenDisplayed()
         trackingProtectionScreen.closePanel()
     }
@@ -356,6 +453,13 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.openURL(url)
         waitUntilPageLoad()
         waitForTabsButton()
+    }
+
+    private func logInOnCookiePage(url: String) {
+        browserScreen.navigateToURL(url)
+        waitUntilPageLoad()
+        browserScreen.assertCookiePageLoaded()
+        browserScreen.logInOnCookiePage()
     }
 
     private func openConnectionPanel() {

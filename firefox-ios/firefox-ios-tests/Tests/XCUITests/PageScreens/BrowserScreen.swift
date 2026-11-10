@@ -904,6 +904,17 @@ final class BrowserScreen {
         sel.PRIVATE_MODE_HOMEPAGE_LINK.element(in: app).waitAndTap()
     }
 
+    /// Taps Login on the cookie test page, which stores its login cookies, and waits for LOGGED_IN.
+    func logInOnCookiePage() {
+        let webview = app.webViews.firstMatch
+        webview.buttons["Login"].waitAndTap()
+        assertCookiePageLoggedIn()
+    }
+
+    func assertCookiePageLoggedIn() {
+        BaseTestCase().mozWaitForElementToExist(app.webViews.firstMatch.staticTexts["LOGGED_IN"])
+    }
+
     func assertCookiePageLoaded() {
         let webview = app.webViews.firstMatch
         BaseTestCase().mozWaitForElementToExist(webview.staticTexts["Cookie Test Page"])

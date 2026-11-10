@@ -71,6 +71,12 @@ final class WebsiteDataScreen {
         }
     }
 
+    func assertWebsiteDataRowExists(host: String, timeout: TimeInterval = TIMEOUT) {
+        waitUntilListIsReady(timeout: timeout)
+        expandShowMoreIfNeeded()
+        BaseTestCase().mozWaitForElementToExist(sel.websiteDataRow(host: host).element(in: app), timeout: timeout)
+    }
+
     func waitForExampleDomain(timeout: TimeInterval = TIMEOUT) {
         BaseTestCase().mozWaitForElementToExist(sel.EXAMPLE_EQUAL.element(in: app), timeout: timeout)
     }

@@ -188,6 +188,20 @@ final class TrackingProtectionScreen {
         XCTAssertTrue(connection.isBelow(element: trackers), "Secure connection should be below the trackers section")
     }
 
+    /// With protections off the fox illustration turns grayscale and the trackers section is hidden,
+    /// so "Secure connection" sits right below the illustration.
+    @MainActor
+    func assertSecureConnectionIsBelowGrayedOutFox() {
+        let foxImage = sel.PANEL_FOX_IMAGE.element(in: app)
+        let connection = sel.SECURITY_STATUS_BUTTON.element(in: app)
+        BaseTestCase().waitForElementsToExist([foxImage, connection])
+        BaseTestCase().mozWaitForElementToNotExist(sel.PANEL_TRACKERS_BUTTON.element(in: app))
+        let saturatedRatio = foxImage.saturatedPixelRatio()
+        XCTAssertLessThan(saturatedRatio, 0.02, "Expected a grayed out fox, \(saturatedRatio) of its pixels are colored")
+        assertPanelConnectionIs(secure: true)
+        XCTAssertTrue(connection.isBelow(element: foxImage), "Secure connection should be below the fox illustration")
+    }
+
     /// Checks the connection details screen: header (back, website name, close), "Secure connection",
     /// "Verified by" and "View certificate", top to bottom.
     @MainActor
@@ -332,6 +346,57 @@ final class TrackingProtectionScreen {
     @MainActor
     func closeConnectionDetails() {
         sel.DETAILS_CLOSE_BUTTON.element(in: app).waitAndTap()
+    }
+
+    @MainActor
+    func assertClearCookiesButtonIsBelowSwitch() {
+        let toggle = sel.PANEL_TRACKING_PROTECTION_SWITCH.element(in: app)
+        let clearCookies = sel.PANEL_CLEAR_COOKIES_BUTTON.element(in: app)
+        BaseTestCase().waitForElementsToExist([toggle, clearCookies])
+        XCTAssertEqual(clearCookies.label,
+                       String.Menu.EnhancedTrackingProtection.clearDataButtonTitle,
+                       "Unexpected Clear cookies button")
+        XCTAssertTrue(clearCookies.isBelow(element: toggle), "Clear cookies should be below the ETP switch")
+    }
+
+    @MainActor
+    func tapClearCookiesAndSiteData() {
+        sel.PANEL_CLEAR_COOKIES_BUTTON.element(in: app).waitAndTap()
+    }
+
+    /// Checks the confirmation alert: title, the warning naming `domain`, and the Clear and Cancel buttons.
+    @MainActor
+    func assertClearCookiesAlert(domain: String) {
+        let alert = sel.CLEAR_COOKIES_ALERT.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(alert)
+        let message = String(format: .Menu.EnhancedTrackingProtection.clearDataAlertText, domain)
+        BaseTestCase().waitForElementsToExist(
+            [
+                alert.staticTexts[String.Menu.EnhancedTrackingProtection.clearDataAlertTitle],
+                alert.staticTexts[message],
+                alert.buttons[String.Menu.EnhancedTrackingProtection.clearDataAlertButton],
+                alert.buttons[String.Menu.EnhancedTrackingProtection.clearDataAlertCancelButton]
+            ]
+        )
+    }
+
+    @MainActor
+    func confirmClearCookies() {
+        let alert = sel.CLEAR_COOKIES_ALERT.element(in: app)
+        alert.buttons[String.Menu.EnhancedTrackingProtection.clearDataAlertButton].waitAndTap()
+        BaseTestCase().mozWaitForElementToNotExist(alert)
+    }
+
+    @MainActor
+    func cancelClearCookies() {
+        let alert = sel.CLEAR_COOKIES_ALERT.element(in: app)
+        alert.buttons[String.Menu.EnhancedTrackingProtection.clearDataAlertCancelButton].waitAndTap()
+        BaseTestCase().mozWaitForElementToNotExist(alert)
+    }
+
+    @MainActor
+    func assertClearCookiesToastDisplayed() {
+        BaseTestCase().mozWaitForElementToExist(sel.CLEAR_COOKIES_TOAST.element(in: app))
     }
 
     // assertTrackingProtectionSwitchIsEnabled/Disabled above check whether the switch control

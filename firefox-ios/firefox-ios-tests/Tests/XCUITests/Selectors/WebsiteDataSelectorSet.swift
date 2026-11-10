@@ -26,6 +26,8 @@ protocol WebsiteDataSelectorsSet {
     @MainActor
     func websiteDataRowImages(_ app: XCUIApplication) -> XCUIElementQuery
 
+    func websiteDataRow(host: String) -> Selector
+
     var all: [Selector] { get }
 }
 
@@ -129,6 +131,14 @@ struct WebsiteDataSelectors: WebsiteDataSelectorsSet {
     @MainActor
     func websiteDataRowImages(_ app: XCUIApplication) -> XCUIElementQuery {
         return app.tables.cells.buttons.images
+    }
+
+    func websiteDataRow(host: String) -> Selector {
+        Selector.staticTextInTablesByLabel(
+            host,
+            description: "Website Data row for \(host)",
+            groups: ["settings", "privacy"]
+        )
     }
 
     var all: [Selector] {
