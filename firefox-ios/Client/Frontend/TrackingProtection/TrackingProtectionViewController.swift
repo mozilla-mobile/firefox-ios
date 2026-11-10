@@ -130,7 +130,7 @@ class TrackingProtectionViewController: UIViewController,
     private var shouldConnectionStatusBeTappable: Bool {
         let isReaderMode = model.selectedTab?.url?.isReaderModeURL == true
         let isCertError = InternalURL(model.selectedTab?.url)?.isCertificateErrorURL == true
-        let isSecure = model.selectedTab?.isSecure ?? false
+        let isSecure = model.isConnectionSecure
         let origin = CertStore.origin(for: model.originalURL) ?? ""
         let isManuallyTrusted = profile?.certStore.hasCertificate(forOrigin: origin) ?? false
 
