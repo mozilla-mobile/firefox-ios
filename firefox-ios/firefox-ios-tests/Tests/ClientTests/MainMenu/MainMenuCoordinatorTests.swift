@@ -91,6 +91,17 @@ final class MainMenuCoordinatorTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockDelegate.presentReportBrokenSiteCalled, 1)
     }
 
+    func testHandleNavigation_privacyPanel_callsPresentPrivacyPanelOnDelegate() {
+        let subject = createSubject()
+        let mockDelegate = MockMainMenuCoordinatorDelegate()
+        subject.navigationHandler = mockDelegate
+
+        subject.navigateTo(MenuNavigationDestination(.privacyPanel), animated: false)
+        mockRouter.savedCompletion?()
+
+        XCTAssertEqual(mockDelegate.presentPrivacyPanelCalled, 1)
+    }
+
     func testHandleNavigation_webpageSummary_callsDelegate() {
         let subject = createSubject()
         let mockDelegate = MockMainMenuCoordinatorDelegate()

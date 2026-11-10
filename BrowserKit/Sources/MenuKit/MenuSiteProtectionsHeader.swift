@@ -35,9 +35,12 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
     public var closeButtonCallback: (() -> Void)?
     public var siteProtectionsButtonCallback: (() -> Void)?
     public var adBlockerButtonCallback: (() -> Void)?
+    public var privacyPanelButtonCallback: (() -> Void)?
     public var mainMenuHelper: MainMenuInterface = MainMenuHelper()
 
     private var trailingContentConstraints: [NSLayoutConstraint] = []
+    private var visibleBadges: [MenuSiteBadge] = []
+    private var badgeRows: [[MenuSiteBadge]] = []
 
     public func setCloseButtonHidden(_ hidden: Bool) {
         guard closeButton.isHidden != hidden else { return }
@@ -93,9 +96,8 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
     }
 
     private lazy var badgesStack: UIStackView = .build { stack in
-        stack.axis = .horizontal
-        stack.alignment = .center
-        stack.distribution = .fill
+        stack.axis = .vertical
+        stack.alignment = .leading
         stack.spacing = UX.badgesSpacing
     }
 
@@ -113,10 +115,16 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         return badge
     }()
 
+    private lazy var privacyPanelBadge: MenuSiteBadge = {
+        let badge = MenuSiteBadge(mainMenuHelper: mainMenuHelper)
+        badge.translatesAutoresizingMaskIntoConstraints = false
+        badge.tapHandler = { [weak self] in self?.privacyPanelButtonCallback?() }
+        return badge
+    }()
+
     init() {
         super.init(frame: .zero)
         setupViews()
-        updateBadgesAxis()
     }
 
     required init?(coder: NSCoder) {
@@ -126,21 +134,60 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
     override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
-            updateBadgesAxis()
+            setNeedsLayout()
         }
     }
 
-    private func updateBadgesAxis() {
+    override public func layoutSubviews() {
+        super.layoutSubviews()
+        layoutBadgeRows()
+    }
+
+    /// Distributes the visible badges into rows, wrapping to a new row when a badge doesn't fit.
+    private func layoutBadgeRows() {
         let isLarge = traitCollection.preferredContentSizeCategory.isAccessibilityCategory
-        badgesStack.axis = isLarge ? .vertical : .horizontal
-        badgesStack.alignment = isLarge ? .leading : .center
+        let maxX = closeButton.isHidden
+            ? safeAreaLayoutGuide.layoutFrame.maxX - UX.horizontalContentMargin
+            : closeButton.frame.minX
+        let availableWidth = maxX - favicon.frame.minX
+
+        var rows: [[MenuSiteBadge]] = []
+        var rowWidth: CGFloat = 0
+        for badge in visibleBadges {
+            let width = badge.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).width
+            if !isLarge, !rows.isEmpty, rowWidth + UX.badgesSpacing + width <= availableWidth {
+                rows[rows.count - 1].append(badge)
+                rowWidth += UX.badgesSpacing + width
+            } else {
+                rows.append([badge])
+                rowWidth = width
+            }
+        }
+
+        guard rows != badgeRows else { return }
+        badgeRows = rows
+        badgesStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        for row in rows {
+            let rowStack = UIStackView(arrangedSubviews: row)
+            rowStack.axis = .horizontal
+            rowStack.alignment = .center
+            rowStack.spacing = UX.badgesSpacing
+            badgesStack.addArrangedSubview(rowStack)
+        }
+    }
+
+    private func setVisibleBadges(_ badges: [MenuSiteBadge]) {
+        guard badges != visibleBadges else { return }
+        visibleBadges = badges
+        badgeRows = []
+        setNeedsLayout()
     }
 
     private func setupViews() {
         contentLabels.addArrangedSubview(titleLabel)
         contentLabels.addArrangedSubview(subtitleLabel)
         addSubviews(contentLabels, favicon, closeButton, badgesStack)
-        badgesStack.addArrangedSubview(siteProtectionsBadge)
+        visibleBadges = [siteProtectionsBadge]
 
         let badgesTopFromFavicon = badgesStack.topAnchor.constraint(
             greaterThanOrEqualTo: favicon.bottomAnchor,
@@ -190,7 +237,8 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         stateIconTintColor: UIColor? = nil,
         stateTextColor: UIColor? = nil,
         stateChevronTintColor: UIColor? = nil,
-        adBlocker: MenuSiteAdBlockerBadgeData? = nil
+        adBlocker: MenuSiteAdBlockerBadgeData? = nil,
+        privacyPanel: MenuSiteAdBlockerBadgeData? = nil
     ) {
         titleLabel.text = title
         subtitleLabel.text = subtitle
@@ -200,17 +248,22 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
                                        iconTintColor: stateIconTintColor,
                                        textColor: stateTextColor,
                                        chevronTintColor: stateChevronTintColor)
+        var badges = [siteProtectionsBadge]
         if let adBlocker {
-            if adBlockerBadge.superview == nil {
-                badgesStack.addArrangedSubview(adBlockerBadge)
-            }
+            badges.append(adBlockerBadge)
             adBlockerBadge.configure(text: adBlocker.title,
                                      iconName: adBlocker.image,
                                      useTemplate: adBlocker.shouldUseRenderMode,
                                      iconTintColor: adBlocker.iconTintColor)
-        } else {
-            adBlockerBadge.removeFromSuperview()
         }
+        if let privacyPanel {
+            badges.append(privacyPanelBadge)
+            privacyPanelBadge.configure(text: privacyPanel.title,
+                                        iconName: privacyPanel.image,
+                                        useTemplate: privacyPanel.shouldUseRenderMode,
+                                        iconTintColor: privacyPanel.iconTintColor)
+        }
+        setVisibleBadges(badges)
         let image = FaviconImageViewModel(siteURLString: image,
                                           faviconCornerRadius: UX.favIconSize / 2)
         favicon.setFavicon(image)
@@ -248,5 +301,6 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         }
         siteProtectionsBadge.applyTheme(theme: theme)
         adBlockerBadge.applyTheme(theme: theme)
+        privacyPanelBadge.applyTheme(theme: theme)
     }
 }

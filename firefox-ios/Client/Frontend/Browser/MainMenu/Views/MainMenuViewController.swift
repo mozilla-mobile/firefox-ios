@@ -167,6 +167,10 @@ class MainMenuViewController: UIViewController,
             self?.dispatchAdBlockerAction()
         }
 
+        menuContent.siteProtectionHeader.privacyPanelButtonCallback = { [weak self] in
+            self?.dispatchPrivacyPanelAction()
+        }
+
         menuContent.closeButtonCallback = { [weak self] in
             self?.dispatchCloseMenuAction()
         }
@@ -515,6 +519,17 @@ class MainMenuViewController: UIViewController,
         )
     }
 
+    private func dispatchPrivacyPanelAction() {
+        store.dispatch(
+            MainMenuAction(
+                windowUUID: self.windowUUID,
+                actionType: MainMenuActionType.tapNavigateToDestination,
+                navigationDestination: MenuNavigationDestination(.privacyPanel),
+                currentTabInfo: menuState.currentTabInfo
+            )
+        )
+    }
+
     private func dispatchDefaultBrowserAction() {
         store.dispatch(
             MainMenuAction(
@@ -581,6 +596,13 @@ class MainMenuViewController: UIViewController,
                                               iconTintColor: adBlockerTintColor)
         }()
 
+        let privacyPanel: MenuSiteAdBlockerBadgeData? = adBlocker.map { _ in
+            MenuSiteAdBlockerBadgeData(title: String.MainMenu.SiteProtection.PrivacyPanel,
+                                       image: StandardImageIdentifiers.Large.shield,
+                                       shouldUseRenderMode: true,
+                                       iconTintColor: currentTheme.colors.iconPrimary)
+        }
+
         menuContent.siteProtectionHeader.setupDetails(
             title: siteProtectionsData.title,
             subtitle: siteProtectionsData.subtitle,
@@ -591,7 +613,8 @@ class MainMenuViewController: UIViewController,
             stateIconTintColor: protectionsTintColor,
             stateTextColor: currentTheme.isNova ? currentTheme.colors.textPrimary : nil,
             stateChevronTintColor: currentTheme.isNova ? currentTheme.colors.iconPrimary : nil,
-            adBlocker: adBlocker)
+            adBlocker: adBlocker,
+            privacyPanel: privacyPanel)
     }
 
     // MARK: - A11y

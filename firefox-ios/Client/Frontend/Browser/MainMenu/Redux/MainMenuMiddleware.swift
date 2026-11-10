@@ -225,6 +225,9 @@ final class MainMenuMiddleware {
         case .adBlocker:
             self.telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.adBlocker)
 
+        case .privacyPanel:
+            break
+
         case .defaultBrowser:
             self.telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.defaultBrowserSettings)
 

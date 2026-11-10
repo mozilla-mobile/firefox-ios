@@ -771,6 +771,13 @@ final class BrowserCoordinator: BaseCoordinator,
         router.present(navigationController, animated: true)
     }
 
+    func presentPrivacyPanel() {
+        let privacyPanel = PrivacyPanelViewController()
+        privacyPanel.sheetPresentationController?.detents = [.medium(), .large()]
+        privacyPanel.sheetPresentationController?.prefersGrabberVisible = true
+        router.present(privacyPanel, animated: true)
+    }
+
     private func setupAdBlockerSettingsDetents(for controller: UIViewController) {
         if #available(iOS 16.0, *) {
             let customDetent = UISheetPresentationController.Detent.custom(

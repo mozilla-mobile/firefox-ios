@@ -17,6 +17,7 @@ class MockMainMenuCoordinatorDelegate: MainMenuCoordinatorDelegate {
     private(set) var presentReportBrokenSiteCalled = 0
     private(set) var presentReportBrokenSiteURL: URL?
     private(set) var presentAdBlockerSettingsCalled = 0
+    private(set) var presentPrivacyPanelCalled = 0
     private(set) var showPrintSheetCalled = 0
     private(set) var showShareSheetForCurrentlySelectedTabCalled = 0
     private(set) var showSummarizePanelCalled = 0
@@ -61,6 +62,10 @@ class MockMainMenuCoordinatorDelegate: MainMenuCoordinatorDelegate {
 
     func presentAdBlockerSettings() {
         presentAdBlockerSettingsCalled += 1
+    }
+
+    func presentPrivacyPanel() {
+        presentPrivacyPanelCalled += 1
     }
 
     func showPrintSheet() {

@@ -39,6 +39,9 @@ protocol MainMenuCoordinatorDelegate: AnyObject {
     func presentAdBlockerSettings()
 
     @MainActor
+    func presentPrivacyPanel()
+
+    @MainActor
     func showPrintSheet()
 
     /// Open the share sheet to share the currently selected `Tab`.
@@ -168,6 +171,9 @@ class MainMenuCoordinator: BaseCoordinator {
 
         case .adBlocker:
             navigationHandler?.presentAdBlockerSettings()
+
+        case .privacyPanel:
+            navigationHandler?.presentPrivacyPanel()
 
         case .defaultBrowser:
             DefaultApplicationHelper().openSettings()

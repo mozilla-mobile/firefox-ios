@@ -1776,6 +1776,9 @@
 		C2F335342ECE33720071588A /* translations-engine.worker.js in Resources */ = {isa = PBXBuildFile; fileRef = C2F335322ECE33720071588A /* translations-engine.worker.js */; };
 		C2F335352ECE33720071588A /* TranslationsEngine.js in Resources */ = {isa = PBXBuildFile; fileRef = C2F335332ECE33720071588A /* TranslationsEngine.js */; };
 		C2F335372ECE339F0071588A /* TranslationsEngine.html in Resources */ = {isa = PBXBuildFile; fileRef = C2F335362ECE339F0071588A /* TranslationsEngine.html */; };
+		AB01DE5A2F00000000000001 /* PrivacyPanel.html in Resources */ = {isa = PBXBuildFile; fileRef = AB01DE5A2F00000000000002 /* PrivacyPanel.html */; };
+		AB01DE5A2F00000000000003 /* PrivacyPanel.js in Resources */ = {isa = PBXBuildFile; fileRef = AB01DE5A2F00000000000004 /* PrivacyPanel.js */; };
+		AB01DE5A2F00000000000005 /* PrivacyPanelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB01DE5A2F00000000000006 /* PrivacyPanelViewController.swift */; };
 		C2F336EB2ECE44840071588A /* TranslationsServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F336EA2ECE447A0071588A /* TranslationsServiceProtocol.swift */; };
 		C2F336ED2ECE45E20071588A /* TranslationsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F336EC2ECE45DB0071588A /* TranslationsService.swift */; };
 		C2F700A12FBC000100112233 /* TrackerBlockerModuleAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F700B12FBC000100112233 /* TrackerBlockerModuleAction.swift */; };
@@ -11480,6 +11483,9 @@
 		C2F335322ECE33720071588A /* translations-engine.worker.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "translations-engine.worker.js"; sourceTree = "<group>"; };
 		C2F335332ECE33720071588A /* TranslationsEngine.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = TranslationsEngine.js; sourceTree = "<group>"; };
 		C2F335362ECE339F0071588A /* TranslationsEngine.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = TranslationsEngine.html; path = Client/Frontend/UserContent/UserScripts/TranslationsEngine/TranslationsEngine.html; sourceTree = "<group>"; };
+		AB01DE5A2F00000000000002 /* PrivacyPanel.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = PrivacyPanel.html; path = Client/Frontend/UserContent/UserScripts/PrivacyPanel/PrivacyPanel.html; sourceTree = "<group>"; };
+		AB01DE5A2F00000000000004 /* PrivacyPanel.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = PrivacyPanel.js; sourceTree = "<group>"; };
+		AB01DE5A2F00000000000006 /* PrivacyPanelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPanelViewController.swift; sourceTree = "<group>"; };
 		C2F336EA2ECE447A0071588A /* TranslationsServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsServiceProtocol.swift; sourceTree = "<group>"; };
 		C2F336EC2ECE45DB0071588A /* TranslationsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsService.swift; sourceTree = "<group>"; };
 		C2F700B12FBC000100112233 /* TrackerBlockerModuleAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerBlockerModuleAction.swift; sourceTree = "<group>"; };
@@ -18179,6 +18185,7 @@
 				D4F0C2642B2C90FB008ECEE8 /* BrowserKit */,
 				1BFB58D82E4D1CB700643A49 /* MozillaRustComponents */,
 				C2F335362ECE339F0071588A /* TranslationsEngine.html */,
+				AB01DE5A2F00000000000002 /* PrivacyPanel.html */,
 				43BE578B278BA4D900491291 /* RustMozillaAppServices-Info.plist */,
 				962C6C3F2971F5D400354BE8 /* Dangerfile.swift */,
 				962C6C39297054A700354BE8 /* Package.swift */,
@@ -18441,6 +18448,7 @@
 			children = (
 				C2F335322ECE33720071588A /* translations-engine.worker.js */,
 				C2F335332ECE33720071588A /* TranslationsEngine.js */,
+				AB01DE5A2F00000000000004 /* PrivacyPanel.js */,
 				ED287B732E4D4C0500527204 /* LiquidGlassAppIcons */,
 				0BD049CF2DFC4B7900614E61 /* Debug */,
 				E699220D1B94E3EF007C480D /* About */,
@@ -18468,12 +18476,21 @@
 			path = Assets;
 			sourceTree = "<group>";
 		};
+		AB01DE5A2F00000000000007 /* PrivacyPanel */ = {
+			isa = PBXGroup;
+			children = (
+				AB01DE5A2F00000000000006 /* PrivacyPanelViewController.swift */,
+			);
+			path = PrivacyPanel;
+			sourceTree = "<group>";
+		};
 		F84B21F11A0910F600AAB793 /* Frontend */ = {
 			isa = PBXGroup;
 			children = (
 				ECD8E56A2FF7EB5B002092C6 /* Wayback */,
 				0B78DC6C2E3C9CDA00804872 /* Summarizer */,
 				AA5E81452EB12BAB00919E60 /* Translations */,
+				AB01DE5A2F00000000000007 /* PrivacyPanel */,
 				FB16062100000000000000E0 /* GoogleLens */,
 				392ED7D51D0AEEEE009D9B62 /* Accessors */,
 				E692E3271C46E62D009D1240 /* AuthenticationManager */,
@@ -19660,6 +19677,7 @@
 			files = (
 				EEB971C32FC48C4800D6C232 /* Reader.css in Resources */,
 				C2F335372ECE339F0071588A /* TranslationsEngine.html in Resources */,
+				AB01DE5A2F00000000000001 /* PrivacyPanel.html in Resources */,
 				8A94DB962E0F16E80005FE69 /* homepageSearchBarOff.json in Resources */,
 				8A94DB972E0F16E80005FE69 /* homepageSearchBarOn.json in Resources */,
 				9A6A6D06E2CA4A33943C7881 /* homepageStoryCategoriesOn.json in Resources */,
@@ -19673,6 +19691,7 @@
 				C2F335342ECE33720071588A /* translations-engine.worker.js in Resources */,
 				A5C9C991308A99330016CA78 /* searchTermInAddressBarOn.json in Resources */,
 				C2F335352ECE33720071588A /* TranslationsEngine.js in Resources */,
+				AB01DE5A2F00000000000003 /* PrivacyPanel.js in Resources */,
 				D4AFAB0E2AFA8F9A000BFEAA /* SyncIntegrationTests in Resources */,
 				EDF2C05C2D6CDB6F00723609 /* AppIcons.xcassets in Resources */,
 				43F92B3829E9F52B000C0F17 /* AutofillAllFramesAtDocumentStart.js in Resources */,
@@ -20816,6 +20835,7 @@
 				F18859502A3E454E0004AA7B /* EnhancedTrackingProtectionCoordinator.swift in Sources */,
 				21618A8C2A438A0900A5189E /* ComponentAction.swift in Sources */,
 				C25020802ECDE0390071506F /* TranslationsEngine.swift in Sources */,
+				AB01DE5A2F00000000000005 /* PrivacyPanelViewController.swift in Sources */,
 				E15DE7C2293A7AED00B32667 /* PhotonActionSheetLineSeparator.swift in Sources */,
 				631A369F2CC0A4FE0044DFEB /* NativeErrorPageMiddleware.swift in Sources */,
 				8CE1E43A2B8C76C80026530B /* LoginListView.swift in Sources */,
