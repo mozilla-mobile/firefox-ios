@@ -85,7 +85,7 @@ final class HomepageViewController: UIViewController,
         return view.frame.size.width
     }
 
-    private lazy var nativeMenuHelper = NativeMenuHelper(windowUUID: windowUUID, toastContainer: view)
+    private lazy var nativeMenuHelper = NativeMenuHelper(windowUUID: windowUUID, toastContainer: toastContainer)
 
     // MARK: - Private constants
     private let profile: Profile
