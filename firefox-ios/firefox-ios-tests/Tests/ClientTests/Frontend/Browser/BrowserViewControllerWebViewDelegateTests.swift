@@ -332,15 +332,30 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     }
 
     @MainActor
-    func testWebViewDecidePolicyForNavigationAction_allowInternalURL_whenUnprivilegedReaderModeURL() {
+    func testWebViewDecidePolicyForNavigationAction_cancelInternalURL_whenUnprivilegedReaderModeURL() {
         let subject = createSubject()
         let tab = createTab()
         tabManager.tabs = [tab]
-        let url = URL(string: "http://localhost:6571/reader-mode/page")!
+        let url = URL(string: "http://localhost:6571/reader-mode/page?url=https://accounts.google.com/")!
 
         subject.webView(tab.webView!,
                         decidePolicyFor: MockNavigationAction(url: url,
                                                               type: .linkActivated)) { policy in
+            XCTAssertEqual(policy, .cancel)
+        }
+    }
+
+    @MainActor
+    func testWebViewDecidePolicyForNavigationAction_allowInternalURL_whenAuthorizedReaderModeURL() {
+        let subject = createSubject()
+        let tab = createTab()
+        tabManager.tabs = [tab]
+        let url = URL(string: "http://localhost:6571/reader-mode/page?url=https://mozilla.org/")!
+        let authorizedURL = InternalURL.authorize(url: url)!
+
+        subject.webView(tab.webView!,
+                        decidePolicyFor: MockNavigationAction(url: authorizedURL,
+                                                              type: .other)) { policy in
             XCTAssertEqual(policy, .allow)
         }
     }

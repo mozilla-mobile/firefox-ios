@@ -749,8 +749,7 @@ extension BrowserViewController: WKNavigationDelegate {
         decisionHandler: @escaping @MainActor (WKNavigationActionPolicy) -> Void
     ) {
         if navigationAction.navigationType != .backForward,
-           navigationAction.isInternalUnprivileged,
-           !url.isReaderModeURL {
+           navigationAction.isInternalUnprivileged {
             logger.log("Denying unprivileged request: \(navigationAction.request)",
                        level: .warning,
                        category: .webview)
