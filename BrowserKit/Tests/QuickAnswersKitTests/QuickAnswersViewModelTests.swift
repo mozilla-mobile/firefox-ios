@@ -361,6 +361,23 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertNil(sessionStorage.latestSession)
     }
 
+    func test_hasParkedSession_withStoredSession_isTrue() {
+        let subject = createSubject(isReturnToAnswerEnabled: true)
+
+        sessionStorage.latestSession = makeSnapshot(question: "Saved question")
+
+        XCTAssertTrue(subject.hasParkedSession)
+    }
+
+    func test_hasParkedSession_afterDismiss_isFalse() {
+        let subject = createSubject(prefs: optInCompletedPrefs(), isReturnToAnswerEnabled: true)
+        answerQuestion("Hello world", with: subject)
+
+        subject.dismiss()
+
+        XCTAssertFalse(subject.hasParkedSession)
+    }
+
     func test_handleCitationTap_withAnsweredSession_returnsTrue() {
         let subject = createSubject(prefs: optInCompletedPrefs(), isReturnToAnswerEnabled: true)
         answerQuestion("Hello world", with: subject)

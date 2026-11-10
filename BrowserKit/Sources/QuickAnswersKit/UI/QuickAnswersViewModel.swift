@@ -51,6 +51,10 @@ final class QuickAnswersViewModel {
         return isOptInRequired && feature.isOptInRedesignEnabled
     }
 
+    var hasParkedSession: Bool {
+        return store.latestSession != nil
+    }
+
     init(
         prefs: Prefs,
         sessionStorage: QuickAnswersSessionStorage,
