@@ -1998,6 +1998,7 @@
 		D0769743206C19E900FACFD8 /* SQLiteReadingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0769742206C19E800FACFD8 /* SQLiteReadingList.swift */; };
 		D09A0CDC1FAA24CC009A0273 /* libAccount.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FA435FB1ABB83B4008031D1 /* libAccount.a */; };
 		D0B693D5206C5BB9008A8B11 /* TestSQLiteReadingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B693D4206C5BB9008A8B11 /* TestSQLiteReadingList.swift */; };
+		FA27986000000000000000A2 /* TestSQLiteQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA27986000000000000000A1 /* TestSQLiteQueue.swift */; };
 		D0B9483D22A18B78002F4AA1 /* TextFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B9483C22A18B78002F4AA1 /* TextFieldTableViewCell.swift */; };
 		D0C95E0E200FD3B200E4E51C /* PrintHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C95E0D200FD3B200E4E51C /* PrintHelper.swift */; };
 		D0C95E36200FDC5500E4E51C /* MetadataParserHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C95E35200FDC5400E4E51C /* MetadataParserHelper.swift */; };
@@ -11769,6 +11770,7 @@
 		D08245ADBF1AC954FBD578DF /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/Intro.strings"; sourceTree = "<group>"; };
 		D09B407EBB9EECBF5A45B08A /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		D0B693D4206C5BB9008A8B11 /* TestSQLiteReadingList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSQLiteReadingList.swift; sourceTree = "<group>"; };
+		FA27986000000000000000A1 /* TestSQLiteQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSQLiteQueue.swift; sourceTree = "<group>"; };
 		D0B94837A84544B66CE78383 /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		D0B9483C22A18B78002F4AA1 /* TextFieldTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewCell.swift; sourceTree = "<group>"; };
 		D0C95DF1200EAD3000E4E51C /* FindInPage.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = FindInPage.js; sourceTree = "<group>"; };
@@ -14001,6 +14003,7 @@
 				D37DE2C81CA356F900A5EC69 /* testcert1.pem */,
 				D37DE2C91CA356F900A5EC69 /* testcert2.pem */,
 				45D5EDCF292D854000311934 /* TestSQLitePinnedSites.swift */,
+				FA27986000000000000000A1 /* TestSQLiteQueue.swift */,
 				D0B693D4206C5BB9008A8B11 /* TestSQLiteReadingList.swift */,
 				D32CACEC1AE04DA1000658EB /* TestSwiftData.swift */,
 				BD57D9A629D4C42B00039394 /* ZoomLevelStoreTests.swift */,
@@ -20214,6 +20217,7 @@
 			files = (
 				45D5EDD1292D857000311934 /* TestSQLitePinnedSites.swift in Sources */,
 				C8611C8E1F71904C00C3DE7D /* DiskImageStoreTests.swift in Sources */,
+				FA27986000000000000000A2 /* TestSQLiteQueue.swift in Sources */,
 				D0B693D5206C5BB9008A8B11 /* TestSQLiteReadingList.swift in Sources */,
 				F8AAC1B7296637CE000BCDEC /* RustAutofillTests.swift in Sources */,
 				158241282820698B00956B39 /* RustRemoteTabsTests.swift in Sources */,

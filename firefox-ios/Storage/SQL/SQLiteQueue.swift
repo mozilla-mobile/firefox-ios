@@ -21,16 +21,18 @@ public final class SQLiteQueue: TabQueue {
         return ShareItem(url: url, title: "")
     }
 
-    public func getQueuedTabs(completion: @MainActor @escaping ([ShareItem]) -> Void) {
+    public func getQueuedTabs() async throws -> [ShareItem] {
         let sql = "SELECT url FROM queue"
-        db.runQuery(sql, args: nil, factory: self.factory)
-            .uponQueue(.main) { result in
-                guard let cursor = result.successValue else { return }
-                // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
-                MainActor.assumeIsolated {
-                    completion(cursor.asArray())
+        return try await withCheckedThrowingContinuation { continuation in
+            db.runQuery(sql, args: nil, factory: self.factory).upon { result in
+                switch result {
+                case .success(let cursor):
+                    continuation.resume(returning: cursor.asArray())
+                case .failure(let error):
+                    continuation.resume(throwing: error)
                 }
             }
+        }
     }
 
     public func clearQueuedTabs() -> Success {
