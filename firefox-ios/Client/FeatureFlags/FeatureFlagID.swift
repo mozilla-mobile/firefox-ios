@@ -151,6 +151,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .recentSearches,
                 .relayIntegration,
                 .reportBrokenSite,
+                .searchConfigV3,
                 .searchTermInAddressBar,
                 .sentFromFirefox,
                 .summarizerAppAttestAuth,
