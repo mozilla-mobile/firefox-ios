@@ -65,7 +65,14 @@ class BaseTestCase: XCTestCase {
     /// that need a minimum amount of inactivity to elapse.
     func restartInBackground(inactiveFor seconds: TimeInterval = 0) {
         // Send app to background, and re-enter
-        XCUIDevice.shared.press(.home)
+        if iPhoneDuo() {
+            iOS_Settings.activate()
+            XCTAssertTrue(iOS_Settings.wait(for: .runningForeground, timeout: TIMEOUT))
+            iOS_Settings.terminate()
+        } else {
+            XCUIDevice.shared.press(.home)
+            mozWaitForElementToExist(springboard.icons["XCUITests-Runner"])
+        }
         // Let's be sure the app is backgrounded
         _ = app.wait(for: XCUIApplication.State.runningBackgroundSuspended, timeout: TIMEOUT)
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
@@ -528,6 +535,10 @@ class BaseTestCase: XCTestCase {
             return true
         }
         return false
+    }
+
+    func iPhoneDuo() -> Bool {
+        return isIPhoneDuo()
     }
 
     /// - Parameter timeout: how long the loading indicator may stay up. Raise it for slow resources.
