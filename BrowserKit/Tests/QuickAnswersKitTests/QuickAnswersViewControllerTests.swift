@@ -105,6 +105,7 @@ final class QuickAnswersViewControllerTests: XCTestCase {
                 feature: QuickAnswersFeature(
                     model: .exa,
                     isOptInRedesignEnabled: false,
+                    isFollowUpEnabled: false,
                     isReturnToAnswerEnabled: isReturnToAnswerEnabled
                 )
             ),
