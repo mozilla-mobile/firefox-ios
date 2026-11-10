@@ -94,14 +94,14 @@ class TrackingProtectionModel {
     let secureStatusString = String.Menu.EnhancedTrackingProtection.connectionSecureLabel
     let unsecureStatusString = String.Menu.EnhancedTrackingProtection.connectionUnsecureLabel
     var connectionStatusString: String {
-        return connectionSecure ? secureStatusString : unsecureStatusString
+        return isConnectionSecure ? secureStatusString : unsecureStatusString
     }
 
     var connectionDetailsTitle: String {
         if !isProtectionEnabled {
             return .Menu.EnhancedTrackingProtection.offTitle
         }
-        if !connectionSecure {
+        if !isConnectionSecure {
             return .Menu.EnhancedTrackingProtection.onNotSecureTitle
         }
         return String(format: String.Menu.EnhancedTrackingProtection.onTitle, AppName.shortName.rawValue)
@@ -111,7 +111,7 @@ class TrackingProtectionModel {
         if !isProtectionEnabled {
             return String(format: .Menu.EnhancedTrackingProtection.offHeader, AppName.shortName.rawValue)
         }
-        if !connectionSecure {
+        if !isConnectionSecure {
             return .Menu.EnhancedTrackingProtection.onNotSecureHeader
         }
         return .Menu.EnhancedTrackingProtection.onHeader
@@ -122,7 +122,7 @@ class TrackingProtectionModel {
         if !isProtectionEnabled {
             return UIImage(named: ImageIdentifiers.TrackingProtection.protectionOff)
         }
-        if !connectionSecure {
+        if !isConnectionSecure {
             return UIImage(named: ImageIdentifiers.TrackingProtection.protectionAlert)
         }
         return UIImage(named: ImageIdentifiers.TrackingProtection.protectionOn)
@@ -156,7 +156,7 @@ class TrackingProtectionModel {
         if !isProtectionEnabled {
             return theme.colors.layerAccentPrivateNonOpaque
         }
-        if !connectionSecure {
+        if !isConnectionSecure {
             return theme.colors.layerCriticalSubdued
         }
         return theme.colors.layerAccentPrivateNonOpaque
@@ -168,7 +168,7 @@ class TrackingProtectionModel {
                                               URL: originalURL.absoluteDisplayString,
                                               getLockIcon: getConnectionStatusImage(themeType:),
                                               connectionStatusMessage: connectionStatusString,
-                                              connectionSecure: connectionSecure,
+                                              connectionSecure: isConnectionSecure,
                                               certificates: certificates)
     }
 
@@ -179,12 +179,12 @@ class TrackingProtectionModel {
             title: displayTitle,
             URL: originalURL.absoluteDisplayString,
             contentBlockerStats: contentBlockerStats,
-            connectionSecure: connectionSecure
+            connectionSecure: isConnectionSecure
         )
     }
 
     func getConnectionStatusImage(themeType: ThemeType) -> UIImage {
-        let imageName = connectionSecure ? StandardImageIdentifiers.Large.lock : StandardImageIdentifiers.Large.lockSlash
+        let imageName = isConnectionSecure ? StandardImageIdentifiers.Large.lock : StandardImageIdentifiers.Large.lockSlash
         return UIImage(imageLiteralResourceName: imageName)
             .withRenderingMode(.alwaysTemplate)
     }
