@@ -10,17 +10,29 @@ import Shared
 struct Store {
     private let prefs: Prefs
     private let sessionStorage: QuickAnswersSessionStorage
-    let feature: QuickAnswersFeature
+    private let feature: QuickAnswersFeature
+    private let isReturningToAnswer: Bool
 
-    init(prefs: Prefs, sessionStorage: QuickAnswersSessionStorage, feature: QuickAnswersFeature) {
+    init(
+        prefs: Prefs,
+        sessionStorage: QuickAnswersSessionStorage,
+        feature: QuickAnswersFeature,
+        isReturningToAnswer: Bool
+    ) {
         self.prefs = prefs
         self.sessionStorage = sessionStorage
         self.feature = feature
+        self.isReturningToAnswer = isReturningToAnswer
     }
 
     /// Whether the user has accepted the Quick Answers opt-in.
     var isOptInCompleted: Bool {
         return prefs.boolForKey(PrefsKeys.QuickAnswers.optInCompleted) ?? false
+    }
+
+    /// The session the user is returning to, if any. Always nil when not returning or when return to answer is disabled.
+    var restoredSession: QuickAnswersSessionSnapshot? {
+        return isReturningToAnswer ? latestSession : nil
     }
 
     /// The latest answered session the user can return to, if any. Always nil when return to answer is disabled.
