@@ -99,6 +99,7 @@ final class SourceRevealTransitionAnimator: NSObject,
             quickAnswersController.applyPresentationTransition(isOptInVisible: isOptInVisible)
         } completion: { _ in
             presentedController.view.mask = nil
+            blurView.removeFromSuperview()
             transitionContext.completeTransition(true)
         }
 
@@ -135,6 +136,7 @@ final class SourceRevealTransitionAnimator: NSObject,
             maskView.transform = CGAffineTransform(scaleX: UX.collapsedMaskScale, y: UX.collapsedMaskScale)
         } completion: { _ in
             blurView.removeFromSuperview()
+            containerView.mask = nil
             transitionContext.completeTransition(true)
         }
     }

@@ -4,18 +4,17 @@
 
 import UIKit
 
-/// The presenting view stays in the window below the transition container, so to slide it over Quick
-/// Answers the animator keeps a snapshot of the Quick Answers view behind it and hides the original.
+/// Presenting slides the presenting view down to reveal Quick Answers, which scales up behind it.
+/// Dismissing shrinks Quick Answers while the presenting view slides back up over it.
 /// While `isActive` it handles both directions, otherwise they are handed to `fallback`, or to the
 /// system when `fallback` is nil.
 final class ReturnToBrowserTransitionAnimator: NSObject,
                                                UIViewControllerTransitioningDelegate,
                                                UIViewControllerAnimatedTransitioning {
     private struct UX {
-        static let springDuration: TimeInterval = 0.55
-        static let springDamping: CGFloat = 0.82
-        static let reverseDuration: TimeInterval = 0.4
-        static let reverseDamping: CGFloat = 1.0
+        static let duration: TimeInterval = 0.4
+        static let damping: CGFloat = 1.0
+        static let stackedTransform = CGAffineTransform(scaleX: 0.92, y: 0.92)
     }
 
     private let isActive: () -> Bool
@@ -47,7 +46,7 @@ final class ReturnToBrowserTransitionAnimator: NSObject,
 
     // MARK: - UIViewControllerAnimatedTransitioning
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return isPresenting(transitionContext) ? UX.reverseDuration : UX.springDuration
+        return UX.duration
     }
 
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
@@ -70,60 +69,82 @@ final class ReturnToBrowserTransitionAnimator: NSObject,
         let toView: UIView = transitionContext.view(forKey: .to) ?? presentedController.view
         containerView.addSubview(toView)
         toView.frame = transitionContext.finalFrame(for: presentedController)
-        toView.layoutIfNeeded()
 
-        guard transitionContext.isAnimated,
-              let snapshot = toView.snapshotView(afterScreenUpdates: true)
-        else {
-            transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
+        guard transitionContext.isAnimated else {
+            transitionContext.completeTransition(true)
             return
         }
-        snapshot.frame = presentingView.frame
-        presentingView.superview?.insertSubview(snapshot, belowSubview: presentingView)
-        toView.alpha = 0.0
+        let restorePresentingView = liftPresentingView(presentingView, above: toView, in: containerView)
+        let contentView = transitionContentView(in: presentedController)
+        contentView?.transform = UX.stackedTransform
 
-        let animator = UIViewPropertyAnimator(duration: UX.reverseDuration, dampingRatio: UX.reverseDamping) {
+        UIView.animate(
+            withDuration: UX.duration,
+            delay: 0.0,
+            usingSpringWithDamping: UX.damping,
+            initialSpringVelocity: 0.0
+        ) {
+            contentView?.transform = .identity
             presentingView.transform = CGAffineTransform(translationX: 0.0, y: containerView.bounds.height)
+        } completion: { _ in
+            restorePresentingView()
+            transitionContext.completeTransition(true)
         }
-        animator.addCompletion { _ in
-            toView.alpha = 1.0
-            presentingView.transform = .identity
-            snapshot.removeFromSuperview()
-            transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
-        }
-        animator.startAnimation()
     }
 
     // MARK: - Dismissal
     private func animateDismissal(_ transitionContext: UIViewControllerContextTransitioning) {
         guard transitionContext.isAnimated,
               let fromView = transitionContext.view(forKey: .from),
-              let presentingView = transitionContext.viewController(forKey: .to)?.view,
-              let snapshot = fromView.snapshotView(afterScreenUpdates: false)
+              let presentingView = transitionContext.viewController(forKey: .to)?.view
         else {
-            transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
+            transitionContext.completeTransition(true)
             return
         }
-        snapshot.frame = presentingView.frame
-        presentingView.superview?.insertSubview(snapshot, belowSubview: presentingView)
-        fromView.alpha = 0.0
-        presentingView.transform = CGAffineTransform(
-            translationX: 0.0,
-            y: transitionContext.containerView.bounds.height
-        )
+        let containerView = transitionContext.containerView
+        let contentView = transitionContentView(in: transitionContext.viewController(forKey: .from))
+        let restorePresentingView = liftPresentingView(presentingView, above: fromView, in: containerView)
+        presentingView.transform = CGAffineTransform(translationX: 0.0, y: containerView.bounds.height)
 
-        let animator = UIViewPropertyAnimator(duration: UX.springDuration, dampingRatio: UX.springDamping) {
+        UIView.animate(
+            withDuration: UX.duration,
+            delay: 0.0,
+            usingSpringWithDamping: UX.damping,
+            initialSpringVelocity: 0.0
+        ) {
+            contentView?.transform = UX.stackedTransform
             presentingView.transform = .identity
+        } completion: { _ in
+            restorePresentingView()
+            transitionContext.completeTransition(true)
         }
-        animator.addCompletion { _ in
-            snapshot.removeFromSuperview()
-            fromView.alpha = 1.0
-            transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
-        }
-        animator.startAnimation()
     }
 
     // MARK: - Helpers
+    /// The presenting view lives below the transition container, so to slide it over Quick Answers it is
+    /// moved into the container for the duration of the transition. Returns the closure that puts it back.
+    private func liftPresentingView(
+        _ presentingView: UIView,
+        above view: UIView,
+        in containerView: UIView
+    ) -> () -> Void {
+        let originalSuperview = presentingView.superview
+        let originalIndex = originalSuperview?.subviews.firstIndex(of: presentingView) ?? 0
+        let originalFrame = presentingView.frame
+        presentingView.frame = containerView.bounds
+        containerView.insertSubview(presentingView, aboveSubview: view)
+        return {
+            presentingView.transform = .identity
+            presentingView.frame = originalFrame
+            originalSuperview?.insertSubview(presentingView, at: originalIndex)
+        }
+    }
+
+    private func transitionContentView(in controller: UIViewController?) -> UIView? {
+        let rootController = (controller as? UINavigationController)?.viewControllers.first ?? controller
+        return (rootController as? QuickAnswersViewController)?.transitionContentView
+    }
+
     private func isPresenting(_ transitionContext: UIViewControllerContextTransitioning?) -> Bool {
         return transitionContext?.viewController(forKey: .to)?.isBeingPresented ?? false
     }
