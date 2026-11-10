@@ -71,6 +71,9 @@ let package = Package(
         .library(
             name: "WebCompatReporterKit",
             targets: ["WebCompatReporterKit"]),
+        .library(
+            name: "WebDataTransfer",
+            targets: ["WebDataTransfer"]),
         .executable(
             name: "ExecutableContentBlockingGenerator",
             targets: ["ExecutableContentBlockingGenerator"]),
@@ -233,6 +236,15 @@ let package = Package(
             dependencies: ["WebCompatReporterKit", "TestKit"],
             swiftSettings: [
             ]
+        ),
+        .target(
+            name: "WebDataTransfer",
+            swiftSettings: [
+                .unsafeFlags(["-enable-testing"]),
+            ]),
+        .testTarget(
+            name: "WebDataTransferTests",
+            dependencies: ["WebDataTransfer"]
         ),
         .target(
             name: "AppAttestKit",

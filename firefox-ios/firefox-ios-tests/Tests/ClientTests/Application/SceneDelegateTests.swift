@@ -39,6 +39,20 @@ final class SceneDelegateTests: XCTestCase, FeatureFlaggable {
         XCTAssertTrue(mockSessionManager.launchSessionProvider.openedFromExternalSource)
     }
 
+    func testContinueUserActivity_browserDataTransferActivity_isNotRouted() throws {
+        AppEventQueue.signal(event: .startupFlowComplete)
+        let setup = try createSubjectWithCoordinator()
+
+        for activityType in ["BEBrowserDataExchangeImportActivity", "BEBrowserDataExchangeExportActivity"] {
+            let activity = NSUserActivity(activityType: activityType)
+            // Generic routing would open this URL if the transfer guard did not consume the activity.
+            activity.webpageURL = URL(string: "https://example.com")
+            setup.delegate.scene(setup.scene, continue: activity)
+        }
+
+        XCTAssertFalse(mockSessionManager.launchSessionProvider.openedFromExternalSource)
+    }
+
     // MARK: - handle(route:) timing - refactor enabled
 
     func testHandleRoute_refactorEnabled_dispatchesAfterStartupFlowComplete() throws {

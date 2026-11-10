@@ -1663,6 +1663,7 @@
 		BD0D407A2D83124E00C38511 /* TabWebViewPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD0D40792D83124E00C38511 /* TabWebViewPreview.swift */; };
 		BD57D9A729D4C42B00039394 /* ZoomLevelStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD57D9A629D4C42B00039394 /* ZoomLevelStoreTests.swift */; };
 		BD6CC84229CDDA3400546A5D /* ZoomLevelStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD6CC84129CDDA3400546A5D /* ZoomLevelStore.swift */; };
+		BD7A00000000000000000011 /* WebDataTransfer in Frameworks */ = {isa = PBXBuildFile; productRef = BD7A00000000000000000012 /* WebDataTransfer */; };
 		BD865A5D2F55C6E100BE5AE0 /* TabTrayButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD865A5C2F55C6E100BE5AE0 /* TabTrayButtonStyle.swift */; };
 		BDB4E7212F337AAB000DB45F /* LocationTextFieldTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDB4E7202F337AAB000DB45F /* LocationTextFieldTests.swift */; };
 		BDD262562CE3AC8200DF2C62 /* PrivacyWindowHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD262552CE3AC8200DF2C62 /* PrivacyWindowHelper.swift */; };
@@ -12866,6 +12867,7 @@
 		5FE7F18C2E78224100B0AFEC /* PageScreens */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = PageScreens; sourceTree = "<group>"; };
 		8CF609282EA8D46E00F069B6 /* ActionExtension */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (8CF609442EA8D61F00F069B6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = ActionExtension; sourceTree = "<group>"; };
 		BCBE04E22E3A52D4004B6039 /* Summarize */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Summarize; sourceTree = "<group>"; };
+		BD7A00000000000000000001 /* BrowserDataTransfer */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = BrowserDataTransfer; sourceTree = "<group>"; };
 		BD7A00000000000000000002 /* BrowserDataTransfer */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = BrowserDataTransfer; sourceTree = "<group>"; };
 		ED85DD2C2DE669FF00487807 /* probes */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = probes; sourceTree = "<group>"; };
 		FC16179A00000000000000A1 /* WebCompat */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = WebCompat; sourceTree = "<group>"; };
@@ -12957,6 +12959,7 @@
 				E6231C011B90A44F005ABB0D /* libz.tbd in Frameworks */,
 				E4B3348A1BBF23F9004E2BFF /* AdSupport.framework in Frameworks */,
 				AA459F872F630F3500D05D04 /* QuickAnswersKit in Frameworks */,
+				BD7A00000000000000000011 /* WebDataTransfer in Frameworks */,
 				ED6C8DAC2CE6A4BB00D7F7F3 /* Sentry-Dynamic in Frameworks */,
 				AA93AB052F6B06BE002E5E88 /* MLPAKit in Frameworks */,
 				FEEDFACE000000000000FC01 /* VPNKit in Frameworks */,
@@ -18432,6 +18435,7 @@
 		F84B21F11A0910F600AAB793 /* Frontend */ = {
 			isa = PBXGroup;
 			children = (
+				BD7A00000000000000000001 /* BrowserDataTransfer */,
 				ECD8E56A2FF7EB5B002092C6 /* Wayback */,
 				0B78DC6C2E3C9CDA00804872 /* Summarizer */,
 				AA5E81452EB12BAB00919E60 /* Translations */,
@@ -19026,6 +19030,7 @@
 			fileSystemSynchronizedGroups = (
 				034784BA2E2690F600D04A84 /* TermsOfUse */,
 				BCBE04E22E3A52D4004B6039 /* Summarize */,
+				BD7A00000000000000000001 /* BrowserDataTransfer */,
 				ED85DD2C2DE669FF00487807 /* probes */,
 				FC16179A00000000000000A1 /* WebCompat */,
 			);
@@ -19050,6 +19055,7 @@
 				8C51ED732DE0A64D00B3E58A /* OnboardingKit */,
 				0B6D1C872E15456F00919F1E /* SummarizeKit */,
 				AA459F862F630F3500D05D04 /* QuickAnswersKit */,
+				BD7A00000000000000000012 /* WebDataTransfer */,
 				AA93AB042F6B06BE002E5E88 /* MLPAKit */,
 				FEEDFACE000000000000FC02 /* VPNKit */,
 				AA93B7142F6D95D6002E5E88 /* LLMKit */,
@@ -34617,6 +34623,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AB2AC6612BCFD0A200022AAB /* XCRemoteSwiftPackageReference "swift-certificates" */;
 			productName = X509;
+		};
+		BD7A00000000000000000012 /* WebDataTransfer */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = WebDataTransfer;
 		};
 		C26B96D62F29188100D4B140 /* TestKit */ = {
 			isa = XCSwiftPackageProductDependency;
