@@ -98,29 +98,20 @@ final class ReturnToBrowserTransitionAnimatorTests: XCTestCase {
     }
 
     // MARK: - animateTransition
-    func test_animateTransition_dismissal_completesTransition_andRestoresIdentityTransform() async {
+    func test_animateTransition_dismissal_completesTransition() async {
         setUpDismissal()
         let subject = createSubject()
 
         subject.animateTransition(using: transitionContext)
+
+        XCTAssertEqual(transitionContext.completeTransitionCallCount, 0)
         await waitForTransitionToComplete()
 
         XCTAssertEqual(transitionContext.completeTransitionCallCount, 1)
         XCTAssertEqual(transitionContext.lastDidComplete, true)
+        XCTAssertTrue(browserController.view.superview === window)
         XCTAssertEqual(browserController.view.transform, .identity)
-        XCTAssertEqual(quickAnswersView.alpha, 1.0)
-        XCTAssertTrue(snapshotViews.isEmpty)
-    }
-
-    func test_animateTransition_dismissal_hidesQuickAnswersViewWhileAnimating() {
-        setUpDismissal()
-        let subject = createSubject()
-
-        subject.animateTransition(using: transitionContext)
-
-        XCTAssertEqual(quickAnswersView.alpha, 0.0)
-        XCTAssertEqual(snapshotViews.count, 1)
-        XCTAssertEqual(transitionContext.completeTransitionCallCount, 0)
+        XCTAssertEqual(browserController.view.frame, finalFrame)
     }
 
     func test_animateTransition_dismissalWithoutAnimation_completesImmediately() {
@@ -131,8 +122,7 @@ final class ReturnToBrowserTransitionAnimatorTests: XCTestCase {
         subject.animateTransition(using: transitionContext)
 
         XCTAssertEqual(transitionContext.completeTransitionCallCount, 1)
-        XCTAssertEqual(quickAnswersView.alpha, 1.0)
-        XCTAssertTrue(snapshotViews.isEmpty)
+        XCTAssertEqual(quickAnswersView.transform, .identity)
     }
 
     func test_animateTransition_presentation_addsToViewToContainer_andCompletes() async {
@@ -144,9 +134,9 @@ final class ReturnToBrowserTransitionAnimatorTests: XCTestCase {
 
         XCTAssertTrue(quickAnswersView.superview === transitionContext.containerView)
         XCTAssertEqual(quickAnswersView.frame, finalFrame)
-        XCTAssertEqual(quickAnswersView.alpha, 1.0)
+        XCTAssertEqual(quickAnswersView.transform, .identity)
+        XCTAssertTrue(browserController.view.superview === window)
         XCTAssertEqual(browserController.view.transform, .identity)
-        XCTAssertTrue(snapshotViews.isEmpty)
         XCTAssertEqual(transitionContext.completeTransitionCallCount, 1)
         XCTAssertEqual(transitionContext.lastDidComplete, true)
     }
@@ -159,8 +149,7 @@ final class ReturnToBrowserTransitionAnimatorTests: XCTestCase {
         subject.animateTransition(using: transitionContext)
 
         XCTAssertTrue(quickAnswersView.superview === transitionContext.containerView)
-        XCTAssertEqual(quickAnswersView.alpha, 1.0)
-        XCTAssertTrue(snapshotViews.isEmpty)
+        XCTAssertEqual(quickAnswersView.transform, .identity)
         XCTAssertEqual(transitionContext.completeTransitionCallCount, 1)
     }
 
@@ -178,16 +167,9 @@ final class ReturnToBrowserTransitionAnimatorTests: XCTestCase {
         return subject
     }
 
-    private var snapshotViews: [UIView] {
-        return window.subviews.filter {
-            $0 !== browserController.view && $0 !== transitionContext.containerView
-        }
-    }
-
     private func setUpDismissal() {
         let presentedController = MockPresentedViewController()
         presentedController.isBeingPresentedValue = false
-        browserController.view.frame = finalFrame
         transitionContext.toViewController = browserController
         transitionContext.fromViewController = presentedController
         transitionContext.fromView = quickAnswersView

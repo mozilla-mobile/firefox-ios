@@ -330,6 +330,9 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
     }
 
     // MARK: - Presentation transition
+    /// Scaled by the return to browser transition in place of the whole view.
+    var transitionContentView: UIView { contentView }
+
     func prepareForPresentationTransition(sourceRect: CGRect, isOptInVisible: Bool) {
         contentView.prepareForPresentationTransition(
             sourceRect: sourceRect,
