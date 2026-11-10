@@ -1,0 +1,41 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/
+
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: 'Issue Security Keyword CC'
+
+on:
+  issues:
+    types: [opened]
+
+permissions: {}
+
+jobs:
+  issue-security-keyword-cc:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_REPO: ${{ github.repository }}
+      NUMBER: ${{ github.event.issue.number }}
+      ISSUE_BODY: ${{ github.event.issue.body }}
+
+    steps:
+      - name: CC on issues mentioning security keywords
+        shell: bash
+        env:
+          # Case-insensitive, matched at the start of a word (e.g. "attack" also matches "attacker")
+          KEYWORDS: '(^|[^[:alnum:]_])(spoof|security|vulnerab|attack|malicious|xss|uxss)'
+          COMMENT: '+cc @mattreaganmozilla'
+        run: |
+          set -euo pipefail
+
+          if ! printf '%s' "$ISSUE_BODY" | grep -Eiq "$KEYWORDS"; then
+            echo "No security keywords in issue #$NUMBER description; nothing to do."
+            exit 0
+          fi
+
+          echo "Security keyword found in issue #$NUMBER; adding CC comment."
+          gh issue comment "$NUMBER" -R "$GH_REPO" --body "$COMMENT"
