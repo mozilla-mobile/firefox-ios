@@ -60,7 +60,12 @@ final class RemoteQuickAnswersConfigFetcherTests: XCTestCase {
         model: QuickAnswersKit.QuickAnswersModel,
         client: MockRemoteSettingsClient
     ) -> RemoteQuickAnswersConfigFetcher {
-        let feature = QuickAnswersKit.QuickAnswersFeature(model: model, isOptInRedesignEnabled: false)
+        let feature = QuickAnswersKit.QuickAnswersFeature(
+            model: model,
+            isOptInRedesignEnabled: false,
+            isFollowUpEnabled: false,
+            isReturnToAnswerEnabled: false
+        )
         return RemoteQuickAnswersConfigFetcher(
             feature: feature,
             remoteConfig: ASAIRemoteConfig(rsClient: client),

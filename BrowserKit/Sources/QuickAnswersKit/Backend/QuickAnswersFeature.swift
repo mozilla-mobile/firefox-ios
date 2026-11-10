@@ -16,8 +16,8 @@ public struct QuickAnswersFeature: Equatable, Sendable {
     public init(
         model: QuickAnswersModel,
         isOptInRedesignEnabled: Bool,
-        isFollowUpEnabled: Bool = false,
-        isReturnToAnswerEnabled: Bool = false
+        isFollowUpEnabled: Bool,
+        isReturnToAnswerEnabled: Bool
     ) {
         self.model = model
         self.isOptInRedesignEnabled = isOptInRedesignEnabled

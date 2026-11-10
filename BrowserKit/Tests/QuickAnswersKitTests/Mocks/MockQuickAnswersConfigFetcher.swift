@@ -5,7 +5,12 @@
 @testable import QuickAnswersKit
 
 final class MockQuickAnswersConfigFetcher: QuickAnswersConfigFetcher, @unchecked Sendable {
-    var feature = QuickAnswersFeature(model: .exa, isOptInRedesignEnabled: false)
+    var feature = QuickAnswersFeature(
+        model: .exa,
+        isOptInRedesignEnabled: false,
+        isFollowUpEnabled: false,
+        isReturnToAnswerEnabled: false
+    )
     var configToReturn: QuickAnswersConfig
     var errorToThrow: Error?
     var fetchCallCount = 0
