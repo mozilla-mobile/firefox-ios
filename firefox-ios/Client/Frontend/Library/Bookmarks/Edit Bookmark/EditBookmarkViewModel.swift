@@ -19,8 +19,8 @@ protocol ParentFolderSelector: AnyObject {
     func selectFolderCreatedFromChild(folder: Folder)
 }
 
-// FIXME: FXIOS-14161 Make EditBookmarkViewModel actually Sendable
-class EditBookmarkViewModel: ParentFolderSelector, @unchecked Sendable {
+@MainActor
+class EditBookmarkViewModel: ParentFolderSelector {
     private let parentFolder: FxBookmarkNode
     private var node: BookmarkItemData?
     private let profile: Profile
@@ -80,7 +80,6 @@ class EditBookmarkViewModel: ParentFolderSelector, @unchecked Sendable {
         return folder.indentation
     }
 
-    @MainActor
     func selectFolder(_ folder: Folder) {
         isFolderCollapsed.toggle()
         selectedFolder = folder
@@ -92,7 +91,6 @@ class EditBookmarkViewModel: ParentFolderSelector, @unchecked Sendable {
         }
     }
 
-    @MainActor
     func createNewFolder() {
         bookmarkCoordinatorDelegate?.showBookmarkDetail(
             bookmarkType: .folder,
@@ -141,7 +139,6 @@ class EditBookmarkViewModel: ParentFolderSelector, @unchecked Sendable {
         }
     }
 
-    @MainActor
     func didFinish() {
         bookmarkCoordinatorDelegate?.didFinish()
     }
