@@ -114,6 +114,7 @@
         "FirefoxSuggestTest",
         "FirstRunTourTests",
         "FxScreenGraphTests",
+        "HTTPSFirstModeTests",
         "HistoryTests",
         "HomeButtonTests",
         "HomePageSettingsUITests",
