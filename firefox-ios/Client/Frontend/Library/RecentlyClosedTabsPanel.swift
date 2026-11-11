@@ -27,6 +27,9 @@ class RecentlyClosedTabsPanel: UIViewController, LibraryPanel, Themeable {
 
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     var state: LibraryPanelMainState = .history(state: .inFolder)
+    var libraryTitle: String? {
+        return .RecentlyClosedTabsPanelTitle
+    }
     var isTransitioning = false
     weak var recentlyClosedTabsDelegate: RecentlyClosedPanelDelegate?
     let profile: Profile
