@@ -2076,6 +2076,7 @@ class BrowserViewController: UIViewController,
         scrollController.showToolbars(animated: false)
 
         let pill = quickAnswersReturnPill ?? QuickAnswersReturnPillView(
+            accessibilityIdentifier: "",
             onTap: onTap,
             onSwipeAway: { [weak self] in
                 onSwipeAway()
@@ -2084,8 +2085,7 @@ class BrowserViewController: UIViewController,
         )
         pill.configure(
             question: question ?? String.QuickAnswers.ReturnPill.FallbackTitle,
-            subtitle: String.QuickAnswers.ReturnPill.Subtitle,
-            accessibilityRemoveActionName: String.QuickAnswers.ReturnPill.RemoveAccessibilityAction
+            subtitle: String.QuickAnswers.ReturnPill.Subtitle
         )
         pill.applyTheme(theme: currentTheme())
 
