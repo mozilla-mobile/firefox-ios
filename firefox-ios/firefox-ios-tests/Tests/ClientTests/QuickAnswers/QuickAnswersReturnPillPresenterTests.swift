@@ -56,14 +56,6 @@ final class QuickAnswersReturnPillPresenterTests: XCTestCase {
         XCTAssertEqual(activeConstraints().count, 3)
     }
 
-    func test_show_withoutQuestion_labelsPillWithFallbackTitle() {
-        let subject = createSubject()
-
-        showPill(on: subject, question: nil)
-
-        XCTAssertEqual(pill?.accessibilityLabel, String.QuickAnswers.ReturnPill.FallbackTitle)
-    }
-
     // MARK: - hide
 
     func test_hide_removesPillAndConstraints() {
@@ -252,7 +244,7 @@ final class QuickAnswersReturnPillPresenterTests: XCTestCase {
         return QuickAnswersReturnPillPresenter(hostView: hostView, anchorView: anchorView, overlayState: overlayState)
     }
 
-    private func showPill(on subject: QuickAnswersReturnPillPresenter, question: String? = "Question") {
+    private func showPill(on subject: QuickAnswersReturnPillPresenter, question: String = "Question") {
         subject.show(question: question, theme: LightTheme(), onTap: { _ in }, onSwipeAway: {})
     }
 

@@ -49,7 +49,7 @@ final class QuickAnswersReturnPillPresenter {
 
     /// An already shown pill is only reconfigured, it keeps the closures it was created with.
     func show(
-        question: String?,
+        question: String,
         theme: Theme,
         onTap: @escaping (Bool) -> Void,
         onSwipeAway: @escaping () -> Void
@@ -63,7 +63,7 @@ final class QuickAnswersReturnPillPresenter {
             }
         )
         pill.configure(
-            question: question ?? String.QuickAnswers.ReturnPill.FallbackTitle,
+            question: question,
             subtitle: String.QuickAnswers.ReturnPill.Subtitle
         )
         pill.applyTheme(theme: theme)
