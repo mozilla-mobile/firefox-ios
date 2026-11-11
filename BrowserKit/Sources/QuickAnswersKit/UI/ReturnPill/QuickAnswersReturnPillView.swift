@@ -18,6 +18,7 @@ public final class QuickAnswersReturnPillView: UIView, ThemeApplicable {
         static let iconBackgroundSize: CGFloat = 30.0
         static let iconSize: CGFloat = 16.0
         static let iconBackgroundAlpha: CGFloat = 0.1
+        static let blurBorderWidth: CGFloat = 0.5
         static let minimizeDuration: TimeInterval = 0.2
         static let fadeDistance: CGFloat = 200.0
         static let maxFade: CGFloat = 0.6
@@ -239,5 +240,9 @@ public final class QuickAnswersReturnPillView: UIView, ThemeApplicable {
         iconImageView.image = icon?.verticalGradientTinted(with: gradientStops)
         titleLabel.textColor = colors.textPrimary
         subtitleLabel.textColor = colors.textSecondary
+        if glassView.effect is UIBlurEffect {
+            glassView.layer.borderWidth = UX.blurBorderWidth
+            glassView.layer.borderColor = colors.borderPrimary.cgColor
+        }
     }
 }
