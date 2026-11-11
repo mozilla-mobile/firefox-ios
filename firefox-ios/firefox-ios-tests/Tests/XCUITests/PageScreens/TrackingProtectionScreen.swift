@@ -179,6 +179,51 @@ final class TrackingProtectionScreen {
         }
     }
 
+    /// Asserts the panel reports blocked trackers and returns the count once it stops changing, as hosts are
+    /// counted while they're checked against the blocklists.
+    @MainActor
+    @discardableResult
+    func assertBlockedTrackersCount(timeout: TimeInterval = TIMEOUT) -> Int {
+        let trackers = sel.PANEL_TRACKERS_BUTTON.element(in: app)
+        let prefix = String(format: .Menu.EnhancedTrackingProtection.trackersBlockedLabel, "")
+        var count = trackers.wholeNumberInLabel(after: prefix, timeout: timeout)
+        let deadline = Date().addingTimeInterval(timeout)
+        while let current = count, Date() < deadline {
+            BaseTestCase().idle(for: 1)
+            count = trackers.wholeNumberInLabel(after: prefix, timeout: timeout)
+            if count == current { break }
+        }
+        guard let count else {
+            XCTFail("The panel shows no blocked trackers count, its label is '\(trackers.label)'")
+            return 0
+        }
+        return count
+    }
+
+    /// Opens the blocked trackers list and returns each category's count, ordered like the Tracker Blocker panel
+    /// rows. Closing the list also closes the panel.
+    @MainActor
+    func blockedTrackersByCategory(timeout: TimeInterval = TIMEOUT) -> [Int] {
+        sel.PANEL_TRACKERS_BUTTON.element(in: app).waitAndTap()
+        let formats: [String] = [
+            .Menu.EnhancedTrackingProtection.crossSiteTrackersBlockedLabel,
+            .Menu.EnhancedTrackingProtection.fingerprinterBlockedLabel,
+            .Menu.EnhancedTrackingProtection.analyticsTrackersBlockedLabel,
+            .Menu.EnhancedTrackingProtection.socialMediaTrackersBlockedLabel
+        ]
+        let counts = zip(sel.BLOCKED_TRACKERS_CATEGORY_LABELS, formats).map { selector, format in
+            let label = selector.element(in: app)
+            BaseTestCase().mozWaitForElementToExist(label, timeout: timeout)
+            guard let count = label.wholeNumberInLabel(after: String(format: format, ""), timeout: timeout) else {
+                XCTFail("No count in the blocked trackers category '\(label.label)'")
+                return 0
+            }
+            return count
+        }
+        sel.DETAILS_CLOSE_BUTTON.element(in: app).waitAndTap()
+        return counts
+    }
+
     @MainActor
     func assertSecureConnectionIsBelowTrackers() {
         let trackers = sel.PANEL_TRACKERS_BUTTON.element(in: app)

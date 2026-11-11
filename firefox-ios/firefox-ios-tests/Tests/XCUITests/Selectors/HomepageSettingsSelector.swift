@@ -7,6 +7,7 @@ import XCTest
 protocol HomepageSettingsSelectorSet {
     var BOOKMARK_TOGGLE: Selector { get }
     var JUMP_BACK_IN_TOGGLE: Selector { get }
+    var PRIVACY_REPORT_TOGGLE: Selector { get }
     var HOMEPAGE_SETTINGS_TABLE: Selector { get }
     var CUSTOM_URL_TEXT_FIELD: Selector { get }
     var SHORTCUTS_SETTINGS_CELL: Selector { get }
@@ -20,6 +21,8 @@ struct HomepageSettingsSelectors: HomepageSettingsSelectorSet {
         static let bookmarkToogle = "BookmarksSectionUserPrefsKey"
         // Mirrors PrefsKeys.HomepageSettings.JumpBackInSection, used as the switch identifier
         static let jumpBackInToggle = "JumpBackInSectionUserPrefsKey"
+        // Mirrors PrefsKeys.HomepageSettings.TrackerBlockerSection, used as the switch identifier
+        static let privacyReportToggle = "TrackerBlockerSectionUserPrefsKey"
         static let customURLTextField = "HomeAsCustomURLTextField"
         static let shortcutsSettingsCell = AccessibilityIdentifiers
             .Settings
@@ -48,6 +51,12 @@ struct HomepageSettingsSelectors: HomepageSettingsSelectorSet {
         groups: ["homepage_settings"]
     )
 
+    let PRIVACY_REPORT_TOGGLE = Selector.switchByIdOrLabel(
+        IDs.privacyReportToggle,
+        description: "Privacy Report toggle in homepage settings",
+        groups: ["homepage_settings"]
+    )
+
     let CUSTOM_URL_TEXT_FIELD = Selector.textFieldId(
         IDs.customURLTextField,
         description: "Custom URL text field of the current homepage section",
@@ -71,6 +80,7 @@ struct HomepageSettingsSelectors: HomepageSettingsSelectorSet {
             BOOKMARK_TOGGLE,
             HOMEPAGE_SETTINGS_TABLE,
             JUMP_BACK_IN_TOGGLE,
+            PRIVACY_REPORT_TOGGLE,
             CUSTOM_URL_TEXT_FIELD,
             SHORTCUTS_SETTINGS_CELL,
             SHORTCUTS_STATUS_ON

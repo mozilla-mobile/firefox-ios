@@ -27,6 +27,11 @@ final class HomepageSettingsScreen {
         return settingTable.cells.switches[toggle]
     }
 
+    private var privacyReportSwitch: XCUIElement {
+        let settingTable = sel.HOMEPAGE_SETTINGS_TABLE.element(in: app)
+        return settingTable.cells.switches[sel.PRIVACY_REPORT_TOGGLE.value]
+    }
+
     private var customURLTextField: XCUIElement { sel.CUSTOM_URL_TEXT_FIELD.element(in: app) }
 
     private var shortcutsSettingsCell: XCUIElement { sel.SHORTCUTS_SETTINGS_CELL.element(in: app) }
@@ -76,6 +81,18 @@ final class HomepageSettingsScreen {
         if switchElement.value as? String == "0" {
             switchElement.waitAndTap()
         }
+    }
+
+    func setPrivacyReportToggle(isOn: Bool) {
+        BaseTestCase().mozWaitForElementToExist(privacyReportSwitch)
+        if privacyReportSwitch.value as? String != (isOn ? "1" : "0") {
+            privacyReportSwitch.waitAndTap()
+        }
+        assertPrivacyReportToggle(isOn: isOn)
+    }
+
+    func assertPrivacyReportToggle(isOn: Bool) {
+        BaseTestCase().mozWaitForValueContains(privacyReportSwitch, value: isOn ? "1" : "0")
     }
 
     func assertBookmarkToggleIsEnabled() {
