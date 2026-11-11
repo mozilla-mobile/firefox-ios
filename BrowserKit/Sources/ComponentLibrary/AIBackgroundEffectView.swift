@@ -5,7 +5,46 @@
 import SwiftUI
 import UIKit
 import Common
-import ComponentLibrary
+
+/// How the blobs move over time.
+public enum AIBackgroundBlobsMotion {
+    /// A slow, continuous drift.
+    case smooth
+    /// A faster drift that advances in steps, each eased with a `cubic-bezier(0, 0, 0, 1)` curve.
+    case stepped
+
+    fileprivate enum UX {
+        static let steppedSpeedMultiplier: TimeInterval = 2.5
+        static let steppedStepDuration: TimeInterval = 1.0
+    }
+
+    /// Maps the wall clock time to the time the blobs are animated with.
+    func animationTime(at time: TimeInterval) -> TimeInterval {
+        switch self {
+        case .smooth:
+            return time
+        case .stepped:
+            let duration = UX.steppedStepDuration
+            let step = (time / duration).rounded(.down)
+            let progress = (time - step * duration) / duration
+            return (step + Self.easeOut(progress)) * duration * UX.steppedSpeedMultiplier
+        }
+    }
+
+    /// `cubic-bezier(0, 0, 0, 1)`: with those control points x(s) = s³ and y(s) = 3s² - 2s³.
+    private static func easeOut(_ progress: TimeInterval) -> TimeInterval {
+        let s = cbrt(progress)
+        return 3 * s * s - 2 * s * s * s
+    }
+}
+
+/// Where the blobs sit when the canvas is wider than tall.
+public enum AIBackgroundBlobsLandscapeLayout {
+    /// Large blobs centered below the bottom edge, so only their upper part shows.
+    case bottomEdge
+    /// The portrait arrangement, centered in the canvas.
+    case centered
+}
 
 final class BlendedBlobsGradientState: ObservableObject {
     @Published var colors: [Color] = []
@@ -37,6 +76,8 @@ struct BlendedBlobsGradient: View {
         /// Height of the region the blobs are laid out in, relative to the canvas height.
         static let portraitRegionHeightRatio: CGFloat = 2.0 / 3.0
         static let landscapeRegionHeightRatio: CGFloat = 1.0 / 2.5
+        /// The centered landscape region spans the canvas height so the blobs cover the whole screen.
+        static let centeredLandscapeRegionHeightRatio: CGFloat = 1.0
         /// Radius of the circular path each blob drifts along, relative to the blob radius.
         static let motionRatio: CGFloat = 0.08
         static let pulsationAmplitude: CGFloat = 0.04
@@ -81,6 +122,9 @@ struct BlendedBlobsGradient: View {
         static let portraitMaskHeightRatio: CGFloat = 1.0 / 1.1
         /// Vertical position of the portrait mask center, relative to the canvas height.
         static let portraitMaskCenterYRatio: CGFloat = 1.0 / 1.3
+        /// Size of the centered landscape mask, relative to the canvas.
+        static let centeredMaskWidthRatio: CGFloat = 2.0
+        static let centeredMaskHeightRatio: CGFloat = 2.5
     }
 
     private struct Blob: Identifiable {
@@ -92,12 +136,15 @@ struct BlendedBlobsGradient: View {
     }
 
     @ObservedObject var state: BlendedBlobsGradientState
+    let motion: AIBackgroundBlobsMotion
+    let landscapeLayout: AIBackgroundBlobsLandscapeLayout
 
     var body: some View {
         GeometryReader { geo in
             if !UIAccessibility.isReduceMotionEnabled {
                 TimelineView(.animation(minimumInterval: UX.frameInterval, paused: state.isPaused)) { timeline in
-                    scene(at: timeline.date.timeIntervalSinceReferenceDate, size: geo.size)
+                    let time = motion.animationTime(at: timeline.date.timeIntervalSinceReferenceDate)
+                    scene(at: time, size: geo.size)
                 }
             } else {
                 scene(at: 0, size: geo.size)
@@ -115,7 +162,9 @@ struct BlendedBlobsGradient: View {
         }
         .mask {
             EllipticalGradient(
-                gradient: SwiftUI.Gradient(stops: isLandscape(size) ? UX.landscapeMaskStops : UX.portraitMaskStops),
+                gradient: SwiftUI.Gradient(
+                    stops: isLandscape(size) && !isCenteredLandscape(size) ? UX.landscapeMaskStops : UX.portraitMaskStops
+                ),
                 center: .center
             )
             .frame(width: maskFrame.width, height: maskFrame.height)
@@ -128,8 +177,19 @@ struct BlendedBlobsGradient: View {
         return size.width > size.height
     }
 
+    private func isCenteredLandscape(_ size: CGSize) -> Bool {
+        return isLandscape(size) && landscapeLayout == .centered
+    }
+
     private func regionHeight(in size: CGSize) -> CGFloat {
-        let ratio = isLandscape(size) ? UX.landscapeRegionHeightRatio : UX.portraitRegionHeightRatio
+        let ratio: CGFloat
+        if isCenteredLandscape(size) {
+            ratio = UX.centeredLandscapeRegionHeightRatio
+        } else if isLandscape(size) {
+            ratio = UX.landscapeRegionHeightRatio
+        } else {
+            ratio = UX.portraitRegionHeightRatio
+        }
         return size.height * ratio
     }
 
@@ -137,6 +197,11 @@ struct BlendedBlobsGradient: View {
     /// in the lower part of the canvas. In landscape it overflows the canvas horizontally and is
     /// centered on the bottom edge, so only its upper half, as tall as the blobs region, is visible.
     private func maskFrame(in size: CGSize) -> CGRect {
+        if isCenteredLandscape(size) {
+            let width = size.width * UX.centeredMaskWidthRatio
+            let height = size.height * UX.centeredMaskHeightRatio
+            return CGRect(x: (size.width - width) / 2.0, y: (size.height - height) / 2.0, width: width, height: height)
+        }
         guard !isLandscape(size) else {
             let width = size.width * UX.landscapeMaskWidthRatio
             let height = regionHeight(in: size) * 2.0
@@ -160,7 +225,7 @@ struct BlendedBlobsGradient: View {
         let pulsation = 1.0 + UX.pulsationAmplitude * CGFloat(sin(time * UX.pulsationSpeed))
 
         return state.colors.enumerated().map { index, color in
-            let (baseCenter, blobRadii) = isLandscape(size)
+            let (baseCenter, blobRadii) = isLandscape(size) && !isCenteredLandscape(size)
                 ? landscapeLayout(at: index, in: size)
                 : portraitLayout(at: index, in: size)
             let driftAngle = time * value(at: index, in: UX.speeds)
@@ -186,10 +251,14 @@ struct BlendedBlobsGradient: View {
         return (
             CGPoint(
                 x: size.width / 2.0 + cos(angle) * orbitRadius,
-                y: size.height - regionHeight / 2.0 + sin(angle) * orbitRadius
+                y: regionCenterY(in: size) + sin(angle) * orbitRadius
             ),
             CGSize(width: blobRadius, height: blobRadius)
         )
+    }
+
+    private func regionCenterY(in size: CGSize) -> CGFloat {
+        return isCenteredLandscape(size) ? size.height / 2.0 : size.height - regionHeight(in: size) / 2.0
     }
 
     private func landscapeLayout(at index: Int, in size: CGSize) -> (center: CGPoint, radii: CGSize) {
@@ -232,11 +301,11 @@ struct BlendedBlobsGradient: View {
 
 /// Layers the blended blobs between a glow in the top trailing corner and a wash that fades in once
 /// a result is shown.
-final class BackgroundEffectView: UIView, ThemeApplicable {
+public final class AIBackgroundEffectView: UIView, ThemeApplicable {
     private enum UX {
         static let resultBlobsAlpha: CGFloat = 0.5
         static let resultFadeDuration: TimeInterval = 0.3
-        static let resultFadeDelay: TimeInterval = 0.2
+        static let blobsRevealDuration: TimeInterval = 0.2
         static let presentationBlobsOffset: CGFloat = 50.0
         static let topTrailingGlowOpacities: [CGFloat] = [0.25, 0.1, 0.0]
         /// Vertical wash laid over the blobs once a result is shown, so the answer stays readable.
@@ -262,18 +331,31 @@ final class BackgroundEffectView: UIView, ThemeApplicable {
         $0.alpha = 0.0
     }
 
-    /// - Parameter parentController: the controller the blobs hosting controller is added to as a child.
-    init(parentController: UIViewController) {
+    /// - Parameters:
+    ///   - parentController: the controller the blobs hosting controller is added to as a child.
+    ///   - blobsMotion: how the blobs move over time.
+    ///   - blobsLandscapeLayout: where the blobs sit in landscape.
+    public init(
+        parentController: UIViewController,
+        blobsMotion: AIBackgroundBlobsMotion = .smooth,
+        blobsLandscapeLayout: AIBackgroundBlobsLandscapeLayout = .bottomEdge
+    ) {
         let blobsState = BlendedBlobsGradientState()
         self.blobsState = blobsState
-        blobsHostingController = UIHostingController(rootView: BlendedBlobsGradient(state: blobsState))
+        blobsHostingController = UIHostingController(
+            rootView: BlendedBlobsGradient(
+                state: blobsState,
+                motion: blobsMotion,
+                landscapeLayout: blobsLandscapeLayout
+            )
+        )
         super.init(frame: .zero)
         parentController.addChild(blobsHostingController)
         setupSubviews()
         blobsHostingController.didMove(toParent: parentController)
     }
 
-    required init?(coder: NSCoder) {
+    public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -286,7 +368,7 @@ final class BackgroundEffectView: UIView, ThemeApplicable {
         resultWash.pinToSuperview()
     }
 
-    override func layoutSubviews() {
+    override public func layoutSubviews() {
         super.layoutSubviews()
         topTrailingGlow.frame = CGRect(
             origin: .zero,
@@ -299,19 +381,33 @@ final class BackgroundEffectView: UIView, ThemeApplicable {
         topTrailingGlow.endPoint = CGPoint(x: 0.0, y: 1.0)
     }
 
-    func showResult() {
+    public func transformBlobs(_ transform: CGAffineTransform) {
+        blobsHostingController.view.transform = transform
+    }
+
+    /// Freezes the blobs and fades them to their result alpha once `blobsRevealDelay` has elapsed. If they were
+    /// transformed, they are hidden right away and reset to their result position.
+    public func showResult(blobsRevealDelay: TimeInterval = 0.0) {
         blobsState.isPaused = true
-        UIView.animate(
-            withDuration: UX.resultFadeDuration,
-            delay: UX.resultFadeDelay,
-            options: .curveEaseInOut
-        ) { [self] in
-            blobsHostingController.view.alpha = UX.resultBlobsAlpha
+        let blobsView: UIView = blobsHostingController.view
+        // avoid showing the move down of the blobs by setting its alpha to 0.0
+        if blobsView.transform != .identity {
+            blobsView.alpha = 0.0
+            blobsView.transform = .identity
+        }
+        UIView.animate(withDuration: UX.resultFadeDuration, delay: 0.0, options: .curveEaseInOut) { [self] in
             resultWash.alpha = 1.0
+        }
+        UIView.animate(withDuration: UX.blobsRevealDuration, delay: blobsRevealDelay, options: .curveEaseInOut) {
+            blobsView.alpha = UX.resultBlobsAlpha
         }
     }
 
-    func hideResult(duration: TimeInterval) {
+    public func setBlobsPaused(_ isPaused: Bool) {
+        blobsState.isPaused = isPaused
+    }
+
+    public func hideResult(duration: TimeInterval) {
         blobsState.isPaused = false
         UIView.animate(withDuration: duration, delay: 0.0, options: .curveEaseInOut) { [self] in
             blobsHostingController.view.alpha = 1.0
@@ -320,24 +416,25 @@ final class BackgroundEffectView: UIView, ThemeApplicable {
     }
 
     // MARK: - Presentation transition
-    func prepareForPresentationTransition() {
+    public func prepareForPresentationTransition() {
         blobsHostingController.view.transform = CGAffineTransform(translationX: 0.0, y: UX.presentationBlobsOffset)
     }
 
-    func applyPresentationTransition() {
+    public func applyPresentationTransition() {
         blobsHostingController.view.transform = .identity
     }
 
     // MARK: - ThemeApplicable
-    func applyTheme(theme: any Theme) {
+    public func applyTheme(theme: any Theme) {
         topTrailingGlow.colors = UX.topTrailingGlowOpacities.map {
             theme.colors.gradientAIStrongStop1.withAlphaComponent($0).cgColor
         }
-        blobsState.colors = [
+        let blobColors = [
             theme.colors.gradientAIStrongStop1.color,
             theme.colors.gradientAIStrongStop2.color,
             theme.colors.gradientAIStrongStop3.color
         ]
+        blobsState.colors = blobColors
         resultWash.configure(
             gradient: Gradient(colors: UX.resultWashStops.map {
                 theme.colors.layer1.withAlphaComponent($0.opacity)
