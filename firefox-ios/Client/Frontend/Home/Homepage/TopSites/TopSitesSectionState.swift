@@ -20,6 +20,7 @@ struct TopSitesSectionState: StateType, Equatable {
     let shouldShowSection: Bool
     let shouldShowSectionHeader: Bool
     let shouldShowAddShortcutTile: Bool
+    let hasRetrievedTopSites: Bool
 
     init(profile: Profile = AppContainer.shared.resolve(), windowUUID: WindowUUID) {
         let preferredNumberOfRows = profile.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows)
@@ -34,7 +35,8 @@ struct TopSitesSectionState: StateType, Equatable {
             numberOfTilesPerRow: TopSitesSectionLayoutProvider.UX.minCards,
             shouldShowSection: shouldShowSection,
             shouldShowSectionHeader: false,
-            shouldShowAddShortcutTile: false
+            shouldShowAddShortcutTile: false,
+            hasRetrievedTopSites: false
         )
     }
 
@@ -45,7 +47,8 @@ struct TopSitesSectionState: StateType, Equatable {
         numberOfTilesPerRow: Int,
         shouldShowSection: Bool,
         shouldShowSectionHeader: Bool,
-        shouldShowAddShortcutTile: Bool
+        shouldShowAddShortcutTile: Bool,
+        hasRetrievedTopSites: Bool
     ) {
         self.windowUUID = windowUUID
         self.topSitesData = topSitesData
@@ -54,6 +57,7 @@ struct TopSitesSectionState: StateType, Equatable {
         self.shouldShowSection = shouldShowSection
         self.shouldShowSectionHeader = shouldShowSectionHeader
         self.shouldShowAddShortcutTile = shouldShowAddShortcutTile
+        self.hasRetrievedTopSites = hasRetrievedTopSites
     }
 
     static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
@@ -102,6 +106,7 @@ struct TopSitesSectionState: StateType, Equatable {
             .copy(topSitesData: sites)
             .copy(shouldShowSectionHeader: shouldShowSectionHeader)
             .copy(shouldShowAddShortcutTile: shouldShowAddShortcutTile)
+            .copy(hasRetrievedTopSites: true)
     }
 
     private static func handleUpdatedNumberOfRowsAction(action: Action, state: Self) -> TopSitesSectionState {
@@ -162,7 +167,8 @@ struct TopSitesSectionState: StateType, Equatable {
             numberOfTilesPerRow: state.numberOfTilesPerRow,
             shouldShowSection: state.shouldShowSection,
             shouldShowSectionHeader: state.shouldShowSectionHeader,
-            shouldShowAddShortcutTile: state.shouldShowAddShortcutTile
+            shouldShowAddShortcutTile: state.shouldShowAddShortcutTile,
+            hasRetrievedTopSites: state.hasRetrievedTopSites
         )
     }
 
