@@ -1796,6 +1796,8 @@
 		C2FA00022FFF000100AD1FBD /* RemoteQuickAnswersConfigFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FA00012FFF000100AD1FBD /* RemoteQuickAnswersConfigFetcher.swift */; };
 		C2FA00042FFF000100AD1FBD /* RemoteQuickAnswersConfigFetcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FA00032FFF000100AD1FBD /* RemoteQuickAnswersConfigFetcherTests.swift */; };
 		C2FA00212FFF000100AD1FBD /* QuickAnswersTip.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FA00202FFF000100AD1FBD /* QuickAnswersTip.swift */; };
+		C2FA00410FFF000100AD1FBD /* QuickAnswersReturnPillPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FA00400FFF000100AD1FBD /* QuickAnswersReturnPillPresenter.swift */; };
+		C2FA00430FFF000100AD1FBD /* QuickAnswersReturnPillPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FA00420FFF000100AD1FBD /* QuickAnswersReturnPillPresenterTests.swift */; };
 		C2FA00312FFF000100AD1FBD /* ResetTipsSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FA00302FFF000100AD1FBD /* ResetTipsSetting.swift */; };
 		C2FA00332FFF000100AD1FBD /* ResetTipsSettingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FA00322FFF000100AD1FBD /* ResetTipsSettingTests.swift */; };
 		C32D262AC6733C3D39E149CA /* LaunchPairingFromURLSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6894075BBBAF589F845633D0 /* LaunchPairingFromURLSetting.swift */; };
@@ -11507,6 +11509,8 @@
 		C2FA00012FFF000100AD1FBD /* RemoteQuickAnswersConfigFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteQuickAnswersConfigFetcher.swift; sourceTree = "<group>"; };
 		C2FA00032FFF000100AD1FBD /* RemoteQuickAnswersConfigFetcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteQuickAnswersConfigFetcherTests.swift; sourceTree = "<group>"; };
 		C2FA00202FFF000100AD1FBD /* QuickAnswersTip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickAnswersTip.swift; sourceTree = "<group>"; };
+		C2FA00400FFF000100AD1FBD /* QuickAnswersReturnPillPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickAnswersReturnPillPresenter.swift; sourceTree = "<group>"; };
+		C2FA00420FFF000100AD1FBD /* QuickAnswersReturnPillPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickAnswersReturnPillPresenterTests.swift; sourceTree = "<group>"; };
 		C2FA00302FFF000100AD1FBD /* ResetTipsSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetTipsSetting.swift; sourceTree = "<group>"; };
 		C2FA00322FFF000100AD1FBD /* ResetTipsSettingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetTipsSettingTests.swift; sourceTree = "<group>"; };
 		C326435B8F6E47257506096B /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Search.strings; sourceTree = "<group>"; };
@@ -16164,8 +16168,17 @@
 				AAD00A752FBB412800123E8C /* QuickAnswersMiddleware.swift */,
 				C2FA00202FFF000100AD1FBD /* QuickAnswersTip.swift */,
 				C2FA00012FFF000100AD1FBD /* RemoteQuickAnswersConfigFetcher.swift */,
+				C2FA00440FFF000100AD1FBD /* ReturnPill */,
 			);
 			path = QuickAnswers;
+			sourceTree = "<group>";
+		};
+		C2FA00440FFF000100AD1FBD /* ReturnPill */ = {
+			isa = PBXGroup;
+			children = (
+				C2FA00400FFF000100AD1FBD /* QuickAnswersReturnPillPresenter.swift */,
+			);
+			path = ReturnPill;
 			sourceTree = "<group>";
 		};
 		AAD00A7A2FBB534500123E8C /* QuickAnswers */ = {
@@ -16173,6 +16186,7 @@
 			children = (
 				C2BA6FF92FF54B7D00AD1FBD /* DefaultQuickAnswersTelemetryTests.swift */,
 				AAD00A7B2FBB53EC00123E8C /* QuickAnswersMiddlewareTests.swift */,
+				C2FA00420FFF000100AD1FBD /* QuickAnswersReturnPillPresenterTests.swift */,
 				C2FA00032FFF000100AD1FBD /* RemoteQuickAnswersConfigFetcherTests.swift */,
 			);
 			path = QuickAnswers;
@@ -21375,6 +21389,7 @@
 				AAD00A772FBB412800123E8C /* QuickAnswersMiddleware.swift in Sources */,
 				C2FA00022FFF000100AD1FBD /* RemoteQuickAnswersConfigFetcher.swift in Sources */,
 				C2FA00212FFF000100AD1FBD /* QuickAnswersTip.swift in Sources */,
+				C2FA00410FFF000100AD1FBD /* QuickAnswersReturnPillPresenter.swift in Sources */,
 				AAD00A792FBB412800123E8C /* QuickAnswersAction.swift in Sources */,
 				C8EDDBF229DF1159003A4C07 /* URLScanner.swift in Sources */,
 				EBB89504219398E500EB91A0 /* TrackingProtectionPageStats.swift in Sources */,
@@ -21716,6 +21731,7 @@
 				E1AEC17A286E0CF500062E29 /* WebViewNavigationHandlerTests.swift in Sources */,
 				AAD00A7C2FBB53EC00123E8C /* QuickAnswersMiddlewareTests.swift in Sources */,
 				C2FA00042FFF000100AD1FBD /* RemoteQuickAnswersConfigFetcherTests.swift in Sources */,
+				C2FA00430FFF000100AD1FBD /* QuickAnswersReturnPillPresenterTests.swift in Sources */,
 				D3D488591ABB54CD00A93597 /* FileAccessorTests.swift in Sources */,
 				B0A92F012F31000100DB1EA1 /* MockProfileLifecycleTests.swift in Sources */,
 				EC0FBD2F30069252005CCA62 /* FolderSectionHeaderViewTests.swift in Sources */,
