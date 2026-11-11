@@ -57,4 +57,17 @@ final class ButtonToastTests: XCTestCase {
         XCTAssertEqual(completionResult, true)
         XCTAssertTrue(toast.dismissed)
     }
+
+    // Regression test: re-applying the layout after the toast is already built must not
+    // crash. The button's insertion index is computed before it is removed from the stack,
+    // so without clamping, inserting it back into the same stack goes out of bounds.
+    func testAdjustLayout_reappliedAfterAttach_doesNotCrash() {
+        let hostView = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: 200))
+        hostView.addSubview(toast)
+
+        toast.adjustLayoutForA11ySizeCategory()
+        toast.adjustLayoutForA11ySizeCategory()
+
+        toast.removeFromSuperview()
+    }
 }
