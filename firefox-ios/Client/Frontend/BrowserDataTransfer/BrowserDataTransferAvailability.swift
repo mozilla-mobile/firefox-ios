@@ -41,10 +41,10 @@ struct BrowserDataTransferAvailability {
     /// registration check excludes it.
     static let eligibleSchemes: Set<String> = ["Fennec", "FirefoxBeta"]
 
-    static var isRunningSupportedOperatingSystem: Bool {
-        guard !ProcessInfo.processInfo.isiOSAppOnMac else { return false }
-        if #available(iOS 26.4, *) { return true }
-        return false
+    static var isSupportedOS: Bool {
+        guard !ProcessInfo.processInfo.isiOSAppOnMac,
+              #available(iOS 26.4, *) else { return false }
+        return true
     }
 
     private let featureFlags: FeatureFlagProviding
@@ -55,7 +55,7 @@ struct BrowserDataTransferAvailability {
 
     init(
         featureFlags: FeatureFlagProviding = AppContainer.shared.resolve(),
-        isOperatingSystemSupported: Bool = BrowserDataTransferAvailability.isRunningSupportedOperatingSystem,
+        isOperatingSystemSupported: Bool = BrowserDataTransferAvailability.isSupportedOS,
         isEligibleBuild: Bool = BrowserDataTransferAvailability.eligibleSchemes.contains(AppConstants.scheme),
         registeredActivityTypes: Set<String> = Set(
             Bundle.main.object(forInfoDictionaryKey: "NSUserActivityTypes") as? [String] ?? []

@@ -57,7 +57,7 @@ final class BrowserDataTransferAvailabilityTests: XCTestCase {
         XCTAssertFalse(subject.isAvailable(.export))
     }
 
-    func testIsRunningSupportedOperatingSystem_matchesiOS26_4Availability() {
+    func testIsSupportedOS_matchesiOS26_4Availability() {
         let expected: Bool
         if #available(iOS 26.4, *) {
             expected = !ProcessInfo.processInfo.isiOSAppOnMac
@@ -65,7 +65,7 @@ final class BrowserDataTransferAvailabilityTests: XCTestCase {
             expected = false
         }
 
-        XCTAssertEqual(BrowserDataTransferAvailability.isRunningSupportedOperatingSystem, expected)
+        XCTAssertEqual(BrowserDataTransferAvailability.isSupportedOS, expected)
     }
 
     func testIsAvailable_ineligibleBuild_returnsFalseDespiteFlags() {
