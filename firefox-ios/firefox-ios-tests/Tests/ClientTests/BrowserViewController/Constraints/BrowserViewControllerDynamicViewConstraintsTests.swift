@@ -125,15 +125,6 @@ final class BrowserViewControllerDynamicViewConstraintsTests: BrowserViewControl
         XCTAssertEqual(returnPills(in: subject).count, 1)
     }
 
-    func test_showQuickAnswersReturnPill_withoutQuestion_labelsPillWithFallbackTitle() {
-        let subject = createSubject()
-
-        subject.showQuickAnswersReturnPill(question: nil, onTap: { _ in }, onSwipeAway: {})
-
-        XCTAssertEqual(returnPills(in: subject).first?.accessibilityLabel,
-                       String.QuickAnswers.ReturnPill.FallbackTitle)
-    }
-
     func test_hideQuickAnswersReturnPill_removesPill() {
         let subject = createSubject()
         subject.showQuickAnswersReturnPill(question: "Question", onTap: { _ in }, onSwipeAway: {})

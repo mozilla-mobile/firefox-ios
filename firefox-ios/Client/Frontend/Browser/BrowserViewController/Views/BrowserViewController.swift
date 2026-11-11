@@ -2080,7 +2080,7 @@ class BrowserViewController: UIViewController,
 
     /// An already shown pill is only reconfigured, it keeps the closures it was created with.
     func showQuickAnswersReturnPill(
-        question: String?,
+        question: String,
         onTap: @escaping (Bool) -> Void,
         onSwipeAway: @escaping () -> Void
     ) {
