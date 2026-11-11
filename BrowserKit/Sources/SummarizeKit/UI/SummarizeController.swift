@@ -29,6 +29,7 @@ public final class SummarizeController: UIViewController, Themeable {
         static let tabSnapshotShadowOffset = CGSize(width: 0.0, height: -10.0)
         static let tabSnapshotShadowOpacity: Float = 1.0
         static let labelShimmeringColorAlpha: CGFloat = 0.5
+        static let titleFadeDuration: TimeInterval = 0.1
     }
 
     lazy var animationController: AnimationController = DefaultAnimationController(
@@ -111,7 +112,9 @@ public final class SummarizeController: UIViewController, Themeable {
         host.view.isUserInteractionEnabled = false
         return host
     }()
-    private let summaryView: SummaryView = .build()
+    private let summaryView: SummaryView = .build {
+        $0.alpha = 0.0
+    }
     private var layoutContext: LayoutContext {
         return LayoutContext(
             viewSize: view.bounds.size,
@@ -202,16 +205,18 @@ public final class SummarizeController: UIViewController, Themeable {
         closeButton.accessibilityLabel = configuration.closeButton.a11yLabel
         closeButton.largeContentTitle = configuration.closeButton.a11yLabel
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: closeButton)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: closeButton)
         navigationItem.titleView = titleLabel
 
         setupTitleAnimation()
     }
 
     private func setupTitleAnimation() {
-        summaryView.onDidChangeTitleCellVisibility = { [weak self] isShowingTitleCell in
-            self?.titleLabel.alpha = isShowingTitleCell ? 0.0 : 1.0
-            self?.titleLabel.text = isShowingTitleCell ? nil : self?.webView.title
+        summaryView.onTitleVisibilityChange = { [weak self] isTitleVisible in
+            UIView.animate(withDuration: UX.titleFadeDuration) {
+                self?.titleLabel.alpha = isTitleVisible ? 0.0 : 1.0
+                self?.titleLabel.text = isTitleVisible ? nil : self?.webView.title
+            }
         }
     }
 
@@ -340,9 +345,9 @@ public final class SummarizeController: UIViewController, Themeable {
             model: SummaryViewModel(
                 title: webView.title,
                 titleA11yId: configuration.titleLabelA11yId,
-                compactTitleA11yId: configuration.compactTitleLabelA11yId,
-                brandViewModel: configuration.brandView,
-                summary: formatter.format(markdown: summary),
+                brandLabel: configuration.brandView.brandLabel,
+                brandLabelA11yId: configuration.brandView.brandLabelA11yId,
+                summary: formatter.format(markdown: summary) ?? NSAttributedString(string: summary),
                 summaryA11yId: configuration.summarizeViewA11yId,
                 scrollContentBottomInset: UX.tabSnapshotFinalPositionBottomPadding
             )
