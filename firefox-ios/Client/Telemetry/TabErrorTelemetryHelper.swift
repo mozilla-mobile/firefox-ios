@@ -104,6 +104,7 @@ final class TabErrorTelemetryHelper {
         guard let tabCounts = defaults.object(forKey: entryPoint.defaultsKey) as? [String: Int],
               let expectedTabCount = tabCounts[window.uuidString] else { return }
         guard let currentTabCount = getTotalTabCount(window: window) else {
+            assertionFailure("You couldn't get the tab manager for a window! This should never happen. Please debug.")
             logger.log("Can't validate tab count. Tab manager unavailable for window \(window.uuidString).",
                        level: .info,
                        category: .tabs)
@@ -112,6 +113,9 @@ final class TabErrorTelemetryHelper {
 
         if Self.tabDiscrepancyDetected(expectedTabCount: expectedTabCount,
                                        currentTabCount: currentTabCount) {
+            assertionFailure(
+                "You have hit authentic tab loss! Please review your stack trace and determine how.")
+
             let significantEvent = Self.isSignificantTabLossEvent(expectedTabCount: expectedTabCount,
                                                                   currentTabCount: currentTabCount)
             sendTelemetryTabLossDetectedEvent(
@@ -162,33 +166,30 @@ final class TabErrorTelemetryHelper {
                                                    actual: Int,
                                                    entryPoint: EntryPoint,
                                                    significantLossDetected: Bool) {
-        let extras: [String: String] = [
-            "expected": String(expected),
-            "actual": String(actual),
-            "missing": String(expected - actual),
-            "windows": String(windowManager.windows.count)
-           ]
+        let diagnosticDetails = TabLossTelemetry.TabLossDiagnostic(
+            actual: actual,
+            expected: expected,
+            missing: expected - actual,
+            windows: windowManager.windows.count
+        )
 
         if significantLossDetected {
-            var logExtras = extras
-            logExtras["entryPoint"] = entryPoint.logInfo
+            var sentryExtras = diagnosticDetails.sentryExtras
+            sentryExtras["entryPoint"] = entryPoint.logInfo
             logger.log("Tab loss detected.",
                        level: .fatal,
                        category: .tabs,
-                       extra: logExtras)
+                       extra: sentryExtras)
         }
 
         // Only send the telemetry event for the foregrounding log so we don't mess with our existing metrics
         // around tab loss
         if case .backgroundForeground = entryPoint {
-            let event: TelemetryWrapper.EventValue = significantLossDetected ? .tabLossDetected : .tabCountDiscrepancy
-            telemetryWrapper.recordEvent(
-                category: .information,
-                method: .error,
-                object: .app,
-                value: event,
-                extras: extras
-            )
+            if significantLossDetected {
+                TabLossTelemetry().recordTabLossDetected(withDetails: diagnosticDetails)
+            } else {
+                TabLossTelemetry().recordTabCountDiscrepancy(withDetails: diagnosticDetails)
+            }
         }
     }
 }

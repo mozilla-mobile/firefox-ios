@@ -1524,10 +1524,6 @@ extension TelemetryWrapper {
             }
         case(.information, .error, .app, .crashedLastLaunch, _):
             GleanMetrics.AppErrors.crashedLastLaunch.record()
-        case(.information, .error, .app, .tabLossDetected, _):
-            GleanMetrics.AppErrors.tabLossDetected.record()
-        case(.information, .error, .app, .tabCountDiscrepancy, _):
-            GleanMetrics.AppErrors.tabCountDiscrepancy.record()
         case(.information, .error, .app, .cpuException, let extras):
             if let quantity = extras?[EventExtraKey.size.rawValue] as? Int32 {
                 let properties = GleanMetrics.AppErrors.CpuExceptionExtra(size: quantity)
