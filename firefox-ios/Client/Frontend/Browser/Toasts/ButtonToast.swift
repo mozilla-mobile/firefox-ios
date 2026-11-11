@@ -252,7 +252,9 @@ class ButtonToast: Toast {
             currentStack.removeArrangedSubview(view)
         }
         view.removeFromSuperview()
-        stackView.insertArrangedSubview(view, at: index)
+        // The index is computed before the view is removed from its current stack, so
+        // clamp it to the post-removal count when re-inserting into the same stack.
+        stackView.insertArrangedSubview(view, at: min(index, stackView.arrangedSubviews.count))
     }
 
     private func move(_ view: UIView, toContainer container: UIView) {
