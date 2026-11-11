@@ -11,6 +11,23 @@ import XCTest
 
 @MainActor
 final class BrowserViewControllerDynamicViewConstraintsTests: BrowserViewControllerConstraintTestsBase {
+    private var featureFlagsProvider: MockNimbusFeatureFlags!
+
+    override func setUp() async throws {
+        try await super.setUp()
+        featureFlagsProvider = MockNimbusFeatureFlags()
+        featureFlagsProvider.enabledFlags = [.quickAnswers, .quickAnswersReturnToAnswer]
+        DependencyHelperMock().bootstrapDependencies(
+            injectedTabManager: tabManager,
+            injectedFeatureFlagProvider: featureFlagsProvider
+        )
+    }
+
+    override func tearDown() async throws {
+        featureFlagsProvider = nil
+        try await super.tearDown()
+    }
+
     // MARK: - Reader Mode Bar Tests
 
     func test_readerModeBar_bottomToolbar() {
@@ -88,6 +105,15 @@ final class BrowserViewControllerDynamicViewConstraintsTests: BrowserViewControl
         subject.showQuickAnswersReturnPill(question: "Question", onTap: { _ in }, onSwipeAway: {})
 
         XCTAssertEqual(returnPills(in: subject).count, 1)
+    }
+
+    func test_showQuickAnswersReturnPill_featureDisabled_doesNotAddPill() {
+        featureFlagsProvider.enabledFlags = []
+        let subject = createSubject()
+
+        subject.showQuickAnswersReturnPill(question: "Question", onTap: { _ in }, onSwipeAway: {})
+
+        XCTAssertTrue(returnPills(in: subject).isEmpty)
     }
 
     func test_showQuickAnswersReturnPill_calledTwice_keepsOnePill() {
