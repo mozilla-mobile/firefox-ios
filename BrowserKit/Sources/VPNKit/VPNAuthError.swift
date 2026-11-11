@@ -22,7 +22,7 @@ extension VPNAuthError {
         switch error {
         case VPNAuthError.notEnrolled:
             return true
-        case AppAttestServiceError.missingKeyID, AppAttestServiceError.invalidKeyID:
+        case AppAttestServiceError.missingKeyID:
             return true
         case AppAttestServiceError.serverError(let statusCode, _):
             return statusCode == 401
