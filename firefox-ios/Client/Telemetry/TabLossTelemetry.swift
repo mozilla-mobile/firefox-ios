@@ -29,21 +29,29 @@ struct TabLossTelemetry {
     }
 
     func recordTabLossDetected(withDetails details: TabLossDiagnostic) {
+        // Glean quantity extras are Int32; clamp instead of Int32(_:),
+        // which traps if the 64-bit Int doesn't fit,
+        // because on 32-bit platforms, Int is the same size as Int32,
+        // and on 64-bit platforms, Int is the same size as Int64.
         let extras = GleanMetrics.AppErrors.TabLossDetectedExtra(
-            actual: Int32(details.actual),
-            expected: Int32(details.expected),
-            missing: Int32(details.missing),
-            windows: Int32(details.windows)
+            actual: Int32(clamping: details.actual),
+            expected: Int32(clamping: details.expected),
+            missing: Int32(clamping: details.missing),
+            windows: Int32(clamping: details.windows)
         )
         gleanWrapper.recordEvent(for: GleanMetrics.AppErrors.tabLossDetected, extras: extras)
     }
 
     func recordTabCountDiscrepancy(withDetails details: TabLossDiagnostic) {
+        // Glean quantity extras are Int32; clamp instead of Int32(_:),
+        // which traps if the 64-bit Int doesn't fit,
+        // because on 32-bit platforms, Int is the same size as Int32,
+        // and on 64-bit platforms, Int is the same size as Int64.
         let extras = GleanMetrics.AppErrors.TabCountDiscrepancyExtra(
-            actual: Int32(details.actual),
-            expected: Int32(details.expected),
-            missing: Int32(details.missing),
-            windows: Int32(details.windows)
+            actual: Int32(clamping: details.actual),
+            expected: Int32(clamping: details.expected),
+            missing: Int32(clamping: details.missing),
+            windows: Int32(clamping: details.windows)
         )
         gleanWrapper.recordEvent(for: GleanMetrics.AppErrors.tabCountDiscrepancy, extras: extras)
     }

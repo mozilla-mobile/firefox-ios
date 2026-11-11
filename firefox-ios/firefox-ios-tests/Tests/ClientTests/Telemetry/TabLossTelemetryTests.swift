@@ -83,8 +83,6 @@ final class TabLossTelemetryTests: XCTestCase {
 
     func testRecordTabLossDetected_doesNotOverflowInt32Extra() throws {
         // Glean is using Int32 under the hood so we want to make sure no crashes due to type coercion from Int
-        let event = GleanMetrics.AppErrors.tabCountDiscrepancy
-        typealias EventExtrasType = GleanMetrics.AppErrors.TabCountDiscrepancyExtra
         let expectedTabDiagnostic = TabLossTelemetry.TabLossDiagnostic(
             actual: Int.max,
             expected: Int.max,

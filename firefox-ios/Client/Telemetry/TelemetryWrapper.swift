@@ -647,8 +647,6 @@ extension TelemetryWrapper {
         case crashedLastLaunch = "crashed_last_launch"
         case cpuException = "cpu_exception"
         case hangException = "hang-exception"
-        case tabLossDetected = "tab_loss_detected"
-        case tabCountDiscrepancy = "tab_count_discrepancy"
         case webviewFail = "webview-fail"
         case webviewFailProvisional = "webview-fail-provisional"
         case webviewShowErrorPage = "webview-show-error-page"
