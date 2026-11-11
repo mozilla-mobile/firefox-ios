@@ -147,6 +147,11 @@
           "name" : "QuickAnswersKit"
         },
         {
+          "containerPath" : "container:..\/BrowserKit",
+          "identifier" : "WebDataTransfer",
+          "name" : "WebDataTransfer"
+        },
+        {
           "containerPath" : "container:..\/MozillaRustComponents",
           "identifier" : "MozillaRustComponents",
           "name" : "MozillaRustComponents"
@@ -197,6 +202,13 @@
         "containerPath" : "container:..\/BrowserKit",
         "identifier" : "QuickAnswersKitTests",
         "name" : "QuickAnswersKitTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..\/BrowserKit",
+        "identifier" : "WebDataTransferTests",
+        "name" : "WebDataTransferTests"
       }
     },
     {
