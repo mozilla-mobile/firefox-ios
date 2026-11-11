@@ -7,6 +7,8 @@ import QuickAnswersKit
 import Shared
 import UIKit
 
+/// Hosts the Quick Answers return pill over the browser, owning its position and visibility.
+/// The pill sizes itself, so only its position is constrained.
 @MainActor
 final class QuickAnswersReturnPillPresenter {
     struct LayoutContext: Equatable {
@@ -40,7 +42,7 @@ final class QuickAnswersReturnPillPresenter {
 
     /// - Parameters:
     ///   - hostView: The view the pill is added to.
-    ///   - anchorView: The view the expanded pill sits above.
+    ///   - anchorView: The view the expanded pill sits above, whose top already follows the bar position and keyboard.
     init(hostView: UIView, anchorView: UIView, overlayState: OverlayStateProtocol) {
         self.hostView = hostView
         self.anchorView = anchorView
@@ -111,6 +113,8 @@ final class QuickAnswersReturnPillPresenter {
         pill?.applyTheme(theme: theme)
     }
 
+    /// With a bottom address bar the minimized pill trails the location view.
+    /// Otherwise it sits at the bottom of the screen.
     private func placement(for context: LayoutContext) -> Placement {
         if !context.isMinimized {
             return .expanded
