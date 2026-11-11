@@ -2078,7 +2078,7 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Quick Answers return pill
 
-    /// An already shown pill is only reconfigured, it keeps the closures it was created with.
+    /// Does nothing when Quick Answers or return to answer is disabled.
     func showQuickAnswersReturnPill(
         question: String,
         onTap: @escaping (Bool) -> Void,
