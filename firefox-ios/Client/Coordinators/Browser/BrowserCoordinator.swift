@@ -1349,8 +1349,9 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     private func showQuickAnswersReturnPill() {
+        guard let question = quickAnswersSessionStorage.latestSession?.question else { return }
         browserViewController.showQuickAnswersReturnPill(
-            question: quickAnswersSessionStorage.latestSession?.question,
+            question: question,
             onTap: { [weak self] _ in self?.resumeParkedQuickAnswers() },
             onSwipeAway: { [weak self] in self?.discardParkedQuickAnswers(reason: .swipe) }
         )
