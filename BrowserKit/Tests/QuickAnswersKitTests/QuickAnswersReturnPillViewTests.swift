@@ -15,7 +15,6 @@ final class QuickAnswersReturnPillViewTests: XCTestCase {
     private let subtitle = "Tap to return"
     private let identifier = "QuickAnswers.returnPill"
     private let minimizedSize: CGFloat = 28.0
-    private let expandedHeight: CGFloat = 47.0
 
     override func setUp() async throws {
         try await super.setUp()
@@ -77,12 +76,13 @@ final class QuickAnswersReturnPillViewTests: XCTestCase {
 
     func test_setMinimized_falseAfterTrue_restoresExpandedSize() {
         let subject = createSubject()
+        let expandedSize = fittingSize(of: subject)
         subject.setMinimized(true, animated: false)
 
         subject.setMinimized(false, animated: false)
 
         XCTAssertFalse(subject.isMinimized)
-        XCTAssertEqual(fittingSize(of: subject).height, expandedHeight)
+        XCTAssertEqual(fittingSize(of: subject), expandedSize)
     }
 
     // MARK: - Helpers

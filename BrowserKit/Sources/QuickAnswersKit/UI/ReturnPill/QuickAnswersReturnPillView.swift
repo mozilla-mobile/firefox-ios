@@ -9,7 +9,7 @@ import UIKit
 /// Floating pill that takes the user back to a parked Quick Answers session. The host owns its position.
 public final class QuickAnswersReturnPillView: UIView, ThemeApplicable {
     private struct UX {
-        static let expandedHeight: CGFloat = 47.0
+        static let verticalPadding: CGFloat = 8.0
         static let maxWidth: CGFloat = 220.0
         static let minimizedSize: CGFloat = 28.0
         static let leadingPadding: CGFloat = 10.0
@@ -187,8 +187,13 @@ public final class QuickAnswersReturnPillView: UIView, ThemeApplicable {
             labelStack.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
 
+        // Hugs the taller of the icon and the labels, so the height follows Dynamic Type.
+        let hugHeight = heightAnchor.constraint(equalToConstant: 0)
+        hugHeight.priority = .defaultLow
         expandedConstraints = [
-            heightAnchor.constraint(equalToConstant: UX.expandedHeight),
+            hugHeight,
+            labelStack.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: UX.verticalPadding),
+            iconBackgroundView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: UX.verticalPadding),
             iconBackgroundView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.leadingPadding),
             labelStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.trailingPadding)
         ]
