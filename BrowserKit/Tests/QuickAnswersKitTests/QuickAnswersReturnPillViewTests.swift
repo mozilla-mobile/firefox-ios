@@ -13,7 +13,7 @@ final class QuickAnswersReturnPillViewTests: XCTestCase {
     private var swipeAwayCallCount = 0
     private let question = "How tall is Mount Everest?"
     private let subtitle = "Tap to return"
-    private let removeActionName = "Remove"
+    private let identifier = "QuickAnswers.returnPill"
     private let minimizedSize: CGFloat = 28.0
     private let expandedHeight: CGFloat = 47.0
 
@@ -37,20 +37,20 @@ final class QuickAnswersReturnPillViewTests: XCTestCase {
         XCTAssertEqual(subject.accessibilityHint, subtitle)
     }
 
-    func test_configure_addsRemoveCustomAction() {
+    // MARK: - init
+    func test_init_setsInjectedAccessibilityIdentifier() {
         let subject = createSubject()
 
-        XCTAssertEqual(subject.accessibilityCustomActions?.count, 1)
-        XCTAssertEqual(subject.accessibilityCustomActions?.first?.name, removeActionName)
+        XCTAssertEqual(subject.accessibilityIdentifier, identifier)
     }
 
-    func test_customAction_callsOnSwipeAway() throws {
+    // MARK: - accessibilityPerformEscape
+    func test_accessibilityPerformEscape_callsOnSwipeAway() {
         let subject = createSubject()
-        let action = try XCTUnwrap(subject.accessibilityCustomActions?.first)
 
-        let handled = action.actionHandler?(action)
+        let handled = subject.accessibilityPerformEscape()
 
-        XCTAssertEqual(handled, true)
+        XCTAssertTrue(handled)
         XCTAssertEqual(swipeAwayCallCount, 1)
     }
 
@@ -88,10 +88,11 @@ final class QuickAnswersReturnPillViewTests: XCTestCase {
     // MARK: - Helpers
     private func createSubject(file: StaticString = #filePath, line: UInt = #line) -> QuickAnswersReturnPillView {
         let subject = QuickAnswersReturnPillView(
+            accessibilityIdentifier: identifier,
             onTap: { [weak self] isMinimized in self?.tapMinimizedStates.append(isMinimized) },
             onSwipeAway: { [weak self] in self?.swipeAwayCallCount += 1 }
         )
-        subject.configure(question: question, subtitle: subtitle, accessibilityRemoveActionName: removeActionName)
+        subject.configure(question: question, subtitle: subtitle)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
