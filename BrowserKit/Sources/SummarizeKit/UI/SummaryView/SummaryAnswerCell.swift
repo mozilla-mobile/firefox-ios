@@ -9,6 +9,7 @@ import UIKit
 final class SummaryAnswerCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private enum UX {
         static let horizontalPadding: CGFloat = 24.0
+        static let fadeDuration: TimeInterval = 0.3
     }
 
     private let answerCardView: AIAnswerCardView = .build()
@@ -36,6 +37,7 @@ final class SummaryAnswerCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     func configure(header: String, body: NSAttributedString, headerA11yId: String, bodyA11yId: String) {
         answerCardView.configure(header: header, body: body, headerA11yId: headerA11yId, bodyA11yId: bodyA11yId)
+        answerCardView.fadeBodyChange(duration: UX.fadeDuration)
     }
 
     // MARK: - ThemeApplicable

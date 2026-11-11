@@ -16,6 +16,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         static let followUpButtonSize: CGFloat = 62.0
         static let followUpFadeOutDuration: TimeInterval = 0.3
         static let followUpFadeInDuration: TimeInterval = 0.2
+        static let resultBlobsFadeDelay: TimeInterval = 0.2
     }
 
     // MARK: - Properties
@@ -221,7 +222,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
                     self?.errorHandler.handleSearchError(error)
                 } else {
                     self?.triggerHaptic()
-                    self?.backgroundEffectView.showResult()
+                    self?.backgroundEffectView.showResult(blobsRevealDelay: UX.resultBlobsFadeDelay)
                     self?.showFollowUpButton()
                     self?.contentView.configureResult(
                         result.resultText,

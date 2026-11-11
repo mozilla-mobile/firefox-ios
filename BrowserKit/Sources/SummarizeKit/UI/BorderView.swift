@@ -6,9 +6,9 @@ import SwiftUI
 import Common
 
 /// Renders a blurred border “overlay” that keeps the center transparent.
-/// You control color, thickness, corner radius, blur amount, and target size.
+/// You control gradient, thickness, corner radius, blur amount, and target size.
 private struct AdjustableBlurBorder: View {
-    var borderColor: Color
+    var borderGradient: LinearGradient
     var borderWidth: CGFloat
     var cornerRadius: CGFloat
     var blurRadius: CGFloat
@@ -21,10 +21,10 @@ private struct AdjustableBlurBorder: View {
                 .foregroundColor(.clear)
                 .frame(width: size.width, height: size.height)
                 .overlay(
-                    Rectangle().stroke(borderColor, lineWidth: borderWidth)
+                    Rectangle().stroke(borderGradient, lineWidth: borderWidth)
                 )
                 .overlay(
-                    shape.stroke(borderColor, lineWidth: borderWidth)
+                    shape.stroke(borderGradient, lineWidth: borderWidth)
                 )
                 .blur(radius: blurRadius)
         }
@@ -38,14 +38,22 @@ private struct AdjustableBlurBorder: View {
 struct BorderView: View {
     var theme: Theme
     private enum UX {
-        static let borderWidth: CGFloat = 50
+        static let borderWidth: CGFloat = 20
         static let cornerRadius: CGFloat = 55
-        static let blurRadius: CGFloat = 25
+        static let blurRadius: CGFloat = 20
     }
     var body: some View {
         GeometryReader { proxy in
             AdjustableBlurBorder(
-                borderColor: Color(uiColor: theme.colors.shadowBorder),
+                borderGradient: LinearGradient(
+                    colors: [
+                        theme.colors.gradientAIStrongStop1.color,
+                        theme.colors.gradientAIStrongStop2.color,
+                        theme.colors.gradientAIStrongStop3.color
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                ),
                 borderWidth: UX.borderWidth,
                 cornerRadius: UX.cornerRadius,
                 blurRadius: UX.blurRadius,

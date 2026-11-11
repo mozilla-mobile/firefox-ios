@@ -34,6 +34,8 @@ class InfoView: UIView,
         $0.isEditable = false
         $0.isScrollEnabled = false
         $0.textAlignment = .center
+        $0.showsLargeContentViewer = true
+        $0.addInteraction(UILargeContentViewerInteraction())
     }
     private let actionButton: UIButton = .build {
         if #available(iOS 26, *) {
@@ -78,6 +80,7 @@ class InfoView: UIView,
     func configure(viewModel: InfoViewModel) {
         self.viewModel = viewModel
         contentView.attributedText = viewModel.content
+        contentView.largeContentTitle = viewModel.content?.string
         contentView.accessibilityIdentifier = viewModel.contentA11yId
         actionButton.configuration?.title = viewModel.actionButtonLabel
         actionButton.accessibilityIdentifier = viewModel.actionButtonA11yId
