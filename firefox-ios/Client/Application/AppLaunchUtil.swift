@@ -57,6 +57,10 @@ final class AppLaunchUtil: FeatureFlaggable, Sendable {
             || termsOfServiceManager.isAccepted
             || !introScreenManager.shouldShowIntroScreen
 
+        // Initialize app services ( including NSS ). Must be called before any other calls to rust components.
+        // In particular this must run before telemetry setup.
+        MozillaAppServices.initialize()
+
         logger.setup(sendCrashReports: sendCrashReports && canInitializeTelemetry)
         if canInitializeTelemetry {
             TelemetryWrapper.shared.setup(profile: profile)
@@ -76,9 +80,6 @@ final class AppLaunchUtil: FeatureFlaggable, Sendable {
 
         // Active days and conversion events are recorded when the app becomes active
         ConversionActivityLogger().recordFirstDayAfterInstallTimestampIfNeeded()
-
-        // Initialize app services ( including NSS ). Must be called before any other calls to rust components.
-        MozillaAppServices.initialize()
 
         /// Migrate TermsOfService prefs to TermsOfUse prefs
         /// before Nimbus is initialized (should be available for experiments)
