@@ -4,6 +4,7 @@
 
 import UIKit
 import Common
+import ComponentLibrary
 
 final class QuickAnswersContentView: UIView, UIScrollViewDelegate, ThemeApplicable {
     private enum UX {
@@ -68,7 +69,7 @@ final class QuickAnswersContentView: UIView, UIScrollViewDelegate, ThemeApplicab
         $0.textAlignment = .center
         $0.adjustsFontForContentSizeCategory = true
     }
-    private let answerCardView: QuickAnswersAnswerCardView = .build {
+    private let answerCardView: AIAnswerCardView = .build {
         $0.alpha = 0.0
     }
     private let sourceView: QuickAnswersSourceView = .build {

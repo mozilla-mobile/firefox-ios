@@ -5,6 +5,7 @@
 import UIKit
 import Common
 import Shared
+import ComponentLibrary
 
 // TODO: - FXIOS-16295 improve VoiceOver by adding notification announcement before and after recording.
 public final class QuickAnswersViewController: UIViewController, Themeable {
@@ -18,7 +19,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
     }
 
     // MARK: - Properties
-    private lazy var backgroundEffectView = BackgroundEffectView(parentController: self)
+    private lazy var backgroundEffectView = AIBackgroundEffectView(parentController: self)
     private lazy var closeButton: UIButton = .build { [weak self] in
         $0.setImage(
             UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate),

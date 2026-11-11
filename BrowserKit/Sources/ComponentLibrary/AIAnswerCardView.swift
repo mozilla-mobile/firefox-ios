@@ -4,11 +4,9 @@
 
 import UIKit
 import Common
-import ComponentLibrary
 
-/// The card displaying a Quick Answers result: a gradient header and the answer body, laid over a
-/// material background.
-final class QuickAnswersAnswerCardView: UIView, ThemeApplicable {
+/// The card displaying an AI answer: a gradient header and the answer body, laid over a material background.
+public final class AIAnswerCardView: UIView, ThemeApplicable {
     private enum UX {
         static let cornerRadius: CGFloat = 38.0
         static let borderWidth: CGFloat = 0.25
@@ -29,6 +27,7 @@ final class QuickAnswersAnswerCardView: UIView, ThemeApplicable {
     }
     private let headerLabel: UILabel = .build {
         $0.font = FXFontStyles.Bold.caption1.scaledFont()
+        $0.numberOfLines = 0
         $0.adjustsFontForContentSizeCategory = true
     }
     private let bodyLabel: UILabel = .build {
@@ -37,13 +36,14 @@ final class QuickAnswersAnswerCardView: UIView, ThemeApplicable {
         $0.adjustsFontForContentSizeCategory = true
     }
     private var headerGradientColors: [UIColor] = []
+    private var usesAttributedBody = false
 
-    override init(frame: CGRect) {
+    override public init(frame: CGRect) {
         super.init(frame: frame)
         setupSubviews()
     }
 
-    required init?(coder: NSCoder) {
+    public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -74,16 +74,40 @@ final class QuickAnswersAnswerCardView: UIView, ThemeApplicable {
         ])
     }
 
-    override func layoutSubviews() {
+    override public func layoutSubviews() {
         super.layoutSubviews()
         applyHeaderGradient()
     }
 
     // MARK: - Configuration
-    func configure(header: String, body: String) {
+    public func configure(
+        header: String,
+        body: String,
+        headerA11yId: String? = nil,
+        bodyA11yId: String? = nil
+    ) {
+        usesAttributedBody = false
         headerLabel.text = header
         bodyLabel.text = body
-        setNeedsLayout()
+        applyAccessibilityIdentifiers(headerA11yId: headerA11yId, bodyA11yId: bodyA11yId)
+    }
+
+    /// The attributed body is expected to be already themed, so `applyTheme` doesn't override its colors.
+    public func configure(
+        header: String,
+        body: NSAttributedString,
+        headerA11yId: String? = nil,
+        bodyA11yId: String? = nil
+    ) {
+        usesAttributedBody = true
+        headerLabel.text = header
+        bodyLabel.attributedText = body
+        applyAccessibilityIdentifiers(headerA11yId: headerA11yId, bodyA11yId: bodyA11yId)
+    }
+
+    private func applyAccessibilityIdentifiers(headerA11yId: String?, bodyA11yId: String?) {
+        headerLabel.accessibilityIdentifier = headerA11yId
+        bodyLabel.accessibilityIdentifier = bodyA11yId
     }
 
     /// Fills the header text with the AI gradient, since a label can't take a gradient text color directly.
@@ -112,7 +136,7 @@ final class QuickAnswersAnswerCardView: UIView, ThemeApplicable {
     }
 
     // MARK: - ThemeApplicable
-    func applyTheme(theme: any Theme) {
+    public func applyTheme(theme: any Theme) {
         layer.borderColor = theme.colors.borderPrimary.cgColor
         headerGradientColors = [
             theme.colors.gradientAIStrongStop1,
@@ -121,6 +145,8 @@ final class QuickAnswersAnswerCardView: UIView, ThemeApplicable {
         ]
         applyHeaderGradient()
         applyHeaderIconGradient()
-        bodyLabel.textColor = theme.colors.textPrimary
+        if !usesAttributedBody {
+            bodyLabel.textColor = theme.colors.textPrimary
+        }
     }
 }
