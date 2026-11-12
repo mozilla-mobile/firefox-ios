@@ -97,6 +97,8 @@ final class VPNMiddleware {
             await stopVPN()
         case .changeLocation:
             await changeVPNLocation()
+        case .reconnectAtLaunch:
+            await reconnectAtLaunch()
         case .closeThisTab:
             let tabManager = windowManager.tabManager(for: windowUUID)
             if let selectedTab = tabManager?.selectedTab {
@@ -112,6 +114,14 @@ final class VPNMiddleware {
         }
     }
 
+    private func reconnectAtLaunch() async {
+        AppEventQueue.started(.vpnReconnect)
+        if vpnManager != nil, userPreferences.getPreferenceFor(.vpnFeature) {
+            await startVPN()
+        }
+        AppEventQueue.completed(.vpnReconnect)
+    }
+
     private func startVPN() async {
         guard let vpnManager else {
             logger.log("VPN start with no VPNManager registered", level: .warning, category: .vpn)
@@ -119,7 +129,7 @@ final class VPNMiddleware {
         }
         do {
             try await vpnManager.start(countryCode: selectedCountryCode)
-            userPreferences.setPreferenceFor(.vpnFeature, to: true)
+            userPreferences.setPreferenceFor(.vpnFeature, to: vpnManager.isRunning)
         } catch {
             logger.log("VPN start failed: \(error)", level: .warning, category: .vpn)
         }

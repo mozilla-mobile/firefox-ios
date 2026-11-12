@@ -161,9 +161,7 @@ class AppDelegate: UIResponder,
             }
         }
 
-        if #available(iOS 17.0, *) {
-            reconnectVPNIfNeeded()
-        }
+        reconnectVPNIfNeeded()
 
         if #available(iOS 17.0, *) {
             ResetTipsSetting.resetDatastoreIfNeeded(prefs: profile.prefs)
@@ -403,18 +401,7 @@ class AppDelegate: UIResponder,
             AppEventQueue.signal(event: .vpnReconnect)
             return
         }
-        let vpnManager: VPNRunnable = AppContainer.shared.resolve()
-        AppEventQueue.started(.vpnReconnect)
-        Task {
-            do {
-                try await vpnManager.start(
-                    countryCode: profile.prefs.stringForKey(PrefsKeys.VPNSettings.selectedCountryCode)
-                )
-            } catch {
-                logger.log("VPN reconnect failed: \(error)", level: .warning, category: .vpn)
-            }
-            AppEventQueue.completed(.vpnReconnect)
-        }
+        store.dispatch(VPNModernAction.reconnectAtLaunch, forWindowUUID: .unavailable)
     }
 
     private func fixSimulatorDevBuild(_ application: UIApplication) {

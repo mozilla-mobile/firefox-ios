@@ -124,6 +124,32 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertNil(mockUserPreferences.boolPreferences[.vpnFeature])
     }
 
+    func testReconnectAtLaunch_whenPreferenceOn_startsVPN() async {
+        mockUserPreferences.boolPreferences[.vpnFeature] = true
+        let started = expectation(description: "VPN started")
+        mockVPNManager.onStart = { started.fulfill() }
+        let subject = createSubject()
+
+        subject.vpnProvider.modernMiddleware(AppState(), VPNModernAction.reconnectAtLaunch, firstWindowUUID)
+        // I hope these tests don't flake on me
+        await fulfillment(of: [started], timeout: 1)
+
+        XCTAssertEqual(mockVPNManager.startCalled, 1)
+    }
+
+    func testReconnectAtLaunch_whenPreferenceOff_doesNotStartVPN() async {
+        let started = expectation(description: "VPN started")
+        started.isInverted = true
+        mockVPNManager.onStart = { started.fulfill() }
+        let subject = createSubject()
+
+        subject.vpnProvider.modernMiddleware(AppState(), VPNModernAction.reconnectAtLaunch, firstWindowUUID)
+        // I hope these tests don't flake on me
+        await fulfillment(of: [started], timeout: 1)
+
+        XCTAssertEqual(mockVPNManager.startCalled, 0)
+    }
+
     // MARK: - Alert choices
 
     func testAlertChoice_clearsPreference() async {
