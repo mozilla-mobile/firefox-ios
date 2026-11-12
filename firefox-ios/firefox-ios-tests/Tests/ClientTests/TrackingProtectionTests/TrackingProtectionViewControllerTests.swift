@@ -61,13 +61,12 @@ final class TrackingProtectionViewControllerTests: XCTestCase {
             userDefaults: nil,
             url: URL(string: "https://example.com")!,
             globalETPIsEnabled: true,
-            contentBlockerStatus: .noBlockedURLs,
             contentBlockerStats: nil,
-            selectedTab: nil
+            selectedTab: nil,
+            profile: mockProfile
         )
         return TrackingProtectionViewController(
             viewModel: model,
-            profile: mockProfile,
             windowUUID: .XCTestDefaultUUID
         )
     }

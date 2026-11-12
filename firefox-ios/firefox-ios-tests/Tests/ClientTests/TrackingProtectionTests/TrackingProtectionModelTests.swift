@@ -7,6 +7,18 @@ import XCTest
 
 @MainActor
 final class TrackingProtectionModelTests: XCTestCase {
+    private var mockProfile: MockProfile!
+
+    override func setUp() async throws {
+        try await super.setUp()
+        mockProfile = makeProfile()
+    }
+
+    override func tearDown() async throws {
+        mockProfile = nil
+        try await super.tearDown()
+    }
+
     func testClearCookiesAndSiteData() {
         let cookiesClearable = MockCookiesClearable()
         let siteDataClearable = MockSiteDataClearable()
@@ -47,9 +59,9 @@ final class TrackingProtectionModelTests: XCTestCase {
         let subject = TrackingProtectionModel(userDefaults: nil,
                                               url: url,
                                               globalETPIsEnabled: globalETPIsEnabled,
-                                              contentBlockerStatus: contentBlockerStatus,
                                               contentBlockerStats: contentBlockerStats,
-                                              selectedTab: selectedTab)
+                                              selectedTab: selectedTab,
+                                              profile: mockProfile)
         trackForMemoryLeaks(subject)
         return subject
     }

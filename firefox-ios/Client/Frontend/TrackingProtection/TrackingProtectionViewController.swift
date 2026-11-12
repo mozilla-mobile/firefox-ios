@@ -52,7 +52,6 @@ class TrackingProtectionViewController: UIViewController,
                                         StoreSubscriber,
                                         UIScrollViewDelegate {
     var themeManager: ThemeManager
-    var profile: Profile?
     var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
     let windowUUID: WindowUUID
@@ -127,26 +126,14 @@ class TrackingProtectionViewController: UIViewController,
 
     private var protectionViewTopConstraint: NSLayoutConstraint?
 
-    private var shouldConnectionStatusBeTappable: Bool {
-        let isReaderMode = model.selectedTab?.url?.isReaderModeURL == true
-        let isCertError = InternalURL(model.selectedTab?.url)?.isCertificateErrorURL == true
-        let isSecure = model.isConnectionSecure
-        let origin = CertStore.origin(for: model.originalURL) ?? ""
-        let isManuallyTrusted = profile?.certStore.hasCertificate(forOrigin: origin) ?? false
-
-        return !isReaderMode && (isCertError || isSecure || isManuallyTrusted)
-    }
-
     // MARK: - View lifecycle
 
     init(viewModel: TrackingProtectionModel,
-         profile: Profile,
          windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared) {
         self.model = viewModel
-        self.profile = profile
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
@@ -436,7 +423,7 @@ class TrackingProtectionViewController: UIViewController,
             )
         }
         connectionStatusView.connectionStatusButtonCallback = { [weak self] in
-            guard let self, shouldConnectionStatusBeTappable else { return }
+            guard let self, model.shouldConnectionStatusBeTappable else { return }
 
             store.dispatch(
                 TrackingProtectionAction(
@@ -555,7 +542,7 @@ class TrackingProtectionViewController: UIViewController,
         connectionStatusView.setConnectionStatus(image: model.getConnectionStatusImage(themeType: currentTheme().type),
                                                  text: model.connectionStatusString,
                                                  theme: currentTheme(),
-                                                 shouldBeTappable: shouldConnectionStatusBeTappable)
+                                                 shouldBeTappable: model.shouldConnectionStatusBeTappable)
         connectionDetailsHeaderView.setupDetails(title: model.connectionDetailsTitle,
                                                  status: model.connectionDetailsHeader,
                                                  image: model.connectionDetailsImage)
@@ -674,7 +661,7 @@ class TrackingProtectionViewController: UIViewController,
 
     @objc
     func openSettingsTapped() {
-        let isContentBlockingConfigEnabled = profile?.prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) ?? true
+        let isContentBlockingConfigEnabled = model.isContentBlockingConfigEnabled
         if !isContentBlockingConfigEnabled {
             store.dispatch(
                 TrackingProtectionAction(windowUUID: self.windowUUID,
@@ -751,7 +738,7 @@ class TrackingProtectionViewController: UIViewController,
 
     // MARK: - Update Views
     private func updateProtectionViewStatus() {
-        let isContentBlockingConfigEnabled = profile?.prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) ?? true
+        let isContentBlockingConfigEnabled = model.isContentBlockingConfigEnabled
         if toggleView.toggleIsOn, isContentBlockingConfigEnabled {
             toggleView.setStatusLabelText(with: .Menu.EnhancedTrackingProtection.switchOnText,
                                           and: !isContentBlockingConfigEnabled)

@@ -16,12 +16,12 @@ import SwiftASN1
 class TrackingProtectionModel {
     // MARK: - Constants
     private let userDefaults: UserDefaultsInterface?
-    let contentBlockerStatus: BlockerStatus
     var contentBlockerStats: TPPageStats?
     var certificates = [Certificate]()
     let url: URL
     let globalETPIsEnabled: Bool
     var selectedTab: Tab?
+    let profile: Profile?
 
     let clearCookiesButtonTitle: String = .Menu.EnhancedTrackingProtection.clearDataButtonTitle
     let clearCookiesButtonA11yId: String = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.clearCookiesButton
@@ -128,11 +128,18 @@ class TrackingProtectionModel {
         return UIImage(named: ImageIdentifiers.TrackingProtection.protectionOn)
     }
 
-    var isSiteETPEnabled: Bool {
-        switch contentBlockerStatus {
-        case .noBlockedURLs, .blocking, .disabled: return true
-        case .safelisted: return false
-        }
+    var shouldConnectionStatusBeTappable: Bool {
+        let isReaderMode = selectedTab?.url?.isReaderModeURL == true
+        let isCertError = InternalURL(selectedTab?.url)?.isCertificateErrorURL == true
+        let isSecure = isConnectionSecure
+        let origin = CertStore.origin(for: originalURL) ?? ""
+        let isManuallyTrusted = profile?.certStore.hasCertificate(forOrigin: origin) ?? false
+
+        return !isReaderMode && (isCertError || isSecure || isManuallyTrusted)
+    }
+
+    var isContentBlockingConfigEnabled: Bool {
+        profile?.prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) ?? true
     }
 
     // MARK: - Initializers
@@ -140,15 +147,15 @@ class TrackingProtectionModel {
     init(userDefaults: UserDefaultsInterface?,
          url: URL,
          globalETPIsEnabled: Bool,
-         contentBlockerStatus: BlockerStatus,
          contentBlockerStats: TPPageStats?,
-         selectedTab: Tab?) {
+         selectedTab: Tab?,
+         profile: Profile?) {
         self.userDefaults = userDefaults
         self.url = url
         self.globalETPIsEnabled = globalETPIsEnabled
-        self.contentBlockerStatus = contentBlockerStatus
         self.contentBlockerStats = contentBlockerStats
         self.selectedTab = selectedTab
+        self.profile = profile
     }
 
     // MARK: - Helpers
