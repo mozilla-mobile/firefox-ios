@@ -3692,7 +3692,7 @@ extension String {
                 key: "VPN.LocationPicker.LocationUnavailableButtonText.v162",
                 tableName: "VPN",
                 value: "OK",
-                comment: "Button on the popup shown when the VPN server location the user picked can’t be used right now. Tapping it closes the popup."
+                comment: "Button on the popup shown when the VPN server location the user picked can’t be used right now. Indicates the user understands and acknowledges the location has changed. Tapping it closes the popup."
             )
         }
     }
