@@ -54,9 +54,9 @@ if __name__ == '__main__':
     '''
     STEPS
     1. check bitrise API stack info for the default stack version
-    2. compare latest with current bitrise.yml stack version in repo
+    2. compare latest with current BITRISE_YML stack version in repo
     3. if same exit, if not, continue
-    4. modify bitrise.yml (update stack value)
+    4. modify BITRISE_YML (update stack value)
     '''
 
     stacks_info = get_stack_info()
@@ -88,17 +88,17 @@ if __name__ == '__main__':
             # if there is a stable stack of the same version or later, use stable stack.
             # otherwise do nothing
             if latest_stable_semver >= current_semver.replace('-edge', ''):
-                print("Stable version of Bitrise stack available: {0} ... updating bitrise.yml!".format(latest_stable_semver))
+                print("Stable version of Bitrise stack available: {0} ... updating {1}!".format(latest_stable_semver, BITRISE_YML))
                 write_to_bitrise_yml(y, latest_stable_semver)
             else:
                 print('No stable version of Bitrise stack available! aborting.')
         # if we are using a stable stack, see if there is a new stable version
         elif current_semver < latest_stable_semver:
-            print('New stable Bitrise stack available: {0} ... updating bitrise.yml!'.format(latest_stable_semver))
+            print('New stable Bitrise stack available: {0} ... updating {1}!'.format(latest_stable_semver, BITRISE_YML))
             write_to_bitrise_yml(y, latest_stable_semver)
-        # if a new edge version is available, update bitrise.yml
+        # if a new edge version is available, update BITRISE_YML
         elif current_semver < latest_semver:
-            print('New edge version of Bitrise stack available: {0} ... updating bitrise.yml!'.format(latest_semver))
+            print('New edge version of Bitrise stack available: {0} ... updating {1}!'.format(latest_semver, BITRISE_YML))
             write_to_bitrise_yml(y, latest_semver)
         # we're using the absolutely latest version available
         else:
