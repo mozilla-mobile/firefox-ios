@@ -1085,6 +1085,8 @@ final class HomepageViewController: UIViewController,
             )
             return
         }
+
+        // Skip top sites since it uses native UIMenu
         if case .topSites = section {
             return
         }
