@@ -19,9 +19,8 @@ final class QuickAnswersReturnPillPresenter {
     }
 
     private enum Placement: Equatable {
-        case expanded
-        case trailingLocationView(CGRect)
-        case bottom(isAboveHomeIndicator: Bool)
+        case aboveAnchor
+        case bottom(hasSafeAreaBottom: Bool)
     }
 
     private enum UX {
@@ -29,12 +28,11 @@ final class QuickAnswersReturnPillPresenter {
         static let bottomSpacing: CGFloat = 8
         static let sideInset: CGFloat = 16
         static let minimizedLocationSpacing: CGFloat = 10
-        static let minimizedHomeIndicatorOffset: CGFloat = 4
         static let minimizedBottomInset: CGFloat = 8
     }
 
-    private unowned let hostView: UIView
-    private unowned let anchorView: UIView
+    private weak var hostView: UIView?
+    private weak var anchorView: UIView?
     private let overlayState: OverlayStateProtocol
     private var pill: QuickAnswersReturnPillView?
     private var placement: Placement?
@@ -70,10 +68,10 @@ final class QuickAnswersReturnPillPresenter {
         )
         pill.applyTheme(theme: theme)
 
-        guard self.pill == nil else { return }
+        guard self.pill == nil, let hostView else { return }
         self.pill = pill
         hostView.addSubview(pill)
-        apply(.expanded, to: pill)
+        apply(.aboveAnchor, to: pill)
         updateVisibility()
     }
 
@@ -87,16 +85,20 @@ final class QuickAnswersReturnPillPresenter {
     }
 
     func updateLayout(_ context: LayoutContext, animated: Bool) {
-        guard let pill else { return }
-        let newPlacement = placement(for: context)
+        guard let pill, let hostView else { return }
+        let newPlacement = placement(for: context, in: hostView)
         if newPlacement != placement {
             apply(newPlacement, to: pill)
         }
-        pill.setMinimized(context.isMinimized, animated: animated)
+        pill.setMinimized(
+            context.isMinimized,
+            restingOffset: restingOffset(for: context, in: hostView),
+            animated: animated
+        )
     }
 
     func updateVisibility() {
-        guard let pill else { return }
+        guard let pill, let hostView else { return }
         let isVisible = !overlayState.inOverlayMode && !hostView.subviews.contains { $0 is Toast }
         pill.isUserInteractionEnabled = isVisible
         UIView.animate(withDuration: UX.fadeDuration) {
@@ -106,52 +108,63 @@ final class QuickAnswersReturnPillPresenter {
 
     func bringPillToFront() {
         guard let pill else { return }
-        hostView.bringSubviewToFront(pill)
+        hostView?.bringSubviewToFront(pill)
     }
 
     func applyTheme(_ theme: Theme) {
         pill?.applyTheme(theme: theme)
     }
 
-    /// With a bottom address bar the minimized pill trails the location view.
-    /// Otherwise it sits at the bottom of the screen.
-    private func placement(for context: LayoutContext) -> Placement {
-        if !context.isMinimized {
-            return .expanded
-        } else if context.isBottomSearchBar, let frame = context.locationViewFrame {
-            return .trailingLocationView(frame)
-        }
-        return .bottom(isAboveHomeIndicator: hostView.safeAreaInsets.bottom > 0)
+    /// With a bottom address bar the minimized pill keeps its expanded constraints and is offset next to the
+    /// location view. Otherwise it sits at the bottom of the screen.
+    private func placement(for context: LayoutContext, in hostView: UIView) -> Placement {
+        guard context.isMinimized, !trailsLocationView(context) else { return .aboveAnchor }
+        return .bottom(hasSafeAreaBottom: hostView.safeAreaInsets.bottom > 0)
+    }
+
+    private func trailsLocationView(_ context: LayoutContext) -> Bool {
+        return context.isMinimized && context.isBottomSearchBar && context.locationViewFrame != nil
+    }
+
+    /// The offset from the minimized pill's constrained center, above the anchor, to the trailing side of the
+    /// location view.
+    private func restingOffset(for context: LayoutContext, in hostView: UIView) -> CGPoint {
+        guard trailsLocationView(context), let frame = context.locationViewFrame, let anchorView else { return .zero }
+        let halfSize = QuickAnswersReturnPillView.minimizedSize / 2
+        let anchorTop = anchorView.convert(anchorView.bounds, to: hostView).minY
+        let constrainedCenter = CGPoint(
+            x: hostView.safeAreaLayoutGuide.layoutFrame.midX,
+            y: anchorTop - UX.bottomSpacing - halfSize
+        )
+        let targetCenter = CGPoint(x: frame.maxX + UX.minimizedLocationSpacing + halfSize, y: frame.midY)
+        return CGPoint(x: targetCenter.x - constrainedCenter.x, y: targetCenter.y - constrainedCenter.y)
     }
 
     private func apply(_ newPlacement: Placement, to pill: UIView) {
         NSLayoutConstraint.deactivate(constraints)
-        constraints = makeConstraints(for: newPlacement, pill: pill)
+        constraints = makeConstraints(for: newPlacement, pill: pill) ?? []
         NSLayoutConstraint.activate(constraints)
         placement = newPlacement
     }
 
-    private func makeConstraints(for placement: Placement, pill: UIView) -> [NSLayoutConstraint] {
+    private func makeConstraints(for placement: Placement, pill: UIView) -> [NSLayoutConstraint]? {
+        guard let hostView, let anchorView else { return nil }
         let safeArea = hostView.safeAreaLayoutGuide
         switch placement {
-        case .expanded:
+        case .aboveAnchor:
             return [
                 pill.bottomAnchor.constraint(equalTo: anchorView.topAnchor, constant: -UX.bottomSpacing),
                 pill.centerXAnchor.constraint(equalTo: safeArea.centerXAnchor),
                 pill.leadingAnchor.constraint(greaterThanOrEqualTo: safeArea.leadingAnchor, constant: UX.sideInset)
             ]
-        case .trailingLocationView(let frame):
+        case .bottom(let hasSafeAreaBottom):
             return [
-                pill.centerYAnchor.constraint(equalTo: hostView.topAnchor, constant: frame.midY),
-                pill.leadingAnchor.constraint(equalTo: hostView.leadingAnchor,
-                                              constant: frame.maxX + UX.minimizedLocationSpacing)
+                pill.centerXAnchor.constraint(equalTo: safeArea.centerXAnchor),
+                pill.bottomAnchor.constraint(
+                    equalTo: safeArea.bottomAnchor,
+                    constant: hasSafeAreaBottom ? 0 : -UX.minimizedBottomInset
+                )
             ]
-        case .bottom(let isAboveHomeIndicator):
-            let vertical = isAboveHomeIndicator
-                ? pill.centerYAnchor.constraint(equalTo: safeArea.bottomAnchor,
-                                                constant: -UX.minimizedHomeIndicatorOffset)
-                : pill.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor, constant: -UX.minimizedBottomInset)
-            return [pill.centerXAnchor.constraint(equalTo: safeArea.centerXAnchor), vertical]
         }
     }
 }

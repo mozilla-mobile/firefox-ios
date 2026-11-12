@@ -99,15 +99,30 @@ final class QuickAnswersReturnPillPresenterTests: XCTestCase {
         XCTAssertEqual(activeAttributes(), [.bottom, .centerX, .leading])
     }
 
-    func test_updateLayout_minimizedBottomSearchBar_followsLocationView() {
+    func test_updateLayout_minimizedBottomSearchBar_keepsExpandedConstraintsAndOffsetsPill() {
         let subject = createSubject()
         showPill(on: subject)
 
         subject.updateLayout(layoutContext(isMinimized: true), animated: false)
 
-        XCTAssertEqual(activeAttributes(), [.centerY, .leading])
-        XCTAssertEqual(activeConstraint(for: .centerY)?.constant, Self.defaultLocationViewFrame.midY)
-        XCTAssertGreaterThan(activeConstraint(for: .leading)?.constant ?? 0, Self.defaultLocationViewFrame.maxX)
+        XCTAssertEqual(activeAttributes(), [.bottom, .centerX, .leading])
+        XCTAssertNotEqual(pill?.transform, .identity)
+    }
+
+    func test_updateLayout_minimizedBottomSearchBar_movesPillCenterNextToLocationView() {
+        let subject = createSubject()
+        showPill(on: subject)
+        hostView.layoutIfNeeded()
+
+        subject.updateLayout(layoutContext(isMinimized: true), animated: false)
+
+        let center = pill.map { $0.center.applying($0.transform) }
+        let expectedCenter = CGPoint(
+            x: Self.defaultLocationViewFrame.maxX + 10 + QuickAnswersReturnPillView.minimizedSize / 2,
+            y: Self.defaultLocationViewFrame.midY
+        )
+        XCTAssertEqual(center?.x ?? 0, expectedCenter.x, accuracy: 0.5)
+        XCTAssertEqual(center?.y ?? 0, expectedCenter.y, accuracy: 0.5)
     }
 
     func test_updateLayout_minimizedBottomSearchBarWithoutFrame_centersAtBottom() {
@@ -117,6 +132,7 @@ final class QuickAnswersReturnPillPresenterTests: XCTestCase {
         subject.updateLayout(layoutContext(isMinimized: true, locationViewFrame: nil), animated: false)
 
         XCTAssertEqual(activeAttributes(), [.centerX, .bottom])
+        XCTAssertEqual(pill?.transform, .identity)
     }
 
     func test_updateLayout_minimizedTopSearchBar_centersAtBottom() {
@@ -136,18 +152,21 @@ final class QuickAnswersReturnPillPresenterTests: XCTestCase {
         subject.updateLayout(layoutContext(isMinimized: false), animated: false)
 
         XCTAssertEqual(activeAttributes(), [.bottom, .centerX, .leading])
+        XCTAssertEqual(pill?.transform, .identity)
     }
 
-    func test_updateLayout_changedLocationViewFrame_rebuildsConstraintsWithNewConstants() {
+    func test_updateLayout_changedLocationViewFrame_movesPillWithoutRebuildingConstraints() {
         let subject = createSubject()
         showPill(on: subject)
         subject.updateLayout(layoutContext(isMinimized: true), animated: false)
+        let constraints = activeConstraints()
+        let transform = pill?.transform
         let newFrame = CGRect(x: 60, y: 700, width: 220, height: 30)
 
         subject.updateLayout(layoutContext(isMinimized: true, locationViewFrame: newFrame), animated: false)
 
-        XCTAssertEqual(activeConstraints().count, 2)
-        XCTAssertEqual(activeConstraint(for: .centerY)?.constant, newFrame.midY)
+        XCTAssertTrue(zip(constraints, activeConstraints()).allSatisfy { $0 === $1 })
+        XCTAssertNotEqual(pill?.transform, transform)
     }
 
     func test_updateLayout_sameContextTwice_keepsSameConstraints() {
