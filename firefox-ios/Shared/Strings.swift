@@ -2681,11 +2681,23 @@ public enum TermsOfUse {
         value: "We’ve introduced a %@ Terms of Use and updated our Privacy Notice.",
         comment: "Introductory message in the Terms of Use sheet that mentions updated Terms of Use and Privacy Notice. %@ will be replaced with the app name (e.g., Firefox)."
     )
+    public static let DescriptionMarkdown = MZLocalizedString(
+        key: "TermsOfUse.Description.Markdown.v161",
+        tableName: "TermsOfUse",
+        value: "We’ve introduced a [%@ Terms of Use](TERMS_OF_USE_URL) and updated our [Privacy Notice](PRIVACY_NOTICE_URL).",
+        comment: "Introductory message in the Terms of Use sheet that mentions updated Terms of Use and Privacy Notice. This string uses markdown links: [Link text here](URL_PLACEHOLDER_HERE). Translate only the text *inside* square brackets: [Privacy Notice] and [%@ Terms of Use]. For example, “[隐私政策](PRIVACY_NOTICE_URL)”. The TERMS_OF_USE_URL placeholder links to the terms of use. The PRIVACY_NOTICE_URL placeholder links to the policy. The %@ placeholder is the app name (e.g. Firefox). More info: https://www.markdownguide.org/basic-syntax/#links"
+    )
     public static let ReviewAndAcceptText = MZLocalizedString(
         key: "TermsOfUse.ReviewAndAcceptText.v142",
         tableName: "TermsOfUse",
         value: "Please take a moment to review and accept. Learn more",
         comment: "Descriptive text shown before user accepts the Terms of Use. Includes link text for 'Learn more'."
+    )
+    public static let ReviewAndAcceptMarkdownText = MZLocalizedString(
+        key: "TermsOfUse.ReviewAndAcceptText.Markdown.v161",
+        tableName: "TermsOfUse",
+        value: "Please take a moment to review and accept. [Learn more](LEARN_MORE_URL)",
+        comment: "Descriptive text shown before user accepts the Terms of Use. This string uses markdown links: [Link text here](URL_PLACEHOLDER_HERE). Translate only the text *inside* square brackets: [Learn more]. For example, “[Weitere Informationen](LEARN_MORE_URL)”. The LEARN_MORE_URL placeholder links to the support page about terms of use. More info: https://www.markdownguide.org/basic-syntax/#links"
     )
     public static let TitleValue1 = MZLocalizedString(
         key: "TermsOfUse.TitleValue1.v147",
@@ -2704,6 +2716,12 @@ public enum TermsOfUse {
         tableName: "TermsOfUse",
         value: "You can learn more %@.",
         comment: "Text shown in the Terms of Use bottom sheet for variants 1 and 2. %@ is replaced with the localized 'here' link text."
+    )
+    public static let LearnMoreHereMarkdown = MZLocalizedString(
+        key: "TermsOfUse.LearnMoreHere.Markdown.v161",
+        tableName: "TermsOfUse",
+        value: "You can learn more [here](LEARN_MORE_URL).",
+        comment: "Text shown in the Terms of Use bottom sheet for variants 1 and 2. This string uses markdown links: [Link text here](URL_PLACEHOLDER_HERE). Translate only the text *inside* square brackets: [Learn more]. For example, “[hier](LEARN_MORE_URL)”. The LEARN_MORE_URL placeholder links to the support page about terms of use. More info: https://www.markdownguide.org/basic-syntax/#links"
     )
     public static let LinkTermsOfUse = MZLocalizedString(
         key: "TermsOfUse.Link.TermsOfUse.v142",
