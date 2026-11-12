@@ -18,7 +18,7 @@ curl ${BITRISE_STACK_INFO} | jq ' . | keys'
 '''
 pattern = 'osx-xcode-'
 patterns = [pattern]
-BITRISE_YML = 'bitrise.yml'
+BITRISE_YML = 'bitrise/new-xcode-versions.yml'
 WORKFLOW = 'NewXcodeVersions'
 
 def get_stack_info():

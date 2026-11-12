@@ -11,6 +11,7 @@ include:
 - path: bitrise/performance-tests.yml
 - path: bitrise/nightly-tests.yml
 - path: bitrise/weekly-tests.yml
+- path: bitrise/new-xcode-versions.yml
 
 app:
   envs:

@@ -76,7 +76,3 @@ workflows:
         - buttons: |
             Build Log|${BITRISE_BUILD_URL}
             Test Report|${BITRISE_BUILD_URL}?tab=artifacts
-
-  #
-  # *****%*****%***** FOCUS WORKFLOWS *****%*****%*****
-  #
