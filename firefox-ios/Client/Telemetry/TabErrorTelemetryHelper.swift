@@ -116,7 +116,9 @@ final class TabErrorTelemetryHelper {
         if Self.tabDiscrepancyDetected(expectedTabCount: expectedTabCount,
                                        currentTabCount: currentTabCount) {
             if !AppConstants.isRunningUnitTest {
-                assertionFailure("You have hit authentic tab loss! Please review your stack trace and determine how.")
+                assertionFailure(
+                    "You have encountered real tab loss! This is a rare bug. Review your stack trace and determine how."
+                )
             }
 
             let significantEvent = Self.isSignificantTabLossEvent(expectedTabCount: expectedTabCount,
