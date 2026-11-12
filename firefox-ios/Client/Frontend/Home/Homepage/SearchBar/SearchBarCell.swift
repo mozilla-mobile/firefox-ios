@@ -7,9 +7,6 @@ import UIKit
 
 class SearchBarCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
     enum UX {
-        static let shadowRadius: CGFloat = 14
-        static let shadowOffset = CGSize(width: 0, height: 2)
-        static let shadowOpacity: Float = 1
         static let cornerRadius: CGFloat = 32
         static let borderWidth: CGFloat = 1
         static let heightPadding: CGFloat = 20
@@ -82,29 +79,11 @@ class SearchBarCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        contentView.layer.shadowPath = UIBezierPath(
-            roundedRect: contentView.bounds,
-            cornerRadius: UX.cornerRadius
-        ).cgPath
-    }
-
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
-        contentView.backgroundColor = theme.colors.actionPrimary
         placeholderLabel.textColor = theme.colors.textSecondary
         container.backgroundColor = theme.colors.layer2
         container.layer.borderColor = theme.colors.borderPrimary.cgColor
         searchImageView.tintColor = theme.colors.iconSecondary
-        setupShadow(theme: theme)
-    }
-
-    func setupShadow(theme: Theme) {
-        contentView.layer.shadowRadius = UX.shadowRadius
-        contentView.layer.shadowOffset = UX.shadowOffset
-        contentView.layer.shadowColor = theme.colors.shadowStrong.cgColor
-        contentView.layer.shadowOpacity = UX.shadowOpacity
     }
 }
