@@ -99,6 +99,8 @@ final class VPNMiddleware {
             await changeVPNLocation()
         case .reconnectAtLaunch:
             await reconnectAtLaunch()
+        case .selectLocation(let countryCode):
+            await selectLocation(countryCode)
         case .closeThisTab:
             let tabManager = windowManager.tabManager(for: windowUUID)
             if let selectedTab = tabManager?.selectedTab {
@@ -120,6 +122,15 @@ final class VPNMiddleware {
             await startVPN()
         }
         AppEventQueue.completed(.vpnReconnect)
+    }
+
+    private func selectLocation(_ countryCode: String) async {
+        guard let vpnManager, countryCode != vpnManager.selectedCountryCode else { return }
+        vpnManager.selectCountry(countryCode)
+
+        // if the VPN is running when the selected location changes, start a new connection
+        guard vpnManager.isRunning else { return }
+        await startVPN()
     }
 
     private func startVPN() async {

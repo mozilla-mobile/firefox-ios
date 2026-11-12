@@ -104,7 +104,6 @@ struct VPNLocationsView: ThemeableView {
 
     // MARK: - Actions
 
-    // this is only called from a Task
     private func loadLocations() async {
         guard isLoadingCountries else { return }
         let loadedCountryCodes = await viewModel.loadCountryCodes()

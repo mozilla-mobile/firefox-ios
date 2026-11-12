@@ -28,12 +28,14 @@ protocol VPNRunnable {
     var dataLimitInGB: Double { get }
     var usageFraction: Double { get }
     var isLimitReached: Bool { get }
+    var selectedCountryCode: String { get }
     /// Single-consumer stream of `VPNEvent`s, observed by `VPNMiddleware`.
     var events: AsyncStream<VPNEvent> { get }
     /// Also switches a running VPN to a new server and pass without stopping it first.
     func start(countryCode: String?) async throws
     func stop() async
     func listCountries() async -> [VPNServerManager.Country]
+    func selectCountry(_ countryCode: String)
 }
 
 enum VPNError: Error {
@@ -65,6 +67,7 @@ final class VPNManager: VPNRunnable {
     private let serverManager: VPNServerManaging
     private let windowManager: WindowManager
     private let proxyApplier: ProxyConfigurator
+    private let prefs: Prefs
     private let eventsContinuation: AsyncStream<VPNEvent>.Continuation
     let events: AsyncStream<VPNEvent>
 
@@ -76,6 +79,7 @@ final class VPNManager: VPNRunnable {
     }
 
     private(set) var isConnecting = false
+    private(set) var selectedCountryCode: String
     // TODO: FXIOS-17238 guardian doesn't return usage yet, so the pass's usage stays nil
     private var currentPass: VPNProxyPass?
     private static let bytesPerGB = 1_000_000_000.0
@@ -120,6 +124,9 @@ final class VPNManager: VPNRunnable {
         )
         self.windowManager = windowManager
         self.proxyApplier = proxyApplier
+        self.prefs = profile.prefs
+        self.selectedCountryCode = profile.prefs.stringForKey(PrefsKeys.VPNSettings.selectedCountryCode)
+            ?? VPNServerManager.recommendedCountryCode
         let (events, eventsContinuation) = AsyncStream<VPNEvent>.makeStream()
         self.events = events
         self.eventsContinuation = eventsContinuation
@@ -166,6 +173,11 @@ final class VPNManager: VPNRunnable {
 
     func listCountries() async -> [VPNServerManager.Country] {
         return await serverManager.listCountries()
+    }
+
+    func selectCountry(_ countryCode: String) {
+        selectedCountryCode = countryCode
+        prefs.setString(countryCode, forKey: PrefsKeys.VPNSettings.selectedCountryCode)
     }
 
     /// Consumes `VPNGuardian.passRotation` and reapplies the proxy configuration with the new

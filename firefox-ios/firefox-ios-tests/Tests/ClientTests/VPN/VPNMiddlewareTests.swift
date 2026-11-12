@@ -150,6 +150,48 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockVPNManager.startCalled, 0)
     }
 
+    // MARK: - Location
+
+    func testSelectLocation_whenRunning_selectsCountryAndRestartsVPN() async {
+        mockVPNManager.isRunning = true
+        let started = expectation(description: "VPN started")
+        mockVPNManager.onStart = { started.fulfill() }
+        let subject = createSubject()
+
+        subject.vpnProvider.modernMiddleware(AppState(), VPNModernAction.selectLocation(countryCode: "DE"), firstWindowUUID)
+        await fulfillment(of: [started], timeout: 1)
+
+        XCTAssertEqual(mockVPNManager.selectedCountryCode, "DE")
+        XCTAssertEqual(mockVPNManager.startCalled, 1)
+    }
+
+    func testSelectLocation_whenNotRunning_selectsCountryWithoutStarting() async {
+        let started = expectation(description: "VPN started")
+        started.isInverted = true
+        mockVPNManager.onStart = { started.fulfill() }
+        let subject = createSubject()
+
+        subject.vpnProvider.modernMiddleware(AppState(), VPNModernAction.selectLocation(countryCode: "DE"), firstWindowUUID)
+        await fulfillment(of: [started], timeout: 1)
+
+        XCTAssertEqual(mockVPNManager.selectedCountryCode, "DE")
+        XCTAssertEqual(mockVPNManager.startCalled, 0)
+    }
+
+    func testSelectLocation_whenCountryUnchanged_doesNotRestartVPN() async {
+        mockVPNManager.isRunning = true
+        mockVPNManager.selectedCountryCode = "DE"
+        let started = expectation(description: "VPN started")
+        started.isInverted = true
+        mockVPNManager.onStart = { started.fulfill() }
+        let subject = createSubject()
+
+        subject.vpnProvider.modernMiddleware(AppState(), VPNModernAction.selectLocation(countryCode: "DE"), firstWindowUUID)
+        await fulfillment(of: [started], timeout: 1)
+
+        XCTAssertEqual(mockVPNManager.startCalled, 0)
+    }
+
     // MARK: - Alert choices
 
     func testAlertChoice_clearsPreference() async {

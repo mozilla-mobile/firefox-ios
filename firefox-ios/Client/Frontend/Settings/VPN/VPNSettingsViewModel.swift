@@ -12,9 +12,6 @@ import Shared
 @MainActor
 @Observable
 final class VPNSettingsViewModel {
-    private(set) var selectedCountryCode: String
-
-    @ObservationIgnored private let prefs: Prefs
     @ObservationIgnored private let vpnManager: VPNRunnable
     @ObservationIgnored private let windowUUID: WindowUUID
     @ObservationIgnored private let localeProvider: LocaleProvider
@@ -25,6 +22,7 @@ final class VPNSettingsViewModel {
     var dataLimitInGB: Double { vpnManager.dataLimitInGB }
     var usageFraction: Double { vpnManager.usageFraction }
     var isLimitReached: Bool { vpnManager.isLimitReached }
+    var selectedCountryCode: String { vpnManager.selectedCountryCode }
     var accessibilityValue: String {
         if isVPNConnecting { return .VPN.Settings.Connecting }
         return isVPNEnabled ? .VPN.Settings.StatusOn : .VPN.Settings.StatusOff
@@ -52,27 +50,17 @@ final class VPNSettingsViewModel {
     }
 
     init(
-        prefs: Prefs,
         vpnManager: VPNRunnable,
         windowUUID: WindowUUID,
         localeProvider: LocaleProvider = SystemLocaleProvider()
     ) {
-        self.prefs = prefs
         self.vpnManager = vpnManager
         self.windowUUID = windowUUID
         self.localeProvider = localeProvider
-        self.selectedCountryCode = prefs.stringForKey(PrefsKeys.VPNSettings.selectedCountryCode)
-            ?? VPNServerManager.recommendedCountryCode
     }
 
     func selectLocation(_ countryCode: String) {
-        guard countryCode != selectedCountryCode else { return }
-        selectedCountryCode = countryCode
-        prefs.setString(countryCode, forKey: PrefsKeys.VPNSettings.selectedCountryCode)
-
-        // if the VPN is running when the selected location changes, start a new connection
-        guard vpnManager.isRunning else { return }
-        store.dispatch(VPNModernAction.start, forWindowUUID: windowUUID)
+        store.dispatch(VPNModernAction.selectLocation(countryCode: countryCode), forWindowUUID: windowUUID)
     }
 
     func toggleVPN(_ isOn: Bool) {

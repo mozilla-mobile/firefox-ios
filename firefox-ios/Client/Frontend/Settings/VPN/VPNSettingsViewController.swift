@@ -25,13 +25,12 @@ final class VPNSettingsViewController: UIViewController {
 
     init(
         windowUUID: WindowUUID,
-        prefs: Prefs,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         vpnManager: VPNRunnable = AppContainer.shared.resolve()
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
-        self.viewModel = VPNSettingsViewModel(prefs: prefs, vpnManager: vpnManager, windowUUID: windowUUID)
+        self.viewModel = VPNSettingsViewModel(vpnManager: vpnManager, windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
     }
 
