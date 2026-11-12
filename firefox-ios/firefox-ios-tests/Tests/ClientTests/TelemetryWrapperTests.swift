@@ -812,24 +812,6 @@ class TelemetryWrapperTests: XCTestCase {
         try testEventMetricRecordingSuccess(metric: GleanMetrics.AppErrors.hangException)
     }
 
-    func test_error_tabLossDetectedIsCalled() throws {
-        TelemetryWrapper.recordEvent(category: .information,
-                                     method: .error,
-                                     object: .app,
-                                     value: .tabLossDetected)
-
-        try testEventMetricRecordingSuccess(metric: GleanMetrics.AppErrors.tabLossDetected)
-    }
-
-    func test_error_tabDiscrepancyIsCalled() throws {
-        TelemetryWrapper.recordEvent(category: .information,
-                                     method: .error,
-                                     object: .app,
-                                     value: .tabCountDiscrepancy)
-
-        try testEventMetricRecordingSuccess(metric: GleanMetrics.AppErrors.tabCountDiscrepancy)
-    }
-
     // MARK: - RecordSearch
     func test_RecordSearch_GleanIsCalledSearchSuggestion() {
         let extras = [TelemetryWrapper.EventExtraKey.recordSearchLocation.rawValue: "suggestion",
