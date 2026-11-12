@@ -105,8 +105,6 @@ public final class QuickAnswersReturnPillView: UIView, ThemeApplicable {
     public func setMinimized(_ isMinimized: Bool, animated: Bool) {
         guard isMinimized != self.isMinimized else { return }
         self.isMinimized = isMinimized
-        let layoutHost = superview ?? self
-        layoutHost.layoutIfNeeded()
         labelWidthConstraint.constant = labelStack.bounds.width
         labelWidthConstraint.isActive = isMinimized
         NSLayoutConstraint.deactivate(isMinimized ? expandedConstraints : minimizedConstraints)
@@ -116,7 +114,7 @@ public final class QuickAnswersReturnPillView: UIView, ThemeApplicable {
             let contentAlpha: CGFloat = isMinimized ? 0.0 : 1.0
             self.labelStack.alpha = contentAlpha
             self.iconBackgroundView.alpha = contentAlpha
-            layoutHost.layoutIfNeeded()
+            self.superview?.layoutIfNeeded()
         }
         guard animated else {
             changes()
@@ -163,16 +161,9 @@ public final class QuickAnswersReturnPillView: UIView, ThemeApplicable {
     }
 
     private func setupConstraints() {
+        glassView.pinToSuperview()
+        contentContainer.pinToSuperview()
         NSLayoutConstraint.activate([
-            glassView.topAnchor.constraint(equalTo: topAnchor),
-            glassView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            glassView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            glassView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            contentContainer.topAnchor.constraint(equalTo: topAnchor),
-            contentContainer.leadingAnchor.constraint(equalTo: leadingAnchor),
-            contentContainer.trailingAnchor.constraint(equalTo: trailingAnchor),
-            contentContainer.bottomAnchor.constraint(equalTo: bottomAnchor),
-
             widthAnchor.constraint(lessThanOrEqualToConstant: UX.maxWidth),
 
             iconBackgroundView.widthAnchor.constraint(equalToConstant: UX.iconBackgroundSize),
@@ -187,13 +178,11 @@ public final class QuickAnswersReturnPillView: UIView, ThemeApplicable {
             labelStack.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
 
-        // Hugs the taller of the icon and the labels, so the height follows Dynamic Type.
-        let hugHeight = heightAnchor.constraint(equalToConstant: 0)
-        hugHeight.priority = .defaultLow
         expandedConstraints = [
-            hugHeight,
             labelStack.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: UX.verticalPadding),
             iconBackgroundView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: UX.verticalPadding),
+            labelStack.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: -UX.verticalPadding),
+            iconBackgroundView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: -UX.verticalPadding),
             iconBackgroundView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.leadingPadding),
             labelStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.trailingPadding)
         ]
