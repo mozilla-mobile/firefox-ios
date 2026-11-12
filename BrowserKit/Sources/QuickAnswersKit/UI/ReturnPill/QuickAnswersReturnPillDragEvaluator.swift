@@ -4,7 +4,7 @@
 
 import CoreGraphics
 
-struct QuickAnswersReturnPillDragEvaluator {
+enum QuickAnswersReturnPillDragEvaluator {
     static let removeDistance: CGFloat = 100
     static let removeVelocity: CGFloat = 800
 

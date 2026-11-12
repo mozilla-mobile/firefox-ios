@@ -8,7 +8,7 @@ import UIKit
 
 /// Floating pill that takes the user back to a parked Quick Answers session. The host owns its position.
 public final class QuickAnswersReturnPillView: UIView, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let verticalPadding: CGFloat = 8.0
         static let maxWidth: CGFloat = 220.0
         static let minimizedSize: CGFloat = 28.0
