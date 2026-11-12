@@ -13,7 +13,7 @@ import Common
 final class TabErrorTelemetryHelper {
     static let shared = TabErrorTelemetryHelper()
 
-    private let telemetryWrapper: TelemetryWrapperProtocol
+    private let tabLossTelemetry: TabLossTelemetryRecording
     private let defaults: UserDefaultsInterface
     private let windowManager: WindowManager
     private let logger: Logger
@@ -49,10 +49,10 @@ final class TabErrorTelemetryHelper {
     }
 
     init(logger: Logger = DefaultLogger.shared,
-         telemetryWrapper: TelemetryWrapperProtocol = TelemetryWrapper.shared,
+         tabLossTelemetry: TabLossTelemetryRecording = TabLossTelemetry(),
          windowManager: WindowManager = AppContainer.shared.resolve(),
          defaults: UserDefaultsInterface = UserDefaults.standard) {
-        self.telemetryWrapper = telemetryWrapper
+        self.tabLossTelemetry = tabLossTelemetry
         self.defaults = defaults
         self.windowManager = windowManager
         self.logger = logger
@@ -113,8 +113,7 @@ final class TabErrorTelemetryHelper {
 
         if Self.tabDiscrepancyDetected(expectedTabCount: expectedTabCount,
                                        currentTabCount: currentTabCount) {
-            assertionFailure(
-                "You have hit authentic tab loss! Please review your stack trace and determine how.")
+            assertionFailure("You have hit authentic tab loss! Please review your stack trace and determine how.")
 
             let significantEvent = Self.isSignificantTabLossEvent(expectedTabCount: expectedTabCount,
                                                                   currentTabCount: currentTabCount)
@@ -186,9 +185,9 @@ final class TabErrorTelemetryHelper {
         // around tab loss
         if case .backgroundForeground = entryPoint {
             if significantLossDetected {
-                TabLossTelemetry().recordTabLossDetected(withDetails: diagnosticDetails)
+                tabLossTelemetry.recordTabLossDetected(withDetails: diagnosticDetails)
             } else {
-                TabLossTelemetry().recordTabCountDiscrepancy(withDetails: diagnosticDetails)
+                tabLossTelemetry.recordTabCountDiscrepancy(withDetails: diagnosticDetails)
             }
         }
     }

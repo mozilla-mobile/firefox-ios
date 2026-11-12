@@ -5,7 +5,12 @@
 import Foundation
 import Glean
 
-struct TabLossTelemetry {
+protocol TabLossTelemetryRecording {
+    func recordTabLossDetected(withDetails details: TabLossTelemetry.TabLossDiagnostic)
+    func recordTabCountDiscrepancy(withDetails details: TabLossTelemetry.TabLossDiagnostic)
+}
+
+struct TabLossTelemetry: TabLossTelemetryRecording {
     private let gleanWrapper: GleanWrapper
 
     struct TabLossDiagnostic {
