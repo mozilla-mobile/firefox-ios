@@ -638,7 +638,7 @@ final class BookmarksPanelViewModelTests: XCTestCase {
     }
 
     private func setupNimbusBookmarksSearchTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.bookmarksSearchFeature.with { _, _ in
+        FxNimbus.shared.features.bookmarksSearchFeature.with { _ in
             return BookmarksSearchFeature(enabled: isEnabled)
         }
     }

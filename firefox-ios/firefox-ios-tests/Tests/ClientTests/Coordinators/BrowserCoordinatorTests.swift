@@ -2089,7 +2089,7 @@ final class BrowserCoordinatorTests: XCTestCase,
     }
 
     private func setIsDeeplinkOptimizationRefactorEnabled(_ enabled: Bool) {
-        FxNimbus.shared.features.deeplinkOptimizationRefactorFeature.with { _, _ in
+        FxNimbus.shared.features.deeplinkOptimizationRefactorFeature.with { _ in
             return DeeplinkOptimizationRefactorFeature(enabled: enabled)
         }
     }
@@ -2101,7 +2101,7 @@ final class BrowserCoordinatorTests: XCTestCase,
     }
 
     private func setIsAppAttestEnabled(_ isEnabled: Bool) {
-        FxNimbus.shared.features.summarizerAppAttestAuthFeature.with { _, _ in
+        FxNimbus.shared.features.summarizerAppAttestAuthFeature.with { _ in
             return SummarizerAppAttestAuthFeature(enabled: true)
         }
     }
@@ -2112,7 +2112,7 @@ final class BrowserCoordinatorTests: XCTestCase,
         } else {
             featureFlags.enabledFlags.remove(.tabTrayUIExperiments)
         }
-        FxNimbus.shared.features.tabTrayUiExperiments.with { _, _ in
+        FxNimbus.shared.features.tabTrayUiExperiments.with { _ in
             return TabTrayUiExperiments(
                 enabled: isEnabled
             )

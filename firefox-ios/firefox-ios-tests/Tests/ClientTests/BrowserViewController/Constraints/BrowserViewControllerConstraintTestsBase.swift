@@ -44,7 +44,7 @@ class BrowserViewControllerConstraintTestsBase: XCTestCase {
     }
 
     func setupNimbusHomepagePinnedHeaderTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
+        FxNimbus.shared.features.homepageRedesignFeature.with { _ in
             return HomepageRedesignFeature(
                 categoriesEnabled: isEnabled,
                 pinnedHeaderEnabled: isEnabled

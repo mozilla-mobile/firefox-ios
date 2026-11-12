@@ -566,7 +566,7 @@ final class SearchViewModelTests: XCTestCase {
     }
 
     private func setupNimbusTrendingSearchesTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.trendingSearchesFeature.with { _, _ in
+        FxNimbus.shared.features.trendingSearchesFeature.with { _ in
             return TrendingSearchesFeature(
                 enabled: isEnabled
             )
@@ -574,7 +574,7 @@ final class SearchViewModelTests: XCTestCase {
     }
 
     private func setupNimbusRecentSearchesTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.recentSearchesFeature.with { _, _ in
+        FxNimbus.shared.features.recentSearchesFeature.with { _ in
             return RecentSearchesFeature(
                 enabled: isEnabled
             )

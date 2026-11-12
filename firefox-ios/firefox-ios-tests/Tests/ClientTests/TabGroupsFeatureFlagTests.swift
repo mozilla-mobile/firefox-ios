@@ -14,8 +14,8 @@ final class TabGroupsFeatureFlagTests: XCTestCase {
     }
 
     override func tearDown() async throws {
-        FxNimbus.shared.features.tabGroupsFeature.with { variables, prefs in
-            TabGroupsFeature(variables, prefs)
+        FxNimbus.shared.features.tabGroupsFeature.with { variables in
+            TabGroupsFeature(variables)
         }
         DependencyHelperMock().reset()
         try await super.tearDown()
@@ -37,7 +37,7 @@ final class TabGroupsFeatureFlagTests: XCTestCase {
     }
 
     private func setupNimbusTabGroupsTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.tabGroupsFeature.with { _, _ in
+        FxNimbus.shared.features.tabGroupsFeature.with { _ in
             return TabGroupsFeature(enabled: isEnabled)
         }
     }

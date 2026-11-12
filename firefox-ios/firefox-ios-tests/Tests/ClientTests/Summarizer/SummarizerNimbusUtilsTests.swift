@@ -244,7 +244,7 @@ final class SummarizerNimbusUtilsTests: XCTestCase {
         shakeGesture: Bool = true,
         toolbarEntrypoint: Bool = true
     ) {
-        FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
+        FxNimbus.shared.features.hostedSummarizerFeature.with { _ in
             return HostedSummarizerFeature(
                 enabled: isEnabled,
                 shakeGesture: shakeGesture,
@@ -261,7 +261,7 @@ final class SummarizerNimbusUtilsTests: XCTestCase {
     }
 
     private func setIsAppAttestAuthEnabled(isEnabled: Bool = true) {
-        FxNimbus.shared.features.summarizerAppAttestAuthFeature.with { _, _ in
+        FxNimbus.shared.features.summarizerAppAttestAuthFeature.with { _ in
             return SummarizerAppAttestAuthFeature(enabled: isEnabled)
         }
     }
@@ -270,7 +270,7 @@ final class SummarizerNimbusUtilsTests: XCTestCase {
         isEnabled: Bool = true,
         supportedLocaleIdentifiers: [String] = []
     ) {
-        FxNimbus.shared.features.summarizerLanguageExpansionFeature.with { _, _ in
+        FxNimbus.shared.features.summarizerLanguageExpansionFeature.with { _ in
             return SummarizerLanguageExpansionFeature(
                 enabled: isEnabled,
                 supportedLocales: supportedLocaleIdentifiers
