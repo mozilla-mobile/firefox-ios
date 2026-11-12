@@ -1678,6 +1678,7 @@
 		C0D3CA000000000000000002 /* SystemCameraTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3CA000000000000000001 /* SystemCameraTelemetry.swift */; };
 		C0D3CA000000000000000004 /* SystemCameraTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3CA000000000000000003 /* SystemCameraTelemetryTests.swift */; };
 		C0D3CA000000000000000006 /* MockSystemCameraTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3CA000000000000000005 /* MockSystemCameraTelemetry.swift */; };
+		C0D3CA000000000000000008 /* MockTabLossTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3CA000000000000000007 /* MockTabLossTelemetry.swift */; };
 		C0D3F1000000000000000002 /* SystemPhotoPickerTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3F1000000000000000001 /* SystemPhotoPickerTelemetry.swift */; };
 		C0D3F1000000000000000004 /* SystemPhotoPickerTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3F1000000000000000003 /* SystemPhotoPickerTelemetryTests.swift */; };
 		C0D3F1000000000000000006 /* MockSystemPhotoPickerTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3F1000000000000000005 /* MockSystemPhotoPickerTelemetry.swift */; };
@@ -11371,6 +11372,7 @@
 		C0D3CA000000000000000001 /* SystemCameraTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemCameraTelemetry.swift; sourceTree = "<group>"; };
 		C0D3CA000000000000000003 /* SystemCameraTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemCameraTelemetryTests.swift; sourceTree = "<group>"; };
 		C0D3CA000000000000000005 /* MockSystemCameraTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSystemCameraTelemetry.swift; sourceTree = "<group>"; };
+		C0D3CA000000000000000007 /* MockTabLossTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTabLossTelemetry.swift; sourceTree = "<group>"; };
 		C0D3F1000000000000000001 /* SystemPhotoPickerTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemPhotoPickerTelemetry.swift; sourceTree = "<group>"; };
 		C0D3F1000000000000000003 /* SystemPhotoPickerTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemPhotoPickerTelemetryTests.swift; sourceTree = "<group>"; };
 		C0D3F1000000000000000005 /* MockSystemPhotoPickerTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSystemPhotoPickerTelemetry.swift; sourceTree = "<group>"; };
@@ -16886,6 +16888,7 @@
 				8A36AC2B2886F27F00CDC0AD /* MockTabManager.swift */,
 				5A9A09D328B01D8700B6F51E /* MockTelemetryWrapper.swift */,
 				C0D3CA000000000000000005 /* MockSystemCameraTelemetry.swift */,
+				C0D3CA000000000000000007 /* MockTabLossTelemetry.swift */,
 				C0D3F1000000000000000005 /* MockSystemPhotoPickerTelemetry.swift */,
 				ED575BD22D00F9D00056BCDA /* MockTemporaryDocument.swift */,
 				C80C11F228B3CD3E0062922A /* MockTests */,
@@ -22098,6 +22101,7 @@
 				E1EAA5F12D49470900D3039C /* ToolbarStateTests.swift in Sources */,
 				5A9A09D428B01D8700B6F51E /* MockTelemetryWrapper.swift in Sources */,
 				C0D3CA000000000000000006 /* MockSystemCameraTelemetry.swift in Sources */,
+				C0D3CA000000000000000008 /* MockTabLossTelemetry.swift in Sources */,
 				C0D3F1000000000000000006 /* MockSystemPhotoPickerTelemetry.swift in Sources */,
 				C80C11F028B3C9150062922A /* MockUserDefaults.swift in Sources */,
 				A5C6EA07305958FA0062B3A8 /* RustFirefoxAccountsProfileCacheTests.swift in Sources */,
