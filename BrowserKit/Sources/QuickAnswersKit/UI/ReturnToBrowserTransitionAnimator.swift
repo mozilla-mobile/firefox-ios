@@ -11,7 +11,7 @@ import UIKit
 final class ReturnToBrowserTransitionAnimator: NSObject,
                                                UIViewControllerTransitioningDelegate,
                                                UIViewControllerAnimatedTransitioning {
-    private struct UX {
+    private enum UX {
         static let duration: TimeInterval = 0.4
         static let damping: CGFloat = 1.0
         static let stackedTransform = CGAffineTransform(scaleX: 0.92, y: 0.92)
