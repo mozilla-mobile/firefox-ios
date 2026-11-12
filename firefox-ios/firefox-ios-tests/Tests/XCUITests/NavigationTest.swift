@@ -381,12 +381,18 @@ class NavigationTest: FeatureFlaggedTestSuite {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306858
     // Smoketest
-    func testSSL() {
+    func testSSL() throws {
         let sslScreen = SSLWarningScreen(app: app)
         let toolbarScreen = ToolbarScreen(app: app)
         let browserScreen = BrowserScreen(app: app)
+        // A local site with an untrusted certificate stands in for expired.badssl.com, whose
+        // TLS handshakes took from 1 s to over 20 s and made the test time out
+        let server = try UntrustedHTTPSServer()
+        try server.start()
+        addTeardownBlock { server.stop() }
+        let untrustedSite = server.siteURL
 
-        browserScreen.navigateToURL("https://expired.badssl.com/")
+        browserScreen.navigateToURL(untrustedSite)
         sslScreen.waitForWarning()
         sslScreen.assertWarningVisible()
 
@@ -394,7 +400,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         sslScreen.waitForWarningToDisappear()
 
         toolbarScreen.openNewTabFromTabTray()
-        browserScreen.navigateToURL("https://expired.badssl.com/")
+        browserScreen.navigateToURL(untrustedSite)
         sslScreen.waitForWarning()
         sslScreen.assertWarningVisible()
 
@@ -403,7 +409,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         sslScreen.waitForPageToLoadAfterBypass()
 
         restartTheApp()
-        browserScreen.navigateToURL("https://expired.badssl.com/")
+        browserScreen.navigateToURL(untrustedSite)
         sslScreen.waitForWarning()
         sslScreen.assertWarningVisible()
         sslScreen.tapAdvanced()

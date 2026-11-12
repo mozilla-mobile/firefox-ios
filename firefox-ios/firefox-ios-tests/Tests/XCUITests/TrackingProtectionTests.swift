@@ -130,8 +130,11 @@ class TrackingProtectionTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307061
     // Regression
-    func testTrackingProtectionButtonMenu() {
+    func testTrackingProtectionButtonMenu() throws {
         let sslScreen = SSLWarningScreen(app: app)
+        let untrustedServer = try UntrustedHTTPSServer()
+        try untrustedServer.start()
+        addTeardownBlock { untrustedServer.stop() }
 
         app.launch()
         // Step 1: the page is correctly loaded
@@ -149,11 +152,11 @@ class TrackingProtectionTests: BaseTestCase {
         trackingProtectionScreen.assertConnectionIsSecure()
         trackingProtectionScreen.assertConnectionVerifiedByCertificate()
 
-        // Step 3: the expired certificate page loads with the lock icon disabled. Opened directly
-        // because tapping "expired" on badssl.com does not raise the interstitial reliably.
+        // Step 3: the untrusted certificate page loads with the lock icon disabled. A local site with an
+        // untrusted certificate stands in for badssl.com's "expired" page, which loads too slowly to rely on.
         trackingProtectionScreen.closeConnectionDetails()
         navigator.nowAt(BrowserTab)
-        navigator.openURL("https://expired.badssl.com/")
+        navigator.openURL(untrustedServer.siteURL)
         sslScreen.waitForWarning()
         sslScreen.tapAdvanced()
         sslScreen.tapVisitSiteAnyway()
