@@ -1898,6 +1898,11 @@ extension String {
                 tableName: "NativeErrorPage",
                 value: "%@ can look for an earlier version of this page from the Internet Archive’s %@.",
                 comment: "Footer text below the wayback button/card, explaining that the app can look for an archived version of the page via the Internet Archive's Wayback Machine. %1$@ is the app name (e.g. Firefox). %2$@ is the link text (Wayback Machine), which is a tappable link that opens web.archive.org.")
+            public static let FooterDescriptionMarkdown = MZLocalizedString(
+                key: "NativeErrorPage.Wayback.Error.FooterDescription.Markdown.v161",
+                tableName: "NativeErrorPage",
+                value: "%@ can look for an earlier version of this page from the Internet Archive’s [Wayback Machine](WAYBACK_MACHINE_URL).",
+                comment: "Footer text below the wayback button/card, explaining that the app can look for an archived version of the page via the Internet Archive's Wayback Machine. This string uses markdown links: [Link text here](URL_PLACEHOLDER_HERE). Translate only the text *inside* square brackets: [Wayback Machine]. For example, “[网站时光机](WAYBACK_MACHINE_URL)”. The WAYBACK_MACHINE_URL placeholder links to the website of the Wayback Machine. The %@ placeholder is the app name (e.g. Firefox). More info: https://www.markdownguide.org/basic-syntax/#links")
             public static let LinkText = MZLocalizedString(
                 key: "NativeErrorPage.Wayback.Error.LinkText.v155",
                 tableName: "NativeErrorPage",
