@@ -517,6 +517,12 @@ class BaseTestCase: XCTestCase {
         mozWaitForElementToNotExist(app.tables["Context Menu"])
     }
 
+    func selectOptionFromUIMenu(option: String) {
+        let button = app.buttons[option]
+        button.waitAndTap()
+        mozWaitForElementToNotExist(button)
+    }
+
     func loadWebPage(_ url: String, waitForLoadToFinish: Bool = true) {
         let app = XCUIApplication()
         UIPasteboard.general.string = url

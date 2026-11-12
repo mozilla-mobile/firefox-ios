@@ -85,6 +85,8 @@ final class HomepageViewController: UIViewController,
         return view.frame.size.width
     }
 
+    private lazy var nativeMenuHelper = NativeMenuHelper(windowUUID: windowUUID, toastContainer: toastContainer)
+
     // MARK: - Private constants
     private let profile: Profile
     private let tabManager: TabManager
@@ -1083,6 +1085,11 @@ final class HomepageViewController: UIViewController,
             )
             return
         }
+
+        // Skip top sites since it uses native UIMenu
+        if case .topSites = section {
+            return
+        }
         if section.canHandleLongPress && item.canHandleLongPress {
             navigateToContextMenu(for: item, sourceView: sourceView)
         }
@@ -1427,6 +1434,50 @@ final class HomepageViewController: UIViewController,
         default:
             return
         }
+    }
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration
+    ) -> UITargetedPreview? {
+        guard let indexPath = configuration.identifier as? IndexPath else { return nil }
+        return targetedPreview(for: indexPath)
+    }
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        previewForDismissingContextMenuWithConfiguration configuration: UIContextMenuConfiguration
+    ) -> UITargetedPreview? {
+        guard let indexPath = configuration.identifier as? IndexPath else { return nil }
+        return targetedPreview(for: indexPath)
+    }
+
+    private func targetedPreview(for indexPath: IndexPath) -> UITargetedPreview? {
+        guard let topSiteCell = collectionView?.cellForItem(at: indexPath) as? TopSiteCell else {
+            return nil
+        }
+
+        let view = topSiteCell.rootContainer
+        let parameters = UIPreviewParameters()
+        parameters.backgroundColor = .clear
+        parameters.visiblePath = topSiteCell.contextMenuPreviewPath
+        parameters.shadowPath = UIBezierPath(roundedRect: view.bounds,
+                                             cornerRadius: TopSiteCell.UX.faviconCornerRadius)
+        return UITargetedPreview(view: view, parameters: parameters)
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        contextMenuConfigurationForItemAt indexPath: IndexPath,
+                        point: CGPoint) -> UIContextMenuConfiguration? {
+        guard let dataSource,
+              let section = dataSource.sectionIdentifier(for: indexPath.section),
+              section.canHandleLongPress,
+              let item = dataSource.itemIdentifier(for: indexPath),
+              item.canHandleLongPress,
+              let menu = nativeMenuHelper.menu(for: item, sourceView: collectionView.cellForItem(at: indexPath))
+        else { return nil }
+
+        return UIContextMenuConfiguration(identifier: indexPath as NSCopying, previewProvider: nil) { _ in menu }
     }
 
     private func presentAddShortcutAlert() {

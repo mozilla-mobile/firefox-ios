@@ -30,7 +30,6 @@ class BrowsingPDFTests: BaseTestCase {
     private var topSites: TopSitesScreen!
     private var browser: BrowserScreen!
     private var pdf: PDFScreen!
-    private var contextMenu: ContextMenuScreen!
     private var library: LibraryScreen!
     private var tabTrayScreen: TabTrayScreen!
 
@@ -38,7 +37,6 @@ class BrowsingPDFTests: BaseTestCase {
         // Test name looks like: "[Class testFunc]", parse out the function name
         try await super.setUp()
         topSites = TopSitesScreen(app: app)
-        contextMenu = ContextMenuScreen(app: app)
         pdf = PDFScreen(app: app)
         browser = BrowserScreen(app: app)
         library = LibraryScreen(app: app)
@@ -167,7 +165,7 @@ class BrowsingPDFTests: BaseTestCase {
         topSites.longPressOnPinnedSite(named: bookmarkLabel)
 
         // Remove the pinned site via the context menu.
-        contextMenu.unpinFromTopSites()
+        topSites.tapUnpin()
 
         // 5. Verify the item has been unpinned.
         topSites.assertTopSiteDoesNotExist(named: bookmarkLabel)

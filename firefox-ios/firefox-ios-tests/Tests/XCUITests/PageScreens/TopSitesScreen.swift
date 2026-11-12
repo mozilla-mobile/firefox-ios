@@ -127,8 +127,8 @@ final class TopSitesScreen {
         pinnedSite.press(forDuration: duration)
     }
 
-    func tapPinSlashIcon() {
-        sel.PIN_SLASH.element(in: app).waitAndTap()
+    func tapUnpin() {
+        sel.UNPIN.element(in: app).waitAndTap()
     }
 
     func assertYoutubeTopSitesNotExist() {
