@@ -1,5 +1,5 @@
 /* Displayed in a CFR help message to inform users about the availability of Relay email masking features now being available on mobile. %@ is the name of the app (e.g. 'Firefox') */
-"RelayMask.RelayEmailMaskAvailableCFR.v146" = "新功能！現在起行動板也提供 %@ Relay 轉寄信箱功能。";
+"RelayMask.RelayEmailMaskAvailableCFR.v146" = "新功能！現在起行動版也提供 %@ Relay 轉寄信箱功能。";
 
 /* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
 "RelayMask.RelayEmailMaskFreeTierLimitReached.v147" = "您已用完 5 組免費轉寄信箱，我們從中挑選一組讓您重複使用。";

@@ -14,7 +14,7 @@
 "NativeErrorPage.BadCertDomain.AdvancedWarning2.v149" = "Si vous utilisez un réseau d’entreprise, votre équipe d’assistance pourrait avoir plus d’informations.";
 
 /* On certificate error page, this is the description explaining the security risk. */
-"NativeErrorPage.BadCertDomain.Description.v149" = "Quelqu’un se faisant passer pour le site pourrait tenter de dérober vos informations personnelles. Vos paramètres de connexion peuvent également être mal configurés.";
+"NativeErrorPage.BadCertDomain.Description.v149" = "Quelqu’un se faisant passer pour le site pourrait tenter de dérober vos informations personnelles. Vos paramètres de connexion pourraient également être mal configurés.";
 
 /* On certificate error page, this is the label prefix for the error code. %@ is the error code (e.g. SSL_ERROR_BAD_CERT_DOMAIN). */
 "NativeErrorPage.BadCertDomain.ErrorCodeLabel.v149" = "Code d’erreur : %@";

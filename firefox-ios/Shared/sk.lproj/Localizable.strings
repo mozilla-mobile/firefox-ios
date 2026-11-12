@@ -1682,7 +1682,7 @@
 "TabTray.CurrentSelectedTab.A11Y" = "Aktuálne vybratá karta.";
 
 /* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as “Others”. */
-"TabTray.Header.FilteredTabs.SectionHeader" = "Iné";
+"TabTray.Header.FilteredTabs.SectionHeader" = "Ostatné";
 
 /* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
 "TabTray.InactiveTabs.SectionTitle" = "Neaktívne karty";
