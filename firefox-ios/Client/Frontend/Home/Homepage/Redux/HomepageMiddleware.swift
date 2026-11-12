@@ -82,7 +82,7 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
             HomepageActionType.notificationCardEnableButtonTapped:
             self.handleNotificationCardDismissed(action: action)
 
-        case HomepageActionType.viewWillTransition, ToolbarActionType.cancelEdit,
+        case HomepageActionType.viewWillTransition, ToolbarActionType.cancelEdit, ToolbarActionType.toolbarPositionChanged,
             GeneralBrowserActionType.navigateBack, GeneralBrowserActionType.didCloseTabFromToolbar:
             self.dispatchSearchBarConfigurationAction(action: action)
 

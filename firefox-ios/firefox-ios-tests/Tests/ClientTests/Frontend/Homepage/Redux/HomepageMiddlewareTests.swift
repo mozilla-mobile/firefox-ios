@@ -449,6 +449,30 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(configuredSearchBarAction.isSearchBarEnabled, false)
     }
 
+    func test_toolbarPositionChangedAction_configuresSearchBar() throws {
+        setupNimbusAnimatedCenterSearchBarTesting(isEnabled: true)
+        let subject = createSubject()
+        let action = ToolbarAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ToolbarActionType.toolbarPositionChanged
+        )
+
+        let dispatchExpectation = XCTestExpectation(description: "Search bar configured middleware action dispatched")
+
+        mockStore.dispatchCalled = {
+            dispatchExpectation.fulfill()
+        }
+
+        subject.homepageProvider.legacyMiddleware(AppState(), action)
+
+        wait(for: [dispatchExpectation], timeout: 1)
+
+        let (configuredSearchBarAction, configuredSearchBarActionCount) = try getActionInfo(for: .configuredSearchBar)
+
+        XCTAssertEqual(configuredSearchBarActionCount, 1)
+        XCTAssertEqual(configuredSearchBarAction.isSearchBarEnabled, true)
+    }
+
     func test_navigateBackAction_configuresSearchBar() throws {
         setupNimbusAnimatedCenterSearchBarTesting(isEnabled: true)
         let subject = createSubject()

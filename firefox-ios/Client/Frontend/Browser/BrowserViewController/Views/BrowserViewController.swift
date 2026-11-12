@@ -670,6 +670,7 @@ class BrowserViewController: UIViewController,
             windowUUID: windowUUID,
             actionType: GeneralBrowserMiddlewareActionType.toolbarPositionChanged)
         store.dispatch(action)
+        shouldHideAddressToolbar()
         updateSwipingTabs()
 
         searchController?.viewModel.updateBottomSearchBarState(isBottomSearchBar: isBottomSearchBar)
@@ -1429,13 +1430,9 @@ class BrowserViewController: UIViewController,
 
         let isEditing = toolbarState?.addressToolbar.isEditing ?? false
 
-        let shouldShowSearchBar = store.state.componentState(
-            HomepageState.self,
-            for: .homepage,
-            window: windowUUID
-        )?.searchBarState.shouldShowSearchBar ?? false
+        let isPhonePortrait = UIDevice.current.userInterfaceIdiom == .phone && !UIWindow.isLandscape
 
-        guard shouldShowSearchBar, !isEditing, contentContainer.hasHomepage else {
+        guard !isBottomSearchBar, isPhonePortrait, !isEditing, contentContainer.hasHomepage else {
             guard addressToolbarContainer.isHidden == true else { return }
             addressToolbarContainer.isHidden = false
             store.dispatch(
