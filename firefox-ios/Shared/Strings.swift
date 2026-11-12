@@ -5499,6 +5499,12 @@ extension String {
                 value: "Your report helps us understand and fix issues in %1$@ to make it better for everyone. %2$@",
                 comment: "Explanatory caption below the Additional Info section. %1$@ is the app name (e.g. Firefox). %2$@ is replaced by the tappable 'Learn more' link, in the Report a Website Issue form."
             )
+            public static let FooterMarkdownText = MZLocalizedString(
+                key: "WebCompatReporter.AdditionalInfo.FooterText.Markdown.v161",
+                tableName: "WebCompatReporter",
+                value: "Your report helps us understand and fix issues in %@ to make it better for everyone. [Learn more](LEARN_MORE_URL)",
+                comment: "Explanatory caption below the Additional Info section. This string uses markdown links: [Link text here](URL_PLACEHOLDER_HERE). Translate only the text *inside* square brackets: [Learn more]. For example, “[Weitere Informationen](LEARN_MORE_URL)”. The LEARN_MORE_URL placeholder links to the support page for ”Report a broken website”. The %@ placeholder is the app name (e.g. Firefox). More info: https://www.markdownguide.org/basic-syntax/#links"
+            )
             public static let LearnMore = MZLocalizedString(
                 key: "WebCompatReporter.AdditionalInfo.LearnMore.v154",
                 tableName: "WebCompatReporter",
