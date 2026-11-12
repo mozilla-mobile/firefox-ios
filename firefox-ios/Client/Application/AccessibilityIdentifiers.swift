@@ -691,6 +691,7 @@ enum AccessibilityIdentifiers {
             static let websiteDataSection = "WebsiteData"
             static let clearPrivateDataSection = "ClearPrivateData"
             static let clearAllWebsiteData = "ClearAllWebsiteData"
+            static let importBrowserData = "ImportBrowserData"
         }
 
         enum Notifications {
