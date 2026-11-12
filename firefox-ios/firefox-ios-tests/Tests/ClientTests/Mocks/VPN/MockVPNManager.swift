@@ -12,6 +12,7 @@ final class MockVPNManager: VPNRunnable {
     var dataLimitInGB: Double = 0
     var usageFraction: Double = 0
     var isLimitReached = false
+    var selectedCountryCode = VPNServerManager.recommendedCountryCode
     var startCalled = 0
     var stopCalled = 0
     var onStop: (() -> Void)?
@@ -40,5 +41,9 @@ final class MockVPNManager: VPNRunnable {
 
     func listCountries() async -> [VPNServerManager.Country] {
         return []
+    }
+
+    func selectCountry(_ countryCode: String) {
+        selectedCountryCode = countryCode
     }
 }

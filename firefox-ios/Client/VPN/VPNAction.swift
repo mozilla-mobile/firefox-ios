@@ -4,11 +4,12 @@
 
 import Redux
 
-enum VPNModernAction: ModernAction {
+enum VPNModernAction: ModernAction, Equatable {
     case start
     case stop
     case changeLocation
     case reconnectAtLaunch
+    case selectLocation(countryCode: String)
     // User choices from the VPN alerts. Each one turns the VPN off.
     case continueWithoutVPN
     case closeThisTab
