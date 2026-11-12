@@ -11,6 +11,9 @@ final class EmbeddedAddressBarView: UIView, ThemeApplicable {
         static let verticalPadding: CGFloat = 14
         static let contentSpacing: CGFloat = 8
         static let searchIconSize = CGSize(width: 20, height: 20)
+        static let shadowRadius: CGFloat = 14
+        static let shadowOffset = CGSize(width: 0, height: 2)
+        static let shadowOpacity: Float = 1
     }
 
     private lazy var searchIconView: UIImageView = .build { view in
@@ -47,9 +50,12 @@ final class EmbeddedAddressBarView: UIView, ThemeApplicable {
         let radius = bounds.height / 2
         layer.cornerRadius = radius
         glassView.layer.cornerRadius = radius
+        layer.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: radius).cgPath
     }
 
     private func setupView() {
+        layer.shadowRadius = UX.shadowRadius
+        layer.shadowOffset = UX.shadowOffset
         addSubview(glassView)
         addSubviews(searchIconView, placeholderLabel)
 
@@ -86,8 +92,11 @@ final class EmbeddedAddressBarView: UIView, ThemeApplicable {
     func applyTheme(theme: Theme) {
         if #available(iOS 26.0, *) {
             backgroundColor = .clear
+            layer.shadowOpacity = 0
         } else {
             backgroundColor = theme.colors.layerSurfaceMedium
+            layer.shadowOpacity = UX.shadowOpacity
+            layer.shadowColor = theme.colors.shadowStrong.cgColor
         }
         placeholderLabel.textColor = theme.colors.textSecondary
         searchIconView.tintColor = theme.colors.iconPrimary
