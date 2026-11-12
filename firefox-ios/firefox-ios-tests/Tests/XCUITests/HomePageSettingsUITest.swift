@@ -22,7 +22,8 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
     private var browserScreen: BrowserScreen!
     private var mainMenuScreen: MainMenuScreen!
     private var trackingProtectionScreen: TrackingProtectionScreen!
-    // The same tracker page on another host, so loading it counts as a new page
+    // The same tracker page on another host, so loading it counts as a new page.
+    // localtest.me resolves to 127.0.0.1 through public DNS, so these steps need DNS access
     private var otherTrackerPage: String { "http://localtest.me:\(serverPort)/test-fixture/\(TestPages.trackers)" }
 
     private func enterWebPageAsHomepage(text: String) {
@@ -327,9 +328,10 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         homePageScreen.assertTrackerBlockerPillDoesNotExist()
 
         // Step 1
+        var blockedWhileHidden = 0
         for page in [trackerPage, otherTrackerPage] {
             browserScreen.openURLAndAssertPageText(page, text: TestLabels.trackers)
-            assertBlockedTrackersInPanel()
+            blockedWhileHidden += assertBlockedTrackersInPanel().total
         }
 
         // Step 2
@@ -338,7 +340,7 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         // Step 3
         openNewTab()
         homePageScreen.assertTrackerBlockerPillIsBetweenShortcutsAndJumpBackIn()
-        homePageScreen.assertTrackerBlockerCount(atLeast: countBeforeHiding)
+        homePageScreen.assertTrackerBlockerCount(equals: countBeforeHiding + blockedWhileHidden)
 
         // Step 4
         homePageScreen.tapTrackerBlockerPill()

@@ -106,6 +106,11 @@ final class HomePageScreen {
         return count
     }
 
+    func assertTrackerBlockerCount(equals expected: Int, timeout: TimeInterval = TIMEOUT) {
+        let count = trackerBlockerCount(timeout: timeout)
+        XCTAssertEqual(count, expected, "The Tracker Blocker pill count is not the expected total")
+    }
+
     /// Reads the pill and the weekly panel, then asserts the pill shows the footer's lifetime total, which the
     /// weekly count can't exceed. With `previous`, also asserts that each total grew by `blocked`. Leaves the panel open.
     @discardableResult
