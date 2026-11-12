@@ -3673,6 +3673,27 @@ extension String {
                 value: "Finding Locations…",
                 comment: "Text displayed on the locations screen when the app loads a list of locations for the user to pick from. “Locations” here means the locations of VPN servers the user can connect to."
             )
+
+            public static let LocationUnavailableTitle = MZLocalizedString(
+                key: "VPN.LocationPicker.LocationUnavailableTitle.v162",
+                tableName: "VPN",
+                value: "Location Unavailable",
+                comment: "Title of the popup shown when the VPN server the user picked can’t be used right now. “Location” means the VPN server’s location."
+            )
+
+            public static let LocationUnavailableBody = MZLocalizedString(
+                key: "VPN.LocationPicker.LocationUnavailableBody.v162",
+                tableName: "VPN",
+                value: "We’ve switched you to the recommended location.",
+                comment: "Body text of the popup shown when the VPN server the user picked can’t be used right now. Explains that the VPN has connected through the recommended location instead. The recommended location is the one with the fastest connection. “Location” means the VPN server’s location."
+            )
+
+            public static let LocationUnavailableButtonText = MZLocalizedString(
+                key: "VPN.LocationPicker.LocationUnavailableButtonText.v162",
+                tableName: "VPN",
+                value: "OK",
+                comment: "Button on the popup shown when the VPN server location the user picked can’t be used right now. Indicates the user understands and acknowledges the location has changed. Tapping it closes the popup."
+            )
         }
     }
 }
