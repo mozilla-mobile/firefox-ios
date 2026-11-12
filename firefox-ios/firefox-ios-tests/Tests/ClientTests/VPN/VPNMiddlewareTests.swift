@@ -259,34 +259,8 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
             userPreferences: mockUserPreferences,
             vpnManager: mockVPNManager
         )
-        trackForMemoryLeaks(subject)
 
-        addTeardownBlock { [weak subject] in
-            guard let subject else { return }
-            self.releaseMiddlewareProvidersFromMemory(subject)
-        }
         return subject
-    }
-
-    /// Middleware providers strongly retain `self`, since the app keeps them alive for its whole
-    /// lifecycle. Replacing them with empty closures breaks that cycle for `trackForMemoryLeaks`.
-    private func releaseMiddlewareProvidersFromMemory(_ subject: VPNMiddleware) {
-        subject.vpnProvider = emptyMiddlewareProviderFactory()
-        subject.legacyProvider = emptyLegacyMiddlewareFactory()
-        subject.modernProvider = emptyMiddlewareFactory()
-    }
-
-    private func dispatchChangeLocationAndWait(expectStart: Bool) async {
-        let started = expectation(description: "VPN start attempted")
-        started.isInverted = !expectStart
-        mockVPNManager.onStart = { started.fulfill() }
-        let preferenceSet = expectation(description: "Preference set")
-        preferenceSet.isInverted = true
-        mockUserPreferences.onSetPreference = { preferenceSet.fulfill() }
-        let subject = createSubject()
-
-        subject.vpnProvider.modernMiddleware(AppState(), VPNModernAction.changeLocation, firstWindowUUID)
-        await fulfillment(of: [started, preferenceSet], timeout: 0.2)
     }
 
     private func yieldAndWaitForDispatch(_ event: VPNEvent, subject: VPNMiddleware) async throws {
