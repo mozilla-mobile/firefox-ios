@@ -650,14 +650,6 @@ public protocol FirefoxAccountProtocol: AnyObject, Sendable {
     func disconnect() 
     
     /**
-     * Get the high-level authentication state of the client
-     *
-     * TODO: remove this and the FxaRustAuthState type from the public API
-     * https://bugzilla.mozilla.org/show_bug.cgi?id=1868614
-     */
-    func getAuthState()  -> FxaRustAuthState
-    
-    /**
      * Get the URL at which to begin a device-pairing signin flow.
      *
      * If the user wants to sign in using device pairing, call this method and then
@@ -690,7 +682,7 @@ public protocol FirefoxAccountProtocol: AnyObject, Sendable {
      * **💾 This method alters the persisted account state.**
      *
      * Call this if you know there's an authentication / authorization issue that requires the
-     * user to re-authenticated.  It transitions the user to the [FxaRustAuthState.AuthIssues] state.
+     * user to re-authenticated.  It transitions the user to the [FxaState.AuthIssues] state.
      */
     func onAuthIssues() 
     
@@ -707,7 +699,7 @@ public protocol FirefoxAccountProtocol: AnyObject, Sendable {
      *
      * **💾 This method alters the persisted account state.**
      *
-     * Call this if we have encountered the [FxaRustAuthState.AuthIssues] state as a result of a
+     * Call this if we have encountered the [FxaState.AuthIssues] state as a result of a
      * failure happening (i.e. not as a result of initialization simply loading that state from a
      * previous failure).
      * Most likely, this should not need to be called externally except in testing since the state
@@ -1363,21 +1355,6 @@ open func disconnect()  {try! rustCall() {
 }
     
     /**
-     * Get the high-level authentication state of the client
-     *
-     * TODO: remove this and the FxaRustAuthState type from the public API
-     * https://bugzilla.mozilla.org/show_bug.cgi?id=1868614
-     */
-open func getAuthState() -> FxaRustAuthState  {
-    return try!  FfiConverterTypeFxaRustAuthState_lift(try! rustCall() {
-        uniffiCallStatus in
-    uniffi_fxa_client_fn_method_firefoxaccount_get_auth_state(
-            self.uniffiCloneHandle(),uniffiCallStatus
-    )
-})
-}
-    
-    /**
      * Get the URL at which to begin a device-pairing signin flow.
      *
      * If the user wants to sign in using device pairing, call this method and then
@@ -1431,7 +1408,7 @@ open func handleWebChannelLogin(jsonPayload: String)throws   {try rustCallWithEr
      * **💾 This method alters the persisted account state.**
      *
      * Call this if you know there's an authentication / authorization issue that requires the
-     * user to re-authenticated.  It transitions the user to the [FxaRustAuthState.AuthIssues] state.
+     * user to re-authenticated.  It transitions the user to the [FxaState.AuthIssues] state.
      */
 open func onAuthIssues()  {try! rustCall() {
         uniffiCallStatus in
@@ -1462,7 +1439,7 @@ open func processEvent(event: FxaEvent)throws  -> FxaState  {
      *
      * **💾 This method alters the persisted account state.**
      *
-     * Call this if we have encountered the [FxaRustAuthState.AuthIssues] state as a result of a
+     * Call this if we have encountered the [FxaState.AuthIssues] state as a result of a
      * failure happening (i.e. not as a result of initialization simply loading that state from a
      * previous failure).
      * Most likely, this should not need to be called externally except in testing since the state
@@ -4041,89 +4018,6 @@ public func FfiConverterTypeFxaEvent_lower(_ value: FxaEvent) -> RustBuffer {
 
 
 
-/**
- * High-level view of the authorization state
- *
- * This is named `FxaRustAuthState` because it doesn't track all the states we want yet and needs
- * help from the wrapper code.  The wrapper code defines the actual `FxaAuthState` type based on
- * this, adding the extra data.
- *
- * In the long-term, we should track that data in Rust, remove the wrapper, and rename this to
- * `FxaAuthState`.
- */
-
-public enum FxaRustAuthState: Equatable, Hashable {
-    
-    case disconnected
-    case connected
-    case authIssues
-
-
-
-
-
-}
-
-#if compiler(>=6)
-extension FxaRustAuthState: Sendable {}
-#endif
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public struct FfiConverterTypeFxaRustAuthState: FfiConverterRustBuffer {
-    typealias SwiftType = FxaRustAuthState
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FxaRustAuthState {
-        let variant: Int32 = try readInt(&buf)
-        switch variant {
-        
-        case 1: return .disconnected
-        
-        case 2: return .connected
-        
-        case 3: return .authIssues
-        
-        default: throw UniffiInternalError.unexpectedEnumCase
-        }
-    }
-
-    public static func write(_ value: FxaRustAuthState, into buf: inout [UInt8]) {
-        switch value {
-        
-        
-        case .disconnected:
-            writeInt(&buf, Int32(1))
-        
-        
-        case .connected:
-            writeInt(&buf, Int32(2))
-        
-        
-        case .authIssues:
-            writeInt(&buf, Int32(3))
-        
-        }
-    }
-}
-
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeFxaRustAuthState_lift(_ buf: RustBuffer) throws -> FxaRustAuthState {
-    return try FfiConverterTypeFxaRustAuthState.lift(buf)
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeFxaRustAuthState_lower(_ value: FxaRustAuthState) -> RustBuffer {
-    return FfiConverterTypeFxaRustAuthState.lower(value)
-}
-
-
-
 
 public enum FxaServer: Equatable, Hashable {
     
@@ -4227,7 +4121,7 @@ public func FfiConverterTypeFxaServer_lower(_ value: FxaServer) -> RustBuffer {
  * These are the states of [crate::FxaStateMachine] that consumers observe.
  */
 
-public enum FxaState: Equatable, Hashable {
+public indirect enum FxaState: Equatable, Hashable {
     
     /**
      * The state machine needs to be initialized via [Event::Initialize].
@@ -4238,10 +4132,11 @@ public enum FxaState: Equatable, Hashable {
      */
     case disconnected
     /**
-     * User is currently performing an OAuth flow - our existing initial state
-     * when we transition to this state will influence what this means exactly.
+     * User is currently performing an OAuth flow.
+     *
+     * Initial state is what we transition to if the flow is cancelled or fails.
      */
-    case authenticating(oauthUrl: String, initialState: FxaRustAuthState
+    case authenticating(oauthUrl: String, initialState: FxaState
     )
     /**
      * User is currently connected to FxA
@@ -4277,7 +4172,7 @@ public struct FfiConverterTypeFxaState: FfiConverterRustBuffer {
         
         case 2: return .disconnected
         
-        case 3: return .authenticating(oauthUrl: try FfiConverterString.read(from: &buf), initialState: try FfiConverterTypeFxaRustAuthState.read(from: &buf)
+        case 3: return .authenticating(oauthUrl: try FfiConverterString.read(from: &buf), initialState: try FfiConverterTypeFxaState.read(from: &buf)
         )
         
         case 4: return .connected
@@ -4303,7 +4198,7 @@ public struct FfiConverterTypeFxaState: FfiConverterRustBuffer {
         case let .authenticating(oauthUrl,initialState):
             writeInt(&buf, Int32(3))
             FfiConverterString.write(oauthUrl, into: &buf)
-            FfiConverterTypeFxaRustAuthState.write(initialState, into: &buf)
+            FfiConverterTypeFxaState.write(initialState, into: &buf)
             
         
         case .connected:
@@ -4753,9 +4648,6 @@ private let initializationResult: InitializationResult = {
     if (uniffi_fxa_client_checksum_method_firefoxaccount_disconnect() != 44105) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_auth_state() != 20188) {
-        return InitializationResult.apiChecksumMismatch
-    }
     if (uniffi_fxa_client_checksum_method_firefoxaccount_get_pairing_authority_url() != 31881) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -4765,13 +4657,13 @@ private let initializationResult: InitializationResult = {
     if (uniffi_fxa_client_checksum_method_firefoxaccount_handle_web_channel_login() != 62645) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_on_auth_issues() != 48678) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_on_auth_issues() != 16011) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_fxa_client_checksum_method_firefoxaccount_process_event() != 12576) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_reset_auth_recheck_timer() != 40117) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_reset_auth_recheck_timer() != 41596) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_fxa_client_checksum_method_firefoxaccount_simulate_permanent_auth_token_issue() != 54132) {
