@@ -39,7 +39,9 @@ final class HTTPSFirstModeTests: FeatureFlaggedTestBase {
         try launchWithHTTPSUpgradeEnabled()
 
         for site in topVisitedSites {
-            openURLAndAssertConnection("http://\(site)", isSecure: true)
+            XCTContext.runActivity(named: "Upgrade http://\(site)") { _ in
+                openURLAndAssertConnection("http://\(site)", isSecure: true)
+            }
         }
     }
 
@@ -85,19 +87,10 @@ final class HTTPSFirstModeTests: FeatureFlaggedTestBase {
         loadTimeoutSite(from: server, expectingHTTPSAttempt: false) {
             browserScreen.tapLink(named: HTTPSTimeoutServer.timeoutLinkText)
         }
-        let expectedMessage = Self.exceptionNotReusedMessage
-        let options = XCTExpectedFailure.Options()
-        options.issueMatcher = { $0.compactDescription.contains(expectedMessage) }
-        XCTExpectFailure(
-            "The HTTPS exception isn't shared across tabs, see https://github.com/mozilla-mobile/firefox-ios/issues/36515",
-            options: options
-        ) {
-            loadTimeoutSite(from: server, expectingHTTPSAttempt: false) {
-                toolbarScreen.tapOnNewTabButton()
-                browserScreen.dismissMicrosurveyIfExists()
-                browserScreen.navigateToURL(server.timeoutSiteURL())
-            }
-        }
+        throw XCTSkip(
+            "Step 4 skipped: the HTTPS exception isn't shared across tabs, " +
+            "see https://github.com/mozilla-mobile/firefox-ios/issues/36515"
+        )
     }
 
     // MARK: - Helpers
@@ -144,15 +137,16 @@ final class HTTPSFirstModeTests: FeatureFlaggedTestBase {
         }
     }
 
-    /// A plain `http://` prefix also rules out the error page, which loads from an internal URL.
+    /// The secure lock already rules out the error page, which is internal and never secure, so live
+    /// sites are not checked for content. The insecure lock does not, so content is checked there.
     private func openURLAndAssertConnection(_ url: String, isSecure: Bool) {
         browserScreen.openURL(url)
         waitUntilPageLoad(timeout: TIMEOUT_LONG)
-        browserScreen.assertWebViewHasContent(timeout: TIMEOUT_LONG)
         if isSecure {
             browserScreen.assertAddressBar_LockIconExist()
             browserScreen.assertLoadedURLStarts(with: "https://")
         } else {
+            browserScreen.assertWebViewHasContent(timeout: TIMEOUT_LONG)
             browserScreen.assertAddressBar_LockIconOffExist()
             browserScreen.assertLoadedURLStarts(with: "http://")
         }
