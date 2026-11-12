@@ -4976,12 +4976,19 @@ extension BrowserViewController: TabManagerDelegate {
 
         scrollController.showToolbars(animated: false)
         toast.showToast(viewController: self, delay: delay, duration: duration) { toast in
-            [
+            // `bottomContentStackView` can extend below the safe area (e.g. landscape, where the
+            // toolbar area covers the home indicator). Clamp the toast so it always stays inside.
+            let bottomConstraint = toast.bottomAnchor.constraint(
+                equalTo: self.bottomContentStackView.bottomAnchor
+            )
+            bottomConstraint.priority = .defaultHigh
+            return [
                 toast.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,
                                                constant: Toast.UX.toastSidePadding),
                 toast.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
                                                 constant: -Toast.UX.toastSidePadding),
-                toast.bottomAnchor.constraint(equalTo: self.bottomContentStackView.bottomAnchor)
+                bottomConstraint,
+                toast.bottomAnchor.constraint(lessThanOrEqualTo: self.view.safeAreaLayoutGuide.bottomAnchor)
             ]
         }
     }
