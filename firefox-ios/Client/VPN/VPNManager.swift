@@ -24,10 +24,9 @@ protocol VPNRunnable {
     var isRunning: Bool { get }
     /// Single-consumer stream of `VPNEvent`s, observed by `VPNMiddleware`.
     var events: AsyncStream<VPNEvent> { get }
-    func start() async throws
+    /// Also switches a running VPN to a new server and pass without stopping it first.
+    func start(countryCode: String?) async throws
     func stop() async
-    /// Switches a running VPN to the server for the saved location with a fresh pass. No-op when stopped.
-    func changeLocation() async throws
 }
 
 enum VPNError: Error {
@@ -54,7 +53,6 @@ struct DefaultProxyConfigurator: ProxyConfigurator {
 final class VPNManager: VPNRunnable {
     private let logger: Logger
     private let environment: VPNEnvironment
-    private let prefs: Prefs
     private let guardian: VPNGuardianProviding?
     private let serverManager: VPNServerManaging
     private let windowManager: WindowManager
@@ -81,7 +79,6 @@ final class VPNManager: VPNRunnable {
     ) {
         self.logger = logger
         self.environment = VPNEnvironment(prefs: profile.prefs)
-        self.prefs = profile.prefs
         self.guardian = guardian ?? VPNGuardian(authCreator: authCreator, prefs: profile.prefs, logger: logger)
         self.serverManager = serverManager ?? VPNServerManager(
             client: profile.remoteSettingsService.makeClient(collectionName: VPNServerManager.collectionName),
@@ -94,24 +91,15 @@ final class VPNManager: VPNRunnable {
         self.eventsContinuation = eventsContinuation
     }
 
-    func start() async throws {
-        try await connect()
-    }
-
-    /// The proxy stays on the old server until the new one is applied, so a failure leaves it running as-is.
-    func changeLocation() async throws {
-        guard isRunning else { return }
-        try await connect()
-    }
-
-    private func connect() async throws {
+    /// When already running, the proxy stays on the old server until the new one is applied,
+    /// so a failure leaves it running as-is.
+    func start(countryCode: String?) async throws {
         guard let guardian = self.guardian else {
             throw VPNError.tokenProviderUnavailable
         }
 
         let pass = try await guardian.getPass()
 
-        let countryCode = prefs.stringForKey(PrefsKeys.VPNSettings.selectedCountryCode)
         guard let selection = await serverManager.selectServer(countryCode: countryCode, environment: environment) else {
             throw VPNError.noServerFound
         }
