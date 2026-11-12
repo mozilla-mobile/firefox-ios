@@ -7655,11 +7655,23 @@ extension String {
                 value: "Standard blocks common trackers after a page starts loading, so you may see a higher tracker count. %@",
                 comment: "Text to let users know how standard mode for Tracking Protection work. %@ is a tappable text which contains a link with more information about current Tracking Protection mode. e.g Learn more")
 
+            public static let trackersBlockedStandardModeFooterMarkdownText = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Details.TrackersStandardModeFooterText.Markdown.v161",
+                tableName: "EnhancedTrackingProtection",
+                value: "Standard blocks common trackers after a page starts loading, so you may see a higher tracker count. [Learn more](LEARN_MORE_URL)",
+                comment: "Text to let users know how standard mode for Tracking Protection work. This string uses markdown links: [Link text here](URL_PLACEHOLDER_HERE). Translate only the text *inside* square brackets: [Learn more]. For example, “[Weitere Informationen](LEARN_MORE_URL)”. The LEARN_MORE_URL placeholder links to the support page about tracking protection. More info: https://www.markdownguide.org/basic-syntax/#links")
+
             public static let trackersBlockedStrictModeFooterText = MZLocalizedString(
                 key: "Menu.EnhancedTrackingProtection.Details.TrackersStrictModeFooterText.v150",
                 tableName: "EnhancedTrackingProtection",
                 value: "Strict blocks more trackers by stopping them before a page loads, so you may see a lower tracker count. %@",
                 comment: "Text to let users know how strict mode for Tracking Protection work. %@ is a tappable text which contains a link with more information about current Tracking Protection mode. e.g Learn more")
+
+            public static let trackersBlockedStrictModeFooterMarkdownText = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Details.TrackersStrictModeFooterText.Markdown.v161",
+                tableName: "EnhancedTrackingProtection",
+                value: "Strict blocks more trackers by stopping them before a page loads, so you may see a lower tracker count. [Learn more](LEARN_MORE_URL)",
+                comment: "Text to let users know how strict mode for Tracking Protection work. This string uses markdown links: [Link text here](URL_PLACEHOLDER_HERE). Translate only the text *inside* square brackets: [Learn more]. For example, “[Weitere Informationen](LEARN_MORE_URL)”. The LEARN_MORE_URL placeholder links to the support page about tracking protection. More info: https://www.markdownguide.org/basic-syntax/#links")
 
             public static let trackersBlockedFooterTextLink = MZLocalizedString(
                 key: "Menu.EnhancedTrackingProtection.Link.LearnMore.v150",
