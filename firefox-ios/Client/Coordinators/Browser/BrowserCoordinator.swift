@@ -1322,8 +1322,11 @@ final class BrowserCoordinator: BaseCoordinator,
 
     func showQuickAnswers(transitionType: QuickAnswersTransitionType) {
         guard !childCoordinators.contains(where: { $0 is QuickAnswersCoordinator }) else { return }
-        if case .sourceReveal = transitionType {
+        switch transitionType {
+        case .sourceReveal:
             discardParkedQuickAnswers(reason: .newSession)
+        case .returnToAnswer:
+            browserViewController.hideQuickAnswersReturnPill()
         }
         let coordinator = QuickAnswersCoordinator(
             parentCoordinatorDelegate: self,
@@ -1346,10 +1349,7 @@ final class BrowserCoordinator: BaseCoordinator,
             }
         )
         add(child: coordinator)
-        coordinator.start { [weak self] in
-            guard transitionType == .returnToAnswer else { return }
-            self?.browserViewController.hideQuickAnswersReturnPill()
-        }
+        coordinator.start()
     }
 
     private func showQuickAnswersReturnPill() {

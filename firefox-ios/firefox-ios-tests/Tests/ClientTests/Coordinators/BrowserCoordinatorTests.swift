@@ -978,25 +978,13 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertEqual(browserViewController.hideQuickAnswersReturnPillCount, 0)
     }
 
-    func testShowQuickAnswers_withReturnToAnswer_hidesPillOnPresentationCompletion() {
+    func testShowQuickAnswers_withReturnToAnswer_hidesPill() {
         let subject = createSubject()
         subject.browserViewController = browserViewController
 
         subject.showQuickAnswers(transitionType: .returnToAnswer)
 
-        XCTAssertEqual(browserViewController.hideQuickAnswersReturnPillCount, 0)
-        mockRouter.savedCompletion?()
         XCTAssertEqual(browserViewController.hideQuickAnswersReturnPillCount, 1)
-    }
-
-    func testShowQuickAnswers_withSourceReveal_doesNotHidePillOnPresentationCompletion() {
-        let subject = createSubject()
-        subject.browserViewController = browserViewController
-
-        subject.showQuickAnswers(transitionType: .sourceReveal(sourceRect: .zero))
-        mockRouter.savedCompletion?()
-
-        XCTAssertEqual(browserViewController.hideQuickAnswersReturnPillCount, 0)
     }
 
     func testQuickAnswersOnPark_showsPill() throws {

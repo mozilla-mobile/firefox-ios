@@ -54,7 +54,7 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
         super.init(router: router)
     }
 
-    func start(completion: (() -> Void)? = nil) {
+    func start() {
         let controller = QuickAnswersViewController(
             navigationHandler: self,
             transitionType: transitionType,
@@ -70,7 +70,7 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
         let navigationController = UINavigationController(rootViewController: controller)
         navigationController.modalPresentationStyle = controller.modalPresentationStyle
         navigationController.transitioningDelegate = controller.transitioningDelegate
-        router.present(navigationController, animated: shouldAnimateTransition, completion: completion)
+        router.present(navigationController, animated: shouldAnimateTransition)
     }
 
     private func makeStringsConfiguration() -> QuickAnswersViewConfiguration {

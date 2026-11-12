@@ -46,16 +46,6 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
         XCTAssertTrue(navigationController.viewControllers.first is QuickAnswersViewController)
     }
 
-    func test_start_withCompletion_passesItToRouterPresent() {
-        let subject = createSubject()
-        var didCallCompletion = false
-
-        subject.start { didCallCompletion = true }
-        router.savedCompletion?()
-
-        XCTAssertTrue(didCallCompletion)
-    }
-
     func test_dismissQuickAnswers_dismissesControllerAndNotifiesParent() {
         let subject = createSubject()
 
