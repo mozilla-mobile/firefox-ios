@@ -66,7 +66,7 @@ final class QuickAnswersReturnPillPresenterTests: XCTestCase {
         subject.hide()
 
         XCTAssertNil(pill)
-        XCTAssertTrue(hostView.constraints.filter { $0.firstItem === shownPill }.isEmpty)
+        XCTAssertFalse(hostView.constraints.contains { $0.firstItem === shownPill })
     }
 
     func test_hide_withoutPill_doesNothing() {
