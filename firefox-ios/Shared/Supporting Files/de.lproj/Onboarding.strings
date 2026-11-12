@@ -399,7 +399,7 @@ Secondary button on the onboarding card that prompts users to enable syncing for
 "Onboarding.Notification.Skip.Action.v115" = "Überspringen";
 
 /* String used to describe the title of the notification onboarding page in our Onboarding screens. %@ is the app name (e.g. Firefox). */
-"Onboarding.Notification.Title.v120" = "Benachrichtigungen helfen Ihnen, %@ noch sicherer zu machen";
+"Onboarding.Notification.Title.v120" = "Benachrichtigungen helfen Ihnen, mit %@ noch sicherer unterwegs zu sein";
 
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "Benachrichtigungen aktivieren";

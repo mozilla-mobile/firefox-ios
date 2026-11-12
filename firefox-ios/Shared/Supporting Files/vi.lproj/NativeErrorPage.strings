@@ -106,3 +106,9 @@
 /* Accessibility hint read by VoiceOver describing what happens when the 'Check for earlier version' button is clicked. */
 "NativeErrorPage.Wayback.Error.WaybackButtonA11yHint.v154" = "Tìm kiếm trên Wayback Machine phiên bản lưu trữ của trang này.";
 
+/* Body text of the error page shown when a website fails to load while the VPN is on. Suggests turning off the VPN first, then refreshing the page or checking the internet connection if that doesn't help. */
+"VPN.ErrorPage.Body.v160" = "Hãy thử tắt VPN. Nếu trang web vẫn không tải được, hãy làm mới trang hoặc kiểm tra kết nối internet của bạn.";
+
+/* Title of an error page shown when a website fails to load while the VPN is on and the exact cause is unknown. “Can't be reached” means the website couldn't be loaded. */
+"VPN.ErrorPage.Title.v160" = "Không thể truy cập trang web này.";
+

@@ -1,3 +1,15 @@
+/* The accessibility label for the sign in button in the Main menu header view. */
+"MainMenu.Account.AccessibilityLabels.MainButton.v132" = "Pieteikties, lai vienādotu paroles, cilnes un citus datus";
+
+/* On the main menu, at the top, when the user is signed out. The title for the sign in action */
+"MainMenu.Account.SignedOut.Title.v131" = "Pieteikties";
+
+/* On the main menu account header, shown transiently while the user is being signed out of their account. */
+"MainMenu.Account.SigningOut.Title.v154" = "Izrakstās…";
+
+/* On the main menu, at the top, when the user is signed in but there was an error syncing. The title for this state. */
+"MainMenu.Account.SyncError.Title.v131" = "Pieteikties atkārtoti, lai vienādotu";
+
 /* On the main menu, the accessibility label for the action that will take the user to the Downloads panel. */
 "MainMenu.PanelLinkSection.AccessibilityLabels.Downloads.v132" = "Lejupielādes";
 
