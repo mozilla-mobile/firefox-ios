@@ -86,6 +86,24 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(firstTabManager.removeAllTabsCalledWith.isEmpty)
     }
 
+    func testChangeLocation_changesLocationWithoutTouchingPreference() async {
+        await dispatchChangeLocationAndWait()
+
+        XCTAssertEqual(mockVPNManager.changeLocationCalled, 1)
+        XCTAssertEqual(mockVPNManager.startCalled, 0)
+        XCTAssertEqual(mockVPNManager.stopCalled, 0)
+        XCTAssertNil(mockUserPreferences.boolPreferences[.vpnFeature])
+    }
+
+    func testChangeLocation_whenChangeFails_doesNotTouchPreference() async {
+        mockVPNManager.changeLocationError = URLError(.notConnectedToInternet)
+
+        await dispatchChangeLocationAndWait()
+
+        XCTAssertEqual(mockVPNManager.changeLocationCalled, 1)
+        XCTAssertNil(mockUserPreferences.boolPreferences[.vpnFeature])
+    }
+
     // MARK: - Alert choices
 
     func testAlertChoice_clearsPreference() async {
@@ -235,6 +253,18 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.vpnProvider = emptyMiddlewareProviderFactory()
         subject.legacyProvider = emptyLegacyMiddlewareFactory()
         subject.modernProvider = emptyMiddlewareFactory()
+    }
+
+    private func dispatchChangeLocationAndWait() async {
+        let changed = expectation(description: "VPN location change attempted")
+        mockVPNManager.onChangeLocation = { changed.fulfill() }
+        let preferenceSet = expectation(description: "Preference set")
+        preferenceSet.isInverted = true
+        mockUserPreferences.onSetPreference = { preferenceSet.fulfill() }
+        let subject = createSubject()
+
+        subject.vpnProvider.modernMiddleware(AppState(), VPNModernAction.changeLocation, firstWindowUUID)
+        await fulfillment(of: [changed, preferenceSet], timeout: 0.2)
     }
 
     private func yieldAndWaitForDispatch(_ event: VPNEvent, subject: VPNMiddleware) async throws {

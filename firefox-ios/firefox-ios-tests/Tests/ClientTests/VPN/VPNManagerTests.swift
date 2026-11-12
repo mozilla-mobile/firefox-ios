@@ -153,6 +153,90 @@ final class VPNManagerTests: XCTestCase {
         XCTAssertEqual(mockProxyConfigurator.params.count, 1)
     }
 
+    func testStart_selectsServerForSavedCountryCode() async throws {
+        mockProfile.prefs.setString("DE", forKey: PrefsKeys.VPNSettings.selectedCountryCode)
+        let subject = createSubject()
+
+        try await subject.start()
+
+        XCTAssertEqual(mockServerManager.selectServerCountryCodes, ["DE"])
+    }
+
+    // MARK: - changeLocation
+
+    func testChangeLocation_whenStopped_doesNothing() async throws {
+        let subject = createSubject()
+
+        try await subject.changeLocation()
+
+        XCTAssertEqual(mockServerManager.selectServerCalled, 0)
+        XCTAssertTrue(mockProxyConfigurator.params.isEmpty)
+        XCTAssertEqual(mockTabManager.tearDownWebViewsForProxyChangeCalled, 0)
+        XCTAssertFalse(subject.isRunning)
+    }
+
+    func testChangeLocation_whenRunning_appliesServerForNewCountryCode() async throws {
+        let subject = createSubject()
+        try await subject.start()
+        mockProfile.prefs.setString("DE", forKey: PrefsKeys.VPNSettings.selectedCountryCode)
+
+        try await subject.changeLocation()
+
+        XCTAssertEqual(mockServerManager.selectServerCountryCodes, [nil, "DE"])
+        XCTAssertEqual(mockProxyConfigurator.params.count, 2)
+        let params = try XCTUnwrap(mockProxyConfigurator.params.last)
+        XCTAssertEqual(params.configs.count, 1)
+        XCTAssertTrue(params.forcingSessionReset)
+        XCTAssertEqual(mockTabManager.tearDownWebViewsForProxyChangeCalled, 2)
+        XCTAssertEqual(mockTabManager.restoreSelectedTabForProxyChangeCalled, 2)
+        XCTAssertTrue(subject.isRunning)
+    }
+
+    func testChangeLocation_whenRunning_restartsPassRotationWithNewPass() async throws {
+        let rotationStarted = expectation(description: "Pass rotation started")
+        rotationStarted.expectedFulfillmentCount = 2
+        mockGuardian.onPassRotation = { rotationStarted.fulfill() }
+        let subject = createSubject()
+        try await subject.start()
+        mockGuardian.passResult = .success(makePass(token: "new-token"))
+
+        try await subject.changeLocation()
+        await fulfillment(of: [rotationStarted], timeout: 1)
+
+        XCTAssertEqual(mockGuardian.passRotationInitialPasses.map(\.bearerToken), ["initial-token", "new-token"])
+    }
+
+    func testChangeLocation_whenGetPassFails_throwsAndKeepsCurrentProxy() async throws {
+        let subject = createSubject()
+        try await subject.start()
+        mockGuardian.passResult = .failure(URLError(.notConnectedToInternet))
+
+        do {
+            try await subject.changeLocation()
+            XCTFail("Expected changeLocation to throw")
+        } catch {}
+
+        XCTAssertEqual(mockServerManager.selectServerCalled, 1)
+        XCTAssertEqual(mockProxyConfigurator.params.count, 1)
+        XCTAssertEqual(mockTabManager.tearDownWebViewsForProxyChangeCalled, 1)
+        XCTAssertTrue(subject.isRunning)
+    }
+
+    func testChangeLocation_whenNoServerFound_throwsAndKeepsCurrentProxy() async throws {
+        let subject = createSubject()
+        try await subject.start()
+        mockServerManager.server = nil
+
+        do {
+            try await subject.changeLocation()
+            XCTFail("Expected changeLocation to throw")
+        } catch {}
+
+        XCTAssertEqual(mockProxyConfigurator.params.count, 1)
+        XCTAssertEqual(mockTabManager.tearDownWebViewsForProxyChangeCalled, 1)
+        XCTAssertTrue(subject.isRunning)
+    }
+
     // MARK: - events
 
     func testStart_emitsPassUpdated() async throws {

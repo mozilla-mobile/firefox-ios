@@ -26,6 +26,8 @@ protocol VPNRunnable {
     var events: AsyncStream<VPNEvent> { get }
     func start() async throws
     func stop() async
+    /// Switches a running VPN to the server for the saved location with a fresh pass. No-op when stopped.
+    func changeLocation() async throws
 }
 
 enum VPNError: Error {
@@ -52,6 +54,7 @@ struct DefaultProxyConfigurator: ProxyConfigurator {
 final class VPNManager: VPNRunnable {
     private let logger: Logger
     private let environment: VPNEnvironment
+    private let prefs: Prefs
     private let guardian: VPNGuardianProviding?
     private let serverManager: VPNServerManaging
     private let windowManager: WindowManager
@@ -78,6 +81,7 @@ final class VPNManager: VPNRunnable {
     ) {
         self.logger = logger
         self.environment = VPNEnvironment(prefs: profile.prefs)
+        self.prefs = profile.prefs
         self.guardian = guardian ?? VPNGuardian(authCreator: authCreator, prefs: profile.prefs, logger: logger)
         self.serverManager = serverManager ?? VPNServerManager(
             client: profile.remoteSettingsService.makeClient(collectionName: VPNServerManager.collectionName),
@@ -91,14 +95,24 @@ final class VPNManager: VPNRunnable {
     }
 
     func start() async throws {
+        try await connect()
+    }
+
+    /// The proxy stays on the old server until the new one is applied, so a failure leaves it running as-is.
+    func changeLocation() async throws {
+        guard isRunning else { return }
+        try await connect()
+    }
+
+    private func connect() async throws {
         guard let guardian = self.guardian else {
             throw VPNError.tokenProviderUnavailable
         }
 
         let pass = try await guardian.getPass()
 
-        // TODO: FXIOS-16873 When we implement location selection it will be passed in here
-        guard let selection = await serverManager.selectServer(countryCode: nil, environment: environment) else {
+        let countryCode = prefs.stringForKey(PrefsKeys.VPNSettings.selectedCountryCode)
+        guard let selection = await serverManager.selectServer(countryCode: countryCode, environment: environment) else {
             throw VPNError.noServerFound
         }
         let server = selection.server

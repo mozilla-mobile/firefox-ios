@@ -86,6 +86,8 @@ final class VPNMiddleware {
             await startVPN()
         case .stop, .continueWithoutVPN:
             await stopVPN()
+        case .changeLocation:
+            await changeVPNLocation()
         case .closeThisTab:
             let tabManager = windowManager.tabManager(for: windowUUID)
             if let selectedTab = tabManager?.selectedTab {
@@ -111,6 +113,18 @@ final class VPNMiddleware {
             userPreferences.setPreferenceFor(.vpnFeature, to: true)
         } catch {
             logger.log("VPN start failed: \(error)", level: .warning, category: .vpn)
+        }
+    }
+
+    private func changeVPNLocation() async {
+        guard let vpnManager else {
+            logger.log("VPN location change with no VPNManager registered", level: .warning, category: .vpn)
+            return
+        }
+        do {
+            try await vpnManager.changeLocation()
+        } catch {
+            logger.log("VPN location change failed: \(error)", level: .warning, category: .vpn)
         }
     }
 
