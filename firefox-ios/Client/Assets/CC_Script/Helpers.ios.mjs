@@ -178,7 +178,15 @@ export const OSKeyStore = withNotImplementedError({
 // eslint-disable-next-line no-shadow
 export const Services = withNotImplementedError({
   locale: withNotImplementedError({ isAppLocaleRTL: false }),
-  prefs: withNotImplementedError({ prefIsLocked: () => false }),
+  prefs: withNotImplementedError({
+    prefIsLocked: () => false,
+    getBoolPref: (pref, defaultValue) =>
+      IOSAppConstants.prefs[pref] ?? defaultValue,
+    getStringPref: (pref, defaultValue) =>
+      IOSAppConstants.prefs[pref] ?? defaultValue,
+    getIntPref: (pref, defaultValue) =>
+      IOSAppConstants.prefs[pref] ?? defaultValue,
+  }),
   strings: withNotImplementedError({
     createBundle: () =>
       withNotImplementedError({

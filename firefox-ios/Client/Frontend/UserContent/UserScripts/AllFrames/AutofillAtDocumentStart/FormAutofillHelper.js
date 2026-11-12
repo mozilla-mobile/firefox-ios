@@ -80,7 +80,19 @@ const addressSendMessage = sendMessage(
 // Note: We expect all values to be string based
 const sendCaptureCreditCardFormMessage = creditCardSendMessage(
   messageTypes.CAPTURE_CREDIT_CARD_FORM,
-  normalizePayload(expectedCreditCardPayloadShape)
+  (payload) => {
+    const normalized = normalizePayload(expectedCreditCardPayloadShape)(payload);
+    console.log(
+      "[CVV check] raw:",
+      JSON.stringify(payload),
+      "normalized:",
+      JSON.stringify(normalized),
+      "has cc-csc:",
+      "cc-csc" in normalized
+    );
+    console.log("[CVV check] cc-csc value:", normalized["cc-csc"]);
+    return normalized;
+  }
 );
 
 const sendFillCreditCardFormMessage = creditCardSendMessage(

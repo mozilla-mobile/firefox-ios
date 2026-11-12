@@ -2,35 +2,38 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import { AppConstants } from "resource://gre/modules/AppConstants.sys.mjs";
 import { XPCOMUtils } from "resource://gre/modules/XPCOMUtils.sys.mjs";
 import { Region } from "resource://gre/modules/Region.sys.mjs";
 import { AddressMetaDataLoader } from "resource://gre/modules/shared/AddressMetaDataLoader.sys.mjs";
 
-const AUTOFILL_ADDRESSES_AVAILABLE_PREF =
-  "extensions.formautofill.addresses.supported";
-// This pref should be refactored after the migration of the old bool pref
-const AUTOFILL_CREDITCARDS_AVAILABLE_PREF =
-  "extensions.formautofill.creditCards.supported";
+const lazy = {};
+ChromeUtils.defineESModuleGetters(lazy, {
+  AutofillDataTypes: "resource://gre/modules/shared/AutofillDataTypes.sys.mjs",
+});
+
 const BROWSER_SEARCH_REGION_PREF = "browser.search.region";
-const CREDITCARDS_AUTOFILL_SUPPORTED_COUNTRIES_PREF =
-  "extensions.formautofill.creditCards.supportedCountries";
 const ENABLED_AUTOFILL_ADDRESSES_PREF =
   "extensions.formautofill.addresses.enabled";
 const ENABLED_AUTOFILL_ADDRESSES_CAPTURE_PREF =
   "extensions.formautofill.addresses.capture.enabled";
 const ENABLED_AUTOFILL_ADDRESSES_CAPTURE_REQUIRED_FIELDS_PREF =
   "extensions.formautofill.addresses.capture.requiredFields";
-const ENABLED_AUTOFILL_ADDRESSES_SUPPORTED_COUNTRIES_PREF =
-  "extensions.formautofill.addresses.supportedCountries";
 const ENABLED_AUTOFILL_CREDITCARDS_PREF =
   "extensions.formautofill.creditCards.enabled";
-const AUTOFILL_CREDITCARDS_REAUTH_PREF =
-  "extensions.formautofill.creditCards.reauth.optout";
+const AUTOFILL_CREDITCARDS_OS_AUTH_LOCKED_PREF =
+  "extensions.formautofill.creditCards.os-auth.locked.enabled";
 const AUTOFILL_CREDITCARDS_HIDE_UI_PREF =
   "extensions.formautofill.creditCards.hideui";
 const FORM_AUTOFILL_SUPPORT_RTL_PREF = "extensions.formautofill.supportRTL";
 const AUTOFILL_CREDITCARDS_AUTOCOMPLETE_OFF_PREF =
   "extensions.formautofill.creditCards.ignoreAutocompleteOff";
+const SUPPORTED_AUTOFILL_CREDITCARDS_CVV_PREF =
+  "extensions.formautofill.creditCards.cvv.supported";
+const ENABLED_AUTOFILL_CREDITCARDS_CVV_PREF =
+  "extensions.formautofill.creditCards.cvv.enabled";
+const CREDITCARDS_RUST_STORAGE_ACTIVE_PREF =
+  "extensions.formautofill.creditCards.storage.rust.active";
 const AUTOFILL_ADDRESSES_AUTOCOMPLETE_OFF_PREF =
   "extensions.formautofill.addresses.ignoreAutocompleteOff";
 const ENABLED_AUTOFILL_CAPTURE_ON_FORM_REMOVAL_PREF =
@@ -45,6 +48,12 @@ const AUTOFILL_FILL_ON_DYNAMIC_FORM_CHANGES_TIMEOUT_PREF =
   "extensions.formautofill.heuristics.fillOnDynamicFormChanges.timeout";
 const AUTOFILL_FILL_ON_DYNAMIC_FORM_CHANGES_PREF =
   "extensions.formautofill.heuristics.fillOnDynamicFormChanges";
+const AUTOFILL_REFILL_ON_SITE_CLEARING_VALUE_PREF =
+  "extensions.formautofill.heuristics.refillOnSiteClearingFields";
+const AUTOFILL_REFILL_ON_SITE_CLEARING_VALUE_TIMEOUT_PREF =
+  "extensions.formautofill.heuristics.refillOnSiteClearingFields.timeout";
+const SUPPRESS_UNRECOGNIZED_AUTOCOMPLETE_PREF =
+  "extensions.formautofill.suppressUnrecognizedAutocomplete.enabled";
 
 export const FormAutofill = {
   ENABLED_AUTOFILL_ADDRESSES_PREF,
@@ -53,12 +62,17 @@ export const FormAutofill = {
   ENABLED_AUTOFILL_CAPTURE_ON_PAGE_NAVIGATION_PREF,
   ENABLED_AUTOFILL_SAME_ORIGIN_WITH_TOP,
   ENABLED_AUTOFILL_CREDITCARDS_PREF,
+  SUPPORTED_AUTOFILL_CREDITCARDS_CVV_PREF,
+  ENABLED_AUTOFILL_CREDITCARDS_CVV_PREF,
+  CREDITCARDS_RUST_STORAGE_ACTIVE_PREF,
   ENABLED_AUTOFILL_DETECT_DYNAMIC_FORM_CHANGES_PREF,
-  AUTOFILL_CREDITCARDS_REAUTH_PREF,
+  AUTOFILL_CREDITCARDS_OS_AUTH_LOCKED_PREF,
   AUTOFILL_CREDITCARDS_AUTOCOMPLETE_OFF_PREF,
   AUTOFILL_ADDRESSES_AUTOCOMPLETE_OFF_PREF,
   AUTOFILL_FILL_ON_DYNAMIC_FORM_CHANGES_PREF,
   AUTOFILL_FILL_ON_DYNAMIC_FORM_CHANGES_TIMEOUT_PREF,
+  AUTOFILL_REFILL_ON_SITE_CLEARING_VALUE_PREF,
+  AUTOFILL_REFILL_ON_SITE_CLEARING_VALUE_TIMEOUT_PREF,
 
   _region: null,
 
@@ -94,96 +108,155 @@ export const FormAutofill = {
   },
 
   /**
-   * Return true if address autofill is available for a specific country.
+   * Return true if the given data type's autofill is available for a specific
+   * country. Unlike `isAutofillTypeAvailable`, which tests the browser's own
+   * region, this tests a caller-supplied country (e.g. a record's country).
+   *
+   * @param {string} typeId
+   * @param {string} country A region code, or null/empty to ignore the region.
+   * @returns {boolean} `true` if the data type's autofill is available there
    */
-  isAutofillAddressesAvailableInCountry(country) {
-    if (FormAutofill._isAutofillAddressesAvailableInExperiment) {
+  isAutofillTypeAvailableInCountry(typeId, country) {
+    const type = lazy.AutofillDataTypes.get(typeId);
+    if (!type) {
+      return false;
+    }
+    if (Services.prefs.getBoolPref(type.experimentPref, false)) {
       return true;
     }
-
-    let available = FormAutofill._isAutofillAddressesAvailable;
+    const available = Services.prefs.getStringPref(type.availablePref, "off");
     if (country && available == "detect") {
-      return FormAutofill._addressAutofillSupportedCountries.includes(
-        country.toUpperCase()
-      );
+      return Services.prefs
+        .getStringPref(type.supportedCountriesPref, "")
+        .split(",")
+        .includes(country.toUpperCase());
     }
     return available == "on";
   },
-  get isAutofillEnabled() {
-    return this.isAutofillAddressesEnabled || this.isAutofillCreditCardsEnabled;
-  },
   /**
-   * Determines if the credit card autofill feature is available to use in the browser.
-   * If the feature is not available, then there are no user facing ways to enable it.
+   * Whether the given data type (by AutofillDataTypes id) is available to use
+   * in this browser. A type is available when its `availablePref` permits the
+   * current region (see `_isSupportedRegion`) or its optional `experimentPref`
+   * forces it on. If the feature is not available, there is no user-facing way
+   * to enable it.
    *
-   * @returns {boolean} `true` if credit card autofill is available
+   * @param {string} typeId
+   * @returns {boolean} `true` if the data type's autofill is available
    */
-  get isAutofillCreditCardsAvailable() {
-    return this._isSupportedRegion(
-      FormAutofill._isAutofillCreditCardsAvailable,
-      FormAutofill._creditCardAutofillSupportedCountries
-    );
-  },
-  /**
-   * Determines if the address autofill feature is available to use in the browser.
-   * If the feature is not available, then there are no user facing ways to enable it.
-   * Two conditions must be met for the autofill feature to be considered available:
-   *   1. Address autofill support is confirmed when:
-   *      - `extensions.formautofill.addresses.supported` is set to `on`.
-   *      - The user is located in a region supported by the feature
-   *        (`extensions.formautofill.creditCards.supportedCountries`).
-   *   2. Address autofill is enabled through a Nimbus experiment:
-   *      - The experiment pref `extensions.formautofill.addresses.experiments.enabled` is set to true.
-   *
-   * @returns {boolean} `true` if address autofill is available
-   */
-  get isAutofillAddressesAvailable() {
+  isAutofillTypeAvailable(typeId) {
+    const type = lazy.AutofillDataTypes.get(typeId);
+    if (!type) {
+      return false;
+    }
     const isUserInSupportedRegion = this._isSupportedRegion(
-      FormAutofill._isAutofillAddressesAvailable,
-      FormAutofill._addressAutofillSupportedCountries
+      Services.prefs.getStringPref(type.availablePref, "off"),
+      Services.prefs.getStringPref(type.supportedCountriesPref, "").split(",")
     );
     return (
       isUserInSupportedRegion ||
-      FormAutofill._isAutofillAddressesAvailableInExperiment
+      Services.prefs.getBoolPref(type.experimentPref, false)
     );
   },
+
   /**
-   * Determines if the user has enabled or disabled credit card autofill.
+   * Whether the user has enabled the given data type (by AutofillDataTypes id).
    *
-   * @returns {boolean} `true` if credit card autofill is enabled
+   * @param {string} typeId
+   * @returns {boolean} `true` if the data type's autofill is enabled
    */
-  get isAutofillCreditCardsEnabled() {
+  isAutofillTypeEnabled(typeId) {
+    const type = lazy.AutofillDataTypes.get(typeId);
     return (
-      this.isAutofillCreditCardsAvailable &&
-      FormAutofill._isAutofillCreditCardsEnabled
+      !!type &&
+      this.isAutofillTypeAvailable(typeId) &&
+      Services.prefs.getBoolPref(type.enabledPref, false)
     );
   },
+
   /**
-   * Determines if credit card autofill is locked by policy.
+   * Whether the CVV feature has been rolled out to this user. Takes the same
+   * "on"/"off" values as the other supported prefs, and needs the Rust credit
+   * card store to be the one serving: only that store encrypts the security
+   * code, and the JSON store would keep it in the clear. On Android the app
+   * stores credit cards, always in the Rust store, so only the rollout counts.
    *
-   * @returns {boolean} `true` if credit card autofill is locked
+   * @returns {boolean}
    */
-  get isAutofillCreditCardsLocked() {
-    return Services.prefs.prefIsLocked(ENABLED_AUTOFILL_CREDITCARDS_PREF);
-  },
-  /**
-   * Determines if the user has enabled or disabled address autofill.
-   *
-   * @returns {boolean} `true` if address autofill is enabled
-   */
-  get isAutofillAddressesEnabled() {
+  get isAutofillCreditCardCVVSupported() {
     return (
-      this.isAutofillAddressesAvailable &&
-      FormAutofill._isAutofillAddressesEnabled
+      this._autofillCreditCardCVVSupportedPref == "on" &&
+      this._canStoreEncryptedCreditCardSecurityCode
     );
   },
+
   /**
-   * Determines if address autofill is locked by policy.
+   * Whether the store serving credit cards encrypts security codes, so they
+   * are never kept in the clear. Both android and desktop keep credit cards
+   * in the Application Services autofill store, which encrypts them, but reach
+   * it differently:
    *
-   * @returns {boolean} `true` if address autofill is locked
+   * - On desktop, Gecko owns the storage. `RustAutofillCreditCardStorage`
+   *   wraps the Application Services store, and
+   *   `_isCreditCardRustStorageActive` tells whether that wrapper is serving
+   *   rather than the JSON store, which would keep security codes in the
+   *   clear.
+   * - On Android, Gecko keeps no credit cards and hands them to the GeckoView
+   *   embedder. Fenix stores them through `GeckoAutocompleteStorageDelegate`
+   *   in Android Components, which uses the same Application Services store.
+   *   `_isCreditCardRustStorageActive` only applies to the desktop wrapper,
+   *   so it is not checked here.
+   *
+   * @returns {boolean}
    */
-  get isAutofillAddressesLocked() {
-    return Services.prefs.prefIsLocked(ENABLED_AUTOFILL_ADDRESSES_PREF);
+  get _canStoreEncryptedCreditCardSecurityCode() {
+    switch (AppConstants.platform) {
+      case "android":
+        return true;
+      default:
+        // Only the Rust store encrypts security codes, not the JSON one.
+        return this._isCreditCardRustStorageActive;
+    }
+  },
+
+  /**
+   * Whether credit card security codes may be captured and stored.
+   *
+   * Like `isAutofillTypeEnabled`, this folds the rollout gate
+   * (`creditCards.cvv.supported`) into the user's own choice
+   * (`creditCards.cvv.enabled`), so storage never has to test the two
+   * separately. UI that has to differ purely by whether the feature has
+   * shipped — such as whether to offer the settings checkbox at all — should
+   * read `isAutofillCreditCardCVVSupported` instead.
+   *
+   * @returns {boolean}
+   */
+  get isAutofillCreditCardCVVEnabled() {
+    return (
+      this.isAutofillCreditCardCVVSupported &&
+      this._isAutofillCreditCardCVVUserEnabled
+    );
+  },
+
+  /**
+   * Whether any autofill data type is available to use in this browser.
+   *
+   * @returns {boolean}
+   */
+  get isAnyAutofillFeatureAvailable() {
+    return lazy.AutofillDataTypes.all.some(type =>
+      this.isAutofillTypeAvailable(type.id)
+    );
+  },
+
+  /**
+   * Whether the user has any autofill data type enabled.
+   *
+   * @returns {boolean}
+   */
+  get isAutofillEnabled() {
+    return lazy.AutofillDataTypes.all.some(type =>
+      this.isAutofillTypeEnabled(type.id)
+    );
   },
 
   defineLogGetter(scope, logPrefix) {
@@ -212,10 +285,6 @@ export const FormAutofill = {
       prefix: logPrefix,
     });
   },
-
-  get isMLExperimentEnabled() {
-    return FormAutofill._isMLEnabled && FormAutofill._isMLExperimentEnabled;
-  },
 };
 
 // TODO: Bug 1747284. Use Region.home instead of reading "browser.serach.region"
@@ -236,28 +305,14 @@ XPCOMUtils.defineLazyPreferenceGetter(
 
 XPCOMUtils.defineLazyPreferenceGetter(
   FormAutofill,
-  "_isAutofillAddressesAvailable",
-  AUTOFILL_ADDRESSES_AVAILABLE_PREF
-);
-XPCOMUtils.defineLazyPreferenceGetter(
-  FormAutofill,
-  "_isAutofillAddressesEnabled",
-  ENABLED_AUTOFILL_ADDRESSES_PREF
-);
-XPCOMUtils.defineLazyPreferenceGetter(
-  FormAutofill,
   "isAutofillAddressesCaptureEnabled",
   ENABLED_AUTOFILL_ADDRESSES_CAPTURE_PREF
 );
 XPCOMUtils.defineLazyPreferenceGetter(
   FormAutofill,
-  "_isAutofillCreditCardsAvailable",
-  AUTOFILL_CREDITCARDS_AVAILABLE_PREF
-);
-XPCOMUtils.defineLazyPreferenceGetter(
-  FormAutofill,
-  "_isAutofillCreditCardsEnabled",
-  ENABLED_AUTOFILL_CREDITCARDS_PREF
+  "suppressUnrecognizedAutocomplete",
+  SUPPRESS_UNRECOGNIZED_AUTOCOMPLETE_PREF,
+  false
 );
 XPCOMUtils.defineLazyPreferenceGetter(
   FormAutofill,
@@ -266,18 +321,21 @@ XPCOMUtils.defineLazyPreferenceGetter(
 );
 XPCOMUtils.defineLazyPreferenceGetter(
   FormAutofill,
-  "_addressAutofillSupportedCountries",
-  ENABLED_AUTOFILL_ADDRESSES_SUPPORTED_COUNTRIES_PREF,
-  null,
-  val => val.split(",")
+  "_autofillCreditCardCVVSupportedPref",
+  SUPPORTED_AUTOFILL_CREDITCARDS_CVV_PREF,
+  "off"
 );
 XPCOMUtils.defineLazyPreferenceGetter(
   FormAutofill,
-  "_creditCardAutofillSupportedCountries",
-  CREDITCARDS_AUTOFILL_SUPPORTED_COUNTRIES_PREF,
-  null,
-  null,
-  val => val.split(",")
+  "_isAutofillCreditCardCVVUserEnabled",
+  ENABLED_AUTOFILL_CREDITCARDS_CVV_PREF,
+  false
+);
+XPCOMUtils.defineLazyPreferenceGetter(
+  FormAutofill,
+  "_isCreditCardRustStorageActive",
+  CREDITCARDS_RUST_STORAGE_ACTIVE_PREF,
+  false
 );
 XPCOMUtils.defineLazyPreferenceGetter(
   FormAutofill,
@@ -320,33 +378,6 @@ XPCOMUtils.defineLazyPreferenceGetter(
 
 XPCOMUtils.defineLazyPreferenceGetter(
   FormAutofill,
-  "_isAutofillAddressesAvailableInExperiment",
-  "extensions.formautofill.addresses.experiments.enabled"
-);
-
-XPCOMUtils.defineLazyPreferenceGetter(
-  FormAutofill,
-  "_isMLEnabled",
-  "browser.ml.enable",
-  false
-);
-
-XPCOMUtils.defineLazyPreferenceGetter(
-  FormAutofill,
-  "_isMLExperimentEnabled",
-  "extensions.formautofill.ml.experiment.enabled",
-  false
-);
-
-XPCOMUtils.defineLazyPreferenceGetter(
-  FormAutofill,
-  "MLModelRevision",
-  "extensions.formautofill.ml.experiment.modelRevision",
-  null
-);
-
-XPCOMUtils.defineLazyPreferenceGetter(
-  FormAutofill,
   "detectDynamicFormChanges",
   "extensions.formautofill.heuristics.detectDynamicFormChanges",
   false
@@ -363,6 +394,20 @@ XPCOMUtils.defineLazyPreferenceGetter(
   FormAutofill,
   "fillOnDynamicFormChangeTimeout",
   "extensions.formautofill.heuristics.fillOnDynamicFormChanges.timeout",
+  0
+);
+
+XPCOMUtils.defineLazyPreferenceGetter(
+  FormAutofill,
+  "refillOnSiteClearingFields",
+  "extensions.formautofill.heuristics.refillOnSiteClearingFields",
+  false
+);
+
+XPCOMUtils.defineLazyPreferenceGetter(
+  FormAutofill,
+  "refillOnSiteClearingFieldsTimeout",
+  "extensions.formautofill.heuristics.refillOnSiteClearingFields.timeout",
   0
 );
 

@@ -16,6 +16,7 @@ const ModuleOverrides = {
   "EntryFile.sys.mjs": "FormAutofillChild.ios.sys.mjs",
   "LoginHelper.sys.mjs": "EmptyModule.sys.mjs",
   "MLAutofill.sys.mjs": "EmptyModule.sys.mjs",
+  "FormAutofillStorage.sys.mjs": "EmptyModule.sys.mjs",
   "LoginRecipes.sys.mjs": "EmptyModule.sys.mjs",
   "Timer.sys.mjs": "TranslationsHelpers.mjs",
 };
