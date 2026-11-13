@@ -45,5 +45,6 @@ final class SSLWarningScreen {
         waitForWarningToDisappear()
         let urlField = sel.PAGE_DOMAIN.element(in: app)
         BaseTestCase().mozWaitForValueContains(urlField, value: domain, timeout: TIMEOUT_LONG)
+        BaseTestCase().mozWaitForElementToExist(sel.UNTRUSTED_PAGE_HEADING.element(in: app), timeout: TIMEOUT_LONG)
     }
 }
