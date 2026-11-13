@@ -60,7 +60,7 @@ final class VPNSettingsViewModel {
     }
 
     func selectLocation(_ countryCode: String) {
-        store.dispatch(VPNModernAction.selectLocation(countryCode: countryCode), forWindowUUID: windowUUID)
+        store.dispatch(VPNModernAction.changeLocation(countryCode: countryCode), forWindowUUID: windowUUID)
     }
 
     func toggleVPN(_ isOn: Bool) {

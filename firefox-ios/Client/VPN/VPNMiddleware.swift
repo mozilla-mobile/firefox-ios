@@ -95,12 +95,10 @@ final class VPNMiddleware {
             await startVPN()
         case .stop, .continueWithoutVPN:
             await stopVPN()
-        case .changeLocation:
-            await changeVPNLocation()
+        case .changeLocation(let countryCode):
+            await changeVPNLocation(countryCode)
         case .reconnectAtLaunch:
             await reconnectAtLaunch()
-        case .selectLocation(let countryCode):
-            await selectLocation(countryCode)
         case .closeThisTab:
             let tabManager = windowManager.tabManager(for: windowUUID)
             if let selectedTab = tabManager?.selectedTab {
@@ -124,15 +122,6 @@ final class VPNMiddleware {
         AppEventQueue.completed(.vpnReconnect)
     }
 
-    private func selectLocation(_ countryCode: String) async {
-        guard let vpnManager, countryCode != vpnManager.selectedCountryCode else { return }
-        vpnManager.selectCountry(countryCode)
-
-        // if the VPN is running when the selected location changes, start a new connection
-        guard vpnManager.isRunning else { return }
-        await startVPN()
-    }
-
     private func startVPN() async {
         guard let vpnManager else {
             logger.log("VPN start with no VPNManager registered", level: .warning, category: .vpn)
@@ -146,14 +135,19 @@ final class VPNMiddleware {
         }
     }
 
-    private func changeVPNLocation() async {
+    private func changeVPNLocation(_ countryCode: String) async {
         guard let vpnManager else {
             logger.log("VPN location change with no VPNManager registered", level: .warning, category: .vpn)
             return
         }
+        guard countryCode != vpnManager.selectedCountryCode else { return }
+        prefs.setString(countryCode, forKey: PrefsKeys.VPNSettings.selectedCountryCode)
+        vpnManager.updateSelectedCountryCode(countryCode)
+
+        // if the VPN is running when the selected location changes, start a new connection
         guard vpnManager.isRunning else { return }
         do {
-            try await vpnManager.start(countryCode: selectedCountryCode)
+            try await vpnManager.start(countryCode: countryCode)
         } catch {
             logger.log("VPN location change failed: \(error)", level: .warning, category: .vpn)
         }
