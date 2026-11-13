@@ -5,10 +5,10 @@
 
   const { C, TAU, rand, lerp, clamp, fmt, theme } = Arcade;
   const GAME = 'fox-dash';
-
-  // Everything is measured in world units. The screen is always VIEW_W units
-  // wide, so every phone sees the same distance ahead and scores stay fair.
+  // Everything is measured in world units. The screen is at least VIEW_W units
+  // wide and MIN_VIEW_H units tall, so landscape sees farther ahead instead of zooming.
   const VIEW_W = 430;
+  const MIN_VIEW_H = 520;
   const GRAVITY = 2600;
   const JUMP_V = 760;
   const DOUBLE_JUMP_V = 700;
@@ -68,6 +68,7 @@
 
   const canvas = $('canvas');
   let scale = 1;
+  let viewW = VIEW_W;
   let viewH = 800;
   let groundY = 560;
   let foxX = 86;
@@ -75,10 +76,11 @@
   let skyKey = '';
 
   const view = Arcade.fitCanvas(canvas, (v) => {
-    scale = v.width / VIEW_W;
+    scale = Math.min(v.width / VIEW_W, v.height / MIN_VIEW_H);
+    viewW = v.width / scale;
     viewH = v.height / scale;
     groundY = Math.round(viewH * 0.7);
-    foxX = VIEW_W * 0.2;
+    foxX = viewW * 0.2;
     sky = null;
   });
   const ctx = view.ctx;
@@ -96,7 +98,7 @@
   }
 
   // Speed streaks are pure decoration, so they stay on Math.random.
-  const streaks = Array.from({ length: 18 }, (_, i) => streak(i % 3 !== 0, Math.random() * VIEW_W));
+  const streaks = Array.from({ length: 18 }, (_, i) => streak(i % 3 !== 0, Math.random() * viewW));
 
   function streak(air, x) {
     return { air, x, y: Math.random(), len: rand(30, 90), k: rand(1.3, 2) };
@@ -183,7 +185,7 @@
 
   function starField(r, count) {
     return Array.from({ length: count }, () => ({
-      x: r() * VIEW_W,
+      x: r() * viewW,
       y: r() * 0.6,
       size: 0.8 + r() * 1.2,
       phase: r() * TAU,
@@ -248,7 +250,7 @@
   // survived, so a slow first run never meets them. A single jump peaks at
   // ~111 units and stays above 45 for ~0.45 s, which every pattern respects.
   function spawnPattern() {
-    const x = VIEW_W + 40;
+    const x = viewW + 40;
     if (phase === 'breather') return spawnBreather(x);
 
     const d = difficulty();
@@ -389,7 +391,7 @@
 
     for (const s of streaks) {
       s.x -= dx * s.k;
-      if (s.x + s.len < 0) Object.assign(s, streak(s.air, VIEW_W + rand(0, 120)));
+      if (s.x + s.len < 0) Object.assign(s, streak(s.air, viewW + rand(0, 120)));
     }
 
     const hit = obstacles.find((o) => touchesFox(o.x, groundY - o.h, o.r * 0.82));
@@ -494,7 +496,7 @@
   }
 
   function milestone() {
-    fx.text(VIEW_W / 2, groundY * 0.5, `${fmt(nextMilestone / 10)} m`, C.snow, 22);
+    fx.text(viewW / 2, groundY * 0.5, `${fmt(nextMilestone / 10)} m`, C.snow, 22);
     nextMilestone += MILESTONE;
     sfx.milestone();
   }
@@ -583,7 +585,7 @@
 
     const pose = state === 'dying' || state === 'over' ? 'hurt' : fox.h > 0 ? 'jump' : 'run';
     Sprites.fox(ctx, foxX, groundY - fox.h, 1, fox.phase, pose);
-    if (ambient) ambient.draw(ctx, { width: VIEW_W, height: viewH, scroll, clock });
+    if (ambient) ambient.draw(ctx, { width: viewW, height: viewH, scroll, clock });
     fx.draw(ctx);
 
     if (state === 'playing' && time < HINT_TIME) drawHint();
@@ -600,19 +602,19 @@
       [0, 0.6, 1].forEach((stop, i) => sky.addColorStop(stop, mix(look.sky[i], look.late[i], drift)));
     }
     ctx.fillStyle = sky;
-    ctx.fillRect(-20, -20, VIEW_W + 40, groundY + 20);
+    ctx.fillRect(-20, -20, viewW + 40, groundY + 20);
 
     ctx.fillStyle = C.snow;
     for (const star of look.starField) {
       ctx.globalAlpha = 0.4 + 0.35 * Math.sin(clock * 2 + star.phase);
-      const x = (((star.x - scroll * 0.02) % VIEW_W) + VIEW_W) % VIEW_W;
+      const x = (((star.x - scroll * 0.02) % viewW) + viewW) % viewW;
       ctx.fillRect(x, star.y * groundY, star.size, star.size);
     }
     ctx.globalAlpha = 1;
 
     if (look.aurora) drawAurora();
 
-    const mx = VIEW_W * look.bodyX;
+    const mx = viewW * look.bodyX;
     const my = groundY * look.bodyY;
     const r = look.bodyR;
     ctx.fillStyle = look.glow;
@@ -644,13 +646,13 @@
       ctx.globalAlpha = 0.16;
       ctx.fillStyle = color;
       ctx.beginPath();
-      for (let x = -20; x <= VIEW_W + 20; x += 10) {
+      for (let x = -20; x <= viewW + 20; x += 10) {
         const wx = (x + scroll * 0.03) * 0.012 + shift;
         const y = groundY * at + Math.sin(wx + clock * 0.4) * 16 + Math.sin(wx * 2.7) * 6;
         if (x === -20) ctx.moveTo(x, y);
         else ctx.lineTo(x, y);
       }
-      for (let x = VIEW_W + 20; x >= -20; x -= 10) {
+      for (let x = viewW + 20; x >= -20; x -= 10) {
         const wx = (x + scroll * 0.03) * 0.012 + shift;
         ctx.lineTo(x, groundY * at + 34 + Math.sin(wx * 1.4 + clock * 0.3) * 10);
       }
@@ -666,25 +668,25 @@
     ctx.fillStyle = color;
     ctx.beginPath();
     ctx.moveTo(-20, groundY + 1);
-    for (let x = -20; x <= VIEW_W + 20; x += 8) {
+    for (let x = -20; x <= viewW + 20; x += 8) {
       const wx = (x + offset) * freq;
       ctx.lineTo(x, y0 - amp * (0.6 * Math.sin(wx + phaseShift) + 0.4 * Math.sin(wx * 2.3 + phaseShift * 1.7)));
     }
-    ctx.lineTo(VIEW_W + 20, groundY + 1);
+    ctx.lineTo(viewW + 20, groundY + 1);
     ctx.closePath();
     ctx.fill();
   }
 
   function drawGround() {
     ctx.fillStyle = look.ground;
-    ctx.fillRect(-20, groundY, VIEW_W + 40, viewH - groundY + 20);
+    ctx.fillRect(-20, groundY, viewW + 40, viewH - groundY + 20);
     ctx.fillStyle = look.edge;
-    ctx.fillRect(-20, groundY, VIEW_W + 40, 4);
+    ctx.fillRect(-20, groundY, viewW + 40, 4);
 
     // Two rows of pebbles at different spacings so the speed reads clearly.
     ctx.fillStyle = look.pebble;
-    for (let x = -(scroll % 46); x < VIEW_W + 46; x += 46) ctx.fillRect(x, groundY + 14, 18, 4);
-    for (let x = -(scroll % 71); x < VIEW_W + 71; x += 71) ctx.fillRect(x + 23, groundY + 34, 10, 4);
+    for (let x = -(scroll % 46); x < viewW + 46; x += 46) ctx.fillRect(x, groundY + 14, 18, 4);
+    for (let x = -(scroll % 71); x < viewW + 71; x += 71) ctx.fillRect(x + 23, groundY + 34, 10, 4);
   }
 
   // Speed lines that fade in as the world speeds up (and during a rush):
@@ -714,7 +716,7 @@
   }
 
   function drawHint() {
-    const x = VIEW_W / 2;
+    const x = viewW / 2;
     const y = groundY + (viewH - groundY) * 0.45;
     const pulse = (clock * 1.5) % 1;
     ctx.globalAlpha = Math.min(1, (HINT_TIME - time) * 2);

@@ -71,6 +71,7 @@ final class FoxDashViewController: UIViewController, WKNavigationDelegate {
         self.onClose = onClose
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .fullScreen
+        modalTransitionStyle = .crossDissolve
     }
 
     required init?(coder: NSCoder) {

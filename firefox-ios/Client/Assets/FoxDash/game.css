@@ -124,7 +124,6 @@ body.game {
 .stage {
   position: relative;
   width: 100%;
-  max-width: 560px;
   height: 100vh;
   height: 100dvh;
   margin: 0 auto;
@@ -304,5 +303,35 @@ body.game {
 @media (prefers-reduced-motion: reduce) {
   .btn {
     transition: none;
+  }
+}
+
+@media (max-height: 500px) {
+  .panel {
+    gap: 0.75rem;
+  }
+
+  .hero {
+    width: 11rem;
+    height: 6rem;
+  }
+
+  .cause {
+    width: 4rem;
+    height: 4rem;
+  }
+
+  .legend {
+    grid-auto-flow: column;
+    gap: 1.25rem;
+  }
+
+  .legend canvas {
+    width: 44px;
+    height: 44px;
+  }
+
+  .final-score {
+    font-size: 4rem;
   }
 }
