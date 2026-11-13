@@ -179,8 +179,8 @@ struct ToolbarState: ScreenState, Sendable {
         case .didSetTabScreenshot(let previousTabScreenshot, let nextTabScreenshot):
             return handleDidSetTabScreenshot(state: state, previous: previousTabScreenshot, next: nextTabScreenshot)
 
-        case .didKeyboardRequestChange, .cancelEditOnHomepage, .didPasteSearchTerm, .lockIconChanged,
-             .searchTermDidChange, .searchTermDidClear:
+        case .didKeyboardRequestChange, .cancelEditOnHomepage, .searchTermDidSet, .lockIconChanged,
+             .searchTermDidChange, .searchTermDidClear, .websiteLoadingStateDidChange:
             // AddressBarState is a nested sub-state, forwards modern call to AddressBarState
             return state.copy(addressToolbar: AddressBarState.reducer.modernReducer(state.addressToolbar,
                                                                                     action,
@@ -213,9 +213,7 @@ struct ToolbarState: ScreenState, Sendable {
             return handleDidLoadToolbars(state: state, action: action)
 
         case ToolbarActionType.borderPositionChanged, ToolbarActionType.urlDidChange,
-            ToolbarActionType.didSetTextInLocationView,
             ToolbarActionType.didStartEditingUrl, ToolbarActionType.cancelEdit,
-            ToolbarActionType.websiteLoadingStateDidChange,
             ToolbarMiddlewareActionType.googleLensAvailabilityDidChange,
             ToolbarActionType.didStartTyping,
             ToolbarActionType.readerModeStateChanged,

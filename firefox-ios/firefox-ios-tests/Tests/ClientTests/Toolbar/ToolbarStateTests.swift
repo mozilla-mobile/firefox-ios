@@ -124,29 +124,13 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertNotNil(newState.addressToolbar.translationConfiguration)
     }
 
-    func test_didSetTextInLocationViewAction_returnsExpectedState() {
-        let initialState = createSubject()
-        let reducer = toolbarReducer()
-
-        let newState = reducer.legacyReducer(
-            initialState,
-            ToolbarAction(
-                searchTerm: "text",
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.didSetTextInLocationView)
-        )
-
-        XCTAssertNotEqual(newState.addressToolbar, initialState.addressToolbar)
-        XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
-    }
-
-    func test_didPasteSearchTermAction_returnsExpectedState() {
+    func test_searchTermDidSetAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
         let newState = reducer.modernReducer(
             initialState,
-            ToolbarModernAction.didPasteSearchTerm(searchTerm: "text"),
+            ToolbarModernAction.searchTermDidSet(searchTerm: "text"),
             windowUUID
         )
 
@@ -234,16 +218,27 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             initialState,
-            ToolbarAction(
-                isLoading: true,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.websiteLoadingStateDidChange)
+            ToolbarModernAction.websiteLoadingStateDidChange(isLoading: true),
+            windowUUID
         )
 
-        XCTAssertNotEqual(newState.addressToolbar, initialState.addressToolbar)
+        XCTAssertTrue(newState.addressToolbar.isLoading)
         XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
+    }
+
+    func test_websiteLoadingStateDidChangeAction_fromAnotherWindow_doesNotChangeState() {
+        let initialState = createSubject()
+        let reducer = toolbarReducer()
+
+        let newState = reducer.modernReducer(
+            initialState,
+            ToolbarModernAction.websiteLoadingStateDidChange(isLoading: true),
+            WindowUUID()
+        )
+
+        XCTAssertFalse(newState.addressToolbar.isLoading)
     }
 
     func test_searchEngineDidChangeAction_returnsExpectedState() {
