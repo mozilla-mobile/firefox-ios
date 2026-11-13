@@ -12,6 +12,9 @@ final class DefaultThemeManagerTests: XCTestCase {
     // MARK: - Variables
 
     private var userDefaults: MockUserDefaults!
+    private var windowScene: UIWindowScene? {
+        return UIApplication.shared.connectedScenes.first as? UIWindowScene
+    }
 
     // MARK: - Test lifecycle
     override func setUp() async throws {
@@ -262,6 +265,17 @@ final class DefaultThemeManagerTests: XCTestCase {
         XCTAssertEqual(sut.getCurrentTheme(for: windowUUID).type, expectedThemeInSystemMode)
     }
 
+    func testDTM_autoBrightnessOn_withoutWindow_returnsManualTheme() {
+        let sut = DefaultThemeManager(userDefaults: userDefaults, sharedContainerIdentifier: "")
+        trackForMemoryLeaks(sut)
+
+        sut.setSystemTheme(isOn: false)
+        sut.setAutomaticBrightness(isOn: true)
+        sut.setManualTheme(to: .dark)
+
+        XCTAssertEqual(sut.resolvedTheme(with: false).type, .dark)
+    }
+
     func testDTM_novaDesignOn_returnsNovaLightThemeForLightMode() {
         let sut = createSubject(with: userDefaults, isNovaDesignOn: true)
 
@@ -326,7 +340,7 @@ final class DefaultThemeManagerTests: XCTestCase {
             isNovaDesignOnClosure: { isNovaDesignOn },
             isPrivateThemeOverrideEnabledClosure: { isPrivateThemeOverrideOn }
         )
-        subject.setWindow(UIWindow(frame: .zero), for: windowUUID)
+        subject.setWindow(UIWindow(windowScene: windowScene!), for: windowUUID)
         trackForMemoryLeaks(subject, file: file, line: line)
 
         return subject
@@ -338,7 +352,7 @@ final class DefaultThemeManagerTests: XCTestCase {
     ) {
         sut.setSystemTheme(isOn: false)
         sut.setAutomaticBrightness(isOn: true)
-        UIScreen.main.brightness = 0.5
+        windowScene?.screen.brightness = 0.5
         sut.setAutomaticBrightnessValue(Float(threshold))
     }
 }
