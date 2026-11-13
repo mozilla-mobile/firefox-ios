@@ -2545,6 +2545,7 @@
 		8E705EF9E6AF4DF3991CBABD /* CodableColorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A7FB5BF2F7486392963A7A /* CodableColorTests.swift */; };
 		B42E21CA8C8C4FBAA1D93406 /* TabGroupStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD09DA3FE794078AA98D479 /* TabGroupStorageTests.swift */; };
 		341B6248236A4DF68FFC8E7F /* TabGroupIconTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 823EC3631F034311A05488D7 /* TabGroupIconTests.swift */; };
+		5A1B2C3D4E5F60718293A4B2 /* ClipboardBarDisplayHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B2C3D4E5F60718293A4B1 /* ClipboardBarDisplayHandlerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -12952,6 +12953,7 @@
 		99A7FB5BF2F7486392963A7A /* CodableColorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableColorTests.swift; sourceTree = "<group>"; };
 		6AD09DA3FE794078AA98D479 /* TabGroupStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TabGroupStorageTests.swift"; sourceTree = "<group>"; };
 		823EC3631F034311A05488D7 /* TabGroupIconTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TabGroupIconTests.swift"; sourceTree = "<group>"; };
+		5A1B2C3D4E5F60718293A4B1 /* ClipboardBarDisplayHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardBarDisplayHandlerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -17638,6 +17640,7 @@
 				8A1E3BE828CBC57E003388C4 /* SearchEngines */,
 				2173326629CCD259007F20C7 /* LegacyTabScrollControllerTests.swift */,
 				21872A222E3CFEA500241A8A /* TabScrollHandlerTests.swift */,
+				5A1B2C3D4E5F60718293A4B1 /* ClipboardBarDisplayHandlerTests.swift */,
 				21EA33802EC67FCA00D20D90 /* ToolbarAnimatorTest.swift */,
 				7FA6190FE4B33D9B108A2179 /* ToolbarMemoryLeakTests.swift */,
 				8A5BD9582878871B000FE773 /* TopSitesHelperTests.swift */,
@@ -21891,6 +21894,7 @@
 				81DAB2F72C89004D00F4BE98 /* MainMenuMiddlewareTests.swift in Sources */,
 				5A70EF19295E2E1600790249 /* DependencyHelperMock.swift in Sources */,
 				61497F3C2F687B5A00BC5ACA /* AIControlsSettingTests.swift in Sources */,
+				5A1B2C3D4E5F60718293A4B2 /* ClipboardBarDisplayHandlerTests.swift in Sources */,
 				CB4BB1112F954E8B003A181D /* NativeErrorPageHelperTests.swift in Sources */,
 				8A96C4BB28F9E7B300B75884 /* XCTestCaseRootViewController.swift in Sources */,
 				8A8482F02BE1602500F9007B /* MicrosurveyPromptStateTests.swift in Sources */,
