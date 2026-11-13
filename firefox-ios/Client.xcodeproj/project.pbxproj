@@ -498,6 +498,10 @@
 		39236E721FCC600200A38F1B /* TabEventHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39236E711FCC600200A38F1B /* TabEventHandlerTests.swift */; };
 		392D791A2F8FCE1A00B10BDC /* FeatureFlagID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 392D79192F8FCE0E00B10BDC /* FeatureFlagID.swift */; };
 		26CC5468CF3075C7FDB5E4E1 /* TabGroupsFeatureFlag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6490D091AB3E3ED2BDDF36EF /* TabGroupsFeatureFlag.swift */; };
+		CB4B79A09A5A4F708607D6C0 /* TabGroupsPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CE1180175E484486B955DD /* TabGroupsPickerView.swift */; };
+		F1E1A9C90EED44D28BBEE901 /* TabGroupEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E1A9C90EED44D28BBEE902 /* TabGroupEditorView.swift */; };
+		69D292EF051E4389AF6ECF3C /* TabGroupsPickerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCD66A505174674B87656EE /* TabGroupsPickerViewModel.swift */; };
+		580705F9591F4835A43EA1A4 /* TabGroupsPickerPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F9FD0BCB2C422AB3BA099B /* TabGroupsPickerPreview.swift */; };
 		392D80542F901D2600B10BDC /* UserFeaturePreferenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 392D80532F901D1500B10BDC /* UserFeaturePreferenceManager.swift */; };
 		392ED7E41D0AEF56009D9B62 /* NewTabAccessors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 392ED7E31D0AEF56009D9B62 /* NewTabAccessors.swift */; };
 		392ED7E61D0AEFEF009D9B62 /* HomePageAccessors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 392ED7E51D0AEFEF009D9B62 /* HomePageAccessors.swift */; };
@@ -2555,6 +2559,7 @@
 		CB229C3DBF374FCB5F7BE2EC /* TabGroupsTabActionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9861A6A024B27D42B33B475E /* TabGroupsTabActionsTests.swift */; };
 		C38C7F7C1F1A42D8937CCF25 /* TabGroupsSessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C38C7F7C1F1A42D8937CCF26 /* TabGroupsSessionStore.swift */; };
 		55EBB7718ABDD8B91B668150 /* TabGroupsTabActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE9110B09488F42C4FE72C6 /* TabGroupsTabActions.swift */; };
+		F044C1BE7A3F4BF0B2B1034A /* TabGroupIconImageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D034D885E9764642A0E80188 /* TabGroupIconImageTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -3700,6 +3705,10 @@
 		39236E711FCC600200A38F1B /* TabEventHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabEventHandlerTests.swift; sourceTree = "<group>"; };
 		392D79192F8FCE0E00B10BDC /* FeatureFlagID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagID.swift; sourceTree = "<group>"; };
 		6490D091AB3E3ED2BDDF36EF /* TabGroupsFeatureFlag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsFeatureFlag.swift; sourceTree = "<group>"; };
+		04CE1180175E484486B955DD /* TabGroupsPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsPickerView.swift; sourceTree = "<group>"; };
+		F1E1A9C90EED44D28BBEE902 /* TabGroupEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupEditorView.swift; sourceTree = "<group>"; };
+		8BCD66A505174674B87656EE /* TabGroupsPickerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsPickerViewModel.swift; sourceTree = "<group>"; };
+		B0F9FD0BCB2C422AB3BA099B /* TabGroupsPickerPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsPickerPreview.swift; sourceTree = "<group>"; };
 		392D80532F901D1500B10BDC /* UserFeaturePreferenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFeaturePreferenceManager.swift; sourceTree = "<group>"; };
 		392ED7E31D0AEF56009D9B62 /* NewTabAccessors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewTabAccessors.swift; path = Accessors/NewTabAccessors.swift; sourceTree = "<group>"; };
 		392ED7E51D0AEFEF009D9B62 /* HomePageAccessors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HomePageAccessors.swift; path = Accessors/HomePageAccessors.swift; sourceTree = "<group>"; };
@@ -12972,6 +12981,7 @@
 		9861A6A024B27D42B33B475E /* TabGroupsTabActionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsTabActionsTests.swift; sourceTree = "<group>"; };
 		C38C7F7C1F1A42D8937CCF26 /* TabGroupsSessionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsSessionStore.swift; sourceTree = "<group>"; };
 		6EE9110B09488F42C4FE72C6 /* TabGroupsTabActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsTabActions.swift; sourceTree = "<group>"; };
+		D034D885E9764642A0E80188 /* TabGroupIconImageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupIconImageTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -13727,6 +13737,17 @@
 			path = LayoutManager;
 			sourceTree = "<group>";
 		};
+		ABFAB7BF5B674D2A8F6F0FFF /* TabGroupsPicker */ = {
+			isa = PBXGroup;
+			children = (
+				F1E1A9C90EED44D28BBEE902 /* TabGroupEditorView.swift */,
+				04CE1180175E484486B955DD /* TabGroupsPickerView.swift */,
+				8BCD66A505174674B87656EE /* TabGroupsPickerViewModel.swift */,
+				B0F9FD0BCB2C422AB3BA099B /* TabGroupsPickerPreview.swift */,
+			);
+			path = TabGroupsPicker;
+			sourceTree = "<group>";
+		};
 		21C5B3582AF2A7130093F366 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -13734,6 +13755,7 @@
 				C28CAABE2E5C8C620049D7C7 /* InsetUpdatable.swift */,
 				8A8D12122DD671BE00E0B8BB /* Animation */,
 				5A96FB602D97073C00917B12 /* CustomSelectorView */,
+				ABFAB7BF5B674D2A8F6F0FFF /* TabGroupsPicker */,
 				43162A2E2492DB7800F91658 /* EmptyPrivateTabsView.swift */,
 				8AC6F2232D6E243F00D10A9F /* ExperimentEmptyPrivateTabsView.swift */,
 				8AC6F2252D6E263500D10A9F /* ExperimentRemoteTabsEmptyView.swift */,
@@ -15952,6 +15974,7 @@
 				99A7FB5BF2F7486392963A7A /* CodableColorTests.swift */,
 				6AD09DA3FE794078AA98D479 /* TabGroupStorageTests.swift */,
 				823EC3631F034311A05488D7 /* TabGroupIconTests.swift */,
+				D034D885E9764642A0E80188 /* TabGroupIconImageTests.swift */,
 				8A3FD28D2FABB9BA001F5DE9 /* TabManagerClearHistoryTests.swift */,
 				8A3FD28E2FABB9BA001F5DE9 /* TabManagerGetTabTests.swift */,
 				8AFC09522FA54A240070CA11 /* TabManagerOlderTabsTests.swift */,
@@ -20687,6 +20710,10 @@
 				8A76B01629F6EB3900A82607 /* ScreenshotService.swift in Sources */,
 				392D791A2F8FCE1A00B10BDC /* FeatureFlagID.swift in Sources */,
 				26CC5468CF3075C7FDB5E4E1 /* TabGroupsFeatureFlag.swift in Sources */,
+				CB4B79A09A5A4F708607D6C0 /* TabGroupsPickerView.swift in Sources */,
+				F1E1A9C90EED44D28BBEE901 /* TabGroupEditorView.swift in Sources */,
+				69D292EF051E4389AF6ECF3C /* TabGroupsPickerViewModel.swift in Sources */,
+				580705F9591F4835A43EA1A4 /* TabGroupsPickerPreview.swift in Sources */,
 				8C1953322B85EAB500761B20 /* AutofillHeaderView.swift in Sources */,
 				8A7AE4442BAB510B0072DAEC /* LibraryPanelCoordinatorDelegate.swift in Sources */,
 				8C19532E2B85E7AE00761B20 /* SelfSizingHostingController.swift in Sources */,
@@ -22411,6 +22438,7 @@
 				8E705EF9E6AF4DF3991CBABD /* CodableColorTests.swift in Sources */,
 				B42E21CA8C8C4FBAA1D93406 /* TabGroupStorageTests.swift in Sources */,
 				341B6248236A4DF68FFC8E7F /* TabGroupIconTests.swift in Sources */,
+				F044C1BE7A3F4BF0B2B1034A /* TabGroupIconImageTests.swift in Sources */,
 				8A3F08AE2FB40BD0001F5DE9 /* TabRestorerTests.swift in Sources */,
 				8A7AF0C72C9A119A009691B5 /* TabPeekStateTests.swift in Sources */,
 				0AFF7F642C7784D600265214 /* MockDataCleaner.swift in Sources */,
