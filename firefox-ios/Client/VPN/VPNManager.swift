@@ -35,6 +35,8 @@ protocol VPNRunnable {
     func start(countryCode: String?) async throws
     func stop() async
     func listCountries() async -> [VPNServerManager.Country]
+    /// Redraws views reading `selectedCountryCode` after its pref changes.
+    func selectedCountryCodeDidChange(countryCode: String)
 }
 
 enum VPNError: Error {
@@ -79,7 +81,9 @@ final class VPNManager: VPNRunnable {
     private(set) var isConnecting = false
 
     var selectedCountryCode: String {
-        prefs.stringForKey(PrefsKeys.VPNSettings.selectedCountryCode) ?? VPNServerManager.recommendedCountryCode
+        // Used with withMutation(keyPath: ) farther down so that SwiftUI observes this computed property
+        access(keyPath: \.selectedCountryCode)
+        return prefs.stringForKey(PrefsKeys.VPNSettings.selectedCountryCode) ?? VPNServerManager.recommendedCountryCode
     }
 
     // TODO: FXIOS-17238 guardian doesn't return usage yet, so the pass's usage stays nil
@@ -160,7 +164,7 @@ final class VPNManager: VPNRunnable {
         self.startPassRotation(after: pass)
         self.eventsContinuation.yield(.passUpdated(pass))
         if selection.didFallBack {
-            prefs.setString(server.countryCode, forKey: PrefsKeys.VPNSettings.selectedCountryCode)
+            selectedCountryCodeDidChange(countryCode: server.countryCode)
             self.eventsContinuation.yield(.selectedLocationUnavailable)
         }
     }
@@ -174,6 +178,13 @@ final class VPNManager: VPNRunnable {
 
     func listCountries() async -> [VPNServerManager.Country] {
         return await serverManager.listCountries()
+    }
+
+    func selectedCountryCodeDidChange(countryCode: String) {
+        // Needed for SwiftUI to observe changes to computed properties
+        withMutation(keyPath: \.selectedCountryCode) {
+            prefs.setString(countryCode, forKey: PrefsKeys.VPNSettings.selectedCountryCode)
+        }
     }
 
     /// Consumes `VPNGuardian.passRotation` and reapplies the proxy configuration with the new
