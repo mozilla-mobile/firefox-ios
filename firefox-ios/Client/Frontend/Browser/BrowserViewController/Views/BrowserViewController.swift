@@ -160,7 +160,7 @@ class BrowserViewController: UIViewController,
         return QuickAnswersReturnPillPresenter.LayoutContext(
             isMinimized: isMinimized,
             isBottomSearchBar: isBottomSearchBar,
-            locationViewFrame: addressToolbarContainer.locationViewFrame(in: view)
+            locationCapsuleFrame: addressToolbarContainer.locationCapsuleFrame(in: view)
         )
     }
     private(set) lazy var mailtoLinkHandler = MailtoLinkHandler()

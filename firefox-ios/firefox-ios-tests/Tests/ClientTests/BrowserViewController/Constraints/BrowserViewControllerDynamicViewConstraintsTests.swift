@@ -154,16 +154,16 @@ final class BrowserViewControllerDynamicViewConstraintsTests: BrowserViewControl
 
     // MARK: - Location View Frame Tests
 
-    func test_locationViewFrame_inBrowserView_returnsFrame() {
+    func test_locationCapsuleFrame_inBrowserView_returnsFrame() {
         let subject = createSubject()
 
-        XCTAssertNotNil(subject.addressToolbarContainer.locationViewFrame(in: subject.view))
+        XCTAssertNotNil(subject.addressToolbarContainer.locationCapsuleFrame(in: subject.view))
     }
 
-    func test_locationViewFrame_inUnrelatedView_returnsNil() {
+    func test_locationCapsuleFrame_inUnrelatedView_returnsNil() {
         let subject = createSubject()
 
-        XCTAssertNil(subject.addressToolbarContainer.locationViewFrame(in: UIView()))
+        XCTAssertNil(subject.addressToolbarContainer.locationCapsuleFrame(in: UIView()))
     }
 
     // MARK: - Private

@@ -117,7 +117,7 @@ final class LocationView: UIView,
     }
 
     private lazy var glassEffect: UIVisualEffect? = if #available(iOS 26.0, *) { UIGlassEffect() } else { nil }
-    private lazy var effectView: UIVisualEffectView = .build {
+    private(set) lazy var effectView: UIVisualEffectView = .build {
         $0.layer.cornerRadius = UX.effectViewCornerRadius
     }
 

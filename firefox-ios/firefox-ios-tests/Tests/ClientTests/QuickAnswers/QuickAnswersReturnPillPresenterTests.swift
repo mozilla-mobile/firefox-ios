@@ -14,7 +14,7 @@ final class QuickAnswersReturnPillPresenterTests: XCTestCase {
     private var hostView: UIView!
     private var anchorView: UIView!
     private var overlayState: MockOverlayState!
-    private static let defaultLocationViewFrame = CGRect(x: 40, y: 760, width: 200, height: 30)
+    private static let defaultLocationCapsuleFrame = CGRect(x: 40, y: 760, width: 200, height: 30)
 
     override func setUp() async throws {
         try await super.setUp()
@@ -40,7 +40,7 @@ final class QuickAnswersReturnPillPresenterTests: XCTestCase {
         showPill(on: subject)
 
         XCTAssertNotNil(pill)
-        XCTAssertEqual(activeAttributes(), [.bottom, .centerX, .leading])
+        XCTAssertEqual(activeAttributes(), [.bottom, .centerX, .leading, .trailing])
         let bottomConstraint = activeConstraint(for: .bottom)
         XCTAssertTrue(bottomConstraint?.secondItem === anchorView)
         XCTAssertEqual(bottomConstraint?.secondAttribute, .top)
@@ -85,7 +85,7 @@ final class QuickAnswersReturnPillPresenterTests: XCTestCase {
         showPill(on: subject)
 
         XCTAssertEqual(pills.count, 1)
-        XCTAssertEqual(activeAttributes(), [.bottom, .centerX, .leading])
+        XCTAssertEqual(activeAttributes(), [.bottom, .centerX, .leading, .trailing])
     }
 
     // MARK: - updateLayout
@@ -96,7 +96,7 @@ final class QuickAnswersReturnPillPresenterTests: XCTestCase {
 
         subject.updateLayout(layoutContext(isMinimized: false), animated: false)
 
-        XCTAssertEqual(activeAttributes(), [.bottom, .centerX, .leading])
+        XCTAssertEqual(activeAttributes(), [.bottom, .centerX, .leading, .trailing])
     }
 
     func test_updateLayout_minimizedBottomSearchBar_keepsExpandedConstraintsAndOffsetsPill() {
@@ -105,7 +105,7 @@ final class QuickAnswersReturnPillPresenterTests: XCTestCase {
 
         subject.updateLayout(layoutContext(isMinimized: true), animated: false)
 
-        XCTAssertEqual(activeAttributes(), [.bottom, .centerX, .leading])
+        XCTAssertEqual(activeAttributes(), [.bottom, .centerX, .leading, .trailing])
         XCTAssertNotEqual(pill?.transform, .identity)
     }
 
@@ -118,8 +118,8 @@ final class QuickAnswersReturnPillPresenterTests: XCTestCase {
 
         let center = pill.map { $0.center.applying($0.transform) }
         let expectedCenter = CGPoint(
-            x: Self.defaultLocationViewFrame.maxX + 10 + QuickAnswersReturnPillView.minimizedSize / 2,
-            y: Self.defaultLocationViewFrame.midY
+            x: Self.defaultLocationCapsuleFrame.maxX + 10 + QuickAnswersReturnPillView.minimizedSize / 2,
+            y: Self.defaultLocationCapsuleFrame.midY
         )
         XCTAssertEqual(center?.x ?? 0, expectedCenter.x, accuracy: 0.5)
         XCTAssertEqual(center?.y ?? 0, expectedCenter.y, accuracy: 0.5)
@@ -129,7 +129,18 @@ final class QuickAnswersReturnPillPresenterTests: XCTestCase {
         let subject = createSubject()
         showPill(on: subject)
 
-        subject.updateLayout(layoutContext(isMinimized: true, locationViewFrame: nil), animated: false)
+        subject.updateLayout(layoutContext(isMinimized: true, locationCapsuleFrame: nil), animated: false)
+
+        XCTAssertEqual(activeAttributes(), [.centerX, .bottom])
+        XCTAssertEqual(pill?.transform, .identity)
+    }
+
+    func test_updateLayout_minimizedCapsuleReachingTrailingEdge_centersAtBottom() {
+        let subject = createSubject()
+        showPill(on: subject)
+        let wideFrame = CGRect(x: 16, y: 760, width: 350, height: 30)
+
+        subject.updateLayout(layoutContext(isMinimized: true, locationCapsuleFrame: wideFrame), animated: false)
 
         XCTAssertEqual(activeAttributes(), [.centerX, .bottom])
         XCTAssertEqual(pill?.transform, .identity)
@@ -151,11 +162,11 @@ final class QuickAnswersReturnPillPresenterTests: XCTestCase {
 
         subject.updateLayout(layoutContext(isMinimized: false), animated: false)
 
-        XCTAssertEqual(activeAttributes(), [.bottom, .centerX, .leading])
+        XCTAssertEqual(activeAttributes(), [.bottom, .centerX, .leading, .trailing])
         XCTAssertEqual(pill?.transform, .identity)
     }
 
-    func test_updateLayout_changedLocationViewFrame_movesPillWithoutRebuildingConstraints() {
+    func test_updateLayout_changedLocationCapsuleFrame_movesPillWithoutRebuildingConstraints() {
         let subject = createSubject()
         showPill(on: subject)
         subject.updateLayout(layoutContext(isMinimized: true), animated: false)
@@ -163,7 +174,7 @@ final class QuickAnswersReturnPillPresenterTests: XCTestCase {
         let transform = pill?.transform
         let newFrame = CGRect(x: 60, y: 700, width: 220, height: 30)
 
-        subject.updateLayout(layoutContext(isMinimized: true, locationViewFrame: newFrame), animated: false)
+        subject.updateLayout(layoutContext(isMinimized: true, locationCapsuleFrame: newFrame), animated: false)
 
         XCTAssertTrue(zip(constraints, activeConstraints()).allSatisfy { $0 === $1 })
         XCTAssertNotEqual(pill?.transform, transform)
@@ -270,12 +281,12 @@ final class QuickAnswersReturnPillPresenterTests: XCTestCase {
     private func layoutContext(
         isMinimized: Bool,
         isBottomSearchBar: Bool = true,
-        locationViewFrame: CGRect? = QuickAnswersReturnPillPresenterTests.defaultLocationViewFrame
+        locationCapsuleFrame: CGRect? = QuickAnswersReturnPillPresenterTests.defaultLocationCapsuleFrame
     ) -> QuickAnswersReturnPillPresenter.LayoutContext {
         return QuickAnswersReturnPillPresenter.LayoutContext(
             isMinimized: isMinimized,
             isBottomSearchBar: isBottomSearchBar,
-            locationViewFrame: locationViewFrame
+            locationCapsuleFrame: locationCapsuleFrame
         )
     }
 

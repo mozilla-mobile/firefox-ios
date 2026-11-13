@@ -14,8 +14,8 @@ final class QuickAnswersReturnPillPresenter {
     struct LayoutContext: Equatable {
         let isMinimized: Bool
         let isBottomSearchBar: Bool
-        /// The location view frame in the host view's coordinates.
-        let locationViewFrame: CGRect?
+        /// The frame of the location view's visible capsule in the host view's coordinates.
+        let locationCapsuleFrame: CGRect?
     }
 
     private enum Placement: Equatable {
@@ -127,20 +127,24 @@ final class QuickAnswersReturnPillPresenter {
     }
 
     /// With a bottom address bar the minimized pill keeps its expanded constraints and is offset next to the
-    /// location view. Otherwise it sits at the bottom of the screen.
+    /// location capsule. Otherwise, or when it wouldn't fit there, it sits at the bottom of the screen.
     private func placement(for context: LayoutContext, in hostView: UIView) -> Placement {
-        guard context.isMinimized, !trailsLocationView(context) else { return .aboveAnchor }
+        guard context.isMinimized, trailingCapsuleFrame(for: context, in: hostView) == nil else { return .aboveAnchor }
         return .bottom(hasSafeAreaBottom: hostView.safeAreaInsets.bottom > 0)
     }
 
-    private func trailsLocationView(_ context: LayoutContext) -> Bool {
-        return context.isMinimized && context.isBottomSearchBar && context.locationViewFrame != nil
+    /// The location capsule frame, when the minimized pill should trail it and fits before the safe area's trailing edge.
+    private func trailingCapsuleFrame(for context: LayoutContext, in hostView: UIView) -> CGRect? {
+        guard context.isMinimized, context.isBottomSearchBar, let frame = context.locationCapsuleFrame else { return nil }
+        let pillMaxX = frame.maxX + UX.minimizedLocationSpacing + QuickAnswersReturnPillView.minimizedSize
+        guard pillMaxX <= hostView.safeAreaLayoutGuide.layoutFrame.maxX else { return nil }
+        return frame
     }
 
     /// Moves the minimized pill from its constrained center, above the anchor, to the trailing side of the
-    /// location view.
+    /// location capsule.
     private func minimizedTransform(for context: LayoutContext, in hostView: UIView) -> CGAffineTransform {
-        guard trailsLocationView(context), let frame = context.locationViewFrame, let anchorView else { return .identity }
+        guard let frame = trailingCapsuleFrame(for: context, in: hostView), let anchorView else { return .identity }
         let halfSize = QuickAnswersReturnPillView.minimizedSize / 2
         let anchorTop = anchorView.convert(anchorView.bounds, to: hostView).minY
         let constrainedCenter = CGPoint(
@@ -166,7 +170,8 @@ final class QuickAnswersReturnPillPresenter {
             return [
                 pill.bottomAnchor.constraint(equalTo: anchorView.topAnchor, constant: -UX.bottomSpacing),
                 pill.centerXAnchor.constraint(equalTo: safeArea.centerXAnchor),
-                pill.leadingAnchor.constraint(greaterThanOrEqualTo: safeArea.leadingAnchor, constant: UX.sideInset)
+                pill.leadingAnchor.constraint(greaterThanOrEqualTo: safeArea.leadingAnchor, constant: UX.sideInset),
+                pill.trailingAnchor.constraint(lessThanOrEqualTo: safeArea.trailingAnchor, constant: -UX.sideInset)
             ]
         case .bottom(let hasSafeAreaBottom):
             return [

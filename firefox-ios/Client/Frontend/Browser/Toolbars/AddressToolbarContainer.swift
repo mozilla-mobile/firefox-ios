@@ -226,9 +226,9 @@ final class AddressToolbarContainer: UIView,
         subscribeToRedux()
     }
 
-    func locationViewFrame(in view: UIView) -> CGRect? {
+    func locationCapsuleFrame(in view: UIView) -> CGRect? {
         guard toolbar.isDescendant(of: view) else { return nil }
-        return toolbar.locationViewFrame(in: view)
+        return toolbar.locationCapsuleFrame(in: view)
     }
 
     func updateProgressBar(progress: Double) {
