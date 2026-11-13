@@ -144,6 +144,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             return handleSearchTermDidChangeAction(state: state, isEmpty: isEmpty)
         case .searchTermDidClear:
             return handleSearchTermDidClearAction(state: state)
+        case .websiteLoadingStateDidChange(let isLoading):
+            return state.copy(isLoading: isLoading)
         default:
             return defaultState(from: state)
         }
@@ -173,9 +175,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         case ToolbarActionType.readerModeStateChanged:
             return handleReaderModeStateChangedAction(state: state, action: action)
-
-        case ToolbarActionType.websiteLoadingStateDidChange:
-            return handleWebsiteLoadingStateDidChangeAction(state: state, action: action)
 
         case ToolbarActionType.urlDidChange:
             return handleUrlDidChangeAction(state: state, action: action)
@@ -271,14 +270,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
         return state
             .copy(readerModeState: readerModeState)
             .copy(canSummarize: canSummarize)
-    }
-
-    @MainActor
-    private static func handleWebsiteLoadingStateDidChangeAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-
-        return state
-            .copy(isLoading: toolbarAction.isLoading ?? state.isLoading)
     }
 
     @MainActor

@@ -2550,12 +2550,8 @@ class BrowserViewController: UIViewController,
             loading = doc.isDownloading
         }
 
-        let action = ToolbarAction(
-            isLoading: loading,
-            windowUUID: windowUUID,
-            actionType: ToolbarActionType.websiteLoadingStateDidChange
-        )
-        store.dispatch(action)
+        store.dispatch(ToolbarModernAction.websiteLoadingStateDidChange(isLoading: loading),
+                       forWindowUUID: windowUUID)
     }
 
     private func handleURL(url: URL?, tab: Tab, webView: WKWebView) {
@@ -2960,12 +2956,8 @@ class BrowserViewController: UIViewController,
             // There is an edge case in which calling stop on the webView doesn't update webView's isLoading var.
             // To make sure we show the correct button change toolbar state directly when the user stops loading
             // the website.
-            let action = ToolbarAction(
-                isLoading: false,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.websiteLoadingStateDidChange
-            )
-            store.dispatch(action)
+            store.dispatch(ToolbarModernAction.websiteLoadingStateDidChange(isLoading: false),
+                           forWindowUUID: windowUUID)
             addressToolbarContainer.updateProgressBar(progress: 0.0)
         case .newTab:
             willNavigateAway(from: tabManager.selectedTab)

@@ -27,7 +27,6 @@ struct ToolbarAction: Action {
     let hasOnlySecureContent: Bool?
     let isWebsiteMode: Bool?
     let safeListedURLImageName: String?
-    let isLoading: Bool?
     let middleButton: NavigationBarMiddleButtonType?
     let isTranslationsEnabled: Bool?
     let translationConfiguration: TranslationConfiguration?
@@ -51,7 +50,6 @@ struct ToolbarAction: Action {
          hasOnlySecureContent: Bool? = nil,
          isWebsiteMode: Bool? = nil,
          safeListedURLImageName: String? = nil,
-         isLoading: Bool? = nil,
          shouldShowKeyboard: Bool? = nil,
          middleButton: NavigationBarMiddleButtonType? = nil,
          isTranslationsEnabled: Bool? = nil,
@@ -78,7 +76,6 @@ struct ToolbarAction: Action {
         self.hasOnlySecureContent = hasOnlySecureContent
         self.isWebsiteMode = isWebsiteMode
         self.safeListedURLImageName = safeListedURLImageName
-        self.isLoading = isLoading
         self.canSummarize = canSummarize
         self.middleButton = middleButton
         self.isTranslationsEnabled = isTranslationsEnabled
@@ -129,6 +126,11 @@ enum ToolbarModernAction: ModernAction {
     /// where the lock icon isn't shown. The lock icon itself is derived from these in the Lens.
     case lockIconChanged(hasOnlySecureContent: Bool, isWebsiteMode: Bool)
 
+    /// The page's loading state changed. Drives the reload/stop button and the share and translate
+    /// icons' enabled state. Also sent with `false` when the user taps stop, since stopping doesn't
+    /// always update the web view's own loading state.
+    case websiteLoadingStateDidChange(isLoading: Bool)
+
     /// The menu button's warning badge changed, for example when the account needs the user's attention.
     case showMenuWarningBadge(isShown: Bool)
 
@@ -159,7 +161,6 @@ enum ToolbarActionType: ActionType {
     case readerModeStateChanged
     case backForwardButtonStateChanged
     case traitCollectionDidChange
-    case websiteLoadingStateDidChange
     case searchEngineDidChange
     case googleLensSettingDidChange
     case didSummarizeSettingsChange
