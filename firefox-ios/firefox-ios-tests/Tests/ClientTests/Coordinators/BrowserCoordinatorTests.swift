@@ -1103,6 +1103,7 @@ final class BrowserCoordinatorTests: XCTestCase,
 
         let presented = try XCTUnwrap(mockRouter.presentedViewController as? FoxDashViewController)
         XCTAssertEqual(presented.modalPresentationStyle, .fullScreen)
+        XCTAssertEqual(presented.modalTransitionStyle, .crossDissolve)
         XCTAssertEqual(mockRouter.presentCalled, 1)
     }
 
