@@ -1694,6 +1694,7 @@
 		C2126EFA2F447A46001C01FE /* SummarizerNimbusUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2126EF92F447A46001C01FE /* SummarizerNimbusUtilsTests.swift */; };
 		C21326992F5713F000746393 /* SummarizerLanguageProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21326982F5713F000746393 /* SummarizerLanguageProviderTests.swift */; };
 		C2200A6A2B7D148C00DC062A /* ContentBlockerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2200A692B7D148C00DC062A /* ContentBlockerTests.swift */; };
+		A1B2C3D4E5F6071829304A5C /* UserScriptManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6071829304A5B /* UserScriptManagerTests.swift */; };
 		C22753402A3C9E1300B9C0D1 /* WebsiteDataManagementViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C227533F2A3C9E1300B9C0D1 /* WebsiteDataManagementViewModel.swift */; };
 		C234BFC02EBB8321004BF5A8 /* SettingsNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C234BFBF2EBB82E1004BF5A8 /* SettingsNavigationController.swift */; };
 		C234BFC22EBB8356004BF5A8 /* ModalSettingsNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C234BFC12EBB8352004BF5A8 /* ModalSettingsNavigationController.swift */; };
@@ -11451,6 +11452,7 @@
 		C2126EF92F447A46001C01FE /* SummarizerNimbusUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerNimbusUtilsTests.swift; sourceTree = "<group>"; };
 		C21326982F5713F000746393 /* SummarizerLanguageProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerLanguageProviderTests.swift; sourceTree = "<group>"; };
 		C2200A692B7D148C00DC062A /* ContentBlockerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentBlockerTests.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6071829304A5B /* UserScriptManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserScriptManagerTests.swift; sourceTree = "<group>"; };
 		C227533F2A3C9E1300B9C0D1 /* WebsiteDataManagementViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebsiteDataManagementViewModel.swift; sourceTree = "<group>"; };
 		C234BFBF2EBB82E1004BF5A8 /* SettingsNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNavigationController.swift; sourceTree = "<group>"; };
 		C234BFC12EBB8352004BF5A8 /* ModalSettingsNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalSettingsNavigationController.swift; sourceTree = "<group>"; };
@@ -18386,6 +18388,7 @@
 				391C281B3007C3D700833828 /* TrackingProtectionPageStatsTests.swift */,
 				8A86DAD7277298DE00D7BFFF /* ClosedTabsStoreTests.swift */,
 				C2200A692B7D148C00DC062A /* ContentBlockerTests.swift */,
+				A1B2C3D4E5F6071829304A5B /* UserScriptManagerTests.swift */,
 				ADB10C102D900000001AB003 /* ASAdBlockerListFetcherTests.swift */,
 				8A93F86329D37314004159D9 /* Coordinators */,
 				FB16062100000000000000D0 /* GoogleLens */,
@@ -21988,6 +21991,7 @@
 				C2D1A1112A67E73D00205DCC /* BookmarksCoordinatorTests.swift in Sources */,
 				EC405C143007DEE10003DE07 /* WaybackCodesTests.swift in Sources */,
 				C2200A6A2B7D148C00DC062A /* ContentBlockerTests.swift in Sources */,
+				A1B2C3D4E5F6071829304A5C /* UserScriptManagerTests.swift in Sources */,
 				ADB10C112D900000001AB004 /* ASAdBlockerListFetcherTests.swift in Sources */,
 				C869916328918C36007ACC5C /* WallpaperNetworkingModuleTests.swift in Sources */,
 				8A9D31662D13586500171502 /* MockFolderHierarchyFetcher.swift in Sources */,

@@ -13,6 +13,8 @@ final class ContentBlockerTests: XCTestCase {
     private var featureFlags: MockNimbusFeatureFlags!
     private var profile: MockProfile!
     private var originalFetcher: AdBlockerListFetcherProtocol!
+    private var originalIsProxyEnabled: (() -> Bool)!
+    private var originalProxyHardeningRule: WKContentRuleList?
 
     override func setUp() async throws {
         try await super.setUp()
@@ -20,6 +22,8 @@ final class ContentBlockerTests: XCTestCase {
         profile = makeProfile()
         DependencyHelperMock().bootstrapDependencies(injectedFeatureFlagProvider: featureFlags)
         originalFetcher = ContentBlocker.shared.adBlockerListFetcher
+        originalIsProxyEnabled = ContentBlocker.shared.isProxyEnabled
+        originalProxyHardeningRule = ContentBlocker.shared.proxyHardeningRule
 
         // Ensure all rules are removed from the global store prior to each test
         let expectation = XCTestExpectation()
@@ -32,10 +36,14 @@ final class ContentBlockerTests: XCTestCase {
     override func tearDown() async throws {
         UserDefaults.standard.removeObject(forKey: ASAdBlockerListFetcher.adBlockerRecordID)
         ContentBlocker.shared.adBlockerListFetcher = originalFetcher
+        ContentBlocker.shared.isProxyEnabled = originalIsProxyEnabled
+        ContentBlocker.shared.proxyHardeningRule = originalProxyHardeningRule
         DependencyHelperMock().reset()
         featureFlags = nil
         profile = nil
         originalFetcher = nil
+        originalIsProxyEnabled = nil
+        originalProxyHardeningRule = nil
         try await super.tearDown()
     }
 
@@ -175,6 +183,45 @@ final class ContentBlockerTests: XCTestCase {
         XCTAssertNotEqual(hashAfterFirst, hashAfterSecond, "Different JSON should produce a new hash")
     }
 
+    func testSetupTrackingProtection_whenProxyEnabled_addsProxyHardeningRule() async throws {
+        let rule = try await compileProxyHardeningRule()
+        ContentBlocker.shared.proxyHardeningRule = rule
+        ContentBlocker.shared.isProxyEnabled = { true }
+        let userContentController = RecordingUserContentController()
+        let tab = makeTab(userContentController: userContentController)
+
+        ContentBlocker.shared.setupTrackingProtection(forTab: tab, isEnabled: false, rules: [], completion: nil)
+
+        XCTAssertEqual(userContentController.addedContentRuleLists, [rule])
+    }
+
+    func testSetupTrackingProtection_whenProxyDisabled_doesNotAddProxyHardeningRule() async throws {
+        ContentBlocker.shared.proxyHardeningRule = try await compileProxyHardeningRule()
+        ContentBlocker.shared.isProxyEnabled = { false }
+        let userContentController = RecordingUserContentController()
+        let tab = makeTab(userContentController: userContentController)
+
+        ContentBlocker.shared.setupTrackingProtection(forTab: tab, isEnabled: false, rules: [], completion: nil)
+
+        XCTAssertTrue(userContentController.addedContentRuleLists.isEmpty)
+    }
+
+    private func compileProxyHardeningRule() async throws -> WKContentRuleList {
+        let rule = try await WKContentRuleListStore.default().compileContentRuleList(
+            forIdentifier: ProxyHardeningDefaults.scriptName,
+            encodedContentRuleList: ProxyHardeningDefaults.script
+        )
+        return try XCTUnwrap(rule)
+    }
+
+    private func makeTab(userContentController: WKUserContentController) -> MockContentBlockerTab {
+        let configuration = WKWebViewConfiguration()
+        configuration.userContentController = userContentController
+        let tab = MockContentBlockerTab()
+        tab.webView = WKWebView(frame: .zero, configuration: configuration)
+        return tab
+    }
+
     private static let validRuleJSON = """
     [{"trigger":{"url-filter":".*ads.*"},"action":{"type":"block"}}]
     """
@@ -186,7 +233,17 @@ final class ContentBlockerTests: XCTestCase {
 
 private final class MockContentBlockerTab: ContentBlockerTab {
     var isPrivate = false
+    var webView: WKWebView?
     func currentURL() -> URL? { return nil }
-    func currentWebView() -> WKWebView? { return nil }
+    func currentWebView() -> WKWebView? { return webView }
     func imageContentBlockingEnabled() -> Bool { return false }
+}
+
+private final class RecordingUserContentController: WKUserContentController {
+    var addedContentRuleLists: [WKContentRuleList] = []
+
+    override func add(_ contentRuleList: WKContentRuleList) {
+        addedContentRuleLists.append(contentRuleList)
+        super.add(contentRuleList)
+    }
 }
