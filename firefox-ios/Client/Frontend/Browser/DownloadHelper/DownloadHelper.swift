@@ -34,6 +34,10 @@ class DownloadHelper: NSObject {
         self.preflightResponse = response
     }
 
+    var requestedURL: URL? {
+        return request.url
+    }
+
     func shouldDownloadFile(canShowInWebView: Bool,
                             forceDownload: Bool,
                             isForMainFrame: Bool) -> Bool {
