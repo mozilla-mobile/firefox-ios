@@ -2229,6 +2229,7 @@
 		E1EAA5EF2D49182700D3039C /* NavigationBarStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EAA5EE2D49181600D3039C /* NavigationBarStateTests.swift */; };
 		E1EAA5F12D49470900D3039C /* ToolbarStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EAA5F02D49470000D3039C /* ToolbarStateTests.swift */; };
 		E1EAA5F32D4A705500D3039C /* ToolbarMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EAA5F22D4A705300D3039C /* ToolbarMiddlewareTests.swift */; };
+		B0B0C0DE2F00000100A1B2C3 /* ToolbarBorderBehaviorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B0C0DE2F00000200A1B2C3 /* ToolbarBorderBehaviorTests.swift */; };
 		E1FD75E32E437E3F00C060DC /* TabTrayUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FD75E22E437E3500C060DC /* TabTrayUtils.swift */; };
 		E1FE132F29C0B3CB002A65FF /* NotificationSurfaceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FE132E29C0B3CB002A65FF /* NotificationSurfaceManager.swift */; };
 		E1FE133129C22726002A65FF /* BackgroundFetchAndProcessingUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FE133029C22726002A65FF /* BackgroundFetchAndProcessingUtility.swift */; };
@@ -12448,6 +12449,7 @@
 		E1EAA5EE2D49181600D3039C /* NavigationBarStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarStateTests.swift; sourceTree = "<group>"; };
 		E1EAA5F02D49470000D3039C /* ToolbarStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarStateTests.swift; sourceTree = "<group>"; };
 		E1EAA5F22D4A705300D3039C /* ToolbarMiddlewareTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarMiddlewareTests.swift; sourceTree = "<group>"; };
+		B0B0C0DE2F00000200A1B2C3 /* ToolbarBorderBehaviorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarBorderBehaviorTests.swift; sourceTree = "<group>"; };
 		E1FD75E22E437E3500C060DC /* TabTrayUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayUtils.swift; sourceTree = "<group>"; };
 		E1FE132E29C0B3CB002A65FF /* NotificationSurfaceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSurfaceManager.swift; sourceTree = "<group>"; };
 		E1FE133029C22726002A65FF /* BackgroundFetchAndProcessingUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundFetchAndProcessingUtility.swift; sourceTree = "<group>"; };
@@ -17547,6 +17549,7 @@
 				E14C78952C105488002AD3C7 /* AddressToolbarContainerModelTests.swift */,
 				E1EAA5EE2D49181600D3039C /* NavigationBarStateTests.swift */,
 				E1EAA5F22D4A705300D3039C /* ToolbarMiddlewareTests.swift */,
+				B0B0C0DE2F00000200A1B2C3 /* ToolbarBorderBehaviorTests.swift */,
 				E1EAA5F02D49470000D3039C /* ToolbarStateTests.swift */,
 				BDB4E7202F337AAB000DB45F /* LocationTextFieldTests.swift */,
 			);
@@ -21946,6 +21949,7 @@
 				630EBE4D301109A30046E9BC /* GradientProgressBarTests.swift in Sources */,
 				C27484E42F55C4B600920313 /* MockSummarizerConfigFactory.swift in Sources */,
 				E1EAA5F32D4A705500D3039C /* ToolbarMiddlewareTests.swift in Sources */,
+				B0B0C0DE2F00000100A1B2C3 /* ToolbarBorderBehaviorTests.swift in Sources */,
 				8AA8389D2CA2FEFC003FA256 /* StoreTestUtility.swift in Sources */,
 				8C196D512F7D2B74006EB316 /* AutoTranslatePromptStateTests.swift in Sources */,
 				C27484E02F558C2800920313 /* MockSummarizerLanguageProvider.swift in Sources */,

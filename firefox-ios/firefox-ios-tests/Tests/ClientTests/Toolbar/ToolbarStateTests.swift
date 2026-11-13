@@ -55,8 +55,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
             initialState,
             ToolbarAction(
                 toolbarPosition: .top,
-                addressBorderPosition: .bottom,
-                displayNavBorder: true,
                 translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.didLoadToolbars)
@@ -73,24 +71,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(newState.showMenuWarningBadge)
         XCTAssertFalse(newState.canShowNavigationHint)
         XCTAssertNil(newState.addressToolbar.translationConfiguration)
-    }
-
-    func test_borderPositionChangedAction_returnsExpectedState() {
-        let initialState = createSubject()
-        let reducer = toolbarReducer()
-
-        let newState = reducer.legacyReducer(
-            initialState,
-            ToolbarAction(
-                addressBorderPosition: .top,
-                displayNavBorder: false,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.borderPositionChanged)
-        )
-
-        XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertNotEqual(newState.addressToolbar, initialState.addressToolbar)
-        XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
     }
 
     func test_urlDidChangeAction_returnsExpectedState() {
@@ -244,6 +224,65 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertNotEqual(newState.addressToolbar, initialState.addressToolbar)
         XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
+    }
+
+    func test_websiteDidScrollAction_pastTopOfPage_setsIsScrolled() {
+        let initialState = createSubject()
+        let reducer = toolbarReducer()
+
+        let newState = reducer.legacyReducer(
+            initialState,
+            GeneralBrowserMiddlewareAction(
+                scrollOffset: CGPoint(x: 0, y: 100),
+                windowUUID: windowUUID,
+                actionType: GeneralBrowserMiddlewareActionType.websiteDidScroll)
+        )
+
+        XCTAssertTrue(newState.isScrolled)
+    }
+
+    func test_websiteDidScrollAction_backAtTopOfPage_clearsIsScrolled() {
+        let initialState = createSubject().copy(isScrolled: true)
+        let reducer = toolbarReducer()
+
+        let newState = reducer.legacyReducer(
+            initialState,
+            GeneralBrowserMiddlewareAction(
+                scrollOffset: CGPoint(x: 0, y: 0),
+                windowUUID: windowUUID,
+                actionType: GeneralBrowserMiddlewareActionType.websiteDidScroll)
+        )
+
+        XCTAssertFalse(newState.isScrolled)
+    }
+
+    func test_urlDidChangeMiddlewareAction_withScrollOffset_updatesIsScrolled() {
+        let initialState = createSubject()
+        let reducer = toolbarReducer()
+
+        let newState = reducer.legacyReducer(
+            initialState,
+            ToolbarMiddlewareAction(
+                scrollOffset: CGPoint(x: 0, y: 50),
+                windowUUID: windowUUID,
+                actionType: ToolbarMiddlewareActionType.urlDidChange)
+        )
+
+        XCTAssertTrue(newState.isScrolled)
+    }
+
+    func test_urlDidChangeMiddlewareAction_withoutScrollOffset_keepsIsScrolled() {
+        let initialState = createSubject().copy(isScrolled: true)
+        let reducer = toolbarReducer()
+
+        let newState = reducer.legacyReducer(
+            initialState,
+            ToolbarMiddlewareAction(
+                windowUUID: windowUUID,
+                actionType: ToolbarMiddlewareActionType.urlDidChange)
+        )
+
+        XCTAssertTrue(newState.isScrolled)
     }
 
     func test_searchEngineDidChangeAction_returnsExpectedState() {
@@ -497,16 +536,14 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         let newState = reducer.legacyReducer(
             initialState,
             ToolbarAction(
-                toolbarPosition: .top,
-                addressBorderPosition: .bottom,
-                displayNavBorder: true,
+                toolbarPosition: .bottom,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.toolbarPositionChanged
             )
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.toolbarPosition, .top)
+        XCTAssertEqual(newState.toolbarPosition, .bottom)
     }
 
     func test_readerModeStateChangedAction_onHomepage_returnsExpectedState() {

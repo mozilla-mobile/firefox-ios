@@ -12,7 +12,6 @@ import SummarizeKit
 struct AddressBarState: StateType, Sendable, Equatable {
     var windowUUID: WindowUUID
     var editingAccessoryAction: ToolbarActionConfiguration?
-    let borderPosition: AddressToolbarBorderPosition?
     var url: URL?
     var searchTerm: String?
     var hasOnlySecureContent: Bool?
@@ -65,7 +64,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
         self.init(
             windowUUID: windowUUID,
             editingAccessoryAction: nil,
-            borderPosition: nil,
             url: nil,
             searchTerm: nil,
             hasOnlySecureContent: nil,
@@ -87,7 +85,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
     init(windowUUID: WindowUUID,
          editingAccessoryAction: ToolbarActionConfiguration?,
-         borderPosition: AddressToolbarBorderPosition?,
          url: URL?,
          searchTerm: String?,
          hasOnlySecureContent: Bool?,
@@ -106,7 +103,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
          isNovaDesignEnabled: Bool) {
         self.windowUUID = windowUUID
         self.editingAccessoryAction = editingAccessoryAction
-        self.borderPosition = borderPosition
         self.url = url
         self.searchTerm = searchTerm
         self.hasOnlySecureContent = hasOnlySecureContent
@@ -183,10 +179,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
         case ToolbarActionType.backForwardButtonStateChanged:
             return handleBackForwardButtonStateChangedAction(state: state, action: action)
 
-        case ToolbarActionType.borderPositionChanged,
-            ToolbarActionType.toolbarPositionChanged:
-            return handlePositionChangedAction(state: state, action: action)
-
         case ToolbarActionType.didStartEditingUrl:
             return handleDidStartEditingUrlAction(state: state, action: action)
 
@@ -215,14 +207,10 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
     @MainActor
     private static func handleDidLoadToolbarsAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction,
-              let borderPosition = toolbarAction.addressBorderPosition else {
-            return defaultState(from: state)
-        }
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
         return state
             .copy(editingAccessoryAction: nil)
-            .copy(borderPosition: borderPosition)
             .copy(url: nil)
             .copy(searchTerm: nil)
             .copy(hasOnlySecureContent: nil)
@@ -315,14 +303,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         return state
             .copy(searchTerm: nil)
-    }
-
-    @MainActor
-    private static func handlePositionChangedAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-
-        return state
-            .copy(borderPosition: toolbarAction.addressBorderPosition)
     }
 
     @MainActor
@@ -462,7 +442,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             editingAccessoryAction: state.editingAccessoryAction,
-            borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: state.searchTerm,
             hasOnlySecureContent: state.hasOnlySecureContent,

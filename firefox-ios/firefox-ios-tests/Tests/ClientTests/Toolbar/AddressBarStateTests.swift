@@ -35,7 +35,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         let initialState = createSubject()
 
         XCTAssertEqual(initialState.windowUUID, windowUUID)
-        XCTAssertNil(initialState.borderPosition)
         XCTAssertNil(initialState.url)
         XCTAssertNil(initialState.searchTerm)
         XCTAssertNil(initialState.hasOnlySecureContent)
@@ -58,7 +57,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         let newState = reducer.legacyReducer(
             initialState,
             ToolbarAction(
-                addressBorderPosition: .top,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.didLoadToolbars
             )
@@ -66,7 +64,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
 
-        XCTAssertEqual(newState.borderPosition, .top)
         XCTAssertNil(newState.url)
         XCTAssertNil(newState.searchTerm)
         XCTAssertNil(newState.hasOnlySecureContent)
@@ -272,44 +269,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertNil(newState.translationConfiguration?.state)
         XCTAssertNil(newState.translationConfiguration?.translatedToLanguage)
-    }
-
-    func test_borderPositionChangedAction_returnsExpectedState() {
-        setupStore()
-        let initialState = createSubject()
-        let reducer = addressBarReducer()
-
-        let newState = reducer.legacyReducer(
-            initialState,
-            ToolbarAction(
-                addressBorderPosition: .bottom,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.borderPositionChanged
-            )
-        )
-
-        XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.borderPosition, .bottom)
-    }
-
-    func test_toolbarPositionChangedAction_returnsExpectedState() {
-        setupStore()
-        let initialState = createSubject()
-        let reducer = addressBarReducer()
-
-        let newState = reducer.legacyReducer(
-            initialState,
-            ToolbarAction(
-                toolbarPosition: .bottom,
-                addressBorderPosition: .top,
-                displayNavBorder: false,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.toolbarPositionChanged
-            )
-        )
-
-        XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.borderPosition, .top)
     }
 
     func test_didPasteSearchTermAction_returnsExpectedState() {

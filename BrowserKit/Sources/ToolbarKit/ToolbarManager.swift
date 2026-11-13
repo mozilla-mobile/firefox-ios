@@ -21,13 +21,16 @@ public enum AddressToolbarBorderPosition: Sendable {
 }
 
 public protocol ToolbarManager {
-    /// Determines which border should be displayed for the address toolbar
+    /// Determines which border should be displayed for the address toolbar.
+    /// `isScrolled` means the page content is scrolled past the top.
     func getAddressBorderPosition(for toolbarPosition: AddressToolbarPosition,
                                   isPrivate: Bool,
-                                  scrollY: CGFloat) -> AddressToolbarBorderPosition
+                                  isScrolled: Bool,
+                                  isMicrosurveyShown: Bool) -> AddressToolbarBorderPosition
 
     /// Determines whether a border on top of the navigation toolbar should be displayed
-    func shouldDisplayNavigationBorder(toolbarPosition: AddressToolbarPosition) -> Bool
+    func shouldDisplayNavigationBorder(toolbarPosition: AddressToolbarPosition,
+                                       isMicrosurveyShown: Bool) -> Bool
 }
 
 public final class DefaultToolbarManager: ToolbarManager {
@@ -35,22 +38,25 @@ public final class DefaultToolbarManager: ToolbarManager {
 
     public func getAddressBorderPosition(for toolbarPosition: AddressToolbarPosition,
                                          isPrivate: Bool,
-                                         scrollY: CGFloat) -> AddressToolbarBorderPosition {
+                                         isScrolled: Bool,
+                                         isMicrosurveyShown: Bool) -> AddressToolbarBorderPosition {
         // display the top border if
-        // - the toolbar is displayed at the bottom
+        // - the toolbar is displayed at the bottom (hidden while a microsurvey is shown)
         // display the bottom border if
         // - the toolbar is displayed at the top and page is scrolled
         // - the toolbar is displayed at the top and we are in private mode
-        if toolbarPosition == .bottom {
-            return .top
-        } else if toolbarPosition == .top && (scrollY > 0 || isPrivate) {
-            return .bottom
-        } else {
-            return .none
+        // A microsurvey never affects the border of an address bar at the top.
+        switch toolbarPosition {
+        case .bottom:
+            return isMicrosurveyShown ? .none : .top
+        case .top:
+            return (isScrolled || isPrivate) ? .bottom : .none
         }
     }
 
-    public func shouldDisplayNavigationBorder(toolbarPosition: AddressToolbarPosition) -> Bool {
-        return toolbarPosition == .top
+    public func shouldDisplayNavigationBorder(toolbarPosition: AddressToolbarPosition,
+                                              isMicrosurveyShown: Bool) -> Bool {
+        // Hidden while a microsurvey is shown so the survey looks like part of the app and can't be spoofed
+        return toolbarPosition == .top && !isMicrosurveyShown
     }
 }

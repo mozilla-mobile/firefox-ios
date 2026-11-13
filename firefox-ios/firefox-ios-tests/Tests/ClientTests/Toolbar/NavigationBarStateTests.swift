@@ -31,7 +31,6 @@ final class NavigationBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(initialState.windowUUID, windowUUID)
         XCTAssertEqual(initialState.middleButton, .newTab)
-        XCTAssertFalse(initialState.displayBorder)
     }
 
     func test_didLoadToolbarsAction_returnsExpectedState() {
@@ -44,8 +43,6 @@ final class NavigationBarStateTests: XCTestCase, StoreTestUtility {
                 toolbarPosition: .bottom,
                 toolbarLayout: .version1,
                 isTranslucent: true,
-                addressBorderPosition: .none,
-                displayNavBorder: true,
                 middleButton: .newTab,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.didLoadToolbars
@@ -53,45 +50,7 @@ final class NavigationBarStateTests: XCTestCase, StoreTestUtility {
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.displayBorder, true)
         XCTAssertEqual(newState.middleButton, .newTab)
-    }
-
-    func test_borderPositionChangedAction_returnsExpectedState() {
-        let initialState = createSubject()
-        let reducer = navigationBarReducer()
-
-        let newState = reducer.legacyReducer(
-            initialState,
-            ToolbarAction(
-                addressBorderPosition: .top,
-                displayNavBorder: true,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.borderPositionChanged
-            )
-        )
-
-        XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.displayBorder, true)
-    }
-
-    func test_toolbarPositionChangedAction_returnsExpectedState() {
-        let initialState = createSubject()
-        let reducer = navigationBarReducer()
-
-        let newState = reducer.legacyReducer(
-            initialState,
-            ToolbarAction(
-                toolbarPosition: .top,
-                addressBorderPosition: .bottom,
-                displayNavBorder: true,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.toolbarPositionChanged
-            )
-        )
-
-        XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.displayBorder, true)
     }
 
     func test_navigationMiddleButtonDidChangeAction_updatesMiddleButton() {

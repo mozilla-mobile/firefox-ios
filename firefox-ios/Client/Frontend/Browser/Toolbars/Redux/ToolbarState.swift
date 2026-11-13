@@ -32,6 +32,8 @@ struct ToolbarState: ScreenState, Sendable {
     var isAddressBarMinimized: Bool
     // When a web form's keyboard accessory view is visible on a bottom-positioned address bar.
     var isAccessoryViewVisible: Bool
+    // Whether the page content is scrolled past the top; the address toolbar border depends on it
+    var isScrolled: Bool
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let toolbarState = appState.componentState(
@@ -63,7 +65,8 @@ struct ToolbarState: ScreenState, Sendable {
                   previousTabScreenshot: toolbarState.previousTabScreenshot,
                   nextTabScreenshot: toolbarState.nextTabScreenshot,
                   isAddressBarMinimized: toolbarState.isAddressBarMinimized,
-                  isAccessoryViewVisible: toolbarState.isAccessoryViewVisible
+                  isAccessoryViewVisible: toolbarState.isAccessoryViewVisible,
+                  isScrolled: toolbarState.isScrolled
         )
     }
 
@@ -89,7 +92,8 @@ struct ToolbarState: ScreenState, Sendable {
             previousTabScreenshot: nil,
             nextTabScreenshot: nil,
             isAddressBarMinimized: false,
-            isAccessoryViewVisible: false
+            isAccessoryViewVisible: false,
+            isScrolled: false
         )
     }
 
@@ -114,7 +118,8 @@ struct ToolbarState: ScreenState, Sendable {
         previousTabScreenshot: UIImage?,
         nextTabScreenshot: UIImage?,
         isAddressBarMinimized: Bool,
-        isAccessoryViewVisible: Bool
+        isAccessoryViewVisible: Bool,
+        isScrolled: Bool
     ) {
         self.windowUUID = windowUUID
         self.toolbarPosition = toolbarPosition
@@ -137,6 +142,7 @@ struct ToolbarState: ScreenState, Sendable {
         self.nextTabScreenshot = nextTabScreenshot
         self.isAddressBarMinimized = isAddressBarMinimized
         self.isAccessoryViewVisible = isAccessoryViewVisible
+        self.isScrolled = isScrolled
     }
 
     static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
@@ -212,7 +218,7 @@ struct ToolbarState: ScreenState, Sendable {
         case ToolbarActionType.didLoadToolbars:
             return handleDidLoadToolbars(state: state, action: action)
 
-        case ToolbarActionType.borderPositionChanged, ToolbarActionType.urlDidChange,
+        case ToolbarActionType.urlDidChange,
             ToolbarActionType.didSetTextInLocationView,
             ToolbarActionType.didStartEditingUrl, ToolbarActionType.cancelEdit,
             ToolbarActionType.websiteLoadingStateDidChange,
@@ -230,6 +236,10 @@ struct ToolbarState: ScreenState, Sendable {
 
         case GeneralBrowserActionType.showToast:
             return handleShowToast(state: state, action: action)
+
+        case GeneralBrowserMiddlewareActionType.websiteDidScroll,
+            ToolbarMiddlewareActionType.urlDidChange:
+            return handleScrollOffsetChanged(state: state, action: action)
 
         case ToolbarActionType.toolbarPositionChanged:
             return handleToolbarPositionChanged(state: state, action: action)
@@ -267,6 +277,16 @@ struct ToolbarState: ScreenState, Sendable {
             .copy(navigationToolbar: NavigationBarState.reducer.legacyReducer(state.navigationToolbar, toolbarAction))
             .copy(isTranslucent: isTranslucent)
             .copy(isTranslationsEnabled: toolbarAction.isTranslationsEnabled ?? state.isTranslationsEnabled)
+    }
+
+    // Both actions carry the page's scroll offset; only whether it is past the top matters.
+    @MainActor
+    private static func handleScrollOffsetChanged(state: Self, action: Action) -> ToolbarState {
+        let scrollOffset = (action as? GeneralBrowserMiddlewareAction)?.scrollOffset
+            ?? (action as? ToolbarMiddlewareAction)?.scrollOffset
+        guard let scrollOffset else { return defaultState(from: state) }
+
+        return state.copy(isScrolled: scrollOffset.y > 0)
     }
 
     @MainActor
@@ -310,8 +330,6 @@ struct ToolbarState: ScreenState, Sendable {
         let position = addressToolbarPositionFromSearchBarPosition(toolbarPosition)
         return state
             .copy(toolbarPosition: position)
-            .copy(addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, action))
-            .copy(navigationToolbar: NavigationBarState.reducer.legacyReducer(state.navigationToolbar, action))
     }
 
     @MainActor
@@ -375,6 +393,7 @@ struct ToolbarState: ScreenState, Sendable {
                             previousTabScreenshot: state.previousTabScreenshot,
                             nextTabScreenshot: state.nextTabScreenshot,
                             isAddressBarMinimized: state.isAddressBarMinimized,
-                            isAccessoryViewVisible: state.isAccessoryViewVisible)
+                            isAccessoryViewVisible: state.isAccessoryViewVisible,
+                            isScrolled: state.isScrolled)
     }
 }

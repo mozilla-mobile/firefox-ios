@@ -30,6 +30,9 @@ struct AddressToolbarContainerModel {
     }
 
     private var borderPosition: AddressToolbarBorderPosition? {
-        manager.getAddressBorderPosition(for: .top, isPrivate: false, scrollY: scrollY)
+        manager.getAddressBorderPosition(for: .top,
+                                         isPrivate: false,
+                                         isScrolled: scrollY > 0,
+                                         isMicrosurveyShown: false)
     }
 }
