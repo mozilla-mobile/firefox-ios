@@ -964,7 +964,7 @@ extension BrowserViewController: WKNavigationDelegate {
             logger.log("Unable to access downloadHelper, it is nil", level: .warning, category: .webview)
             return
         }
-        handleDownloadFiles(downloadHelper: downloadHelper)
+        handleDownloadFiles(downloadHelper: downloadHelper, webView: webView)
     }
 
     @MainActor
@@ -978,8 +978,6 @@ extension BrowserViewController: WKNavigationDelegate {
             tabManager[webView]?.mimeType = response.mimeType
             notificationCenter.post(name: .TabMimeTypeDidSet, withUserInfo: windowUUID.userInfo)
         }
-
-        // Check for google lens web navigation response to record http status code extra
         if let tab = tabManager[webView],
            googleLensSearches[tab.tabUUID] != nil,
            navigationResponse.isForMainFrame,
@@ -993,8 +991,9 @@ extension BrowserViewController: WKNavigationDelegate {
             request = pendingRequests.removeValue(forKey: url.absoluteString)
         }
 
-        // We can only show this content in the web view if this web view is not pending
-        // download via the context menu.
+        if shouldDisplayContentRestriction(for: responseURL, isMainFrame: navigationResponse.isForMainFrame) {
+            return .allow
+        }
         let canShowInWebView = navigationResponse.canShowMIMEType && (webView != pendingDownloadWebView)
         let forceDownload = webView == pendingDownloadWebView
         let cookieStore = webView.configuration.websiteDataStore.httpCookieStore
@@ -1002,15 +1001,10 @@ extension BrowserViewController: WKNavigationDelegate {
         if let mimeType = response.mimeType, OpenPassBookHelper.shouldOpenWithPassBook(
             mimeType: mimeType,
             forceDownload: forceDownload) {
-            // Open our helper and nullifies the helper when done with it
             let passBookHelper = OpenPassBookHelper(presenter: self)
             await passBookHelper.open(response: response, cookieStore: cookieStore)
-
-            // Cancel this response from the webview.
             return .cancel
         }
-
-        // For USDZ / Reality 3D model files, we can cancel this response from the webView and open the QL previewer instead
         if OpenQLPreviewHelper.shouldOpenPreviewHelper(response: response, forceDownload: forceDownload),
            let tab = tabManager[webView],
            let request = request {
@@ -1028,35 +1022,8 @@ extension BrowserViewController: WKNavigationDelegate {
                 }
                 return .cancel
             }
-
-            // We don't have a temporary document, fallthrough
         }
-
-        // FIXME(FXIOS-11543): Before FXIOS-11256 all calendar type requests were forwarded to SFSafariViewController.
-        // This, however, led to the app crashing sometimes since SFSafariViewController only expects http(s) urls.
-        // In order to handle blob urls as well we need to use EventKitUI and parse the calendars ourselves.
-        if let url = responseURL,
-           ["http", "https"].contains(url.scheme),
-           response.mimeType == MIMEType.Calendar {
-            let alertMessage: String
-            if let baseDomain = url.baseDomain {
-                alertMessage = String(format: .Alerts.AddToCalendar.Body, baseDomain)
-            } else {
-                alertMessage = .Alerts.AddToCalendar.BodyDefault
-            }
-
-            let alert = UIAlertController(title: .Alerts.AddToCalendar.Title,
-                                          message: alertMessage,
-                                          preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: .Alerts.AddToCalendar.CancelButton, style: .default))
-            alert.addAction(UIAlertAction(title: .Alerts.AddToCalendar.AddButton,
-                                          style: .default,
-                                          handler: { _ in
-                let safariVC = SFSafariViewController(url: url)
-                safariVC.modalPresentationStyle = .fullScreen
-                self.present(safariVC, animated: true, completion: nil)
-            }))
-            present(alert, animated: true)
+        if presentAddToCalendarAlertIfNeeded(for: response) {
             return .cancel
         }
 
@@ -1109,6 +1076,46 @@ extension BrowserViewController: WKNavigationDelegate {
         // If none of our helpers are responsible for handling this response,
         // just let the webview handle it as normal.
         return .allow
+    }
+
+    /// A download of this URL was refused by system content restrictions. Display the navigation
+    /// so WebKit can present the restriction page instead of saving the response.
+    private func shouldDisplayContentRestriction(for responseURL: URL?, isMainFrame: Bool) -> Bool {
+        guard isMainFrame,
+              let pendingHost = contentRestrictionDisplayURL?.host,
+              responseURL?.host?.caseInsensitiveCompare(pendingHost) == .orderedSame
+        else { return false }
+
+        contentRestrictionDisplayURL = nil
+        return true
+    }
+
+    private func presentAddToCalendarAlertIfNeeded(for response: URLResponse) -> Bool {
+        guard let url = response.url,
+              ["http", "https"].contains(url.scheme),
+              response.mimeType == MIMEType.Calendar
+        else { return false }
+
+        let alertMessage: String
+        if let baseDomain = url.baseDomain {
+            alertMessage = String(format: .Alerts.AddToCalendar.Body, baseDomain)
+        } else {
+            alertMessage = .Alerts.AddToCalendar.BodyDefault
+        }
+
+        let alert = UIAlertController(title: .Alerts.AddToCalendar.Title,
+                                      message: alertMessage,
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: .Alerts.AddToCalendar.CancelButton, style: .default))
+        alert.addAction(UIAlertAction(title: .Alerts.AddToCalendar.AddButton,
+                                      style: .default,
+                                      handler: { _ in
+            let safariVC = SFSafariViewController(url: url)
+            safariVC.modalPresentationStyle = .fullScreen
+            self.present(safariVC, animated: true, completion: nil)
+        }))
+        present(alert, animated: true)
+        return true
     }
 
     /// iOS can only install configuration profiles downloaded by Safari, so for http(s) profile responses this shows
@@ -1229,13 +1236,21 @@ extension BrowserViewController: WKNavigationDelegate {
         }
     }
 
-    func handleDownloadFiles(downloadHelper: DownloadHelper) {
+    func handleDownloadFiles(downloadHelper: DownloadHelper, webView: WKWebView) {
         // Clear the pending download web view so that subsequent navigations from the same
         // web view don't invoke another download.
         pendingDownloadWebView = nil
 
+        let requestedURL = downloadHelper.requestedURL
+        let dataStore = webView.configuration.websiteDataStore
+        let container = webView.superview ?? webView
+        // Start the check while the confirmation sheet is up so "Download Now" usually doesn't wait.
+        let restrictionCheck = Task { @MainActor () -> URL? in
+            await Self.blockedDownloadURL(requestedURL, dataStore: dataStore, container: container)
+        }
+
         let downloadAction: @MainActor (HTTPDownload) -> Void = { [weak self] download in
-            self?.downloadQueue.enqueue(download)
+            self?.enqueueIfContentRestrictionsAllow(download, restrictionCheck: restrictionCheck)
         }
 
         // Open our helper and cancel this response from the webview.
@@ -1243,6 +1258,51 @@ extension BrowserViewController: WKNavigationDelegate {
                                                                     okAction: downloadAction) {
             presentSheetWith(viewModel: downloadViewModel, from: addressToolbarContainer)
         }
+    }
+
+    private func enqueueIfContentRestrictionsAllow(
+        _ download: HTTPDownload,
+        restrictionCheck: Task<URL?, Never>
+    ) {
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            if let blockedURL = await restrictionCheck.value {
+                self.showContentRestrictionPage(for: blockedURL)
+                return
+            }
+            self.downloadQueue.enqueue(download)
+        }
+    }
+
+    /// `nil` when the download may be saved. Otherwise the URL Screen Time blocked.
+    private static func blockedDownloadURL(
+        _ url: URL?,
+        dataStore: WKWebsiteDataStore,
+        container: UIView
+    ) async -> URL? {
+        guard let url else { return nil }
+        let blocked = await WebContentFilterProbe().isBlocked(
+            url: url,
+            dataStore: dataStore,
+            container: container
+        )
+        guard blocked else { return nil }
+        return url
+    }
+
+    private func showContentRestrictionPage(for url: URL) {
+        guard let webView = tabManager.selectedTab?.webView else { return }
+        contentRestrictionDisplayURL = url
+        pendingDownloadWebView = nil
+        webView.load(URLRequest(url: url))
+    }
+
+    private func clearContentRestrictionDisplay(matching error: NSError) {
+        guard let pendingHost = contentRestrictionDisplayURL?.host,
+              let failingURL = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL,
+              failingURL.host?.caseInsensitiveCompare(pendingHost) == .orderedSame
+        else { return }
+        contentRestrictionDisplayURL = nil
     }
 
     private func presentSheetWith(viewModel: PhotonActionSheetViewModel, from view: UIView) {
@@ -1267,6 +1327,7 @@ extension BrowserViewController: WKNavigationDelegate {
         didFail navigation: WKNavigation?,
         withError error: Error
     ) {
+        clearContentRestrictionDisplay(matching: error as NSError)
         // The navigation won't present; make sure content hidden on a cross-origin popup commit is
         // not left stuck hidden.
         webView.isHidden = false
@@ -1312,6 +1373,8 @@ extension BrowserViewController: WKNavigationDelegate {
         if error.domain == "WebKitErrorDomain" && error.code == 102 {
             return
         }
+
+        clearContentRestrictionDisplay(matching: error)
 
         guard !checkIfWebContentProcessHasCrashed(webView, error: error as NSError) else { return }
 

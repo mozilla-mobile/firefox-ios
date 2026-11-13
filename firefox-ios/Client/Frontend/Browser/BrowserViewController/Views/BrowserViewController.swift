@@ -447,6 +447,10 @@ class BrowserViewController: UIViewController,
     // download of the next request through the `WKNavigationDelegate` that matches this web view.
     weak var pendingDownloadWebView: WKWebView?
 
+    /// Download refused by system content restrictions. The next matching main-frame response is
+    /// displayed so WebKit can present the restriction page instead of saving the file.
+    var contentRestrictionDisplayURL: URL?
+
     let downloadQueue: DownloadQueue
     let userInitiatedQueue: DispatchQueueInterface
 
