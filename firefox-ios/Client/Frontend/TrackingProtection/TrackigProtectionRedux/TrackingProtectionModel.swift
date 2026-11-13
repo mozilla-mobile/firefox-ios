@@ -16,13 +16,12 @@ import SwiftASN1
 class TrackingProtectionModel {
     // MARK: - Constants
     private let userDefaults: UserDefaultsInterface?
-    let contentBlockerStatus: BlockerStatus
     var contentBlockerStats: TPPageStats?
     var certificates = [Certificate]()
     let url: URL
-    var connectionSecure: Bool
     let globalETPIsEnabled: Bool
     var selectedTab: Tab?
+    let profile: Profile?
 
     let clearCookiesButtonTitle: String = .Menu.EnhancedTrackingProtection.clearDataButtonTitle
     let clearCookiesButtonA11yId: String = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.clearCookiesButton
@@ -85,20 +84,24 @@ class TrackingProtectionModel {
     }
 
     var websiteTitle: String {
-        return originalURL.baseDomain ?? ""
+        return url.isReaderModeURL ? .MainMenu.SiteProtection.ReaderModeSubtitle : originalURL.baseDomain ?? ""
+    }
+
+    var isConnectionSecure: Bool {
+        selectedTab?.isSecure ?? false
     }
 
     let secureStatusString = String.Menu.EnhancedTrackingProtection.connectionSecureLabel
     let unsecureStatusString = String.Menu.EnhancedTrackingProtection.connectionUnsecureLabel
     var connectionStatusString: String {
-        return connectionSecure ? secureStatusString : unsecureStatusString
+        return isConnectionSecure ? secureStatusString : unsecureStatusString
     }
 
     var connectionDetailsTitle: String {
         if !isProtectionEnabled {
             return .Menu.EnhancedTrackingProtection.offTitle
         }
-        if !connectionSecure {
+        if !isConnectionSecure {
             return .Menu.EnhancedTrackingProtection.onNotSecureTitle
         }
         return String(format: String.Menu.EnhancedTrackingProtection.onTitle, AppName.shortName.rawValue)
@@ -108,7 +111,7 @@ class TrackingProtectionModel {
         if !isProtectionEnabled {
             return String(format: .Menu.EnhancedTrackingProtection.offHeader, AppName.shortName.rawValue)
         }
-        if !connectionSecure {
+        if !isConnectionSecure {
             return .Menu.EnhancedTrackingProtection.onNotSecureHeader
         }
         return .Menu.EnhancedTrackingProtection.onHeader
@@ -119,35 +122,40 @@ class TrackingProtectionModel {
         if !isProtectionEnabled {
             return UIImage(named: ImageIdentifiers.TrackingProtection.protectionOff)
         }
-        if !connectionSecure {
+        if !isConnectionSecure {
             return UIImage(named: ImageIdentifiers.TrackingProtection.protectionAlert)
         }
         return UIImage(named: ImageIdentifiers.TrackingProtection.protectionOn)
     }
 
-    var isSiteETPEnabled: Bool {
-        switch contentBlockerStatus {
-        case .noBlockedURLs, .blocking, .disabled: return true
-        case .safelisted: return false
-        }
+    var shouldConnectionStatusBeTappable: Bool {
+        let isReaderMode = selectedTab?.url?.isReaderModeURL == true
+        let isCertError = InternalURL(selectedTab?.url)?.isCertificateErrorURL == true
+        let isSecure = isConnectionSecure
+        let origin = CertStore.origin(for: originalURL) ?? ""
+        let isManuallyTrusted = profile?.certStore.hasCertificate(forOrigin: origin) ?? false
+
+        return !isReaderMode && (isCertError || isSecure || isManuallyTrusted)
+    }
+
+    var isContentBlockingConfigEnabled: Bool {
+        profile?.prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) ?? true
     }
 
     // MARK: - Initializers
 
     init(userDefaults: UserDefaultsInterface?,
          url: URL,
-         connectionSecure: Bool,
          globalETPIsEnabled: Bool,
-         contentBlockerStatus: BlockerStatus,
          contentBlockerStats: TPPageStats?,
-         selectedTab: Tab?) {
+         selectedTab: Tab?,
+         profile: Profile?) {
         self.userDefaults = userDefaults
         self.url = url
-        self.connectionSecure = connectionSecure
         self.globalETPIsEnabled = globalETPIsEnabled
-        self.contentBlockerStatus = contentBlockerStatus
         self.contentBlockerStats = contentBlockerStats
         self.selectedTab = selectedTab
+        self.profile = profile
     }
 
     // MARK: - Helpers
@@ -155,7 +163,7 @@ class TrackingProtectionModel {
         if !isProtectionEnabled {
             return theme.colors.layerAccentPrivateNonOpaque
         }
-        if !connectionSecure {
+        if !isConnectionSecure {
             return theme.colors.layerCriticalSubdued
         }
         return theme.colors.layerAccentPrivateNonOpaque
@@ -167,7 +175,7 @@ class TrackingProtectionModel {
                                               URL: originalURL.absoluteDisplayString,
                                               getLockIcon: getConnectionStatusImage(themeType:),
                                               connectionStatusMessage: connectionStatusString,
-                                              connectionSecure: connectionSecure,
+                                              connectionSecure: isConnectionSecure,
                                               certificates: certificates)
     }
 
@@ -178,12 +186,12 @@ class TrackingProtectionModel {
             title: displayTitle,
             URL: originalURL.absoluteDisplayString,
             contentBlockerStats: contentBlockerStats,
-            connectionSecure: connectionSecure
+            connectionSecure: isConnectionSecure
         )
     }
 
     func getConnectionStatusImage(themeType: ThemeType) -> UIImage {
-        let imageName = connectionSecure ? StandardImageIdentifiers.Large.lock : StandardImageIdentifiers.Large.lockSlash
+        let imageName = isConnectionSecure ? StandardImageIdentifiers.Large.lock : StandardImageIdentifiers.Large.lockSlash
         return UIImage(imageLiteralResourceName: imageName)
             .withRenderingMode(.alwaysTemplate)
     }
