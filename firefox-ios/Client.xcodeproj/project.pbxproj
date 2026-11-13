@@ -14198,8 +14198,18 @@
 				338510A2D1FFA7548E64224B /* XCUIElementHelpers.swift */,
 				39EB46981E26DDB4006346E8 /* FxScreenGraph.swift */,
 				5BA0ED001432406BA5B07E0B /* TestConstants.swift */,
+				AEC0FF0600000000000000F1 /* TestServers */,
 			);
 			name = Utils;
+			sourceTree = "<group>";
+		};
+		AEC0FF0600000000000000F1 /* TestServers */ = {
+			isa = PBXGroup;
+			children = (
+				AEC0FF0400000000000000D1 /* HTTPSTimeoutServer.swift */,
+				AEC0FF0500000000000000E1 /* UntrustedHTTPSServer.swift */,
+			);
+			path = TestServers;
 			sourceTree = "<group>";
 		};
 		3BFE4B081D342FB900DDF53F /* XCUITests */ = {
@@ -14251,8 +14261,6 @@
 				EDDC4F722F68697E00E0B8FA /* ModernKitOnboardingTests.swift */,
 				AEC0FF0100000000000000A1 /* AIControlsTests.swift */,
 				AEC0FF0300000000000000C1 /* HTTPSFirstModeTests.swift */,
-				AEC0FF0400000000000000D1 /* HTTPSTimeoutServer.swift */,
-				AEC0FF0500000000000000E1 /* UntrustedHTTPSServer.swift */,
 				B15058802AA0A878008B7382 /* OpeningScreenTests.swift */,
 				D4C35390283500A600F7DC7D /* PerformanceTests.swift */,
 				D81127D71F84023B0050841D /* PhotonActionSheetTests.swift */,
