@@ -13,7 +13,7 @@ class CreditCardInputFieldHelper {
 
     func sanitizeInputOn(_ newValue: String) -> String {
         switch inputType {
-        case .number, .expiration:
+        case .number, .expiration, .securityCode:
             let sanitized = newValue.filter { "0123456789".contains($0) }
             if sanitized != newValue {
                 return sanitized

@@ -186,6 +186,92 @@ final class FormAutofillHelperTests: XCTestCase {
         XCTAssertEqual(messageFields.creditCardPayload.ccNumber, "4520 2991 2039 6788")
     }
 
+    func test_parseFieldCaptureJsonType_withSecurityCode_decodesCsc() throws {
+        let json = """
+            {
+              "type" : "capture-credit-card-form",
+              "payload" : {
+                "cc-number" : "4520 2991 2039 6788",
+                "cc-name" : "Josh Moustache",
+                "cc-exp-month" : "03",
+                "cc-exp-year" : "2999",
+                "cc-csc" : "123"
+              }
+            }
+        """
+        let messageFields = try JSONDecoder().decode(FillCreditCardForm.self, from: Data(json.utf8))
+
+        XCTAssertEqual(messageFields.creditCardPayload.ccCsc, "123")
+    }
+
+    func test_parseFieldCaptureJsonType_withoutSecurityCode_hasNilCsc() throws {
+        let messageFields = try JSONDecoder().decode(FillCreditCardForm.self,
+                                                     from: Data(validMockPayloadCaptureJson.utf8))
+
+        XCTAssertNil(messageFields.creditCardPayload.ccCsc)
+    }
+
+    // MARK: - CVV
+
+    func test_getFieldTypeValues_withSecurityCode_keepsDigitsOnly() throws {
+        let payload = CreditCardPayload(ccNumber: "4520299120396788",
+                                        ccExpMonth: "03",
+                                        ccExpYear: "2999",
+                                        ccName: "Josh Moustache",
+                                        ccCsc: " 12 3")
+
+        let card = try XCTUnwrap(formAutofillHelper.getFieldTypeValues(payload: payload).fieldData
+                                 as? UnencryptedCreditCardFields)
+
+        XCTAssertEqual(card.ccCvv, "123")
+    }
+
+    func test_getFieldTypeValues_withEmptySecurityCode_hasNilCvv() throws {
+        let payload = CreditCardPayload(ccNumber: "4520299120396788",
+                                        ccExpMonth: "03",
+                                        ccExpYear: "2999",
+                                        ccName: "Josh Moustache",
+                                        ccCsc: "")
+
+        let card = try XCTUnwrap(formAutofillHelper.getFieldTypeValues(payload: payload).fieldData
+                                 as? UnencryptedCreditCardFields)
+
+        XCTAssertNil(card.ccCvv)
+    }
+
+    func testInjectionJsonBuilder_withCvv_includesCsc() {
+        let card = makePlainCard(ccCvv: "987")
+
+        XCTAssertEqual(FormAutofillHelper.injectionJSONBuilder(card: card)["cc-csc"] as? String, "987")
+    }
+
+    func testInjectionJsonBuilder_withoutCvv_omitsCsc() {
+        XCTAssertNil(FormAutofillHelper.injectionJSONBuilder(card: makePlainCard(ccCvv: nil))["cc-csc"])
+    }
+
+    func test_toUpdatableCreditCardFields_carriesCvv() {
+        XCTAssertEqual(makePlainCard(ccCvv: "987").toUpdatableCreditCardFields().ccCvv, "987")
+        XCTAssertNil(makePlainCard(ccCvv: nil).toUpdatableCreditCardFields().ccCvv)
+    }
+
+    func test_isEqualToCreditCard_comparesCvvOnlyWhenCaptured() {
+        let savedCard = makePlainCard(ccCvv: "987").convertToTempCreditCard()
+
+        XCTAssertTrue(makePlainCard(ccCvv: nil).isEqualToCreditCard(creditCard: savedCard))
+        XCTAssertTrue(makePlainCard(ccCvv: "987").isEqualToCreditCard(creditCard: savedCard))
+        XCTAssertFalse(makePlainCard(ccCvv: "123").isEqualToCreditCard(creditCard: savedCard))
+    }
+
+    private func makePlainCard(ccCvv: String?) -> UnencryptedCreditCardFields {
+        return UnencryptedCreditCardFields(ccName: "John Doe",
+                                           ccNumber: "1234567812345678",
+                                           ccNumberLast4: "5678",
+                                           ccExpMonth: 12,
+                                           ccExpYear: 2043,
+                                           ccType: "VISA",
+                                           ccCvv: ccCvv)
+    }
+
     // MARK: - Retrieval
 
     func test_getFieldTypeValues() async {

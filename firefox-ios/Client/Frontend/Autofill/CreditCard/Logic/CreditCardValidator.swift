@@ -77,6 +77,11 @@ struct CreditCardValidator {
         return cardType.validNumberLength.contains(String(card).count)
     }
 
+    /// The security code is optional, so an empty one is valid.
+    func isSecurityCodeValidFor(code: String) -> Bool {
+        return code.isEmpty || ((3...4).contains(code.count) && code.allSatisfy { "0123456789".contains($0) })
+    }
+
     func isExpirationValidFor(date: String) -> Bool {
         let userCalendar = Calendar(identifier: .gregorian)
 

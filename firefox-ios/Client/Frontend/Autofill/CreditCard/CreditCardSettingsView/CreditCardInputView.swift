@@ -117,12 +117,7 @@ struct CreditCardInputView: ThemeableView {
             number
                 .background(listBackgroundColor)
 
-            expiration
-                .background(listBackgroundColor)
-                .modifier(NewStyleRoundedCorners(topLeadingCorner: nil,
-                                                 topTrailingCorner: nil,
-                                                 bottomLeadingCorner: UX.cornerRadius,
-                                                 bottomTrailingCorner: UX.cornerRadius))
+            expirationAndSecurityCode(background: listBackgroundColor)
 
             Spacer()
                 .frame(height: UX.spacerHeight)
@@ -136,6 +131,26 @@ struct CreditCardInputView: ThemeableView {
             Spacer()
         }
         .modifier(NewStyleExtraPadding())
+    }
+
+    /// The last row of the card section gets the bottom rounded corners.
+    @ViewBuilder
+    private func expirationAndSecurityCode(background: Color) -> some View {
+        expiration
+            .background(background)
+            .modifier(NewStyleRoundedCorners(topLeadingCorner: nil,
+                                             topTrailingCorner: nil,
+                                             bottomLeadingCorner: showSecurityCode ? nil : UX.cornerRadius,
+                                             bottomTrailingCorner: showSecurityCode ? nil : UX.cornerRadius))
+
+        if showSecurityCode {
+            securityCode
+                .background(background)
+                .modifier(NewStyleRoundedCorners(topLeadingCorner: nil,
+                                                 topTrailingCorner: nil,
+                                                 bottomLeadingCorner: UX.cornerRadius,
+                                                 bottomTrailingCorner: UX.cornerRadius))
+        }
     }
 
     private var name: some View {
@@ -173,6 +188,33 @@ struct CreditCardInputView: ThemeableView {
             CreditCardInputField(windowUUID: windowUUID,
                                  inputType: .expiration,
                                  showError: viewModel.showExpirationError,
+                                 inputViewModel: viewModel)
+            .padding(.top, UX.inputFieldPaddingTop)
+
+            if showSecurityCode {
+                Divider()
+                    .frame(height: UX.dividerHeight)
+                    .foregroundColor(.clear)
+                    .padding(.top, UX.dividerPaddingTop)
+            } else if #unavailable(iOS 26.0) {
+                Divider()
+                    .frame(height: UX.dividerHeight)
+                    .foregroundColor(.clear)
+                    .padding(.top, UX.dividerPaddingTop)
+            }
+        }
+    }
+
+    /// A card without a security code has nothing to show in view mode, but one can always be entered.
+    private var showSecurityCode: Bool {
+        return viewModel.state != .view || !viewModel.securityCode.isEmpty
+    }
+
+    private var securityCode: some View {
+        return Group {
+            CreditCardInputField(windowUUID: windowUUID,
+                                 inputType: .securityCode,
+                                 showError: !viewModel.securityCodeIsValid,
                                  inputViewModel: viewModel)
             .padding(.top, UX.inputFieldPaddingTop)
 

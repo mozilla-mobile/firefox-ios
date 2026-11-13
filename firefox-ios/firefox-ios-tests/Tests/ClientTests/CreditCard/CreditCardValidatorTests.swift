@@ -19,6 +19,18 @@ class CreditCardValidatorTests: XCTestCase {
         super.tearDown()
     }
 
+    func testIsSecurityCodeValid_acceptsEmptyThreeAndFourDigits() {
+        XCTAssertTrue(creditCardValidator.isSecurityCodeValidFor(code: ""))
+        XCTAssertTrue(creditCardValidator.isSecurityCodeValidFor(code: "123"))
+        XCTAssertTrue(creditCardValidator.isSecurityCodeValidFor(code: "1234"))
+    }
+
+    func testIsSecurityCodeValid_rejectsWrongLengthOrNonDigits() {
+        XCTAssertFalse(creditCardValidator.isSecurityCodeValidFor(code: "12"))
+        XCTAssertFalse(creditCardValidator.isSecurityCodeValidFor(code: "12345"))
+        XCTAssertFalse(creditCardValidator.isSecurityCodeValidFor(code: "12a"))
+    }
+
     func testCardTypeForVisa() {
         let result = creditCardValidator.cardTypeFor("4004100120023003")
         XCTAssertEqual(result, .visa)

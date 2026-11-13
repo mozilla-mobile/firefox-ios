@@ -939,6 +939,11 @@ extension String {
                 tableName: "EditCard",
                 value: "Expiration MM / YY",
                 comment: "Title label for user to input their credit card Expiration date in the format MM / YY printed on their credit card in the text box below.")
+            public static let SecurityCodeTitle = MZLocalizedString(
+                key: "CreditCard.EditCard.SecurityCodeTitle.v161",
+                tableName: "EditCard",
+                value: "Security Code (CVV)",
+                comment: "Title label for the optional 3 or 4 digit security code (CVV) printed on the user's credit card, entered in the text box below.")
             public static let RemoveCardButtonTitle = MZLocalizedString(
                 key: "CreditCard.EditCard.RemoveCardButtonTitle.v112",
                 tableName: "EditCard",
@@ -1040,6 +1045,11 @@ extension String {
                 tableName: "ErrorState",
                 value: "Enter a valid expiration date",
                 comment: "Sub label error string that gets shown when user enters incorrect input for their expiration date on their credit card in the text box.")
+            public static let SecurityCodeSublabel = MZLocalizedString(
+                key: "CreditCard.ErrorState.SecurityCodeSublabel.v161",
+                tableName: "ErrorState",
+                value: "Enter a valid security code",
+                comment: "Sub label error string that gets shown when the security code (CVV) the user entered for their credit card is not 3 or 4 digits.")
         }
 
         // Snackbar / toast

@@ -7,7 +7,7 @@ import Foundation
 import SwiftUI
 
 enum CreditCardInputType: String {
-    case name, number, expiration
+    case name, number, expiration, securityCode
 }
 
 struct CreditCardInputField: View {
@@ -31,6 +31,8 @@ struct CreditCardInputField: View {
         willSet(val) {
             if inputType == .number {
                 text = val ? revealCardNum() : concealedCardNum()
+            } else if inputType == .securityCode {
+                text = val ? viewModel.securityCode : concealedSecurityCode()
             }
         }
     }
@@ -82,6 +84,13 @@ struct CreditCardInputField: View {
             delimiterCharacter = " / "
             userInputLimit = 4
             formattedTextLimit = 7
+            keyboardType = .numberPad
+        case .securityCode:
+            fieldHeadline = .CreditCard.EditCard.SecurityCodeTitle
+            errorString = .CreditCard.ErrorState.SecurityCodeSublabel
+            delimiterCharacter = nil
+            userInputLimit = 4
+            formattedTextLimit = 4
             keyboardType = .numberPad
         }
     }
@@ -144,9 +153,9 @@ struct CreditCardInputField: View {
                     UIPasteboard.general.string = viewModel.getCopyValueFor(inputType)
                 }
 
-                // We conceal and reveal credit card number for only view state
+                // We conceal and reveal credit card number and security code for only view state
                 if viewModel.state == .view &&
-                    inputType == .number {
+                    (inputType == .number || inputType == .securityCode) {
                     if shouldReveal {
                         Button(String.CreditCard.EditCard.ConcealLabel) {
                             shouldReveal = false
@@ -215,7 +224,7 @@ struct CreditCardInputField: View {
         switch self.inputType {
         case .name:
             text = viewModel.nameOnCard
-        case .number:
+        case .number, .securityCode:
             let state = viewModel.state
             shouldReveal = state == .edit || state == .add
         case .expiration:
@@ -258,6 +267,11 @@ struct CreditCardInputField: View {
             let validity = isExpirationValid(val: sanitizedValue)
             viewModel.showExpirationError = !validity && (sanitizedValue.count == 4 || fieldChanged)
             return validity
+        case .securityCode:
+            guard shouldReveal else { return nil }
+            let validity = creditCardValidator.isSecurityCodeValidFor(code: inputFieldHelper.sanitizeInputOn(text))
+            viewModel.securityCodeIsValid = validity
+            return validity
         }
     }
 
@@ -296,6 +310,15 @@ struct CreditCardInputField: View {
             let formattedText = inputFieldHelper.formatExpiration(for: newSanitizedValue.removingOccurrences(of: " / "))
             viewModel.expirationDate = formattedText
             text = formattedText
+        case .securityCode:
+            guard shouldReveal else { return }
+            let val = inputFieldHelper.sanitizeInputOn(newValue)
+            guard val.count <= userInputLimit else {
+                text = oldValue
+                return
+            }
+            text = val
+            viewModel.securityCode = val
         }
     }
 
@@ -305,6 +328,10 @@ struct CreditCardInputField: View {
         let concealedString = String(repeating: "•", count: sanitizedCardNum.count - 4)
         let lastFour = sanitizedCardNum.suffix(4)
         return concealedString + lastFour
+    }
+
+    func concealedSecurityCode() -> String {
+        return String(repeating: "•", count: viewModel.securityCode.count)
     }
 
     func revealCardNum() -> String {

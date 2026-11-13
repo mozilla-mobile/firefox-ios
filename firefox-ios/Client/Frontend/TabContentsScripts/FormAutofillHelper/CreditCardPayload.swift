@@ -9,11 +9,13 @@ struct CreditCardPayload: Codable {
     let ccExpMonth: String
     let ccExpYear: String
     let ccName: String
+    var ccCsc: String?
 
     enum CodingKeys: String, CodingKey, CaseIterable {
         case ccNumber = "cc-number"
         case ccExpMonth = "cc-exp-month"
         case ccExpYear = "cc-exp-year"
         case ccName = "cc-name"
+        case ccCsc = "cc-csc"
     }
 }

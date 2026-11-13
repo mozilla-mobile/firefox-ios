@@ -123,6 +123,8 @@ final class CreditCardInputViewModel: ObservableObject, @unchecked Sendable {
     @Published var numberIsValid = true
     @Published var showExpirationError = false
     @Published var nameOnCard = ""
+    @Published var securityCode = ""
+    @Published var securityCodeIsValid = true
 
     @Published var expirationDate = "" {
         didSet {
@@ -146,8 +148,9 @@ final class CreditCardInputViewModel: ObservableObject, @unchecked Sendable {
         let isExpirationValid = creditCardValidator.isExpirationValidFor(date: getCopyValueFor(.expiration))
         let numberIsValid = creditCardValidator.isCardNumberValidFor(card: getCopyValueFor(.number))
         let nameIsValid = !getCopyValueFor(.name).isEmpty
+        let securityCodeIsValid = creditCardValidator.isSecurityCodeValidFor(code: securityCode)
 
-        return isExpirationValid && numberIsValid && nameIsValid
+        return isExpirationValid && numberIsValid && nameIsValid && securityCodeIsValid
     }
 
     @Published var isRightBarButtonEnabled = false
@@ -283,6 +286,8 @@ final class CreditCardInputViewModel: ObservableObject, @unchecked Sendable {
         nameOnCard = ""
         cardNumber = ""
         expirationDate = ""
+        securityCode = ""
+        securityCodeIsValid = true
         nameIsValid = true
         showExpirationError = false
         numberIsValid = true
@@ -293,6 +298,7 @@ final class CreditCardInputViewModel: ObservableObject, @unchecked Sendable {
         guard let creditCard = creditCard else { return }
         nameOnCard = creditCard.ccName
         cardNumber = creditCard.ccNumber
+        securityCode = creditCard.ccCvv ?? ""
         let month = creditCard.ccExpMonth
         isRightBarButtonEnabled = initialStateToEnableTopRightButton()
         let formattedMonth = month < 10 ? String(format: "%02d", month) : String(month)
@@ -324,6 +330,7 @@ final class CreditCardInputViewModel: ObservableObject, @unchecked Sendable {
         guard let cardType = cardType,
               nameIsValid,
               numberIsValid,
+              creditCardValidator.isSecurityCodeValidFor(code: securityCode),
               let month = month,
               let year = year else {
             return nil
@@ -339,9 +346,17 @@ final class CreditCardInputViewModel: ObservableObject, @unchecked Sendable {
                          ccNumberLast4: String(cardNumber.suffix(4)),
                          ccExpMonth: month,
                          ccExpYear: yearVal,
-                         ccType: cardType.rawValue)
+                         ccType: cardType.rawValue,
+                         ccCvv: securityCodeToSave)
 
         return plainCreditCard
+    }
+
+    /// `nil` leaves the stored CVV untouched and `""` deletes it, so an emptied field only clears
+    /// a card that actually had one.
+    private var securityCodeToSave: String? {
+        guard securityCode.isEmpty else { return securityCode }
+        return creditCard?.ccCvv?.isEmpty == false ? "" : nil
     }
 
     func getCopyValueFor(_ inputType: CreditCardInputType) -> String {
@@ -352,6 +367,8 @@ final class CreditCardInputViewModel: ObservableObject, @unchecked Sendable {
             return cardNumber
         case .expiration:
             return expirationDate.removingOccurrences(of: " / ")
+        case .securityCode:
+            return securityCode
         }
     }
 }

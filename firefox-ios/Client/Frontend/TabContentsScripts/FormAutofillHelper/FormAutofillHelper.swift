@@ -146,6 +146,8 @@ class FormAutofillHelper: TabContentScript {
         ccPlainText.ccNumber = "\(payload.ccNumber.filter { $0.isNumber })"
         ccPlainText.ccNumberLast4 = ccPlainText.ccNumber.count > 4 ? String(ccPlainText.ccNumber.suffix(4)) : ""
         ccPlainText.ccType = creditCardValidator.cardTypeFor(ccPlainText.ccNumber)?.rawValue ?? ""
+        let cvv = payload.ccCsc?.filter { $0.isNumber } ?? ""
+        ccPlainText.ccCvv = cvv.isEmpty ? nil : cvv
         return AutofillFieldValuePayload(fieldValue: .creditCard, fieldData: ccPlainText)
     }
 
@@ -274,13 +276,16 @@ class FormAutofillHelper: TabContentScript {
     static func injectionJSONBuilder(card: UnencryptedCreditCardFields) -> [String: Any] {
         let sanitizedName = card.ccName.htmlEntityEncodedString
         let sanitizedNumber = card.ccNumber.htmlEntityEncodedString
-        let injectionJSON: [String: Any] = [
+        var injectionJSON: [String: Any] = [
             "cc-name": sanitizedName,
             "cc-number": sanitizedNumber,
             "cc-exp-month": card.ccExpMonth,
             "cc-exp-year": card.ccExpYear,
             "cc-exp": "\(card.ccExpMonth)/\(card.ccExpYear)",
         ]
+        if let cvv = card.ccCvv, !cvv.isEmpty {
+            injectionJSON["cc-csc"] = cvv.htmlEntityEncodedString
+        }
         return injectionJSON
     }
 

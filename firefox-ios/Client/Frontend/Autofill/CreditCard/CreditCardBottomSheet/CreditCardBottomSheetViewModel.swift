@@ -213,7 +213,8 @@ final class CreditCardBottomSheetViewModel {
                                                             ccNumberLast4: selectedCreditCard.ccNumberLast4,
                                                             ccExpMonth: selectedCreditCard.ccExpMonth,
                                                             ccExpYear: yearVal,
-                                                            ccType: selectedCreditCard.ccType)
+                                                            ccType: selectedCreditCard.ccType,
+                                                            ccCvv: selectedCreditCard.ccCvv)
             return plainTextCard
         }
     }

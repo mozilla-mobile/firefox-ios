@@ -172,6 +172,73 @@ class CreditCardInputViewModelTests: XCTestCase {
         XCTAssertEqual(result, "1239")
     }
 
+    func testGetCopyValueForSecurityCode() {
+        viewModel.securityCode = "123"
+
+        XCTAssertEqual(viewModel.getCopyValueFor(.securityCode), "123")
+    }
+
+    func testSetupViewValues_loadsSecurityCode() {
+        viewModel.creditCard = makeSavedCard(ccCvv: "321")
+
+        viewModel.setupViewValues()
+
+        XCTAssertEqual(viewModel.securityCode, "321")
+    }
+
+    func testGetDisplayedCCValues_addWithSecurityCode_savesIt() {
+        fillValidCardFields()
+        viewModel.securityCode = "456"
+
+        XCTAssertEqual(viewModel.getDisplayedCCValues()?.ccCvv, "456")
+    }
+
+    func testGetDisplayedCCValues_addWithoutSecurityCode_sendsNil() {
+        fillValidCardFields()
+
+        let values = viewModel.getDisplayedCCValues()
+
+        XCTAssertNotNil(values)
+        XCTAssertNil(values?.ccCvv)
+    }
+
+    func testGetDisplayedCCValues_clearingStoredSecurityCode_sendsEmptyToDeleteIt() {
+        viewModel.creditCard = makeSavedCard(ccCvv: "321")
+        fillValidCardFields()
+        viewModel.securityCode = ""
+
+        XCTAssertEqual(viewModel.getDisplayedCCValues()?.ccCvv, "")
+    }
+
+    func testGetDisplayedCCValues_invalidSecurityCode_returnsNil() {
+        fillValidCardFields()
+        viewModel.securityCode = "12"
+
+        XCTAssertNil(viewModel.getDisplayedCCValues())
+        XCTAssertFalse(viewModel.areFieldValuesValid())
+    }
+
+    private func fillValidCardFields() {
+        viewModel.nameOnCard = samplePlainTextCard.ccName
+        viewModel.cardNumber = samplePlainTextCard.ccNumber
+        viewModel.expirationDate = "1288"
+    }
+
+    private func makeSavedCard(ccCvv: String?) -> CreditCard {
+        return CreditCard(guid: "1",
+                          ccName: "Allen Burges",
+                          ccNumber: "4539185806954013",
+                          ccCvv: ccCvv,
+                          ccNumberLast4: "4013",
+                          ccExpMonth: 8,
+                          ccExpYear: 2055,
+                          ccType: "VISA",
+                          timeCreated: 1234678,
+                          timeLastUsed: nil,
+                          timeLastModified: 123123,
+                          timesUsed: 123123)
+    }
+
     func testClearValues() {
         viewModel.nameOnCard = "Jakyla Labarge"
         viewModel.expirationDate = "12 / 39"
@@ -179,6 +246,8 @@ class CreditCardInputViewModelTests: XCTestCase {
         viewModel.nameIsValid = false
         viewModel.showExpirationError = true
         viewModel.numberIsValid = false
+        viewModel.securityCode = "123"
+        viewModel.securityCodeIsValid = false
         viewModel.creditCard = CreditCard(guid: "1",
                                           ccName: "Allen Burges",
                                           ccNumber: "1234567891234567",
@@ -199,6 +268,8 @@ class CreditCardInputViewModelTests: XCTestCase {
         XCTAssert(viewModel.nameIsValid)
         XCTAssertFalse(viewModel.showExpirationError)
         XCTAssert(viewModel.numberIsValid)
+        XCTAssert(viewModel.securityCode.isEmpty)
+        XCTAssert(viewModel.securityCodeIsValid)
         XCTAssertNil(viewModel.creditCard)
     }
 

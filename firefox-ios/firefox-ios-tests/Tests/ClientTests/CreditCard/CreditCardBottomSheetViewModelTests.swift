@@ -221,6 +221,32 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
     }
 
     @MainActor
+    func test_select_PlainCreditCard_carriesSavedCvv() throws {
+        let subject = createSubject()
+        var savedCard = sampleCreditCard
+        savedCard.ccCvv = "321"
+
+        subject.state = .selectSavedCard
+        subject.creditCards = [savedCard]
+        let value = try XCTUnwrap(subject.getPlainCreditCardValues(bottomSheetState: .selectSavedCard, row: 0))
+
+        XCTAssertEqual(value.ccCvv, "321")
+    }
+
+    @MainActor
+    func test_update_getPlainCreditCardValues_carriesCapturedCvv() throws {
+        let subject = createSubject()
+        var capturedCard = samplePlainTextCard
+        capturedCard.ccCvv = "456"
+
+        subject.creditCard = sampleCreditCard
+        subject.decryptedCreditCard = capturedCard
+        let value = try XCTUnwrap(subject.getPlainCreditCardValues(bottomSheetState: .update))
+
+        XCTAssertEqual(value.ccCvv, "456")
+    }
+
+    @MainActor
     func test_save_getConvertedCreditCardValues() throws {
         let subject = createSubject()
 

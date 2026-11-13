@@ -16,6 +16,8 @@ public struct UnencryptedCreditCardFields: @unchecked Sendable {
     public var ccExpMonth: Int64 = 0
     public var ccExpYear: Int64 = 0
     public var ccType = ""
+    /// Security code, `nil` when unknown. Passing `nil` on update keeps the stored CVV.
+    public var ccCvv: String?
 
     public init() { }
 
@@ -24,19 +26,22 @@ public struct UnencryptedCreditCardFields: @unchecked Sendable {
                 ccNumberLast4: String,
                 ccExpMonth: Int64,
                 ccExpYear: Int64,
-                ccType: String) {
+                ccType: String,
+                ccCvv: String? = nil) {
         self.ccName = ccName
         self.ccNumber = ccNumber
         self.ccNumberLast4 = ccNumberLast4
         self.ccExpMonth = ccExpMonth
         self.ccExpYear = ccExpYear
         self.ccType = ccType
+        self.ccCvv = ccCvv
     }
 
     public func convertToTempCreditCard() -> CreditCard {
         let convertedCreditCard = CreditCard(guid: "",
                                              ccName: self.ccName,
                                              ccNumber: self.ccNumber,
+                                             ccCvv: self.ccCvv,
                                              ccNumberLast4: self.ccNumberLast4,
                                              ccExpMonth: self.ccExpMonth,
                                              ccExpYear: self.ccExpYear,
@@ -51,6 +56,7 @@ public struct UnencryptedCreditCardFields: @unchecked Sendable {
     public func toUpdatableCreditCardFields() -> UpdatableCreditCardFields {
         return UpdatableCreditCardFields(ccName: self.ccName,
                                          ccNumber: self.ccNumber,
+                                         ccCvv: self.ccCvv,
                                          ccExpMonth: self.ccExpMonth,
                                          ccExpYear: self.ccExpYear,
                                          ccType: self.ccType)
@@ -60,6 +66,7 @@ public struct UnencryptedCreditCardFields: @unchecked Sendable {
         return creditCard.ccExpMonth == ccExpMonth &&
         creditCard.ccExpYear == ccExpYear &&
         creditCard.ccName == ccName &&
-        creditCard.ccNumberLast4 == ccNumberLast4
+        creditCard.ccNumberLast4 == ccNumberLast4 &&
+        (ccCvv == nil || ccCvv == creditCard.ccCvv)
     }
 }
