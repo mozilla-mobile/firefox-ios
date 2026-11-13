@@ -129,6 +129,19 @@ final class VPNProxyTokenServiceTests: XCTestCase {
         XCTAssertEqual(result.usage?.reset, resetDate)
     }
 
+    func test_fetchProxyPass_withNegativeRemainingHeader_clampsRemainingToZero() async throws {
+        let auth = MockVPNAuthenticating(session: session(jwt: "stored-dsj"))
+        let urlSession = MockURLSession(
+            with: tokenJSON(),
+            response: httpResponse(statusCode: 200, headers: quotaHeaders(remaining: "-1024"))
+        )
+        let subject = VPNProxyTokenService(with: .dev, urlSession: urlSession, authService: auth)
+
+        let result = try await subject.fetchProxyPass()
+
+        XCTAssertEqual(result.usage?.remaining, 0)
+    }
+
     func test_fetchProxyPass_withMalformedQuotaHeader_returnsNilUsage() async throws {
         let auth = MockVPNAuthenticating(session: session(jwt: "stored-dsj"))
         let urlSession = MockURLSession(

@@ -22,9 +22,9 @@ public struct VPNProxyPass: Equatable, Sendable {
 
 public struct VPNProxyUsage: Equatable, Sendable {
     // Bytes the User can consume in each Period
-    public let max: UInt64
+    public let max: Int64
     // Bytes the User has left in each Period
-    public let remaining: UInt64
+    public let remaining: Int64
     // Date when the next Period begins
     public let reset: Date
     // For people in a promotion or that have a subscription
@@ -37,7 +37,7 @@ public struct VPNProxyUsage: Equatable, Sendable {
         let resetAt: Date
     }
 
-    public init(max: UInt64, remaining: UInt64, reset: Date, unlimited: Bool) {
+    public init(max: Int64, remaining: Int64, reset: Date, unlimited: Bool) {
         self.max = max
         self.remaining = remaining
         self.reset = reset
@@ -48,13 +48,13 @@ public struct VPNProxyUsage: Equatable, Sendable {
     init?(response: URLResponse) {
         guard let httpResponse = response as? HTTPURLResponse,
               let maxString = httpResponse.value(forHTTPHeaderField: VPNConstants.quotaLimitHeader),
-              let max = UInt64(maxString),
+              let max = Int64(maxString),
               let remainingString = httpResponse.value(forHTTPHeaderField: VPNConstants.quotaRemainingHeader),
-              let remaining = UInt64(remainingString),
+              let remaining = Int64(remainingString),
               let resetString = httpResponse.value(forHTTPHeaderField: VPNConstants.quotaResetHeader),
               let reset = Self.parseISO8601(resetString)
         else { return nil }
-        self.init(max: max, remaining: remaining, reset: reset, unlimited: false)
+        self.init(max: max, remaining: Swift.max(0, remaining), reset: reset, unlimited: false)
     }
 
     /// Decodes the `/ipn/entitlement` JSON body.
@@ -62,14 +62,14 @@ public struct VPNProxyUsage: Equatable, Sendable {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .millisecondsSince1970
         let entitlement = try decoder.decode(EntitlementResponse.self, from: entitlementData)
-        guard let usage = UInt64(entitlement.usageBytes),
-              let max = UInt64(entitlement.maxBytes)
+        guard let usage = Int64(entitlement.usageBytes),
+              let max = Int64(entitlement.maxBytes)
         else {
             throw AppAttestServiceError.invalidPayload
         }
         self.init(
             max: max,
-            remaining: usage >= max ? 0 : max - usage,
+            remaining: Swift.max(0, max - usage),
             reset: entitlement.resetAt,
             unlimited: false
         )
