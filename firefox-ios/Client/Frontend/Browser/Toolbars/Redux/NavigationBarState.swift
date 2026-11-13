@@ -32,23 +32,19 @@ enum NavigationBarMiddleButtonType: String, Equatable, CaseIterable {
 @Copyable
 struct NavigationBarState: StateType, Equatable {
     var windowUUID: WindowUUID
-    var displayBorder: Bool
     var middleButton: NavigationBarMiddleButtonType
     var isNovaDesignEnabled: Bool
 
     init(windowUUID: WindowUUID) {
         self.init(windowUUID: windowUUID,
-                  displayBorder: false,
                   middleButton: .newTab,
                   isNovaDesignEnabled: false)
     }
 
     init(windowUUID: WindowUUID,
-         displayBorder: Bool,
          middleButton: NavigationBarMiddleButtonType,
          isNovaDesignEnabled: Bool) {
         self.windowUUID = windowUUID
-        self.displayBorder = displayBorder
         self.middleButton = middleButton
         self.isNovaDesignEnabled = isNovaDesignEnabled
     }
@@ -70,10 +66,6 @@ struct NavigationBarState: StateType, Equatable {
         case ToolbarActionType.didLoadToolbars:
             return handleDidLoadToolbarsAction(state: state, action: action)
 
-        case ToolbarActionType.borderPositionChanged,
-            ToolbarActionType.toolbarPositionChanged:
-            return handlePositionChangedAction(state: state, action: action)
-
         case ToolbarActionType.navigationMiddleButtonDidChange:
             return handleNavigationMiddleButtonDidChange(state: state, action: action)
 
@@ -84,25 +76,14 @@ struct NavigationBarState: StateType, Equatable {
 
     private static func handleDidLoadToolbarsAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction,
-              let displayBorder = toolbarAction.displayNavBorder,
               let middleButton = toolbarAction.middleButton
         else {
             return defaultState(from: state)
         }
 
         return state
-            .copy(displayBorder: displayBorder)
             .copy(middleButton: middleButton)
             .copy(isNovaDesignEnabled: toolbarAction.isNovaDesignEnabled ?? state.isNovaDesignEnabled)
-    }
-
-    private static func handlePositionChangedAction(state: Self, action: Action) -> Self {
-        guard let displayBorder = (action as? ToolbarAction)?.displayNavBorder
-        else {
-            return defaultState(from: state)
-        }
-
-        return state.copy(displayBorder: displayBorder)
     }
 
     private static func handleNavigationMiddleButtonDidChange(state: Self, action: Action) -> Self {
@@ -115,7 +96,6 @@ struct NavigationBarState: StateType, Equatable {
     static func defaultState(from state: NavigationBarState) -> NavigationBarState {
         return NavigationBarState(
             windowUUID: state.windowUUID,
-            displayBorder: state.displayBorder,
             middleButton: state.middleButton,
             isNovaDesignEnabled: state.isNovaDesignEnabled
         )
