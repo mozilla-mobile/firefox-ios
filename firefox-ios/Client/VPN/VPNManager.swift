@@ -35,7 +35,6 @@ protocol VPNRunnable {
     func start(countryCode: String?) async throws
     func stop() async
     func listCountries() async -> [VPNServerManager.Country]
-    func updateSelectedCountryCode(_ countryCode: String)
 }
 
 enum VPNError: Error {
@@ -67,18 +66,22 @@ final class VPNManager: VPNRunnable {
     private let serverManager: VPNServerManaging
     private let windowManager: WindowManager
     private let proxyApplier: ProxyConfigurator
+    private let prefs: Prefs
     private let eventsContinuation: AsyncStream<VPNEvent>.Continuation
     let events: AsyncStream<VPNEvent>
 
     private var activeServer: VPNGuardian.Server?
 
-    // TODO: fxios-16876 This will get used when we wire up VPN Connection
     var isRunning: Bool {
         activeServer != nil
     }
 
     private(set) var isConnecting = false
-    private(set) var selectedCountryCode: String
+
+    var selectedCountryCode: String {
+        prefs.stringForKey(PrefsKeys.VPNSettings.selectedCountryCode) ?? VPNServerManager.recommendedCountryCode
+    }
+
     // TODO: FXIOS-17238 guardian doesn't return usage yet, so the pass's usage stays nil
     private var currentPass: VPNProxyPass?
     private static let bytesPerGB = 1_000_000_000.0
@@ -123,8 +126,7 @@ final class VPNManager: VPNRunnable {
         )
         self.windowManager = windowManager
         self.proxyApplier = proxyApplier
-        self.selectedCountryCode = profile.prefs.stringForKey(PrefsKeys.VPNSettings.selectedCountryCode)
-            ?? VPNServerManager.recommendedCountryCode
+        self.prefs = profile.prefs
         let (events, eventsContinuation) = AsyncStream<VPNEvent>.makeStream()
         self.events = events
         self.eventsContinuation = eventsContinuation
@@ -158,7 +160,7 @@ final class VPNManager: VPNRunnable {
         self.startPassRotation(after: pass)
         self.eventsContinuation.yield(.passUpdated(pass))
         if selection.didFallBack {
-            updateSelectedCountryCode(selection.server.countryCode)
+            prefs.setString(server.countryCode, forKey: PrefsKeys.VPNSettings.selectedCountryCode)
             self.eventsContinuation.yield(.selectedLocationUnavailable)
         }
     }
@@ -172,10 +174,6 @@ final class VPNManager: VPNRunnable {
 
     func listCountries() async -> [VPNServerManager.Country] {
         return await serverManager.listCountries()
-    }
-
-    func updateSelectedCountryCode(_ countryCode: String) {
-        selectedCountryCode = countryCode
     }
 
     /// Consumes `VPNGuardian.passRotation` and reapplies the proxy configuration with the new

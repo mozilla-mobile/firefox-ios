@@ -68,7 +68,7 @@ final class VPNMiddleware {
         case .rotationFailed:
             dispatchAlert(.showFailureAlert)
         case .selectedLocationUnavailable:
-            // TODO: FXIOS-16876 wire up location selection errors
+            // TODO: FXIOS-17347 wire up location selection errors
             break
         }
     }
@@ -142,7 +142,6 @@ final class VPNMiddleware {
         }
         guard countryCode != vpnManager.selectedCountryCode else { return }
         prefs.setString(countryCode, forKey: PrefsKeys.VPNSettings.selectedCountryCode)
-        vpnManager.updateSelectedCountryCode(countryCode)
 
         // if the VPN is running when the selected location changes, start a new connection
         guard vpnManager.isRunning else { return }
