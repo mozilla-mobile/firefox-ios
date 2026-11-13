@@ -59,6 +59,62 @@ final class MenuSiteProtectionsHeaderTests: XCTestCase {
         XCTAssertEqual(badgesStack?.arrangedSubviews.count, 1)
     }
 
+    func testBadgesRow_longTranslationsStackVerticallyWithoutWrapping() {
+        let container = UIView(frame: CGRect(x: 0, y: 0, width: 393, height: 300))
+        header.translatesAutoresizingMaskIntoConstraints = false
+        container.addSubview(header)
+        NSLayoutConstraint.activate([
+            header.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+            header.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+            header.topAnchor.constraint(equalTo: container.topAnchor)
+        ])
+
+        header.setupDetails(
+            title: "tagesschau.de",
+            subtitle: "tagesschau.de",
+            image: nil,
+            state: "Schutzmaßnahmen",
+            stateImage: "",
+            shouldUseRenderMode: false,
+            adBlocker: MenuSiteAdBlockerBadgeData(title: "Werbeblocker", image: "", shouldUseRenderMode: false)
+        )
+        container.layoutIfNeeded()
+
+        guard let badgesStack = firstStackView(in: header, axis: .vertical) else {
+            XCTFail("Badges stack not found")
+            return
+        }
+        XCTAssertEqual(badgesStack.axis, .vertical)
+    }
+
+    func testBadgesRow_shortTitlesStayHorizontal() {
+        let container = UIView(frame: CGRect(x: 0, y: 0, width: 393, height: 300))
+        header.translatesAutoresizingMaskIntoConstraints = false
+        container.addSubview(header)
+        NSLayoutConstraint.activate([
+            header.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+            header.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+            header.topAnchor.constraint(equalTo: container.topAnchor)
+        ])
+
+        header.setupDetails(
+            title: "example.com",
+            subtitle: "Connection is secure",
+            image: nil,
+            state: "On",
+            stateImage: "",
+            shouldUseRenderMode: false,
+            adBlocker: MenuSiteAdBlockerBadgeData(title: "Ad Blocker", image: "", shouldUseRenderMode: false)
+        )
+        container.layoutIfNeeded()
+
+        guard let badgesStack = firstStackView(in: header, axis: .horizontal) else {
+            XCTFail("Badges stack not found")
+            return
+        }
+        XCTAssertEqual(badgesStack.axis, .horizontal)
+    }
+
     // MARK: - Helpers
 
     private func firstStackView(in view: UIView, axis: NSLayoutConstraint.Axis) -> UIStackView? {

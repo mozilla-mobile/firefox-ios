@@ -19,6 +19,17 @@ final class MenuSiteBadge: UIView, ThemeApplicable {
     var tapHandler: (() -> Void)?
     private let mainMenuHelper: MainMenuInterface
 
+    /// The width needed to render the whole badge content on a single line,
+    /// used by `MenuSiteProtectionsHeader` to decide when to stack the badges vertically.
+    var singleLineContentWidth: CGFloat {
+        // Measure the text directly: intrinsicContentSize underestimates the single-line
+        // width once Dynamic Type scaling is involved.
+        let text = label.text ?? ""
+        let textWidth = (text as NSString).size(withAttributes: [.font: label.font as Any]).width
+        return UX.horizontalPadding * 2 + UX.iconSize + UX.chevronSize + UX.contentSpacing * 2
+            + ceil(textWidth)
+    }
+
     private lazy var stack: UIStackView = .build { [weak self] stack in
         guard let self else { return }
         stack.isLayoutMarginsRelativeArrangement = true

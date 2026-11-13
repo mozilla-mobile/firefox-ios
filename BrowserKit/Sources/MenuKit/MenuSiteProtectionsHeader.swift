@@ -54,13 +54,18 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
             trailingContentConstraints = [
                 contentLabels.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor,
                                                         constant: -UX.horizontalContentMargin),
-                badgesStack.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor)
+                badgesStack.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor,
+                                                      constant: -UX.badgesSpacing)
             ]
         }
         NSLayoutConstraint.activate(trailingContentConstraints)
     }
 
     private var theme: Theme?
+    private var badgesOverflow = false
+    private lazy var badgesFullWidthConstraint: NSLayoutConstraint =
+        badgesStack.widthAnchor.constraint(equalTo: safeAreaLayoutGuide.widthAnchor,
+                                           constant: -2 * UX.horizontalContentMargin)
 
     private var contentLabels: UIStackView = .build { stack in
         stack.distribution = .fillProportionally
@@ -130,10 +135,36 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         }
     }
 
+    override public func layoutSubviews() {
+        super.layoutSubviews()
+        updateBadgesOverflow()
+    }
+
     private func updateBadgesAxis() {
-        let isLarge = traitCollection.preferredContentSizeCategory.isAccessibilityCategory
-        badgesStack.axis = isLarge ? .vertical : .horizontal
-        badgesStack.alignment = isLarge ? .leading : .center
+        let vertical = traitCollection.preferredContentSizeCategory.isAccessibilityCategory || badgesOverflow
+        badgesStack.axis = vertical ? .vertical : .horizontal
+        // Stacked badges fill the row: their fitting width underestimates the rendered text
+        // width under Dynamic Type, which would wrap the label even on its own row.
+        badgesStack.alignment = vertical ? .fill : .center
+        badgesFullWidthConstraint.isActive = vertical
+    }
+
+    // Badges that don't fit on one line next to the close button stack vertically instead
+    // of wrapping their labels onto multiple lines.
+    private func updateBadgesOverflow() {
+        guard bounds.width > 0, !badgesStack.arrangedSubviews.isEmpty else { return }
+        let trailingLimit = closeButton.isHidden
+            ? safeAreaLayoutGuide.layoutFrame.maxX - UX.horizontalContentMargin
+            : closeButton.frame.minX - UX.badgesSpacing
+        let available = trailingLimit - badgesStack.frame.minX
+        let required = badgesStack.arrangedSubviews.reduce(0) { partial, badge in
+            partial + ((badge as? MenuSiteBadge)?.singleLineContentWidth ?? 0)
+        } + UX.badgesSpacing * CGFloat(badgesStack.arrangedSubviews.count - 1)
+        let overflow = required > available
+        if overflow != badgesOverflow {
+            badgesOverflow = overflow
+            updateBadgesAxis()
+        }
     }
 
     private func setupViews() {
@@ -155,7 +186,8 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         trailingContentConstraints = [
             contentLabels.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor,
                                                     constant: -UX.horizontalContentMargin),
-            badgesStack.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor)
+            badgesStack.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor,
+                                                  constant: -UX.badgesSpacing)
         ]
         NSLayoutConstraint.activate(trailingContentConstraints)
         NSLayoutConstraint.activate([
