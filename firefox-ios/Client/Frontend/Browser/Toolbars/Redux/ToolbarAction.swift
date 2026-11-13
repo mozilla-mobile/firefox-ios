@@ -109,8 +109,9 @@ enum ToolbarModernAction: ModernAction {
     /// otherwise just hides the keyboard (visually still looks like homepage but is zero search state)
     case cancelEditOnHomepage
 
-    /// The user pasted text into the address bar, entering editing mode with the pasted term.
-    case didPasteSearchTerm(searchTerm: String?)
+    /// Sets the address bar's search term and puts it into editing mode with the keyboard shown. Sent when
+    /// the user pastes into the address bar, and when search suggestions highlight or append a row's text.
+    case searchTermDidSet(searchTerm: String?)
 
     /// The number of tabs in the window changed.
     case numberOfTabsChanged(count: Int)
@@ -153,7 +154,6 @@ enum ToolbarModernAction: ModernAction {
 enum ToolbarActionType: ActionType {
     case didLoadToolbars
     case urlDidChange
-    case didSetTextInLocationView
     case borderPositionChanged
     case toolbarPositionChanged
     case didStartEditingUrl

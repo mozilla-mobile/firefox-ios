@@ -124,29 +124,13 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertNotNil(newState.addressToolbar.translationConfiguration)
     }
 
-    func test_didSetTextInLocationViewAction_returnsExpectedState() {
-        let initialState = createSubject()
-        let reducer = toolbarReducer()
-
-        let newState = reducer.legacyReducer(
-            initialState,
-            ToolbarAction(
-                searchTerm: "text",
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.didSetTextInLocationView)
-        )
-
-        XCTAssertNotEqual(newState.addressToolbar, initialState.addressToolbar)
-        XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
-    }
-
-    func test_didPasteSearchTermAction_returnsExpectedState() {
+    func test_searchTermDidSetAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
         let newState = reducer.modernReducer(
             initialState,
-            ToolbarModernAction.didPasteSearchTerm(searchTerm: "text"),
+            ToolbarModernAction.searchTermDidSet(searchTerm: "text"),
             windowUUID
         )
 

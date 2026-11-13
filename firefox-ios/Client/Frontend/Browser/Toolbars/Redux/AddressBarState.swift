@@ -134,8 +134,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             return state.copy(shouldShowKeyboard: shouldShow)
         case .cancelEditOnHomepage:
             return handleCancelEditOnHomepageAction(state: state, windowUUID: actionWindowUUID)
-        case .didPasteSearchTerm(let searchTerm):
-            return handleDidPasteSearchTermAction(state: state, searchTerm: searchTerm)
+        case .searchTermDidSet(let searchTerm):
+            return handleSearchTermDidSetAction(state: state, searchTerm: searchTerm)
         case .lockIconChanged(let hasOnlySecureContent, let isWebsiteMode):
             return state
                 .copy(hasOnlySecureContent: hasOnlySecureContent)
@@ -191,9 +191,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         case ToolbarActionType.cancelEdit:
             return handleCancelEditAction(state: state, action: action)
-
-        case ToolbarActionType.didSetTextInLocationView:
-            return handleDidSetTextInLocationViewAction(state: state, action: action)
 
         case ToolbarActionType.didStartTyping:
             return handleDidStartTypingAction(state: state, action: action)
@@ -317,15 +314,13 @@ struct AddressBarState: StateType, Sendable, Equatable {
     }
 
     @MainActor
-    private static func handleDidPasteSearchTermAction(state: Self, searchTerm: String?) -> Self {
+    private static func handleSearchTermDidSetAction(state: Self, searchTerm: String?) -> Self {
         let isEmptySearch = searchTerm == nil || searchTerm?.isEmpty == true
         // This action always puts the address bar into editing mode.
-        // Declared once and reused so the actions computed here can never drift out of sync
-        let isEditing = true
 
         return state
             .copy(searchTerm: searchTerm)
-            .copy(isEditing: isEditing)
+            .copy(isEditing: true)
             .copy(shouldShowKeyboard: true)
             .copy(shouldSelectSearchTerm: false)
             .copy(didStartTyping: false)
@@ -380,24 +375,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
             .copy(searchTerm: nil)
             .copy(isEditing: isEditing)
             .copy(shouldShowKeyboard: false)
-            .copy(shouldSelectSearchTerm: false)
-            .copy(didStartTyping: false)
-            .copy(isEmptySearch: isEmptySearch)
-    }
-
-    @MainActor
-    private static func handleDidSetTextInLocationViewAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-
-        let isEmptySearch = toolbarAction.searchTerm == nil || toolbarAction.searchTerm?.isEmpty == true
-        // This action always puts the address bar into editing mode.
-        // Declared once and reused so the actions computed here can never drift out of sync
-        let isEditing = true
-
-        return state
-            .copy(searchTerm: toolbarAction.searchTerm)
-            .copy(isEditing: isEditing)
-            .copy(shouldShowKeyboard: true)
             .copy(shouldSelectSearchTerm: false)
             .copy(didStartTyping: false)
             .copy(isEmptySearch: isEmptySearch)

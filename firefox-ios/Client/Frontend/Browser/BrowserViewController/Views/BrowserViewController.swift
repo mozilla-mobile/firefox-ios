@@ -4686,12 +4686,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
     }
 
     func setLocationView(text: String, search: Bool) {
-        let toolbarAction = ToolbarAction(
-            searchTerm: text,
-            windowUUID: windowUUID,
-            actionType: ToolbarActionType.didSetTextInLocationView
-        )
-        store.dispatch(toolbarAction)
+        store.dispatch(ToolbarModernAction.searchTermDidSet(searchTerm: text), forWindowUUID: windowUUID)
 
         if search {
             openSuggestions(searchTerm: text)
