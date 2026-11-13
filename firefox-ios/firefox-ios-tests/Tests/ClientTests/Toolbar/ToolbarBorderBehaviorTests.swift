@@ -28,7 +28,6 @@ final class ToolbarBorderBehaviorTests: XCTestCase {
         DependencyHelperMock().bootstrapDependencies(injectedWindowManager: windowManager,
                                                      injectedTabManager: tabManager)
         middleware = ToolbarMiddleware(
-            manager: DefaultToolbarManager(),
             toolbarTelemetry: ToolbarTelemetry(gleanWrapper: MockGleanWrapper()),
             profile: profile,
             summarizerConfigFactory: MockSummarizerConfigFactory(),

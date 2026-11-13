@@ -468,7 +468,6 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                                editingAccessoryAction: makeEditingAccessoryAction(
                                    isGoogleLensEnabled: isGoogleLensEnabled
                                ),
-                               borderPosition: nil,
                                url: url,
                                searchTerm: nil,
                                hasOnlySecureContent: nil,
@@ -515,7 +514,6 @@ final class AddressToolbarContainerModelTests: XCTestCase {
 
     private func createBasicNavigationBarState() -> NavigationBarState {
         return NavigationBarState(windowUUID: windowUUID,
-                                  displayBorder: false,
                                   middleButton: .newTab,
                                   isNovaDesignEnabled: false)
     }

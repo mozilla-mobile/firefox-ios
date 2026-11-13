@@ -218,7 +218,7 @@ struct ToolbarState: ScreenState, Sendable {
         case ToolbarActionType.didLoadToolbars:
             return handleDidLoadToolbars(state: state, action: action)
 
-        case ToolbarActionType.borderPositionChanged, ToolbarActionType.urlDidChange,
+        case ToolbarActionType.urlDidChange,
             ToolbarActionType.didStartEditingUrl, ToolbarActionType.cancelEdit,
             ToolbarMiddlewareActionType.googleLensAvailabilityDidChange,
             ToolbarActionType.didStartTyping,
@@ -328,8 +328,6 @@ struct ToolbarState: ScreenState, Sendable {
         let position = addressToolbarPositionFromSearchBarPosition(toolbarPosition)
         return state
             .copy(toolbarPosition: position)
-            .copy(addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, action))
-            .copy(navigationToolbar: NavigationBarState.reducer.legacyReducer(state.navigationToolbar, action))
     }
 
     @MainActor
