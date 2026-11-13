@@ -10,8 +10,8 @@ import XCTest
 @testable import Client
 
 /// End-to-end baseline for the address and navigation toolbar borders. Input actions go through the real store,
-/// middleware and reducers, so the assertions only depend on the final `ToolbarState` and survive refactors of
-/// where the border is computed.
+/// middleware and reducers. The borders are read from the `AddressToolbarContainerLens`, which is what the
+/// toolbar views consume, so the assertions survive refactors of where the border is computed.
 @MainActor
 final class ToolbarBorderBehaviorTests: XCTestCase {
     private let windowUUID: WindowUUID = .XCTestDefaultUUID
@@ -118,8 +118,7 @@ final class ToolbarBorderBehaviorTests: XCTestCase {
         assertBorders(position: .bottom, address: .top, nav: false)
     }
 
-    // The border is only refreshed by the scroll offset events, switching to private mode alone does not update it.
-    func testPrivateModeAlone_atTop_doesNotRefreshAddressBorder() {
+    func testPrivateModeAlone_atTop_showsBottomAddressBorder() {
         loadBrowser(at: .top)
 
         store.dispatch(ToolbarAction(url: URL(string: "https://example.com"),
@@ -127,7 +126,7 @@ final class ToolbarBorderBehaviorTests: XCTestCase {
                                      windowUUID: windowUUID,
                                      actionType: ToolbarActionType.urlDidChange))
 
-        assertBorders(position: .top, address: AddressToolbarBorderPosition.none, nav: true)
+        assertBorders(position: .top, address: .bottom, nav: true)
     }
 
     // MARK: - Position change
@@ -142,6 +141,7 @@ final class ToolbarBorderBehaviorTests: XCTestCase {
 
     func testPositionChange_bottomToTop_whenScrolled_showsBottomAddressBorderAndNavBorder() {
         loadBrowser(at: .bottom)
+        scroll(toY: 100)
 
         changePosition(to: .top, scrollY: 100)
 
@@ -200,7 +200,7 @@ final class ToolbarBorderBehaviorTests: XCTestCase {
 
         showMicrosurvey()
 
-        XCTAssertEqual(toolbarState.navigationToolbar.displayBorder, false)
+        XCTAssertFalse(lens.displayNavBorder)
     }
 
     func testMicrosurveyClosed_atTop_restoresNavBorder() {
@@ -209,11 +209,12 @@ final class ToolbarBorderBehaviorTests: XCTestCase {
 
         closeMicrosurvey()
 
-        XCTAssertEqual(toolbarState.navigationToolbar.displayBorder, true)
+        XCTAssertTrue(lens.displayNavBorder)
     }
 
     func testPositionChange_toTop_whileMicrosurveyShown_whenScrolled_keepsAddressBorderAndHidesNavBorder() {
         loadBrowser(at: .bottom)
+        scroll(toY: 100)
         showMicrosurvey()
 
         changePosition(to: .top, scrollY: 100)
@@ -250,6 +251,10 @@ final class ToolbarBorderBehaviorTests: XCTestCase {
         return state
     }
 
+    private var lens: AddressToolbarContainerLens {
+        return AddressToolbarContainerLens(appState: store.state, uuid: windowUUID)
+    }
+
     private func assertBorders(
         position: AddressToolbarPosition,
         address: AddressToolbarBorderPosition,
@@ -257,10 +262,10 @@ final class ToolbarBorderBehaviorTests: XCTestCase {
         file: StaticString = #filePath,
         line: UInt = #line
     ) {
-        let state = toolbarState
-        XCTAssertEqual(state.toolbarPosition, position, "toolbar position", file: file, line: line)
-        XCTAssertEqual(state.addressToolbar.borderPosition, address, "address border", file: file, line: line)
-        XCTAssertEqual(state.navigationToolbar.displayBorder, nav, "navigation border", file: file, line: line)
+        let lens = lens
+        XCTAssertEqual(toolbarState.toolbarPosition, position, "toolbar position", file: file, line: line)
+        XCTAssertEqual(lens.addressBorderPosition, address, "address border", file: file, line: line)
+        XCTAssertEqual(lens.displayNavBorder, nav, "navigation border", file: file, line: line)
     }
 
     private func loadBrowser(at position: SearchBarPosition) {

@@ -185,6 +185,68 @@ final class AddressToolbarContainerLensTests: XCTestCase {
         XCTAssertEqual(subject.navigationToolbarActions.map(\.actionType), [.back, .forward, .search, .tabs, .menu])
     }
 
+    // MARK: - borders, derived from position, private mode, scroll and microsurvey
+
+    func testInit_withoutToolbarState_returnsNoBorders() {
+        let appState = AppState(presentedComponents: PresentedComponentsState(components: []))
+        let subject = AddressToolbarContainerLens(appState: appState, uuid: windowUUID)
+
+        XCTAssertEqual(subject.addressBorderPosition, AddressToolbarBorderPosition.none)
+        XCTAssertFalse(subject.displayNavBorder)
+    }
+
+    func testInit_topPosition_notScrolled_returnsNoAddressBorderAndNavBorder() {
+        let subject = createSubject(toolbarPosition: .top)
+
+        XCTAssertEqual(subject.addressBorderPosition, AddressToolbarBorderPosition.none)
+        XCTAssertTrue(subject.displayNavBorder)
+    }
+
+    func testInit_topPosition_scrolled_returnsBottomAddressBorder() {
+        let subject = createSubject(toolbarPosition: .top, isScrolled: true)
+
+        XCTAssertEqual(subject.addressBorderPosition, .bottom)
+        XCTAssertTrue(subject.displayNavBorder)
+    }
+
+    func testInit_topPosition_privateMode_returnsBottomAddressBorder() {
+        let subject = createSubject(toolbarPosition: .top, isPrivateMode: true)
+
+        XCTAssertEqual(subject.addressBorderPosition, .bottom)
+    }
+
+    func testInit_bottomPosition_returnsTopAddressBorderAndNoNavBorder() {
+        let subject = createSubject(toolbarPosition: .bottom)
+
+        XCTAssertEqual(subject.addressBorderPosition, .top)
+        XCTAssertFalse(subject.displayNavBorder)
+    }
+
+    func testInit_bottomPosition_microsurveyShown_returnsNoBorders() {
+        let subject = createSubject(toolbarPosition: .bottom, isMicrosurveyShown: true)
+
+        XCTAssertEqual(subject.addressBorderPosition, AddressToolbarBorderPosition.none)
+        XCTAssertFalse(subject.displayNavBorder)
+    }
+
+    func testInit_topPosition_microsurveyShown_scrolled_keepsAddressBorderAndHidesNavBorder() {
+        let subject = createSubject(toolbarPosition: .top, isScrolled: true, isMicrosurveyShown: true)
+
+        XCTAssertEqual(subject.addressBorderPosition, .bottom)
+        XCTAssertFalse(subject.displayNavBorder)
+    }
+
+    func testInit_usesTheInjectedManager() {
+        let manager = StubToolbarManager(addressBorderPosition: .bottom, displayNavBorder: true)
+        let toolbarState = ToolbarState(windowUUID: windowUUID).copy(toolbarPosition: .bottom)
+        let appState = AppState(presentedComponents: PresentedComponentsState(components: [.toolbar(toolbarState)]))
+
+        let subject = AddressToolbarContainerLens(appState: appState, uuid: windowUUID, manager: manager)
+
+        XCTAssertEqual(subject.addressBorderPosition, .bottom)
+        XCTAssertTrue(subject.displayNavBorder)
+    }
+
     // MARK: - Helpers
 
     // MARK: - lockIconState, derived from hasOnlySecureContent, isWebsiteMode and readerModeState
@@ -257,7 +319,10 @@ final class AddressToolbarContainerLensTests: XCTestCase {
         toolbarLayout: ToolbarLayoutStyle = .version1,
         hasOnlySecureContent: Bool? = nil,
         isWebsiteMode: Bool = true,
-        readerModeState: ReaderModeState? = nil
+        readerModeState: ReaderModeState? = nil,
+        isPrivateMode: Bool = false,
+        isScrolled: Bool = false,
+        isMicrosurveyShown: Bool = false
     ) -> AddressToolbarContainerLens {
         let addressToolbar = AddressBarState(windowUUID: windowUUID)
             .copy(url: url)
@@ -279,8 +344,36 @@ final class AddressToolbarContainerLensTests: XCTestCase {
             .copy(showMenuWarningBadge: showMenuWarningBadge)
             .copy(toolbarLayout: toolbarLayout)
             .copy(navigationToolbar: NavigationBarState(windowUUID: windowUUID).copy(middleButton: middleButton))
+            .copy(isPrivateMode: isPrivateMode)
+            .copy(isScrolled: isScrolled)
 
-        let appState = AppState(presentedComponents: PresentedComponentsState(components: [.toolbar(toolbarState)]))
+        let microsurveyState = MicrosurveyPromptState(windowUUID: windowUUID,
+                                                      showPrompt: isMicrosurveyShown,
+                                                      showSurvey: false,
+                                                      model: nil)
+        let browserViewControllerState = BrowserViewControllerState(windowUUID: windowUUID)
+            .copy(microsurveyState: microsurveyState)
+        let appState = AppState(presentedComponents: PresentedComponentsState(components: [
+            .toolbar(toolbarState),
+            .browserViewController(browserViewControllerState)
+        ]))
         return AddressToolbarContainerLens(appState: appState, uuid: windowUUID)
+    }
+}
+
+private struct StubToolbarManager: ToolbarManager {
+    let addressBorderPosition: AddressToolbarBorderPosition
+    let displayNavBorder: Bool
+
+    func getAddressBorderPosition(for toolbarPosition: AddressToolbarPosition,
+                                  isPrivate: Bool,
+                                  isScrolled: Bool,
+                                  isMicrosurveyShown: Bool) -> AddressToolbarBorderPosition {
+        return addressBorderPosition
+    }
+
+    func shouldDisplayNavigationBorder(toolbarPosition: AddressToolbarPosition,
+                                       isMicrosurveyShown: Bool) -> Bool {
+        return displayNavBorder
     }
 }
