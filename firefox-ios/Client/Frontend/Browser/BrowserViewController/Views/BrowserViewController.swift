@@ -725,17 +725,8 @@ class BrowserViewController: UIViewController,
             return isScrollAlphaZero && webView.scrollView.contentSize.height > view.bounds.height
         }()
 
-        if isBottomSearchBar {
-            header.isClearBackground = false
-
-            let isFxHomeTab = tabManager.selectedTab?.isFxHomeTab ?? false
-            let offset = scrollOffset ?? statusBarOverlay.scrollOffset
-            topBlurView.alpha = isFxHomeTab ? offset : 1
-        } else {
-            header.isClearBackground = true
-            topBlurView.alpha = 1
-        }
-
+        header.isClearBackground = !isBottomSearchBar
+        topBlurView.alpha = 1
         overKeyboardContainer.isClearBackground = !isKeyboardShowing || shouldClearBackground
         bottomContainer.isClearBackground = true
         bottomBlurView.isHidden = isScrollAlphaZero
