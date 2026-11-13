@@ -94,7 +94,6 @@ final class QuickAnswersReturnPillPresenter {
         }
         let changes = {
             pill.setMinimized(context.isMinimized, transform: self.minimizedTransform(for: context, in: hostView))
-            hostView.layoutIfNeeded()
         }
         guard animated else {
             changes()
