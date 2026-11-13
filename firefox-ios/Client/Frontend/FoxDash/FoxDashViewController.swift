@@ -8,12 +8,17 @@ import UIKit
 import WebKit
 
 /// Full screen host for the bundled Fox Dash game, with a single native close button.
-final class FoxDashViewController: UIViewController, WKNavigationDelegate {
+final class FoxDashViewController: UIViewController, WKNavigationDelegate, Themeable {
     private enum UX {
         static let closeButtonSize: CGFloat = 44
         static let closeButtonInset: CGFloat = 8
-        static let closeButtonBackgroundAlpha: CGFloat = 0.45
     }
+
+    // MARK: - Themeable
+    let themeManager: ThemeManager
+    var themeListenerCancellable: Any?
+    let currentWindowUUID: WindowUUID?
+    private let notificationCenter: NotificationProtocol
 
     private let themeProvider: FoxDashThemeProviding
     private let bundle: Bundle
@@ -45,27 +50,33 @@ final class FoxDashViewController: UIViewController, WKNavigationDelegate {
         return webView
     }()
 
-    private lazy var closeButton: UIButton = .build { [weak self] button in
-        var configuration = UIButton.Configuration.filled()
-        configuration.image = UIImage(named: StandardImageIdentifiers.Large.cross)?
-            .withRenderingMode(.alwaysTemplate)
-        configuration.baseForegroundColor = .white
-        configuration.baseBackgroundColor = UIColor.black.withAlphaComponent(UX.closeButtonBackgroundAlpha)
-        configuration.cornerStyle = .capsule
-        button.configuration = configuration
-        button.accessibilityLabel = .CloseButtonTitle
-        button.accessibilityIdentifier = AccessibilityIdentifiers.FoxDash.closeButton
-        button.addAction(UIAction { _ in self?.onClose() }, for: .touchUpInside)
+    private lazy var closeButton: UIButton = .build { [weak self] in
+        $0.setImage(
+            UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate),
+            for: .normal
+        )
+        $0.addAction(UIAction(handler: { _ in
+            self?.onClose()
+        }), for: .touchUpInside)
+        $0.accessibilityLabel = .CloseButtonTitle
+        $0.largeContentTitle = .CloseButtonTitle
+        $0.showsLargeContentViewer = true
     }
 
     override var prefersStatusBarHidden: Bool { true }
     override var prefersHomeIndicatorAutoHidden: Bool { true }
 
     init(
+        windowUUID: WindowUUID,
         themeProvider: FoxDashThemeProviding = FoxDashThemeProvider(),
+        themeManager: ThemeManager = AppContainer.shared.resolve(),
+        notificationCenter: NotificationProtocol = NotificationCenter.default,
         bundle: Bundle = .main,
         onClose: @escaping () -> Void
     ) {
+        self.currentWindowUUID = windowUUID
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
         self.themeProvider = themeProvider
         self.bundle = bundle
         self.onClose = onClose
@@ -80,7 +91,6 @@ final class FoxDashViewController: UIViewController, WKNavigationDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .black
         view.addSubview(webView)
         view.addSubview(closeButton)
 
@@ -102,10 +112,20 @@ final class FoxDashViewController: UIViewController, WKNavigationDelegate {
             )
         ])
 
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
+        applyTheme()
+
         guard let indexURL = bundle.url(forResource: "index", withExtension: "html", subdirectory: "FoxDash") else {
             return
         }
         webView.loadFileURL(indexURL, allowingReadAccessTo: indexURL.deletingLastPathComponent())
+    }
+
+    // MARK: - Themeable
+    func applyTheme() {
+        let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
+        view.backgroundColor = theme.colors.layer1
+        closeButton.tintColor = theme.colors.iconPrimary
     }
 
     // MARK: - WKNavigationDelegate

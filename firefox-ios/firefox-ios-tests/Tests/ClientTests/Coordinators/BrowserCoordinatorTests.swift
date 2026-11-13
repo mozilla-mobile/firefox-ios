@@ -1128,15 +1128,6 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertEqual(mockRouter.presentCalled, 1)
     }
 
-    func test_showFoxDash_calledTwice_presentsOnlyOnce() {
-        let subject = createSubject()
-
-        subject.showFoxDash()
-        subject.showFoxDash()
-
-        XCTAssertEqual(mockRouter.presentCalled, 1)
-    }
-
     func test_showFoxDash_closeTapped_dismissesRouter() throws {
         let subject = createSubject()
         subject.showFoxDash()

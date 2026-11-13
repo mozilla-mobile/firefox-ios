@@ -64,7 +64,6 @@ final class BrowserCoordinator: BaseCoordinator,
     private let touExperimentsTracking: ToUExperimentsTracking
     private let homepageTabStateStore: HomepageTabStateStore
     private var browserIsReady = false
-    private weak var presentedFoxDash: FoxDashViewController?
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
     private let googleLensService: GoogleLensServicing
     private lazy var trackerBlockerTelemetry = TrackerBlockerTelemetry(gleanWrapper: glean)
@@ -1385,11 +1384,9 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     func showFoxDash() {
-        guard presentedFoxDash == nil else { return }
-        let foxDash = FoxDashViewController { [weak self] in
+        let foxDash = FoxDashViewController(windowUUID: windowUUID) { [weak self] in
             self?.router.dismiss(animated: true, completion: nil)
         }
-        presentedFoxDash = foxDash
         router.present(foxDash, animated: true, completion: nil)
     }
 
