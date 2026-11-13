@@ -65,15 +65,24 @@ final class FoxDashViewControllerTests: XCTestCase {
         XCTAssertEqual(closeCallCount, 1)
     }
 
+    func test_viewDidLoad_indexMissing_callsOnClose() {
+        let subject = createSubject(bundle: Bundle(for: FoxDashViewControllerTests.self))
+
+        subject.loadViewIfNeeded()
+
+        XCTAssertEqual(closeCallCount, 1)
+    }
+
     func test_bundle_containsFoxDashIndex() {
         XCTAssertNotNil(Bundle.main.url(forResource: "index", withExtension: "html", subdirectory: "FoxDash"))
     }
 
-    private func createSubject() -> FoxDashViewController {
+    private func createSubject(bundle: Bundle = .main) -> FoxDashViewController {
         let subject = FoxDashViewController(
             windowUUID: .XCTestDefaultUUID,
             themeProvider: themeProvider,
-            themeManager: themeManager
+            themeManager: themeManager,
+            bundle: bundle
         ) { [weak self] in
             self?.closeCallCount += 1
         }

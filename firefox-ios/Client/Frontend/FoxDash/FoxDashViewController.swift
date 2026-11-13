@@ -8,10 +8,14 @@ import UIKit
 import WebKit
 
 /// Full screen host for the bundled Fox Dash game, with a single native close button.
-final class FoxDashViewController: UIViewController, WKNavigationDelegate, Themeable {
+final class FoxDashViewController: UIViewController, Themeable {
     private enum UX {
-        static let closeButtonSize: CGFloat = 44
-        static let closeButtonInset: CGFloat = 8
+        static var closeButtonPadding: CGFloat {
+            if #available(iOS 26, *) {
+                return 18.0
+            }
+            return 12.0
+        }
     }
 
     // MARK: - Themeable
@@ -36,7 +40,6 @@ final class FoxDashViewController: UIViewController, WKNavigationDelegate, Theme
         )
         let webView = WKWebView(frame: .zero, configuration: configuration)
         webView.translatesAutoresizingMaskIntoConstraints = false
-        webView.navigationDelegate = self
         webView.scrollView.isScrollEnabled = false
         webView.scrollView.bounces = false
         webView.scrollView.contentInsetAdjustmentBehavior = .never
@@ -51,16 +54,19 @@ final class FoxDashViewController: UIViewController, WKNavigationDelegate, Theme
     }()
 
     private lazy var closeButton: UIButton = .build { [weak self] in
-        $0.setImage(
-            UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate),
-            for: .normal
-        )
         $0.addAction(UIAction(handler: { _ in
             self?.onClose()
         }), for: .touchUpInside)
+        if #available(iOS 26, *) {
+            $0.configuration = .prominentClearGlass()
+        } else {
+            $0.configuration = .filled()
+            $0.configuration?.cornerStyle = .capsule
+        }
+        $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.cross)?
+            .withRenderingMode(.alwaysTemplate)
         $0.accessibilityLabel = .CloseButtonTitle
-        $0.largeContentTitle = .CloseButtonTitle
-        $0.showsLargeContentViewer = true
+        $0.scalesLargeContentImage = true
     }
 
     override var prefersStatusBarHidden: Bool { true }
@@ -100,15 +106,13 @@ final class FoxDashViewController: UIViewController, WKNavigationDelegate, Theme
             webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
-            closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
-            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
             closeButton.leadingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.leadingAnchor,
-                constant: UX.closeButtonInset
+                constant: UX.closeButtonPadding
             ),
             closeButton.topAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.topAnchor,
-                constant: UX.closeButtonInset
+                constant: UX.closeButtonPadding
             )
         ])
 
@@ -116,6 +120,7 @@ final class FoxDashViewController: UIViewController, WKNavigationDelegate, Theme
         applyTheme()
 
         guard let indexURL = bundle.url(forResource: "index", withExtension: "html", subdirectory: "FoxDash") else {
+            onClose()
             return
         }
         webView.loadFileURL(indexURL, allowingReadAccessTo: indexURL.deletingLastPathComponent())
@@ -125,17 +130,11 @@ final class FoxDashViewController: UIViewController, WKNavigationDelegate, Theme
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
         view.backgroundColor = theme.colors.layer1
-        closeButton.tintColor = theme.colors.iconPrimary
-    }
-
-    // MARK: - WKNavigationDelegate
-
-    func webView(
-        _ webView: WKWebView,
-        decidePolicyFor navigationAction: WKNavigationAction,
-        decisionHandler: @escaping @MainActor (WKNavigationActionPolicy) -> Void
-    ) {
-        let isLocal = navigationAction.request.url?.isFileURL ?? false
-        decisionHandler(isLocal ? .allow : .cancel)
+        if #unavailable(iOS 26.0) {
+            closeButton.configuration?.baseBackgroundColor = theme.colors.layer2
+            closeButton.configuration?.baseForegroundColor = theme.colors.iconPrimary
+        } else {
+            closeButton.tintColor = theme.colors.iconPrimary
+        }
     }
 }
