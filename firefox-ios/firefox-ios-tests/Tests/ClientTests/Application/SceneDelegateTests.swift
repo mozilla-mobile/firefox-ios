@@ -60,7 +60,7 @@ final class SceneDelegateTests: XCTestCase, FeatureFlaggable {
         AppEventQueue.signal(event: .startupFlowComplete)
         let setup = try createSubjectWithCoordinator()
 
-        setup.delegate.scene(setup.scene, continue: makeSearchActivity())
+        setup.delegate.scene(setup.scene, continue: makeOpenNewTabActivity())
 
         XCTAssertNotNil(setup.coordinator.savedRoute)
     }
@@ -71,7 +71,7 @@ final class SceneDelegateTests: XCTestCase, FeatureFlaggable {
         let setup = try createSubjectWithCoordinator()
         // tabRestoration NOT signalled for this coordinator's fresh windowUUID
 
-        setup.delegate.scene(setup.scene, continue: makeSearchActivity())
+        setup.delegate.scene(setup.scene, continue: makeOpenNewTabActivity())
 
         XCTAssertNotNil(setup.coordinator.savedRoute,
                         "With refactor enabled route should dispatch without waiting for tabRestoration")
@@ -86,7 +86,7 @@ final class SceneDelegateTests: XCTestCase, FeatureFlaggable {
         expectation.isInverted = true
         AppEventQueue.wait(for: [.startupFlowComplete]) { expectation.fulfill() }
 
-        setup.delegate.scene(setup.scene, continue: makeSearchActivity())
+        setup.delegate.scene(setup.scene, continue: makeOpenNewTabActivity())
 
         wait(for: [expectation], timeout: 0.3)
         XCTAssertNil(setup.coordinator.savedRoute,
@@ -133,6 +133,37 @@ final class SceneDelegateTests: XCTestCase, FeatureFlaggable {
                         "Route should dispatch once tabRestoration is signalled")
     }
 
+    // MARK: - handle(route:) timing - routes that open a tab
+
+    func testHandleRoute_routeThatOpensTab_dispatchesOnTabRestorationWithoutStartupFlowComplete() throws {
+        for isRefactorEnabled in [false, true] {
+            AppEventQueue.reset()
+            setIsDeeplinkOptimizationRefactorEnabled(isRefactorEnabled)
+            let setup = try createSubjectWithCoordinator()
+            // startupFlowComplete NOT signalled: it waits for the browser to appear, which is too late
+            AppEventQueue.signal(event: .tabRestoration(setup.coordinator.windowUUID))
+
+            setup.delegate.scene(setup.scene, continue: makeSearchActivity())
+
+            XCTAssertNotNil(setup.coordinator.savedRoute,
+                            "Route that opens a tab should dispatch once tabs are restored (refactor: \(isRefactorEnabled))")
+        }
+    }
+
+    func testHandleRoute_routeThatOpensTab_doesNotDispatchBeforeTabRestoration() throws {
+        for isRefactorEnabled in [false, true] {
+            AppEventQueue.reset()
+            setIsDeeplinkOptimizationRefactorEnabled(isRefactorEnabled)
+            AppEventQueue.signal(event: .startupFlowComplete)
+            let setup = try createSubjectWithCoordinator()
+
+            setup.delegate.scene(setup.scene, continue: makeSearchActivity())
+
+            XCTAssertNil(setup.coordinator.savedRoute,
+                         "Route that opens a tab should wait for tab restoration (refactor: \(isRefactorEnabled))")
+        }
+    }
+
     // MARK: - Telemetry
 
     func testHandleRoute_refactorEnabled_recordsDeeplinkTimeOnSuccess() throws {
@@ -141,7 +172,7 @@ final class SceneDelegateTests: XCTestCase, FeatureFlaggable {
         let setup = try createSubjectWithCoordinator()
         setup.delegate.shareTelemetry.recordOpenDeeplinkTime()
 
-        setup.delegate.scene(setup.scene, continue: makeSearchActivity())
+        setup.delegate.scene(setup.scene, continue: makeOpenNewTabActivity())
 
         XCTAssertEqual(mockGleanWrapper.stopAndAccumulateCalled, 1)
     }
@@ -181,6 +212,11 @@ final class SceneDelegateTests: XCTestCase, FeatureFlaggable {
         let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
         activity.webpageURL = URL(string: "https://example.com")
         return activity
+    }
+
+    /// Siri "open new tab" activity: routed as `.search(url: nil, ...)`, which doesn't open a specific tab.
+    private func makeOpenNewTabActivity() -> NSUserActivity {
+        return NSUserActivity(activityType: SiriShortcuts.activityType.openURL.rawValue)
     }
 
     private func setIsDeeplinkOptimizationRefactorEnabled(_ enabled: Bool) {

@@ -244,25 +244,23 @@ class SceneDelegate: UIResponder,
         logger.log("Scene coordinator will handle a route", level: .info, category: .coordinator)
         sessionManager.launchSessionProvider.openedFromExternalSource = true
 
-        if isDeeplinkOptimizationRefactorEnabled {
-            AppEventQueue.wait(for: [.startupFlowComplete]) { [weak self] in
-                ensureMainThread {
-                    self?.logger.log("Start up flow done, will handle route",
-                                     level: .info,
-                                     category: .coordinator)
-                    sceneCoordinator.findAndHandle(route: route)
-                    self?.shareTelemetry.sendOpenDeeplinkTimeRecord()
-                }
-            }
+        let windowUUID = sceneCoordinator.windowUUID
+        let requiredEvents: [AppEvent]
+        if route.opensTabOnHandling {
+            requiredEvents = [.tabRestoration(windowUUID)]
+        } else if isDeeplinkOptimizationRefactorEnabled {
+            requiredEvents = [.startupFlowComplete]
         } else {
-            AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(sceneCoordinator.windowUUID)]) { [weak self] in
-                ensureMainThread {
-                    self?.logger.log("Start up flow and restoration done, will handle route",
-                                     level: .info,
-                                     category: .coordinator)
-                    sceneCoordinator.findAndHandle(route: route)
-                    self?.shareTelemetry.sendOpenDeeplinkTimeRecord()
-                }
+            requiredEvents = [.startupFlowComplete, .tabRestoration(windowUUID)]
+        }
+
+        AppEventQueue.wait(for: requiredEvents) { [weak self] in
+            ensureMainThread {
+                self?.logger.log("Route dependencies done, will handle route.",
+                                 level: .info,
+                                 category: .coordinator)
+                sceneCoordinator.findAndHandle(route: route)
+                self?.shareTelemetry.sendOpenDeeplinkTimeRecord()
             }
         }
     }
