@@ -76,6 +76,8 @@ final class TabCell: UICollectionViewCell,
     }
 
     private var borderGradientColors: [CGColor]?
+    private var selectedGroupColor: UIColor?
+    private var hidesSelectedBorder = false
 
     // MARK: - Initializer
 
@@ -111,10 +113,12 @@ final class TabCell: UICollectionViewCell,
         theme: Theme?,
         delegate: TabCellDelegate,
         a11yId: String,
-        newTabTitle: String?
+        newTabTitle: String?,
+        selectedGroupColor: UIColor? = nil
     ) {
         self.tabModel = tabModel
         self.delegate = delegate
+        self.selectedGroupColor = selectedGroupColor
 
         if let swipeAnimatorDelegate = delegate as? SwipeAnimatorDelegate {
             animator?.delegate = swipeAnimatorDelegate
@@ -173,10 +177,16 @@ final class TabCell: UICollectionViewCell,
 
     private func updateBorder(theme: Theme, isSelected: Bool, isPrivate: Bool) {
         borderGradientColors = nil
-        layer.borderWidth = isSelected ? UX.borderWidth : 0
+        let showsSelectedBorder = isSelected && !hidesSelectedBorder
+        layer.borderWidth = showsSelectedBorder ? UX.borderWidth : 0
 
-        guard isSelected else {
+        guard showsSelectedBorder else {
             layer.borderColor = UIColor.clear.cgColor
+            return
+        }
+
+        if let selectedGroupColor {
+            layer.borderColor = selectedGroupColor.cgColor
             return
         }
 
@@ -261,6 +271,19 @@ final class TabCell: UICollectionViewCell,
         updateBorder(theme: theme, isSelected: selected, isPrivate: isPrivate)
     }
 
+    func setSelectedGroupColor(_ color: UIColor?, theme: Theme?) {
+        selectedGroupColor = color
+        guard let theme else { return }
+        updateBorder(theme: theme, isSelected: isSelectedTab, isPrivate: tabModel?.isPrivate ?? false)
+    }
+
+    func setTabSelectionMode(_ isSelectingTabs: Bool, theme: Theme?) {
+        hidesSelectedBorder = isSelectingTabs
+        closeButton.isHidden = isSelectingTabs
+        guard let theme else { return }
+        updateBorder(theme: theme, isSelected: isSelectedTab, isPrivate: tabModel?.isPrivate ?? false)
+    }
+
     // MARK: - UICollectionViewCell
 
     override func layoutSubviews() {
@@ -280,6 +303,8 @@ final class TabCell: UICollectionViewCell,
         backgroundHolder.alpha = 1
         faviconBG.isHidden = true
         borderGradientColors = nil
+        selectedGroupColor = nil
+        hidesSelectedBorder = false
         layer.borderColor = UIColor.clear.cgColor
         layer.borderWidth = 0
         layer.shadowOffset = .zero

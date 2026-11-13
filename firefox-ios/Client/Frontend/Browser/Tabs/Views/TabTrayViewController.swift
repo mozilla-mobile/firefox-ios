@@ -6,6 +6,7 @@ import Common
 import Foundation
 import Redux
 import Shared
+import SwiftUI
 
 import enum MozillaAppServices.VisitType
 
@@ -72,6 +73,12 @@ final class TabTrayViewController: UIViewController,
     private var pageViewController: UIPageViewController?
     private weak var pageScrollView: UIScrollView?
     private var swipeFromIndex: Int?
+    weak var tabManager: TabManager?
+    var tabGroupsController: TabGroupsController?
+    var tabGroupsTopHost: UIHostingController<AnyView>?
+    var tabGroupsBottomHost: UIHostingController<AnyView>?
+    var tabGroupsSelectionBackdrop: UIView?
+    var tabGroupsPickerHost: UIHostingController<AnyView>?
     private lazy var themeAnimator = TabTrayThemeAnimator()
 
     private let blurView: UIVisualEffectView = .build { view in
@@ -360,6 +367,11 @@ final class TabTrayViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        setupTabGroupsUI()
+        if TabGroupsFeatureFlag.isEnabled, tabGroupsController != nil {
+            navigationToolbar.isHidden = true
+            experimentSegmentControl.isHidden = true
+        }
         subscribeToRedux()
         updateToolbarItems()
 
@@ -382,6 +394,7 @@ final class TabTrayViewController: UIViewController,
         super.viewWillAppear(animated)
 
         updateLayout()
+        refreshTabGroupsUI()
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -411,6 +424,13 @@ final class TabTrayViewController: UIViewController,
     }
 
     private func updateLayout() {
+        if TabGroupsFeatureFlag.isEnabled, tabGroupsController != nil {
+            navigationController?.setNavigationBarHidden(true, animated: false)
+            navigationController?.setToolbarHidden(true, animated: false)
+            navigationToolbar.isHidden = true
+            experimentSegmentControl.isHidden = true
+            return
+        }
         navigationController?.isToolbarHidden = isRegularLayout
         titleWidthConstraint?.isActive = isRegularLayout
 
@@ -485,6 +505,8 @@ final class TabTrayViewController: UIViewController,
         if let enableDeleteTabsButton = tabTrayState.enableDeleteTabsButton {
             deleteButton.isEnabled = enableDeleteTabsButton
         }
+
+        refreshTabGroupsUI()
 
         // Only apply normal theme when there's no on going animations
         if !themeAnimator.isAnimating && swipeFromIndex == nil {
@@ -811,6 +833,7 @@ final class TabTrayViewController: UIViewController,
     }
 
     private func updateToolbarItems() {
+        guard !TabGroupsFeatureFlag.isEnabled || tabGroupsController == nil else { return }
         // iPad configuration
         guard !isRegularLayout else {
             setupToolbarForIpad()
@@ -894,6 +917,7 @@ final class TabTrayViewController: UIViewController,
         segmentedControl.selectedSegmentIndex = panelType.rawValue
         updateTitle()
         updateLayout()
+        refreshTabGroupsUI()
 
         if !tabTrayUtils.shouldDisplayExperimentUI() {
             hideCurrentPanel()
@@ -1102,7 +1126,7 @@ final class TabTrayViewController: UIViewController,
     }
 
     @objc
-    private func newTabButtonTapped() {
+    func newTabButtonTapped() {
         guard let type = TabsDisplayViewPanelType(fromTabTrayPanelType: tabTrayState.selectedPanel) else { return }
         store.dispatch(
             TabPanelViewModernAction.addNewTab(ofType: type),
@@ -1111,7 +1135,7 @@ final class TabTrayViewController: UIViewController,
     }
 
     @objc
-    private func doneButtonTapped() {
+    func doneButtonTapped() {
         notificationCenter.post(name: .TabsTrayDidClose, withUserInfo: windowUUID.userInfo)
         store.dispatch(
             TabTrayAction(
