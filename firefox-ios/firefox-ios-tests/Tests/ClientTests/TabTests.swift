@@ -73,30 +73,34 @@ class TabTests: XCTestCase {
         XCTAssertFalse(tab.isNormal)
     }
 
-    func testGroupID_whenChangedOnNormalTab_preservesPrivacy() {
-        let tab = Tab(profile: mockProfile, groupID: UUID(), windowUUID: windowUUID)
-        let groupID = UUID()
+    func testGroupID_whenChangedOnNormalTab_preservesPrivacy() async throws {
+        let manager = TabGroupManager(storage: MockTabGroupStorage())
+        try await manager.restore()
+        let groupID = try manager.createGroup(title: "Group")
+        let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
+        manager.bind(tab)
 
-        tab.groupID = groupID
+        try manager.moveTab(tab, to: groupID)
         XCTAssertEqual(tab.groupID, groupID)
         XCTAssertFalse(tab.isPrivate)
 
-        tab.groupID = nil
+        try manager.moveTab(tab, to: nil)
         XCTAssertNil(tab.groupID)
         XCTAssertFalse(tab.isPrivate)
+        try await manager.flush()
     }
 
-    func testGroupID_whenChangedOnPrivateTab_preservesPrivacy() {
-        let tab = Tab(profile: mockProfile, isPrivate: true, groupID: UUID(), windowUUID: windowUUID)
-        let groupID = UUID()
+    func testGroupID_whenPrivateTabAssignedToGroup_preservesPrivacy() async throws {
+        let manager = TabGroupManager(storage: MockTabGroupStorage())
+        try await manager.restore()
+        let groupID = try manager.createGroup(title: "Group")
+        let tab = Tab(profile: mockProfile, isPrivate: true, windowUUID: windowUUID)
+        manager.bind(tab)
 
-        tab.groupID = groupID
-        XCTAssertEqual(tab.groupID, groupID)
-        XCTAssertTrue(tab.isPrivate)
-
-        tab.groupID = nil
+        XCTAssertThrowsError(try manager.moveTab(tab, to: groupID))
         XCTAssertNil(tab.groupID)
         XCTAssertTrue(tab.isPrivate)
+        try await manager.flush()
     }
 
     func testShareURL_RemovingReaderModeComponents() {
