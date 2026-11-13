@@ -328,7 +328,8 @@ class ToolbarButton: UIButton,
             return existingImage
         }
 
-        guard let iconName = element.iconName, let baseImage = UIImage(named: iconName) else {
+        guard let iconName = element.iconName,
+              let baseImage = UIImage(named: iconName) ?? UIImage(systemName: iconName) else {
             return nil
         }
         let image = element.templateModeForImage
