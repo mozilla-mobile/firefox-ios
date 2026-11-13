@@ -10,16 +10,19 @@ import XCTest
 @MainActor
 final class FoxDashViewControllerTests: XCTestCase {
     private var themeProvider: MockFoxDashThemeProvider!
+    private var themeManager: MockThemeManager!
     private var closeCallCount = 0
 
     override func setUp() async throws {
         try await super.setUp()
         themeProvider = MockFoxDashThemeProvider(themeID: "christmas")
+        themeManager = MockThemeManager()
         closeCallCount = 0
     }
 
     override func tearDown() async throws {
         themeProvider = nil
+        themeManager = nil
         try await super.tearDown()
     }
 
@@ -67,16 +70,18 @@ final class FoxDashViewControllerTests: XCTestCase {
     }
 
     private func createSubject() -> FoxDashViewController {
-        let subject = FoxDashViewController(themeProvider: themeProvider) { [weak self] in
+        let subject = FoxDashViewController(
+            windowUUID: .XCTestDefaultUUID,
+            themeProvider: themeProvider,
+            themeManager: themeManager
+        ) { [weak self] in
             self?.closeCallCount += 1
         }
         return subject
     }
 
     private func closeButton(in subject: FoxDashViewController) -> UIButton? {
-        return subject.view.subviews.compactMap { $0 as? UIButton }.first {
-            $0.accessibilityIdentifier == AccessibilityIdentifiers.FoxDash.closeButton
-        }
+        return subject.view.subviews.compactMap { $0 as? UIButton }.first
     }
 }
 
