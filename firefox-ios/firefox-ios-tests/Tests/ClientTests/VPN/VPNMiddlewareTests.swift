@@ -109,7 +109,6 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
     func testChangeLocation_whenStopped_savesCountryCodeWithoutStarting() async {
         await dispatchChangeLocationAndWait(countryCode: "DE", expectStart: false)
 
-        XCTAssertEqual(mockVPNManager.selectedCountryCode, "DE")
         XCTAssertEqual(mockProfile.prefs.stringForKey(PrefsKeys.VPNSettings.selectedCountryCode), "DE")
         XCTAssertEqual(mockVPNManager.startCalled, 0)
         XCTAssertNil(mockUserPreferences.boolPreferences[.vpnFeature])

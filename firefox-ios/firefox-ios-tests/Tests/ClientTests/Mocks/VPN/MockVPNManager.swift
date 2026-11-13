@@ -42,8 +42,4 @@ final class MockVPNManager: VPNRunnable {
     func listCountries() async -> [VPNServerManager.Country] {
         return []
     }
-
-    func updateSelectedCountryCode(_ countryCode: String) {
-        selectedCountryCode = countryCode
-    }
 }

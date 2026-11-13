@@ -224,21 +224,12 @@ final class VPNManagerTests: XCTestCase {
         XCTAssertTrue(subject.isRunning)
     }
 
-    func testInit_loadsSelectedCountryCodeFromPref() {
+    func testSelectedCountryCode_readsFromPref() {
+        let subject = createSubject()
+
         mockProfile.prefs.setString("DE", forKey: PrefsKeys.VPNSettings.selectedCountryCode)
 
-        let subject = createSubject()
-
         XCTAssertEqual(subject.selectedCountryCode, "DE")
-    }
-
-    func testUpdateSelectedCountryCode_updatesSelectionWithoutWritingPref() {
-        let subject = createSubject()
-
-        subject.updateSelectedCountryCode("DE")
-
-        XCTAssertEqual(subject.selectedCountryCode, "DE")
-        XCTAssertNil(mockProfile.prefs.stringForKey(PrefsKeys.VPNSettings.selectedCountryCode))
     }
 
     // MARK: - events
