@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import AppAttestKit
 import Foundation
 
 /// A Proxy Pass contains the Token to Authenticate to the Proxy Servers
@@ -29,10 +30,51 @@ public struct VPNProxyUsage: Equatable, Sendable {
     // For people in a promotion or that have a subscription
     public let unlimited: Bool
 
+    /// Byte counts are BigInts serialized as strings; `resetAt` is Unix milliseconds.
+    private struct EntitlementResponse: Decodable {
+        let usageBytes: String
+        let maxBytes: String
+        let resetAt: Double
+    }
+
     public init(max: Int64, remaining: Int64, reset: Date, unlimited: Bool) {
         self.max = max
         self.remaining = remaining
         self.reset = reset
         self.unlimited = unlimited
+    }
+
+    /// Reads Guardian's `X-Quota-*` headers; nil if any are missing or malformed.
+    init?(response: URLResponse) {
+        guard let httpResponse = response as? HTTPURLResponse,
+              let maxString = httpResponse.value(forHTTPHeaderField: VPNConstants.quotaLimitHeader),
+              let max = Int64(maxString),
+              let remainingString = httpResponse.value(forHTTPHeaderField: VPNConstants.quotaRemainingHeader),
+              let remaining = Int64(remainingString),
+              let resetString = httpResponse.value(forHTTPHeaderField: VPNConstants.quotaResetHeader),
+              let reset = Self.parseISO8601(resetString)
+        else { return nil }
+        self.init(max: max, remaining: remaining, reset: reset, unlimited: false)
+    }
+
+    /// Decodes the `/ipn/entitlement` JSON body.
+    init(entitlementData: Data) throws {
+        let entitlement = try JSONDecoder().decode(EntitlementResponse.self, from: entitlementData)
+        guard let usage = Int64(entitlement.usageBytes),
+              let max = Int64(entitlement.maxBytes)
+        else {
+            throw AppAttestServiceError.invalidPayload
+        }
+        self.init(
+            max: max,
+            remaining: Swift.max(0, max - usage),
+            reset: Date(timeIntervalSince1970: entitlement.resetAt / 1000),
+            unlimited: false
+        )
+    }
+
+    private static func parseISO8601(_ string: String) -> Date? {
+        (try? Date.ISO8601FormatStyle(includingFractionalSeconds: true).parse(string))
+            ?? (try? Date.ISO8601FormatStyle().parse(string))
     }
 }

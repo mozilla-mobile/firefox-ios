@@ -36,6 +36,9 @@ public enum VPNConstants {
     static let contentTypeJSON = "application/json"
     static let POST = "POST"
     static let GET = "GET"
+    static let quotaLimitHeader = "X-Quota-Limit"
+    static let quotaRemainingHeader = "X-Quota-Remaining"
+    static let quotaResetHeader = "X-Quota-Reset"
 
     static func challengeEndpoint(with env: VPNEnvironment) -> URL? {
         env.baseURL?.appendingPathComponent("api/v1/ipn/challenge")
@@ -51,5 +54,9 @@ public enum VPNConstants {
 
     static func tokenEndpoint(with env: VPNEnvironment) -> URL? {
         env.baseURL?.appendingPathComponent("api/v1/ipn/token")
+    }
+
+    static func entitlementEndpoint(with env: VPNEnvironment) -> URL? {
+        env.baseURL?.appendingPathComponent("api/v1/ipn/entitlement")
     }
 }

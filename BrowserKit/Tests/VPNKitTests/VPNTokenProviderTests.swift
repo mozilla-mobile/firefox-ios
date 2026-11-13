@@ -65,6 +65,53 @@ final class VPNTokenProviderTests: XCTestCase {
         XCTAssertEqual(fetcher.fetchCallCount, 2)
     }
 
+    // MARK: - Usage
+
+    func test_proxyUsage_authenticatesThenFetchesEntitlement() async throws {
+        let auth = MockVPNAuthenticating(session: nil)
+        let fetcher = MockVPNProxyTokenFetching(passToReturn: pass())
+        let usage = VPNProxyUsage(max: 100, remaining: 40, reset: Date(timeIntervalSince1970: 0), unlimited: false)
+        fetcher.usageToReturn = usage
+        let subject = VPNTokenProvider(authService: auth, tokenService: fetcher)
+
+        let result = try await subject.proxyUsage()
+
+        XCTAssertEqual(result, usage)
+        XCTAssertEqual(auth.authenticateCallCount, 1, "Must establish a session before using it")
+        XCTAssertEqual(fetcher.fetchEntitlementCallCount, 1)
+        XCTAssertEqual(fetcher.fetchCallCount, 0, "Checking usage must not mint a proxy token")
+    }
+
+    func test_proxyUsage_propagatesAuthenticationFailure_withoutFetching() async throws {
+        let auth = MockVPNAuthenticating()
+        auth.authenticateError = VPNAuthError.notEnrolled
+        let fetcher = MockVPNProxyTokenFetching(passToReturn: pass())
+        let subject = VPNTokenProvider(authService: auth, tokenService: fetcher)
+
+        do {
+            _ = try await subject.proxyUsage()
+            XCTFail("Expected the authentication failure to surface.")
+        } catch let error as VPNAuthError {
+            XCTAssertEqual(error, .notEnrolled)
+        }
+
+        XCTAssertEqual(fetcher.fetchEntitlementCallCount, 0)
+    }
+
+    func test_proxyUsage_propagatesFetchFailure() async throws {
+        let auth = MockVPNAuthenticating()
+        let fetcher = MockVPNProxyTokenFetching(passToReturn: pass())
+        fetcher.fetchEntitlementError = URLError(.notConnectedToInternet)
+        let subject = VPNTokenProvider(authService: auth, tokenService: fetcher)
+
+        do {
+            _ = try await subject.proxyUsage()
+            XCTFail("Expected the transport failure to surface.")
+        } catch let error as URLError {
+            XCTAssertEqual(error.code, .notConnectedToInternet)
+        }
+    }
+
     // MARK: - Construction via VPNAuthCreator
 
     func test_makeTokenProvider_returnsProvider() {
