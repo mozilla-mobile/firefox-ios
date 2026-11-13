@@ -25,6 +25,8 @@ final class QuickAnswersReturnPillPresenter {
 
     private enum UX {
         static let fadeDuration: TimeInterval = 0.2
+        static let minimizeDuration: TimeInterval = 0.35
+        static let minimizeDamping: CGFloat = 0.9
         static let bottomSpacing: CGFloat = 8
         static let sideInset: CGFloat = 16
         static let minimizedLocationSpacing: CGFloat = 10
@@ -90,10 +92,20 @@ final class QuickAnswersReturnPillPresenter {
         if newPlacement != placement {
             apply(newPlacement, to: pill)
         }
-        pill.setMinimized(
-            context.isMinimized,
-            restingOffset: restingOffset(for: context, in: hostView),
-            animated: animated
+        let changes = {
+            pill.setMinimized(context.isMinimized, transform: self.minimizedTransform(for: context, in: hostView))
+            hostView.layoutIfNeeded()
+        }
+        guard animated else {
+            changes()
+            return
+        }
+        UIView.animate(
+            withDuration: UX.minimizeDuration,
+            delay: 0,
+            usingSpringWithDamping: UX.minimizeDamping,
+            initialSpringVelocity: 0,
+            animations: changes
         )
     }
 
@@ -126,10 +138,10 @@ final class QuickAnswersReturnPillPresenter {
         return context.isMinimized && context.isBottomSearchBar && context.locationViewFrame != nil
     }
 
-    /// The offset from the minimized pill's constrained center, above the anchor, to the trailing side of the
+    /// Moves the minimized pill from its constrained center, above the anchor, to the trailing side of the
     /// location view.
-    private func restingOffset(for context: LayoutContext, in hostView: UIView) -> CGPoint {
-        guard trailsLocationView(context), let frame = context.locationViewFrame, let anchorView else { return .zero }
+    private func minimizedTransform(for context: LayoutContext, in hostView: UIView) -> CGAffineTransform {
+        guard trailsLocationView(context), let frame = context.locationViewFrame, let anchorView else { return .identity }
         let halfSize = QuickAnswersReturnPillView.minimizedSize / 2
         let anchorTop = anchorView.convert(anchorView.bounds, to: hostView).minY
         let constrainedCenter = CGPoint(
@@ -137,7 +149,7 @@ final class QuickAnswersReturnPillPresenter {
             y: anchorTop - UX.bottomSpacing - halfSize
         )
         let targetCenter = CGPoint(x: frame.maxX + UX.minimizedLocationSpacing + halfSize, y: frame.midY)
-        return CGPoint(x: targetCenter.x - constrainedCenter.x, y: targetCenter.y - constrainedCenter.y)
+        return CGAffineTransform(translationX: targetCenter.x - constrainedCenter.x, y: targetCenter.y - constrainedCenter.y)
     }
 
     private func apply(_ newPlacement: Placement, to pill: UIView) {
