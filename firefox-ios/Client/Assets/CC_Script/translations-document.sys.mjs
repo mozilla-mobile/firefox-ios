@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import { AppConstants } from "resource://gre/modules/AppConstants.sys.mjs";
+import "Assets/CC_Script/TranslationsPolyfills.js";
 
 /**
  * @typedef {object} Lazy
