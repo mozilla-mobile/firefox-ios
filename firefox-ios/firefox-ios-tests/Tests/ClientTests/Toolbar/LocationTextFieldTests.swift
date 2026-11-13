@@ -10,11 +10,14 @@ final class LocationTextFieldTests: XCTestCase {
     private var textField: LocationTextField!
     private var themeManager: MockThemeManager!
     private var window: UIWindow!
+    private var delegate: MockLocationTextFieldDelegate!
 
     override func setUp() async throws {
         try await super.setUp()
         textField = LocationTextField(frame: .zero)
         themeManager = MockThemeManager()
+        delegate = MockLocationTextFieldDelegate()
+        textField.autocompleteDelegate = delegate
         window = UIWindow(frame: CGRect(x: 0, y: 0, width: 375, height: 44))
         window.addSubview(textField)
         window.makeKeyAndVisible()
@@ -24,6 +27,7 @@ final class LocationTextFieldTests: XCTestCase {
         textField.resignFirstResponder()
         textField = nil
         themeManager = nil
+        delegate = nil
         window = nil
         try await super.tearDown()
     }
@@ -32,127 +36,127 @@ final class LocationTextFieldTests: XCTestCase {
         textField.becomeFirstResponder()
     }
 
-    func testHandleInputModeDidChange_withNoLastMarkedText_doesNothing() {
-        textField.text = "www.wikipedia.com"
-        textField.setMarkedText("", selectedRange: NSRange())
+    // The suggestion must not be marked text: IME keyboards treat marked text as an active
+    // composition, so Return confirms the "composition" instead of submitting (FXIOS-16999).
+    func testSetAutocompleteSuggestion_rendersSuggestionAsLabelNotMarkedText() {
+        makeTextFieldEditing()
+        simulateTyping("google")
 
-        textField.handleInputModeDidChange()
+        textField.setAutocompleteSuggestion("google.com")
 
-        XCTAssertEqual(textField.text, "www.wikipedia.com")
+        XCTAssertNil(textField.markedTextRange, "The suggestion must not be set as marked text.")
+        XCTAssertEqual(textField.text, "google")
+        XCTAssertTrue(textField.isSelectionActive)
+        XCTAssertEqual(textField.accessibilityValue, "google.com")
     }
 
-    func testHandleInputModeDidChange_withLastMarkedText_updatesTextAndSetsMarkedText() {
-        textField.text = "www.wiki"
-        textField.setMarkedText("pedia.com", selectedRange: NSRange())
+    func testTextFieldShouldReturn_commitsSuggestion() {
+        makeTextFieldEditing()
+        simulateTyping("google")
+        textField.setAutocompleteSuggestion("google.com")
 
-        textField.handleInputModeDidChange()
+        let result = textField.textFieldShouldReturn(textField)
 
-        XCTAssertTrue(textField.text?.contains("www.wiki") ?? false)
+        XCTAssertTrue(result)
+        XCTAssertTrue(delegate.shouldReturnCalled)
+        XCTAssertEqual(delegate.shouldReturnText, "google.com")
+        XCTAssertEqual(textField.text, "google.com")
+        XCTAssertFalse(textField.isSelectionActive)
+    }
+
+    func testSetAutocompleteSuggestion_duringIMEComposition_doesNotShowSuggestion() {
+        makeTextFieldEditing()
+        textField.text = "google"
+        // Simulate an active IME composition (e.g. Japanese kana input).
+        textField.setMarkedText("にほん", selectedRange: NSRange())
         XCTAssertNotNil(textField.markedTextRange)
+
+        textField.setAutocompleteSuggestion("google.com")
+
+        XCTAssertFalse(textField.isSelectionActive)
+        XCTAssertNotNil(textField.markedTextRange, "The ongoing composition must not be disturbed.")
     }
 
-    func testHandleInputModeDidChange_whenSuggestionNoLongerMatchesTypedText_doesNotRestoreIt() {
+    func testDeleteBackward_withSuggestion_removesOnlySuggestion() {
         makeTextFieldEditing()
-        textField.text = "y"
-        textField.setAutocompleteSuggestion("youtube.com")
-        XCTAssertEqual(textField.text, "youtube.com")
+        simulateTyping("google")
+        textField.setAutocompleteSuggestion("google.com")
 
-        // The user types a second "y", replacing the completion with text that matches no suggestion.
-        _ = textField.textField(
-            textField,
-            shouldChangeCharactersIn: NSRange(location: 1, length: 10),
-            replacementString: "y"
-        )
-        textField.text = "yy"
-        textField.setAutocompleteSuggestion(nil)
+        textField.deleteBackward()
 
-        textField.handleInputModeDidChange()
+        XCTAssertEqual(textField.text, "google")
+        XCTAssertFalse(textField.isSelectionActive)
+    }
 
-        XCTAssertEqual(textField.text, "yy", "The dismissed suggestion should not come back on input mode change.")
+    func testDeleteBackward_duringIMEComposition_deletesCompositionCharacter() {
+        makeTextFieldEditing()
+        textField.text = "google"
+        textField.setMarkedText("g", selectedRange: NSRange())
+        XCTAssertNotNil(textField.markedTextRange)
+
+        textField.deleteBackward()
+
+        XCTAssertEqual(textField.text, "google", "Delete should shrink the composition, not the typed text.")
         XCTAssertNil(textField.markedTextRange)
     }
 
-    func testHandleInputModeDidChange_whenTextDoesNotEndWithLastMarkedText_doesNothing() {
-        textField.text = "wiki"
-        textField.setMarkedText("pedia.com", selectedRange: NSRange())
-        textField.text = "yy"
-
-        textField.handleInputModeDidChange()
-
-        XCTAssertEqual(textField.text, "yy")
-        XCTAssertNil(textField.markedTextRange)
-    }
-
-    func testAutocompleteSuggestion_whenInsertingAtStartOfText_appendsSuggestionAtEnd() {
-        // Start with "o" already in the text field.
+    func testTyping_removesSuggestion() {
         makeTextFieldEditing()
-        textField.text = "o"
+        simulateTyping("google")
+        textField.setAutocompleteSuggestion("google.com")
+        XCTAssertTrue(textField.isSelectionActive)
 
-        // Move the cursor before the "o": |o
-        if let startPosition = textField.position(from: textField.beginningOfDocument, offset: 0) {
-            textField.selectedTextRange = textField.textRange(from: startPosition, to: startPosition)
-        }
+        simulateTyping("1")
 
-        // Simulate the user typing "y" at the start.
-        _ = textField.textField(
-            textField,
-            shouldChangeCharactersIn: NSRange(location: 0, length: 0),
-            replacementString: "y"
-        )
-
-        textField.text = "yo"
-        if let cursorPosition = textField.position(from: textField.beginningOfDocument, offset: 1) {
-            textField.selectedTextRange = textField.textRange(from: cursorPosition, to: cursorPosition)
-        }
-
-        // Apply the autocomplete suggestion.
-        textField.setAutocompleteSuggestion("youtube.com")
-
-        // It should complete the full text, not insert the suggestion after the cursor.
-        XCTAssertEqual(textField.text,
-                       "youtube.com",
-                       "Suggestion should be appended at end of text, not inserted at cursor position")
+        XCTAssertFalse(textField.isSelectionActive)
+        XCTAssertEqual(textField.text, "google1")
     }
 
-    func testAutocompleteSuggestion_whenAppendingAtEnd_stillWorks() {
+    func testApplyTheme_keepsSuggestionVisible() {
         makeTextFieldEditing()
-        textField.text = "yo"
-
-        if let endPosition = textField.position(from: textField.beginningOfDocument, offset: 2) {
-            textField.selectedTextRange = textField.textRange(from: endPosition, to: endPosition)
-        }
-
-        _ = textField.textField(
-            textField,
-            shouldChangeCharactersIn: NSRange(location: 2, length: 0),
-            replacementString: "u"
-        )
-
-        textField.text = "you"
-        if let endPosition = textField.position(from: textField.beginningOfDocument, offset: 3) {
-            textField.selectedTextRange = textField.textRange(from: endPosition, to: endPosition)
-        }
-
-        textField.setAutocompleteSuggestion("youtube.com")
-
-        XCTAssertEqual(textField.text, "youtube.com")
-    }
-
-    func testApplyTheme_refreshesMarkedText() {
-        textField.text = "github"
-        // Move cursor to end of text before setting marked text
-        if let endPosition = textField.position(from: textField.beginningOfDocument, offset: textField.text!.count-1) {
-            textField.selectedTextRange = textField.textRange(from: endPosition, to: endPosition)
-        }
-        textField.setMarkedText(".com", selectedRange: .init())
-
-        XCTAssertNotNil(textField.markedTextRange, "Marked text should exist before theme change.")
+        simulateTyping("google")
+        textField.setAutocompleteSuggestion("google.com")
+        XCTAssertTrue(textField.isSelectionActive)
 
         themeManager.setManualTheme(to: .dark)
         textField.applyTheme(theme: themeManager.getCurrentTheme(for: .XCTestDefaultUUID))
 
-        XCTAssertNotNil(textField.markedTextRange, "Marked text should still exist after theme change.")
-
-        XCTAssertEqual(textField.text, "github.com")
+        XCTAssertTrue(textField.isSelectionActive)
+        XCTAssertEqual(textField.accessibilityValue, "google.com")
     }
+
+    // MARK: - Helpers
+
+    private func simulateTyping(_ string: String) {
+        for character in string {
+            let location = (textField.text ?? "").count
+            _ = textField.textField(
+                textField,
+                shouldChangeCharactersIn: NSRange(location: location, length: 0),
+                replacementString: String(character)
+            )
+            textField.text = (textField.text ?? "") + String(character)
+        }
+    }
+}
+
+@MainActor
+private final class MockLocationTextFieldDelegate: LocationTextFieldDelegate {
+    var shouldReturnCalled = false
+    var shouldReturnText: String?
+
+    func locationTextFieldDidEnterText(_ text: String) {}
+
+    func locationTextFieldShouldReturn(_ textField: LocationTextField) -> Bool {
+        shouldReturnCalled = true
+        shouldReturnText = textField.text
+        return true
+    }
+
+    func locationTextFieldShouldClear() -> Bool { return true }
+    func locationTextFieldDidBeginEditing(_ textField: UITextField) {}
+    func locationTextFieldDidEndEditing() {}
+    func locationTextFieldNeedsSearchReset() {}
+    func locationTextFieldDidDisplayEditingAccessoryButton(_ button: UIButton, contextualHintType: String) {}
+    func locationTextFieldDidHideEditingAccessoryButton() {}
 }

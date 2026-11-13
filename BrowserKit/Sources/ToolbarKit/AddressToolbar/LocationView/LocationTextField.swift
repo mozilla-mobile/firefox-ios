@@ -19,7 +19,7 @@ protocol LocationTextFieldDelegate: AnyObject {
     func locationTextFieldDidHideEditingAccessoryButton()
 }
 
-final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable, Notifiable {
+final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
     private enum UX {
         static let editingAccessoryRightViewSize = CGSize(width: 44, height: 44)
         static let editingAccessoryContentInsets = NSDirectionalEdgeInsets(
@@ -37,6 +37,13 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
 
     weak var autocompleteDelegate: LocationTextFieldDelegate?
 
+    // The autocomplete suggestion is rendered in a separate label overlay rather than as
+    // marked text. Using marked text conflicts with IME keyboards (Chinese, Japanese, …):
+    // the IME treats the suggestion as an active composition, so Return confirms the
+    // "composition" instead of submitting, and composition updates can clobber typed text.
+    private var autocompleteTextLabel: UILabel?
+    private var suggestionHighlightColor: UIColor = .clear
+
     // This variable is a solution to get the right behaviour for refocusing
     // the LocationTextField. The initial transition into Overlay Mode
     // doesn't involve the user interacting with LocationTextField.
@@ -48,8 +55,11 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     // The last string used as a replacement in shouldChangeCharactersInRange.
     private var lastReplacement: String?
     private var hideCursor = false
-    private var isSettingMarkedText = false
-    private var lastMarkedText = ""
+
+    var isSelectionActive: Bool {
+        return autocompleteTextLabel != nil
+    }
+
     var clearButton: UIButton? {
         return value(forKey: "_clearButton") as? UIButton
     }
@@ -70,6 +80,22 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
         ])
         return button
     }()
+
+    override var text: String? {
+        didSet {
+            super.text = text
+            self.textDidChange(self)
+        }
+    }
+
+    override var accessibilityValue: String? {
+        get {
+            return (self.text ?? "") + (self.autocompleteTextLabel?.text ?? "")
+        }
+        set {
+            super.accessibilityValue = newValue
+        }
+    }
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -105,16 +131,10 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
                                      action: {
             if self.isEditing {
                 self.autocompleteDelegate?.locationTextFieldDidEnterText(
-                    self.normalizeString(self.textWithoutSuggestion() ?? "")
+                    self.normalizeString(self.text ?? "")
                 )
             }
         })
-
-        startObservingNotifications(
-            withNotificationCenter: notificationCenter,
-            forObserver: self,
-            observing: [UITextInputMode.currentInputModeDidChangeNotification]
-        )
     }
 
     weak var accessibilityActionsSource: AccessibilityActionsSource?
@@ -138,18 +158,16 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     }
 
     override func deleteBackward() {
-        lastMarkedText = ""
         lastReplacement = ""
         hideCursor = false
 
-        guard markedTextRange == nil else {
+        if isSelectionActive {
             // If we have an active completion, delete it without deleting any user-typed characters.
             removeCompletion()
             forceResetCursor()
-            return
+        } else {
+            super.deleteBackward()
         }
-
-        super.deleteBackward()
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -163,45 +181,49 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     }
 
     override public func setMarkedText(_ markedText: String?, selectedRange: NSRange) {
-        isSettingMarkedText = true
-        lastMarkedText = markedText ?? ""
+        // Clear the autocompletion if any provisionally inserted text has been
+        // entered (e.g., a partial composition from a Japanese keyboard).
         removeCompletion()
+        hideCursor = false
         super.setMarkedText(markedText, selectedRange: selectedRange)
-        isSettingMarkedText = false
     }
 
     func setAutocompleteSuggestion(_ suggestion: String?) {
         let searchText = text ?? ""
 
-        guard let suggestion, isEditing && markedTextRange == nil else {
-            cancelPendingCompletion()
+        // Never show a suggestion while a real IME composition is in progress.
+        guard let suggestion, isEditing, markedTextRange == nil else {
+            removeCompletion()
+            hideCursor = false
             return
         }
 
         let normalized = normalizeString(searchText)
-        guard suggestion.hasPrefix(normalized) && normalized.count < suggestion.count else {
-            cancelPendingCompletion()
+        guard suggestion.hasPrefix(normalized), normalized.count < suggestion.count else {
+            removeCompletion()
+            hideCursor = false
             return
         }
 
         let suggestionText = String(suggestion.dropFirst(normalized.count))
-        selectedTextRange = textRange(from: endOfDocument, to: endOfDocument)
-        setMarkedText(suggestionText, selectedRange: NSRange())
-        hideCursor = true
-    }
+        let autocompleteText = NSMutableAttributedString(string: suggestionText)
+        autocompleteText.addAttribute(
+            .backgroundColor,
+            value: suggestionHighlightColor,
+            range: NSRange(location: 0, length: (suggestionText as NSString).length)
+        )
 
-    func handleInputModeDidChange() {
-        guard !lastMarkedText.isEmpty, let currentText = text, currentText.hasSuffix(lastMarkedText) else { return }
-        self.text = String(currentText.dropLast(lastMarkedText.count))
-        hideCursor = true
-        setMarkedText(lastMarkedText, selectedRange: NSRange())
-    }
+        autocompleteTextLabel?.removeFromSuperview() // should be nil. But just in case
+        let label = createAutocompleteLabel(with: autocompleteText)
+        autocompleteTextLabel = label
+        addSubview(label)
 
-    // MARK: - Notifiable
-    func handleNotifications(_ notification: Notification) {
-        guard notification.name == UITextInputMode.currentInputModeDidChangeNotification else { return }
-        DispatchQueue.main.async { [weak self] in
-            self?.handleInputModeDidChange()
+        // Only call forceResetCursor() if `hideCursor` changes.
+        // Because forceResetCursor() auto accepts iOS user's text replacement
+        // (e.g. mu->μ) which makes user unable to type "mu".
+        if !hideCursor {
+            hideCursor = true
+            forceResetCursor()
         }
     }
 
@@ -211,29 +233,24 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
         tintColor = colors.layerSelectedText
         clearButtonTintColor = colors.iconPrimary
         editingAccessoryRightView.applyTheme(theme: theme)
-        markedTextStyle = [NSAttributedString.Key.backgroundColor: colors.layerAutofillText]
+        suggestionHighlightColor = colors.layerAutofillText
 
-        // Force marked text to refresh with new style
-        if let markedRange = markedTextRange,
-           let markedText = text(in: markedRange) {
-            setMarkedText(markedText, selectedRange: .init())
+        if let label = autocompleteTextLabel,
+           let attributed = label.attributedText?.mutableCopy() as? NSMutableAttributedString {
+            attributed.addAttribute(.backgroundColor,
+                                    value: suggestionHighlightColor,
+                                    range: NSRange(location: 0, length: attributed.length))
+            label.attributedText = attributed
         }
         tintClearButton()
     }
 
     // MARK: - Private
-    private func cancelPendingCompletion() {
-        hideCursor = false
-        if markedTextRange == nil { lastMarkedText = "" }
-    }
 
     @objc
-    private func textDidChange() {
-        // When marked text (autocomplete suggestion) is set this method is called
-        // in this case we don't need to
-        guard !isSettingMarkedText else { return }
-
-        hideCursor = markedTextRange != nil
+    private func textDidChange(_ sender: Any?) {
+        hideCursor = isSelectionActive
+        removeCompletion()
 
         let isKeyboardReplacingText = lastReplacement != nil
         if isKeyboardReplacingText, markedTextRange == nil {
@@ -254,7 +271,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     }
 
     private func updateRightView() {
-        let textIsEmpty = textWithoutSuggestion()?.isEmpty ?? true
+        let textIsEmpty = text?.isEmpty ?? true
         let shouldShowEditingAccessory = editingAccessoryAction?.iconName != nil && isEditing && textIsEmpty
         let wasShowingEditingAccessory = rightView != nil && rightView === editingAccessoryRightView
 
@@ -282,11 +299,9 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
 
     /// Commits the completion by setting the text and removing the highlight.
     private func applyCompletion() {
-        // Clear the current completion, then set the text without the attributed style.
-        lastMarkedText = ""
-        let text = (self.text ?? "")
+        let text = (self.text ?? "") + (self.autocompleteTextLabel?.text ?? "")
         let didRemoveCompletion = removeCompletion()
-        self.text = text
+        super.text = text
         hideCursor = false
 
         // Move the cursor to the end of the completion.
@@ -299,19 +314,10 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     @objc
     @discardableResult
     private func removeCompletion() -> Bool {
-        guard markedTextRange != nil else { return false }
-
-        text = textWithoutSuggestion()
-        return true
-    }
-
-    private func textWithoutSuggestion() -> String? {
-        guard let markedTextRange else { return text }
-
-        let location = offset(from: beginningOfDocument, to: markedTextRange.start)
-        let length = offset(from: markedTextRange.start, to: markedTextRange.end)
-        let range = NSRange(location: location, length: length)
-        return (text as NSString?)?.replacingCharacters(in: range, with: "")
+        let hasActiveCompletion = isSelectionActive
+        autocompleteTextLabel?.removeFromSuperview()
+        autocompleteTextLabel = nil
+        return hasActiveCompletion
     }
 
     @objc
@@ -320,6 +326,25 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
         removeCompletion()
         updateRightView()
         autocompleteDelegate?.locationTextFieldDidEnterText("")
+    }
+
+    private func createAutocompleteLabel(with autocompleteText: NSAttributedString) -> UILabel {
+        let label = UILabel()
+        var frame = self.bounds
+        label.attributedText = autocompleteText
+        label.font = self.font
+        label.accessibilityIdentifier = "autocomplete"
+        label.textColor = self.textColor
+        label.textAlignment = .left
+        label.isUserInteractionEnabled = false
+
+        let fontAttributes: [NSAttributedString.Key: Any] = [.font: self.font as Any]
+        let enteredTextWidth = ((self.text ?? "") as NSString).size(withAttributes: fontAttributes).width
+        frame.origin.x = enteredTextWidth.rounded() + textRect(forBounds: bounds).origin.x
+        frame.size.width = self.frame.size.width - clearButtonRect(forBounds: self.bounds).size.width - frame.origin.x
+        frame.size.height = self.frame.size.height
+        label.frame = frame
+        return label
     }
 
     private func normalizeString(_ string: String) -> String {
