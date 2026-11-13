@@ -7930,6 +7930,11 @@ extension String {
         tableName: nil,
         value: "If a site doesn’t work as expected, tap the lock in the address bar and turn off Enhanced Tracking Protection for that page.",
         comment: "Footer information for tracker protection level.")
+    public static let TrackingProtectionLevelFooterStrict = MZLocalizedString(
+        key: "Settings.TrackingProtection.ProtectionLevel.Footer.Strict.v161",
+        tableName: nil,
+        value: "If a site isn’t working, open the menu and try turning Enhanced Tracking Protection off.",
+        comment: "Footer information for tracker protection level.")
     public static let TrackerProtectionLearnMore = MZLocalizedString(
         key: "Settings.TrackingProtection.LearnMore",
         tableName: nil,
