@@ -203,7 +203,7 @@ final class HistoryPanelViewModel: @unchecked Sendable {
     func removeHistoryItems(item historyItem: [HistoryItem], at section: Int) {
         historyItem.forEach { item in
             if case HistoryItem.site(let site) = item {
-                deleteSingle(site: site)
+                deleteAllVisits(for: site)
             }
         }
         buildVisibleSections()
@@ -262,7 +262,7 @@ final class HistoryPanelViewModel: @unchecked Sendable {
         }
     }
 
-    private func deleteSingle(site: Site) {
+    private func deleteAllVisits(for site: Site) {
         dateGroupedSites.allItems()
             .filter { $0.url == site.url }
             .forEach { dateGroupedSites.remove($0) }
