@@ -322,7 +322,11 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         mockUserPreferences.onSetPreference = { preferenceSet.fulfill() }
         let subject = createSubject()
 
-        subject.vpnProvider.modernMiddleware(AppState(), VPNModernAction.changeLocation(countryCode: countryCode), firstWindowUUID)
+        subject.vpnProvider.modernMiddleware(
+            AppState(),
+            VPNModernAction.changeLocation(countryCode: countryCode),
+            firstWindowUUID
+        )
         await fulfillment(of: [started, preferenceSet], timeout: 0.2)
     }
 
