@@ -117,15 +117,14 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
 
     private func dispatchNotificationCardConfigurationAction(action: Action) {
         guard shouldShowNotificationCard() else { return }
-
         let windowUUID = action.windowUUID
         // The card prompts the user to enable notifications, so it should only
         // appear when they aren't already on. hasPermission() is async, so we
         // confirm the live system permission before queueing the action.
         Task { [weak self] in
             guard let self else { return }
-            let notificationsEnabled = await self.notificationManager.hasPermission()
-            guard !notificationsEnabled else { return }
+            let canEnableNotifications = await self.notificationManager.hasNoPermissionAndCanAsk()
+            guard canEnableNotifications else { return }
             ensureMainThread {
                 store.dispatch(
                     HomepageAction(

@@ -12,6 +12,7 @@ protocol NotificationManagerProtocol: Sendable {
     func requestAuthorization() async throws -> Bool
     func getNotificationSettings(sendTelemetry: Bool) async -> UNNotificationSettings
     func hasPermission() async -> Bool
+    func hasNoPermissionAndCanAsk() async -> Bool
     func schedule(title: String,
                   body: String,
                   id: String,
@@ -94,6 +95,22 @@ final class NotificationManager: NotificationManagerProtocol, @unchecked Sendabl
         case .authorized, .ephemeral, .provisional:
             hasPermission = true
         case .notDetermined, .denied:
+            fallthrough
+        @unknown default:
+            hasPermission = false
+        }
+        return hasPermission
+    }
+
+    // Determines if the user has not allowed permissions
+    // and they have not explicitly denied notifications
+    func hasNoPermissionAndCanAsk() async -> Bool {
+        let settings = await getNotificationSettings()
+        var hasPermission = false
+        switch settings.authorizationStatus {
+        case .notDetermined:
+            hasPermission = true
+        case .authorized, .ephemeral, .provisional, .denied:
             fallthrough
         @unknown default:
             hasPermission = false

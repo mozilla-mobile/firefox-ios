@@ -321,11 +321,13 @@ final class BrowserCoordinator: BaseCoordinator,
             findAndHandle(route: savedRoute)
         }
 
-        presentHardcodedOnboardingDripIfNeeded()
+        Task { @MainActor [weak self] in
+            await self?.presentHardcodedOnboardingDripIfNeeded()
+        }
     }
 
     // Presents the day-based onboarding card over the current tab
-    private func presentHardcodedOnboardingDripIfNeeded() {
+    private func presentHardcodedOnboardingDripIfNeeded() async {
         guard browserViewController.presentedViewController == nil else { return }
 
         let manager = IntroScreenManager(prefs: profile.prefs)
@@ -334,8 +336,17 @@ final class BrowserCoordinator: BaseCoordinator,
         let cards = OnboardingCardScheduler(prefs: profile.prefs).getDueCards()
         guard !cards.isEmpty else { return }
 
+        let canRequestNotifications = await NotificationManager().hasNoPermissionAndCanAsk()
+        let cardsToShow = cards.filter { card in
+            switch card.cardType {
+            case .notifications: return canRequestNotifications
+            case .sync: return !profile.hasSyncableAccount()
+            }
+        }
+        guard !cardsToShow.isEmpty, browserViewController.presentedViewController == nil else { return }
+
         let view = OnboardingFlowView(
-            cards: cards,
+            cards: cardsToShow,
             windowUUID: windowUUID,
             themeManager: themeManager,
             onAction: { [weak self] action in
