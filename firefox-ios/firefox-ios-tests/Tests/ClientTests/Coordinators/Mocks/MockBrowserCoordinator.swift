@@ -56,6 +56,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
     var popToBVCCalled = 0
     var openLearnMoreFromNativeErrorPageCalled = 0
     var showQuickAnswersCalled = 0
+    var showFoxDashCalled = 0
     var showGoogleLensPhotoPickerCalled = 0
     var showGoogleLensCameraCalled = 0
     var showVPNFailureAlertCalled = 0
@@ -194,6 +195,10 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
 
     func showQuickAnswers(transitionType: QuickAnswersTransitionType) {
         showQuickAnswersCalled += 1
+    }
+
+    func showFoxDash() {
+        showFoxDashCalled += 1
     }
 
     func showGoogleLensPhotoPicker() {

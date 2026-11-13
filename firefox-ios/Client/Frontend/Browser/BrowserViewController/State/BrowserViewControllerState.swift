@@ -205,6 +205,7 @@ struct BrowserViewControllerState: ScreenState {
             NavigationBrowserActionType.tapOnHomepageSearchBar,
             NavigationBrowserActionType.tapOnShortcutsShowAllButton,
             NavigationBrowserActionType.tapOnQuickAnswersButton,
+            NavigationBrowserActionType.longPressOnHomepageLogo,
             NavigationBrowserActionType.tapOnPrivacyNoticeLink,
             NavigationBrowserActionType.tapOnShowCertificatesFromErrorPage,
             NavigationBrowserActionType.tapOnNativeErrorPageLearnMore,

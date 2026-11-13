@@ -20,6 +20,7 @@ enum BrowserNavigationDestination: Equatable {
     case zeroSearch
     case shortcutsLibrary
     case quickAnswers(transitionType: QuickAnswersTransitionType)
+    case foxDash
     case privacyNoticeLink(URL)
     case summarizer(config: SummarizerConfig, trigger: SummarizerTrigger)
     case certificatesFromErrorPage
