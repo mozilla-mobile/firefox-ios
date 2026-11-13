@@ -22,9 +22,9 @@ public struct VPNProxyPass: Equatable, Sendable {
 
 public struct VPNProxyUsage: Equatable, Sendable {
     // Bytes the User can consume in each Period
-    public let max: Int64
+    public let max: UInt64
     // Bytes the User has left in each Period
-    public let remaining: Int64
+    public let remaining: UInt64
     // Date when the next Period begins
     public let reset: Date
     // For people in a promotion or that have a subscription
@@ -34,10 +34,10 @@ public struct VPNProxyUsage: Equatable, Sendable {
     private struct EntitlementResponse: Decodable {
         let usageBytes: String
         let maxBytes: String
-        let resetAt: Double
+        let resetAt: Date
     }
 
-    public init(max: Int64, remaining: Int64, reset: Date, unlimited: Bool) {
+    public init(max: UInt64, remaining: UInt64, reset: Date, unlimited: Bool) {
         self.max = max
         self.remaining = remaining
         self.reset = reset
@@ -48,9 +48,9 @@ public struct VPNProxyUsage: Equatable, Sendable {
     init?(response: URLResponse) {
         guard let httpResponse = response as? HTTPURLResponse,
               let maxString = httpResponse.value(forHTTPHeaderField: VPNConstants.quotaLimitHeader),
-              let max = Int64(maxString),
+              let max = UInt64(maxString),
               let remainingString = httpResponse.value(forHTTPHeaderField: VPNConstants.quotaRemainingHeader),
-              let remaining = Int64(remainingString),
+              let remaining = UInt64(remainingString),
               let resetString = httpResponse.value(forHTTPHeaderField: VPNConstants.quotaResetHeader),
               let reset = Self.parseISO8601(resetString)
         else { return nil }
@@ -59,16 +59,18 @@ public struct VPNProxyUsage: Equatable, Sendable {
 
     /// Decodes the `/ipn/entitlement` JSON body.
     init(entitlementData: Data) throws {
-        let entitlement = try JSONDecoder().decode(EntitlementResponse.self, from: entitlementData)
-        guard let usage = Int64(entitlement.usageBytes),
-              let max = Int64(entitlement.maxBytes)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .millisecondsSince1970
+        let entitlement = try decoder.decode(EntitlementResponse.self, from: entitlementData)
+        guard let usage = UInt64(entitlement.usageBytes),
+              let max = UInt64(entitlement.maxBytes)
         else {
             throw AppAttestServiceError.invalidPayload
         }
         self.init(
             max: max,
             remaining: Swift.max(0, max - usage),
-            reset: Date(timeIntervalSince1970: entitlement.resetAt / 1000),
+            reset: entitlement.resetAt,
             unlimited: false
         )
     }
