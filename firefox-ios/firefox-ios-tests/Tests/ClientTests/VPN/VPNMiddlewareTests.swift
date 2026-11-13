@@ -263,6 +263,19 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         return subject
     }
 
+    private func dispatchChangeLocationAndWait(expectStart: Bool) async {
+        let started = expectation(description: "VPN start attempted")
+        started.isInverted = !expectStart
+        mockVPNManager.onStart = { started.fulfill() }
+        let preferenceSet = expectation(description: "Preference set")
+        preferenceSet.isInverted = true
+        mockUserPreferences.onSetPreference = { preferenceSet.fulfill() }
+        let subject = createSubject()
+
+        subject.vpnProvider.modernMiddleware(AppState(), VPNModernAction.changeLocation, firstWindowUUID)
+        await fulfillment(of: [started, preferenceSet], timeout: 0.2)
+    }
+
     private func yieldAndWaitForDispatch(_ event: VPNEvent, subject: VPNMiddleware) async throws {
         let dispatched = expectation(description: "Alert dispatched")
         mockStore.dispatchCalled = { dispatched.fulfill() }
