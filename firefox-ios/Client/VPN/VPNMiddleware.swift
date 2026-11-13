@@ -142,6 +142,7 @@ final class VPNMiddleware {
         }
         guard countryCode != vpnManager.selectedCountryCode else { return }
         prefs.setString(countryCode, forKey: PrefsKeys.VPNSettings.selectedCountryCode)
+        vpnManager.selectedCountryCodeDidChange(countryCode: countryCode)
 
         // if the VPN is running when the selected location changes, start a new connection
         guard vpnManager.isRunning else { return }
