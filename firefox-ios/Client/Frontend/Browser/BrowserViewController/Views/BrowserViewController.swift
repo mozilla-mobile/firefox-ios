@@ -2892,6 +2892,8 @@ class BrowserViewController: UIViewController,
             navigationHandler?.showShortcutsLibrary()
         case .quickAnswers(let transitionType):
             navigationHandler?.showQuickAnswers(transitionType: transitionType)
+        case .foxDash:
+            navigationHandler?.showFoxDash()
         case .privacyNoticeLink(let url):
             navigationHandler?.showPrivacyNoticeLink(url: url)
         case .certificatesFromErrorPage:

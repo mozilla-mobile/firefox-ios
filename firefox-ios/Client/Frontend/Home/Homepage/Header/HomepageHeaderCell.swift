@@ -18,6 +18,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         static let firefoxTextImageSize = CGSize(width: 90, height: 40)
         static let interImageSpacing: CGFloat = 10
         static let quickAnswersButtonSize: CGFloat = 44
+        static let foxDashActionName = "Fox Dash"
 
         static func contentWidth() -> CGFloat {
             return UX.firefoxLogoImageSize.width + UX.interImageSpacing + UX.firefoxTextImageSize.width
@@ -43,7 +44,21 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         view.accessibilityLabel = AppName.shortName.rawValue
         view.isAccessibilityElement = true
         view.accessibilityTraits = .image
+        view.isUserInteractionEnabled = true
     }
+
+    private lazy var logoLongPressRecognizer = UILongPressGestureRecognizer(
+        target: self,
+        action: #selector(handleLogoLongPress)
+    )
+
+    private lazy var foxDashAccessibilityAction = UIAccessibilityCustomAction(
+        name: UX.foxDashActionName,
+        actionHandler: { [weak self] _ in
+            self?.openFoxDash()
+            return true
+        }
+    )
 
     private lazy var logoImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
@@ -98,6 +113,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         contentView.addSubview(quickAnswersButton)
 
         logoStackView.pinToSuperview()
+        logoStackView.addGestureRecognizer(logoLongPressRecognizer)
 
         setupConstraints()
     }
@@ -143,6 +159,9 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
             : UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoBall)
 
         quickAnswersButton.isHidden = !headerState.showQuickAnswersButton
+
+        logoLongPressRecognizer.isEnabled = headerState.isFoxDashEnabled
+        logoStackView.accessibilityCustomActions = headerState.isFoxDashEnabled ? [foxDashAccessibilityAction] : nil
 
         // if the quick answers button is visible and we are on iPhone setup, align the logo to the leading
         let alignLogoToLeading = headerState.showQuickAnswersButton && !showiPadSetup
@@ -222,6 +241,24 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
     private func cancelQuickAnswersTipObservation() {
         tipObservationTask?.cancel()
         tipObservationTask = nil
+    }
+
+    @objc
+    private func handleLogoLongPress(_ recognizer: UILongPressGestureRecognizer) {
+        guard recognizer.state == .began else { return }
+        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+        openFoxDash()
+    }
+
+    private func openFoxDash() {
+        guard let headerState else { return }
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.foxDash),
+                windowUUID: headerState.windowUUID,
+                actionType: NavigationBrowserActionType.longPressOnHomepageLogo
+            )
+        )
     }
 
     private func quickAnswerButtonTapped() {
