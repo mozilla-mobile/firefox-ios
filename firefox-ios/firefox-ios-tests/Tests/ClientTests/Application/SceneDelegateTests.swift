@@ -184,7 +184,7 @@ final class SceneDelegateTests: XCTestCase, FeatureFlaggable {
     }
 
     private func setIsDeeplinkOptimizationRefactorEnabled(_ enabled: Bool) {
-        FxNimbus.shared.features.deeplinkOptimizationRefactorFeature.with { _, _ in
+        FxNimbus.shared.features.deeplinkOptimizationRefactorFeature.with { _ in
             return DeeplinkOptimizationRefactorFeature(enabled: enabled)
         }
     }

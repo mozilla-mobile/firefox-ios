@@ -841,37 +841,37 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     }
 
     private func setupNimbusToolbarRefactorTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
+        FxNimbus.shared.features.toolbarRefactorFeature.with { _ in
             return ToolbarRefactorFeature()
         }
     }
 
     private func setIsSwipingTabsEnabled(_ isEnabled: Bool) {
-        FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
+        FxNimbus.shared.features.toolbarRefactorFeature.with { _ in
             return ToolbarRefactorFeature()
         }
     }
 
     private func setIsHostedSummarizerEnabled(_ isEnabled: Bool) {
-        FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
+        FxNimbus.shared.features.hostedSummarizerFeature.with { _ in
             return HostedSummarizerFeature()
         }
     }
 
     private func setIsDeeplinkOptimizationRefactorEnabled(_ isEnabled: Bool) {
-        FxNimbus.shared.features.deeplinkOptimizationRefactorFeature.with { _, _ in
+        FxNimbus.shared.features.deeplinkOptimizationRefactorFeature.with { _ in
             return DeeplinkOptimizationRefactorFeature(enabled: isEnabled)
         }
     }
 
     private func setupSummarizedShakeGestureForTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
+        FxNimbus.shared.features.hostedSummarizerFeature.with { _ in
             return HostedSummarizerFeature(enabled: isEnabled, shakeGesture: isEnabled)
         }
     }
 
     private func setupNimbusNativeErrorPageTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.nativeErrorPageFeature.with { _, _ in
+        FxNimbus.shared.features.nativeErrorPageFeature.with { _ in
             return NativeErrorPageFeature(enabled: isEnabled)
         }
     }

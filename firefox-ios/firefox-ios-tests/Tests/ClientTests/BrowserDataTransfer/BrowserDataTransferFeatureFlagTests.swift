@@ -14,8 +14,8 @@ final class BrowserDataTransferFeatureFlagTests: XCTestCase {
     }
 
     override func tearDown() async throws {
-        FxNimbus.shared.features.browserDataTransferFeature.with { variables, prefs in
-            BrowserDataTransferFeature(variables, prefs)
+        FxNimbus.shared.features.browserDataTransferFeature.with { variables in
+            BrowserDataTransferFeature(variables)
         }
         try await super.tearDown()
     }
@@ -36,13 +36,13 @@ final class BrowserDataTransferFeatureFlagTests: XCTestCase {
         let layer = NimbusFeatureFlagLayer()
         let prefs = MockProfilePrefs()
 
-        FxNimbus.shared.features.browserDataTransferFeature.with { _, _ in
+        FxNimbus.shared.features.browserDataTransferFeature.with { _ in
             BrowserDataTransferFeature(exportEnabled: false, importEnabled: true)
         }
         XCTAssertTrue(layer.checkNimbusConfigFor(.browserDataImport, with: prefs))
         XCTAssertFalse(layer.checkNimbusConfigFor(.browserDataExport, with: prefs))
 
-        FxNimbus.shared.features.browserDataTransferFeature.with { _, _ in
+        FxNimbus.shared.features.browserDataTransferFeature.with { _ in
             BrowserDataTransferFeature(exportEnabled: true, importEnabled: false)
         }
         XCTAssertFalse(layer.checkNimbusConfigFor(.browserDataImport, with: prefs))
@@ -52,7 +52,7 @@ final class BrowserDataTransferFeatureFlagTests: XCTestCase {
     func testDebugOverride_appliesToOneDirection() throws {
         let prefs = MockProfilePrefs()
         let layer = NimbusFeatureFlagLayer()
-        FxNimbus.shared.features.browserDataTransferFeature.with { _, _ in
+        FxNimbus.shared.features.browserDataTransferFeature.with { _ in
             BrowserDataTransferFeature(exportEnabled: true, importEnabled: true)
         }
         let importDebugKey = try XCTUnwrap(FeatureFlagID.browserDataImport.debugKey)

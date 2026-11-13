@@ -174,7 +174,7 @@ final class WallpaperEngagementCoordinatorTests: XCTestCase {
     }
 
     private func setMarketingSlug(_ slug: String) {
-        FxNimbus.shared.features.wallpaperEngagementSheetFeature.with(initializer: { _, _ in
+        FxNimbus.shared.features.wallpaperEngagementSheetFeature.with(initializer: { _ in
             WallpaperEngagementSheetFeature(enabled: true, marketingSlug: slug)
         })
     }

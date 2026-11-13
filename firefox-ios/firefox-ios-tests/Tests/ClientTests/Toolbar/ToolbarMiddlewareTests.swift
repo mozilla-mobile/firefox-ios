@@ -1299,7 +1299,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     private func setIsHostedSummaryEnabled(_ isEnabled: Bool) {
-        return FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
+        return FxNimbus.shared.features.hostedSummarizerFeature.with { _ in
             return HostedSummarizerFeature(enabled: isEnabled)
         }
     }

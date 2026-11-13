@@ -265,7 +265,7 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
     }
 
     private func setIsSummarizerLanguageExpansionEnabled(_ enabled: Bool) {
-        FxNimbus.shared.features.summarizerLanguageExpansionFeature.with { _, _ in
+        FxNimbus.shared.features.summarizerLanguageExpansionFeature.with { _ in
             return SummarizerLanguageExpansionFeature(enabled: enabled)
         }
     }
@@ -295,7 +295,7 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
     }
 
     private func setLanguagePickerEnabled(_ enabled: Bool) {
-        FxNimbus.shared.features.translationsFeature.with { _, _ in
+        FxNimbus.shared.features.translationsFeature.with { _ in
             TranslationsFeature(enabled: true, languagePickerEnabled: enabled)
         }
     }

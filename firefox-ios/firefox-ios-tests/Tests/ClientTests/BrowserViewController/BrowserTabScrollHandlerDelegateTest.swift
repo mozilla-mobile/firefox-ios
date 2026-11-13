@@ -184,7 +184,7 @@ final class BrowserTabScrollHandlerDelegateTest: BrowserViewControllerConstraint
     }
 
     private func setupNimbusTabScrollRefactorTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.tabScrollRefactorFeature.with { _, _ in
+        FxNimbus.shared.features.tabScrollRefactorFeature.with { _ in
             return TabScrollRefactorFeature(enabled: isEnabled)
         }
     }
