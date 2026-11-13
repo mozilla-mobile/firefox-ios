@@ -54,13 +54,13 @@ final class VPNSettingsViewModelTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(action, .start)
     }
 
-    func test_selectLocation_dispatchesSelectLocation() throws {
+    func test_selectLocation_dispatchesChangeLocation() throws {
         let subject = createSubject()
 
         subject.selectLocation("DE")
 
         let action = try XCTUnwrap(mockStore.dispatchedModernActions.last as? VPNModernAction)
-        XCTAssertEqual(action, .selectLocation(countryCode: "DE"))
+        XCTAssertEqual(action, .changeLocation(countryCode: "DE"))
     }
 
     func test_sortedByName_sortsByLocalizedCountryName() {

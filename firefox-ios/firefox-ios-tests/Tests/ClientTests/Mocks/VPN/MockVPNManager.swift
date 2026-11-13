@@ -43,7 +43,7 @@ final class MockVPNManager: VPNRunnable {
         return []
     }
 
-    func selectCountry(_ countryCode: String) {
+    func updateSelectedCountryCode(_ countryCode: String) {
         selectedCountryCode = countryCode
     }
 }
