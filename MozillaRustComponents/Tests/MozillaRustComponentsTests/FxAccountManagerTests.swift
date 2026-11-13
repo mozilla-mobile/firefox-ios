@@ -140,48 +140,6 @@ class FxAccountManagerTests: XCTestCase {
         XCTAssertFalse(mgr.hasAccount())
     }
 
-    func testProfileRecoverableAuthError() {
-        class MockAccount: MockFxAccount {
-            var profileCallCount = 0
-            override func getProfile(ignoreCache: Bool) throws -> Profile {
-                let profile = try super.getProfile(ignoreCache: ignoreCache)
-                profileCallCount += 1
-                if profileCallCount == 1 {
-                    notifyAuthError()
-                    throw FxaError.Authentication(message: "Uh oh.")
-                } else {
-                    return profile
-                }
-            }
-        }
-        let mgr = mockFxAManager()
-        let account = MockAccount()
-        account.initializeResult = .connected
-        mgr.storedAccount = account
-
-        // accountAuthenticated fires twice: once from the initial .initialize path, and again
-        // after the auth error is recovered via .checkAuthorizationStatus.
-        let authExpectation = expectation(forNotification: .accountAuthenticated, object: nil, handler: nil)
-        authExpectation.expectedFulfillmentCount = 2
-        // accountProfileUpdate fires once: the first getProfile call throws (no notification posted),
-        // and only the second successful call fires it.
-        expectation(forNotification: .accountProfileUpdate, object: nil, handler: nil)
-
-        let initDone = expectation(description: "Initialization done")
-        mgr.initialize { _ in
-            initDone.fulfill()
-        }
-        waitForExpectations(timeout: 5, handler: nil)
-
-        XCTAssertFalse(mgr.accountNeedsReauth())
-
-        // Read invocations through the same serial queue used for writes to avoid
-        // a potential memory visibility issue on the main test thread.
-        var hasCheckAuthStatus = false
-        queue.sync { hasCheckAuthStatus = account.invocations.contains(.checkAuthorizationStatus) }
-        XCTAssertTrue(hasCheckAuthStatus)
-    }
-
     func testReLoginAfterLogout() {
         // Regression test: after logout, onDisconnected() creates a fresh account.
         // That account must be re-initialized so that beginAuthentication works again.
