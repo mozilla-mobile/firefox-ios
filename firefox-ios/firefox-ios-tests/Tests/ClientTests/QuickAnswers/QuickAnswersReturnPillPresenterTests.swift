@@ -135,17 +135,6 @@ final class QuickAnswersReturnPillPresenterTests: XCTestCase {
         XCTAssertEqual(pill?.transform, .identity)
     }
 
-    func test_updateLayout_minimizedCapsuleReachingTrailingEdge_centersAtBottom() {
-        let subject = createSubject()
-        showPill(on: subject)
-        let wideFrame = CGRect(x: 16, y: 760, width: 350, height: 30)
-
-        subject.updateLayout(layoutContext(isMinimized: true, locationCapsuleFrame: wideFrame), animated: false)
-
-        XCTAssertEqual(activeAttributes(), [.centerX, .bottom])
-        XCTAssertEqual(pill?.transform, .identity)
-    }
-
     func test_updateLayout_minimizedTopSearchBar_centersAtBottom() {
         let subject = createSubject()
         showPill(on: subject)

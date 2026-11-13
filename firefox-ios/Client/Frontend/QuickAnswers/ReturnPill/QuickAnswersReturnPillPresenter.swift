@@ -127,24 +127,22 @@ final class QuickAnswersReturnPillPresenter {
     }
 
     /// With a bottom address bar the minimized pill keeps its expanded constraints and is offset next to the
-    /// location capsule. Otherwise, or when it wouldn't fit there, it sits at the bottom of the screen.
+    /// location capsule. Otherwise it sits at the bottom of the screen.
     private func placement(for context: LayoutContext, in hostView: UIView) -> Placement {
-        guard context.isMinimized, trailingCapsuleFrame(for: context, in: hostView) == nil else { return .aboveAnchor }
+        guard context.isMinimized, !trailsLocationCapsule(context) else { return .aboveAnchor }
         return .bottom(hasSafeAreaBottom: hostView.safeAreaInsets.bottom > 0)
     }
 
-    /// The location capsule frame, when the minimized pill should trail it and fits before the safe area's trailing edge.
-    private func trailingCapsuleFrame(for context: LayoutContext, in hostView: UIView) -> CGRect? {
-        guard context.isMinimized, context.isBottomSearchBar, let frame = context.locationCapsuleFrame else { return nil }
-        let pillMaxX = frame.maxX + UX.minimizedLocationSpacing + QuickAnswersReturnPillView.minimizedSize
-        guard pillMaxX <= hostView.safeAreaLayoutGuide.layoutFrame.maxX else { return nil }
-        return frame
+    private func trailsLocationCapsule(_ context: LayoutContext) -> Bool {
+        return context.isMinimized && context.isBottomSearchBar && context.locationCapsuleFrame != nil
     }
 
     /// Moves the minimized pill from its constrained center, above the anchor, to the trailing side of the
     /// location capsule.
     private func minimizedTransform(for context: LayoutContext, in hostView: UIView) -> CGAffineTransform {
-        guard let frame = trailingCapsuleFrame(for: context, in: hostView), let anchorView else { return .identity }
+        guard trailsLocationCapsule(context), let frame = context.locationCapsuleFrame, let anchorView else {
+            return .identity
+        }
         let halfSize = QuickAnswersReturnPillView.minimizedSize / 2
         let anchorTop = anchorView.convert(anchorView.bounds, to: hostView).minY
         let constrainedCenter = CGPoint(
