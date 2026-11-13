@@ -382,4 +382,17 @@ extension XCUIElement {
         let expectation = XCTNSPredicateExpectation(predicate: predicate, object: nil)
         return XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed
     }
+
+    /// Waits for the label to start with `prefix` and returns the whole number right after it, ignoring
+    /// grouping separators ("5,305"). Returns nil on timeout or when no number follows the prefix.
+    func wholeNumberInLabel(after prefix: String = "", timeout: TimeInterval = TIMEOUT) -> Int? {
+        // BEGINSWITH never matches an empty string, so with no prefix any non-empty label will do
+        let hasPrefix = prefix.isEmpty
+            ? NSPredicate(format: "label != ''")
+            : NSPredicate(format: "label BEGINSWITH %@", prefix)
+        let expectation = XCTNSPredicateExpectation(predicate: hasPrefix, object: self)
+        guard XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed else { return nil }
+        let number = label.dropFirst(prefix.count).prefix { $0.isNumber || $0.isPunctuation || $0.isWhitespace }
+        return Int(String(number.filter(\.isNumber)))
+    }
 }

@@ -25,6 +25,7 @@ protocol TrackingProtectionSelectorsSet {
     var PANEL_CONNECTION_DETAILS_TITLE: Selector { get }
     var PANEL_CONNECTION_DETAILS_STATUS: Selector { get }
     var PANEL_TRACKERS_BUTTON: Selector { get }
+    var BLOCKED_TRACKERS_CATEGORY_LABELS: [Selector] { get }
     var PANEL_CLEAR_COOKIES_BUTTON: Selector { get }
     var CLEAR_COOKIES_ALERT: Selector { get }
     var CLEAR_COOKIES_TOAST: Selector { get }
@@ -41,6 +42,7 @@ struct TrackingProtectionSelectors: TrackingProtectionSelectorsSet {
         static let trackingProtectionNormal = "prefkey.trackingprotection.normalbrowsing"
         static let mainScreen = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.self
         static let detailsScreen = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.self
+        static let blockedTrackers = AccessibilityIdentifiers.EnhancedTrackingProtection.BlockedTrackers.self
         static let settingsScreen = AccessibilityIdentifiers.Settings.TrackingProtection.self
     }
 
@@ -173,6 +175,16 @@ struct TrackingProtectionSelectors: TrackingProtectionSelectorsSet {
         groups: ["privacy", "trackingProtection"]
     )
 
+    /// Ordered like the Tracker Blocker panel rows: cross-site cookies, fingerprinters, tracking content, social.
+    let BLOCKED_TRACKERS_CATEGORY_LABELS = [
+        IDs.blockedTrackers.crossSiteTitle,
+        IDs.blockedTrackers.fingerPrintersTitle,
+        IDs.blockedTrackers.trackingContentTitle,
+        IDs.blockedTrackers.socialMediaTitle
+    ].map {
+        Selector.staticTextId($0, description: "Blocked trackers category \($0)", groups: ["privacy", "trackingProtection"])
+    }
+
     let PANEL_CLEAR_COOKIES_BUTTON = Selector.buttonId(
         IDs.mainScreen.clearCookiesButton,
         description: "Clear cookies and site data button in the tracking protection panel",
@@ -228,6 +240,8 @@ struct TrackingProtectionSelectors: TrackingProtectionSelectorsSet {
          PANEL_SUBTITLE_LABEL,
          PANEL_CLOSE_BUTTON, PANEL_TRACKING_PROTECTION_SWITCH, PANEL_PRIVACY_SETTINGS_BUTTON,
          PANEL_FOX_IMAGE, PANEL_CONNECTION_DETAILS_TITLE, PANEL_CONNECTION_DETAILS_STATUS, PANEL_TRACKERS_BUTTON,
+         BLOCKED_TRACKERS_CATEGORY_LABELS[0], BLOCKED_TRACKERS_CATEGORY_LABELS[1],
+         BLOCKED_TRACKERS_CATEGORY_LABELS[2], BLOCKED_TRACKERS_CATEGORY_LABELS[3],
          PANEL_CLEAR_COOKIES_BUTTON, CLEAR_COOKIES_ALERT, CLEAR_COOKIES_TOAST,
          SETTINGS_NAVIGATION_BAR, SETTINGS_BACK_BUTTON, SETTINGS_DONE_BUTTON, SETTINGS_STANDARD_CELL,
          SETTINGS_STRICT_CELL]

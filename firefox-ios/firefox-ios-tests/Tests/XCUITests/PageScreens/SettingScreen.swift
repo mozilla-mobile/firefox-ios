@@ -233,6 +233,10 @@ final class SettingScreen {
         cell.waitAndTap()
     }
 
+    func openHomepageSettings() {
+        sel.HOMEPAGE_CELL.element(in: app).waitAndTap()
+    }
+
     func navigateToToolbarSettings() {
         BaseTestCase().mozWaitForElementToExist(toolbarCell)
         toolbarCell.waitAndTap()
