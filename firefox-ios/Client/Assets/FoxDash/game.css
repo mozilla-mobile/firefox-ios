@@ -214,11 +214,6 @@ body.game {
   margin: auto;
 }
 
-.hero {
-  width: min(70vw, 16rem);
-  height: min(38vw, 9rem);
-}
-
 .cause {
   width: 6rem;
   height: 6rem;
@@ -226,32 +221,6 @@ body.game {
 
 .pause-glyph {
   color: var(--snow);
-}
-
-.legend {
-  display: grid;
-  gap: 0.75rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.legend li {
-  display: grid;
-  grid-template-columns: 56px 4.5rem;
-  align-items: center;
-  gap: 0.875rem;
-}
-
-.legend canvas {
-  width: 56px;
-  height: 56px;
-}
-
-.glyph {
-  font-size: 1.75rem;
-  font-weight: 900;
-  text-align: left;
 }
 
 .final-score {
@@ -311,24 +280,9 @@ body.game {
     gap: 0.75rem;
   }
 
-  .hero {
-    width: 11rem;
-    height: 6rem;
-  }
-
   .cause {
     width: 4rem;
     height: 4rem;
-  }
-
-  .legend {
-    grid-auto-flow: column;
-    gap: 1.25rem;
-  }
-
-  .legend canvas {
-    width: 44px;
-    height: 44px;
   }
 
   .final-score {
