@@ -591,6 +591,17 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         )
     }
 
+    // MARK: - Fox Dash
+    func test_longPressOnHomepageLogo_navigationBrowserAction_returnsFoxDashDestination() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        let action = getNavigationBrowserAction(for: .longPressOnHomepageLogo, destination: .foxDash)
+        let newState = reducer.legacyReducer(initialState, action)
+
+        XCTAssertEqual(newState.navigationDestination?.destination, .foxDash)
+    }
+
     // MARK: - Reader Mode
 
     func test_tapOnReaderMode_navigationBrowserAction_returnsExpectedState() {
