@@ -69,7 +69,7 @@ public struct VPNProxyUsage: Equatable, Sendable {
         }
         self.init(
             max: max,
-            remaining: Swift.max(0, max - usage),
+            remaining: usage >= max ? 0 : max - usage,
             reset: entitlement.resetAt,
             unlimited: false
         )
