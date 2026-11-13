@@ -1046,6 +1046,10 @@ enum AccessibilityIdentifiers {
         static let dontUpdateButton = "UpdateLoginPrompt.dontUpdateButton"
     }
 
+    enum FoxDash {
+        static let closeButton = "FoxDash.closeButton"
+    }
+
     enum ReaderMode {
         static let sansSerifFontButton = "ReaderMode.sansSerifFontButton"
         static let serifFontButton = "ReaderMode.serifFontButton"
