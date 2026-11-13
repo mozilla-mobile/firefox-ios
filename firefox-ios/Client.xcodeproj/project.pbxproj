@@ -360,6 +360,7 @@
 		219588942D6E519F00B8715E /* AutofillPasswordSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219588932D6E519F00B8715E /* AutofillPasswordSetting.swift */; };
 		219638EC2DBFBC56007C3893 /* ZoomLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219638EB2DBFBC56007C3893 /* ZoomLevel.swift */; };
 		2197DF8A287624BF00215624 /* LibraryViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2197DF89287624BF00215624 /* LibraryViewModelTests.swift */; };
+		2EAEB1EB92FC490785283E74 /* LibraryViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF76A6135E89415080ED52BF /* LibraryViewControllerTests.swift */; };
 		219914052AF963F900153598 /* TabTrayAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219914042AF963F900153598 /* TabTrayAction.swift */; };
 		219935E72B05447C00E5966F /* TabDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219935E62B05447C00E5966F /* TabDisplayModel.swift */; };
 		219935E92B070F9000E5966F /* TabPanelAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219935E82B070F9000E5966F /* TabPanelAction.swift */; };
@@ -3390,6 +3391,7 @@
 		219588932D6E519F00B8715E /* AutofillPasswordSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillPasswordSetting.swift; sourceTree = "<group>"; };
 		219638EB2DBFBC56007C3893 /* ZoomLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomLevel.swift; sourceTree = "<group>"; };
 		2197DF89287624BF00215624 /* LibraryViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViewModelTests.swift; sourceTree = "<group>"; };
+		CF76A6135E89415080ED52BF /* LibraryViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViewControllerTests.swift; sourceTree = "<group>"; };
 		219914042AF963F900153598 /* TabTrayAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayAction.swift; sourceTree = "<group>"; };
 		219935E62B05447C00E5966F /* TabDisplayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabDisplayModel.swift; sourceTree = "<group>"; };
 		219935E82B070F9000E5966F /* TabPanelAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabPanelAction.swift; sourceTree = "<group>"; };
@@ -15911,6 +15913,7 @@
 				8AF3B1592AF99B86009BB262 /* HistoryPanelTests.swift */,
 				21737FB528789EA9000A9A92 /* HistoryPanelViewModelTests.swift */,
 				2197DF89287624BF00215624 /* LibraryViewModelTests.swift */,
+				CF76A6135E89415080ED52BF /* LibraryViewControllerTests.swift */,
 				8AF3B15B2AF99C77009BB262 /* ReadingListPanelTests.swift */,
 			);
 			path = Library;
@@ -21878,6 +21881,7 @@
 				C7470EEB2E974E42000E1B6E /* MockStoryProvider.swift in Sources */,
 				ED5BEBD62E2823F2001D731D /* MockLegacyResponder.swift in Sources */,
 				2197DF8A287624BF00215624 /* LibraryViewModelTests.swift in Sources */,
+				2EAEB1EB92FC490785283E74 /* LibraryViewControllerTests.swift in Sources */,
 				5A3A7DDC2889EC5D0065F81A /* MockBookmarksHandler.swift in Sources */,
 				8015C8B52D0A31FE0093AED0 /* RecordedNimbusContextTests.swift in Sources */,
 				39B783F63011076900430F38 /* TrackerBlockerTelemetryTests.swift in Sources */,

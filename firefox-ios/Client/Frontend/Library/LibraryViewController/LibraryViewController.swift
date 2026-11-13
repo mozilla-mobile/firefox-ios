@@ -155,10 +155,12 @@ class LibraryViewController: UIViewController, Themeable {
 
     /// The Library title can be updated from some subpanels navigation actions
     /// - Parameter subpanelTitle: The title coming from a subpanel, optional as by default we set the title to be
-    /// the selectedPanel.title
+    /// the title of the panel on top of the current stack, or the selectedPanel.title when it has none
     private func updateTitle(subpanelTitle: String? = nil) {
         if let subpanelTitle {
             navigationItem.title = subpanelTitle
+        } else if let panelTitle = getCurrentPanel()?.libraryTitle {
+            navigationItem.title = panelTitle
         } else if let newTitle = viewModel.selectedPanel?.title {
             navigationItem.title = newTitle
         }
@@ -464,6 +466,7 @@ extension LibraryViewController: Notifiable {
             ensureMainThread {
                 self.setupButtons()
                 self.updateSegmentControl()
+                self.updateTitle()
             }
 
         case .LibraryPanelBookmarkTitleChanged:
