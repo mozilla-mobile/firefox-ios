@@ -544,7 +544,7 @@ class HistoryPanel: UIViewController,
 
         // For UX consistency, every cell in history panel SHOULD have a trailing action.
         let deleteAction = UIContextualAction(
-            style: .destructive,
+            style: .normal,
             title: .HistoryPanelDelete
         ) { [weak self] (_, _, completion) in
             guard let self else {
@@ -553,7 +553,9 @@ class HistoryPanel: UIViewController,
             }
 
             self.removeHistoryItem(at: indexPath)
+            completion(true)
         }
+        deleteAction.backgroundColor = .systemRed
 
         return UISwipeActionsConfiguration(actions: [deleteAction])
     }
