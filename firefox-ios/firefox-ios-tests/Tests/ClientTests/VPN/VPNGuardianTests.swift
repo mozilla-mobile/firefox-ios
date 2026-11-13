@@ -122,4 +122,8 @@ private final class MockVPNTokenProvider: VPNTokenProviding, @unchecked Sendable
         let index = proxyTokenCalled - 1
         return try (index < results.count ? results[index] : last).get()
     }
+
+    func proxyUsage() async throws -> VPNProxyUsage {
+        VPNProxyUsage(max: 0, remaining: 0, reset: Date(), unlimited: false)
+    }
 }

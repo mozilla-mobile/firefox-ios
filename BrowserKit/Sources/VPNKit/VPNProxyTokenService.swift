@@ -8,9 +8,11 @@ import Shared
 
 public protocol VPNProxyTokenFetching: Sendable {
     func fetchProxyPass() async throws -> VPNProxyPass
+    /// Current bandwidth usage; works even when the quota is exhausted.
+    func fetchEntitlement() async throws -> VPNProxyUsage
 }
 
-/// Exchanges a Device Session JWT for a short-lived proxy token.
+/// Exchanges a Device Session JWT for a short-lived proxy token or the device's bandwidth usage.
 public struct VPNProxyTokenService: VPNProxyTokenFetching {
     private let environmentType: VPNEnvironment
     private let urlSession: URLSessionProtocol
@@ -38,42 +40,57 @@ public struct VPNProxyTokenService: VPNProxyTokenFetching {
     }
 
     public func fetchProxyPass() async throws -> VPNProxyPass {
-        do {
-            return try await requestToken()
-        } catch VPNAuthError.sessionRejected {
-            // Refresh once and retry; a second failure is surfaced to the caller.
-            _ = try await authService.refresh()
-            return try await requestToken()
-        }
+        let (data, response) = try await get(
+            VPNConstants.tokenEndpoint(with: environmentType),
+            name: "tokenEndpoint"
+        )
+        return try Self.makePass(from: data, response: response)
     }
 
-    private func requestToken() async throws -> VPNProxyPass {
-        guard let endpoint = VPNConstants.tokenEndpoint(with: environmentType) else {
-            throw AppAttestServiceError.invalidURL(description: "tokenEndpoint")
-        }
+    public func fetchEntitlement() async throws -> VPNProxyUsage {
+        let (data, _) = try await get(
+            VPNConstants.entitlementEndpoint(with: environmentType),
+            name: "entitlementEndpoint"
+        )
+        return try VPNProxyUsage(entitlementData: data)
+    }
 
+    private func get(_ endpoint: URL?, name: String) async throws -> (Data, URLResponse) {
+        guard let endpoint else {
+            throw AppAttestServiceError.invalidURL(description: name)
+        }
         var request = URLRequest(url: endpoint)
         request.httpMethod = VPNConstants.GET
         request.cachePolicy = .reloadIgnoringLocalCacheData
         try await requestAuth.authenticate(request: &request)
 
-        let (data, response) = try await urlSession.data(from: request)
-        // A rejected session is recoverable by refreshing, so it is separated from other failures.
+        var (data, response) = try await urlSession.data(from: request)
         if (response as? HTTPURLResponse)?.statusCode == 401 {
-            throw VPNAuthError.sessionRejected
+            // Refresh once and retry; a second failure is surfaced to the caller.
+            _ = try await authService.refresh()
+            try await requestAuth.authenticate(request: &request)
+            (data, response) = try await urlSession.data(from: request)
         }
-        try AppAttestServiceError.validate(response: response, data: data)
-        let token = try JSONDecoder().decode(TokenResponse.self, from: data).token
-        return try Self.makePass(from: token)
+
+        switch (response as? HTTPURLResponse)?.statusCode {
+        case 401:
+            throw VPNAuthError.sessionRejected
+        case 429:
+            throw VPNAuthError.quotaExceeded
+        default:
+            try AppAttestServiceError.validate(response: response, data: data)
+            return (data, response)
+        }
     }
 
-    private static func makePass(from token: String) throws -> VPNProxyPass {
+    private static func makePass(from data: Data, response: URLResponse) throws -> VPNProxyPass {
+        let token = try JSONDecoder().decode(TokenResponse.self, from: data).token
         let claims = try decodeJWTClaims(token)
         return VPNProxyPass(
             bearerToken: token,
             notBefore: claims.nbf.map { Date(timeIntervalSince1970: $0) } ?? Date(),
             expiresAt: Date(timeIntervalSince1970: claims.exp),
-            usage: nil
+            usage: VPNProxyUsage(response: response)
         )
     }
 
