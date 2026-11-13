@@ -1115,6 +1115,39 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertTrue(quickAnswersPillTelemetry.dismissedReasons.isEmpty)
     }
 
+    // MARK: - Fox Dash
+
+    func test_showFoxDash_presentsFullScreenFoxDashViewController() throws {
+        let subject = createSubject()
+
+        subject.showFoxDash()
+
+        let presented = try XCTUnwrap(mockRouter.presentedViewController as? FoxDashViewController)
+        XCTAssertEqual(presented.modalPresentationStyle, .fullScreen)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+    }
+
+    func test_showFoxDash_calledTwice_presentsOnlyOnce() {
+        let subject = createSubject()
+
+        subject.showFoxDash()
+        subject.showFoxDash()
+
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+    }
+
+    func test_showFoxDash_closeTapped_dismissesRouter() throws {
+        let subject = createSubject()
+        subject.showFoxDash()
+        let presented = try XCTUnwrap(mockRouter.presentedViewController as? FoxDashViewController)
+        presented.loadViewIfNeeded()
+        let closeButton = try XCTUnwrap(presented.view.subviews.compactMap { $0 as? UIButton }.first)
+
+        closeButton.sendActions(for: .touchUpInside)
+
+        XCTAssertEqual(mockRouter.dismissCalled, 1)
+    }
+
     // MARK: - Shortcuts Library
 
     func testShowShortcutsLibrary_showsShortcutsLibrary() throws {
