@@ -126,6 +126,71 @@ final class TabGroupManagerTests: XCTestCase {
         try await manager.flush()
     }
 
+    func testBulkMoveKeepsUniqueOrderedMembership() async throws {
+        let manager = try await makeManager()
+        let group = try manager.createGroup(title: "Work")
+        let first = makeTab()
+        let second = makeTab(window: first.windowUUID)
+        manager.bind(first)
+        manager.bind(second)
+        try manager.moveTabs([first, second, first], to: group)
+        XCTAssertEqual(manager.tabIDs(in: group), [first.tabUUID, second.tabUUID])
+        XCTAssertEqual(first.groupID, group)
+        XCTAssertEqual(second.groupID, group)
+        try await manager.flush()
+    }
+
+    func testBulkMoveRejectsTabsFromDifferentWindows() async throws {
+        let manager = try await makeManager()
+        let group = try manager.createGroup(title: "Work")
+        let first = makeTab()
+        let second = makeTab()
+        manager.bind(first)
+        manager.bind(second)
+        XCTAssertThrowsError(try manager.moveTabs([first, second], to: group))
+        XCTAssertTrue(manager.tabIDs(in: group).isEmpty)
+        XCTAssertNil(manager.activeWindow(for: group))
+        XCTAssertNil(first.groupID)
+        XCTAssertNil(second.groupID)
+        try await manager.flush()
+    }
+
+    func testBulkMoveRejectsPrivateTabWithoutPartialMembershipChange() async throws {
+        let manager = try await makeManager()
+        let source = try manager.createGroup(title: "Source")
+        let destination = try manager.createGroup(title: "Destination")
+        let normalTab = makeTab()
+        let privateTab = Tab(profile: MockProfile.unmanaged(), isPrivate: true, windowUUID: normalTab.windowUUID)
+        manager.bind(normalTab)
+        manager.bind(privateTab)
+        try manager.moveTab(normalTab, to: source)
+
+        XCTAssertThrowsError(try manager.moveTabs([normalTab, privateTab], to: destination))
+
+        XCTAssertEqual(manager.tabIDs(in: source), [normalTab.tabUUID])
+        XCTAssertTrue(manager.tabIDs(in: destination).isEmpty)
+        XCTAssertEqual(normalTab.groupID, source)
+        XCTAssertNil(privateTab.groupID)
+        try await manager.flush()
+    }
+
+    func testBulkMoveCannotClaimUnrestoredGroup() async throws {
+        let group = TabGroup(title: "Stored", tabIDs: [UUID().uuidString])
+        let storage = MockTabGroupStorage()
+        await storage.setSnapshot(TabGroupSnapshot(groups: [group]))
+        let manager = try await makeManager(storage)
+        let tab = makeTab()
+        manager.bind(tab)
+
+        XCTAssertThrowsError(try manager.moveTabs([tab], to: group.id))
+
+        XCTAssertEqual(manager.tabIDs(in: group.id), group.tabIDs)
+        XCTAssertNil(manager.activeWindow(for: group.id))
+        XCTAssertNil(tab.groupID)
+        let writes = await storage.savedSnapshots
+        XCTAssertTrue(writes.isEmpty)
+    }
+
     func testGroupCanOnlyBeActiveInOneWindow() async throws {
         let manager = try await makeManager()
         let group = try manager.createGroup(title: "Shared")
