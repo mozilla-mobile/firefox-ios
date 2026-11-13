@@ -19,6 +19,6 @@ struct NavigationToolbarContainerModel {
     }
 
     private var shouldDisplayBorder: Bool {
-        manager.shouldDisplayNavigationBorder(toolbarPosition: toolbarPosition)
+        manager.shouldDisplayNavigationBorder(toolbarPosition: toolbarPosition, isMicrosurveyShown: false)
     }
 }

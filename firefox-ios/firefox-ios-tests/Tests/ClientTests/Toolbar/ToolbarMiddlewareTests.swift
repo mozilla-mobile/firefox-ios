@@ -63,8 +63,12 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? ToolbarActionType)
-        let borderPosition = toolbarManager.getAddressBorderPosition(for: .top, isPrivate: false, scrollY: 0)
-        let displayBorder = toolbarManager.shouldDisplayNavigationBorder(toolbarPosition: .top)
+        let borderPosition = toolbarManager.getAddressBorderPosition(for: .top,
+                                                                     isPrivate: false,
+                                                                     isScrolled: false,
+                                                                     isMicrosurveyShown: false)
+        let displayBorder = toolbarManager.shouldDisplayNavigationBorder(toolbarPosition: .top,
+                                                                         isMicrosurveyShown: false)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 2)
         XCTAssertEqual(actionType, ToolbarActionType.didLoadToolbars)
@@ -410,8 +414,12 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? ToolbarActionType)
-        let borderPosition = toolbarManager.getAddressBorderPosition(for: .top, isPrivate: false, scrollY: 0)
-        let displayBorder = toolbarManager.shouldDisplayNavigationBorder(toolbarPosition: .top)
+        let borderPosition = toolbarManager.getAddressBorderPosition(for: .top,
+                                                                     isPrivate: false,
+                                                                     isScrolled: false,
+                                                                     isMicrosurveyShown: false)
+        let displayBorder = toolbarManager.shouldDisplayNavigationBorder(toolbarPosition: .top,
+                                                                         isMicrosurveyShown: false)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 2)
         XCTAssertEqual(actionType, ToolbarActionType.didLoadToolbars)
@@ -435,7 +443,8 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let actionType = try XCTUnwrap(actionCalled.actionType as? ToolbarActionType)
         let borderPosition = toolbarManager.getAddressBorderPosition(for: .top,
                                                                      isPrivate: false,
-                                                                     scrollY: scrollOffset.y)
+                                                                     isScrolled: scrollOffset.y > 0,
+                                                                     isMicrosurveyShown: false)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         XCTAssertEqual(actionType, ToolbarActionType.borderPositionChanged)
@@ -458,8 +467,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let actionType = try XCTUnwrap(actionCalled.actionType as? ToolbarActionType)
         let borderPosition = toolbarManager.getAddressBorderPosition(for: .bottom,
                                                                      isPrivate: false,
-                                                                     scrollY: scrollOffset.y)
-        let displayBorder = toolbarManager.shouldDisplayNavigationBorder(toolbarPosition: .bottom)
+                                                                     isScrolled: scrollOffset.y > 0,
+                                                                     isMicrosurveyShown: false)
+        let displayBorder = toolbarManager.shouldDisplayNavigationBorder(toolbarPosition: .bottom,
+                                                                         isMicrosurveyShown: false)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         XCTAssertEqual(actionType, ToolbarActionType.toolbarPositionChanged)
@@ -515,6 +526,24 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         XCTAssertEqual(actionType, ToolbarActionType.borderPositionChanged)
+        XCTAssertEqual(actionCalled.addressBorderPosition, AddressToolbarBorderPosition.none)
+        XCTAssertEqual(actionCalled.displayNavBorder, false)
+    }
+
+    func testMicrosurveyPromptInitialize_withTopToolbar_whenScrolled_keepsBottomAddressBorder() throws {
+        mockStore = MockStoreForMiddleware(state: setupToolbarScrolledTopPositionAppState())
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+
+        let subject = createSubject(manager: toolbarManager)
+        let action = MicrosurveyPromptMiddlewareAction(
+            windowUUID: windowUUID,
+            actionType: MicrosurveyPromptMiddlewareActionType.initialize)
+        subject.toolbarProvider.legacyMiddleware(mockStore.state, action)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionCalled.addressBorderPosition, AddressToolbarBorderPosition.bottom)
         XCTAssertEqual(actionCalled.displayNavBorder, false)
     }
 
@@ -550,6 +579,24 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         XCTAssertEqual(actionType, ToolbarActionType.borderPositionChanged)
+        XCTAssertEqual(actionCalled.addressBorderPosition, AddressToolbarBorderPosition.none)
+        XCTAssertEqual(actionCalled.displayNavBorder, true)
+    }
+
+    func testMicrosurveyPromptClosePrompt_withTopToolbar_whenScrolled_keepsBottomAddressBorder() throws {
+        mockStore = MockStoreForMiddleware(state: setupToolbarScrolledTopPositionAppState())
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+
+        let subject = createSubject(manager: toolbarManager)
+        let action = MicrosurveyPromptAction(
+            windowUUID: windowUUID,
+            actionType: MicrosurveyPromptActionType.closePrompt)
+        subject.toolbarProvider.legacyMiddleware(mockStore.state, action)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionCalled.addressBorderPosition, AddressToolbarBorderPosition.bottom)
         XCTAssertEqual(actionCalled.displayNavBorder, true)
     }
 
@@ -980,7 +1027,8 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let actionType = try XCTUnwrap(actionCalled.actionType as? ToolbarActionType)
         let borderPosition = toolbarManager.getAddressBorderPosition(for: .top,
                                                                      isPrivate: false,
-                                                                     scrollY: scrollOffset.y)
+                                                                     isScrolled: scrollOffset.y > 0,
+                                                                     isMicrosurveyShown: false)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         XCTAssertEqual(actionType, ToolbarActionType.borderPositionChanged)
@@ -1316,6 +1364,20 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
                             windowUUID: windowUUID
                         )
                     ),
+                    .toolbar(toolbarState)
+                ]
+            )
+        )
+    }
+
+    func setupToolbarScrolledTopPositionAppState() -> AppState {
+        var toolbarState = ToolbarState(windowUUID: windowUUID)
+        toolbarState.isScrolled = true
+
+        return AppState(
+            presentedComponents: PresentedComponentsState(
+                components: [
+                    .browserViewController(BrowserViewControllerState(windowUUID: windowUUID)),
                     .toolbar(toolbarState)
                 ]
             )

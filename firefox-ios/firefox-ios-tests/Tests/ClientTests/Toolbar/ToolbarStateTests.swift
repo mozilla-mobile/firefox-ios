@@ -246,6 +246,65 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
     }
 
+    func test_websiteDidScrollAction_pastTopOfPage_setsIsScrolled() {
+        let initialState = createSubject()
+        let reducer = toolbarReducer()
+
+        let newState = reducer.legacyReducer(
+            initialState,
+            GeneralBrowserMiddlewareAction(
+                scrollOffset: CGPoint(x: 0, y: 100),
+                windowUUID: windowUUID,
+                actionType: GeneralBrowserMiddlewareActionType.websiteDidScroll)
+        )
+
+        XCTAssertTrue(newState.isScrolled)
+    }
+
+    func test_websiteDidScrollAction_backAtTopOfPage_clearsIsScrolled() {
+        let initialState = createSubject().copy(isScrolled: true)
+        let reducer = toolbarReducer()
+
+        let newState = reducer.legacyReducer(
+            initialState,
+            GeneralBrowserMiddlewareAction(
+                scrollOffset: CGPoint(x: 0, y: 0),
+                windowUUID: windowUUID,
+                actionType: GeneralBrowserMiddlewareActionType.websiteDidScroll)
+        )
+
+        XCTAssertFalse(newState.isScrolled)
+    }
+
+    func test_urlDidChangeMiddlewareAction_withScrollOffset_updatesIsScrolled() {
+        let initialState = createSubject()
+        let reducer = toolbarReducer()
+
+        let newState = reducer.legacyReducer(
+            initialState,
+            ToolbarMiddlewareAction(
+                scrollOffset: CGPoint(x: 0, y: 50),
+                windowUUID: windowUUID,
+                actionType: ToolbarMiddlewareActionType.urlDidChange)
+        )
+
+        XCTAssertTrue(newState.isScrolled)
+    }
+
+    func test_urlDidChangeMiddlewareAction_withoutScrollOffset_keepsIsScrolled() {
+        let initialState = createSubject().copy(isScrolled: true)
+        let reducer = toolbarReducer()
+
+        let newState = reducer.legacyReducer(
+            initialState,
+            ToolbarMiddlewareAction(
+                windowUUID: windowUUID,
+                actionType: ToolbarMiddlewareActionType.urlDidChange)
+        )
+
+        XCTAssertTrue(newState.isScrolled)
+    }
+
     func test_searchEngineDidChangeAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = toolbarReducer()
