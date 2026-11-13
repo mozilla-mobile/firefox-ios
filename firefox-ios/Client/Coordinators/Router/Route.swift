@@ -6,6 +6,17 @@ import Foundation
 
 /// An enumeration representing different navigational routes in an application.
 enum Route {
+    var opensTabOnHandling: Bool {
+        switch self {
+        case let .search(url, _, _):
+            return url != nil
+        case .searchQuery, .searchURL:
+            return true
+        default:
+            return false
+        }
+    }
+
     /// Represents a search route that takes a URL, a boolean value indicating whether the search
     /// is private or not and an optional set of search options.
     ///
