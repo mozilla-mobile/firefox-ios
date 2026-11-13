@@ -1144,7 +1144,12 @@ class BrowserViewController: UIViewController,
 
         setupEssentialUI()
         subscribeToRedux()
-        tabManager.restoreTabs()
+        // vpnReconnect is signaled immediately if the VPN feature flag is off, or if its corresponding user pref is false
+        AppEventQueue.wait(for: .vpnReconnect) { [weak self] in
+            ensureMainThread { [weak self] in
+                self?.tabManager.restoreTabs()
+            }
+        }
         updateAddressToolbarContainerPosition(for: traitCollection)
         if isTabScrollRefactoringEnabled {
             setupToolbarAnimator()

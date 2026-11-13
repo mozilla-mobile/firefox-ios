@@ -2431,7 +2431,6 @@
 		EE046A77300A75F4004E3D80 /* SwipeUpTabPreviewGestureHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE046A76300A75F4004E3D80 /* SwipeUpTabPreviewGestureHandlerTests.swift */; };
 		EE39C19F30990B1B00EB3C7C /* VPNHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE39C19930990B1B00EB3C7C /* VPNHelpers.swift */; };
 		EE39C1A030990B1B00EB3C7C /* VPNSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE39C19C30990B1B00EB3C7C /* VPNSettingsViewModel.swift */; };
-		EE39C1A130990B1B00EB3C7C /* VPNDataUsage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE39C19730990B1B00EB3C7C /* VPNDataUsage.swift */; };
 		EE39C1A230990B1B00EB3C7C /* VPNGlobeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE39C19830990B1B00EB3C7C /* VPNGlobeView.swift */; };
 		EE39C1A330990B1B00EB3C7C /* VPNToggleRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE39C19D30990B1B00EB3C7C /* VPNToggleRow.swift */; };
 		EE39C1A430990B1B00EB3C7C /* VPNUsageBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE39C19E30990B1B00EB3C7C /* VPNUsageBar.swift */; };
@@ -12726,7 +12725,6 @@
 		EE046A74300A75D7004E3D80 /* SwipeUpTabWebViewPreviewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeUpTabWebViewPreviewTests.swift; sourceTree = "<group>"; };
 		EE046A76300A75F4004E3D80 /* SwipeUpTabPreviewGestureHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeUpTabPreviewGestureHandlerTests.swift; sourceTree = "<group>"; };
 		EE294A97B40C4FDBD67AE536 /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/ErrorPages.strings; sourceTree = "<group>"; };
-		EE39C19730990B1B00EB3C7C /* VPNDataUsage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNDataUsage.swift; sourceTree = "<group>"; };
 		EE39C19830990B1B00EB3C7C /* VPNGlobeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNGlobeView.swift; sourceTree = "<group>"; };
 		EE39C19930990B1B00EB3C7C /* VPNHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNHelpers.swift; sourceTree = "<group>"; };
 		EE39C19A30990B1B00EB3C7C /* VPNLocationsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNLocationsRow.swift; sourceTree = "<group>"; };
@@ -18223,7 +18221,6 @@
 		EEF4D5C03077D952001DEC12 /* VPN */ = {
 			isa = PBXGroup;
 			children = (
-				EE39C19730990B1B00EB3C7C /* VPNDataUsage.swift */,
 				EE39C19830990B1B00EB3C7C /* VPNGlobeView.swift */,
 				EE39C19930990B1B00EB3C7C /* VPNHelpers.swift */,
 				EE39C19A30990B1B00EB3C7C /* VPNLocationsRow.swift */,
@@ -21723,7 +21720,6 @@
 				21420EF72ABA338D00B28550 /* TabTrayCoordinator.swift in Sources */,
 				EE39C19F30990B1B00EB3C7C /* VPNHelpers.swift in Sources */,
 				EE39C1A030990B1B00EB3C7C /* VPNSettingsViewModel.swift in Sources */,
-				EE39C1A130990B1B00EB3C7C /* VPNDataUsage.swift in Sources */,
 				EE39C1A230990B1B00EB3C7C /* VPNGlobeView.swift in Sources */,
 				EE39C1A330990B1B00EB3C7C /* VPNToggleRow.swift in Sources */,
 				EE39C1A430990B1B00EB3C7C /* VPNUsageBar.swift in Sources */,

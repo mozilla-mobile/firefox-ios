@@ -61,6 +61,11 @@ class DependencyHelper {
         let userFeaturePreferenceManager = UserFeaturePreferenceManager(prefs: profile.prefs)
         AppContainer.shared.register(service: userFeaturePreferenceManager as UserFeaturePreferring)
 
+        if #available(iOS 17.0, *), featureFlagsProvider.isEnabled(.vpnFeature) {
+            let vpnManager = VPNManager(profile: profile, windowManager: windowManager)
+            AppContainer.shared.register(service: vpnManager as VPNRunnable)
+        }
+
         // Tell the container we are done registering
         AppContainer.shared.bootstrap()
     }

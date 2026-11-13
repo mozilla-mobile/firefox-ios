@@ -7,6 +7,7 @@ import Common
 import Shared
 import MozillaAppServices
 import Network
+import Observation
 import VPNKit
 import WebEngine
 
@@ -22,11 +23,20 @@ enum VPNEvent: Equatable {
 @MainActor
 protocol VPNRunnable {
     var isRunning: Bool { get }
+    var isConnecting: Bool { get }
+    var usedDataInGB: Double { get }
+    var dataLimitInGB: Double { get }
+    var usageFraction: Double { get }
+    var isLimitReached: Bool { get }
+    var selectedCountryCode: String { get }
     /// Single-consumer stream of `VPNEvent`s, observed by `VPNMiddleware`.
     var events: AsyncStream<VPNEvent> { get }
     /// Also switches a running VPN to a new server and pass without stopping it first.
     func start(countryCode: String?) async throws
     func stop() async
+    func listCountries() async -> [VPNServerManager.Country]
+    /// Redraws views reading `selectedCountryCode` after its pref changes.
+    func selectedCountryCodeDidChange(countryCode: String)
 }
 
 enum VPNError: Error {
@@ -50,6 +60,7 @@ struct DefaultProxyConfigurator: ProxyConfigurator {
 }
 
 @available(iOS 17.0, *)
+@Observable
 final class VPNManager: VPNRunnable {
     private let logger: Logger
     private let environment: VPNEnvironment
@@ -57,15 +68,48 @@ final class VPNManager: VPNRunnable {
     private let serverManager: VPNServerManaging
     private let windowManager: WindowManager
     private let proxyApplier: ProxyConfigurator
+    private let prefs: Prefs
     private let eventsContinuation: AsyncStream<VPNEvent>.Continuation
     let events: AsyncStream<VPNEvent>
 
     private var activeServer: VPNGuardian.Server?
 
-    // TODO: fxios-16876 This will get used when we wire up VPN Connection
     var isRunning: Bool {
         activeServer != nil
     }
+
+    private(set) var isConnecting = false
+
+    var selectedCountryCode: String {
+        // Used with withMutation(keyPath: ) farther down so that SwiftUI observes this computed property
+        access(keyPath: \.selectedCountryCode)
+        return prefs.stringForKey(PrefsKeys.VPNSettings.selectedCountryCode) ?? VPNServerManager.recommendedCountryCode
+    }
+
+    // TODO: FXIOS-17238 guardian doesn't return usage yet, so the pass's usage stays nil
+    private var currentPass: VPNProxyPass?
+    private static let bytesPerGB = 1_000_000_000.0
+
+    var dataLimitInGB: Double {
+        guard let usage = currentPass?.usage else { return 0 }
+        return Double(usage.max) / Self.bytesPerGB
+    }
+
+    var usedDataInGB: Double {
+        guard let usage = currentPass?.usage else { return 0 }
+        return Double(min(max(usage.max - usage.remaining, 0), usage.max)) / Self.bytesPerGB
+    }
+
+    var usageFraction: Double {
+        guard let usage = currentPass?.usage, usage.max > 0 else { return 0 }
+        return usedDataInGB / dataLimitInGB
+    }
+
+    var isLimitReached: Bool {
+        guard let usage = currentPass?.usage else { return false }
+        return !usage.unlimited && usage.remaining <= 0
+    }
+
     private var rotationTask: Task<Void, Never>?
 
     init(
@@ -86,6 +130,7 @@ final class VPNManager: VPNRunnable {
         )
         self.windowManager = windowManager
         self.proxyApplier = proxyApplier
+        self.prefs = profile.prefs
         let (events, eventsContinuation) = AsyncStream<VPNEvent>.makeStream()
         self.events = events
         self.eventsContinuation = eventsContinuation
@@ -94,6 +139,8 @@ final class VPNManager: VPNRunnable {
     /// When already running, the proxy stays on the old server until the new one is applied,
     /// so a failure leaves it running as-is.
     func start(countryCode: String?) async throws {
+        isConnecting = true
+        defer { isConnecting = false }
         guard let guardian = self.guardian else {
             throw VPNError.tokenProviderUnavailable
         }
@@ -113,9 +160,11 @@ final class VPNManager: VPNRunnable {
         let config = try self.buildProxyConfig(server: server, pass: pass)
         await self.applyProxyAndRebuildWebViews(configs: [config])
         self.activeServer = server
+        self.currentPass = pass
         self.startPassRotation(after: pass)
         self.eventsContinuation.yield(.passUpdated(pass))
         if selection.didFallBack {
+            selectedCountryCodeDidChange(countryCode: server.countryCode)
             self.eventsContinuation.yield(.selectedLocationUnavailable)
         }
     }
@@ -125,6 +174,17 @@ final class VPNManager: VPNRunnable {
         self.rotationTask = nil
         await self.applyProxyAndRebuildWebViews(configs: [])
         self.activeServer = nil
+    }
+
+    func listCountries() async -> [VPNServerManager.Country] {
+        return await serverManager.listCountries()
+    }
+
+    func selectedCountryCodeDidChange(countryCode: String) {
+        // Needed for SwiftUI to observe changes to computed properties
+        withMutation(keyPath: \.selectedCountryCode) {
+            prefs.setString(countryCode, forKey: PrefsKeys.VPNSettings.selectedCountryCode)
+        }
     }
 
     /// Consumes `VPNGuardian.passRotation` and reapplies the proxy configuration with the new
@@ -142,6 +202,7 @@ final class VPNManager: VPNRunnable {
                           let server = self.activeServer else { return }
                     let config = try self.buildProxyConfig(server: server, pass: new)
                     self.proxyApplier.applyProxyConfigurations([config], forcingSessionReset: false)
+                    self.currentPass = new
                     self.eventsContinuation.yield(.passUpdated(new))
                     self.logger.log(
                         "Rotated VPN proxy pass — next expiry \(new.expiresAt)",
