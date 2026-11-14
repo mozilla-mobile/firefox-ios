@@ -1006,6 +1006,9 @@ public struct SyncResult: Equatable, Hashable {
      * update the local state (ie, to ensure that their Sync UI correctly
      * reflects what engines are enabled and disabled), because these could
      * change after every sync.
+     * Always `None` when using `EngineChoicesModel::Device`, device's engine
+     * choices are local without remote updates. `None` means "no change", not
+     * "nothing declined".
      */
     public var declined: [String]?
     /**
@@ -1040,6 +1043,9 @@ public struct SyncResult: Equatable, Hashable {
          * update the local state (ie, to ensure that their Sync UI correctly
          * reflects what engines are enabled and disabled), because these could
          * change after every sync.
+         * Always `None` when using `EngineChoicesModel::Device`, device's engine
+         * choices are local without remote updates. `None` means "no change", not
+         * "nothing declined".
          */declined: [String]?, 
         /**
          * Earliest time that the next sync should happen at
