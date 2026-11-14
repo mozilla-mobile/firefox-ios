@@ -1,5 +1,11 @@
+/* Body text for the Privacy Notice update card. This string uses markdown links: [Link text here](URL_PLACEHOLDER_HERE). Translate only the text *inside* square brackets: [Privacy Notice]. For example, “[隐私政策](PRIVACY_NOTICE_URL)”. The PRIVACY_NOTICE_URL placeholder links to the updated policy. The %@ placeholder is the app name (e.g. Firefox). More info: https://www.markdownguide.org/basic-syntax/#links */
+"FirefoxHome.PrivacyNotice.Body.Markdown.v160" = "We hebben onze [Privacyverklaring](PRIVACY_NOTICE_URL) bijgewerkt, zodat deze de nieuwste functies in %@ weerspiegelt.";
+
 /* Body label for the Privacy Notice card showed at the top of the homepage notifying users that the Privacy Notice has been updated. The %1$@ placeholder is for the string “Privacy Notice” which will contain a link to the updated privacy notice. The %2$@ placeholder is for the app name (e.g. Firefox). The %3$@ placeholder is for the string “Learn More” which will contain a link to specifically what has changed in the updated Privacy Notice */
 "FirefoxHome.PrivacyNotice.Body.v148" = "We hebben onze %1$@ bijgewerkt om de nieuwste functies in %2$@ weer te geven. %3$@";
+
+/* Heading for the Privacy Notice update card, displayed to notify users of recent changes to the terms. */
+"FirefoxHome.PrivacyNotice.Headline.v160" = "Privacyverklaring bijgewerkt";
 
 /* Label for the “Learn More” link inserted into the second placeholder of the Privacy Notice body label. This text will appear as a tappable link directing users to detailed information about what has changed in the updated Privacy Notice. */
 "FirefoxHome.PrivacyNotice.LearnMoreLink.v148" = "Meer info";

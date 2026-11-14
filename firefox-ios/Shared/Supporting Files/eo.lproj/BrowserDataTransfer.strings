@@ -1,0 +1,21 @@
+/* Name of the bookmarks folder that holds bookmarks imported from another browser. %@ is the date when the import happens, formatted for the user’s locale without the time. */
+"BrowserDataTransfer.ImportedBookmarksFolder.Title.v160" = "%@ importita";
+
+/* Button that dismisses the alert shown when Firefox could not finish importing data from another browser. */
+"BrowserDataTransfer.ImportFailure.DismissButton.v160" = "Ignori";
+
+/* Message of the alert shown when Firefox could not finish importing data from another browser. */
+"BrowserDataTransfer.ImportFailure.Message.v160" = "Provu denove poste.";
+
+/* Title of the alert shown when Firefox could not finish importing data from another browser. %@ is the name of the other browser, for example Safari. Data imported before the error is kept. */
+"BrowserDataTransfer.ImportFailure.Title.v160" = "Ne eblis importi el %@";
+
+/* Button that dismisses the alert shown after Firefox finishes importing data from another browser. */
+"BrowserDataTransfer.ImportSuccess.GotItButton.v160" = "Mi komprenis";
+
+/* Message of the alert shown after Firefox finishes importing data from another browser. %@ is the app name (e.g. Firefox). */
+"BrowserDataTransfer.ImportSuccess.Message.v160" = "Viaj importitaj datumoj estas jam uzeblaj en %@.";
+
+/* Title of the alert shown after Firefox finishes importing data from another browser. %@ is the name of the other browser, for example Safari. */
+"BrowserDataTransfer.ImportSuccess.Title.v160" = "Importo el %@ estas finita";
+

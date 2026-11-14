@@ -155,7 +155,7 @@ final class NativeErrorPageHelperTests: XCTestCase {
     }
 
     private func setupNimbusNativeErrorPageTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.nativeErrorPageFeature.with { _, _ in
+        FxNimbus.shared.features.nativeErrorPageFeature.with { _ in
             return NativeErrorPageFeature(enabled: isEnabled)
         }
     }

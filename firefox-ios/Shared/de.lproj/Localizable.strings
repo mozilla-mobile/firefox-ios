@@ -128,7 +128,7 @@
 "BreachAlerts.LearnMoreButton" = "Weitere Informationen";
 
 /* Leads to a link to the breached website */
-"BreachAlerts.Link" = "Gehe zu";
+"BreachAlerts.Link" = "Seite aufrufen";
 
 /* Title for the Breached Login Detail View. */
 "BreachAlerts.Title" = "Datenleck einer Website";
@@ -287,7 +287,7 @@
 "Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
 
 /* Action button for deleting downloaded files in the Downloads panel. */
-"DownloadsPanel.Delete.Title" = "Entfernen";
+"DownloadsPanel.Delete.Title" = "Löschen";
 
 /* Title for the Downloads Panel empty state. */
 "DownloadsPanel.EmptyState.Title" = "Heruntergeladene Dateien werden hier angezeigt.";
@@ -332,7 +332,7 @@
 "Firefox.HomePage.Title" = "Firefox-Startseite";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
-"FirefoxHome.CustomizeHomeButton.Title" = "Startbildschirm anpassen";
+"FirefoxHome.CustomizeHomeButton.Title" = "Startseite anpassen";
 
 /* At the end of the Pocket section on the Firefox Homepage, this button appears and indicates tapping it will navigate the user to more Pocket Stories. */
 "FirefoxHome.Pocket.DiscoverMore" = "Mehr entdecken";

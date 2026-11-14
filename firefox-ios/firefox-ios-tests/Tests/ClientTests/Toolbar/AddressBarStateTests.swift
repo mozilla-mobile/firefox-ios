@@ -682,33 +682,30 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(resumedState.shouldShowKeyboard)
     }
 
-    func test_clearSearchAction_returnsExpectedState() {
-        let initialState = createSubject()
+    func test_searchTermDidClearAction_returnsExpectedState() {
+        let initialState = createSubject().copy(searchTerm: "text").copy(isEmptySearch: false)
         let reducer = addressBarReducer()
 
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             initialState,
-            ToolbarAction(
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.clearSearch
-            )
+            ToolbarModernAction.searchTermDidClear,
+            windowUUID
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertNil(newState.searchTerm)
         XCTAssertTrue(newState.isEditing)
         XCTAssertTrue(newState.isEmptySearch)
     }
 
-    func test_didDeleteSearchTermAction_returnsExpectedState() {
+    func test_searchTermDidChangeAction_whenEmpty_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = addressBarReducer()
 
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             initialState,
-            ToolbarAction(
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.didDeleteSearchTerm
-            )
+            ToolbarModernAction.searchTermDidChange(isEmpty: true),
+            windowUUID
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
@@ -718,16 +715,14 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(newState.shouldSelectSearchTerm)
     }
 
-    func test_didEnterSearchTermAction_returnsExpectedState() {
+    func test_searchTermDidChangeAction_whenNotEmpty_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = addressBarReducer()
 
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             initialState,
-            ToolbarAction(
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.didEnterSearchTerm
-            )
+            ToolbarModernAction.searchTermDidChange(isEmpty: false),
+            windowUUID
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
@@ -735,25 +730,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(newState.didStartTyping)
         XCTAssertFalse(newState.isEmptySearch)
         XCTAssertFalse(newState.shouldSelectSearchTerm)
-    }
-
-    func test_didSetSearchTermAction_returnsExpectedState() {
-        let initialState = createSubject()
-        let reducer = addressBarReducer()
-        let searchTerm = "Search Term"
-
-        let newState = reducer.legacyReducer(
-            initialState,
-            ToolbarAction(
-                searchTerm: searchTerm,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.didSetSearchTerm
-            )
-        )
-
-        XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.searchTerm, searchTerm)
-        XCTAssertFalse(newState.didStartTyping)
     }
 
     func test_didStartTypingAction_returnsExpectedState() {
@@ -804,19 +780,19 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
     }
 
     private func setIsHostedSummarizerFeatureEnabled(enabled: Bool) {
-        FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
+        FxNimbus.shared.features.hostedSummarizerFeature.with { _ in
             return HostedSummarizerFeature(enabled: enabled, toolbarEntrypoint: enabled)
         }
     }
 
     private func setIsSummarizerLanguageExpansionEnabled(enabled: Bool) {
-        FxNimbus.shared.features.summarizerLanguageExpansionFeature.with { _, _ in
+        FxNimbus.shared.features.summarizerLanguageExpansionFeature.with { _ in
             return SummarizerLanguageExpansionFeature(enabled: enabled)
         }
     }
 
     private func setTranslationsFeatureEnabled(enabled: Bool) {
-        FxNimbus.shared.features.translationsFeature.with { _, _ in
+        FxNimbus.shared.features.translationsFeature.with { _ in
             return TranslationsFeature(enabled: enabled)
         }
     }

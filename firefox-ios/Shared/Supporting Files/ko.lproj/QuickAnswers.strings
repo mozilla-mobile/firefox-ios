@@ -22,6 +22,9 @@
 /* Placeholder text shown in the Quick Answers view while the microphone is active and waiting for the user to ask a follow-up question about the previous answer. */
 "QuickAnswers.ContentView.ListeningFollowUp.v160" = "듣는 중, 추가로 질문하세요…";
 
+/* Button shown below a Quick Answers result that the user taps to ask a new, unrelated question. */
+"QuickAnswers.ContentView.NewQuestionButton.v161" = "새로운 질문하기";
+
 /* Placeholder text shown in the Quick Answers view before the user starts speaking. */
 "QuickAnswers.ContentView.Placeholder.v158" = "무엇이든 물어보세요…";
 

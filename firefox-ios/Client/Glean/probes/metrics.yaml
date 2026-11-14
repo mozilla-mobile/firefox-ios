@@ -2409,6 +2409,23 @@ app_errors:
     type: event
     description: |
       Recorded when we detect potential major tab loss
+    extra_keys: &tab_loss_extra_keys
+      expected:
+        type: quantity
+        description: |
+          The expected number of tabs.
+      actual:
+          type: quantity
+          description: |
+            The actual number of tabs.
+      missing:
+          type: quantity
+          description: |
+            The missing number of tabs.
+      windows:
+          type: quantity
+          description: |
+            The number of windows.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/22180
     data_reviews:
@@ -2420,6 +2437,7 @@ app_errors:
     type: event
     description: |
       Recorded when we detect a minor discrepancy in tab count between backgrounding and foregrounding
+    extra_keys: *tab_loss_extra_keys
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/34546
     data_reviews:

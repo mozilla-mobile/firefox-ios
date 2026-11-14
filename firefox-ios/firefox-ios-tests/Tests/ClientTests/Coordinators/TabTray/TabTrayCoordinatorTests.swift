@@ -149,7 +149,7 @@ final class TabTrayCoordinatorTests: XCTestCase {
     }
 
     private func setupNimbusTabTrayUIExperimentTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.tabTrayUiExperiments.with { _, _ in
+        FxNimbus.shared.features.tabTrayUiExperiments.with { _ in
             return TabTrayUiExperiments(enabled: isEnabled)
         }
     }

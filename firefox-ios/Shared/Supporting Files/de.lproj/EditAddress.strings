@@ -80,7 +80,7 @@
 "Addresses.EditAddress.AutofillAddressProvince.v129" = "Provinz";
 
 /* Label for the state field, a necessary component of addresses in many countries, especially the USA. It ensures that state-specific details are correctly filled in forms using autofill. */
-"Addresses.EditAddress.AutofillAddressState.v129" = "Staat";
+"Addresses.EditAddress.AutofillAddressState.v129" = "Bundesstaat";
 
 /* Label for the suburb field, enabling users to add suburb details to their address. This is important for accurate delivery and services in suburban areas, enhancing autofill functionality. */
 "Addresses.EditAddress.AutofillAddressSuburb.v129" = "Suburb";

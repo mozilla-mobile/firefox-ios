@@ -404,6 +404,69 @@ final class URLExtensionTests: XCTestCase {
         XCTAssertEqual(URL(string: readerModeURL)!.decodeReaderModeURL, url)
     }
 
+    func testDecodeReaderModeURLPreservesQueryItems() throws {
+        for query in ["foo", "foo=", "foo=bar"] {
+            let url = try XCTUnwrap(URL(string: "https://example.com/?\(query)"))
+            let encoded = try XCTUnwrap(url.absoluteString.addingPercentEncoding(withAllowedCharacters: .alphanumerics))
+            let readerURL = try XCTUnwrap(URL(string: "about:reader?url=\(encoded)"))
+            XCTAssertEqual(readerURL.decodeReaderModeURL, url, query)
+        }
+    }
+
+    func testDecodeReaderModeURLPreservesHTTPSURL() throws {
+        let url = try XCTUnwrap(URL(string: "https://example.com/page?foo=bar"))
+        let encoded = try XCTUnwrap(url.absoluteString.addingPercentEncoding(withAllowedCharacters: .alphanumerics))
+
+        for readerURL in [
+            "http://localhost:\(webServerPort)/reader-mode/page",
+            "about:reader",
+            "readermode://app/page"
+        ] {
+            let readerURL = try XCTUnwrap(URL(string: "\(readerURL)?url=\(encoded)"))
+            XCTAssertEqual(readerURL.decodeReaderModeURL, url, readerURL.absoluteString)
+        }
+    }
+
+    func testDecodeReaderModeURLEscapesHTMLInPathAndQuery() throws {
+        let payload = "<script>alert(\"XSS\")</script><img src='x' onerror='alert(1)'>&"
+        let escaped = "&lt;script&gt;alert(&quot;XSS&quot;)&lt;/script&gt;"
+            + "&lt;img src=&#39;x&#39; onerror=&#39;alert(1)&#39;&gt;&amp;"
+        var components = try XCTUnwrap(URLComponents(string: "https://example.com"))
+        components.path = "/\(payload)"
+        components.queryItems = [URLQueryItem(name: "value", value: payload)]
+        let url = try XCTUnwrap(components.url)
+        let encoded = try XCTUnwrap(url.absoluteString.addingPercentEncoding(withAllowedCharacters: .alphanumerics))
+        let readerURL = try XCTUnwrap(URL(string: "about:reader?url=\(encoded)"))
+        let decodedURL = try XCTUnwrap(readerURL.decodeReaderModeURL)
+        let decodedComponents = try XCTUnwrap(URLComponents(url: decodedURL, resolvingAgainstBaseURL: false))
+
+        XCTAssertEqual(decodedComponents.path, "/\(escaped)")
+        XCTAssertEqual(decodedComponents.queryItems, [URLQueryItem(name: "value", value: escaped)])
+    }
+
+    func testDecodeReaderModeURLRejectsXSSPayloads() throws {
+        let payloads = [
+            "javascript:alert(1)",
+            "javascript:alert('XSS')",
+            "data:text/html,<script>alert(1)</script>"
+        ]
+        let readerURLs = [
+            "http://localhost:\(webServerPort)/reader-mode/page",
+            "about:reader",
+            "readermode://app/page"
+        ]
+
+        for payload in payloads {
+            let encoded = try XCTUnwrap(payload.addingPercentEncoding(withAllowedCharacters: .alphanumerics))
+            for readerURL in readerURLs {
+                for value in [payload, encoded] {
+                    let url = try XCTUnwrap(URL(string: "\(readerURL)?url=\(value)"))
+                    XCTAssertNil(url.decodeReaderModeURL, url.absoluteString)
+                }
+            }
+        }
+    }
+
     func testDecodeReaderModeURLGivenNotAReaderModeURLThenNil() {
         let url = "http://google.com"
         XCTAssertNil(URL(string: url)!.decodeReaderModeURL)
@@ -467,6 +530,39 @@ final class URLExtensionTests: XCTestCase {
         let genericUrl = url.safeEncodedUrl
         XCTAssertNotNil(genericUrl)
         XCTAssertTrue(genericUrl!.absoluteString.contains("javascript:alert(%26%2339;XSS%26%2339;)"))
+    }
+
+    func testSafeEncodedUrlPreservesQuery() throws {
+        for query in ["foo&empty=&bar=value", "percent=100%25", "encoded=%2541"] {
+            let url = try XCTUnwrap(URL(string: "https://example.com/?\(query)"))
+            XCTAssertEqual(url.safeEncodedUrl?.absoluteString, url.absoluteString, query)
+        }
+    }
+
+    func testSafeEncodedUrlRejectsHostlessXSSURLs() throws {
+        for payload in [
+            "javascript:alert(1)",
+            "javascript:alert('XSS')",
+            "data:text/html,<script>alert(1)</script>"
+        ] {
+            let url = try XCTUnwrap(URL(string: payload))
+            XCTAssertNil(url.safeEncodedUrl, payload)
+        }
+    }
+
+    func testSafeEncodedUrlEscapesHTMLInPathAndQuery() throws {
+        let payload = "<script>alert(\"XSS\")</script><img src='x' onerror='alert(1)'>&"
+        let escaped = "&lt;script&gt;alert(&quot;XSS&quot;)&lt;/script&gt;"
+            + "&lt;img src=&#39;x&#39; onerror=&#39;alert(1)&#39;&gt;&amp;"
+        var components = URLComponents(string: "https://example.com")!
+        components.path = "/\(payload)"
+        components.queryItems = [URLQueryItem(name: "value", value: payload)]
+        let url = try XCTUnwrap(components.url)
+        let safeURL = try XCTUnwrap(url.safeEncodedUrl)
+        let safeComponents = try XCTUnwrap(URLComponents(url: safeURL, resolvingAgainstBaseURL: false))
+
+        XCTAssertEqual(safeComponents.path, "/\(escaped)")
+        XCTAssertEqual(safeComponents.queryItems, [URLQueryItem(name: "value", value: escaped)])
     }
 
     func testSafeEncodedUrlGivenEmptyPath() {

@@ -175,6 +175,7 @@ final class LocationView: UIView,
         configureURLPlaceholder(basedOn: config)
         setTextFieldPlaceholder(color: theme.colors.textPrimary)
         urlTextField.text = config.url?.absoluteString
+        urlTextField.isUserInteractionEnabled = false
         formatAndTruncateURLTextField()
         updateIconContainer(isURLTextFieldCentered: isURLTextFieldCentered,
                             locationTextFieldTrailingPadding: uxConfig.locationTextFieldTrailingPadding)
@@ -497,7 +498,6 @@ final class LocationView: UIView,
     }
 
     private func restoreLocationViewSize() {
-        urlTextField.isUserInteractionEnabled = isEditing
         isUserInteractionEnabled = true
         UIView.animate(
             withDuration: UX.identityResetAnimationDuration,
@@ -535,6 +535,7 @@ final class LocationView: UIView,
     // MARK: - `urlTextField` Configuration
     private func configureURLTextField(_ config: LocationViewConfiguration) {
         let configurationIsEditing = config.isEditing
+        urlTextField.isUserInteractionEnabled = configurationIsEditing && !isAddressBarMinimized
         configureURLPlaceholder(basedOn: config)
         // This code is fragile and needs to be called in this exact location or it will break.
         // This is because when we rotate the device, a `keyboardWillHide` notification is fired
@@ -589,7 +590,6 @@ final class LocationView: UIView,
 
     private func configureURLPlaceholder(basedOn config: LocationViewConfiguration) {
         isEditing = config.isEditing
-        urlTextField.isUserInteractionEnabled = isEditing && !isAddressBarMinimized
         if !isEditing && config.url != nil {
             // allow proper centering of the urlTextField removing placeholder size.
             urlTextField.placeholder = nil

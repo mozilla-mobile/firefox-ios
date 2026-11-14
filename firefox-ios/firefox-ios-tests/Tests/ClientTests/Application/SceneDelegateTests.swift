@@ -39,6 +39,20 @@ final class SceneDelegateTests: XCTestCase, FeatureFlaggable {
         XCTAssertTrue(mockSessionManager.launchSessionProvider.openedFromExternalSource)
     }
 
+    func testContinueUserActivity_browserDataTransferActivity_isNotRouted() throws {
+        AppEventQueue.signal(event: .startupFlowComplete)
+        let setup = try createSubjectWithCoordinator()
+
+        for activityType in ["BEBrowserDataExchangeImportActivity", "BEBrowserDataExchangeExportActivity"] {
+            let activity = NSUserActivity(activityType: activityType)
+            // Generic routing would open this URL if the transfer guard did not consume the activity.
+            activity.webpageURL = URL(string: "https://example.com")
+            setup.delegate.scene(setup.scene, continue: activity)
+        }
+
+        XCTAssertFalse(mockSessionManager.launchSessionProvider.openedFromExternalSource)
+    }
+
     // MARK: - handle(route:) timing - refactor enabled
 
     func testHandleRoute_refactorEnabled_dispatchesAfterStartupFlowComplete() throws {
@@ -119,39 +133,6 @@ final class SceneDelegateTests: XCTestCase, FeatureFlaggable {
                         "Route should dispatch once tabRestoration is signalled")
     }
 
-    // MARK: - pendingDeeplinkTab Activity
-
-    func testHandleRoute_deeplinkRoute_startsPendingDeeplinkTabActivity() throws {
-        let setup = try createSubjectWithCoordinator()
-        let windowUUID = setup.coordinator.windowUUID
-        defer {
-            if AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(windowUUID)) {
-                AppEventQueue.completed(.pendingDeeplinkTab(windowUUID))
-            }
-        }
-
-        XCTAssertFalse(AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(windowUUID)))
-
-        setup.delegate.scene(setup.scene, continue: makeSearchActivity())
-
-        XCTAssertTrue(AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(windowUUID)))
-    }
-
-    func testHandleRoute_nonTabSelectingRoute_doesNotStartPendingDeeplinkTabActivity() throws {
-        let setup = try createSubjectWithCoordinator()
-        let windowUUID = setup.coordinator.windowUUID
-        defer {
-            if AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(windowUUID)) {
-                AppEventQueue.completed(.pendingDeeplinkTab(windowUUID))
-            }
-        }
-        let nonTabSelectingURL = try XCTUnwrap(URL(string: "firefox://deep-link?url=/action/show-intro-onboarding"))
-
-        setup.delegate.handleOpenURL(nonTabSelectingURL)
-
-        XCTAssertFalse(AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(windowUUID)))
-    }
-
     // MARK: - Telemetry
 
     func testHandleRoute_refactorEnabled_recordsDeeplinkTimeOnSuccess() throws {
@@ -203,7 +184,7 @@ final class SceneDelegateTests: XCTestCase, FeatureFlaggable {
     }
 
     private func setIsDeeplinkOptimizationRefactorEnabled(_ enabled: Bool) {
-        FxNimbus.shared.features.deeplinkOptimizationRefactorFeature.with { _, _ in
+        FxNimbus.shared.features.deeplinkOptimizationRefactorFeature.with { _ in
             return DeeplinkOptimizationRefactorFeature(enabled: enabled)
         }
     }

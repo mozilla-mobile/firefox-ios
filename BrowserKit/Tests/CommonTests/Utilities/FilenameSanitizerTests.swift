@@ -82,4 +82,12 @@ final class FilenameSanitizerTests: XCTestCase {
         // Shares a string prefix with "/tmp/stage" but is not inside it.
         XCTAssertFalse(FilenameSanitizer.isContained(URL(fileURLWithPath: "/tmp/stage-other/a.pdf"), in: dir))
     }
+
+    func testIsContained_newFileInsideExistingPrivateDirectory_isTrue() {
+        let dir = URL(fileURLWithPath: "/private/tmp")
+        let newFile = dir.appendingPathComponent("\(UUID().uuidString).pdf")
+
+        XCTAssertTrue(FilenameSanitizer.isContained(newFile, in: dir))
+        XCTAssertFalse(FilenameSanitizer.isContained(dir.appendingPathComponent("../etc/x.plist"), in: dir))
+    }
 }

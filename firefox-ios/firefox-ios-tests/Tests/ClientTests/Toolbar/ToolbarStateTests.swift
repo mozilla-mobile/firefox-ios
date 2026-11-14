@@ -277,65 +277,87 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
     }
 
-    func test_clearSearchAction_returnsExpectedState() {
+    func test_searchTermDidClearAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = toolbarReducer()
-
-        let newState = reducer.legacyReducer(
-            initialState,
-            ToolbarAction(
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.clearSearch)
+        let stateWithSearchTerm = initialState.copy(
+            addressToolbar: initialState.addressToolbar.copy(searchTerm: "text").copy(isEmptySearch: false)
         )
 
-        XCTAssertNotEqual(newState.addressToolbar, initialState.addressToolbar)
+        let newState = reducer.modernReducer(
+            stateWithSearchTerm,
+            ToolbarModernAction.searchTermDidClear,
+            windowUUID
+        )
+
+        XCTAssertNil(newState.addressToolbar.searchTerm)
+        XCTAssertTrue(newState.addressToolbar.isEmptySearch)
+        XCTAssertTrue(newState.addressToolbar.isEditing)
         XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
     }
 
-    func test_didDeleteSearchTermAction_returnsExpectedState() {
+    func test_searchTermDidClearAction_fromAnotherWindow_doesNotChangeState() {
         let initialState = createSubject()
         let reducer = toolbarReducer()
-
-        let newState = reducer.legacyReducer(
-            initialState,
-            ToolbarAction(
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.didDeleteSearchTerm)
+        let stateWithSearchTerm = initialState.copy(
+            addressToolbar: initialState.addressToolbar.copy(searchTerm: "text").copy(isEmptySearch: false)
         )
 
-        XCTAssertNotEqual(newState.addressToolbar, initialState.addressToolbar)
+        let newState = reducer.modernReducer(
+            stateWithSearchTerm,
+            ToolbarModernAction.searchTermDidClear,
+            WindowUUID()
+        )
+
+        XCTAssertEqual(newState.addressToolbar, stateWithSearchTerm.addressToolbar)
+    }
+
+    func test_searchTermDidChangeAction_whenEmpty_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = toolbarReducer()
+        let stateWithSearchTerm = initialState.copy(
+            addressToolbar: initialState.addressToolbar.copy(isEmptySearch: false)
+        )
+
+        let newState = reducer.modernReducer(
+            stateWithSearchTerm,
+            ToolbarModernAction.searchTermDidChange(isEmpty: true),
+            windowUUID
+        )
+
+        XCTAssertTrue(newState.addressToolbar.isEmptySearch)
+        XCTAssertTrue(newState.addressToolbar.isEditing)
+        XCTAssertTrue(newState.addressToolbar.didStartTyping)
         XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
     }
 
-    func test_didEnterSearchTermAction_returnsExpectedState() {
+    func test_searchTermDidChangeAction_whenNotEmpty_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             initialState,
-            ToolbarAction(
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.didEnterSearchTerm)
+            ToolbarModernAction.searchTermDidChange(isEmpty: false),
+            windowUUID
         )
 
-        XCTAssertNotEqual(newState.addressToolbar, initialState.addressToolbar)
+        XCTAssertFalse(newState.addressToolbar.isEmptySearch)
+        XCTAssertTrue(newState.addressToolbar.isEditing)
+        XCTAssertTrue(newState.addressToolbar.didStartTyping)
         XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
     }
 
-    func test_didSetSearchTermAction_returnsExpectedState() {
+    func test_searchTermDidChangeAction_fromAnotherWindow_doesNotChangeState() {
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             initialState,
-            ToolbarAction(
-                searchTerm: "text",
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.didSetSearchTerm)
+            ToolbarModernAction.searchTermDidChange(isEmpty: false),
+            WindowUUID()
         )
 
-        XCTAssertNotEqual(newState.addressToolbar, initialState.addressToolbar)
-        XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
+        XCTAssertEqual(newState.addressToolbar, initialState.addressToolbar)
     }
 
     func test_didStartTypingAction_returnsExpectedState() {

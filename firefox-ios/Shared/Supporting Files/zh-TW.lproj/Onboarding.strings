@@ -107,7 +107,7 @@
 "Onboarding.Modern.BrandRefresh.Customization.Toolbar.Title.v148" = "選擇網址列位置";
 
 /* Description for the marketing data sharing card in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla). */
-"Onboarding.Modern.BrandRefresh.Marketing.Description.v148" = "與 %2$@ 的行銷夥伴分享您如何發現 %1$@ 以及是如何使用的，我們絕不會販售此資料。";
+"Onboarding.Modern.BrandRefresh.Marketing.Description.v148" = "與 %2$@ 的行銷夥伴分享您如何發現 %1$@ 以及您正在使用它，我們絕不會販售此資料。";
 
 /* Link text for learning more about how marketing data is used in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Marketing.LearnMoreLink.v148" = "我們會如何使用該資料";

@@ -3673,6 +3673,27 @@ extension String {
                 value: "Finding Locations…",
                 comment: "Text displayed on the locations screen when the app loads a list of locations for the user to pick from. “Locations” here means the locations of VPN servers the user can connect to."
             )
+
+            public static let LocationUnavailableTitle = MZLocalizedString(
+                key: "VPN.LocationPicker.LocationUnavailableTitle.v162",
+                tableName: "VPN",
+                value: "Location Unavailable",
+                comment: "Title of the popup shown when the VPN server the user picked can’t be used right now. “Location” means the VPN server’s location."
+            )
+
+            public static let LocationUnavailableBody = MZLocalizedString(
+                key: "VPN.LocationPicker.LocationUnavailableBody.v162",
+                tableName: "VPN",
+                value: "We’ve switched you to the recommended location.",
+                comment: "Body text of the popup shown when the VPN server the user picked can’t be used right now. Explains that the VPN has connected through the recommended location instead. The recommended location is the one with the fastest connection. “Location” means the VPN server’s location."
+            )
+
+            public static let LocationUnavailableButtonText = MZLocalizedString(
+                key: "VPN.LocationPicker.LocationUnavailableButtonText.v162",
+                tableName: "VPN",
+                value: "OK",
+                comment: "Button on the popup shown when the VPN server location the user picked can’t be used right now. Indicates the user understands and acknowledges the location has changed. Tapping it closes the popup."
+            )
         }
     }
 }
@@ -7908,6 +7929,11 @@ extension String {
         key: "Settings.TrackingProtection.ProtectionLevel.Footer.Lock",
         tableName: nil,
         value: "If a site doesn’t work as expected, tap the lock in the address bar and turn off Enhanced Tracking Protection for that page.",
+        comment: "Footer information for tracker protection level.")
+    public static let TrackingProtectionLevelFooterStrict = MZLocalizedString(
+        key: "Settings.TrackingProtection.ProtectionLevel.Footer.Strict.v161",
+        tableName: nil,
+        value: "If a site isn’t working, open the menu and try turning Enhanced Tracking Protection off.",
         comment: "Footer information for tracker protection level.")
     public static let TrackerProtectionLearnMore = MZLocalizedString(
         key: "Settings.TrackingProtection.LearnMore",
