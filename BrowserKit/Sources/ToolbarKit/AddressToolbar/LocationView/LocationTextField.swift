@@ -192,9 +192,16 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
 
     func handleInputModeDidChange() {
         guard !lastMarkedText.isEmpty, let currentText = text, currentText.hasSuffix(lastMarkedText) else { return }
-        self.text = String(currentText.dropLast(lastMarkedText.count))
-        hideCursor = true
-        setMarkedText(lastMarkedText, selectedRange: NSRange())
+        // Re-applying the suggestion as marked text would hand it to the new keyboard's IME
+        // composition session, which swallows the next key press (e.g. Space). Restoring it
+        // as a text selection keeps the suggestion visible while remaining plain text.
+        unmarkText()
+        self.text = currentText
+        hideCursor = false
+        if let suggestionStart = position(from: endOfDocument, offset: -lastMarkedText.count),
+           let suggestionRange = textRange(from: suggestionStart, to: endOfDocument) {
+            selectedTextRange = suggestionRange
+        }
     }
 
     // MARK: - Notifiable
