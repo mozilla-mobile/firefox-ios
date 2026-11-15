@@ -962,4 +962,36 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
 
         XCTAssertNil(contextHelper.elements, "The telemetry refactor must not change the existing reset behavior")
     }
+
+    // MARK: - Link preview configuration
+
+    @MainActor
+    func testLinkPreviewConfiguration_doesNotShareTabPreferences() {
+        let tabWebView = createTabWebViewAllowingInlineMedia()
+
+        let configuration = BrowserViewController.linkPreviewConfiguration(from: tabWebView)
+
+        XCTAssertFalse(configuration.preferences === tabWebView.configuration.preferences,
+                       "WebKit writes the preview's media settings into its preferences, which must not be the tab's")
+    }
+
+    @MainActor
+    func testLinkPreviewConfiguration_disablesMediaPlayback() {
+        let tabWebView = createTabWebViewAllowingInlineMedia()
+
+        let configuration = BrowserViewController.linkPreviewConfiguration(from: tabWebView)
+
+        XCTAssertFalse(configuration.allowsInlineMediaPlayback)
+        XCTAssertFalse(configuration.allowsPictureInPictureMediaPlayback)
+        XCTAssertEqual(configuration.mediaTypesRequiringUserActionForPlayback, .all)
+        XCTAssertFalse(configuration.allowsAirPlayForMediaPlayback)
+    }
+
+    @MainActor
+    private func createTabWebViewAllowingInlineMedia() -> WKWebView {
+        let configuration = WKWebViewConfiguration()
+        configuration.allowsInlineMediaPlayback = true
+        configuration.mediaTypesRequiringUserActionForPlayback = []
+        return WKWebView(frame: .zero, configuration: configuration)
+    }
 }
