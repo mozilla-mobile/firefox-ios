@@ -55,6 +55,7 @@ if (!isFullScreenEnabled && isFullscreenVideosSupported && !/mobile/i.test(navig
 const forceInline = (video) => {
   if (!["playsinline", "webkit-playsinline"].some((attr) => video.hasAttribute(attr))) {
     video.setAttribute("playsinline", "");
+    video.controls = true;
   }
 };
 
@@ -67,13 +68,12 @@ document.createElement = function (tag) {
   return el;
 };
 
-/// This is also added to all autoplay videos on the page.
-/// FXIOS-15411 explains why thanks to iOS changes over time.
+/// Any `autoplay` video on the page without `playsinline` is also forced inline.
+/// FXIOS-15411 explains why this is needed with our autoplay policies driven by prefs.
 
 const playInline = () => {
   document.querySelectorAll("video[autoplay]").forEach((el) => {
     forceInline(el);
-    el.controls = true;
   });
 };
 
