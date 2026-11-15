@@ -53,12 +53,9 @@ if (!isFullScreenEnabled && isFullscreenVideosSupported && !/mobile/i.test(navig
 /// FXIOS-12482 has more details on this issue.
 
 const forceInline = (video) => {
-  const inlineAttributes = ["playsinline", "webkit-playsinline"];
-  inlineAttributes.forEach((attr) => {
-    if (!video.hasAttribute(attr)) {
-      video.setAttribute(attr, "");
-    }
-  });
+  if (!["playsinline", "webkit-playsinline"].some((attr) => video.hasAttribute(attr))) {
+    video.setAttribute("playsinline", "");
+  }
 };
 
 const originalCreateElement = document.createElement;
