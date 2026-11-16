@@ -9,8 +9,11 @@ import Foundation
 final class MockVPNProxyTokenFetching: VPNProxyTokenFetching, @unchecked Sendable {
     var passToReturn: VPNProxyPass
     var fetchError: Error?
+    var usageToReturn = VPNProxyUsage(max: 0, remaining: 0, reset: Date(), unlimited: false)
+    var fetchEntitlementError: Error?
 
     private(set) var fetchCallCount = 0
+    private(set) var fetchEntitlementCallCount = 0
 
     init(passToReturn: VPNProxyPass) {
         self.passToReturn = passToReturn
@@ -20,5 +23,11 @@ final class MockVPNProxyTokenFetching: VPNProxyTokenFetching, @unchecked Sendabl
         fetchCallCount += 1
         if let fetchError { throw fetchError }
         return passToReturn
+    }
+
+    func fetchEntitlement() async throws -> VPNProxyUsage {
+        fetchEntitlementCallCount += 1
+        if let fetchEntitlementError { throw fetchEntitlementError }
+        return usageToReturn
     }
 }
