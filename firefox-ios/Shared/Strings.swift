@@ -861,6 +861,16 @@ extension String {
                 tableName: "Settings",
                 value: "%1$@, issued to %2$@, ending in %3$@, expires %4$@",
                 comment: "Accessibility label for a credit card list item in autofill settings screen. %1$@ is the credit card issuer (e.g. Visa), %2$@ is the name of the credit card holder, %3$@ is the last 4 digits of the credit card, %4$@ is the card's expiration date.")
+            public static let SecurityCodeSavedLabel = MZLocalizedString(
+                key: "CreditCard.Settings.SecurityCodeSavedLabel.v162",
+                tableName: "Settings",
+                value: "CVV saved",
+                comment: "Shown under a saved credit card in the payment methods settings list, and read by VoiceOver for saved cards, when the card's security code (CVV) is saved.")
+            public static let SecurityCodeLabel = MZLocalizedString(
+                key: "CreditCard.Settings.SecurityCodeLabel.v162",
+                tableName: "Settings",
+                value: "Security code",
+                comment: "Shown under a credit card in the bottom sheets to save, update or autofill a card, followed by the hidden security code (CVV) as dots, e.g. 'Security code •••'.")
         }
 
         // Displaying a credit card

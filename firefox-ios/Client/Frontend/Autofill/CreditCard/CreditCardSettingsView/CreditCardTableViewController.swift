@@ -246,6 +246,7 @@ extension CreditCardTableViewController: UITableViewDelegate,
                 self?.didSelectCardAtIndex?(creditCard)
                 self?.lastSelectedIndex = indexPath
             },
+            securityCodeDisplay: viewModel.securityCodeDisplay(for: creditCard),
             windowUUID: windowUUID,
             shouldUsePrivateOverride: shouldUsePrivateOverride,
             shouldBeInPrivateTheme: shouldBeInPrivateTheme)

@@ -605,6 +605,57 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         XCTAssertNil(value.ccCvv)
     }
 
+    @MainActor
+    func test_securityCodeDisplay_saveWithCvvAndToggleOn_isMasked() {
+        let subject = createSubject(decryptedCreditCard: samplePlainTextCardWithCvv)
+        let card = samplePlainTextCardWithCvv.convertToTempCreditCard()
+
+        XCTAssertEqual(subject.securityCodeDisplay(for: card), .masked)
+        XCTAssertTrue(subject.a11yLabel(for: card).string.hasSuffix(String.CreditCard.Settings.SecurityCodeLabel))
+    }
+
+    @MainActor
+    func test_securityCodeDisplay_toggleOff_isNil() {
+        let subject = createSubject(decryptedCreditCard: samplePlainTextCardWithCvv)
+        subject.isSaveSecurityCodesEnabled = false
+
+        XCTAssertNil(subject.securityCodeDisplay(for: samplePlainTextCardWithCvv.convertToTempCreditCard()))
+    }
+
+    @MainActor
+    func test_securityCodeDisplay_cardWithoutCvv_isNil() {
+        let subject = createSubject()
+
+        XCTAssertNil(subject.securityCodeDisplay(for: samplePlainTextCard.convertToTempCreditCard()))
+    }
+
+    @MainActor
+    func test_securityCodeDisplay_selectSavedCardWithCvv_isMasked() {
+        let subject = createSubject(state: .selectSavedCard)
+        var savedCard = sampleCreditCard
+        savedCard.ccCvv = "321"
+
+        XCTAssertEqual(subject.securityCodeDisplay(for: savedCard), .masked)
+        XCTAssertTrue(subject.a11yLabel(for: savedCard).string.hasSuffix(String.CreditCard.Settings.SecurityCodeLabel))
+    }
+
+    @MainActor
+    func test_securityCodeDisplay_selectSavedCardWithCvv_toggleOff_isNil() {
+        userDefaults.set(false, forKey: PrefsKeys.KeyAutofillCreditCardSecurityCodeStatus)
+        let subject = createSubject(state: .selectSavedCard)
+        var savedCard = sampleCreditCard
+        savedCard.ccCvv = "321"
+
+        XCTAssertNil(subject.securityCodeDisplay(for: savedCard))
+    }
+
+    @MainActor
+    func test_securityCodeDisplay_selectSavedCardWithoutCvv_isNil() {
+        let subject = createSubject(state: .selectSavedCard)
+
+        XCTAssertNil(subject.securityCodeDisplay(for: sampleCreditCard))
+    }
+
     private var samplePlainTextCardWithCvv: UnencryptedCreditCardFields {
         var card = samplePlainTextCard
         card.ccCvv = "789"

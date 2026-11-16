@@ -103,6 +103,7 @@ class CreditCardBottomSheetViewController: UIViewController,
         toggleView.translatesAutoresizingMaskIntoConstraints = false
         toggleView.onToggle = { [weak self] isOn in
             self?.viewModel.isSaveSecurityCodesEnabled = isOn
+            self?.cardTableView.reloadData()
         }
         return toggleView
     }()
@@ -371,6 +372,7 @@ class CreditCardBottomSheetViewController: UIViewController,
             didSelectAction: { [weak self] in
                 self?.handleCreditCardSelection(row: indexPath.row)
             },
+            securityCodeDisplay: viewModel.securityCodeDisplay(for: creditCard),
             windowUUID: windowUUID)
         hostingCell.host(creditCardRow, parentController: self)
         hostingCell.backgroundColor = .clear

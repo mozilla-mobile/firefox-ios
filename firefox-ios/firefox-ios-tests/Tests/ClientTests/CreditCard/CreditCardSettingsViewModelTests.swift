@@ -4,6 +4,7 @@
 
 import Common
 import Glean
+import MozillaAppServices
 import Shared
 import UIKit
 import XCTest
@@ -96,7 +97,69 @@ final class CreditCardSettingsViewModelTests: XCTestCase {
         XCTAssertEqual(subject.tableView(UITableView(), numberOfRowsInSection: 0), 1)
     }
 
+    func testTogglingSecurityCodes_updatesCardListSecurityCodeVisibility() {
+        let subject = createSubject()
+
+        subject.securityCodeToggleModel.isEnabled = false
+        XCTAssertFalse(subject.tableViewModel.isSecurityCodeEnabled)
+
+        subject.securityCodeToggleModel.isEnabled = true
+        XCTAssertTrue(subject.tableViewModel.isSecurityCodeEnabled)
+    }
+
+    func testTableViewModel_securityCodeEnabledAndCardHasCvv_showsSaved() {
+        let subject = CreditCardTableViewModel()
+        subject.isSecurityCodeEnabled = true
+        subject.creditCards = [makeCard(ccCvv: "123")]
+
+        XCTAssertEqual(subject.securityCodeDisplay(for: makeCard(ccCvv: "123")), .saved)
+        XCTAssertTrue(subject.a11yLabel(for: IndexPath(row: 0, section: 1)).string
+            .hasSuffix(String.CreditCard.Settings.SecurityCodeSavedLabel))
+    }
+
+    func testTableViewModel_securityCodeDisabled_hidesSaved() {
+        let subject = CreditCardTableViewModel()
+        subject.creditCards = [makeCard(ccCvv: "123")]
+
+        XCTAssertNil(subject.securityCodeDisplay(for: makeCard(ccCvv: "123")))
+        XCTAssertFalse(subject.a11yLabel(for: IndexPath(row: 0, section: 1)).string
+            .contains(String.CreditCard.Settings.SecurityCodeSavedLabel))
+    }
+
+    func testTableViewModel_cardWithoutCvv_hidesSaved() {
+        let subject = CreditCardTableViewModel()
+        subject.isSecurityCodeEnabled = true
+
+        XCTAssertNil(subject.securityCodeDisplay(for: makeCard(ccCvv: nil)))
+        XCTAssertNil(subject.securityCodeDisplay(for: makeCard(ccCvv: "")))
+    }
+
+    func testTableViewModel_changingSecurityCodeEnabled_reloadsCards() {
+        let subject = CreditCardTableViewModel()
+        var reloadCount = 0
+        subject.didUpdateCreditCards = { reloadCount += 1 }
+
+        subject.isSecurityCodeEnabled = true
+
+        XCTAssertEqual(reloadCount, 1)
+    }
+
     // MARK: - Helpers
+
+    private func makeCard(ccCvv: String?) -> CreditCard {
+        return CreditCard(guid: "1",
+                          ccName: "Allen Burges",
+                          ccNumber: "4111111111111111",
+                          ccCvv: ccCvv,
+                          ccNumberLast4: "1111",
+                          ccExpMonth: 3,
+                          ccExpYear: 2043,
+                          ccType: "VISA",
+                          timeCreated: 1234678,
+                          timeLastUsed: nil,
+                          timeLastModified: 123123,
+                          timesUsed: 123123)
+    }
 
     private func createSubject() -> CreditCardSettingsViewModel {
         return CreditCardSettingsViewModel(

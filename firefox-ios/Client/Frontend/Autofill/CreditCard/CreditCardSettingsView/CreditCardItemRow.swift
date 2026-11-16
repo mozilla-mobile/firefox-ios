@@ -9,11 +9,21 @@ import SwiftUI
 import struct MozillaAppServices.CreditCard
 
 struct CreditCardItemRow: View {
+    /// How the card's security code is shown under its expiration date.
+    enum SecurityCodeDisplay {
+        /// "CVV saved", used in the saved cards list.
+        case saved
+        /// "Security code •••", used when about to save or update a card.
+        case masked
+    }
+
     let item: CreditCard
     let isAccessibilityCategory: Bool
     let shouldShowSeparator: Bool
     var addPadding: Bool
     var didSelectAction: (() -> Void)?
+    /// `nil` hides the security code line.
+    var securityCodeDisplay: SecurityCodeDisplay?
 
     // Theming
     let windowUUID: WindowUUID
@@ -100,7 +110,34 @@ struct CreditCardItemRow: View {
             creditCardNumber
 
             creditCardExpiration
+
+            if let securityCodeDisplay {
+                creditCardSecurityCode(securityCodeDisplay)
+            }
         }
+    }
+
+    private func creditCardSecurityCode(_ display: SecurityCodeDisplay) -> some View {
+        return AdaptiveStack(horizontalAlignment: .leading,
+                             spacing: isAccessibilityCategory ? 0 : 5,
+                             isAccessibilityCategory: isAccessibilityCategory) {
+            switch display {
+            case .saved:
+                Text(String.CreditCard.Settings.SecurityCodeSavedLabel)
+                    .font(.subheadline)
+                    .foregroundColor(subTextColor)
+            case .masked:
+                Text(String.CreditCard.Settings.SecurityCodeLabel)
+                    .font(.body)
+                    .foregroundColor(subTextColor)
+                Text(verbatim: "•••")
+                    .font(.subheadline)
+                    .foregroundColor(subTextColor)
+            }
+        }
+        .frame(maxWidth: .infinity,
+               alignment: .leading)
+        .padding(.top, 3)
     }
 
     private var creditCardName: some View {

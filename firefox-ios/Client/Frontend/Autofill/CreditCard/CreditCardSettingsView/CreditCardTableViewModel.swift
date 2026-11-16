@@ -21,17 +21,35 @@ class CreditCardTableViewModel {
 
     var didUpdateCreditCards: (() -> Void)?
 
+    /// Whether saved security codes are shown, as "CVV saved" under the cards that have one.
+    var isSecurityCodeEnabled = false {
+        didSet {
+            didUpdateCreditCards?()
+        }
+    }
+
+    func securityCodeDisplay(for creditCard: CreditCard) -> CreditCardItemRow.SecurityCodeDisplay? {
+        guard isSecurityCodeEnabled,
+              let securityCode = creditCard.ccCvv,
+              !securityCode.isEmpty
+        else { return nil }
+        return .saved
+    }
+
     func a11yLabel(for indexPath: IndexPath) -> NSAttributedString {
         guard indexPath.section == 1 else { return NSAttributedString() }
 
         let creditCard = creditCards[indexPath.row]
 
         let localizedDate = localizedDate(year: Int(creditCard.ccExpYear), month: Int(creditCard.ccExpMonth)) ?? ""
-        let string = String(format: .CreditCard.Settings.ListItemA11y,
+        var string = String(format: .CreditCard.Settings.ListItemA11y,
                             creditCard.ccType,
                             creditCard.ccName,
                             creditCard.ccNumberLast4,
                             localizedDate)
+        if securityCodeDisplay(for: creditCard) != nil {
+            string += ", " + String.CreditCard.Settings.SecurityCodeSavedLabel
+        }
         let attributedString = NSMutableAttributedString(string: string)
         if let range = attributedString.string.range(of: creditCard.ccNumberLast4) {
             attributedString.addAttributes([.accessibilitySpeechSpellOut: true],

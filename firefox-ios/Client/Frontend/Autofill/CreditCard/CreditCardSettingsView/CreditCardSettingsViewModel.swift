@@ -43,6 +43,7 @@ final class CreditCardSettingsViewModel: @unchecked Sendable {
 
         tableViewModel.toggleModel = toggleModel
         tableViewModel.securityCodeToggleModel = showsSecurityCodeToggle ? securityCodeToggleModel : nil
+        tableViewModel.isSecurityCodeEnabled = securityCodeSettings.isSecurityCodeEnabled
     }
 
     /// The "Save Security Codes" toggle is only offered when the security code feature is enabled.
@@ -100,6 +101,7 @@ extension CreditCardSettingsViewModel: ToggleModelDelegate {
     func toggleDidChange(_ toggleModel: ToggleModel) {
         if toggleModel === securityCodeToggleModel {
             securityCodeSettings.setSaveSecurityCodesEnabled(toggleModel.isEnabled)
+            tableViewModel.isSecurityCodeEnabled = securityCodeSettings.isSecurityCodeEnabled
         } else {
             isAutofillEnabled = toggleModel.isEnabled
         }

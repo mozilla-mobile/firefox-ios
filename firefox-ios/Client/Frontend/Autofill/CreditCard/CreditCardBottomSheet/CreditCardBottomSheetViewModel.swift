@@ -124,6 +124,16 @@ final class CreditCardBottomSheetViewModel {
         set { securityCodeSettings.setSaveSecurityCodesEnabled(newValue) }
     }
 
+    /// "Security code •••" is shown under any card in the sheet that has a security code, as long as security
+    /// codes are enabled.
+    func securityCodeDisplay(for creditCard: CreditCard) -> CreditCardItemRow.SecurityCodeDisplay? {
+        guard securityCodeSettings.isSecurityCodeEnabled,
+              let securityCode = creditCard.ccCvv,
+              !securityCode.isEmpty
+        else { return nil }
+        return .masked
+    }
+
     var header: String? {
         guard showsSaveSecurityCodesToggle, state == .save else { return state.header }
         return String(format: .CreditCard.RememberCreditCard.HeaderWithSecurityCode, AppName.shortName.rawValue)
@@ -345,11 +355,14 @@ final class CreditCardBottomSheetViewModel {
     // MARK: Accessibility
     func a11yLabel(for creditCard: CreditCard) -> NSAttributedString {
         let localizedDate = localizedDate(year: Int(creditCard.ccExpYear), month: Int(creditCard.ccExpMonth)) ?? ""
-        let string = String(format: .CreditCard.Settings.ListItemA11y,
+        var string = String(format: .CreditCard.Settings.ListItemA11y,
                             creditCard.ccType,
                             creditCard.ccName,
                             creditCard.ccNumberLast4,
                             localizedDate)
+        if securityCodeDisplay(for: creditCard) != nil {
+            string += ", " + String.CreditCard.Settings.SecurityCodeLabel
+        }
         let attributedString = NSMutableAttributedString(string: string)
         if let range = attributedString.string.range(of: creditCard.ccNumberLast4) {
             attributedString.addAttributes([.accessibilitySpeechSpellOut: true],
