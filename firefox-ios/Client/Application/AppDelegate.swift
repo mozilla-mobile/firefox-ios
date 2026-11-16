@@ -392,9 +392,11 @@ class AppDelegate: UIResponder,
         }
     }
 
-    // reconnect if the VPN was on when the app was last closed, tab restore waits on .vpnReconnect
+    // tab restore waits on .vpnReconnect, for now we never reconnect at launch
     private func reconnectVPNIfNeeded() {
         let userPreferences: UserFeaturePreferring = AppContainer.shared.resolve()
+        // Set this to false so VPN never reconnects at launch
+        userPreferences.setPreferenceFor(.vpnFeature, to: false)
         guard #available(iOS 17.0, *),
               featureFlagsProvider.isEnabled(.vpnFeature),
               userPreferences.getPreferenceFor(.vpnFeature) else {

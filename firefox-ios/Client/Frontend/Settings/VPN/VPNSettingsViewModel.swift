@@ -49,6 +49,10 @@ final class VPNSettingsViewModel {
         return sortedByName(countryCodes.filter { $0 != VPNServerManager.recommendedCountryCode })
     }
 
+    func refreshUsage() {
+        store.dispatch(VPNModernAction.refreshUsage, forWindowUUID: windowUUID)
+    }
+
     init(
         vpnManager: VPNRunnable,
         windowUUID: WindowUUID,

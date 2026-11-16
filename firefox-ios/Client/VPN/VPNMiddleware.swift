@@ -98,7 +98,10 @@ final class VPNMiddleware {
         case .changeLocation(let countryCode):
             await changeVPNLocation(countryCode)
         case .reconnectAtLaunch:
+            // currently unreachable, see AppDelegate.reconnectVPNIfNeeded()
             await reconnectAtLaunch()
+        case .refreshUsage:
+            await vpnManager?.refreshUsage()
         case .closeThisTab:
             let tabManager = windowManager.tabManager(for: windowUUID)
             if let selectedTab = tabManager?.selectedTab {
@@ -115,6 +118,7 @@ final class VPNMiddleware {
     }
 
     private func reconnectAtLaunch() async {
+        // currently unreachable, see AppDelegate.reconnectVPNIfNeeded()
         AppEventQueue.started(.vpnReconnect)
         if vpnManager != nil, userPreferences.getPreferenceFor(.vpnFeature) {
             await startVPN()
