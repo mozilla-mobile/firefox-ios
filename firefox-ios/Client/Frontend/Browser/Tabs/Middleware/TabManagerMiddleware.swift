@@ -903,14 +903,6 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
                            iconURL: nil)
     }
 
-    private func absoluteStringFrom(_ url: URL) -> String? {
-        if let urlDecoded = url.decodeReaderModeURL {
-            return urlDecoded.absoluteString
-        }
-
-        return url.absoluteString
-    }
-
     private func getIsBookmarked(
         url: String,
         dataQueue: DispatchQueue,
