@@ -45,6 +45,7 @@ class MainMenuViewController: UIViewController,
     private var menuState: MainMenuState
     private let logger: Logger
     private let mainMenuHelper: MainMenuInterface
+    private let userPreferences: UserFeaturePreferring
 
     var viewProvider: ContextualHintViewProvider?
 
@@ -91,7 +92,8 @@ class MainMenuViewController: UIViewController,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         logger: Logger = DefaultLogger.shared,
-        mainMenuHelper: MainMenuInterface = MainMenuHelper()
+        mainMenuHelper: MainMenuInterface = MainMenuHelper(),
+        userPreferences: UserFeaturePreferring = AppContainer.shared.resolve()
     ) {
         self.windowUUID = windowUUID
         self.profile = profile
@@ -99,6 +101,7 @@ class MainMenuViewController: UIViewController,
         self.themeManager = themeManager
         self.logger = logger
         self.mainMenuHelper = mainMenuHelper
+        self.userPreferences = userPreferences
         self.menuState = MainMenuState(windowUUID: windowUUID)
         self.lastOrientation = UIDevice.current.orientation
         super.init(nibName: nil, bundle: nil)
@@ -165,6 +168,10 @@ class MainMenuViewController: UIViewController,
 
         menuContent.siteProtectionHeader.adBlockerButtonCallback = { [weak self] in
             self?.dispatchAdBlockerAction()
+        }
+
+        menuContent.siteProtectionHeader.vpnButtonCallback = { [weak self] in
+            self?.dispatchVPNAction()
         }
 
         menuContent.closeButtonCallback = { [weak self] in
@@ -515,6 +522,17 @@ class MainMenuViewController: UIViewController,
         )
     }
 
+    private func dispatchVPNAction() {
+        store.dispatch(
+            MainMenuAction(
+                windowUUID: self.windowUUID,
+                actionType: MainMenuActionType.tapNavigateToDestination,
+                navigationDestination: MenuNavigationDestination(.vpn),
+                currentTabInfo: menuState.currentTabInfo
+            )
+        )
+    }
+
     private func dispatchDefaultBrowserAction() {
         store.dispatch(
             MainMenuAction(
@@ -565,7 +583,7 @@ class MainMenuViewController: UIViewController,
             ? currentTheme.colors.iconAccentGreen
             : currentTheme.colors.iconAccentYellow
 
-        let adBlocker: MenuSiteAdBlockerBadgeData? = {
+        let adBlocker: MenuSiteBadgeData? = {
             guard featureFlagsProvider.isEnabled(.adBlocker),
                   featureFlagsProvider.isEnabled(.adBlockerBadge) else { return nil }
             let isAdBlockerOn = profile.prefs.boolForKey(PrefsKeys.BlockAds) ?? false
@@ -575,10 +593,20 @@ class MainMenuViewController: UIViewController,
             let adBlockerTintColor = isAdBlockerOn
                 ? currentTheme.colors.iconAccentGreen
                 : currentTheme.colors.iconAccentYellow
-            return MenuSiteAdBlockerBadgeData(title: String.MainMenu.SiteProtection.AdBlocker,
-                                              image: adBlockerImage,
-                                              shouldUseRenderMode: true,
-                                              iconTintColor: adBlockerTintColor)
+            return MenuSiteBadgeData(title: String.MainMenu.SiteProtection.AdBlocker,
+                                     image: adBlockerImage,
+                                     shouldUseRenderMode: true,
+                                     iconTintColor: adBlockerTintColor)
+        }()
+
+        let vpn: MenuSiteBadgeData? = {
+            // VPN backend is only possible on iOS 17 and later
+            guard #available(iOS 17.0, *), featureFlagsProvider.isEnabled(.vpnFeature) else { return nil }
+            let isVPNOn = userPreferences.getPreferenceFor(.vpnFeature)
+            return MenuSiteBadgeData(title: String.MainMenu.SiteProtection.VPN,
+                                     image: StandardImageIdentifiers.Large.globe,
+                                     shouldUseRenderMode: true,
+                                     iconTintColor: isVPNOn ? currentTheme.colors.iconAccentViolet : nil)
         }()
 
         menuContent.siteProtectionHeader.setupDetails(
@@ -591,7 +619,8 @@ class MainMenuViewController: UIViewController,
             stateIconTintColor: protectionsTintColor,
             stateTextColor: currentTheme.isNova ? currentTheme.colors.textPrimary : nil,
             stateChevronTintColor: currentTheme.isNova ? currentTheme.colors.iconPrimary : nil,
-            adBlocker: adBlocker)
+            adBlocker: adBlocker,
+            vpn: vpn)
     }
 
     // MARK: - A11y
