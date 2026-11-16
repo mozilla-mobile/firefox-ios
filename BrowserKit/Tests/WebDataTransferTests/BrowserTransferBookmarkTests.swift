@@ -43,4 +43,10 @@ final class BrowserTransferBookmarkTests: XCTestCase {
         XCTAssertEqual(link.kind, .link(url))
         XCTAssertEqual(link.sourceIdentifier, "2")
     }
+
+    func testMemberwiseInit_emptyParentIdentifier_isTopLevel() {
+        let folder = BrowserTransferBookmark(sourceIdentifier: "3", parentIdentifier: "", kind: .folder, title: "Folder")
+
+        XCTAssertNil(folder.parentIdentifier)
+    }
 }

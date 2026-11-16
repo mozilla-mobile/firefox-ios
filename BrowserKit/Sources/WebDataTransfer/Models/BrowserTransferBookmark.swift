@@ -13,14 +13,14 @@ public struct BrowserTransferBookmark: Sendable, Equatable {
     }
 
     public let sourceIdentifier: String
-    /// `nil` for root level items.
+    /// `nil` for root level items. An empty string is treated as `nil`.
     public let parentIdentifier: String?
     public let kind: Kind
     public let title: String
 
     public init(sourceIdentifier: String, parentIdentifier: String?, kind: Kind, title: String) {
         self.sourceIdentifier = sourceIdentifier
-        self.parentIdentifier = parentIdentifier
+        self.parentIdentifier = parentIdentifier?.isEmpty == false ? parentIdentifier : nil
         self.kind = kind
         self.title = title
     }
@@ -35,7 +35,6 @@ public struct BrowserTransferBookmark: Sendable, Equatable {
             return nil
         }
 
-        let parentIdentifier = parentIdentifier?.isEmpty == false ? parentIdentifier : nil
         self.init(sourceIdentifier: sourceIdentifier, parentIdentifier: parentIdentifier, kind: kind, title: title)
     }
 }
