@@ -1,6 +1,7 @@
 # The configuration for the firefoxJpGuideDefaultSite feature
 features:
   firefox-jp-guide-default-site:
+    no-lint: [MISSING_CONTACTS]
     description: >
       This feature is for managing the visibility of the Firefox Japanese Guide default suggested site shortcut
     variables:

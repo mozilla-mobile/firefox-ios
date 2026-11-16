@@ -1,5 +1,6 @@
 features:
   spotlight-search:
+    no-lint: [MISSING_CONTACTS]
     description: Add pages as items findable with Spotlight.
     variables:
       enabled:

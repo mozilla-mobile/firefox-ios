@@ -1,6 +1,7 @@
 # The configuration for the app attest authentication feature for the summarizer
 features:
   summarizer-app-attest-auth-feature:
+    no-lint: [MISSING_CONTACTS]
     description: >
       This feature enables app attest authentication for the summarizer.
     variables:

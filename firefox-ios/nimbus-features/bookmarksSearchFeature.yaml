@@ -3,6 +3,8 @@ features:
   bookmarks-search-feature:
     description: >
       Configuration feature for the bookmarks search bar
+    contacts:
+      - fx-ios@mozilla.com
     variables:
       enabled:
         description: >

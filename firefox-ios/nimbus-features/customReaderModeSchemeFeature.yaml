@@ -1,6 +1,7 @@
 # The configuration for the customReaderModeSchemeFeature feature
 features:
   custom-reader-mode-scheme-feature:
+    no-lint: [MISSING_CONTACTS]
     description: >
       Use a custom WKURLSchemeHandler for reader mode
     variables:

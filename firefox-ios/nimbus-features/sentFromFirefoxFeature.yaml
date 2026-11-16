@@ -3,6 +3,9 @@ features:
   sent-from-firefox-feature:
     description: >
       Adds additional promo text to links shared to WhatsApp.
+    contacts:
+      - isabella@mozilla.com
+      - nfurlan@mozilla.com
     variables:
       enabled:
         description: >

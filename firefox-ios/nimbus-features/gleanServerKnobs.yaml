@@ -1,6 +1,8 @@
 features:
   glean-server-knobs:
     description: "A feature that provides server-side configurations for Glean metrics (aka Server Knobs)."
+    contacts:
+      - glean-team@mozilla.com
     allow-coenrollment: true
     variables:
       gleanMetricConfiguration:

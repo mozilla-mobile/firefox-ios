@@ -1,6 +1,9 @@
 # The configuration for the onboardingFrameworkFeature feature
 features:
   onboarding-framework-feature:
+    no-lint:
+      - MISSING_CONTACTS
+      - DEEP_NESTING  # Onboarding messaging data is highly structured by nature.
     description: >
       The new onboarding framework feature that will allow onboarding
       to be experimentable through initial experiments.
@@ -628,6 +631,7 @@ enums:
         description: >
           Corresponding to onboarding cards with multiple choice buttons
   OnboardingType:
+    no-lint: [TRIVIAL_ENUM]
     description: >
       The identifiers for the different types of onboarding cards.
     variants:

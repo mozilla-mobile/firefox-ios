@@ -1,5 +1,6 @@
 features:
   tab-groups-feature:
+    no-lint: [MISSING_CONTACTS]
     description: >
       Enables Tab Groups views and interactions.
     variables:

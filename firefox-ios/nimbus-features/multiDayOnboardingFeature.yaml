@@ -1,6 +1,7 @@
 # The configuration for the multiDayOnboardingFeature feature
 features:
   multi-day-onboarding-feature:
+    no-lint: [MISSING_CONTACTS]
     description: >
       Multi-day progressive onboarding
     variables:

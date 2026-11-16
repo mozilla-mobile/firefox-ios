@@ -1,5 +1,6 @@
 features:
   sync-string-updates-feature:
+    no-lint: [MISSING_CONTACTS]
     description: >
       Controls the string updates across sync-related screens
     variables:

@@ -1,6 +1,7 @@
 # The configuration for the cellularDataRestrictedErrorPageFeature feature
 features:
   cellular-data-restricted-error-page-feature:
+    no-lint: [MISSING_CONTACTS]
     description: >
       Controls restricted cellular data guidance on error pages
     variables:

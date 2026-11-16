@@ -1,6 +1,7 @@
 # The configuration for the permissive guardrails feature for the summarizer
 features:
   summarizer-permissive-guardrails-feature:
+    no-lint: [MISSING_CONTACTS]
     description: >
       This feature enables permissive guardrails for the summarizer.
     variables:

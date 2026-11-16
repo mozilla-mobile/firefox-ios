@@ -1,6 +1,7 @@
 # The configuration for the Nova design feature
 features:
   nova-design-feature:
+    no-lint: [MISSING_CONTACTS]
     description: >
       The feature flag to manage the rollout of Nova design.
     variables:

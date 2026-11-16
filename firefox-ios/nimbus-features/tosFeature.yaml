@@ -1,6 +1,7 @@
 # The configuration for the tosFeature feature
 features:
   tos-feature:
+    no-lint: [MISSING_CONTACTS]
     description: >
         This feature is for managing the roll out of the ToS (Term of Service) implementation
     variables:
