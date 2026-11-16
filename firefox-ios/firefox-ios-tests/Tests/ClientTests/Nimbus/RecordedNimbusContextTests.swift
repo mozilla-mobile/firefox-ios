@@ -148,6 +148,63 @@ class RecordedNimbusContextTests: XCTestCase {
         XCTAssertEqual(value?.eventQueryValues?.daysOpenedInLast28, 1)
     }
 
+    func testEnrollmentStateIsRecordedToGleanInAStableOrder() throws {
+        let recordedContext = RecordedNimbusContext(
+            isFirstRun: true,
+            isDefaultBrowser: true,
+            isBottomToolbarUser: true,
+            hasEnabledTipsNotifications: true,
+            hasAcceptedTermsOfUse: true,
+            userDisabledAi: true,
+            isAppleIntelligenceAvailable: true,
+            cannotUseAppleIntelligence: true
+        )
+        recordedContext.setEnrollmentState(
+            enrollmentState: RecordedEnrollmentState(
+                activeExperiments: ["exp-b", "exp-a"],
+                enrollments: ["exp-b", "exp-a"],
+                enrollmentsMap: ["exp-b": "treatment", "exp-a": "control"]
+            )
+        )
+        recordedContext.record()
+
+        let value = GleanMetrics.NimbusSystem.recordedNimbusContext.testGetValue("nimbus-targeting-context")
+        XCTAssertNotNil(value)
+        XCTAssertEqual(value?.activeExperiments, ["exp-a", "exp-b"])
+        XCTAssertEqual(value?.enrollments, ["exp-a", "exp-b"])
+        XCTAssertEqual(value?.enrollmentsMap.map(\.experimentslug), ["exp-a", "exp-b"])
+        XCTAssertEqual(value?.enrollmentsMap.map(\.branchslug), ["control", "treatment"])
+    }
+
+    func testToJsonLeavesOutTheEnrollmentState() throws {
+        let recordedContext = RecordedNimbusContext(
+            isFirstRun: true,
+            isDefaultBrowser: true,
+            isBottomToolbarUser: true,
+            hasEnabledTipsNotifications: true,
+            hasAcceptedTermsOfUse: true,
+            userDisabledAi: true,
+            isAppleIntelligenceAvailable: true,
+            cannotUseAppleIntelligence: true
+        )
+        recordedContext.setEnrollmentState(
+            enrollmentState: RecordedEnrollmentState(
+                activeExperiments: ["exp-a"],
+                enrollments: ["exp-a"],
+                enrollmentsMap: ["exp-a": "control"]
+            )
+        )
+
+        let jsonString = recordedContext.toJson()
+        let json = try JSONSerialization.jsonObject(with: jsonString.data(using: .utf8)!) as? [String: Any]
+
+        XCTAssertNotNil(json)
+        for key in ["active_experiments", "enrollments", "enrollments_map",
+                    "activeExperiments", "enrollmentsMap"] {
+            XCTAssertNil(json?[key], "\(key) should not be in the targeting JSON")
+        }
+    }
+
     func testGetEventQueries() throws {
         let recordedContext = RecordedNimbusContext(
             isFirstRun: true,

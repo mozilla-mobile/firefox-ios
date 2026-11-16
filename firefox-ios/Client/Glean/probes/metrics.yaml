@@ -2774,11 +2774,33 @@ nimbus_system:
           type: boolean
         tou_experience_points:
           type: number
+        # Slugs of the experiments and rollouts the client is enrolled in
+        active_experiments:
+          type: array
+          items:
+            type: string
+        # Slugs of every experiment the client is enrolled in
+        enrollments:
+          type: array
+          items:
+            type: string
+        # Each enrolled experiment and the branch the client is on. A list of
+        # pairs, because an object metric cannot hold keys that are not known up front.
+        enrollments_map:
+          type: array
+          items:
+            type: object
+            properties:
+              experimentSlug:
+                type: string
+              branchSlug:
+                type: string
     description: |
       The Nimbus context object that is recorded to Glean
     bugs:
       - 'https://github.com/mozilla-mobile/firefox-ios/issues/23736'
       - 'https://mozilla-hub.atlassian.net/browse/FXIOS-15343'
+      - 'https://bugzilla.mozilla.org/show_bug.cgi?id=2088185'
     data_reviews:
       - 'https://github.com/mozilla-mobile/firefox-ios/pull/23737#issuecomment-2541639916'
       - 'https://github.com/mozilla-mobile/firefox-ios/pull/32929#issuecomment-4206600919'

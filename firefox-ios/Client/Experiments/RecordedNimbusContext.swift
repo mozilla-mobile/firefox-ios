@@ -12,6 +12,7 @@ import func MozillaAppServices.getCalculatedAttributes
 import func MozillaAppServices.getLocaleTag
 import struct MozillaAppServices.JsonObject
 import protocol MozillaAppServices.RecordedContext
+import struct MozillaAppServices.RecordedEnrollmentState
 import MozillaRustComponents
 
 private extension Double? {
@@ -58,6 +59,9 @@ final class RecordedNimbusContext: RecordedContext, @unchecked Sendable {
     var daysSinceInstall: Int32?
     var daysSinceUpdate: Int32?
     var touExperiencePoints: Int32?
+    var activeExperiments: [String] = []
+    var enrollments: [String] = []
+    var enrollmentsMap: [String: String] = [:]
 
     private var eventQueries: [String: String]
     private var eventQueryValues: [String: Double] = [:]
@@ -167,7 +171,17 @@ final class RecordedNimbusContext: RecordedContext, @unchecked Sendable {
                 userDisabledAi: userDisabledAi,
                 isAppleIntelligenceAvailable: isAppleIntelligenceAvailable,
                 cannotUseAppleIntelligence: cannotUseAppleIntelligence,
-                touExperiencePoints: touExperiencePoints.toInt64()
+                touExperiencePoints: touExperiencePoints.toInt64(),
+                activeExperiments: activeExperiments.sorted(),
+                enrollments: enrollments.sorted(),
+                enrollmentsMap: enrollmentsMap
+                    .sorted { $0.key < $1.key }
+                    .map {
+                        GleanMetrics.NimbusSystem.RecordedNimbusContextObjectEnrollmentsMapItem(
+                            experimentslug: $0.key,
+                            branchslug: $0.value
+                        )
+                    }
             )
         )
         logger.log("record end", level: .debug, category: .experiments)
@@ -183,6 +197,19 @@ final class RecordedNimbusContext: RecordedContext, @unchecked Sendable {
     func setEventQueryValues(eventQueryValues: [String: Double]) {
         logger.log("setEventQueryValues", level: .debug, category: .experiments)
         self.eventQueryValues = eventQueryValues
+    }
+
+    /**
+     * [setEnrollmentState] is called by the Nimbus SDK Rust code just before [record]. The state is recorded to
+     * Glean. It is not added to [toJson], because the SDK already supplies it to the targeting context.
+     *
+     * @param [enrollmentState] Which experiments the client is enrolled in, and the branch for each.
+     */
+    func setEnrollmentState(enrollmentState: RecordedEnrollmentState) {
+        logger.log("setEnrollmentState", level: .debug, category: .experiments)
+        activeExperiments = enrollmentState.activeExperiments
+        enrollments = enrollmentState.enrollments
+        enrollmentsMap = enrollmentState.enrollmentsMap
     }
 
     /**
