@@ -102,7 +102,8 @@ public final class QuickAnswersReturnPillView: UIView, ThemeApplicable {
         accessibilityHint = subtitle
     }
 
-    /// Doesn't animate or lay out, so the host can run it inside its own animation. The pill can't be dragged while minimized.
+    /// Doesn't animate or lay out, so the host can run it inside its own animation.
+    /// The pill can't be dragged while minimized.
     public func setMinimized(_ isMinimized: Bool, transform: CGAffineTransform = .identity) {
         if isMinimized != self.isMinimized {
             self.isMinimized = isMinimized

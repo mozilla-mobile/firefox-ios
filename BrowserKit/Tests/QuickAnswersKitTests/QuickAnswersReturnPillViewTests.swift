@@ -70,7 +70,8 @@ final class QuickAnswersReturnPillViewTests: XCTestCase {
         subject.setMinimized(true)
 
         XCTAssertTrue(subject.isMinimized)
-        XCTAssertEqual(fittingSize(of: subject), CGSize(width: QuickAnswersReturnPillView.minimizedSize, height: QuickAnswersReturnPillView.minimizedSize))
+        let minimizedSize = QuickAnswersReturnPillView.minimizedSize
+        XCTAssertEqual(fittingSize(of: subject), CGSize(width: minimizedSize, height: minimizedSize))
     }
 
     func test_setMinimized_falseAfterTrue_restoresExpandedSize() {
