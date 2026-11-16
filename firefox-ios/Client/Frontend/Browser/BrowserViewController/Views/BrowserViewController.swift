@@ -2069,8 +2069,9 @@ class BrowserViewController: UIViewController,
     private func updateQuickAnswersReturnPillLayout(animated: Bool) {
         guard let quickAnswersReturnPillPresenter, quickAnswersReturnPillPresenter.isShowingPill else { return }
         let context = quickAnswersReturnPillLayoutContext
-        // Minimizing can change the location capsule's constraints, so settle them before reading its frame.
-        if context.isMinimized && context.isBottomSearchBar {
+        // Minimizing can change the location capsule's constraints. The legacy scroll controller lays out the
+        // whole view while minimizing, but the refactored one only animates transforms, so settle them here.
+        if isTabScrollRefactoringEnabled && context.isMinimized && context.isBottomSearchBar {
             addressToolbarContainer.layoutIfNeeded()
         }
         quickAnswersReturnPillPresenter.updateLayout(quickAnswersReturnPillLayoutContext, animated: animated)
