@@ -238,7 +238,7 @@ final class VPNAuthServiceTests: XCTestCase {
         let tokenStore = MockVPNTokenStore(initial: expiredSession)
         let keyStore = MockAppAttestKeyIDStore(initial: AppAttestTestData.keyID)
         let service = MockAppAttestService(isSupported: true)
-        service.assertionError = DCError(.invalidKey)
+        service.assertionErrorByKeyID = [AppAttestTestData.keyID: DCError(.invalidKey)]
         let subject = try makeSubject(
             remoteServer: enrollingServer(tokenStore: tokenStore),
             keyStore: keyStore,
@@ -251,6 +251,29 @@ final class VPNAuthServiceTests: XCTestCase {
 
         XCTAssertEqual(result, "new-dsj", "An unusable key must be replaced rather than reported forever")
         XCTAssertEqual(keyStore.loadKeyID(), "mock-key-id", "Should attest a fresh key")
+    }
+
+    func test_authenticate_reattestsOnlyOnce() async throws {
+        // AppAttestClient already re-attested once, so another enrollment would only inflate the risk metric.
+        let tokenStore = MockVPNTokenStore(initial: expiredSession)
+        let remoteServer = MockAppAttestRemoteServer()
+        let service = MockAppAttestService(isSupported: true)
+        service.assertionError = DCError(.invalidKey)
+        let subject = try makeSubject(
+            remoteServer: remoteServer,
+            keyStore: MockAppAttestKeyIDStore(initial: AppAttestTestData.keyID),
+            refresher: MockVPNSessionRefresher(tokenStore: tokenStore),
+            tokenStore: tokenStore,
+            appAttestService: service
+        )
+
+        do {
+            _ = try await subject.authenticate()
+            XCTFail("Expected authenticate to surface the invalid key.")
+        } catch let error as AppAttestServiceError {
+            XCTAssertEqual(error, .invalidKeyID)
+        }
+        XCTAssertEqual(remoteServer.sendAttestationCallCount, 1)
     }
 
     func test_authenticate_rethrows_whenRefreshHitsServerOutage() async throws {

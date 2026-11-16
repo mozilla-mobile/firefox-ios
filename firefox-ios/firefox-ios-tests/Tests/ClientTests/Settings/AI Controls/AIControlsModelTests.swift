@@ -334,15 +334,15 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
         isSummariesEnabled: Bool,
         isQuickAnswersEnabled: Bool
     ) {
-        FxNimbus.shared.features.translationsFeature.with { _, _ in
+        FxNimbus.shared.features.translationsFeature.with { _ in
             return TranslationsFeature(enabled: isTranslationsEnabled)
         }
 
-        FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
+        FxNimbus.shared.features.hostedSummarizerFeature.with { _ in
             return HostedSummarizerFeature(enabled: isSummariesEnabled)
         }
 
-        FxNimbus.shared.features.quickAnswersFeature.with { _, _ in
+        FxNimbus.shared.features.quickAnswersFeature.with { _ in
             return QuickAnswersFeature(enabled: isQuickAnswersEnabled)
         }
     }

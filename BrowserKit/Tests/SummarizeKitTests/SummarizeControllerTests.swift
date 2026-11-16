@@ -58,9 +58,7 @@ final class SummarizeControllerTests: XCTestCase {
         ),
         brandView: BrandViewConfiguration(
             brandLabel: "",
-            brandLabelA11yId: "",
-            brandImage: nil,
-            brandImageA11yId: ""
+            brandLabelA11yId: ""
         ),
         closeButton: CloseButtonViewModel(a11yLabel: "", a11yIdentifier: ""),
         errorMessages: LocalizedErrorsViewConfiguration(
@@ -141,6 +139,15 @@ final class SummarizeControllerTests: XCTestCase {
         XCTAssertEqual(animationController.animateToInfoCalled, 0)
         XCTAssertEqual(snapshotLayoutCalculator.didCallCalculateSummaryTransform, 1)
         XCTAssertTrue(onSummarizeDisplayCalled)
+    }
+
+    func test_viewDidLoad_closeButtonIsOnTheLeading() {
+        let subject = createSubject()
+
+        _ = subject.view
+
+        XCTAssertNotNil(subject.navigationItem.leftBarButtonItem)
+        XCTAssertNil(subject.navigationItem.rightBarButtonItem)
     }
 
     func test_viewDidAppear() {

@@ -202,13 +202,13 @@ final class TrailingPageActionsBuilderTests: XCTestCase {
     }
 
     private func setIsHostedSummarizerFeatureEnabled(enabled: Bool) {
-        FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
+        FxNimbus.shared.features.hostedSummarizerFeature.with { _ in
             return HostedSummarizerFeature(enabled: enabled, toolbarEntrypoint: enabled)
         }
     }
 
     private func setIsSummarizerLanguageExpansionEnabled(enabled: Bool) {
-        FxNimbus.shared.features.summarizerLanguageExpansionFeature.with { _, _ in
+        FxNimbus.shared.features.summarizerLanguageExpansionFeature.with { _ in
             return SummarizerLanguageExpansionFeature(enabled: enabled)
         }
     }

@@ -80,25 +80,10 @@ public struct AppAttestClient: Sendable {
     /// 3. Serialize the payload as sorted-key JSON and hash it with SHA-256.
     /// 4. Ask the Secure Enclave to sign the hash via `appAttestService.generateAssertion()`.
     public func generateAssertion(payload: [String: Any]) async throws -> AssertionResult {
-        guard let keyId = keyStore.loadKeyID() else {
-            throw AppAttestServiceError.missingKeyID
-        }
-
-        let challenge = try await remoteServer.fetchChallenge(for: keyId)
-
-        // Sorted keys ensures both client and server hash identical bytes the same way. 
+        // Sorted keys ensures both client and server hash identical bytes the same way.
         // Otherwise the same JSON with different key orders would produce different hashes and fail verification.
         let clientData = try JSONSerialization.data(withJSONObject: payload, options: [.sortedKeys])
-
-        let clientDataHash = Data(SHA256.hash(data: clientData))
-        let assertion = try await signAssertion(keyId: keyId, clientDataHash: clientDataHash)
-
-        return AssertionResult(
-            keyId: keyId,
-            assertion: assertion,
-            challenge: challenge,
-            payload: clientData
-        )
+        return try await assertion { _ in clientData }
     }
 
     /// Generates an assertion that signs over the server challenge, proving continued possession of
@@ -108,12 +93,27 @@ public struct AppAttestClient: Sendable {
     /// plaintext, this folds it into the signed bytes so a captured assertion can't be replayed.
     /// The client data is the challenge string itself, which is what the server hashes to rebuild the nonce.
     public func generateChallengeBoundAssertion() async throws -> AssertionResult {
+        return try await assertion { challenge in Data(challenge.utf8) }
+    }
+
+    /// Re-attests and retries once if the stored `keyId` has no usable Secure Enclave key.
+    private func assertion(clientData: (String) -> Data) async throws -> AssertionResult {
+        do {
+            return try await attemptAssertion(clientData: clientData)
+        } catch AppAttestServiceError.invalidKeyID {
+            try keyStore.clearKeyID()
+            _ = try await performAttestation()
+            return try await attemptAssertion(clientData: clientData)
+        }
+    }
+
+    private func attemptAssertion(clientData makeClientData: (String) -> Data) async throws -> AssertionResult {
         guard let keyId = keyStore.loadKeyID() else {
             throw AppAttestServiceError.missingKeyID
         }
 
         let challenge = try await remoteServer.fetchChallenge(for: keyId)
-        let clientData = Data(challenge.utf8)
+        let clientData = makeClientData(challenge)
         let clientDataHash = Data(SHA256.hash(data: clientData))
         let assertion = try await signAssertion(keyId: keyId, clientDataHash: clientDataHash)
 
@@ -125,9 +125,7 @@ public struct AppAttestClient: Sendable {
         )
     }
 
-    /// Clears the locally stored `keyId`, forcing re-attestation on the next call.
-    /// This will be called for QA purposes to allow testers to reset the attestation state.
-    /// `DCError.invalidKey` means the stored `keyId` has no usable Secure Enclave key, so callers re-attest.
+    /// `DCError.invalidKey` means the stored `keyId` has no usable Secure Enclave key.
     private func signAssertion(keyId: String, clientDataHash: Data) async throws -> Data {
         do {
             return try await appAttestService.generateAssertion(keyId, clientDataHash: clientDataHash)
@@ -136,6 +134,8 @@ public struct AppAttestClient: Sendable {
         }
     }
 
+    /// Clears the locally stored `keyId`, forcing re-attestation on the next call.
+    /// This will be called for QA purposes to allow testers to reset the attestation state.
     public func resetKey() throws {
         try keyStore.clearKeyID()
     }

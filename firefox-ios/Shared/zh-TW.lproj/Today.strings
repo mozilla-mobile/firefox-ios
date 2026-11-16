@@ -17,7 +17,7 @@
 "TodayWidget.MoreTabsLabel" = "還有 %d 個…";
 
 /* Open New Tab button label */
-"TodayWidget.NewTabButtonLabelV1" = "新搜尋結果";
+"TodayWidget.NewTabButtonLabelV1" = "新搜尋";
 
 /* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
 "TodayWidget.NoOpenTabsLabel" = "沒有開啟的分頁。";

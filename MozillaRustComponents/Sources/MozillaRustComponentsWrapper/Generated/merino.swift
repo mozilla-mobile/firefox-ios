@@ -481,6 +481,22 @@ fileprivate struct FfiConverterUInt16: FfiConverterPrimitive {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterUInt32: FfiConverterPrimitive {
+    typealias FfiType = UInt32
+    typealias SwiftType = UInt32
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> UInt32 {
+        return try lift(readInt(&buf))
+    }
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(value))
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterInt32: FfiConverterPrimitive {
     typealias FfiType = Int32
     typealias SwiftType = Int32
@@ -913,6 +929,179 @@ public func FfiConverterTypeSuggestClient_lift(_ handle: UInt64) throws -> Sugge
 #endif
 public func FfiConverterTypeSuggestClient_lower(_ value: SuggestClient) -> UInt64 {
     return FfiConverterTypeSuggestClient.lower(value)
+}
+
+
+
+
+
+
+/**
+ * A client for the merino Wrexham widget endpoints.
+ *
+ * Use [`WrexhamClient::new`] to create an instance, then call
+ * [`WrexhamClient::get_matches`] or [`WrexhamClient::get_standings`].
+ */
+public protocol WrexhamClientProtocol: AnyObject, Sendable {
+    
+    /**
+     * Fetches Wrexham's previous, current and upcoming matches.
+     *
+     * Returns the raw JSON response body as a string.
+     */
+    func getMatches(options: WrexhamMatchesOptions) throws  -> String
+    
+    /**
+     * Fetches the EFL Championship table.
+     *
+     * Returns the raw JSON response body as a string.
+     */
+    func getStandings() throws  -> String
+    
+}
+/**
+ * A client for the merino Wrexham widget endpoints.
+ *
+ * Use [`WrexhamClient::new`] to create an instance, then call
+ * [`WrexhamClient::get_matches`] or [`WrexhamClient::get_standings`].
+ */
+open class WrexhamClient: WrexhamClientProtocol, @unchecked Sendable {
+    fileprivate let handle: UInt64
+
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public struct NoHandle {
+        public init() {}
+    }
+
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
+    }
+
+    // This constructor can be used to instantiate a fake object.
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    //
+    // - Warning:
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public init(noHandle: NoHandle) {
+        self.handle = 0
+    }
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_merino_fn_clone_wrexhamclient(self.handle, $0) }
+    }
+    /**
+     * Creates a new `WrexhamClient` from the given configuration.
+     */
+public convenience init(config: WrexhamConfig)throws  {
+    let handle =
+        try rustCallWithError(FfiConverterTypeMerinoWrexhamApiError_lift) {
+        uniffiCallStatus in
+    uniffi_merino_fn_constructor_wrexhamclient_new(
+        FfiConverterTypeWrexhamConfig_lower(config),uniffiCallStatus
+    )
+}
+    self.init(unsafeFromHandle: handle)
+}
+
+    deinit {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
+            return
+        }
+
+        try! rustCall { uniffi_merino_fn_free_wrexhamclient(handle, $0) }
+    }
+
+    
+
+    
+    /**
+     * Fetches Wrexham's previous, current and upcoming matches.
+     *
+     * Returns the raw JSON response body as a string.
+     */
+open func getMatches(options: WrexhamMatchesOptions)throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeMerinoWrexhamApiError_lift) {
+        uniffiCallStatus in
+    uniffi_merino_fn_method_wrexhamclient_get_matches(
+            self.uniffiCloneHandle(),
+        FfiConverterTypeWrexhamMatchesOptions_lower(options),uniffiCallStatus
+    )
+})
+}
+    
+    /**
+     * Fetches the EFL Championship table.
+     *
+     * Returns the raw JSON response body as a string.
+     */
+open func getStandings()throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeMerinoWrexhamApiError_lift) {
+        uniffiCallStatus in
+    uniffi_merino_fn_method_wrexhamclient_get_standings(
+            self.uniffiCloneHandle(),uniffiCallStatus
+    )
+})
+}
+    
+
+    
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeWrexhamClient: FfiConverter {
+    typealias FfiType = UInt64
+    typealias SwiftType = WrexhamClient
+
+    public static func lift(_ handle: UInt64) throws -> WrexhamClient {
+        return WrexhamClient(unsafeFromHandle: handle)
+    }
+
+    public static func lower(_ value: WrexhamClient) -> UInt64 {
+        return value.uniffiCloneHandle()
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> WrexhamClient {
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
+    }
+
+    public static func write(_ value: WrexhamClient, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(value))
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeWrexhamClient_lift(_ handle: UInt64) throws -> WrexhamClient {
+    return try FfiConverterTypeWrexhamClient.lift(handle)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeWrexhamClient_lower(_ value: WrexhamClient) -> UInt64 {
+    return FfiConverterTypeWrexhamClient.lower(value)
 }
 
 
@@ -2163,6 +2352,130 @@ public func FfiConverterTypeTile_lower(_ value: Tile) -> RustBuffer {
 
 
 /**
+ * Configuration for the Wrexham widget client.
+ */
+public struct WrexhamConfig: Equatable, Hashable, Codable {
+    /**
+     * The base host for the merino endpoints. Defaults to the production host if not set.
+     */
+    public var baseHost: String?
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(
+        /**
+         * The base host for the merino endpoints. Defaults to the production host if not set.
+         */baseHost: String?) {
+        self.baseHost = baseHost
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension WrexhamConfig: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeWrexhamConfig: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> WrexhamConfig {
+        return
+            try WrexhamConfig(
+                baseHost: FfiConverterOptionString.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: WrexhamConfig, into buf: inout [UInt8]) {
+        FfiConverterOptionString.write(value.baseHost, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeWrexhamConfig_lift(_ buf: RustBuffer) throws -> WrexhamConfig {
+    return try FfiConverterTypeWrexhamConfig.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeWrexhamConfig_lower(_ value: WrexhamConfig) -> RustBuffer {
+    return FfiConverterTypeWrexhamConfig.lower(value)
+}
+
+
+/**
+ * Options for a matches request. Omitted fields are not sent to merino.
+ */
+public struct WrexhamMatchesOptions: Equatable, Hashable, Codable {
+    /**
+     * The maximum number of previous and upcoming matches to return. Merino decides which
+     * values are allowed and the default when it isn't set, and returns a `400` for a value it
+     * doesn't accept. See <https://merino.services.mozilla.com/docs#/widgets>. Current matches
+     * aren't limited.
+     */
+    public var limit: UInt32?
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(
+        /**
+         * The maximum number of previous and upcoming matches to return. Merino decides which
+         * values are allowed and the default when it isn't set, and returns a `400` for a value it
+         * doesn't accept. See <https://merino.services.mozilla.com/docs#/widgets>. Current matches
+         * aren't limited.
+         */limit: UInt32?) {
+        self.limit = limit
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension WrexhamMatchesOptions: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeWrexhamMatchesOptions: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> WrexhamMatchesOptions {
+        return
+            try WrexhamMatchesOptions(
+                limit: FfiConverterOptionUInt32.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: WrexhamMatchesOptions, into buf: inout [UInt8]) {
+        FfiConverterOptionUInt32.write(value.limit, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeWrexhamMatchesOptions_lift(_ buf: RustBuffer) throws -> WrexhamMatchesOptions {
+    return try FfiConverterTypeWrexhamMatchesOptions.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeWrexhamMatchesOptions_lower(_ value: WrexhamMatchesOptions) -> RustBuffer {
+    return FfiConverterTypeWrexhamMatchesOptions.lower(value)
+}
+
+
+/**
  * Locales supported by Merino curated recommendations.
  *
  * Each variant maps to a BCP 47 locale string (e.g. `"en-US"`, `"fr"`) used when
@@ -2530,6 +2843,112 @@ public func FfiConverterTypeMerinoSuggestApiError_lower(_ value: MerinoSuggestAp
     return FfiConverterTypeMerinoSuggestApiError.lower(value)
 }
 
+
+public 
+enum MerinoWrexhamApiError: Swift.Error, Equatable, Hashable, Codable, Foundation.LocalizedError {
+
+    
+    
+    /**
+     * A network-level failure.
+     */
+    case Network(reason: String
+    )
+    /**
+     * Merino has no Wrexham data it can serve right now (HTTP 503). Try again later.
+     */
+    case Unavailable(reason: String
+    )
+    /**
+     * Any other error, e.g. HTTP errors.
+     */
+    case Other(code: UInt16?, reason: String
+    )
+
+    
+
+    
+
+    
+    public var errorDescription: String? {
+        String(reflecting: self)
+    }
+    
+}
+
+#if compiler(>=6)
+extension MerinoWrexhamApiError: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeMerinoWrexhamApiError: FfiConverterRustBuffer {
+    typealias SwiftType = MerinoWrexhamApiError
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> MerinoWrexhamApiError {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+
+        
+
+        
+        case 1: return .Network(
+            reason: try FfiConverterString.read(from: &buf)
+            )
+        case 2: return .Unavailable(
+            reason: try FfiConverterString.read(from: &buf)
+            )
+        case 3: return .Other(
+            code: try FfiConverterOptionUInt16.read(from: &buf), 
+            reason: try FfiConverterString.read(from: &buf)
+            )
+
+         default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: MerinoWrexhamApiError, into buf: inout [UInt8]) {
+        switch value {
+
+        
+
+        
+        
+        case let .Network(reason):
+            writeInt(&buf, Int32(1))
+            FfiConverterString.write(reason, into: &buf)
+            
+        
+        case let .Unavailable(reason):
+            writeInt(&buf, Int32(2))
+            FfiConverterString.write(reason, into: &buf)
+            
+        
+        case let .Other(code,reason):
+            writeInt(&buf, Int32(3))
+            FfiConverterOptionUInt16.write(code, into: &buf)
+            FfiConverterString.write(reason, into: &buf)
+            
+        }
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeMerinoWrexhamApiError_lift(_ buf: RustBuffer) throws -> MerinoWrexhamApiError {
+    return try FfiConverterTypeMerinoWrexhamApiError.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeMerinoWrexhamApiError_lower(_ value: MerinoWrexhamApiError) -> RustBuffer {
+    return FfiConverterTypeMerinoWrexhamApiError.lower(value)
+}
+
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
@@ -2549,6 +2968,30 @@ fileprivate struct FfiConverterOptionUInt16: FfiConverterRustBuffer {
         switch try readInt(&buf) as Int8 {
         case 0: return nil
         case 1: return try FfiConverterUInt16.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterOptionUInt32: FfiConverterRustBuffer {
+    typealias SwiftType = UInt32?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterUInt32.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterUInt32.read(from: &buf)
         default: throw UniffiInternalError.unexpectedOptionalTag
         }
     }
@@ -2975,10 +3418,19 @@ private let initializationResult: InitializationResult = {
     if (uniffi_merino_checksum_method_suggestclient_reset_session() != 54784) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_merino_checksum_method_wrexhamclient_get_matches() != 50751) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_merino_checksum_method_wrexhamclient_get_standings() != 22586) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_merino_checksum_constructor_curatedrecommendationsclient_new() != 60403) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_merino_checksum_constructor_suggestclient_new() != 44805) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_merino_checksum_constructor_wrexhamclient_new() != 19775) {
         return InitializationResult.apiChecksumMismatch
     }
 

@@ -726,7 +726,7 @@ class TabTests: XCTestCase {
     }
 
     private func setHTTPSUpgradeFeature(isEnabled: Bool = true) {
-        FxNimbus.shared.features.httpsUpgradeFeature.with { _, _ in
+        FxNimbus.shared.features.httpsUpgradeFeature.with { _ in
             return HttpsUpgradeFeature(enabled: isEnabled)
         }
     }

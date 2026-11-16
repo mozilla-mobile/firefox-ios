@@ -44,6 +44,7 @@ protocol SettingsSelectorsSet {
     var BROWSING_LINKS_SECTION: Selector { get }
     var BLOCK_POPUPS_SWITCH: Selector { get }
     var TOOLBAR_CELL: Selector { get }
+    var HOMEPAGE_CELL: Selector { get }
     var BOTTOM_TOOLBAR_BUTTON: Selector { get }
     var TOP_TOOLBAR_BUTTON: Selector { get }
     var NAVIGATION_TOOLBAR_HOME_BUTTON: Selector { get }
@@ -90,6 +91,7 @@ struct SettingsSelectors: SettingsSelectorsSet {
         static let settingTitle = "Settings"
         static let mainSettingsTable = AccessibilityIdentifiers.Settings.tableViewController
         static let toolbarCellSettings = AccessibilityIdentifiers.Settings.SearchBar.searchBarSetting
+        static let homepageCell = AccessibilityIdentifiers.Settings.Homepage.homeSettings
         static let bottomToolbarButton = AccessibilityIdentifiers.Settings.SearchBar.bottomSetting
         static let topToolbarButton = AccessibilityIdentifiers.Settings.SearchBar.topSetting
         static let navigationToolbarHomeButton = AccessibilityIdentifiers.Settings.NavigationToolbar.homeButton
@@ -276,6 +278,12 @@ struct SettingsSelectors: SettingsSelectorsSet {
         groups: ["settings", "browsing"]
     )
 
+    let HOMEPAGE_CELL = Selector.tableCellById(
+        IDs.homepageCell,
+        description: "Homepage setting",
+        groups: ["settings"]
+    )
+
     let TOOLBAR_CELL = Selector.tableCellById(
         IDs.toolbarCellSettings,
         description: "Toolbar Search Bar Setting",
@@ -456,7 +464,7 @@ struct SettingsSelectors: SettingsSelectorsSet {
          PRIVACY_POLICY_CELL, LOGINS_CELL, CREDIT_CARDS_CELL, ADDRESS_CELL,
          CLEAR_PRIVATE_DATA_CELL, WEBSITE_DATA_CELL, ALERT_OK_BUTTON, NEW_TAB_CELL, TITLE, TABLE, BROWSING_LINKS_SECTION,
          NAVIGATIONBAR, CONNECT_SETTING, BLOCK_POPUPS_SWITCH, TOOLBAR_CELL, BOTTOM_TOOLBAR_BUTTON, TOP_TOOLBAR_BUTTON,
-         NAVIGATION_TOOLBAR_HOME_BUTTON, NAVIGATION_TOOLBAR_NEW_TAB_BUTTON, DEFAULT_BROWSER_CELL,
+         HOMEPAGE_CELL, NAVIGATION_TOOLBAR_HOME_BUTTON, NAVIGATION_TOOLBAR_NEW_TAB_BUTTON, DEFAULT_BROWSER_CELL,
          SEARCH_CELL, BROWSING_CELL_TITLE, BLOCK_IMAGES_SWITCH_TITLE, NO_IMAGE_MODE_STATUS_SWITCH,
          TRANSLATION_CELL_TITLE, SUMMARIZE_CELL, GENERAL_SECTION_HEADER, SEND_DATA_CELL, SEND_CRASH_REPORTS_CELL,
          APPEARANCE_NAVIGATION_BAR]

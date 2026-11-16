@@ -8,7 +8,7 @@
 "A username and password are being requested by %@." = "%@ 請您輸入使用者名稱與密碼。";
 
 /* Authentication prompt message with a realm. %1$@ is the hostname, %2$@ is the realm string. */
-"A username and password are being requested by %@. The site says: %@" = "%1$@ 請您輸入使用者名稱與密碼。此網站說: %2$@";
+"A username and password are being requested by %@. The site says: %@" = "%1$@ 請您輸入使用者名稱與密碼。此網站說：%2$@";
 
 /* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
 "Aa" = "Aa";
@@ -29,7 +29,7 @@
 "ActivityStream.JumpBackIn.SectionTitle" = "回到先前開啟頁面";
 
 /* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. %d is the number of tabs. It will read 'Tabs: 5' or similar. */
-"ActivityStream.JumpBackIn.TabGroup.SiteCount" = "分頁: %d";
+"ActivityStream.JumpBackIn.TabGroup.SiteCount" = "分頁：%d";
 
 /* A string used to signify the start of the Recently Saved section in Home Screen. */
 "ActivityStream.Library.Title" = "最近儲存";
@@ -302,7 +302,7 @@
 "ErrorPages.Advanced.Button" = "進階";
 
 /* Warning text when clicking the Advanced button on error pages */
-"ErrorPages.AdvancedWarning1.Text" = "警告: 無法確認您與此網站間的連線是否安全。";
+"ErrorPages.AdvancedWarning1.Text" = "警告：無法確認您與此網站間的連線是否安全。";
 
 /* Additional warning text when clicking the Advanced button on error pages */
 "ErrorPages.AdvancedWarning2.Text" = "可能是設定錯誤，或是攻擊者惡意修改連線，若要繼續連線的話請小心會有安全性風險。";
@@ -404,7 +404,7 @@
 "FxA.SyncNow" = "立刻同步";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox 同步已連結到 %@";
+"FxAPush_DeviceConnected_body" = "Firefox Sync 已連結 %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "已連線至 Sync";
@@ -422,7 +422,7 @@
 "FxAPush_DeviceDisconnected_title" = "已與 Sync 取消連線";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "有一台裝置已與 Firefox 取消連線";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "有一台裝置已與 Firefox Sync 取消連線";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
 "FxHomepage.Wallpaper.ButtonLabel.v99" = "Firefox 圖示，點擊此圖示變更背景圖。";
@@ -542,7 +542,7 @@
 "Keyboard.Shortcuts.AddBookmark" = "新增書籤";
 
 /* A label indicating the keyboard shortcut of clearing recent history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.ClearRecentHistory" = "清除最近的歷史記錄";
+"Keyboard.Shortcuts.ClearRecentHistory" = "清除最近的瀏覽紀錄";
 
 /* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.FindAgain" = "找下一個";
@@ -623,7 +623,7 @@
 "LibraryPanel.History.SearchHistoryPlaceholder.v99" = "輸入搜尋詞彙";
 
 /* Within the History Panel, users can see the option of viewing their history from synced tabs. */
-"LibraryPanel.History.SyncedHistory.v100" = "同步自其他裝置的瀏覽記錄";
+"LibraryPanel.History.SyncedHistory.v100" = "同步自其他裝置的瀏覽紀錄";
 
 /* This label is meant to signify the section containing a group of items that are older than thirty days. */
 "LibraryPanel.Section.Older" = "更久之前";
@@ -905,7 +905,7 @@
 "Password" = "密碼";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessMessage" = "讓您可儲存照片到「照片串流」。";
+"PhotoLibrary.FirefoxWouldLikeAccessMessage" = "讓您可儲存照片到「相機膠卷」。";
 
 /* See http://mzl.la/1G7uHo7 */
 "PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox 想要存取您的照片";
@@ -1061,7 +1061,7 @@
 "SendTo.Close.Button" = "關閉";
 
 /* Header for the list of devices table */
-"SendTo.DeviceList.Text" = "可用裝置:";
+"SendTo.DeviceList.Text" = "可用裝置：";
 
 /* Message in error prompt explaining why the URL is invalid. */
 "SendTo.Error.Message" = "僅能分享 HTTP 與 HTTPS 鏈結。";
@@ -1226,7 +1226,7 @@
 "Settings.DisplayTheme.OptionLight" = "亮色";
 
 /* Display (theme) settings footer describing how the brightness slider works. */
-"Settings.DisplayTheme.SectionFooter" = "佈景主題將自動根據螢幕顯示亮度自動切換。您可以設定要切換的門檻，而圈圈是目前的亮度。";
+"Settings.DisplayTheme.SectionFooter" = "佈景主題將根據螢幕顯示亮度自動切換。您可以設定要切換的門檻，而圈圈是目前的亮度。";
 
 /* Display (theme) settings label to show if automatically switch theme is enabled. */
 "Settings.DisplayTheme.StatusTitle" = "自動";
@@ -1316,7 +1316,7 @@
 "Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "蔚藍圖案的 Firefox 背景圖。";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "預設的明亮 Firefox 背景圖";
+"Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "預設的無圖案背景圖";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "日出圖案的 Firefox 背景圖。";
@@ -1742,7 +1742,7 @@
 "Toolbar.Menu.CloseAllTabs" = "關閉所有分頁";
 
 /* Button shown in editing mode to remove this site from the top sites panel. %@ is the title of the site. */
-"TopSites.RemovePage.Button" = "移除頁面 - %@";
+"TopSites.RemovePage.Button" = "移除頁面 — %@";
 
 /* Button to disallow the page to be translated to the user locale language */
 "TranslationToastHandler.PromptTranslate.Cancel" = "否";

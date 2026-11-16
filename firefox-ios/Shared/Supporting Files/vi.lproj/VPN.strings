@@ -1,0 +1,60 @@
+/* Body text of the system notification telling the user their free monthly VPN data has reset. */
+"VPN.DataLimitRefreshNotification.Body.v160" = "Dung lượng VPN miễn phí hàng tháng của bạn đã được làm mới.";
+
+/* Title of a system notification telling the user their free monthly VPN data has reset and is ready to use again. %1$@ is the monthly data limit in gigabytes (for example, 5). “GB” stands for gigabytes. */
+"VPN.DataLimitRefreshNotification.Title.v160" = "%1$@ GB dữ liệu VPN đã sẵn sàng";
+
+/* Body text of the popup shown when the VPN stops working while the user is browsing. Warns that if they keep browsing, websites and other third parties may be able to see their location. */
+"VPN.ErrorBrowsingPopup.Body.v160" = "VPN hiện không hoạt động. Nếu bạn tiếp tục duyệt web, vị trí của bạn có thể bị lộ.";
+
+/* Button on the popup shown when the VPN stops working while the user is browsing. Tapping it closes all of the user's open tabs. */
+"VPN.ErrorBrowsingPopup.CloseAllTabs.v160" = "Đóng tất cả các thẻ";
+
+/* Confirmation shown after the user closes a single tab from the popup that appears when the VPN stops working while browsing. */
+"VPN.ErrorBrowsingPopup.ClosedOneTab.v160" = "Đã đóng 1 thẻ";
+
+/* Confirmation shown after the user closes more than one tab from the popup that appears when the VPN stops working while browsing. %1$@ is the number of tabs that were closed (for example, 3). */
+"VPN.ErrorBrowsingPopup.ClosedXTabs.v160" = "Đã đóng %1$@ thẻ";
+
+/* Button on the popup shown when the VPN stops working while the user is browsing. Tapping it closes only the tab the user is currently viewing. */
+"VPN.ErrorBrowsingPopup.CloseThisTab.v160" = "Đóng thẻ này";
+
+/* Button on the popups shown when the VPN stops working while the user is browsing, or when the user runs out of free monthly VPN data. Tapping it closes the popup so the user can keep browsing without the VPN. */
+"VPN.ErrorBrowsingPopup.Continue.v160" = "Tiếp tục mà không cần VPN";
+
+/* Title of a popup shown when the VPN stops working while the user is browsing with it on. Asks if the user wants to keep browsing without the VPN. */
+"VPN.ErrorBrowsingPopup.Title.v160" = "Tiếp tục mà không cần VPN?";
+
+/* Body text of the popup shown when the app fails to connect to the VPN. “Try again” means try connecting to the VPN again. */
+"VPN.ErrorConnectingPopup.Body.v160" = "Hãy thử lại sau vài phút.";
+
+/* Button on the popup shown when the app fails to connect to the VPN. Tapping it closes the popup. */
+"VPN.ErrorConnectingPopup.CloseButtonText.v160" = "Đóng";
+
+/* Button on the popup shown when the app fails to connect to the VPN. Tapping it tries to connect to the VPN again. */
+"VPN.ErrorConnectingPopup.RetryButtonText.v160" = "Thử lại";
+
+/* Title of a popup shown when the app fails to connect to the VPN. */
+"VPN.ErrorConnectingPopup.Title.v160" = "Không thể kết nối tới VPN";
+
+/* Alternative body text for the popup shown when the user has used all of their free monthly VPN data. Explains that their VPN data resets at the start of next month. %1$@ is the monthly data limit in gigabytes (for example, 5). “GB” stands for gigabytes. */
+"VPN.ReachedDataLimitPopup.AltPopupBody.v160" = "Đã sử dụng hết %1$@ GB dữ liệu VPN. Quyền truy cập sẽ được thiết lập lại vào tháng tới.";
+
+/* Body text of the popup shown when the user has used all of their free monthly VPN data. Explains that the VPN has turned off, so websites may be able to see their location if they keep browsing. %1$@ is the monthly data limit in gigabytes (for example, 5). “GB” stands for gigabytes. */
+"VPN.ReachedDataLimitPopup.Body.v160" = "Bạn đã sử dụng hết %1$@ GB dữ liệu VPN. VPN đã tắt, vì vậy vị trí của bạn có thể bị lộ nếu bạn tiếp tục duyệt web.";
+
+/* Button on the popup shown when the user runs out of free monthly VPN data. Tapping it closes all of the user's open tabs. */
+"VPN.ReachedDataLimitPopup.CloseAllTabs.v160" = "Đóng tất cả các thẻ";
+
+/* Confirmation shown after the user closes a single tab from the popup that appears when they run out of free monthly VPN data. */
+"VPN.ReachedDataLimitPopup.ClosedOneTab.v160" = "Đã đóng 1 thẻ";
+
+/* Confirmation shown after the user closes more than one tab from the popup that appears when they run out of free monthly VPN data. %1$@ is the number of tabs that were closed (for example, 3). */
+"VPN.ReachedDataLimitPopup.ClosedXTabs.v160" = "Đã đóng %1$@ thẻ";
+
+/* Button on the popup shown when the user runs out of free monthly VPN data. Tapping it closes only the tab the user is currently viewing. */
+"VPN.ReachedDataLimitPopup.CloseThisTab.v160" = "Đóng thẻ này";
+
+/* Title of a popup shown when the user has used all of their free monthly VPN data. */
+"VPN.ReachedDataLimitPopup.Title.v160" = "Đã đạt giới hạn dữ liệu VPN";
+

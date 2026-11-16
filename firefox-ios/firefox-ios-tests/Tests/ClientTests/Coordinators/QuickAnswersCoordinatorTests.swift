@@ -154,7 +154,7 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
 
     // MARK: - Helper Methods
     private func setupNimbus(model: Client.QuickAnswersModel) {
-        FxNimbus.shared.features.quickAnswersFeature.with { _, _ in
+        FxNimbus.shared.features.quickAnswersFeature.with { _ in
             Client.QuickAnswersFeature(enabled: true, model: model)
         }
     }

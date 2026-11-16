@@ -84,11 +84,6 @@ final class SummarizeCoordinator: BaseCoordinator,
         } else {
             String(format: .Summarizer.HostedBrandLabel, AppName.shortName.rawValue)
         }
-        let brandImage: UIImage? = if summarizerNimbusUtils.isAppleSummarizerEnabled() {
-            UIImage(named: "appleIntelligence")
-        } else {
-            UIImage(named: "faviconFox")
-        }
 
         let errorModel = LocalizedErrorsViewConfiguration(
             rateLimitedMessage: .Summarizer.RateLimitedErrorMessage,
@@ -136,9 +131,7 @@ final class SummarizeCoordinator: BaseCoordinator,
             ),
             brandView: BrandViewConfiguration(
                 brandLabel: brandLabel,
-                brandLabelA11yId: AccessibilityIdentifiers.Summarizer.brandLabel,
-                brandImage: brandImage,
-                brandImageA11yId: AccessibilityIdentifiers.Summarizer.brandImage
+                brandLabelA11yId: AccessibilityIdentifiers.Summarizer.brandLabel
             ),
             closeButton: CloseButtonViewModel(
                 a11yLabel: .Summarizer.CloseButtonAccessibilityLabel,

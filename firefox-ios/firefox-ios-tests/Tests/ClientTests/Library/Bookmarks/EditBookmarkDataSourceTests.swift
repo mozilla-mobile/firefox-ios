@@ -16,7 +16,7 @@ final class EditBookmarkDataSourceTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         tableView = UITableView()
-        let window = UIWindow(frame: UIScreen.main.bounds)
+        let window = UIWindow(frame: .zero)
         window.rootViewController = UIViewController()
         window.rootViewController?.view.addSubview(tableView)
         window.makeKeyAndVisible()
