@@ -232,7 +232,7 @@ ai.quick_answers:
       - https://github.com/mozilla-mobile/firefox-ios/pull/XXXXX
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2027-06-01"
+    expires: "2026-12-01"
   return_pill_tapped:
     type: event
     description: |
@@ -250,7 +250,7 @@ ai.quick_answers:
       - https://github.com/mozilla-mobile/firefox-ios/pull/XXXXX
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2027-06-01"
+    expires: "2026-12-01"
   return_pill_dismissed:
     type: event
     description: |
@@ -269,4 +269,4 @@ ai.quick_answers:
       - https://github.com/mozilla-mobile/firefox-ios/pull/XXXXX
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2027-06-01"
+    expires: "2026-12-01"
