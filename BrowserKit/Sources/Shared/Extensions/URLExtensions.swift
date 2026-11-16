@@ -210,6 +210,8 @@ extension URL {
         InternalURL(self)?.originalURLFromErrorPage ?? decodeReaderModeURL ?? self
     }
 
+    /// The URL to persist for bookmarks, pinned shortcuts and share items.
+    /// Same as `siteURL`, reader-mode pages keep their reader URL so they reopen in reader mode.
     public var saveableURL: URL {
         if isReaderModeURL {
             return self
