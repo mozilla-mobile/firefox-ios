@@ -227,8 +227,7 @@ ai.quick_answers:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-17380
     data_reviews:
-      # TODO: replace with the data review request pull request.
-      - https://github.com/mozilla-mobile/firefox-ios/pull/XXXXX
+      - https://github.com/mozilla-mobile/firefox-ios/pull/36610
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-12-01"
@@ -244,8 +243,7 @@ ai.quick_answers:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-17380
     data_reviews:
-      # TODO: replace with the data review request pull request.
-      - https://github.com/mozilla-mobile/firefox-ios/pull/XXXXX
+      - https://github.com/mozilla-mobile/firefox-ios/pull/36610
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-12-01"
@@ -262,8 +260,7 @@ ai.quick_answers:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-17380
     data_reviews:
-      # TODO: replace with the data review request pull request.
-      - https://github.com/mozilla-mobile/firefox-ios/pull/XXXXX
+      - https://github.com/mozilla-mobile/firefox-ios/pull/36610
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-12-01"
