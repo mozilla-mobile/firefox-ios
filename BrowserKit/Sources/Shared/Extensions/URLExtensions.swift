@@ -204,6 +204,8 @@ extension URL {
         return absoluteString.hasPrefix("internal://local/about/home")
     }
 
+    /// The page's real URL: unwraps error pages and reader-mode URLs to the original page.
+    /// Used by the main menu site-protection header and the ETP panel
     public var siteURL: URL {
         InternalURL(self)?.originalURLFromErrorPage ?? decodeReaderModeURL ?? self
     }
