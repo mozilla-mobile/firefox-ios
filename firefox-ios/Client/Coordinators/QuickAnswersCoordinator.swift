@@ -11,7 +11,6 @@ import UIKit
 enum QuickAnswersReturnPillDismissReason: String {
     case swipe
     case newSession = "new_session"
-    case privateModeToggled = "private_mode_toggled"
 }
 
 final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHandler {

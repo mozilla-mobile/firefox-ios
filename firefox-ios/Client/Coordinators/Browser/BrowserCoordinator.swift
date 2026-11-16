@@ -1714,11 +1714,6 @@ final class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - TabManagerDelegate
 
-    func tabManager(_ tabManager: TabManager, didSelectedTabChange selectedTab: Tab, previousTab: Tab?, isRestoring: Bool) {
-        guard !isRestoring, let previousTab, selectedTab.isPrivate != previousTab.isPrivate else { return }
-        discardParkedQuickAnswers(reason: .privateModeToggled)
-    }
-
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
         // TabManager clears isRestoringTabs after notifying its delegates.
         Task { @MainActor [weak self] in
