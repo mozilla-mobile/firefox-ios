@@ -299,8 +299,6 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         return subject
     }
 
-
-
     private func dispatchChangeLocationAndWait(countryCode: String, expectStart: Bool) async {
         let started = expectation(description: "VPN start attempted")
         started.isInverted = !expectStart
