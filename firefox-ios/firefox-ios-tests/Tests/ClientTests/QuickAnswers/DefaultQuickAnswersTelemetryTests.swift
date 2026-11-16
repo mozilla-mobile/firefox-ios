@@ -269,7 +269,7 @@ final class DefaultQuickAnswersTelemetryTests: XCTestCase {
         let event = GleanMetrics.AiQuickAnswers.returnPillDismissed
         typealias EventExtrasType = GleanMetrics.AiQuickAnswers.ReturnPillDismissedExtra
 
-        subject.returnPillDismissed(reason: .privateModeToggled)
+        subject.returnPillDismissed(reason: .newSession)
 
         let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
         let savedMetric = try XCTUnwrap(
@@ -278,7 +278,7 @@ final class DefaultQuickAnswersTelemetryTests: XCTestCase {
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 0)
-        XCTAssertEqual(savedExtras.reason, "private_mode_toggled")
+        XCTAssertEqual(savedExtras.reason, "new_session")
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 

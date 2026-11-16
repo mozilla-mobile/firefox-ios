@@ -259,7 +259,7 @@ ai.quick_answers:
       reason:
         type: string
         description: |
-          Why the pill went away. One of `swipe`, `new_session` or `private_mode_toggled`. See the
+          Why the pill went away. One of `swipe` or `new_session`. See the
           `QuickAnswersReturnPillDismissReason` enum for the valid values.
     bugs:
       # TODO: replace with the GitHub issue of this feature.
