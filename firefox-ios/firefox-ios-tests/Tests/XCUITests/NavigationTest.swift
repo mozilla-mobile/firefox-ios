@@ -406,7 +406,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
 
         sslScreen.tapAdvanced()
         sslScreen.tapVisitSiteAnyway()
-        sslScreen.waitForPageToLoadAfterBypass()
+        sslScreen.waitForUntrustedTestSiteToLoad()
 
         restartTheApp()
         browserScreen.navigateToURL(untrustedSite)
@@ -414,7 +414,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         sslScreen.assertWarningVisible()
         sslScreen.tapAdvanced()
         sslScreen.tapVisitSiteAnyway()
-        sslScreen.waitForPageToLoadAfterBypass()
+        sslScreen.waitForUntrustedTestSiteToLoad()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307022

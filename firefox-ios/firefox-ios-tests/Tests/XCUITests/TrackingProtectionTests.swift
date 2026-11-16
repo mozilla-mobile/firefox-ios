@@ -160,7 +160,7 @@ class TrackingProtectionTests: BaseTestCase {
         sslScreen.waitForWarning()
         sslScreen.tapAdvanced()
         sslScreen.tapVisitSiteAnyway()
-        sslScreen.waitForPageToLoadAfterBypass()
+        sslScreen.waitForUntrustedTestSiteToLoad()
         browserScreen.assertAddressBar_LockIconOffExist()
     }
 

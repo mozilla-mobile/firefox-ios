@@ -52,11 +52,9 @@ struct SSLWarningSelectors: SSLWarningSelectorsSet {
         groups: ["browser", "ssl"]
     )
 
-    let UNTRUSTED_PAGE_HEADING = Selector.element(
-        .staticText,
+    let UNTRUSTED_PAGE_HEADING = Selector.staticTextByExactLabel(
+        UntrustedHTTPSServer.pageHeading,
         in: Selector.webView(description: "Web view showing the untrusted test site"),
-        matching: NSPredicate(format: "label == %@", UntrustedHTTPSServer.pageHeading),
-        value: UntrustedHTTPSServer.pageHeading,
         description: "Heading of the untrusted test site, shown once the warning is bypassed",
         groups: ["browser", "ssl"]
     )
