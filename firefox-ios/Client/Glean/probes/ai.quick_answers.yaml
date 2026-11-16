@@ -225,8 +225,7 @@ ai.quick_answers:
     description: |
       Recorded when the Quick Answers return pill is shown after the user opens a citation.
     bugs:
-      # TODO: replace with the GitHub issue of this feature.
-      - https://github.com/mozilla-mobile/firefox-ios/issues/XXXXX
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-17380
     data_reviews:
       # TODO: replace with the data review request pull request.
       - https://github.com/mozilla-mobile/firefox-ios/pull/XXXXX
@@ -243,8 +242,7 @@ ai.quick_answers:
         description: |
           Whether the pill was in its minimized form (minimal address bar) when tapped.
     bugs:
-      # TODO: replace with the GitHub issue of this feature.
-      - https://github.com/mozilla-mobile/firefox-ios/issues/XXXXX
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-17380
     data_reviews:
       # TODO: replace with the data review request pull request.
       - https://github.com/mozilla-mobile/firefox-ios/pull/XXXXX
@@ -262,8 +260,7 @@ ai.quick_answers:
           Why the pill went away. One of `swipe` or `new_session`. See the
           `QuickAnswersReturnPillDismissReason` enum for the valid values.
     bugs:
-      # TODO: replace with the GitHub issue of this feature.
-      - https://github.com/mozilla-mobile/firefox-ios/issues/XXXXX
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-17380
     data_reviews:
       # TODO: replace with the data review request pull request.
       - https://github.com/mozilla-mobile/firefox-ios/pull/XXXXX
