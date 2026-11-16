@@ -80,8 +80,8 @@ enum Route {
     /// A route for testing redownloads (resetting and starting flows).
     ///
     /// - Parameters:
-    ///   - isFirstLaunch: If true, fires the logic as if this is a brand new user who is launching the app for the first time. If false, fires the logic for an existing
-    ///                    user flow.
+    ///   - isFirstLaunch: If true, fires the logic as if this is a brand new user who is launching the app for the first
+    ///                    time. If false, fires the logic for an existing user flow.
     ///   - shouldClearInstallationKeychain: Clear the keychain.
     case testAppInstallation(shouldClearInstallationKeychain: Bool, isFirstLaunch: Bool)
 
