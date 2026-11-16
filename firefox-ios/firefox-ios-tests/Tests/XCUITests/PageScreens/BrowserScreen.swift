@@ -167,6 +167,18 @@ final class BrowserScreen {
         assertBookOfMozillaPageDisplayed(timeout: timeout)
     }
 
+    /// Loads `url` and asserts `text` is in the web view, retrying once for the same reason as
+    /// `navigateToURLAndAssertMobileUserAgent` (https://github.com/mozilla-mobile/firefox-ios/issues/35933).
+    func openURLAndAssertPageText(_ url: String, text: String, timeout: TimeInterval = TIMEOUT) {
+        let pageText = sel.webViewText(text).element(in: app)
+        openURL(url)
+        if BaseTestCase().mozWaitForElementToExist(pageText, timeout: timeout, failOnTimeout: false) {
+            return
+        }
+        openURL(url)
+        BaseTestCase().mozWaitForElementToExist(pageText, timeout: timeout)
+    }
+
     /// Loads `url` and asserts the address bar shows `host`, retrying once for the same reason as
     /// `navigateToURLAndAssertMobileUserAgent` (https://github.com/mozilla-mobile/firefox-ios/issues/35933).
     func navigateToURLAndAssertAddressBarContains(_ url: String, host: String, timeout: TimeInterval = TIMEOUT) {
