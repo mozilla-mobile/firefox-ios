@@ -20,10 +20,7 @@ class L10nBaseSnapshotTests: XCTestCase {
                 LaunchArguments.SkipETPCoverSheet,
                 LaunchArguments.SkipIntro,
                 LaunchArguments.SkipContextualHints,
-                LaunchArguments.DisableAnimations,
-                // Turn off the microsurvey so its "Help us make Firefox better" prompt isn't in the screenshots
-                "\(LaunchArguments.LoadExperiment)defaultEnabledOff",
-                "\(LaunchArguments.ExperimentFeatureName)microsurvey-feature"]
+                LaunchArguments.DisableAnimations]
 
     @MainActor
     override func setUp() async throws {

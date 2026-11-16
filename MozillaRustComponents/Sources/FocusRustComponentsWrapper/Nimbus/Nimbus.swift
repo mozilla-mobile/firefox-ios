@@ -6,6 +6,9 @@ import Foundation
 import Glean
 
 public final class Nimbus: NimbusInterface {
+    // FIXME: FXIOS-14119 Should be thread safe
+    private nonisolated(unsafe) let _userDefaults: UserDefaults?
+
     private let nimbusClient: NimbusClientProtocol
 
     private let resourceBundles: [Bundle]
@@ -28,11 +31,13 @@ public final class Nimbus: NimbusInterface {
 
     init(nimbusClient: NimbusClientProtocol,
          resourceBundles: [Bundle],
+         userDefaults: UserDefaults?,
          errorReporter: @escaping NimbusErrorReporter)
     {
         self.errorReporter = errorReporter
         self.nimbusClient = nimbusClient
         self.resourceBundles = resourceBundles
+        _userDefaults = userDefaults
         NilVariables.instance.set(bundles: resourceBundles)
     }
 }
@@ -98,6 +103,10 @@ extension Nimbus: NimbusEventStore {
 }
 
 extension Nimbus: FeaturesInterface {
+    public var userDefaults: UserDefaults? {
+        _userDefaults
+    }
+
     public func recordExposureEvent(featureId: String, experimentSlug: String? = nil) {
         catchAll {
             nimbusClient.recordFeatureExposure(featureId: featureId, slug: experimentSlug)

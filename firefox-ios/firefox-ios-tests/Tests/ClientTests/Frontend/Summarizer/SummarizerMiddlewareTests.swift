@@ -78,6 +78,8 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, .showSummarizer)
         XCTAssertEqual(actionCalled.summarizerTrigger, .shakeGesture)
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_shakeMotionAction_withoutValidConfigurationAndShakeEnabled_dispatchesToastAction() throws {
@@ -108,6 +110,8 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, .showToast)
         XCTAssertEqual(actionCalled.toastType, .shakeToSummarizeNotAvailable)
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_shakeMotionAction_withoutValidConfigurationAndShakeDisabled_doesNotDispatchToastAction() throws {
@@ -132,6 +136,8 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
         wait(for: [expectation], timeout: 1.0)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_shakeMotionAction_whenTabIsHomePage_doesNotDispatchToastAction() throws {
@@ -157,6 +163,8 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
         wait(for: [expectation], timeout: 1)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_shakeMotionAction_withoutWebView_doesNotDispatchMiddlewareAction() throws {
@@ -177,6 +185,10 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
         wait(for: [expectation], timeout: 1)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+        // the summarizer provider strong retains the middleware as per redux is designed
+        // thus trackForMemoryLeaks would fail, the only way is to release the closure by assigning a new one
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // MARK: - didTapReaderModeBarSummarizerButton
@@ -206,6 +218,8 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, .showSummarizer)
         XCTAssertEqual(actionCalled.summarizerTrigger, .readerModeBarButton)
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // MARK: - showReaderMode
@@ -235,6 +249,8 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(actionType, .showReaderModeBarSummarizerButton)
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_showReaderModeAction_withInvalidConfiguration_dispatchesNotAvailableAction() throws {
@@ -263,6 +279,8 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(actionType, .summaryNotAvailable)
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // MARK: - didSummarizeSettingsChange
@@ -291,6 +309,8 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(actionType, .showReaderModeBarSummarizerButton)
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_didSummarizeSettingsChange_withCanSummarizeFalse_dispatchesNotAvailableAction() throws {
@@ -316,6 +336,8 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(actionType, .summaryNotAvailable)
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // MARK: - makeConfiguration
@@ -432,8 +454,21 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
             summarizerLanguageProvider: mockSummarizerLanguageProvider,
             summarizerConfigProvider: mockSummarizerConfigProvider
         )
-
+        trackForMemoryLeaks(subject)
         return subject
+    }
+
+    /// Our middleware providers always retain a strong reference to `self` for ease of use. Thus, `trackForMemoryLeaks` will
+    /// fail in our unit tests due to a strong circular reference to the middleware retained by its provider closures. In
+    /// practice, this is not a memory leak issue, as we permanently allocate and retain our middleware providers for the
+    /// entire app lifecycle.
+    ///
+    /// As a work around for unit tests, we should release each middleware's provider closures from memory by assigning an
+    /// empty closure, which does not strongly retain `self`.
+    private func releaseMiddlewareProvidersFromMemory(_ subject: SummarizerMiddleware) {
+        subject.summarizerProvider = emptyMiddlewareProviderFactory()
+        subject.legacyProvider = emptyLegacyMiddlewareFactory()
+        subject.modernProvider = emptyMiddlewareFactory()
     }
 
     private func setupWebViewForTabManager(isHomePage: Bool = false) {

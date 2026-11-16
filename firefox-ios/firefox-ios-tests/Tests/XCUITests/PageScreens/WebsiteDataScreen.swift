@@ -31,7 +31,12 @@ final class WebsiteDataScreen {
         BaseTestCase().mozWaitForElementToNotExist(rowImages.firstMatch)
         XCTAssertEqual(rowImages.count, 0, "The Website data has not cleared correctly")
 
-        navigateBackToBrowser()
+        // Add wait for back button to be enabled
+        let backButton = sel.BUTTON_DATA_MANAGEMENT.element(in: app)
+        BaseTestCase().mozWaitElementEnabled(element: backButton, timeout: TIMEOUT)
+        backButton.waitAndTap()
+        sel.BUTTON_SETTINGS.element(in: app).waitAndTap()
+        sel.BUTTON_DONE.element(in: app).waitAndTap()
     }
 
     func assertAllWebsiteDataCleared() {
@@ -42,20 +47,9 @@ final class WebsiteDataScreen {
     }
 
     func navigateBackToBrowser() {
-        let isIPhoneDuo = BaseTestCase().iPhoneDuo()
-        let backToDataManagement = isIPhoneDuo ? sel.BUTTON_BACK : sel.BUTTON_DATA_MANAGEMENT
-        let backToSettings = isIPhoneDuo ? sel.BUTTON_BACK : sel.BUTTON_SETTINGS
-
-        // Add wait for back button to be enabled
-        let backButton = backToDataManagement.element(in: app)
-        BaseTestCase().mozWaitElementEnabled(element: backButton, timeout: TIMEOUT)
-        backButton.waitAndTap()
-        if isIPhoneDuo {
-            // Both screens use the same back button identifier, so make sure the first tap has landed
-            BaseTestCase().mozWaitForElementToExist(sel.NAVBAR_DATA_MANAGEMENT.element(in: app))
-        }
-        backToSettings.element(in: app).waitAndTap()
-        sel.BUTTON_DONE.element(in: app).waitAndTap()
+        Selector.buttonByLabel("Data Management", description: "Back").element(in: app).waitAndTap()
+        Selector.buttonByLabel("Settings", description: "Back").element(in: app).waitAndTap()
+        Selector.buttonByLabel("Done", description: "Done").element(in: app).waitAndTap()
     }
 
     func waitUntilListIsReady(timeout: TimeInterval = TIMEOUT) {

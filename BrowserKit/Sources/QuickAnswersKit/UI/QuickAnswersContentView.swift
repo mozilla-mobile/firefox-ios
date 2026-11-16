@@ -4,7 +4,6 @@
 
 import UIKit
 import Common
-import ComponentLibrary
 
 final class QuickAnswersContentView: UIView, UIScrollViewDelegate, ThemeApplicable {
     private enum UX {
@@ -28,8 +27,6 @@ final class QuickAnswersContentView: UIView, UIScrollViewDelegate, ThemeApplicab
         static let audioWaveformTopPadding: CGFloat = 36.0
         static let audioWaveformBottomSpacing: CGFloat = 36.0
         static let resultTranscriptTopPadding: CGFloat = 32.0
-        /// Added to `horizontalPadding` so the transcript sits 44pt from the edges.
-        static let transcriptExtraHorizontalPadding: CGFloat = 20.0
         /// Moves the transcript up so it sits `resultTranscriptTopPadding` from the top once the waveform is hidden.
         static let resultTranslationOffset = audioWaveformTopPadding
             + audioWaveformSize.height
@@ -71,7 +68,7 @@ final class QuickAnswersContentView: UIView, UIScrollViewDelegate, ThemeApplicab
         $0.textAlignment = .center
         $0.adjustsFontForContentSizeCategory = true
     }
-    private let answerCardView: AIAnswerCardView = .build {
+    private let answerCardView: QuickAnswersAnswerCardView = .build {
         $0.alpha = 0.0
     }
     private let sourceView: QuickAnswersSourceView = .build {
@@ -161,10 +158,8 @@ final class QuickAnswersContentView: UIView, UIScrollViewDelegate, ThemeApplicab
 
             transcriptLabel.topAnchor.constraint(equalTo: audioWaveform.bottomAnchor,
                                                  constant: UX.audioWaveformBottomSpacing),
-            transcriptLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
-                                                     constant: UX.transcriptExtraHorizontalPadding),
-            transcriptLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
-                                                      constant: -UX.transcriptExtraHorizontalPadding),
+            transcriptLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            transcriptLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
             searchingLabel.topAnchor.constraint(equalTo: transcriptLabel.bottomAnchor, constant: UX.searchLabelTopPadding),
             searchingLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),

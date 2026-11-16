@@ -161,7 +161,6 @@
         "FirefoxSuggestTest",
         "FirefoxSuggestTest\/testFirefoxSuggestExists()",
         "FxScreenGraphTests",
-        "HTTPSFirstModeTests",
         "HistoryTests",
         "HistoryTests\/testClearHistoryFromSettings()",
         "HistoryTests\/testClearPrivateData()",

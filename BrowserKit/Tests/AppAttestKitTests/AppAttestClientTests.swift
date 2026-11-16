@@ -117,45 +117,39 @@ final class AppAttestClientTests: XCTestCase {
         XCTAssertNil(keyStore.loadKeyID(), "Expected keyId to be cleared after resetKey().")
     }
 
-    // A stored keyId can outlive the Secure Enclave key it names (e.g. after a reinstall), and only re-attesting fixes it.
-    func test_generateAssertion_reattests_whenKeyIsInvalid() async throws {
-        let keyStore = try createKeyStore(with: AppAttestTestData.keyID)
-        let service = makeService(keyToReturn: Self.freshKeyID)
-        service.assertionErrorByKeyID = [AppAttestTestData.keyID: DCError(.invalidKey)]
-        let subject = try createSubject(appAttestService: service, keyStore: keyStore)
-
-        let result = try await subject.generateAssertion(payload: ["a": "b"])
-
-        XCTAssertEqual(result.keyId, Self.freshKeyID, "Expected the assertion to be signed with the fresh key.")
-        XCTAssertEqual(keyStore.loadKeyID(), Self.freshKeyID, "Expected the fresh key to replace the stale one.")
-    }
-
-    func test_generateAssertion_reattestsOnlyOnce() async throws {
-        let server = MockAppAttestRemoteServer()
-        let service = makeService(keyToReturn: Self.freshKeyID)
+    func testGenerateAssertion_mapsInvalidKeyToInvalidKeyID() async throws {
+        // A stored keyId can outlive the Secure Enclave key it names, and only re-attesting fixes it.
+        let service = makeService(assertionToReturn: AppAttestTestData.assertionBlob)
         service.assertionError = DCError(.invalidKey)
-        let subject = try createSubject(
-            appAttestService: service,
-            remoteServer: server,
-            keyStore: createKeyStore(with: AppAttestTestData.keyID)
-        )
+        let subject = try createSubject(appAttestService: service, keyStore: createKeyStore(with: AppAttestTestData.keyID))
 
         do {
             _ = try await subject.generateAssertion(payload: ["a": "b"])
-            XCTFail("Expected generateAssertion to throw when the fresh key is also invalid.")
+            XCTFail("Expected generateAssertion to throw on an invalid key.")
         } catch let error as AppAttestServiceError {
             XCTAssertEqual(error, .invalidKeyID)
         }
-        XCTAssertEqual(server.sendAttestationCallCount, 1, "Expected exactly one re-attestation.")
+    }
+
+    func testGenerateChallengeBoundAssertion_mapsInvalidKeyToInvalidKeyID() async throws {
+        let service = makeService(assertionToReturn: AppAttestTestData.assertionBlob)
+        service.assertionError = DCError(.invalidKey)
+        let subject = try createSubject(appAttestService: service, keyStore: createKeyStore(with: AppAttestTestData.keyID))
+
+        do {
+            _ = try await subject.generateChallengeBoundAssertion()
+            XCTFail("Expected generateChallengeBoundAssertion to throw on an invalid key.")
+        } catch let error as AppAttestServiceError {
+            XCTAssertEqual(error, .invalidKeyID)
+        }
     }
 
     /// Other DeviceCheck failures are retryable or unrecoverable, so they must not be reported as a
     /// lost key, which would make callers discard a working enrollment.
     func testGenerateAssertion_leavesOtherDeviceCheckErrorsAlone() async throws {
-        let keyStore = try createKeyStore(with: AppAttestTestData.keyID)
         let service = makeService(assertionToReturn: AppAttestTestData.assertionBlob)
         service.assertionError = DCError(.serverUnavailable)
-        let subject = try createSubject(appAttestService: service, keyStore: keyStore)
+        let subject = try createSubject(appAttestService: service, keyStore: createKeyStore(with: AppAttestTestData.keyID))
 
         do {
             _ = try await subject.generateAssertion(payload: ["a": "b"])
@@ -163,10 +157,7 @@ final class AppAttestClientTests: XCTestCase {
         } catch let error as DCError {
             XCTAssertEqual(error.code, .serverUnavailable)
         }
-        XCTAssertEqual(keyStore.loadKeyID(), AppAttestTestData.keyID, "Expected the stored key to be kept.")
     }
-
-    private static let freshKeyID = "fresh-key-id"
 
     private func createSubject(
         appAttestService: AppAttestServiceProtocol = MockAppAttestService(isSupported: true),

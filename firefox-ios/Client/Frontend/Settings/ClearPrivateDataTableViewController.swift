@@ -13,13 +13,10 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
 
     private var clearButton: UITableViewCell?
 
-    private enum Section {
-        case browserDataTransfer
-        case websiteData
-        case toggles
-        case clearButton
-    }
-
+    private let sectionArrow = 0
+    private let sectionToggles = 1
+    private let sectionButton = 2
+    private let numberOfSections = 3
     private let historyClearableIndex = 0
 
     private enum Keys: String {
@@ -28,18 +25,6 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
 
     private var profile: Profile
     private var tabManager: TabManager
-    private let browserDataTransferAvailability: BrowserDataTransferAvailability
-
-    var browserDataTransferActions: [BrowserDataTransferDirection: () -> Void] = [:]
-
-    private lazy var browserDataTransferRows: [BrowserDataTransferDirection] = [.import].filter {
-        browserDataTransferActions[$0] != nil && browserDataTransferAvailability.isAvailable($0)
-    }
-
-    private var sections: [Section] {
-        let transferSections: [Section] = browserDataTransferRows.isEmpty ? [] : [.browserDataTransfer]
-        return transferSections + [.websiteData, .toggles, .clearButton]
-    }
 
     private typealias DefaultCheckedState = Bool
 
@@ -81,11 +66,9 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
     }
 
     init(profile: Profile,
-         tabManager: TabManager,
-         browserDataTransferAvailability: BrowserDataTransferAvailability = BrowserDataTransferAvailability()) {
+         tabManager: TabManager) {
         self.profile = profile
         self.tabManager = tabManager
-        self.browserDataTransferAvailability = browserDataTransferAvailability
 
         super.init(windowUUID: tabManager.windowUUID)
     }
@@ -111,24 +94,13 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = dequeueCellFor(indexPath: indexPath)
         cell.applyTheme(theme: currentTheme())
-        cell.accessibilityTraits = .none
-        cell.accessibilityIdentifier = nil
-        switch sections[indexPath.section] {
-        case .browserDataTransfer:
-            cell.textLabel?.text = .BrowserDataTransfer.Settings.ImportButton
-            cell.textLabel?.textColor = currentTheme().colors.actionPrimary
-            cell.textLabel?.numberOfLines = 0
-            cell.selectionStyle = .default
-            cell.accessibilityTraits = .button
-            cell.accessibilityIdentifier = AccessibilityIdentifiers.Settings.ClearData.importBrowserData
-            return cell
-        case .websiteData:
+        if indexPath.section == sectionArrow {
             cell.accessoryType = .disclosureIndicator
             cell.textLabel?.text = .SettingsWebsiteDataTitle
             cell.accessibilityIdentifier = AccessibilityIdentifiers.Settings.ClearData.websiteDataSection
             clearButton = cell
             return cell
-        case .toggles:
+        } else if indexPath.section == sectionToggles {
             cell.textLabel?.text = clearables[indexPath.item].clearable.label
             cell.textLabel?.numberOfLines = 0
             let control = ThemedSwitch()
@@ -140,52 +112,47 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
             cell.selectionStyle = .none
             control.tag = indexPath.item
             return cell
-        case .clearButton:
-            guard let cell = cell as? ThemedCenteredTableViewCell else { return ThemedTableViewCell() }
+        } else if let cell = cell as? ThemedCenteredTableViewCell {
             cell.setTitle(to: .SettingsClearPrivateDataClearButton)
             cell.setAccessibilities(
                 traits: .button,
                 identifier: AccessibilityIdentifiers.Settings.ClearData.clearPrivateDataSection)
             clearButton = cell
             return cell
+        } else {
+            return ThemedTableViewCell()
         }
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return sections.count
+        return numberOfSections
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch sections[section] {
-        case .browserDataTransfer:
-            return browserDataTransferRows.count
-        case .toggles:
-            return clearables.count
-        case .websiteData, .clearButton:
+        if section == sectionArrow {
             return 1
+        } else if section == sectionToggles {
+            return clearables.count
         }
+
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-        switch sections[indexPath.section] {
-        case .clearButton:
+        if indexPath.section == sectionButton {
             // Highlight the button only if it's enabled.
             return clearButtonEnabled
-        case .websiteData, .browserDataTransfer:
+        } else if indexPath.section == sectionArrow {
             return true
-        case .toggles:
-            return false
         }
+        return false
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        switch sections[indexPath.section] {
-        case .browserDataTransfer:
-            browserDataTransferActions[browserDataTransferRows[indexPath.row]]?()
-        case .websiteData:
+        if indexPath.section == sectionArrow {
             let view = WebsiteDataManagementViewController(windowUUID: windowUUID)
             navigationController?.pushViewController(view, animated: true)
-        case .clearButton:
+        } else if indexPath.section == sectionButton {
             let alert: UIAlertController
             if self.toggles[historyClearableIndex] && profile.hasAccount() {
                 alert = clearSyncedHistoryAlert(okayCallback: clearPrivateData)
@@ -193,14 +160,12 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
                 alert = clearPrivateDataAlert(okayCallback: clearPrivateData)
             }
             present(alert, animated: true, completion: nil)
-        case .toggles:
-            break
         }
         tableView.deselectRow(at: indexPath, animated: false)
     }
 
     override func dequeueCellFor(indexPath: IndexPath) -> ThemedTableViewCell {
-        guard sections[indexPath.section] == .clearButton else {
+        guard indexPath.section == sectionButton else {
             return super.dequeueCellFor(indexPath: indexPath)
         }
 
@@ -237,24 +202,14 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
             ) as? ThemedTableSectionHeaderFooterView
         else { return nil }
 
-        switch sections[section] {
-        case .browserDataTransfer:
-            headerView.titleLabel.text = .BrowserDataTransfer.Settings.SectionTitle
-        case .toggles:
-            headerView.titleLabel.text = .SettingsClearPrivateDataSectionName
-        case .websiteData, .clearButton:
-            headerView.titleLabel.text = nil
+        var sectionTitle: String?
+        if section == sectionToggles {
+            sectionTitle = .SettingsClearPrivateDataSectionName
+        } else {
+            sectionTitle = nil
         }
+        headerView.titleLabel.text = sectionTitle
         return headerView
-    }
-
-    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let footerView = super.tableView(tableView, viewForFooterInSection: section) as? ThemedTableSectionHeaderFooterView
-        footerView?.titleLabel.text = sections[section] == .browserDataTransfer
-            ? String(format: .BrowserDataTransfer.Settings.SupportedDataFooter, AppName.shortName.rawValue)
-            : nil
-        footerView?.titleAlignment = .top
-        return footerView
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

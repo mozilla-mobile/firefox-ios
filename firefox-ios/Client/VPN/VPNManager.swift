@@ -24,8 +24,7 @@ protocol VPNRunnable {
     var isRunning: Bool { get }
     /// Single-consumer stream of `VPNEvent`s, observed by `VPNMiddleware`.
     var events: AsyncStream<VPNEvent> { get }
-    /// Also switches a running VPN to a new server and pass without stopping it first.
-    func start(countryCode: String?) async throws
+    func start() async throws
     func stop() async
 }
 
@@ -91,16 +90,15 @@ final class VPNManager: VPNRunnable {
         self.eventsContinuation = eventsContinuation
     }
 
-    /// When already running, the proxy stays on the old server until the new one is applied,
-    /// so a failure leaves it running as-is.
-    func start(countryCode: String?) async throws {
+    func start() async throws {
         guard let guardian = self.guardian else {
             throw VPNError.tokenProviderUnavailable
         }
 
         let pass = try await guardian.getPass()
 
-        guard let selection = await serverManager.selectServer(countryCode: countryCode, environment: environment) else {
+        // TODO: FXIOS-16873 When we implement location selection it will be passed in here
+        guard let selection = await serverManager.selectServer(countryCode: nil, environment: environment) else {
             throw VPNError.noServerFound
         }
         let server = selection.server

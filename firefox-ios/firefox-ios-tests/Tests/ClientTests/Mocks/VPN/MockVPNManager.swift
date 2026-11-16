@@ -12,16 +12,14 @@ final class MockVPNManager: VPNRunnable {
     var onStop: (() -> Void)?
     var onStart: (() -> Void)?
     var startError: Error?
-    var startCountryCodes: [String?] = []
     let eventsStream = AsyncStream<VPNEvent>.makeStream()
 
     var events: AsyncStream<VPNEvent> {
         eventsStream.stream
     }
 
-    func start(countryCode: String?) async throws {
+    func start() async throws {
         startCalled += 1
-        startCountryCodes.append(countryCode)
         onStart?()
         if let startError { throw startError }
         isRunning = true

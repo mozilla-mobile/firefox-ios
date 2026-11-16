@@ -25,7 +25,9 @@ final class SummarizeErrorExtensionTests: XCTestCase {
         ),
         brandView: BrandViewConfiguration(
             brandLabel: "",
-            brandLabelA11yId: ""
+            brandLabelA11yId: "",
+            brandImage: nil,
+            brandImageA11yId: ""
         ),
         closeButton: CloseButtonViewModel(a11yLabel: "", a11yIdentifier: ""),
         errorMessages: LocalizedErrorsViewConfiguration(

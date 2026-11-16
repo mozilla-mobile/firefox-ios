@@ -122,7 +122,6 @@
         "FirefoxSuggestTest",
         "FirefoxSuggestTest\/testFirefoxSuggestExists()",
         "FxScreenGraphTests",
-        "HTTPSFirstModeTests",
         "HistoryTests",
         "HomeButtonTests",
         "HomePageSettingsUITests",

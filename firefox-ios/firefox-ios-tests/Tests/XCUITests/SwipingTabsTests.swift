@@ -7,10 +7,6 @@ import XCTest
 
 class SwipingTabsTests: BaseTestCase {
     var browserScreen: BrowserScreen!
-    var toolbarScreen: ToolbarScreen!
-    var mainMenuScreen: MainMenuScreen!
-    var settingScreen: SettingScreen!
-    var tabTrayScreen: TabTrayScreen!
 
     /// This test launches the app itself, with its first page already open through a deeplink.
     override func setUpApp() {
@@ -24,10 +20,6 @@ class SwipingTabsTests: BaseTestCase {
     override func setUp() async throws {
         try await super.setUp()
         browserScreen = BrowserScreen(app: app)
-        toolbarScreen = ToolbarScreen(app: app)
-        mainMenuScreen = MainMenuScreen(app: app)
-        settingScreen = SettingScreen(app: app)
-        tabTrayScreen = TabTrayScreen(app: app)
     }
 
     override func tearDown() async throws {
@@ -124,48 +116,5 @@ class SwipingTabsTests: BaseTestCase {
             browserScreen.assertWebViewShowsText(containing: tab.text)
             browserScreen.assertTabSwipeIndicators(previous: false, next: false)
         }
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/4136035
-    // Regression
-    func testSwipeUpOnAddressBarOpensTabTray() throws {
-        guard !iPad() else {
-            throw XCTSkip("The bottom address bar is not available for iPad")
-        }
-        toolbarScreen.tapSettingsMenuButton()
-        mainMenuScreen.tapSettings()
-        settingScreen.navigateToToolbarSettings()
-        settingScreen.selectBottomToolbar()
-        settingScreen.tapBackToSettings()
-        settingScreen.closeSettingsWithDoneButton()
-        waitForTabsButton()
-
-        assertSwipeUpOpensTabTrayOnHomepageAndWebsite()
-
-        tabTrayScreen.switchToPrivateBrowsing()
-        tabTrayScreen.tapOnNewTabButton()
-        waitForTabsButton()
-
-        assertSwipeUpOpensTabTrayOnHomepageAndWebsite()
-    }
-
-    // MARK: - Helpers
-
-    /// Starts on a homepage and leaves the tab tray open.
-    private func assertSwipeUpOpensTabTrayOnHomepageAndWebsite() {
-        assertSwipeUpOnAddressBarOpensTabTray()
-
-        tabTrayScreen.tapOnNewTabButton()
-        browserScreen.dismissMicrosurveyIfExists()
-        browserScreen.openURL(path(forTestPage: TestPages.exampleHTML))
-        waitUntilPageLoad()
-        waitForTabsButton()
-
-        assertSwipeUpOnAddressBarOpensTabTray()
-    }
-
-    private func assertSwipeUpOnAddressBarOpensTabTray() {
-        browserScreen.swipeUpOnAddressBar()
-        tabTrayScreen.assertNewTabButtonExist()
     }
 }

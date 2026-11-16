@@ -95,7 +95,6 @@
         "FindInPageTests",
         "FirefoxSuggestTest",
         "FxScreenGraphTests",
-        "HTTPSFirstModeTests",
         "HistoryTests",
         "HomeButtonTests",
         "HomePageSettingsUITests",

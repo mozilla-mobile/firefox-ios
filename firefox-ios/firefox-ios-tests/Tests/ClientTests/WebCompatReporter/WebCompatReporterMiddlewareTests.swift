@@ -49,6 +49,8 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         let dispatchedType = try XCTUnwrap(dispatched.actionType as? WebCompatReporterMiddlewareActionType)
         XCTAssertEqual(dispatchedType, WebCompatReporterMiddlewareActionType.didLoadInitialDraft)
         XCTAssertEqual(dispatched.url, "https://example.com")
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // MARK: - Page context
@@ -66,6 +68,8 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(dispatchedType, WebCompatReporterMiddlewareActionType.didReadPageContext)
         XCTAssertEqual(dispatched.pageContext?.languages, ["en-GB"])
         XCTAssertEqual(dispatched.pageContext?.fastclick, true)
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_preview_whenThePageWasRead_showsExactlyWhatThePingCarries() throws {
@@ -88,6 +92,8 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(payload.fastclick, true)
         XCTAssertEqual(payload.marfeel, false)
         XCTAssertEqual(payload.mobify, false)
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_preview_whenURLNoLongerMatchesTheTab_dropsThePageFieldsToo() throws {
@@ -103,6 +109,8 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         let payload = try XCTUnwrap(dispatched.previewPayload)
         XCTAssertNil(payload.languages)
         XCTAssertNil(payload.fastclick)
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // MARK: - submit
@@ -117,6 +125,8 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? WebCompatReporterMiddlewareAction)
         let dispatchedType = try XCTUnwrap(dispatched.actionType as? WebCompatReporterMiddlewareActionType)
         XCTAssertEqual(dispatchedType, WebCompatReporterMiddlewareActionType.didSubmit)
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_submit_withAnUnreportableURL_sendsNothing() {
@@ -127,6 +137,8 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(gleanWrapper.submitPingCalled, 0)
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_preview_withAnUnreportableURL_buildsNothing() {
@@ -137,6 +149,8 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
         XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 0)
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // MARK: - Tab-specific info
@@ -150,6 +164,8 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         // is_private_browsing on top of the device's has_touch_screen and is_tablet,
         // plus the app-wide ad_blocker_enabled pref.
         XCTAssertEqual(gleanWrapper.setBooleanCalled, 4)
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_submit_whenURLNoLongerMatchesTheTab_dropsTabFields() {
@@ -159,6 +175,8 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, submitAction())
 
         XCTAssertEqual(gleanWrapper.setBooleanCalled, 3)
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // MARK: - preview
@@ -175,6 +193,8 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         let payload = try XCTUnwrap(dispatched.previewPayload)
         XCTAssertEqual(payload.url, "https://example.com/page")
         XCTAssertEqual(payload.isPrivateBrowsing, false)
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_preview_whenURLNoLongerMatchesTheTab_dropsTabFieldsLikeSubmit() throws {
@@ -189,6 +209,8 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertNil(payload.isPrivateBrowsing)
         XCTAssertNil(payload.blockList)
         XCTAssertNil(payload.userAgentString)
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // MARK: - Pure view actions are not handled by the middleware
@@ -204,6 +226,8 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, action)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // MARK: - Telemetry
@@ -230,6 +254,8 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(savedExtras.reason, WebCompatIssueCategory.videoOrAudio.rawValue)
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_preview_recordsPreviewed() {
@@ -239,6 +265,8 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
         XCTAssertTrue(savedNoExtraEvent(is: GleanMetrics.BrokenSiteReportInteractions.previewed))
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_cancel_recordsCancelled() {
@@ -248,6 +276,8 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
         XCTAssertTrue(savedNoExtraEvent(is: GleanMetrics.BrokenSiteReportInteractions.cancelled))
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_learnMore_recordsLearnMoreTapped() {
@@ -257,6 +287,8 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
         XCTAssertTrue(savedNoExtraEvent(is: GleanMetrics.BrokenSiteReportInteractions.learnMoreTapped))
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // Opting out is the interesting direction now that the blocked list defaults to on.
@@ -268,6 +300,8 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let savedExtras = try XCTUnwrap(createdExtras())
         XCTAssertEqual(savedExtras.hasBlockedTrackersList, false)
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_submit_whenStateWantsAScreenshot_stillRecordsCreatedWithoutOne() throws {
@@ -279,6 +313,8 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(createdExtras())
         XCTAssertEqual(savedExtras.hasScreenshot, false)
         XCTAssertEqual(savedExtras.hasBlockedTrackersList, true)
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // MARK: - Unrelated action
@@ -293,6 +329,8 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, action)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // MARK: - StoreTestUtility
@@ -396,8 +434,21 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
             telemetry: WebCompatReporterTelemetry(gleanWrapper: gleanWrapper),
             pageContextReader: pageContextReader
         )
-
+        trackForMemoryLeaks(subject)
         return subject
+    }
+
+    /// Our middleware providers always retain a strong reference to `self` for ease of use. Thus, `trackForMemoryLeaks` will
+    /// fail in our unit tests due to a strong circular reference to the middleware retained by its provider closures. In
+    /// practice, this is not a memory leak issue, as we permanently allocate and retain our middleware providers for the
+    /// entire app lifecycle.
+    ///
+    /// As a work around for unit tests, we should release each middleware's provider closures from memory by assigning an
+    /// empty closure, which does not strongly retain `self`.
+    private func releaseMiddlewareProvidersFromMemory(_ subject: WebCompatReporterMiddleware) {
+        subject.webCompatReporterProvider = emptyMiddlewareProviderFactory()
+        subject.legacyProvider = emptyLegacyMiddlewareFactory()
+        subject.modernProvider = emptyMiddlewareFactory()
     }
 }
 
