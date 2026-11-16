@@ -13,6 +13,8 @@ enum DeeplinkInput {
         case openUrl = "open-url"
         case openText = "open-text"
         case sharesheet = "share-sheet"
+        case testAppInstallation = "test-app-installation"
+        case viewAppInstallation = "view-app-installation"
         case glean
         case widgetMediumTopSitesOpenUrl = "widget-medium-topsites-open-url"
         case widgetSmallQuickLinkOpenUrl = "widget-small-quicklink-open-url"
@@ -54,7 +56,8 @@ enum DeeplinkInput {
                     .widgetSmallQuickLinkOpenCopied, .widgetMediumQuickLinkOpenCopied:
                 return urlQuery?.isWebPage() ?? true
             case .deepLink, .fxaSignIn, .glean,
-                    .widgetSmallQuickLinkClosePrivateTabs, .widgetMediumQuickLinkClosePrivateTabs:
+                    .widgetSmallQuickLinkClosePrivateTabs, .widgetMediumQuickLinkClosePrivateTabs,
+                    .testAppInstallation, .viewAppInstallation:
                 return true
             }
         }

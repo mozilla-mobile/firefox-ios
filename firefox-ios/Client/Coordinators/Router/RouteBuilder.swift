@@ -112,6 +112,24 @@ final class RouteBuilder {
                 }
 
                 return makeShareSheetRoute(urlScanner: urlScanner, shareURL: shareURL)
+
+            case .testAppInstallation:
+                guard let shouldClearInstallationKeychainString = urlScanner.value(query: "shouldClearInstallationKeychain"),
+                      let isFirstLaunchString = urlScanner.value(query: "isFirstLaunch") else {
+                    assertionFailure("Missing params")
+                    return nil
+                }
+
+                let shouldClearInstallationKeychain = (shouldClearInstallationKeychainString as NSString).boolValue
+                let isFirstLaunch = (isFirstLaunchString as NSString).boolValue
+
+                return makeTestAppInstallationRoute(
+                    shouldClearInstallationKeychain: shouldClearInstallationKeychain,
+                    isFirstLaunch: isFirstLaunch
+                )
+
+            case .viewAppInstallation:
+                return .viewAppInstallation
             }
         } else if urlScanner.isHTTPScheme {
             TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .asDefaultBrowser)
@@ -203,6 +221,13 @@ final class RouteBuilder {
 
         // Deeplinks cannot have an associated tab or file, so this must be a website URL `.site` share
         return .sharesheet(shareType: .site(url: shareURL), shareMessage: shareMessage)
+    }
+
+    private func makeTestAppInstallationRoute(shouldClearInstallationKeychain: Bool, isFirstLaunch: Bool) -> Route? {
+        return .testAppInstallation(
+            shouldClearInstallationKeychain: shouldClearInstallationKeychain,
+            isFirstLaunch: isFirstLaunch
+        )
     }
 
     @MainActor
@@ -314,7 +339,7 @@ final class RouteBuilder {
 
     private func recordTelemetry(input: DeeplinkInput.Host, isPrivate: Bool) {
         switch input {
-        case .deepLink, .fxaSignIn, .glean, .sharesheet:
+        case .deepLink, .fxaSignIn, .glean, .sharesheet, .testAppInstallation, .viewAppInstallation:
             return
         case .widgetMediumTopSitesOpenUrl:
             TelemetryWrapper.recordEvent(category: .action, method: .open, object: .mediumTopSitesWidget)

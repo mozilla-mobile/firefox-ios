@@ -77,6 +77,17 @@ enum Route {
     ///   - shareMessage: An optional plain text share message to be shared.
     case sharesheet(shareType: ShareType, shareMessage: ShareMessage?)
 
+    /// A route for testing redownloads (resetting and starting flows).
+    ///
+    /// - Parameters:
+    ///   - isFirstLaunch: If true, fires the logic as if this is a brand new user who is launching the app for the first time. If false, fires the logic for an existing
+    ///                    user flow.
+    ///   - shouldClearInstallationKeychain: Clear the keychain.
+    case testAppInstallation(shouldClearInstallationKeychain: Bool, isFirstLaunch: Bool)
+
+    /// A route for viewing redownloads information. Show a prompt over the BVC with the current installation details.
+    case viewAppInstallation
+
     /// An enumeration representing different sections of the home panel.
     enum HomepanelSection: String, CaseIterable, Equatable {
         case bookmarks

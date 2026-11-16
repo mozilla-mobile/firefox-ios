@@ -398,7 +398,7 @@ final class BrowserCoordinator: BaseCoordinator,
 
         switch route {
         case .searchQuery, .search, .searchURL, .glean, .homepanel, .action, .fxaSignIn, .fxaPairing,
-                .defaultBrowser, .sharesheet:
+             .defaultBrowser, .sharesheet, .testAppInstallation, .viewAppInstallation:
             return true
         case let .settings(section):
             return canHandleSettings(with: section)
@@ -456,6 +456,14 @@ final class BrowserCoordinator: BaseCoordinator,
             case .tutorial:
                 startLaunch(with: .defaultBrowser)
             }
+
+        case let .testAppInstallation(shouldClearInstallationKeychain, isFirstLaunch):
+            // TODO: Call test functionality here
+            print("🐉 IHC - testAppInstallation \(shouldClearInstallationKeychain) \(isFirstLaunch)")
+
+        case .viewAppInstallation:
+            // TODO: Call BVC to show the installation details prompt
+            print("🐉 IHC - viewAppInstallation")
         }
     }
 
