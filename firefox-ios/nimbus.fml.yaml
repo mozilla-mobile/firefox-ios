@@ -24,6 +24,7 @@ include:
   - nimbus-features/cellularDataRestrictedErrorPageFeature.yaml
   - nimbus-features/checkForReinstallsFeature.yaml
   - nimbus-features/configurationProfileFeature.yaml
+  - nimbus-features/creditCardSecurityCodeFeature.yaml
   - nimbus-features/customReaderModeSchemeFeature.yaml
   - nimbus-features/deeplinkOptimizationRefactorFeature.yaml
   - nimbus-features/downloadLiveActivitiesFeature.yaml

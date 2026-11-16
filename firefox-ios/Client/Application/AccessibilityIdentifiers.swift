@@ -970,6 +970,7 @@ enum AccessibilityIdentifiers {
         static let rememberCreditCardHeader = "RememberCreditCard.Header"
         static let yesButton = "RememberCreditCard.yesButton"
         static let manageCardsButton = "RememberCreditCard.manageCardsButton"
+        static let saveSecurityCodesToggle = "RememberCreditCard.saveSecurityCodesToggle"
     }
 
     enum Autofill {

@@ -78,6 +78,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .configurationProfile:
             return checkConfigurationProfileFeature()
 
+        case .creditCardSecurityCode:
+            return nimbus.features.creditCardSecurityCodeFeature.value().enabled
+
         case .customReaderModeScheme:
             return checkCustomReaderModeSchemeFeature()
 

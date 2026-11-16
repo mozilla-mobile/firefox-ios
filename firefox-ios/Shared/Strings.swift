@@ -973,6 +973,16 @@ extension String {
                 tableName: "RememberCard",
                 value: "%@ encrypts your card number. Your security code won’t be saved.",
                 comment: "This value is used as the header for the remember card page. %@ is the app name (e.g. Firefox).")
+            public static let HeaderWithSecurityCode = MZLocalizedString(
+                key: "CreditCard.RememberCard.HeaderWithSecurityCode.v162",
+                tableName: "RememberCard",
+                value: "%@ encrypts your card number and security code for faster payments later.",
+                comment: "Header of the bottom sheet asking the user to save a credit card they just entered on a webpage, shown when saving the card's security code (CVV) is available. %@ is the app name (e.g. Firefox).")
+            public static let SaveSecurityCodesToggleTitle = MZLocalizedString(
+                key: "CreditCard.RememberCard.SaveSecurityCodesToggleTitle.v162",
+                tableName: "RememberCard",
+                value: "Save security codes",
+                comment: "Label of a switch in the bottom sheet asking the user to save or update a credit card. When on, the card's security code (CVV) is saved and autofilled. When off, security codes aren't saved, autofilled or shown in settings.")
             public static let MainButtonTitle = MZLocalizedString(
                 key: "CreditCard.RememberCard.MainButtonTitle.v122",
                 tableName: "RememberCard",

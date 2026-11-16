@@ -13,6 +13,8 @@ import XCTest
 class CreditCardBottomSheetViewModelTests: XCTestCase {
     private var autofill: MockCreditCardProvider!
     private var dispatchQueue: MockDispatchQueue!
+    private var featureFlags: MockNimbusFeatureFlags!
+    private var userDefaults: MockUserDefaults!
     private var samplePlainTextCard = UnencryptedCreditCardFields(ccName: "Allen Burges",
                                                                   ccNumber: "4111111111111111",
                                                                   ccNumberLast4: "1111",
@@ -42,11 +44,16 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         super.setUp()
         autofill = MockCreditCardProvider()
         dispatchQueue = MockDispatchQueue()
+        featureFlags = MockNimbusFeatureFlags()
+        featureFlags.enabledFlags = [.creditCardSecurityCode]
+        userDefaults = MockUserDefaults()
     }
 
     override func tearDown() {
         autofill = nil
         dispatchQueue = nil
+        featureFlags = nil
+        userDefaults = nil
         super.tearDown()
     }
 
@@ -481,12 +488,134 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
     // MARK: Helper methods
 
     @MainActor
-    private func createSubject() -> CreditCardBottomSheetViewModel {
+    // MARK: - Security Code
+
+    @MainActor
+    func test_showsSaveSecurityCodesToggle_saveWithCapturedCvv_isTrue() {
+        let subject = createSubject(decryptedCreditCard: samplePlainTextCardWithCvv)
+
+        XCTAssertTrue(subject.showsSaveSecurityCodesToggle)
+        XCTAssertEqual(subject.header,
+                       String(format: .CreditCard.RememberCreditCard.HeaderWithSecurityCode,
+                              AppName.shortName.rawValue))
+    }
+
+    @MainActor
+    func test_showsSaveSecurityCodesToggle_updateWithCapturedCvv_isTrue() {
+        let subject = createSubject(decryptedCreditCard: samplePlainTextCardWithCvv, state: .update)
+
+        XCTAssertTrue(subject.showsSaveSecurityCodesToggle)
+        XCTAssertNil(subject.header)
+    }
+
+    @MainActor
+    func test_showsSaveSecurityCodesToggle_featureDisabled_isFalse() {
+        featureFlags.enabledFlags = []
+        let subject = createSubject(decryptedCreditCard: samplePlainTextCardWithCvv)
+
+        XCTAssertFalse(subject.showsSaveSecurityCodesToggle)
+        XCTAssertEqual(subject.header, CreditCardBottomSheetState.save.header)
+    }
+
+    @MainActor
+    func test_showsSaveSecurityCodesToggle_noCapturedCvv_isFalse() {
+        let subject = createSubject()
+
+        XCTAssertFalse(subject.showsSaveSecurityCodesToggle)
+    }
+
+    @MainActor
+    func test_showsSaveSecurityCodesToggle_selectSavedCard_isFalse() {
+        let subject = createSubject(decryptedCreditCard: samplePlainTextCardWithCvv, state: .selectSavedCard)
+
+        XCTAssertFalse(subject.showsSaveSecurityCodesToggle)
+    }
+
+    @MainActor
+    func test_isSaveSecurityCodesEnabled_defaultsToOnAndPersists() {
+        let subject = createSubject(decryptedCreditCard: samplePlainTextCardWithCvv)
+
+        XCTAssertTrue(subject.isSaveSecurityCodesEnabled)
+        subject.isSaveSecurityCodesEnabled = false
+
+        XCTAssertFalse(subject.isSaveSecurityCodesEnabled)
+        XCTAssertEqual(userDefaults.object(forKey: PrefsKeys.KeyAutofillCreditCardSecurityCodeStatus) as? Bool, false)
+    }
+
+    @MainActor
+    func test_save_toggleOff_dropsCapturedCvv() throws {
+        let subject = createSubject(decryptedCreditCard: samplePlainTextCardWithCvv)
+        subject.isSaveSecurityCodesEnabled = false
+
+        let value = try XCTUnwrap(subject.getPlainCreditCardValues(bottomSheetState: .save))
+
+        XCTAssertNil(value.ccCvv)
+    }
+
+    @MainActor
+    func test_save_toggleOn_keepsCapturedCvv() throws {
+        let subject = createSubject(decryptedCreditCard: samplePlainTextCardWithCvv)
+
+        let value = try XCTUnwrap(subject.getPlainCreditCardValues(bottomSheetState: .save))
+
+        XCTAssertEqual(value.ccCvv, "789")
+    }
+
+    @MainActor
+    func test_update_toggleOff_leavesStoredCvvUntouched() throws {
+        let subject = createSubject(decryptedCreditCard: samplePlainTextCardWithCvv, state: .update)
+        subject.isSaveSecurityCodesEnabled = false
+
+        let value = try XCTUnwrap(subject.getPlainCreditCardValues(bottomSheetState: .update))
+
+        // A nil CVV keeps whatever is already stored for the card
+        XCTAssertNil(value.ccCvv)
+    }
+
+    @MainActor
+    func test_select_toggleOff_doesNotFillSavedCvv() throws {
+        userDefaults.set(false, forKey: PrefsKeys.KeyAutofillCreditCardSecurityCodeStatus)
+        let subject = createSubject(state: .selectSavedCard)
+        var savedCard = sampleCreditCard
+        savedCard.ccCvv = "321"
+        subject.creditCards = [savedCard]
+
+        let value = try XCTUnwrap(subject.getPlainCreditCardValues(bottomSheetState: .selectSavedCard, row: 0))
+
+        XCTAssertNil(value.ccCvv)
+    }
+
+    @MainActor
+    func test_select_featureDisabled_doesNotFillSavedCvv() throws {
+        featureFlags.enabledFlags = []
+        let subject = createSubject(state: .selectSavedCard)
+        var savedCard = sampleCreditCard
+        savedCard.ccCvv = "321"
+        subject.creditCards = [savedCard]
+
+        let value = try XCTUnwrap(subject.getPlainCreditCardValues(bottomSheetState: .selectSavedCard, row: 0))
+
+        XCTAssertNil(value.ccCvv)
+    }
+
+    private var samplePlainTextCardWithCvv: UnencryptedCreditCardFields {
+        var card = samplePlainTextCard
+        card.ccCvv = "789"
+        return card
+    }
+
+    @MainActor
+    private func createSubject(
+        decryptedCreditCard: UnencryptedCreditCardFields? = nil,
+        state: CreditCardBottomSheetState = .save
+    ) -> CreditCardBottomSheetViewModel {
         let subject = CreditCardBottomSheetViewModel(
             creditCardProvider: autofill,
             creditCard: sampleCreditCard,
-            decryptedCreditCard: samplePlainTextCard,
-            state: CreditCardBottomSheetState.save
+            decryptedCreditCard: decryptedCreditCard ?? samplePlainTextCard,
+            securityCodeSettings: CreditCardSecurityCodeSettings(featureFlagsProvider: featureFlags,
+                                                                 userDefaults: userDefaults),
+            state: state
         )
         trackForMemoryLeaks(subject)
         return subject

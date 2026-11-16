@@ -31,6 +31,8 @@ class CreditCardBottomSheetViewController: UIViewController,
         static let headerPreferredHeight: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 64 + 24 : 84 + 24
         static let estimatedRowHeight: CGFloat = 86
         static let closeButtonMarginAndWidth: CGFloat = 46.0
+        static let securityCodeToggleSpacing: CGFloat = 16.0
+        static let estimatedSecurityCodeToggleHeight: CGFloat = 52.0
     }
 
     var notificationCenter: NotificationProtocol
@@ -94,6 +96,16 @@ class CreditCardBottomSheetViewController: UIViewController,
     private lazy var yesButton: PrimaryRoundedButton = .build { button in
         button.addTarget(self, action: #selector(self.didTapYes), for: .touchUpInside)
     }
+
+    /// Only created and added to the hierarchy when `viewModel.showsSaveSecurityCodesToggle` is true.
+    private lazy var securityCodeToggleView: CreditCardBottomSheetSecurityCodeToggleView = {
+        let toggleView = CreditCardBottomSheetSecurityCodeToggleView(isOn: viewModel.isSaveSecurityCodesEnabled)
+        toggleView.translatesAutoresizingMaskIntoConstraints = false
+        toggleView.onToggle = { [weak self] isOn in
+            self?.viewModel.isSaveSecurityCodesEnabled = isOn
+        }
+        return toggleView
+    }()
 
     private var contentViewHeightConstraint: NSLayoutConstraint?
     private var contentWidthConstraint: NSLayoutConstraint?
@@ -175,6 +187,9 @@ class CreditCardBottomSheetViewController: UIViewController,
         }
 
         contentView.addSubviews(cardTableView, buttonsContainerStackView)
+        if viewModel.showsSaveSecurityCodesToggle {
+            contentView.addSubview(securityCodeToggleView)
+        }
         view.addSubview(contentView)
     }
 
@@ -201,7 +216,7 @@ class CreditCardBottomSheetViewController: UIViewController,
                     equalTo: contentView.topAnchor,
                     constant: UX.distanceBetweenHeaderAndTop
                 ),
-                cardTableView.bottomAnchor.constraint(equalTo: buttonsContainerStackView.topAnchor, constant: 0),
+                cardTableView.bottomAnchor.constraint(equalTo: cardTableViewBottomAnchor, constant: 0),
                 cardTableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.tableMargin),
                 cardTableView.trailingAnchor.constraint(
                     equalTo: contentView.trailingAnchor,
@@ -224,6 +239,23 @@ class CreditCardBottomSheetViewController: UIViewController,
                 yesButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.yesButtonHeight),
             ]
         )
+
+        guard viewModel.showsSaveSecurityCodesToggle else { return }
+        NSLayoutConstraint.activate([
+            securityCodeToggleView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                            constant: UX.tableMargin),
+            securityCodeToggleView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                             constant: -UX.tableMargin),
+            securityCodeToggleView.bottomAnchor.constraint(equalTo: buttonsContainerStackView.topAnchor,
+                                                           constant: -UX.securityCodeToggleSpacing),
+        ])
+    }
+
+    /// The table sits right above the security code toggle when it's shown, otherwise above the buttons.
+    private var cardTableViewBottomAnchor: NSLayoutYAxisAnchor {
+        return viewModel.showsSaveSecurityCodesToggle
+            ? securityCodeToggleView.topAnchor
+            : buttonsContainerStackView.topAnchor
     }
 
     func estimatedContentHeight() -> CGFloat {
@@ -246,15 +278,23 @@ class CreditCardBottomSheetViewController: UIViewController,
             estimatedContentHeight += UX.yesButtonHeight
         }
 
+        if viewModel.showsSaveSecurityCodesToggle {
+            estimatedContentHeight += UX.estimatedSecurityCodeToggleHeight + UX.securityCodeToggleSpacing
+        }
+
         return estimatedContentHeight
     }
 
     private func updateContentHeight() {
-        let estimatedContentHeight =
+        var estimatedContentHeight =
             cardTableView.contentSize.height +
             buttonsContainerStackView.frame.height +
             UX.bottomSpacing +
             UX.distanceBetweenHeaderAndTop
+
+        if viewModel.showsSaveSecurityCodesToggle {
+            estimatedContentHeight += securityCodeToggleView.frame.height + UX.securityCodeToggleSpacing
+        }
 
         contentViewHeightConstraint?.constant = estimatedContentHeight
     }
@@ -415,6 +455,9 @@ class CreditCardBottomSheetViewController: UIViewController,
             view.backgroundColor = currentTheme.layer1
         }
 
+        if viewModel.showsSaveSecurityCodesToggle {
+            securityCodeToggleView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        }
         cardTableView.reloadData()
     }
 

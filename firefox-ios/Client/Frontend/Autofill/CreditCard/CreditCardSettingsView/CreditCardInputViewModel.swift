@@ -101,6 +101,12 @@ final class CreditCardInputViewModel: ObservableObject, @unchecked Sendable {
     let autofill: CreditCardProvider
     var creditCard: CreditCard?
     let creditCardValidator: CreditCardValidator
+    private let securityCodeSettings: CreditCardSecurityCodeSettings
+
+    /// Whether the security code field is shown, and stored security codes loaded and saved.
+    var isSecurityCodeEnabled: Bool {
+        securityCodeSettings.isSecurityCodeEnabled
+    }
 
     var month: Int64? {
         Int64(expirationDate.prefix(2))
@@ -192,6 +198,7 @@ final class CreditCardInputViewModel: ObservableObject, @unchecked Sendable {
          creditCard: CreditCard? = nil,
          creditCardValidator: CreditCardValidator = CreditCardValidator(),
          creditCardProvider: CreditCardProvider,
+         securityCodeSettings: CreditCardSecurityCodeSettings = CreditCardSecurityCodeSettings(),
          logger: Logger = DefaultLogger.shared
     ) {
         self.profile = profile
@@ -199,6 +206,7 @@ final class CreditCardInputViewModel: ObservableObject, @unchecked Sendable {
         self.creditCard = creditCard
         self.state = .add
         self.creditCardValidator = creditCardValidator
+        self.securityCodeSettings = securityCodeSettings
         self.logger = logger
         self.isRightBarButtonEnabled = initialStateToEnableTopRightButton()
     }
@@ -211,6 +219,7 @@ final class CreditCardInputViewModel: ObservableObject, @unchecked Sendable {
          creditCard: CreditCard? = nil,
          state: CreditCardEditState,
          creditCardValidator: CreditCardValidator = CreditCardValidator(),
+         securityCodeSettings: CreditCardSecurityCodeSettings = CreditCardSecurityCodeSettings(),
          logger: Logger = DefaultLogger.shared
     ) {
         self.profile = profile
@@ -220,6 +229,7 @@ final class CreditCardInputViewModel: ObservableObject, @unchecked Sendable {
         self.creditCard = creditCard
         self.state = state
         self.creditCardValidator = creditCardValidator
+        self.securityCodeSettings = securityCodeSettings
         self.logger = logger
         self.isRightBarButtonEnabled = initialStateToEnableTopRightButton()
     }
@@ -298,7 +308,7 @@ final class CreditCardInputViewModel: ObservableObject, @unchecked Sendable {
         guard let creditCard = creditCard else { return }
         nameOnCard = creditCard.ccName
         cardNumber = creditCard.ccNumber
-        securityCode = creditCard.ccCvv ?? ""
+        securityCode = isSecurityCodeEnabled ? creditCard.ccCvv ?? "" : ""
         let month = creditCard.ccExpMonth
         isRightBarButtonEnabled = initialStateToEnableTopRightButton()
         let formattedMonth = month < 10 ? String(format: "%02d", month) : String(month)
@@ -353,8 +363,9 @@ final class CreditCardInputViewModel: ObservableObject, @unchecked Sendable {
     }
 
     /// `nil` leaves the stored CVV untouched and `""` deletes it, so an emptied field only clears
-    /// a card that actually had one.
+    /// a card that actually had one. A hidden field never touches the stored CVV.
     private var securityCodeToSave: String? {
+        guard isSecurityCodeEnabled else { return nil }
         guard securityCode.isEmpty else { return securityCode }
         return creditCard?.ccCvv?.isEmpty == false ? "" : nil
     }

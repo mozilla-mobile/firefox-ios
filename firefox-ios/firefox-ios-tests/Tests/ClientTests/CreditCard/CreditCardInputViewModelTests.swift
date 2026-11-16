@@ -4,6 +4,7 @@
 
 import Foundation
 import MozillaAppServices
+import Shared
 import Storage
 import XCTest
 
@@ -15,6 +16,8 @@ class CreditCardInputViewModelTests: XCTestCase {
     private var files: FileAccessor!
     private var autofill: MockCreditCardProvider!
     private var encryptionKey: String!
+    private var featureFlags: MockNimbusFeatureFlags!
+    private var userDefaults: MockUserDefaults!
     private var samplePlainTextCard = UnencryptedCreditCardFields(ccName: "Allen Burges",
                                                                   ccNumber: "4539185806954013",
                                                                   ccNumberLast4: "4013",
@@ -26,11 +29,16 @@ class CreditCardInputViewModelTests: XCTestCase {
         files = makeTemporaryFiles()
         autofill = MockCreditCardProvider()
         profile = makeProfile()
-        viewModel = CreditCardInputViewModel(profile: profile, creditCardProvider: autofill)
+        featureFlags = MockNimbusFeatureFlags()
+        featureFlags.enabledFlags = [.creditCardSecurityCode]
+        userDefaults = MockUserDefaults()
+        viewModel = createViewModel()
     }
 
     override func tearDown() {
         viewModel = nil
+        featureFlags = nil
+        userDefaults = nil
         profile = nil
         autofill = nil
         super.tearDown()
@@ -216,6 +224,48 @@ class CreditCardInputViewModelTests: XCTestCase {
 
         XCTAssertNil(viewModel.getDisplayedCCValues())
         XCTAssertFalse(viewModel.areFieldValuesValid())
+    }
+
+    func testIsSecurityCodeEnabled_featureDisabled_isFalse() {
+        featureFlags.enabledFlags = []
+
+        XCTAssertFalse(viewModel.isSecurityCodeEnabled)
+    }
+
+    func testIsSecurityCodeEnabled_saveSecurityCodesOff_isFalse() {
+        userDefaults.set(false, forKey: PrefsKeys.KeyAutofillCreditCardSecurityCodeStatus)
+
+        XCTAssertFalse(viewModel.isSecurityCodeEnabled)
+    }
+
+    func testSetupViewValues_securityCodesDisabled_doesNotLoadStoredCode() {
+        userDefaults.set(false, forKey: PrefsKeys.KeyAutofillCreditCardSecurityCodeStatus)
+        viewModel.creditCard = makeSavedCard(ccCvv: "321")
+
+        viewModel.setupViewValues()
+
+        XCTAssertEqual(viewModel.securityCode, "")
+    }
+
+    func testGetDisplayedCCValues_securityCodesDisabled_leavesStoredCodeUntouched() {
+        userDefaults.set(false, forKey: PrefsKeys.KeyAutofillCreditCardSecurityCodeStatus)
+        viewModel.creditCard = makeSavedCard(ccCvv: "321")
+        viewModel.setupViewValues()
+        fillValidCardFields()
+
+        let values = viewModel.getDisplayedCCValues()
+
+        XCTAssertNotNil(values)
+        XCTAssertNil(values?.ccCvv)
+    }
+
+    private func createViewModel() -> CreditCardInputViewModel {
+        return CreditCardInputViewModel(profile: profile,
+                                        creditCardProvider: autofill,
+                                        securityCodeSettings: CreditCardSecurityCodeSettings(
+                                            featureFlagsProvider: featureFlags,
+                                            userDefaults: userDefaults
+                                        ))
     }
 
     private func fillValidCardFields() {

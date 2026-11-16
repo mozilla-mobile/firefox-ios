@@ -205,8 +205,10 @@ struct CreditCardInputView: ThemeableView {
         }
     }
 
-    /// A card without a security code has nothing to show in view mode, but one can always be entered.
+    /// A card without a security code has nothing to show in view mode, but one can be entered whenever
+    /// security codes are enabled.
     private var showSecurityCode: Bool {
+        guard viewModel.isSecurityCodeEnabled else { return false }
         return viewModel.state != .view || !viewModel.securityCode.isEmpty
     }
 

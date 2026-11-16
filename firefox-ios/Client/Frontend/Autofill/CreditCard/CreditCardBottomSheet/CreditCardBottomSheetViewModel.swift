@@ -63,6 +63,7 @@ enum CreditCardBottomSheetState: String, Equatable, CaseIterable {
 @MainActor
 final class CreditCardBottomSheetViewModel {
     private var logger: Logger
+    private let securityCodeSettings: CreditCardSecurityCodeSettings
     let autofill: CreditCardProvider
     var creditCard: CreditCard? {
         didSet {
@@ -86,10 +87,12 @@ final class CreditCardBottomSheetViewModel {
          decryptedCreditCard: UnencryptedCreditCardFields?,
          preloadedCreditCards: [CreditCard]? = nil,
          logger: Logger = DefaultLogger.shared,
+         securityCodeSettings: CreditCardSecurityCodeSettings = CreditCardSecurityCodeSettings(),
          state: CreditCardBottomSheetState) {
         self.autofill = creditCardProvider
         self.state = state
         self.logger = logger
+        self.securityCodeSettings = securityCodeSettings
         let shouldUsePreloadedCreditCards = state == .selectSavedCard && preloadedCreditCards != nil
         creditCards = shouldUsePreloadedCreditCards ? preloadedCreditCards : [CreditCard]()
         if !shouldUsePreloadedCreditCards {
@@ -102,6 +105,28 @@ final class CreditCardBottomSheetViewModel {
             self.decryptedCreditCard = decryptedCreditCard
             self.creditCard = decryptedCreditCard?.convertToTempCreditCard()
         }
+    }
+
+    // MARK: Security Code
+
+    /// The "Save security codes" toggle is only offered when saving or updating a card the user entered
+    /// with a security code, and the feature is enabled.
+    var showsSaveSecurityCodesToggle: Bool {
+        guard state != .selectSavedCard,
+              securityCodeSettings.isFeatureEnabled,
+              let securityCode = decryptedCreditCard?.ccCvv
+        else { return false }
+        return !securityCode.isEmpty
+    }
+
+    var isSaveSecurityCodesEnabled: Bool {
+        get { securityCodeSettings.isSaveSecurityCodesEnabled }
+        set { securityCodeSettings.setSaveSecurityCodesEnabled(newValue) }
+    }
+
+    var header: String? {
+        guard showsSaveSecurityCodesToggle, state == .save else { return state.header }
+        return String(format: .CreditCard.RememberCreditCard.HeaderWithSecurityCode, AppName.shortName.rawValue)
     }
 
     // MARK: Main Button Action
@@ -183,15 +208,16 @@ final class CreditCardBottomSheetViewModel {
         switch bottomSheetState {
         case .save:
             guard let plainCard = decryptedCreditCard else { return nil }
-            return plainCard
+            return securityCodeSettings.applying(to: plainCard)
         case .update:
-            guard let creditCard = creditCard else {
+            guard let creditCard = creditCard,
+                  let updatedDecryptedCreditCard = updateDecryptedCreditCard(from: creditCard,
+                                                                             with: creditCard.ccNumber,
+                                                                             fieldValues: decryptedCreditCard)
+            else {
                 return nil
             }
-            let updatedDecryptedCreditCard = updateDecryptedCreditCard(from: creditCard,
-                                                                       with: creditCard.ccNumber,
-                                                                       fieldValues: decryptedCreditCard)
-            return updatedDecryptedCreditCard
+            return securityCodeSettings.applying(to: updatedDecryptedCreditCard)
         case .selectSavedCard:
             guard let row = row,
                   let selectedCreditCard = getSavedCreditCard(for: row)
@@ -215,7 +241,7 @@ final class CreditCardBottomSheetViewModel {
                                                             ccExpYear: yearVal,
                                                             ccType: selectedCreditCard.ccType,
                                                             ccCvv: selectedCreditCard.ccCvv)
-            return plainTextCard
+            return securityCodeSettings.applying(to: plainTextCard)
         }
     }
 

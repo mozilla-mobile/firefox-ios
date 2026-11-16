@@ -23,6 +23,7 @@ enum FeatureFlagID: String, CaseIterable {
     case cellularDataRestrictedErrorPage
     case checkForReinstalls
     case configurationProfile
+    case creditCardSecurityCode
     case customReaderModeScheme
     case deeplinkOptimizationRefactor
     case downloadLiveActivities
@@ -126,6 +127,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .browserDataImport,
                 .checkForReinstalls,
                 .configurationProfile,
+                .creditCardSecurityCode,
                 .customReaderModeScheme,
                 .deeplinkOptimizationRefactor,
                 .downloadLiveActivities,

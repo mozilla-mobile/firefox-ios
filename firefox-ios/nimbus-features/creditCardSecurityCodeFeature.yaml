@@ -1,0 +1,18 @@
+# The configuration for the creditCardSecurityCodeFeature feature
+features:
+  credit-card-security-code-feature:
+    description: >
+      Controls saving, showing and autofilling credit card security codes (CVV).
+    variables:
+      enabled:
+        description: >
+          Whether credit card security codes can be saved, shown in settings and autofilled.
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: true

@@ -3871,9 +3871,14 @@ class BrowserViewController: UIViewController,
     }
 
     func showCreditCardAutofillSheet(fieldValues: UnencryptedCreditCardFields) {
+        let securityCodeSettings = CreditCardSecurityCodeSettings(featureFlagsProvider: featureFlagsProvider)
+        var fieldValues = fieldValues
+        if !securityCodeSettings.isFeatureEnabled {
+            fieldValues.ccCvv = nil
+        }
         self.profile.autofill.checkForCreditCardExistance(
             cardNumber: fieldValues.ccNumberLast4
-        ) { existingCard, error in
+        ) { [fieldValues] existingCard, error in
             guard let existingCard = existingCard else {
                 DispatchQueue.main.async {
                     self.navigationHandler?.showCreditCardAutofill(creditCard: nil,
@@ -3887,7 +3892,8 @@ class BrowserViewController: UIViewController,
             }
 
             // card already saved should update if any of its other values are different
-            if !fieldValues.isEqualToCreditCard(creditCard: existingCard) {
+            // With "Save security codes" off, a differing security code alone isn't worth an update prompt
+            if !securityCodeSettings.applying(to: fieldValues).isEqualToCreditCard(creditCard: existingCard) {
                 DispatchQueue.main.async {
                     self.navigationHandler?.showCreditCardAutofill(creditCard: existingCard,
                                                                    decryptedCard: fieldValues,

@@ -136,6 +136,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .creditCardSecurityCode,
+                titleText: format(string: "Credit Card Security Code"),
+                statusText: format(string: "Toggle to enable saving and autofilling card security codes (CVV)")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .customReaderModeScheme,
                 titleText: format(string: "Custom Reader Mode Scheme"),
                 statusText: format(string: "Toggle to serve reader mode via the readermode:// scheme handler")

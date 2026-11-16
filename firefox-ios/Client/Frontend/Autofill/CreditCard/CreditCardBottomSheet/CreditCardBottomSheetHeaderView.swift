@@ -123,7 +123,7 @@ class CreditCardBottomSheetHeaderView: UITableViewHeaderFooterView,
     private func setupContent() {
         guard let viewModel = viewModel else { return }
         titleLabel.text = viewModel.state.title
-        headerLabel.text = viewModel.state.header
+        headerLabel.text = viewModel.header
     }
 
     func applyTheme(theme: Theme) {

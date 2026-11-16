@@ -72,6 +72,7 @@ public enum PrefsKeys {
     public static let KeyCurrentInstallVersion = "KeyCurrentInstallVersion"
     public static let KeySecondRun = "SecondRun"
     public static let KeyAutofillCreditCardStatus = "KeyAutofillCreditCardStatus"
+    public static let KeyAutofillCreditCardSecurityCodeStatus = "KeyAutofillCreditCardSecurityCodeStatus"
     public static let KeyAutofillAddressStatus = "KeyAutofillAddressStatus"
     public static let ReaderModeProfileKeyStyle = "readermode.style"
 
