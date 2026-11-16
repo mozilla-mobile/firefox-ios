@@ -50,6 +50,29 @@ final class QuickAnswersReturnPillPresenterTests: XCTestCase {
         XCTAssertEqual(pills.count, 1)
     }
 
+    func test_isShowingPill_withoutShow_isFalse() {
+        let subject = createSubject()
+
+        XCTAssertFalse(subject.isShowingPill)
+    }
+
+    func test_isShowingPill_afterShow_isTrue() {
+        let subject = createSubject()
+
+        showPill(on: subject)
+
+        XCTAssertTrue(subject.isShowingPill)
+    }
+
+    func test_isShowingPill_afterHide_isFalse() {
+        let subject = createSubject()
+        showPill(on: subject)
+
+        subject.hide()
+
+        XCTAssertFalse(subject.isShowingPill)
+    }
+
     // MARK: - hide
 
     func test_hide_removesPill() {

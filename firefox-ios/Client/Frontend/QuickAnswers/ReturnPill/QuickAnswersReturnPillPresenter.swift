@@ -40,6 +40,10 @@ final class QuickAnswersReturnPillPresenter {
     private var placement: Placement?
     private var constraints: [NSLayoutConstraint] = []
 
+    var isShowingPill: Bool {
+        return pill != nil
+    }
+
     /// - Parameters:
     ///   - hostView: The view the pill is added to.
     ///   - anchorView: The view the expanded pill sits above, whose top already follows the bar position and keyboard.

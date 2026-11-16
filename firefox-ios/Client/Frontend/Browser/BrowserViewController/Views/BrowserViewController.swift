@@ -2067,7 +2067,13 @@ class BrowserViewController: UIViewController,
     }
 
     private func updateQuickAnswersReturnPillLayout(animated: Bool) {
-        quickAnswersReturnPillPresenter?.updateLayout(quickAnswersReturnPillLayoutContext, animated: animated)
+        guard let quickAnswersReturnPillPresenter, quickAnswersReturnPillPresenter.isShowingPill else { return }
+        let context = quickAnswersReturnPillLayoutContext
+        // Minimizing can change the location capsule's constraints, so settle them before reading its frame.
+        if context.isMinimized && context.isBottomSearchBar {
+            addressToolbarContainer.layoutIfNeeded()
+        }
+        quickAnswersReturnPillPresenter.updateLayout(quickAnswersReturnPillLayoutContext, animated: animated)
     }
 
     // MARK: - Microsurvey
