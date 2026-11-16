@@ -240,7 +240,7 @@ public class BrowserAddressToolbar: UIView,
     /// The frame of the location view's visible capsule in `view`'s coordinates, including the minimized address bar
     /// transform.
     public func locationCapsuleFrame(in view: UIView) -> CGRect {
-        let capsule = locationView.effectView
+        let capsule = locationView.capsuleView
         return capsule.convert(capsule.bounds, to: view)
     }
 
