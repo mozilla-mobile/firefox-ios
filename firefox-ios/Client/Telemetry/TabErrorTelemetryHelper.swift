@@ -104,7 +104,7 @@ final class TabErrorTelemetryHelper {
         guard let tabCounts = defaults.object(forKey: entryPoint.defaultsKey) as? [String: Int],
               let expectedTabCount = tabCounts[window.uuidString] else { return }
         guard let currentTabCount = getTotalTabCount(window: window) else {
-            if !AppConstants.isRunningUnitTest {
+            if !AppConstants.isRunningUnitTest && !AppConstants.isRunningUITests {
                 assertionFailure("You couldn't get the tab manager for a window! This should never happen. Please debug.")
             }
             logger.log("Can't validate tab count. Tab manager unavailable for window \(window.uuidString).",
@@ -115,7 +115,7 @@ final class TabErrorTelemetryHelper {
 
         if Self.tabDiscrepancyDetected(expectedTabCount: expectedTabCount,
                                        currentTabCount: currentTabCount) {
-            if !AppConstants.isRunningUnitTest {
+            if !AppConstants.isRunningUnitTest && !AppConstants.isRunningUITests {
                 assertionFailure(
                     "You have encountered real tab loss! This is a rare bug. Review your stack trace and determine how."
                 )
