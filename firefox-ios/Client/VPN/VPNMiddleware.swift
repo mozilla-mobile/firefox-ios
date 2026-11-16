@@ -4,25 +4,21 @@
 
 import Common
 import Redux
-import Shared
 import VPNKit
 
 @MainActor
 final class VPNMiddleware {
     private let windowManager: WindowManager
-    private let prefs: Prefs
     private let logger: Logger
     private let userPreferences: UserFeaturePreferring
     /// Owned here so the proxy session and its pass rotation live as long as the store.
     private let vpnManager: VPNRunnable?
 
     init(windowManager: WindowManager = AppContainer.shared.resolve(),
-         profile: Profile = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
          userPreferences: UserFeaturePreferring = AppContainer.shared.resolve(),
          vpnManager: VPNRunnable? = VPNMiddleware.makeVPNManager()) {
         self.windowManager = windowManager
-        self.prefs = profile.prefs
         self.logger = logger
         self.userPreferences = userPreferences
         self.vpnManager = vpnManager
@@ -40,10 +36,6 @@ final class VPNMiddleware {
     ) -> VPNRunnable? {
         guard #available(iOS 17.0, *), featureFlags.isEnabled(.vpnFeature) else { return nil }
         return VPNManager()
-    }
-
-    private var selectedCountryCode: String? {
-        prefs.stringForKey(PrefsKeys.VPNSettings.selectedCountryCode)
     }
 
     lazy var vpnProvider: Middleware<AppState> = (legacyProvider, modernProvider)
@@ -94,8 +86,6 @@ final class VPNMiddleware {
             await startVPN()
         case .stop, .continueWithoutVPN:
             await stopVPN()
-        case .changeLocation:
-            await changeVPNLocation()
         case .closeThisTab:
             let tabManager = windowManager.tabManager(for: windowUUID)
             if let selectedTab = tabManager?.selectedTab {
@@ -117,23 +107,10 @@ final class VPNMiddleware {
             return
         }
         do {
-            try await vpnManager.start(countryCode: selectedCountryCode)
+            try await vpnManager.start()
             userPreferences.setPreferenceFor(.vpnFeature, to: true)
         } catch {
             logger.log("VPN start failed: \(error)", level: .warning, category: .vpn)
-        }
-    }
-
-    private func changeVPNLocation() async {
-        guard let vpnManager else {
-            logger.log("VPN location change with no VPNManager registered", level: .warning, category: .vpn)
-            return
-        }
-        guard vpnManager.isRunning else { return }
-        do {
-            try await vpnManager.start(countryCode: selectedCountryCode)
-        } catch {
-            logger.log("VPN location change failed: \(error)", level: .warning, category: .vpn)
         }
     }
 

@@ -159,7 +159,8 @@ final class ToolbarMiddleware {
         case ToolbarMiddlewareActionType.didClearSearch:
             guard let toolbarState = state.componentState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
             else { return }
-            store.dispatch(ToolbarModernAction.searchTermDidClear, forWindowUUID: action.windowUUID)
+            let action = ToolbarAction(windowUUID: action.windowUUID, actionType: ToolbarActionType.clearSearch)
+            store.dispatch(action)
             toolbarTelemetry.clearSearchButtonTapped(isPrivate: toolbarState.isPrivateMode)
 
         case ToolbarMiddlewareActionType.didStartDragInteraction:

@@ -658,11 +658,12 @@ final class AddressToolbarContainer: UIView,
     func searchSuggestions(searchTerm: String) {
         if let windowUUID,
            let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID) {
-            if searchTerm.isEmpty != toolbarState.addressToolbar.isEmptySearch {
-                store.dispatch(
-                    ToolbarModernAction.searchTermDidChange(isEmpty: searchTerm.isEmpty),
-                    forWindowUUID: windowUUID
-                )
+            if searchTerm.isEmpty, !toolbarState.addressToolbar.isEmptySearch {
+                let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didDeleteSearchTerm)
+                store.dispatch(action)
+            } else if !searchTerm.isEmpty, toolbarState.addressToolbar.isEmptySearch {
+                let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didEnterSearchTerm)
+                store.dispatch(action)
             } else if !toolbarState.addressToolbar.didStartTyping {
                 let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didStartTyping)
                 store.dispatch(action)

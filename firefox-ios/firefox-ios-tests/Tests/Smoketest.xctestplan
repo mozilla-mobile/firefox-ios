@@ -266,7 +266,6 @@
         "FindInPageTests\/testQueryWithNoMatches()",
         "FirefoxSuggestTest",
         "FxScreenGraphTests",
-        "HTTPSFirstModeTests",
         "HistoryTests\/testClearHistoryFromSettings()",
         "HistoryTests\/testClearRecentlyClosedHistory()",
         "HistoryTests\/testClearRecentlyClosedHistory_tabTrayExperimentOff()",

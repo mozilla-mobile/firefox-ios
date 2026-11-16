@@ -3,41 +3,40 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
-import ComponentLibrary
 @testable import SummarizeKit
 
 @MainActor
 final class AnimationControllerTests: XCTestCase {
-    private var loadingStackView: UIView!
-    private var parentViewController: UIViewController!
+    private var view: UIView!
+    private var loadingLabel: UILabel!
     private var snapshotContainer: UIView!
     private var snapshotView: UIView!
     private var summaryView: UIView!
     private var infoView: UIView!
-    private var backgroundView: AIBackgroundEffectView!
+    private var backgroundGradient: CAGradientLayer!
     private var borderOverlayController: UIViewController!
     private let transform = CGAffineTransform(translationX: 0, y: 100)
 
     override func setUp() async throws {
         try await super.setUp()
-        loadingStackView = UIView()
-        parentViewController = UIViewController()
+        view = UIView(frame: CGRect(x: 0, y: 0, width: 300, height: 300))
+        loadingLabel = UILabel()
         snapshotContainer = UIView()
         snapshotView = UIView()
         summaryView = UIView()
         infoView = UIView()
-        backgroundView = AIBackgroundEffectView(parentController: parentViewController)
+        backgroundGradient = CAGradientLayer()
         borderOverlayController = UIViewController()
     }
 
     override func tearDown() async throws {
-        loadingStackView = nil
-        parentViewController = nil
+        view = nil
+        loadingLabel = nil
         snapshotContainer = nil
         snapshotView = nil
         summaryView = nil
         infoView = nil
-        backgroundView = nil
+        backgroundGradient = nil
         borderOverlayController = nil
         try await super.tearDown()
     }
@@ -48,17 +47,18 @@ final class AnimationControllerTests: XCTestCase {
         controller.animateViewDidAppear(snapshotTransform: transform) {}
 
         XCTAssertEqual(snapshotContainer.transform, transform)
-        XCTAssertEqual(loadingStackView.alpha, 1.0)
+        XCTAssertEqual(loadingLabel.alpha, 1.0)
         XCTAssertNotEqual(snapshotView.layer.cornerRadius, 0.0)
     }
 
     func test_animateToSummary() {
         let controller = createSubject()
-        let overlayParent = UIViewController()
-        overlayParent.addChild(borderOverlayController)
-        overlayParent.view.addSubview(borderOverlayController.view)
-        borderOverlayController.didMove(toParent: overlayParent)
+        let parentViewController = UIViewController()
+        parentViewController.addChild(borderOverlayController)
+        parentViewController.view.addSubview(borderOverlayController.view)
+        borderOverlayController.didMove(toParent: parentViewController)
         var applyThemeCalled = false
+        view.layer.addSublayer(backgroundGradient)
         summaryView.alpha = 0.0
 
         controller.animateToSummary(
@@ -68,11 +68,12 @@ final class AnimationControllerTests: XCTestCase {
             }) {}
 
         XCTAssertEqual(summaryView.alpha, 1.0)
-        XCTAssertEqual(loadingStackView.alpha, 0.0)
+        XCTAssertEqual(loadingLabel.alpha, 0.0)
         XCTAssertEqual(snapshotContainer.transform, transform)
         XCTAssertTrue(applyThemeCalled)
         XCTAssertNil(borderOverlayController.parent)
         XCTAssertNil(borderOverlayController.view.superview)
+        XCTAssertNil(backgroundGradient.superlayer)
     }
 
     func test_animateToSummary_doesNotAnimateIfAlreadyVisible() {
@@ -97,8 +98,18 @@ final class AnimationControllerTests: XCTestCase {
 
         XCTAssertEqual(infoView.alpha, 1.0)
         XCTAssertEqual(summaryView.alpha, 0.0)
-        XCTAssertEqual(loadingStackView.alpha, 0.0)
+        XCTAssertEqual(loadingLabel.alpha, 0.0)
         XCTAssertEqual(snapshotContainer.transform, transform)
+        XCTAssertEqual(backgroundGradient.superlayer, view.layer)
+    }
+
+    func test_animateToInfo_doesNotInsertBackgroundGradientIfAlreadyPresent() {
+        let controller = createSubject()
+        view.layer.addSublayer(backgroundGradient)
+
+        controller.animateToInfo(snapshotTransform: transform) {}
+
+        XCTAssertEqual(view.layer.sublayers?.count ?? 0, 1, "There should be only one sublayer")
     }
 
     func test_animateToPanEnded() {
@@ -116,7 +127,7 @@ final class AnimationControllerTests: XCTestCase {
         controller.animateToDismiss(snapshotTransform: transform) {}
 
         XCTAssertEqual(infoView.alpha, 0.0)
-        XCTAssertEqual(loadingStackView.alpha, 0.0)
+        XCTAssertEqual(loadingLabel.alpha, 0.0)
         XCTAssertEqual(snapshotContainer.transform, transform)
         XCTAssertEqual(snapshotView.layer.cornerRadius, 0.0)
     }
@@ -125,12 +136,13 @@ final class AnimationControllerTests: XCTestCase {
 
     private func createSubject() -> DefaultAnimationController {
         return DefaultAnimationController(
-            loadingStackView: loadingStackView,
+            view: view,
+            loadingLabel: loadingLabel,
             snapshotContainer: snapshotContainer,
             snapshotView: snapshotView,
             summaryView: summaryView,
             infoView: infoView,
-            backgroundView: backgroundView,
+            backgroundGradient: backgroundGradient,
             borderOverlayController: borderOverlayController
         )
     }

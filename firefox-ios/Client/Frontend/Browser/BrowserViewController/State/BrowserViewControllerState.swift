@@ -300,6 +300,9 @@ struct BrowserViewControllerState: ScreenState {
         state: BrowserViewControllerState
     ) -> BrowserViewControllerState {
         switch action.actionType {
+        case ToolbarActionType.didDeleteSearchTerm:
+            guard case .webview = state.browserViewType else { return passthroughState(from: state, action: action) }
+            return stateForToolbarAction(action, state)
         case ToolbarActionType.didStartEditingUrl:
             return stateForToolbarAction(action, state)
         default:

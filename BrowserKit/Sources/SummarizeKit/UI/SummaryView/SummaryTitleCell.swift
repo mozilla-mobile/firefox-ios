@@ -3,39 +3,37 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import Foundation
 import UIKit
 
 final class SummaryTitleCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private enum UX {
-        static let topPadding: CGFloat = 32.0
-        static let bottomPadding: CGFloat = 24.0
-        static let horizontalPadding: CGFloat = 44.0
+        static let titleBottomPadding: CGFloat = 20
     }
-
     private let titleLabel: UILabel = .build {
         $0.font = FXFontStyles.Bold.title1.scaledFont()
-        $0.numberOfLines = 0
         $0.adjustsFontForContentSizeCategory = true
+        $0.numberOfLines = 0
     }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupSubviews()
+        setup()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setupSubviews() {
+    private func setup() {
         contentView.addSubview(titleLabel)
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: UX.topPadding),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
-                                                constant: UX.horizontalPadding),
+                                                constant: SummaryCellUX.horizontalPadding),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
-                                                 constant: -UX.horizontalPadding),
-            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -UX.bottomPadding)
+                                                 constant: -SummaryCellUX.horizontalPadding),
+            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -UX.titleBottomPadding)
         ])
     }
 

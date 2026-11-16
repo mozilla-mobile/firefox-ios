@@ -188,7 +188,6 @@ open class FxAccountManager: @unchecked Sendable {
     ) {
         fxaFsmQueue.async {
             self.pendingAuthType = authData.authType
-            let prevState = self.state
             let event = FxaEvent.completeOAuthFlow(code: authData.code, state: authData.state)
             do {
                 self.state = try self.requireAccount().processEvent(event: event)
@@ -198,7 +197,7 @@ open class FxAccountManager: @unchecked Sendable {
                 DispatchQueue.main.async { completionHandler(.failure(error)) }
                 return
             }
-            self.accountStateSideEffects(via: event, prevState: prevState)
+            self.accountStateSideEffects(forState: self.state, via: event)
             let result: Result<Void, Error>
             if case .connected = self.state {
                 result = .success(())
@@ -378,7 +377,6 @@ open class FxAccountManager: @unchecked Sendable {
     /// Must be called on `fxaFsmQueue`.
     func processEvent(_ fxaEvent: FxaEvent) {
         FxALog.debug("processEvent: event '\(fxaEvent)'")
-        let prevState = state
         do {
             state = try requireAccount().processEvent(event: fxaEvent)
         } catch {
@@ -386,11 +384,11 @@ open class FxAccountManager: @unchecked Sendable {
             return
         }
         FxALog.debug("processEvent: new FxaState '\(state)'")
-        accountStateSideEffects(via: fxaEvent, prevState: prevState)
+        accountStateSideEffects(forState: state, via: fxaEvent)
     }
 
-    func accountStateSideEffects(via: FxaEvent, prevState: FxaState) {
-        switch state {
+    func accountStateSideEffects(forState: FxaState, via: FxaEvent) {
+        switch forState {
         case .disconnected:
             switch via {
             case .disconnect:
@@ -424,13 +422,9 @@ open class FxAccountManager: @unchecked Sendable {
                 pendingAuthType = nil
                 ignoreCache = true
             case .checkAuthorizationStatus:
-                if prevState == .authIssues {
-                    // Recovered from auth problem
-                    authType = .recovered
-                    ignoreCache = true
-                } else {
-                    return
-                }
+                // Recovered from auth problem
+                authType = .recovered
+                ignoreCache = true
             default:
                 return
             }

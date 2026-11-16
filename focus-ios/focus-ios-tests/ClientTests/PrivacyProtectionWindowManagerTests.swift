@@ -11,7 +11,21 @@ import XCTest
 #endif
 
 final class PrivacyProtectionWindowManagerTests: XCTestCase {
+    private var mainWindow: UIWindow!
     private var privacyWindowBuildCount = 0
+    private var mainWindowRestoreCount = 0
+
+    override func setUp() {
+        super.setUp()
+        mainWindow = UIWindow()
+        privacyWindowBuildCount = 0
+        mainWindowRestoreCount = 0
+    }
+
+    override func tearDown() {
+        mainWindow = nil
+        super.tearDown()
+    }
 
     private func makeManager(
         privacyWindowFactory: @escaping () -> UIWindow? = { UIWindow() }
@@ -20,6 +34,10 @@ final class PrivacyProtectionWindowManagerTests: XCTestCase {
             privacyWindowFactory: { [unowned self] in
                 privacyWindowBuildCount += 1
                 return privacyWindowFactory()
+            },
+            mainWindowProvider: { [unowned self] in
+                mainWindowRestoreCount += 1
+                return mainWindow
             },
             rootViewControllerFactory: { UIViewController() }
         )
@@ -52,27 +70,13 @@ final class PrivacyProtectionWindowManagerTests: XCTestCase {
         XCTAssertFalse(firstWindow?.isHidden ?? true)
     }
 
-    func testShowLeavesMainWindowKey() throws {
-        // Regression for FXIOS-17309: the overlay must not take key status, otherwise
-        // the keyboard session on the main window is torn down while it is covered.
-        // Only a window attached to a scene can become key, so borrow the host app's.
-        let windowScene = try XCTUnwrap(
-            UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }.first
-        )
-        let previousKeyWindow = windowScene.keyWindow
-        let mainWindow = UIWindow(windowScene: windowScene)
-        mainWindow.makeKeyAndVisible()
-        defer {
-            mainWindow.isHidden = true
-            previousKeyWindow?.makeKey()
-        }
-        let manager = makeManager(privacyWindowFactory: { UIWindow(windowScene: windowScene) })
-
+    func testHideRestoresMainWindow() {
+        let manager = makeManager()
         manager.show()
-        defer { manager.hide() }
 
-        XCTAssertTrue(mainWindow.isKeyWindow)
-        XCTAssertFalse(manager.privacyWindow?.isKeyWindow ?? true)
+        manager.hide()
+
+        XCTAssertEqual(mainWindowRestoreCount, 1)
     }
 
     func testShowIsNoOpWhenNoWindowSceneAvailable() {

@@ -885,8 +885,9 @@ public protocol RemoteSettingsServiceProtocol: AnyObject, Sendable {
     func makeClient(collectionName: String)  -> RemoteSettingsClient
     
     /**
-     * Set the telemetry implementation used to record Glean metrics (eg. Kotlin, Swift).
-     * If `glean-sym` is enabled, this is not necessary and will be ignored.
+     * Set the telemetry implementation used to record Glean metrics.
+     * This should be set to a real implementation (eg. Kotlin, Swift).
+     * If not set, all metric recording is a no-op.
      */
     func setTelemetry(telemetry: RemoteSettingsTelemetry) 
     
@@ -1016,8 +1017,9 @@ open func makeClient(collectionName: String) -> RemoteSettingsClient  {
 }
     
     /**
-     * Set the telemetry implementation used to record Glean metrics (eg. Kotlin, Swift).
-     * If `glean-sym` is enabled, this is not necessary and will be ignored.
+     * Set the telemetry implementation used to record Glean metrics.
+     * This should be set to a real implementation (eg. Kotlin, Swift).
+     * If not set, all metric recording is a no-op.
      */
 open func setTelemetry(telemetry: RemoteSettingsTelemetry)  {try! rustCall() {
         uniffiCallStatus in
@@ -2579,7 +2581,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_remote_settings_checksum_method_remotesettingsservice_make_client() != 53616) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_remote_settings_checksum_method_remotesettingsservice_set_telemetry() != 20029) {
+    if (uniffi_remote_settings_checksum_method_remotesettingsservice_set_telemetry() != 42237) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_remote_settings_checksum_method_remotesettingsservice_sync() != 918) {

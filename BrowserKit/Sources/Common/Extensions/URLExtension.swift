@@ -390,11 +390,26 @@ extension URL {
         components?.scheme = scheme
         components?.host = host
 
-        // HTML-encode query item values
+        // sanitize query items
         if let queryItems = components?.queryItems {
-            components?.queryItems = queryItems.map {
-                URLQueryItem(name: $0.name, value: $0.value?.htmlEntityEncodedString)
+            var safeQueryItems: [URLQueryItem] = []
+
+            for item in queryItems {
+                // percent-encoded characters
+                guard let decodedValue = item.value?.removingPercentEncoding else {
+                    return nil
+                }
+
+                // HTML special characters
+                let htmlEncodedValue = decodedValue.htmlEntityEncodedString
+
+                // New query item with the HTML-encoded value
+                let safeItem = URLQueryItem(name: item.name, value: htmlEncodedValue)
+                safeQueryItems.append(safeItem)
             }
+
+            // Replace the original query items with the "safe" ones
+            components?.queryItems = safeQueryItems
         }
 
         return components?.url

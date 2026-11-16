@@ -5,7 +5,6 @@
 import UIKit
 import Common
 import Shared
-import ComponentLibrary
 
 // TODO: - FXIOS-16295 improve VoiceOver by adding notification announcement before and after recording.
 public final class QuickAnswersViewController: UIViewController, Themeable {
@@ -16,11 +15,10 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         static let followUpButtonSize: CGFloat = 62.0
         static let followUpFadeOutDuration: TimeInterval = 0.3
         static let followUpFadeInDuration: TimeInterval = 0.2
-        static let resultBlobsFadeDelay: TimeInterval = 0.2
     }
 
     // MARK: - Properties
-    private lazy var backgroundEffectView = AIBackgroundEffectView(parentController: self)
+    private lazy var backgroundEffectView = BackgroundEffectView(parentController: self)
     private lazy var closeButton: UIButton = .build { [weak self] in
         $0.setImage(
             UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate),
@@ -222,7 +220,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
                     self?.errorHandler.handleSearchError(error)
                 } else {
                     self?.triggerHaptic()
-                    self?.backgroundEffectView.showResult(blobsRevealDelay: UX.resultBlobsFadeDelay)
+                    self?.backgroundEffectView.showResult()
                     self?.showFollowUpButton()
                     self?.contentView.configureResult(
                         result.resultText,

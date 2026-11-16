@@ -10,7 +10,6 @@ final class MockSnapshotLayoutCalculator: SnapshotLayoutCalculator {
     var didCallCalculateInfoTransform = 0
     var didCallCalculateDismissTransform = 0
     var didCallCalculateViewDidAppearTransform = 0
-    var didCallCalculateBlobsTransform = 0
 
     func calculateSummaryTransform(context: SummarizeKit.LayoutContext) -> CGAffineTransform {
         didCallCalculateSummaryTransform += 1
@@ -29,11 +28,6 @@ final class MockSnapshotLayoutCalculator: SnapshotLayoutCalculator {
 
     func calculateViewDidAppearTransform(context: SummarizeKit.LayoutContext) -> CGAffineTransform {
         didCallCalculateViewDidAppearTransform += 1
-        return .identity
-    }
-
-    func calculateBlobsTransform(context: SummarizeKit.LayoutContext) -> CGAffineTransform {
-        didCallCalculateBlobsTransform += 1
         return .identity
     }
 }

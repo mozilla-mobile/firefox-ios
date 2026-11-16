@@ -2042,6 +2042,24 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertEqual(browserViewController.handleQuery, "firefox")
     }
 
+    func testHandle_completesPendingDeeplinkTabActivity() {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+        subject.browserHasLoaded()
+        AppEventQueue.started(.pendingDeeplinkTab(windowUUID))
+        defer {
+            if AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(windowUUID)) {
+                AppEventQueue.completed(.pendingDeeplinkTab(windowUUID))
+            }
+        }
+        XCTAssertTrue(AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(windowUUID)))
+
+        let route = Route.search(url: URL(string: "https://example.com")!, isPrivate: false)
+        subject.handle(route: route)
+
+        XCTAssertFalse(AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(windowUUID)))
+    }
+
     // MARK: - StoreTestUtility
     func setupAppState() -> AppState {
         return AppState()
@@ -2089,7 +2107,7 @@ final class BrowserCoordinatorTests: XCTestCase,
     }
 
     private func setIsDeeplinkOptimizationRefactorEnabled(_ enabled: Bool) {
-        FxNimbus.shared.features.deeplinkOptimizationRefactorFeature.with { _ in
+        FxNimbus.shared.features.deeplinkOptimizationRefactorFeature.with { _, _ in
             return DeeplinkOptimizationRefactorFeature(enabled: enabled)
         }
     }
@@ -2101,7 +2119,7 @@ final class BrowserCoordinatorTests: XCTestCase,
     }
 
     private func setIsAppAttestEnabled(_ isEnabled: Bool) {
-        FxNimbus.shared.features.summarizerAppAttestAuthFeature.with { _ in
+        FxNimbus.shared.features.summarizerAppAttestAuthFeature.with { _, _ in
             return SummarizerAppAttestAuthFeature(enabled: true)
         }
     }
@@ -2112,7 +2130,7 @@ final class BrowserCoordinatorTests: XCTestCase,
         } else {
             featureFlags.enabledFlags.remove(.tabTrayUIExperiments)
         }
-        FxNimbus.shared.features.tabTrayUiExperiments.with { _ in
+        FxNimbus.shared.features.tabTrayUiExperiments.with { _, _ in
             return TabTrayUiExperiments(
                 enabled: isEnabled
             )

@@ -173,7 +173,7 @@ final class SceneCoordinatorTests: XCTestCase {
     }
 
     private func setupNimbusDeeplinkOptimization(isEnabled: Bool) {
-        FxNimbus.shared.features.deeplinkOptimizationRefactorFeature.with { _ in
+        FxNimbus.shared.features.deeplinkOptimizationRefactorFeature.with { _, _ in
             return DeeplinkOptimizationRefactorFeature(enabled: isEnabled)
         }
     }
