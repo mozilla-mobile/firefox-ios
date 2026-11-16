@@ -1820,6 +1820,7 @@
 		C705FA7A2EF31F0500AC5EE7 /* MockPrivacyNoticeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C705FA792EF31F0000AC5EE7 /* MockPrivacyNoticeHelper.swift */; };
 		C705FD582EF354D300AC5EE7 /* PrivacyNoticeUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C705FD572EF3545500AC5EE7 /* PrivacyNoticeUpdate.swift */; };
 		C706CBEF2C3F0FDE00DC65F1 /* CreditCardSettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C706CBEE2C3F0FDE00DC65F1 /* CreditCardSettingsViewControllerTests.swift */; };
+		5EE98C9E60973CDC7BDC5948 /* CreditCardSettingsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2969342DD0DEB4853A3C8BEE /* CreditCardSettingsViewModelTests.swift */; };
 		C710FDB72DCBDBEF0046475F /* TopSiteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C710FDB62DCBDBEF0046475F /* TopSiteCell.swift */; };
 		C71158CD2EEA0B19009766B8 /* PrivacyNoticeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71158CC2EEA0B0A009766B8 /* PrivacyNoticeCell.swift */; };
 		C71158D12EEA0B19009766B8 /* PrivacyNoticeState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71158D02EEA0B0A009766B8 /* PrivacyNoticeState.swift */; };
@@ -11612,6 +11613,7 @@
 		C705FA792EF31F0000AC5EE7 /* MockPrivacyNoticeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPrivacyNoticeHelper.swift; sourceTree = "<group>"; };
 		C705FD572EF3545500AC5EE7 /* PrivacyNoticeUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyNoticeUpdate.swift; sourceTree = "<group>"; };
 		C706CBEE2C3F0FDE00DC65F1 /* CreditCardSettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCardSettingsViewControllerTests.swift; sourceTree = "<group>"; };
+		2969342DD0DEB4853A3C8BEE /* CreditCardSettingsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCardSettingsViewModelTests.swift; sourceTree = "<group>"; };
 		C710FDB62DCBDBEF0046475F /* TopSiteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSiteCell.swift; sourceTree = "<group>"; };
 		C71158CC2EEA0B0A009766B8 /* PrivacyNoticeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyNoticeCell.swift; sourceTree = "<group>"; };
 		C71158D02EEA0B0A009766B8 /* PrivacyNoticeState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyNoticeState.swift; sourceTree = "<group>"; };
@@ -14425,6 +14427,7 @@
 				967EDABC29D705300089208D /* CreditCardValidatorTests.swift */,
 				B3C1B0D77E7E4CD80887F277 /* CreditCardSecurityCodeSettingsTests.swift */,
 				C706CBEE2C3F0FDE00DC65F1 /* CreditCardSettingsViewControllerTests.swift */,
+				2969342DD0DEB4853A3C8BEE /* CreditCardSettingsViewModelTests.swift */,
 			);
 			path = CreditCard;
 			sourceTree = "<group>";
@@ -21969,6 +21972,7 @@
 				C2886BB42EC4AC61007AE6C3 /* MockRoute.swift in Sources */,
 				2199A1D42DB8389000DC84BD /* MockZoomStore.swift in Sources */,
 				C706CBEF2C3F0FDE00DC65F1 /* CreditCardSettingsViewControllerTests.swift in Sources */,
+				5EE98C9E60973CDC7BDC5948 /* CreditCardSettingsViewModelTests.swift in Sources */,
 				E19B38B128A3E69300D8C541 /* WallpaperCollectionAvailabilityTests.swift in Sources */,
 				A5EC8109305417AA005A540F /* TopSitesRowCountSettingsControllerTests.swift in Sources */,
 				EE046A77300A75F4004E3D80 /* SwipeUpTabPreviewGestureHandlerTests.swift in Sources */,

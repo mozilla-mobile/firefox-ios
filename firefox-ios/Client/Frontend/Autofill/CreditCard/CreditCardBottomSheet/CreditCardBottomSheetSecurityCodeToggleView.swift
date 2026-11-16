@@ -6,7 +6,7 @@ import Common
 import ComponentLibrary
 import UIKit
 
-/// The "Save security codes" row shown in the save / update credit card bottom sheet.
+/// The "Save Security Codes" row shown in the save / update credit card bottom sheet.
 final class CreditCardBottomSheetSecurityCodeToggleView: UIView, ThemeApplicable {
     private enum UX {
         static let cornerRadius: CGFloat = 12

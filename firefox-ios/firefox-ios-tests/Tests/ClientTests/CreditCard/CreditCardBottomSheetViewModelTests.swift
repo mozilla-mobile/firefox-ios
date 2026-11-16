@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Glean
 import MozillaAppServices
 import Shared
 import Storage
@@ -15,6 +16,7 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
     private var dispatchQueue: MockDispatchQueue!
     private var featureFlags: MockNimbusFeatureFlags!
     private var userDefaults: MockUserDefaults!
+    private var gleanWrapper: MockGleanWrapper!
     private var samplePlainTextCard = UnencryptedCreditCardFields(ccName: "Allen Burges",
                                                                   ccNumber: "4111111111111111",
                                                                   ccNumberLast4: "1111",
@@ -47,6 +49,7 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         featureFlags = MockNimbusFeatureFlags()
         featureFlags.enabledFlags = [.creditCardSecurityCode]
         userDefaults = MockUserDefaults()
+        gleanWrapper = MockGleanWrapper()
     }
 
     override func tearDown() {
@@ -54,6 +57,7 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         dispatchQueue = nil
         featureFlags = nil
         userDefaults = nil
+        gleanWrapper = nil
         super.tearDown()
     }
 
@@ -540,6 +544,9 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
 
         XCTAssertFalse(subject.isSaveSecurityCodesEnabled)
         XCTAssertEqual(userDefaults.object(forKey: PrefsKeys.KeyAutofillCreditCardSecurityCodeStatus) as? Bool, false)
+        let savedExtras = gleanWrapper.savedExtras.first as? GleanMetrics.Settings.ChangedExtra
+        XCTAssertEqual(savedExtras?.setting, PrefsKeys.KeyAutofillCreditCardSecurityCodeStatus)
+        XCTAssertEqual(savedExtras?.changedTo, "false")
     }
 
     @MainActor
@@ -613,8 +620,11 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
             creditCardProvider: autofill,
             creditCard: sampleCreditCard,
             decryptedCreditCard: decryptedCreditCard ?? samplePlainTextCard,
-            securityCodeSettings: CreditCardSecurityCodeSettings(featureFlagsProvider: featureFlags,
-                                                                 userDefaults: userDefaults),
+            securityCodeSettings: CreditCardSecurityCodeSettings(
+                featureFlagsProvider: featureFlags,
+                userDefaults: userDefaults,
+                telemetry: SettingsTelemetry(gleanWrapper: gleanWrapper)
+            ),
             state: state
         )
         trackForMemoryLeaks(subject)

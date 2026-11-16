@@ -23,20 +23,31 @@ final class CreditCardSettingsViewModel: @unchecked Sendable {
     var autofill: RustAutofill?
     var profile: Profile
     let windowUUID: WindowUUID
+    private let securityCodeSettings: CreditCardSecurityCodeSettings
 
     lazy var cardInputViewModel = CreditCardInputViewModel(profile: profile, creditCardProvider: profile.autofill)
     lazy var toggleModel = ToggleModel(isEnabled: isAutofillEnabled, delegate: self)
+    lazy var securityCodeToggleModel = ToggleModel(isEnabled: securityCodeSettings.isSaveSecurityCodesEnabled,
+                                                   delegate: self)
     var tableViewModel = CreditCardTableViewModel()
 
     public init(profile: Profile,
-                windowUUID: WindowUUID
+                windowUUID: WindowUUID,
+                securityCodeSettings: CreditCardSecurityCodeSettings = CreditCardSecurityCodeSettings()
     ) {
         self.profile = profile
         self.windowUUID = windowUUID
+        self.securityCodeSettings = securityCodeSettings
         guard let profile = profile as? BrowserProfile else { return }
         self.autofill = profile.autofill
 
         tableViewModel.toggleModel = toggleModel
+        tableViewModel.securityCodeToggleModel = showsSecurityCodeToggle ? securityCodeToggleModel : nil
+    }
+
+    /// The "Save Security Codes" toggle is only offered when the security code feature is enabled.
+    var showsSecurityCodeToggle: Bool {
+        return securityCodeSettings.isFeatureEnabled
     }
 
     var isAutofillEnabled: Bool {
@@ -87,6 +98,10 @@ final class CreditCardSettingsViewModel: @unchecked Sendable {
 
 extension CreditCardSettingsViewModel: ToggleModelDelegate {
     func toggleDidChange(_ toggleModel: ToggleModel) {
-        isAutofillEnabled = toggleModel.isEnabled
+        if toggleModel === securityCodeToggleModel {
+            securityCodeSettings.setSaveSecurityCodesEnabled(toggleModel.isEnabled)
+        } else {
+            isAutofillEnabled = toggleModel.isEnabled
+        }
     }
 }

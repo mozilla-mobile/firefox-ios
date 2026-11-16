@@ -109,7 +109,7 @@ final class CreditCardBottomSheetViewModel {
 
     // MARK: Security Code
 
-    /// The "Save security codes" toggle is only offered when saving or updating a card the user entered
+    /// The "Save Security Codes" toggle is only offered when saving or updating a card the user entered
     /// with a security code, and the feature is enabled.
     var showsSaveSecurityCodesToggle: Bool {
         guard state != .selectSavedCard,

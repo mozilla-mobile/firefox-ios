@@ -10,24 +10,27 @@ import Storage
 /// Decides whether credit card security codes (CVV) are saved, autofilled and shown in settings.
 ///
 /// Security codes are only used when the `creditCardSecurityCode` feature is enabled and the user kept
-/// "Save security codes" on. Turning it off never deletes codes that are already stored, it only hides
+/// "Save Security Codes" on. Turning it off never deletes codes that are already stored, it only hides
 /// them and stops new ones from being saved.
 struct CreditCardSecurityCodeSettings: Sendable {
     private let featureFlagsProvider: FeatureFlagProviding
     private let userDefaults: UserDefaultsInterface
+    private let telemetry: SettingsTelemetry
 
     init(featureFlagsProvider: FeatureFlagProviding = AppContainer.shared.resolve(),
-         userDefaults: UserDefaultsInterface = UserDefaults.standard) {
+         userDefaults: UserDefaultsInterface = UserDefaults.standard,
+         telemetry: SettingsTelemetry = SettingsTelemetry()) {
         self.featureFlagsProvider = featureFlagsProvider
         self.userDefaults = userDefaults
+        self.telemetry = telemetry
     }
 
-    /// Whether the security code feature, and with it the "Save security codes" toggle, is available.
+    /// Whether the security code feature, and with it the "Save Security Codes" toggle, is available.
     var isFeatureEnabled: Bool {
         return featureFlagsProvider.isEnabled(.creditCardSecurityCode)
     }
 
-    /// The user's "Save security codes" choice. Defaults to on.
+    /// The user's "Save Security Codes" choice. Defaults to on.
     var isSaveSecurityCodesEnabled: Bool {
         return userDefaults.object(forKey: PrefsKeys.KeyAutofillCreditCardSecurityCodeStatus) as? Bool ?? true
     }
@@ -37,8 +40,13 @@ struct CreditCardSecurityCodeSettings: Sendable {
         return isFeatureEnabled && isSaveSecurityCodesEnabled
     }
 
+    /// Persists the user's "Save Security Codes" choice and records the standard `settings.changed` event,
+    /// the same one `BoolSetting` toggles record.
     func setSaveSecurityCodesEnabled(_ isEnabled: Bool) {
         userDefaults.set(isEnabled, forKey: PrefsKeys.KeyAutofillCreditCardSecurityCodeStatus)
+        telemetry.changedSetting(PrefsKeys.KeyAutofillCreditCardSecurityCodeStatus,
+                                 to: "\(isEnabled)",
+                                 from: "\(!isEnabled)")
     }
 
     /// Returns `card` without its security code when security codes are disabled. A `nil` code keeps the

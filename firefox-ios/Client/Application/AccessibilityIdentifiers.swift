@@ -659,6 +659,7 @@ enum AccessibilityIdentifiers {
                 static let autoFillCreditCards = "Payment Methods"
                 static let addCard = "Add Card"
                 static let saveAutofillCards = "Save and Fill Payment Methods"
+                static let saveSecurityCodesToggle = "AutoFillCreditCard.saveSecurityCodesToggle"
                 static let savedCards = "SAVED CARDS"
             }
 

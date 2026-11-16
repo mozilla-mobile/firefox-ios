@@ -59,8 +59,11 @@ class CreditCardSettingsViewController: SensitiveViewController, UIAdaptivePrese
         CreditCardTableViewController(viewModel: viewModel.tableViewModel,
                                       windowUUID: creditCardViewModel.windowUUID)
 
-        let emptyView = CreditCardSettingsEmptyView(windowUUID: viewModel.windowUUID,
-                                                    toggleModel: viewModel.toggleModel)
+        let emptyView = CreditCardSettingsEmptyView(
+            windowUUID: viewModel.windowUUID,
+            toggleModel: viewModel.toggleModel,
+            securityCodeToggleModel: viewModel.showsSecurityCodeToggle ? viewModel.securityCodeToggleModel : nil
+        )
         self.creditCardEmptyView = UIHostingController(rootView: emptyView)
         self.creditCardEmptyView.view.backgroundColor = .clear
 

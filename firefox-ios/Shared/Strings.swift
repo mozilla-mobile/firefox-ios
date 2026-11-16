@@ -981,8 +981,13 @@ extension String {
             public static let SaveSecurityCodesToggleTitle = MZLocalizedString(
                 key: "CreditCard.RememberCard.SaveSecurityCodesToggleTitle.v162",
                 tableName: "RememberCard",
-                value: "Save security codes",
-                comment: "Label of a switch in the bottom sheet asking the user to save or update a credit card. When on, the card's security code (CVV) is saved and autofilled. When off, security codes aren't saved, autofilled or shown in settings.")
+                value: "Save Security Codes",
+                comment: "Label of a switch in the bottom sheet asking the user to save or update a credit card, and in the payment methods settings. When on, the card's security code (CVV) is saved and autofilled. When off, security codes aren't saved, autofilled or shown in settings.")
+            public static let SaveSecurityCodesToggleSubtitle = MZLocalizedString(
+                key: "CreditCard.RememberCard.SaveSecurityCodesToggleSubtitle.v162",
+                tableName: "RememberCard",
+                value: "%@ encrypts your card number and security code for faster payments later",
+                comment: "Description under the 'Save Security Codes' switch in the payment methods settings. %@ is the app name (e.g. Firefox).")
             public static let MainButtonTitle = MZLocalizedString(
                 key: "CreditCard.RememberCard.MainButtonTitle.v122",
                 tableName: "RememberCard",

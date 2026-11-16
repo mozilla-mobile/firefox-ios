@@ -10,6 +10,8 @@ import struct MozillaAppServices.CreditCard
 
 class CreditCardTableViewModel {
     var toggleModel: ToggleModel?
+    /// The "Save Security Codes" toggle model, `nil` when the toggle shouldn't be shown.
+    var securityCodeToggleModel: ToggleModel?
 
     var creditCards = [CreditCard]() {
         didSet {

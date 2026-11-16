@@ -38,7 +38,11 @@ struct CreditCardAutofillToggle: View {
     @State var textColor: Color = .clear
     @State var backgroundColor: Color = .clear
     @State var toggleTintColor: Color = .clear
+    @State var subtitleColor: Color = .clear
     @ObservedObject var model: ToggleModel
+    var title: String = .CreditCard.EditCard.ToggleToAllowAutofillTitle
+    /// Optional description shown under the title.
+    var subtitle: String?
 
     var body: some View {
         VStack {
@@ -47,7 +51,7 @@ struct CreditCardAutofillToggle: View {
                 .padding(.leading, UX.padding)
                 .hidden()
             HStack {
-                Toggle(String.CreditCard.EditCard.ToggleToAllowAutofillTitle, isOn: $model.isEnabled)
+                toggle
                     .font(.body)
                     .foregroundColor(textColor)
                     .padding(.leading, UX.padding)
@@ -69,9 +73,26 @@ struct CreditCardAutofillToggle: View {
         }
     }
 
+    @ViewBuilder
+    private var toggle: some View {
+        if let subtitle {
+            Toggle(isOn: $model.isEnabled) {
+                VStack(alignment: .leading, spacing: UX.paddingSize) {
+                    Text(title)
+                    Text(subtitle)
+                        .font(.footnote)
+                        .foregroundColor(subtitleColor)
+                }
+            }
+        } else {
+            Toggle(title, isOn: $model.isEnabled)
+        }
+    }
+
     func applyTheme(theme: Theme) {
         let color = theme.colors
         textColor = Color(color.textPrimary)
+        subtitleColor = Color(color.textSecondary)
         backgroundColor = Color(theme.isNova ? color.layerSurfaceMedium : color.layer2)
         toggleTintColor = Color(color.actionPrimary)
     }

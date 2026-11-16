@@ -3892,7 +3892,7 @@ class BrowserViewController: UIViewController,
             }
 
             // card already saved should update if any of its other values are different
-            // With "Save security codes" off, a differing security code alone isn't worth an update prompt
+            // With "Save Security Codes" off, a differing security code alone isn't worth an update prompt
             if !securityCodeSettings.applying(to: fieldValues).isEqualToCreditCard(creditCard: existingCard) {
                 DispatchQueue.main.async {
                     self.navigationHandler?.showCreditCardAutofill(creditCard: existingCard,

@@ -18,6 +18,8 @@ struct CreditCardSettingsEmptyView: View {
     @State var imageColor: Color = .clear
 
     @ObservedObject var toggleModel: ToggleModel
+    /// The "Save Security Codes" toggle model, `nil` when the toggle shouldn't be shown.
+    var securityCodeToggleModel: ToggleModel?
 
     var body: some View {
         ZStack {
@@ -43,6 +45,9 @@ struct CreditCardSettingsEmptyView: View {
     private var scrollViewContent: some View {
         return VStack {
             creditCardAutofillToggle
+            if let securityCodeToggleModel {
+                securityCodeToggle(model: securityCodeToggleModel)
+            }
             Spacer()
             creditCardImage
             emptyListTitle
@@ -59,6 +64,17 @@ struct CreditCardSettingsEmptyView: View {
             model: toggleModel)
         .background(Color.white)
         .padding(.top, 25)
+    }
+
+    private func securityCodeToggle(model: ToggleModel) -> some View {
+        return CreditCardAutofillToggle(
+            windowUUID: windowUUID,
+            textColor: toggleTextColor,
+            model: model,
+            title: .CreditCard.RememberCreditCard.SaveSecurityCodesToggleTitle,
+            subtitle: String(format: .CreditCard.RememberCreditCard.SaveSecurityCodesToggleSubtitle,
+                             AppName.shortName.rawValue))
+        .background(Color.white)
     }
 
     private var creditCardImage: some View {

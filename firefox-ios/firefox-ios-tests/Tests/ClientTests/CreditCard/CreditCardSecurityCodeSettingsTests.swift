@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Glean
 import Shared
 import Storage
 import XCTest
@@ -11,16 +12,19 @@ import XCTest
 final class CreditCardSecurityCodeSettingsTests: XCTestCase {
     private var featureFlags: MockNimbusFeatureFlags!
     private var userDefaults: MockUserDefaults!
+    private var gleanWrapper: MockGleanWrapper!
 
     override func setUp() {
         super.setUp()
         featureFlags = MockNimbusFeatureFlags()
         userDefaults = MockUserDefaults()
+        gleanWrapper = MockGleanWrapper()
     }
 
     override func tearDown() {
         featureFlags = nil
         userDefaults = nil
+        gleanWrapper = nil
         super.tearDown()
     }
 
@@ -37,6 +41,20 @@ final class CreditCardSecurityCodeSettingsTests: XCTestCase {
 
         XCTAssertFalse(subject.isSaveSecurityCodesEnabled)
         XCTAssertEqual(userDefaults.object(forKey: PrefsKeys.KeyAutofillCreditCardSecurityCodeStatus) as? Bool, false)
+    }
+
+    func testSetSaveSecurityCodesEnabled_recordsSettingsChangedTelemetry() throws {
+        typealias EventExtrasType = GleanMetrics.Settings.ChangedExtra
+        let subject = createSubject()
+
+        subject.setSaveSecurityCodesEnabled(false)
+
+        let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
+        XCTAssertEqual(savedExtras.setting, PrefsKeys.KeyAutofillCreditCardSecurityCodeStatus)
+        XCTAssertEqual(savedExtras.changedTo, "false")
+        XCTAssertEqual(savedExtras.changedFrom, "true")
+        XCTAssert(savedMetric === GleanMetrics.Settings.changed)
     }
 
     func testIsSecurityCodeEnabled_featureOnAndToggleOn_isTrue() {
@@ -81,7 +99,9 @@ final class CreditCardSecurityCodeSettingsTests: XCTestCase {
     // MARK: - Helpers
 
     private func createSubject() -> CreditCardSecurityCodeSettings {
-        return CreditCardSecurityCodeSettings(featureFlagsProvider: featureFlags, userDefaults: userDefaults)
+        return CreditCardSecurityCodeSettings(featureFlagsProvider: featureFlags,
+                                              userDefaults: userDefaults,
+                                              telemetry: SettingsTelemetry(gleanWrapper: gleanWrapper))
     }
 
     private func makeCard(ccCvv: String?) -> UnencryptedCreditCardFields {

@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import Shared
 import SwiftUI
 import UIKit
 
@@ -162,7 +163,8 @@ extension CreditCardTableViewController: UITableViewDelegate,
 
     func tableView(_ tableView: UITableView,
                    numberOfRowsInSection section: Int) -> Int {
-        return section == 0 ? 1 : viewModel.creditCards.count
+        guard section == 0 else { return viewModel.creditCards.count }
+        return viewModel.securityCodeToggleModel == nil ? 1 : 2
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -181,7 +183,7 @@ extension CreditCardTableViewController: UITableViewDelegate,
     func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            return toggleCell()
+            return indexPath.row == 0 ? toggleCell() : securityCodeToggleCell()
         } else {
             return creditCardCell(indexPath: indexPath)
         }
@@ -201,6 +203,29 @@ extension CreditCardTableViewController: UITableViewDelegate,
                                            textColor: theme.colors.textPrimary.color,
                                            model: model)
         hostingCell.host(row, parentController: self)
+        return hostingCell
+    }
+
+    private func securityCodeToggleCell() -> UITableViewCell {
+        guard let hostingCell = tableView.dequeueReusableCell(
+            withIdentifier: HostingTableViewCell<CreditCardAutofillToggle>.cellIdentifier
+        ) as? HostingTableViewCell<CreditCardAutofillToggle>,
+              let model = viewModel.securityCodeToggleModel else {
+            return UITableViewCell()
+        }
+
+        let theme = currentTheme()
+        let row = CreditCardAutofillToggle(
+            windowUUID: windowUUID,
+            textColor: theme.colors.textPrimary.color,
+            model: model,
+            title: .CreditCard.RememberCreditCard.SaveSecurityCodesToggleTitle,
+            subtitle: String(format: .CreditCard.RememberCreditCard.SaveSecurityCodesToggleSubtitle,
+                             AppName.shortName.rawValue)
+        )
+        hostingCell.host(row, parentController: self)
+        typealias A11y = AccessibilityIdentifiers.Settings.CreditCards.AutoFillCreditCard
+        hostingCell.accessibilityIdentifier = A11y.saveSecurityCodesToggle
         return hostingCell
     }
 
