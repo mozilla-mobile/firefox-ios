@@ -9814,62 +9814,6 @@ extension String {
                 value: "The owner of %@ hasn’t set it up properly and a secure connection can’t be created.",
                 comment: "On error page, this is the description for a generic error. %@ is the site url.")
         }
-        enum v157 {
-            public static let Title = MZLocalizedString(
-                key: "ContextualHints.Translations.Title.v145",
-                tableName: "ContextualHints",
-                value: "%@ Speaks Your Language",
-                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the title of one that points the user to the new translation icon on the toolbar. %@ is the app name (e.g. Firefox).")
-            public static let Body = MZLocalizedString(
-                key: "ContextualHints.Translations.Body.v145",
-                tableName: "ContextualHints",
-                value: "Fast, private translations are ready when you are.",
-                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the body description of one that points the user to the new translation icon on the toolbar.")
-        }
-        enum v156 {
-            public static let WebCompatReporterFieldsURLPlaceholder = MZLocalizedString(
-                key: "WebCompatReporter.Fields.URLPlaceholder.v154",
-                tableName: "WebCompatReporter",
-                value: "URL",
-                comment: "Placeholder shown in the URL field when no web address has been entered, in the Report a Website Issue form.")
-            public static let DetailsAccessibilityLabel = MZLocalizedString(
-                key: "WebCompatReporter.Fields.DetailsAccessibilityLabel.v154",
-                tableName: "WebCompatReporter",
-                value: "Describe the issue in detail",
-                comment: "Accessibility label for the multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form.")
-            public enum Wallpaper {
-                public static let Title = MZLocalizedString(
-                    key: "Onboarding.Wallpaper.Title.v114",
-                    tableName: "Onboarding",
-                    value: "Choose a %@ Wallpaper",
-                    comment: "Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. %@ is the app name (e.g. Firefox).")
-                public static let Action = MZLocalizedString(
-                    key: "Onboarding.Wallpaper.Action.v114",
-                    tableName: "Onboarding",
-                    value: "Set Wallpaper",
-                    comment: "Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper.")
-                public static let SelectorTitle = MZLocalizedString(
-                    key: "Onboarding.Wallpaper.SelectorTitle.v114",
-                    tableName: "Onboarding",
-                    value: "Try a splash of color",
-                    comment: "Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers.")
-                public static let SelectorDescription = MZLocalizedString(
-                    key: "Onboarding.Wallpaper.Description.v114",
-                    tableName: "Onboarding",
-                    value: "Choose a wallpaper that speaks to you.",
-                    comment: "Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers.")
-                public static let ClassicWallpaper = MZLocalizedString(
-                    key: "Onboarding.Wallpaper.Accessibility.Classic.v114",
-                    tableName: "Onboarding",
-                    value: "Classic Wallpaper",
-                    comment: "Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing.")
-                public static let LimitedEditionWallpaper = MZLocalizedString(
-                    key: "Onboarding.Wallpaper.Accessibility.LimitedEdition.v114",
-                    tableName: "Onboarding",
-                    value: "Limited Edition Wallpaper",
-                    comment: "Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing.")
-            }
-        }
     }
 }
 
