@@ -33,6 +33,7 @@ public final class QuickAnswersReturnPillView: UIView, ThemeApplicable {
     private let icon = UIImage(named: StandardImageIdentifiers.Large.audioWave)
 
     private(set) var isMinimized = false
+    private var isPastRemoveDistance = false
     private lazy var panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
     private let glassView: UIVisualEffectView = .build {
         if #available(iOS 26, *) {
@@ -194,6 +195,7 @@ public final class QuickAnswersReturnPillView: UIView, ThemeApplicable {
 
     @objc
     private func handleTap() {
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
         onTap(isMinimized)
     }
 
@@ -206,7 +208,9 @@ public final class QuickAnswersReturnPillView: UIView, ThemeApplicable {
             // Fades with the straight-line distance dragged, down to `1 - UX.maxFade` at `UX.fadeDistance`.
             let draggedDistance = hypot(translation.x, translation.y)
             alpha = 1.0 - min(draggedDistance / UX.fadeDistance, 1.0) * UX.maxFade
+            updateRemoveDistanceFeedback(translation: translation)
         case .ended, .cancelled:
+            isPastRemoveDistance = false
             let velocity = gesture.velocity(in: superview)
             if QuickAnswersReturnPillDragEvaluator.shouldRemove(translation: translation, velocity: velocity) {
                 flyAway(translation: translation, velocity: velocity)
@@ -216,6 +220,14 @@ public final class QuickAnswersReturnPillView: UIView, ThemeApplicable {
         default:
             break
         }
+    }
+
+    /// Plays a haptic each time the drag crosses the remove distance, in either direction.
+    private func updateRemoveDistanceFeedback(translation: CGPoint) {
+        let isPast = QuickAnswersReturnPillDragEvaluator.isPastRemoveDistance(translation: translation)
+        guard isPast != isPastRemoveDistance else { return }
+        isPastRemoveDistance = isPast
+        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
     }
 
     /// Slides the pill a further `UX.flyOutDistance` along the swipe while fading it out, then removes it.

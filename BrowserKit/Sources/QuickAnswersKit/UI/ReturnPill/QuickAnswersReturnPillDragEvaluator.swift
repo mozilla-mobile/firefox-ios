@@ -9,7 +9,10 @@ enum QuickAnswersReturnPillDragEvaluator {
     static let removeVelocity: CGFloat = 800
 
     static func shouldRemove(translation: CGPoint, velocity: CGPoint) -> Bool {
+        return isPastRemoveDistance(translation: translation) || hypot(velocity.x, velocity.y) >= removeVelocity
+    }
+
+    static func isPastRemoveDistance(translation: CGPoint) -> Bool {
         return hypot(translation.x, translation.y) >= removeDistance
-            || hypot(velocity.x, velocity.y) >= removeVelocity
     }
 }

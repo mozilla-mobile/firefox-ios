@@ -42,4 +42,19 @@ final class QuickAnswersReturnPillDragEvaluatorTests: XCTestCase {
 
         XCTAssertTrue(shouldRemove)
     }
+
+    // MARK: - isPastRemoveDistance
+    func test_isPastRemoveDistance_belowDistance_returnsFalse() {
+        let isPast = QuickAnswersReturnPillDragEvaluator.isPastRemoveDistance(translation: CGPoint(x: 30, y: 40))
+
+        XCTAssertFalse(isPast)
+    }
+
+    func test_isPastRemoveDistance_atDistance_returnsTrue() {
+        let isPast = QuickAnswersReturnPillDragEvaluator.isPastRemoveDistance(
+            translation: CGPoint(x: QuickAnswersReturnPillDragEvaluator.removeDistance, y: 0)
+        )
+
+        XCTAssertTrue(isPast)
+    }
 }
