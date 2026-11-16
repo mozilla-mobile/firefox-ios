@@ -14,7 +14,6 @@ final class QuickAnswersReturnPillViewTests: XCTestCase {
     private let question = "How tall is Mount Everest?"
     private let subtitle = "Tap to return"
     private let identifier = "QuickAnswers.returnPill"
-    private let minimizedSize: CGFloat = 28.0
 
     override func setUp() async throws {
         try await super.setUp()
@@ -58,7 +57,7 @@ final class QuickAnswersReturnPillViewTests: XCTestCase {
         let subject = createSubject()
 
         _ = subject.accessibilityActivate()
-        subject.setMinimized(true, animated: false)
+        subject.setMinimized(true)
         _ = subject.accessibilityActivate()
 
         XCTAssertEqual(tapMinimizedStates, [false, true])
@@ -68,21 +67,46 @@ final class QuickAnswersReturnPillViewTests: XCTestCase {
     func test_setMinimized_true_shrinksToMinimizedSize() {
         let subject = createSubject()
 
-        subject.setMinimized(true, animated: false)
+        subject.setMinimized(true)
 
         XCTAssertTrue(subject.isMinimized)
-        XCTAssertEqual(fittingSize(of: subject), CGSize(width: minimizedSize, height: minimizedSize))
+        XCTAssertEqual(fittingSize(of: subject), CGSize(width: QuickAnswersReturnPillView.minimizedSize, height: QuickAnswersReturnPillView.minimizedSize))
     }
 
     func test_setMinimized_falseAfterTrue_restoresExpandedSize() {
         let subject = createSubject()
         let expandedSize = fittingSize(of: subject)
-        subject.setMinimized(true, animated: false)
+        subject.setMinimized(true)
 
-        subject.setMinimized(false, animated: false)
+        subject.setMinimized(false)
 
         XCTAssertFalse(subject.isMinimized)
         XCTAssertEqual(fittingSize(of: subject), expandedSize)
+    }
+
+    func test_setMinimized_withTransform_appliesTransform() {
+        let subject = createSubject()
+
+        subject.setMinimized(true, transform: CGAffineTransform(translationX: 20, y: -10))
+
+        XCTAssertEqual(subject.transform, CGAffineTransform(translationX: 20, y: -10))
+    }
+
+    func test_setMinimized_sameStateNewTransform_updatesTransform() {
+        let subject = createSubject()
+        subject.setMinimized(true, transform: CGAffineTransform(translationX: 20, y: -10))
+
+        subject.setMinimized(true, transform: CGAffineTransform(translationX: 5, y: 5))
+
+        XCTAssertEqual(subject.transform, CGAffineTransform(translationX: 5, y: 5))
+    }
+
+    func test_setMinimized_true_disablesDrag() {
+        let subject = createSubject()
+
+        subject.setMinimized(true)
+
+        XCTAssertEqual(subject.gestureRecognizers?.contains { $0 is UIPanGestureRecognizer && $0.isEnabled }, false)
     }
 
     // MARK: - Helpers

@@ -8,10 +8,11 @@ import UIKit
 
 /// Floating pill that takes the user back to a parked Quick Answers session. The host owns its position.
 public final class QuickAnswersReturnPillView: UIView, ThemeApplicable {
+    public static let minimizedSize: CGFloat = 28.0
+
     private enum UX {
         static let verticalPadding: CGFloat = 8.0
         static let maxWidth: CGFloat = 220.0
-        static let minimizedSize: CGFloat = 28.0
         static let leadingPadding: CGFloat = 10.0
         static let trailingPadding: CGFloat = 16.0
         static let iconSpacing: CGFloat = 8.0
@@ -19,8 +20,6 @@ public final class QuickAnswersReturnPillView: UIView, ThemeApplicable {
         static let iconSize: CGFloat = 16.0
         static let iconBackgroundAlpha: CGFloat = 0.1
         static let blurBorderWidth: CGFloat = 0.5
-        static let minimizeDuration: TimeInterval = 0.35
-        static let minimizeDamping: CGFloat = 0.9
         static let fadeDistance: CGFloat = 200.0
         static let maxFade: CGFloat = 0.6
         static let removeDuration: TimeInterval = 0.2
@@ -34,6 +33,7 @@ public final class QuickAnswersReturnPillView: UIView, ThemeApplicable {
     private let icon = UIImage(named: StandardImageIdentifiers.Large.audioWave)
 
     private(set) var isMinimized = false
+    private lazy var panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
     private let glassView: UIVisualEffectView = .build {
         if #available(iOS 26, *) {
             let glassEffect = UIGlassEffect()
@@ -101,32 +101,20 @@ public final class QuickAnswersReturnPillView: UIView, ThemeApplicable {
         accessibilityHint = subtitle
     }
 
-    /// When `animated` is false the changes are applied directly, so a host can run them inside its own animation.
-    public func setMinimized(_ isMinimized: Bool, animated: Bool) {
-        guard isMinimized != self.isMinimized else { return }
-        self.isMinimized = isMinimized
-        labelWidthConstraint.constant = labelStack.bounds.width
-        labelWidthConstraint.isActive = isMinimized
-        NSLayoutConstraint.deactivate(isMinimized ? expandedConstraints : minimizedConstraints)
-        NSLayoutConstraint.activate(isMinimized ? minimizedConstraints : expandedConstraints)
-
-        let changes = {
-            let contentAlpha: CGFloat = isMinimized ? 0.0 : 1.0
-            self.labelStack.alpha = contentAlpha
-            self.iconBackgroundView.alpha = contentAlpha
-            self.superview?.layoutIfNeeded()
+    /// Doesn't animate or lay out, so the host can run it inside its own animation. The pill can't be dragged while minimized.
+    public func setMinimized(_ isMinimized: Bool, transform: CGAffineTransform = .identity) {
+        if isMinimized != self.isMinimized {
+            self.isMinimized = isMinimized
+            panGesture.isEnabled = !isMinimized
+            labelWidthConstraint.constant = labelStack.bounds.width
+            labelWidthConstraint.isActive = isMinimized
+            NSLayoutConstraint.deactivate(isMinimized ? expandedConstraints : minimizedConstraints)
+            NSLayoutConstraint.activate(isMinimized ? minimizedConstraints : expandedConstraints)
         }
-        guard animated else {
-            changes()
-            return
-        }
-        UIView.animate(
-            withDuration: UX.minimizeDuration,
-            delay: 0,
-            usingSpringWithDamping: UX.minimizeDamping,
-            initialSpringVelocity: 0,
-            animations: changes
-        )
+        let contentAlpha: CGFloat = isMinimized ? 0.0 : 1.0
+        labelStack.alpha = contentAlpha
+        iconBackgroundView.alpha = contentAlpha
+        self.transform = transform
     }
 
     override public func layoutSubviews() {
@@ -187,8 +175,8 @@ public final class QuickAnswersReturnPillView: UIView, ThemeApplicable {
             labelStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.trailingPadding)
         ]
         minimizedConstraints = [
-            widthAnchor.constraint(equalToConstant: UX.minimizedSize),
-            heightAnchor.constraint(equalToConstant: UX.minimizedSize),
+            widthAnchor.constraint(equalToConstant: Self.minimizedSize),
+            heightAnchor.constraint(equalToConstant: Self.minimizedSize),
             iconBackgroundView.centerXAnchor.constraint(equalTo: centerXAnchor)
         ]
         NSLayoutConstraint.activate(expandedConstraints)
@@ -199,7 +187,7 @@ public final class QuickAnswersReturnPillView: UIView, ThemeApplicable {
         // Lets the touches reach the glass, so its interactive press effect still plays.
         tap.cancelsTouchesInView = false
         addGestureRecognizer(tap)
-        addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handlePan)))
+        addGestureRecognizer(panGesture)
     }
 
     // MARK: - Gestures
