@@ -460,6 +460,12 @@ final class TabManagerImplementation: NSObject,
         else {
             ensureAtLeastOneSelectedTab()
             signalTabRestorationSkipped()
+
+            // swiftlint:disable line_length
+            logger.log("Skipping legacy tab restore; isRunningUITests: \(AppConstants.isRunningUITests), isSessionRestoreEnabledForTests: \(AppConstants.isSessionRestoreEnabledForTests), skipSessionRestore: \(DebugSettingsBundleOptions.skipSessionRestore)",
+                       level: .warning,
+                       category: .tabs)
+            // swiftlint:enable line_length
             return
         }
 
@@ -491,6 +497,13 @@ final class TabManagerImplementation: NSObject,
         else {
             ensureAtLeastOneSelectedTab()
             signalTabRestorationSkipped()
+
+            // swiftlint:disable line_length
+            logger.log("Skipping tab restore; isRunningUITests: \(AppConstants.isRunningUITests), isSessionRestoreEnabledForTests: \(AppConstants.isSessionRestoreEnabledForTests), skipSessionRestore: \(DebugSettingsBundleOptions.skipSessionRestore)",
+                       level: .warning,
+                       category: .tabs)
+            // swiftlint:enable line_length
+
             return
         }
 
@@ -710,13 +723,6 @@ final class TabManagerImplementation: NSObject,
 
     private func handleTabSelectionAfterRestore(tabToSelect: Tab?) {
         assert(Thread.isMainThread)
-        if AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(windowUUID)) {
-            logger.log("Skipping post-restore tab selection; deeplink tab pending",
-                       level: .debug,
-                       category: .tabs)
-            return
-        }
-
         if let tabToSelect {
             selectTab(tabToSelect)
         } else {

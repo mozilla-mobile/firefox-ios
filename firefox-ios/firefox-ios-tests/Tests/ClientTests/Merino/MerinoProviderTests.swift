@@ -77,7 +77,7 @@ final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
         try await super.setUp()
         profile = makeProfile()
         await DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
-        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
+        FxNimbus.shared.features.homepageRedesignFeature.with { _ in
             HomepageRedesignFeature(categoriesEnabled: false)
         }
     }
@@ -216,7 +216,7 @@ final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
     }
 
     func test_fetchContent_returnsCached_whenCategoriesEnabledAndCachedResponseHasFlatStoriesOnly() async throws {
-        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
+        FxNimbus.shared.features.homepageRedesignFeature.with { _ in
             HomepageRedesignFeature(categoriesEnabled: true)
         }
 
@@ -239,7 +239,7 @@ final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
     }
 
     func test_fetchContent_returnsCached_whenCategoriesEnabledAndCachedResponseHasFeeds() async throws {
-        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
+        FxNimbus.shared.features.homepageRedesignFeature.with { _ in
             HomepageRedesignFeature(categoriesEnabled: true)
         }
 
@@ -263,7 +263,7 @@ final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
     }
 
     func test_fetchContent_returnsCached_whenCategoriesDisabledAndCachedResponseHasCategoryStoriesOnly() async throws {
-        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
+        FxNimbus.shared.features.homepageRedesignFeature.with { _ in
             HomepageRedesignFeature(categoriesEnabled: false)
         }
 

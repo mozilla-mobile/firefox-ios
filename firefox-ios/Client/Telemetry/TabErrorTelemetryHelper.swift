@@ -13,7 +13,7 @@ import Common
 final class TabErrorTelemetryHelper {
     static let shared = TabErrorTelemetryHelper()
 
-    private let telemetryWrapper: TelemetryWrapperProtocol
+    private let tabLossTelemetry: TabLossTelemetryRecording
     private let defaults: UserDefaultsInterface
     private let windowManager: WindowManager
     private let logger: Logger
@@ -49,10 +49,10 @@ final class TabErrorTelemetryHelper {
     }
 
     init(logger: Logger = DefaultLogger.shared,
-         telemetryWrapper: TelemetryWrapperProtocol = TelemetryWrapper.shared,
+         tabLossTelemetry: TabLossTelemetryRecording = TabLossTelemetry(),
          windowManager: WindowManager = AppContainer.shared.resolve(),
          defaults: UserDefaultsInterface = UserDefaults.standard) {
-        self.telemetryWrapper = telemetryWrapper
+        self.tabLossTelemetry = tabLossTelemetry
         self.defaults = defaults
         self.windowManager = windowManager
         self.logger = logger
@@ -104,6 +104,9 @@ final class TabErrorTelemetryHelper {
         guard let tabCounts = defaults.object(forKey: entryPoint.defaultsKey) as? [String: Int],
               let expectedTabCount = tabCounts[window.uuidString] else { return }
         guard let currentTabCount = getTotalTabCount(window: window) else {
+            if !AppConstants.isRunningUnitTest {
+                assertionFailure("You couldn't get the tab manager for a window! This should never happen. Please debug.")
+            }
             logger.log("Can't validate tab count. Tab manager unavailable for window \(window.uuidString).",
                        level: .info,
                        category: .tabs)
@@ -112,6 +115,12 @@ final class TabErrorTelemetryHelper {
 
         if Self.tabDiscrepancyDetected(expectedTabCount: expectedTabCount,
                                        currentTabCount: currentTabCount) {
+            if !AppConstants.isRunningUnitTest {
+                assertionFailure(
+                    "You have encountered real tab loss! This is a rare bug. Review your stack trace and determine how."
+                )
+            }
+
             let significantEvent = Self.isSignificantTabLossEvent(expectedTabCount: expectedTabCount,
                                                                   currentTabCount: currentTabCount)
             sendTelemetryTabLossDetectedEvent(
@@ -162,33 +171,30 @@ final class TabErrorTelemetryHelper {
                                                    actual: Int,
                                                    entryPoint: EntryPoint,
                                                    significantLossDetected: Bool) {
-        let extras: [String: String] = [
-            "expected": String(expected),
-            "actual": String(actual),
-            "missing": String(expected - actual),
-            "windows": String(windowManager.windows.count)
-           ]
+        let diagnosticDetails = TabLossTelemetry.TabLossDiagnostic(
+            actual: actual,
+            expected: expected,
+            missing: expected - actual,
+            windows: windowManager.windows.count
+        )
 
         if significantLossDetected {
-            var logExtras = extras
-            logExtras["entryPoint"] = entryPoint.logInfo
+            var sentryExtras = diagnosticDetails.sentryExtras
+            sentryExtras["entryPoint"] = entryPoint.logInfo
             logger.log("Tab loss detected.",
                        level: .fatal,
                        category: .tabs,
-                       extra: logExtras)
+                       extra: sentryExtras)
         }
 
         // Only send the telemetry event for the foregrounding log so we don't mess with our existing metrics
         // around tab loss
         if case .backgroundForeground = entryPoint {
-            let event: TelemetryWrapper.EventValue = significantLossDetected ? .tabLossDetected : .tabCountDiscrepancy
-            telemetryWrapper.recordEvent(
-                category: .information,
-                method: .error,
-                object: .app,
-                value: event,
-                extras: extras
-            )
+            if significantLossDetected {
+                tabLossTelemetry.recordTabLossDetected(withDetails: diagnosticDetails)
+            } else {
+                tabLossTelemetry.recordTabCountDiscrepancy(withDetails: diagnosticDetails)
+            }
         }
     }
 }

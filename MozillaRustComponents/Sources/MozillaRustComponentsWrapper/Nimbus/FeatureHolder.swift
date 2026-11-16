@@ -58,11 +58,11 @@ public final class FeatureHolder<T: FMLFeatureInterface>: @unchecked Sendable {
     private var getSdk: GetSdk
     private let featureId: String
 
-    private var create: (Variables, UserDefaults?) -> T
+    private var create: (Variables) -> T
 
     public init(_ getSdk: @escaping () -> FeaturesInterface?,
                 featureId: String,
-                with create: @escaping (Variables, UserDefaults?) -> T)
+                with create: @escaping (Variables) -> T)
     {
         self.getSdk = getSdk
         self.featureId = featureId
@@ -82,12 +82,10 @@ public final class FeatureHolder<T: FMLFeatureInterface>: @unchecked Sendable {
             return v
         }
         var variables: Variables = NilVariables.instance
-        var defaults: UserDefaults?
         if let sdk = getSdk() {
             variables = sdk.getVariables(featureId: featureId, sendExposureEvent: false)
-            defaults = sdk.userDefaults
         }
-        let v = create(variables, defaults)
+        let v = create(variables)
         cachedValue = v
         return v
     }
@@ -114,7 +112,7 @@ public final class FeatureHolder<T: FMLFeatureInterface>: @unchecked Sendable {
     /// This changes the mapping between a ``Variables`` and the feature configuration object.
     ///
     /// This is most likely useful during testing and other generated code.
-    public func with(initializer: @escaping (Variables, UserDefaults?) -> T) {
+    public func with(initializer: @escaping (Variables) -> T) {
         lock.lock()
         defer { self.lock.unlock() }
         cachedValue = nil
@@ -124,15 +122,11 @@ public final class FeatureHolder<T: FMLFeatureInterface>: @unchecked Sendable {
 
 extension FeatureHolder: FeatureHolderInterface {
     public func recordExposure() {
-        if !value().isModified() {
-            getSdk()?.recordExposureEvent(featureId: featureId, experimentSlug: nil)
-        }
+        getSdk()?.recordExposureEvent(featureId: featureId, experimentSlug: nil)
     }
 
     public func recordExperimentExposure(slug: String) {
-        if !value().isModified() {
-            getSdk()?.recordExposureEvent(featureId: featureId, experimentSlug: slug)
-        }
+        getSdk()?.recordExposureEvent(featureId: featureId, experimentSlug: slug)
     }
 
     public func recordMalformedConfiguration(with partId: String = "") {
@@ -202,13 +196,6 @@ public protocol FMLObjectInterface: Encodable {}
 /// implement this interface.
 ///
 public protocol FMLFeatureInterface: FMLObjectInterface {
-    /// A test if the feature configuration has been modified somehow, invalidating any experiment
-    /// that uses it.
-    ///
-    /// This may be `true` if a `pref-key` has been set in the feature manifest and the user has
-    /// set that preference.
-    func isModified() -> Bool
-
     /// Returns a string representation of the complete feature configuration in JSON format.
     func toJSONString() -> String
 }

@@ -144,17 +144,6 @@ public class NimbusBuilder {
     var featureManifest: FeatureManifestInterface?
 
     /**
-     * Main user defaults for the app.
-     */
-    @discardableResult
-    public func with(userDefaults: UserDefaults) -> NimbusBuilder {
-        self.userDefaults = userDefaults
-        return self
-    }
-
-    var userDefaults = UserDefaults.standard
-
-    /**
      * The command line arguments for the app. This is useful for QA, and can be safely left in the app in production.
      */
     @discardableResult
@@ -267,7 +256,6 @@ public class NimbusBuilder {
                           coenrollingFeatureIds: getCoenrollingFeatureIds(),
                           dbPath: dbFilePath,
                           resourceBundles: resourceBundles,
-                          userDefaults: userDefaults,
                           errorReporter: errorReporter,
                           recordedContext: recordedContext)
     }

@@ -126,10 +126,9 @@ final class IntroScreenManagerTests: XCTestCase {
                                          shouldUseBrandRefreshConfiguration: Bool = true,
                                          shouldUseJapanConfiguration: Bool,
                                          enableVideoIntro: Bool = false) {
-        FxNimbus.shared.features.onboardingFrameworkFeature.with { appContext, _ in
+        FxNimbus.shared.features.onboardingFrameworkFeature.with { variables in
             OnboardingFrameworkFeature(
-                appContext,
-                UserDefaults.standard,
+                variables,
                 cards: [:],
                 conditions: ["ALWAYS": "true"],
                 dismissable: false,

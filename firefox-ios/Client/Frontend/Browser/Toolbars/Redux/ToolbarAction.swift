@@ -138,6 +138,14 @@ enum ToolbarModernAction: ModernAction {
 
     /// The screenshots of the tabs next to the selected tab were loaded, used for the tab swipe preview.
     case didSetTabScreenshot(previousTabScreenshot: UIImage?, nextTabScreenshot: UIImage?)
+
+    /// The text in the address bar changed between empty and non-empty while editing. Only sent when
+    /// `isEmpty` differs from the current state, not on every keystroke.
+    case searchTermDidChange(isEmpty: Bool)
+
+    /// The user tapped the address bar's clear button. Clears the stored search term and leaves the
+    /// address bar editing with an empty search.
+    case searchTermDidClear
 }
 
 enum ToolbarActionType: ActionType {
@@ -154,13 +162,9 @@ enum ToolbarActionType: ActionType {
     case websiteLoadingStateDidChange
     case searchEngineDidChange
     case googleLensSettingDidChange
-    case clearSearch
-    case didDeleteSearchTerm
-    case didEnterSearchTerm
     case didSummarizeSettingsChange
     // User submitted a search term to load the search request
     case didSubmitSearchTerm
-    case didSetSearchTerm
     case didStartTyping
     case navigationMiddleButtonDidChange
 }

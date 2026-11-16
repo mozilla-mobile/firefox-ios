@@ -158,7 +158,7 @@ final class TrendingSearchClientTest: XCTestCase, @unchecked Sendable {
 }
 
 private func setupNimbusTrendingSearchesTesting(isEnabled: Bool) {
-    FxNimbus.shared.features.trendingSearchesFeature.with { _, _ in
+    FxNimbus.shared.features.trendingSearchesFeature.with { _ in
         return TrendingSearchesFeature(
             enabled: isEnabled,
             maxSuggestions: 5

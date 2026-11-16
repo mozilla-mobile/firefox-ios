@@ -457,11 +457,6 @@ final class BrowserCoordinator: BaseCoordinator,
                 startLaunch(with: .defaultBrowser)
             }
         }
-
-        if route.willSelectTabOnHandling,
-           AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(windowUUID)) {
-            AppEventQueue.completed(.pendingDeeplinkTab(windowUUID))
-        }
     }
 
     /// Ensures we're properly setup before we handle routes / deeplinks.
