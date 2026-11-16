@@ -706,7 +706,7 @@ final class SettingsCoordinatorTests: XCTestCase {
     }
 
     private func setLanguagePickerEnabled(_ enabled: Bool) {
-        FxNimbus.shared.features.translationsFeature.with { _, _ in
+        FxNimbus.shared.features.translationsFeature.with { _ in
             TranslationsFeature(languagePickerEnabled: enabled)
         }
     }

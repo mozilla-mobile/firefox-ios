@@ -20,6 +20,7 @@ class SceneDelegate: UIResponder,
 
     var sceneCoordinator: SceneCoordinator?
     var routeBuilder = RouteBuilder()
+    lazy var browserDataTransferActivityHandler = BrowserDataTransferActivityHandler()
     var shareTelemetry: ShareTelemetry = AppContainer.shared.resolve()
 
     private let logger: Logger = DefaultLogger.shared
@@ -65,10 +66,6 @@ class SceneDelegate: UIResponder,
         logger.log("SceneDelegate: scene did disconnect. UUID: \(logUUID)", level: .info, category: .lifecycle)
         // Handle clean-up here for closing windows on iPad
         guard let sceneCoordinator = (scene.delegate as? SceneDelegate)?.sceneCoordinator else { return }
-
-        if AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(sceneCoordinator.windowUUID)) {
-            AppEventQueue.completed(.pendingDeeplinkTab(sceneCoordinator.windowUUID))
-        }
 
         // For now, we explicitly cancel downloads for windows that are closed.
         // On iPhone this will happen during app termination, for iPad it will
@@ -141,6 +138,7 @@ class SceneDelegate: UIResponder,
 
     /// Use this method to handle Handoff-related data or other activities.
     func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
+        guard !browserDataTransferActivityHandler.handle(userActivity) else { return }
         guard let route = routeBuilder.makeRoute(userActivity: userActivity) else { return }
         handle(route: route)
     }
@@ -203,7 +201,10 @@ class SceneDelegate: UIResponder,
             handle(route: route)
         }
 
-        if let activity = connectionOptions.userActivities.first,
+        let routableActivities = browserDataTransferActivityHandler.routableActivities(
+            from: connectionOptions.userActivities
+        )
+        if let activity = routableActivities.first,
            let route = routeBuilder.makeRoute(userActivity: activity) {
             handle(route: route)
         }
@@ -242,10 +243,6 @@ class SceneDelegate: UIResponder,
 
         logger.log("Scene coordinator will handle a route", level: .info, category: .coordinator)
         sessionManager.launchSessionProvider.openedFromExternalSource = true
-
-        if route.willSelectTabOnHandling {
-            AppEventQueue.started(.pendingDeeplinkTab(sceneCoordinator.windowUUID))
-        }
 
         if isDeeplinkOptimizationRefactorEnabled {
             AppEventQueue.wait(for: [.startupFlowComplete]) { [weak self] in

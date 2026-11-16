@@ -987,18 +987,19 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionCalled.addressBorderPosition, borderPosition)
     }
 
-    func testDidClearSearch_dispatchesClearSearch() throws {
+    func testDidClearSearch_dispatchesSearchTermDidClear() throws {
         let subject = createSubject(manager: toolbarManager)
         let action = ToolbarMiddlewareAction(
             windowUUID: windowUUID,
             actionType: ToolbarMiddlewareActionType.didClearSearch)
         subject.toolbarProvider.legacyMiddleware(mockStore.state, action)
 
-        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
-        let actionType = try XCTUnwrap(actionCalled.actionType as? ToolbarActionType)
-
-        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
-        XCTAssertEqual(actionType, ToolbarActionType.clearSearch)
+        XCTAssertEqual(mockStore.dispatchedModernActions.count, 1)
+        let isSearchTermDidClear = mockStore.dispatchedModernActions.first.map { action -> Bool in
+            guard case .searchTermDidClear = action as? ToolbarModernAction else { return false }
+            return true
+        }
+        XCTAssertEqual(isSearchTermDidClear, true)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.ClearSearchButtonTappedExtra>
@@ -1298,7 +1299,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     private func setIsHostedSummaryEnabled(_ isEnabled: Bool) {
-        return FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
+        return FxNimbus.shared.features.hostedSummarizerFeature.with { _ in
             return HostedSummarizerFeature(enabled: isEnabled)
         }
     }

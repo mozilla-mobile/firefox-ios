@@ -1,5 +1,5 @@
 /* Toggle for address autofill syncing setting */
-"FirefoxSync.AddressAutofillEngine.v124" = "網址";
+"FirefoxSync.AddressAutofillEngine.v124" = "地址";
 
 /* Toggle for credit cards syncing setting */
 "FirefoxSync.CreditCardsEngine.v122" = "付款方式";

@@ -293,13 +293,13 @@
 "DownloadsPanel.Share.Title" = "Kopīgot";
 
 /* Text message in the settings table view */
-"Enter your password to connect" = "Ievadiet paroli lai pieslēgtos";
+"Enter your password to connect" = "Jāievada sava parole, lai izveidotu savienojumu";
 
 /* Label for button to perform advanced actions on the error page */
 "ErrorPages.Advanced.Button" = "Paplašināti";
 
 /* Warning text when clicking the Advanced button on error pages */
-"ErrorPages.AdvancedWarning1.Text" = "Brīdinājums: mēs nevaram apstiprināt vai jūsu pieslēgums ar šo mājaslapu ir drošs.";
+"ErrorPages.AdvancedWarning1.Text" = "Brīdinājums: mēs nevaram apstiprināt, ka savienojums ar šo tīmekļvietni ir drošs.";
 
 /* Additional warning text when clicking the Advanced button on error pages */
 "ErrorPages.AdvancedWarning2.Text" = "Tā varētu būt konfigurēšanas nepilnība vai uzbrukuma pazīme. Turpināt tikai tad, ja pieņem iespējamo apdraudējumu.";
@@ -369,6 +369,9 @@
 
 /* Label when no internet is present */
 "FxA.NoInternetConnection" = "Nav savienojuma ar internetu";
+
+/* FxA sign in view subtitle */
+"fxa.signin.camera-signin" = "Pieteikties ar kameru";
 
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "Sinhronizēt";
@@ -584,7 +587,7 @@
 "Loading content…" = "Ielādē saturu…";
 
 /* Authentication prompt log in button */
-"Log in" = "Pieslēgties";
+"Log in" = "Pieteikties";
 
 /* Toggle logins syncing setting */
 "Logins" = "Paroles";
@@ -1056,6 +1059,12 @@
 
 /* Title for a link that explains what Mozilla means by Studies */
 "Settings.Studies.Toggle.Link" = "Uzzināt vairāk.";
+
+/* Ddescription that appears in the settings screen to explain what Firefox Sync is useful for. */
+"Settings.Sync.ButtonDescription.v103" = "Jāpiesakās, lai vienādotu cilnes, grāmatzīmes un citus datus.";
+
+/* In the settings account row, shown transiently while the user is being signed out of their account. */
+"Settings.Sync.SigningOut.Title.v154" = "Izrakstās…";
 
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "Labi, sapratu";

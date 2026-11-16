@@ -19,7 +19,7 @@
 /* Button on the popup shown when the VPN stops working while the user is browsing. Tapping it closes only the tab the user is currently viewing. */
 "VPN.ErrorBrowsingPopup.CloseThisTab.v160" = "Κλείσιμο καρτέλας";
 
-/* Button on the popup shown when the VPN stops working while the user is browsing. Tapping it closes the popup so the user can keep browsing without the VPN. */
+/* Button on the popups shown when the VPN stops working while the user is browsing, or when the user runs out of free monthly VPN data. Tapping it closes the popup so the user can keep browsing without the VPN. */
 "VPN.ErrorBrowsingPopup.Continue.v160" = "Συνέχεια χωρίς VPN";
 
 /* Title of a popup shown when the VPN stops working while the user is browsing with it on. Asks if the user wants to keep browsing without the VPN. */

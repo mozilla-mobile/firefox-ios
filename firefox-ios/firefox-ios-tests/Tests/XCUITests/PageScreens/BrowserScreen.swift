@@ -167,6 +167,18 @@ final class BrowserScreen {
         assertBookOfMozillaPageDisplayed(timeout: timeout)
     }
 
+    /// Loads `url` and asserts `text` is in the web view, retrying once for the same reason as
+    /// `navigateToURLAndAssertMobileUserAgent` (https://github.com/mozilla-mobile/firefox-ios/issues/35933).
+    func openURLAndAssertPageText(_ url: String, text: String, timeout: TimeInterval = TIMEOUT) {
+        let pageText = sel.webViewText(text).element(in: app)
+        openURL(url)
+        if BaseTestCase().mozWaitForElementToExist(pageText, timeout: timeout, failOnTimeout: false) {
+            return
+        }
+        openURL(url)
+        BaseTestCase().mozWaitForElementToExist(pageText, timeout: timeout)
+    }
+
     /// Loads `url` and asserts the address bar shows `host`, retrying once for the same reason as
     /// `navigateToURLAndAssertMobileUserAgent` (https://github.com/mozilla-mobile/firefox-ios/issues/35933).
     func navigateToURLAndAssertAddressBarContains(_ url: String, host: String, timeout: TimeInterval = TIMEOUT) {
@@ -359,6 +371,15 @@ final class BrowserScreen {
         start.press(forDuration: 1, thenDragTo: end)
     }
 
+    /// Drags the bottom address bar up to mid-screen, the release zone that opens the tab tray
+    /// rather than closing the tab.
+    func swipeUpOnAddressBar(timeout: TimeInterval = TIMEOUT) {
+        addressBar.mozWaitElementHittable(timeout: timeout)
+        let start = addressBar.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        let end = app.windows.firstMatch.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        start.press(forDuration: 0.05, thenDragTo: end)
+    }
+
     /// Taps the "<" chevron shown next to the address bar while it is being edited.
     func tapCancelEditButton() {
         cancelButton.waitAndTap()
@@ -412,6 +433,17 @@ final class BrowserScreen {
         urlElement.waitAndTap()
     }
 
+    /// The address bar shows only the host until it is edited, so the full URL is read in edit mode.
+    func assertLoadedURLStarts(with prefix: String, timeout: TimeInterval = TIMEOUT) {
+        tapOnAddressBar()
+        let startsWithPrefix = NSPredicate(format: "value BEGINSWITH %@", prefix)
+        let expectation = XCTNSPredicateExpectation(predicate: startsWithPrefix, object: addressBar)
+        let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
+        let url = addressBar.value as? String ?? ""
+        XCTAssertEqual(result, .completed, "The URL should start with '\(prefix)', but was '\(url)'")
+        dismissURLBarOverlay()
+    }
+
     // Pastes the clipboard contents into the (already focused) address bar and asserts the resulting
     // value. Used to verify clipboard content in-app, avoiding the iOS 16+ cross-process paste prompt.
     func pasteAndAssertAddressBarContains(_ value: String) {
@@ -445,6 +477,14 @@ final class BrowserScreen {
     func navigateToURL(_ url: String) {
         tapOnAddressBar()
         addressBar.typeText(url)
+        addressBar.typeText("\r")
+    }
+
+    /// Unlike `navigateToURL`, clears the field first, so typing over a loaded page cannot append to its URL.
+    func openURL(_ url: String) {
+        tapOnAddressBar()
+        clearAddressBarText()
+        addressBar.tapAndTypeTextWhenFocused(url)
         addressBar.typeText("\r")
     }
 
@@ -880,6 +920,11 @@ final class BrowserScreen {
     func assertLinkExists(named name: String, timeout: TimeInterval = TIMEOUT) {
         let link = app.links[name].firstMatch
         BaseTestCase().mozWaitForElementToExist(link, timeout: timeout)
+    }
+
+    func tapLink(named name: String) {
+        let link = Selector.linkByLabel(name, description: "'\(name)' link in the web page", groups: ["browser"])
+        link.element(in: app).waitAndTap()
     }
 
     func assertWebViewLinkTextExists(text: String, timeout: TimeInterval = TIMEOUT) {

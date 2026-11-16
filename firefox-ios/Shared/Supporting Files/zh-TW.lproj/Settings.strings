@@ -329,7 +329,7 @@
 "Settings.Search.Suggest.PrivateSession.Description.v125" = "於隱私瀏覽階段中顯示 Firefox Suggest 的建議內容";
 
 /* In the Search page of the Settings menu, the title for the setting to enable search browsing history. */
-"Settings.Search.Suggest.SearchBrowsingHistory.Title.v124" = "顯示瀏覽紀錄";
+"Settings.Search.Suggest.SearchBrowsingHistory.Title.v124" = "搜尋瀏覽紀錄";
 
 /* In the Search page of the Settings menu, the title for the setting to enable search bookmarks. */
 "Settings.Search.Suggest.SearchSearchBookmarks.Title.v124" = "搜尋書籤";
@@ -395,7 +395,7 @@
 "Settings.TechnicalData.Link.v136" = "更多資訊";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %@ is the app name (e.g. Firefox). */
-"Settings.TechnicalData.Message.v136" = "關於您的裝置、硬體設定，以及您的使用方式，可幫助我們改善 %@ 的功能、效能與穩定度。";
+"Settings.TechnicalData.Message.v136" = "關於您的裝置、硬體設定，以及您的使用方式的資料，可幫助我們改善 %@ 的功能、效能與穩定度。";
 
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
 "Settings.TechnicalData.Title.v136" = "傳送技術與互動資料";

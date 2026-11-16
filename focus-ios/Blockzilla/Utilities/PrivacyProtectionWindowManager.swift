@@ -12,18 +12,15 @@ import UIKit
 final class PrivacyProtectionWindowManager {
     // Injected so tests can supply a plain UIWindow (a UIWindowScene can't be built in a unit test).
     private let privacyWindowFactory: () -> UIWindow?
-    private let mainWindowProvider: () -> UIWindow?
     private let rootViewControllerFactory: () -> UIViewController
 
     private(set) var privacyWindow: UIWindow?
 
     init(
         privacyWindowFactory: @escaping () -> UIWindow?,
-        mainWindowProvider: @escaping () -> UIWindow?,
         rootViewControllerFactory: @escaping () -> UIViewController
     ) {
         self.privacyWindowFactory = privacyWindowFactory
-        self.mainWindowProvider = mainWindowProvider
         self.rootViewControllerFactory = rootViewControllerFactory
     }
 
@@ -34,11 +31,15 @@ final class PrivacyProtectionWindowManager {
             window.windowLevel = .alert + 1
             privacyWindow = window
         }
-        privacyWindow?.makeKeyAndVisible()
+        // Reveal without making the overlay key. The app also resigns active while a
+        // Face ID prompt is up, and taking key status away from the main window ends
+        // the text input session on the web view, so a password picked from the
+        // QuickType bar arrived with nothing left to fill (FXIOS-17309). The splash
+        // button still receives touches on a non-key window.
+        privacyWindow?.isHidden = false
     }
 
     func hide() {
         privacyWindow?.isHidden = true
-        mainWindowProvider()?.makeKeyAndVisible()
     }
 }

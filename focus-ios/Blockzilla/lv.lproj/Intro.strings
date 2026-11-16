@@ -1,3 +1,6 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "Jebkurā brīdī ar vienu piesitienu notīri visu pārlūkošanas sesijas vēsturi, paroles, sīkdatnes!";
+
 /* Button to go to the next card in Focus onboarding. */
 "Intro.Slides.Next.Button" = "Turpināt";
 

@@ -5,21 +5,21 @@
 "VPN.DataLimitRefreshNotification.Title.v160" = "%1$@ GB 的 VPN 流量已可使用";
 
 /* Body text of the popup shown when the VPN stops working while the user is browsing. Warns that if they keep browsing, websites and other third parties may be able to see their location. */
-"VPN.ErrorBrowsingPopup.Body.v160" = "目前未開啟 VPN。如果繼續上網，網站可能會得知您的所在位置。";
+"VPN.ErrorBrowsingPopup.Body.v160" = "VPN 目前無法正常運作。如果繼續上網，網站可能會得知您的所在位置。";
 
 /* Button on the popup shown when the VPN stops working while the user is browsing. Tapping it closes all of the user's open tabs. */
 "VPN.ErrorBrowsingPopup.CloseAllTabs.v160" = "關閉所有分頁";
 
 /* Confirmation shown after the user closes a single tab from the popup that appears when the VPN stops working while browsing. */
-"VPN.ErrorBrowsingPopup.ClosedOneTab.v160" = "關閉 1 個分頁";
+"VPN.ErrorBrowsingPopup.ClosedOneTab.v160" = "已關閉 1 個分頁";
 
 /* Confirmation shown after the user closes more than one tab from the popup that appears when the VPN stops working while browsing. %1$@ is the number of tabs that were closed (for example, 3). */
-"VPN.ErrorBrowsingPopup.ClosedXTabs.v160" = "關閉 %1$@ 個分頁";
+"VPN.ErrorBrowsingPopup.ClosedXTabs.v160" = "已關閉 %1$@ 個分頁";
 
 /* Button on the popup shown when the VPN stops working while the user is browsing. Tapping it closes only the tab the user is currently viewing. */
 "VPN.ErrorBrowsingPopup.CloseThisTab.v160" = "關閉此分頁";
 
-/* Button on the popup shown when the VPN stops working while the user is browsing. Tapping it closes the popup so the user can keep browsing without the VPN. */
+/* Button on the popups shown when the VPN stops working while the user is browsing, or when the user runs out of free monthly VPN data. Tapping it closes the popup so the user can keep browsing without the VPN. */
 "VPN.ErrorBrowsingPopup.Continue.v160" = "不使用 VPN 繼續";
 
 /* Title of a popup shown when the VPN stops working while the user is browsing with it on. Asks if the user wants to keep browsing without the VPN. */
@@ -47,10 +47,10 @@
 "VPN.ReachedDataLimitPopup.CloseAllTabs.v160" = "關閉所有分頁";
 
 /* Confirmation shown after the user closes a single tab from the popup that appears when they run out of free monthly VPN data. */
-"VPN.ReachedDataLimitPopup.ClosedOneTab.v160" = "關閉 1 個分頁";
+"VPN.ReachedDataLimitPopup.ClosedOneTab.v160" = "已關閉 1 個分頁";
 
 /* Confirmation shown after the user closes more than one tab from the popup that appears when they run out of free monthly VPN data. %1$@ is the number of tabs that were closed (for example, 3). */
-"VPN.ReachedDataLimitPopup.ClosedXTabs.v160" = "關閉 %1$@ 個分頁";
+"VPN.ReachedDataLimitPopup.ClosedXTabs.v160" = "已關閉 %1$@ 個分頁";
 
 /* Button on the popup shown when the user runs out of free monthly VPN data. Tapping it closes only the tab the user is currently viewing. */
 "VPN.ReachedDataLimitPopup.CloseThisTab.v160" = "關閉此分頁";

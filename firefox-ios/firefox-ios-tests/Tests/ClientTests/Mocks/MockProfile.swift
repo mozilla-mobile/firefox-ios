@@ -79,27 +79,53 @@ open class ClientSyncManagerSpy: ClientSyncManager, @unchecked Sendable {
     }
 }
 
+/// `getQueuedTabs` is called from a non-main executor while tests read the call
+/// counts from the main actor, so all mutable state here is lock protected.
 final class MockTabQueue: TabQueue, @unchecked Sendable {
-    var queuedTabs = [ShareItem]()
-    var getQueuedTabsCalled = 0
-    var addToQueueCalled = 0
-    var clearQueuedTabsCalled = 0
+    private let lock = NSLock()
+    private var _queuedTabs = [ShareItem]()
+    private var _getQueuedTabsError: Error?
+    private var _getQueuedTabsCalled = 0
+    private var _addToQueueCalled = 0
+    private var _clearQueuedTabsCalled = 0
+
+    var queuedTabs: [ShareItem] {
+        get { withLock { _queuedTabs } }
+        set { withLock { _queuedTabs = newValue } }
+    }
+
+    var getQueuedTabsError: Error? {
+        get { withLock { _getQueuedTabsError } }
+        set { withLock { _getQueuedTabsError = newValue } }
+    }
+
+    var getQueuedTabsCalled: Int { withLock { _getQueuedTabsCalled } }
+    var addToQueueCalled: Int { withLock { _addToQueueCalled } }
+    var clearQueuedTabsCalled: Int { withLock { _clearQueuedTabsCalled } }
 
     func addToQueue(_ tab: ShareItem) -> Success {
-        addToQueueCalled += 1
+        withLock { _addToQueueCalled += 1 }
         return succeed()
     }
 
-    func getQueuedTabs(completion: @MainActor @escaping ([ShareItem]) -> Void) {
-        Task { @MainActor in
-            completion(queuedTabs)
-            getQueuedTabsCalled += 1
+    func getQueuedTabs() async throws -> [ShareItem] {
+        let error: Error? = withLock {
+            _getQueuedTabsCalled += 1
+            return _getQueuedTabsError
         }
+        if let error { throw error }
+        return withLock { _queuedTabs }
     }
 
     func clearQueuedTabs() -> Success {
-        clearQueuedTabsCalled += 1
+        withLock { _clearQueuedTabsCalled += 1 }
         return succeed()
+    }
+
+    private func withLock<T>(_ body: () -> T) -> T {
+        lock.lock()
+        defer { lock.unlock() }
+        return body()
     }
 }
 

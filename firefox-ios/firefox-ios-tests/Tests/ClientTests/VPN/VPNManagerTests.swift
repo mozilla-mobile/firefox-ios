@@ -59,7 +59,7 @@ final class VPNManagerTests: XCTestCase {
     func testStart_setsIsRunning() async throws {
         let subject = createSubject()
 
-        try await subject.start()
+        try await subject.start(countryCode: nil)
 
         XCTAssertTrue(subject.isRunning)
     }
@@ -69,7 +69,7 @@ final class VPNManagerTests: XCTestCase {
         mockGuardian.onPassRotation = { rotationStarted.fulfill() }
         let subject = createSubject()
 
-        try await subject.start()
+        try await subject.start(countryCode: nil)
         await fulfillment(of: [rotationStarted], timeout: 1)
 
         XCTAssertEqual(mockGuardian.passRotationInitialPasses.map(\.bearerToken), ["initial-token"])
@@ -77,7 +77,7 @@ final class VPNManagerTests: XCTestCase {
 
     func testStart_whenPassRotates_appliesProxyWithoutSessionReset() async throws {
         let subject = createSubject()
-        try await subject.start()
+        try await subject.start(countryCode: nil)
         let rotationApplied = expectation(description: "Rotated pass applied")
         mockProxyConfigurator.onApply = { rotationApplied.fulfill() }
 
@@ -95,7 +95,7 @@ final class VPNManagerTests: XCTestCase {
     func testStart_KicksOffWebViewReloadAndProxyApplication() async throws {
         let subject = createSubject()
 
-        try await subject.start()
+        try await subject.start(countryCode: nil)
 
         XCTAssertEqual(mockTabManager.tearDownWebViewsForProxyChangeCalled, 1)
         XCTAssertEqual(mockTabManager.restoreSelectedTabForProxyChangeCalled, 1)
@@ -147,10 +147,81 @@ final class VPNManagerTests: XCTestCase {
         mockProfile.prefs.setString(VPNEnvironment.prod.rawValue, forKey: PrefsKeys.VPNSettings.endpointEnvironment)
         let subject = createSubject()
 
-        try await subject.start()
+        try await subject.start(countryCode: nil)
 
         XCTAssertEqual(mockServerManager.selectServerCalled, 1)
         XCTAssertEqual(mockProxyConfigurator.params.count, 1)
+    }
+
+    func testStart_selectsServerForCountryCode() async throws {
+        let subject = createSubject()
+
+        try await subject.start(countryCode: "DE")
+
+        XCTAssertEqual(mockServerManager.selectServerCountryCodes, ["DE"])
+    }
+
+    // MARK: - start while running
+
+    func testStart_whenRunning_appliesServerForNewCountryCode() async throws {
+        let subject = createSubject()
+        try await subject.start(countryCode: nil)
+
+        try await subject.start(countryCode: "DE")
+
+        XCTAssertEqual(mockServerManager.selectServerCountryCodes, [nil, "DE"])
+        XCTAssertEqual(mockProxyConfigurator.params.count, 2)
+        let params = try XCTUnwrap(mockProxyConfigurator.params.last)
+        XCTAssertEqual(params.configs.count, 1)
+        XCTAssertTrue(params.forcingSessionReset)
+        XCTAssertEqual(mockTabManager.tearDownWebViewsForProxyChangeCalled, 2)
+        XCTAssertEqual(mockTabManager.restoreSelectedTabForProxyChangeCalled, 2)
+        XCTAssertTrue(subject.isRunning)
+    }
+
+    func testStart_whenRunning_restartsPassRotationWithNewPass() async throws {
+        let rotationStarted = expectation(description: "Pass rotation started")
+        rotationStarted.expectedFulfillmentCount = 2
+        mockGuardian.onPassRotation = { rotationStarted.fulfill() }
+        let subject = createSubject()
+        try await subject.start(countryCode: nil)
+        mockGuardian.passResult = .success(makePass(token: "new-token"))
+
+        try await subject.start(countryCode: "DE")
+        await fulfillment(of: [rotationStarted], timeout: 1)
+
+        XCTAssertEqual(mockGuardian.passRotationInitialPasses.map(\.bearerToken), ["initial-token", "new-token"])
+    }
+
+    func testStart_whenRunningAndGetPassFails_throwsAndKeepsCurrentProxy() async throws {
+        let subject = createSubject()
+        try await subject.start(countryCode: nil)
+        mockGuardian.passResult = .failure(URLError(.notConnectedToInternet))
+
+        do {
+            try await subject.start(countryCode: "DE")
+            XCTFail("Expected start to throw")
+        } catch {}
+
+        XCTAssertEqual(mockServerManager.selectServerCalled, 1)
+        XCTAssertEqual(mockProxyConfigurator.params.count, 1)
+        XCTAssertEqual(mockTabManager.tearDownWebViewsForProxyChangeCalled, 1)
+        XCTAssertTrue(subject.isRunning)
+    }
+
+    func testStart_whenRunningAndNoServerFound_throwsAndKeepsCurrentProxy() async throws {
+        let subject = createSubject()
+        try await subject.start(countryCode: nil)
+        mockServerManager.server = nil
+
+        do {
+            try await subject.start(countryCode: "DE")
+            XCTFail("Expected start to throw")
+        } catch {}
+
+        XCTAssertEqual(mockProxyConfigurator.params.count, 1)
+        XCTAssertEqual(mockTabManager.tearDownWebViewsForProxyChangeCalled, 1)
+        XCTAssertTrue(subject.isRunning)
     }
 
     // MARK: - events
@@ -159,7 +230,7 @@ final class VPNManagerTests: XCTestCase {
         let subject = createSubject()
         var iterator = subject.events.makeAsyncIterator()
 
-        try await subject.start()
+        try await subject.start(countryCode: nil)
 
         let event = await iterator.next()
         guard case .passUpdated(let pass) = event else {
@@ -171,7 +242,7 @@ final class VPNManagerTests: XCTestCase {
     func testPassRotation_emitsPassUpdated() async throws {
         let subject = createSubject()
         var iterator = subject.events.makeAsyncIterator()
-        try await subject.start()
+        try await subject.start(countryCode: nil)
         _ = await iterator.next()
 
         mockGuardian.rotation.continuation.yield(makePass(token: "rotated-token"))
@@ -186,7 +257,7 @@ final class VPNManagerTests: XCTestCase {
     func testPassRotationFailure_emitsRotationFailed() async throws {
         let subject = createSubject()
         var iterator = subject.events.makeAsyncIterator()
-        try await subject.start()
+        try await subject.start(countryCode: nil)
         _ = await iterator.next()
 
         mockGuardian.rotation.continuation.finish(throwing: URLError(.notConnectedToInternet))
@@ -199,7 +270,7 @@ final class VPNManagerTests: XCTestCase {
 
     func testStop_clearsProxyAndStopsRunning() async throws {
         let subject = createSubject()
-        try await subject.start()
+        try await subject.start(countryCode: nil)
 
         await subject.stop()
 
@@ -231,7 +302,7 @@ final class VPNManagerTests: XCTestCase {
                                    file: StaticString = #filePath,
                                    line: UInt = #line) async {
         do {
-            try await subject.start()
+            try await subject.start(countryCode: nil)
             XCTFail("Expected start to throw", file: file, line: line)
         } catch {}
     }

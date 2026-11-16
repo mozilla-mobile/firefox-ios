@@ -189,7 +189,7 @@ final class BookmarksSectionStateTests: XCTestCase {
     }
 
     private func setupNimbusHomepageBookmarksSectionDefaultTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
+        FxNimbus.shared.features.homepageRedesignFeature.with { _ in
             return HomepageRedesignFeature(bookmarksSectionDefault: isEnabled)
         }
     }

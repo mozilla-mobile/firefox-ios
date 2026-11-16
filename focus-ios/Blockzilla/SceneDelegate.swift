@@ -65,7 +65,6 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate, ModalDelegate {
             guard let windowScene = self?.window?.windowScene else { return nil }
             return UIWindow(windowScene: windowScene)
         },
-        mainWindowProvider: { [weak self] in self?.window },
         // Captures the manager rather than self: the factory returns a non-optional
         // view controller, so it cannot bail out on a deallocated scene delegate.
         rootViewControllerFactory: { [authenticationManager] in
