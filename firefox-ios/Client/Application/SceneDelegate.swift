@@ -255,7 +255,9 @@ class SceneDelegate: UIResponder,
                 }
             }
         } else {
-            AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(sceneCoordinator.windowUUID)]) { [weak self] in
+            AppEventQueue.wait(for: [.startupFlowComplete,
+                                     .tabRestoration(sceneCoordinator.windowUUID),
+                                     .vpnReconnect]) { [weak self] in
                 ensureMainThread {
                     self?.logger.log("Start up flow and restoration done, will handle route",
                                      level: .info,

@@ -32,8 +32,6 @@ public enum AppEvent: AppEventType {
     // Activities: Tabs
     case tabRestoration(WindowUUID)
 
-    case pendingDeeplinkTab(WindowUUID)
-
     // Activities: VPN
     case vpnReconnect
 }
