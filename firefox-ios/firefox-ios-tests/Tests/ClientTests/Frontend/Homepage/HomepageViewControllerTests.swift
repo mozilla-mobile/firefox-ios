@@ -684,10 +684,10 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(embeddedAddressBar?.isHidden, true)
     }
 
-    func test_viewDidLoad_withFlagDisabledAndTopPosition_doesNotAddEmbeddedAddressBar() {
+    func test_viewDidLoad_withFlagDisabled_embeddedAddressBarStartsHidden() {
         let embeddedAddressBar = loadEmbeddedAddressBar(isFlagEnabled: false, position: .top)
 
-        XCTAssertNil(embeddedAddressBar)
+        XCTAssertEqual(embeddedAddressBar?.isHidden, true)
     }
 
     private func loadEmbeddedAddressBar(isFlagEnabled: Bool, position: SearchBarPosition) -> UIView? {

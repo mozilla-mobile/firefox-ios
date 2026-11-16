@@ -73,10 +73,6 @@ final class HomepageViewController: UIViewController,
         return homepageTabStateStore.state(for: activeTabUUID)
     }
 
-    private var shouldShowEmbeddedAddressBar: Bool {
-        featureFlagsProvider.isEnabled(.homepageAnimatedCenterSearchBar)
-    }
-
     private var currentTheme: Theme {
         themeManager.getCurrentTheme(for: windowUUID)
     }
@@ -540,8 +536,6 @@ final class HomepageViewController: UIViewController,
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
-
-        guard shouldShowEmbeddedAddressBar else { return }
 
         view.addSubview(embeddedAddressBarView)
 

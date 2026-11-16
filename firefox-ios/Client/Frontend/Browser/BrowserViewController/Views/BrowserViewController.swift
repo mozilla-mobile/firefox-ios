@@ -670,7 +670,6 @@ class BrowserViewController: UIViewController,
             windowUUID: windowUUID,
             actionType: GeneralBrowserMiddlewareActionType.toolbarPositionChanged)
         store.dispatch(action)
-        shouldHideAddressToolbar()
         updateSwipingTabs()
 
         searchController?.viewModel.updateBottomSearchBarState(isBottomSearchBar: isBottomSearchBar)
@@ -1086,7 +1085,7 @@ class BrowserViewController: UIViewController,
         }
 
         dismissModalsIfStartAtHome()
-        shouldHideAddressToolbar()
+        addressToolbarContainer.isHidden = state.isCenterSearchBarShowing
     }
 
     private func showToastType(toast: ToastType) {
@@ -1416,31 +1415,6 @@ class BrowserViewController: UIViewController,
 
         store.dispatch(ToolbarModernAction.translucencyDidChange(isTranslucent: toolbarHelper.shouldBlur()),
                        forWindowUUID: windowUUID)
-    }
-
-    /// As part of the homepage search bar work, we want to only hide the toolbar when the homepage search bar appears.
-    /// The homepage search bar should not appear if we are in editing mode.
-    private func shouldHideAddressToolbar() {
-        guard featureFlagsProvider.isEnabled(.homepageAnimatedCenterSearchBar) else { return }
-        let toolbarState = store.state.componentState(
-            ToolbarState.self,
-            for: .toolbar,
-            window: windowUUID
-        )
-
-        let isEditing = toolbarState?.addressToolbar.isEditing ?? false
-
-        let isPhonePortrait = UIDevice.current.userInterfaceIdiom == .phone && !UIWindow.isLandscape
-
-        guard !isBottomSearchBar, isPhonePortrait, !isEditing, contentContainer.hasHomepage else {
-            guard addressToolbarContainer.isHidden == true else { return }
-            addressToolbarContainer.isHidden = false
-            store.dispatch(
-                GeneralBrowserAction(windowUUID: windowUUID, actionType: GeneralBrowserActionType.didUnhideToolbar)
-            )
-            return
-        }
-        addressToolbarContainer.isHidden = true
     }
 
     private func addAddressToolbar() {

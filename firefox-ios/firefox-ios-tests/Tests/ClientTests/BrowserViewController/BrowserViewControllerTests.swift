@@ -883,14 +883,14 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
                 HomepageState(windowUUID: .XCTestDefaultUUID),
                 HomepageAction(
                     windowUUID: .XCTestDefaultUUID,
-                    actionType: HomepageActionType.initialize
+                    actionType: HomepageActionType.viewWillAppear
                 )
             )
         let newHomepageState = HomepageState
             .reducer.legacyReducer(
                 initialHomepageState,
                 HomepageAction(
-                    isSearchBarEnabled: true,
+                    isCenterSearchEnabled: true,
                     windowUUID: .XCTestDefaultUUID,
                     actionType: HomepageMiddlewareActionType.configuredSearchBar
                 )
