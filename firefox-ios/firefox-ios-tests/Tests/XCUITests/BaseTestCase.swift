@@ -61,6 +61,13 @@ class BaseTestCase: XCTestCase {
                            LaunchArguments.DisableAnimations
         ]
 
+    /// ClearProfile keeps the tab-loss telemetry counts in UserDefaults, and a stale one trips its debug assert
+    /// on the next launch. These `-key value` arguments override both with an empty count.
+    private let emptyTabLossCountsArguments = [
+        "-TabErrorTelemetryHelper_Data_PreserveRestoreEvent", "<dict/>",
+        "-TabErrorTelemetryHelper_Data_BackgroundForegroundEvent", "<dict/>"
+    ]
+
     /// - Parameter inactiveFor: how long to stay backgrounded before foregrounding again, for tests
     /// that need a minimum amount of inactivity to elapse.
     func restartInBackground(inactiveFor seconds: TimeInterval = 0) {
@@ -241,6 +248,7 @@ class BaseTestCase: XCTestCase {
         } else {
             app.launchArguments = [LaunchArguments.PerformanceTest] + launchArguments
         }
+        app.launchArguments += emptyTabLossCountsArguments
     }
 
     /// Annotates every failure recorded in the current test, e.g. with a known bug link.
