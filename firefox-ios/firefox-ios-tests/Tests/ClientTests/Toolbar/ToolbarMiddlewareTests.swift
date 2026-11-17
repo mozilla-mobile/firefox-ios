@@ -14,7 +14,6 @@ import XCTest
 final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     let windowUUID: WindowUUID = .XCTestDefaultUUID
     var mockStore: MockStoreForMiddleware<AppState>!
-    var toolbarManager: ToolbarManager!
     var mockGleanWrapper: MockGleanWrapper!
     var mockRecentSearchProvider: MockRecentSearchProvider!
     var windowManager: MockWindowManager!
@@ -33,7 +32,6 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         windowManager = MockWindowManager(wrappedManager: WindowManagerImplementation(), tabManager: tabManager)
         DependencyHelperMock().bootstrapDependencies(injectedWindowManager: windowManager,
                                                      injectedTabManager: tabManager)
-        toolbarManager = DefaultToolbarManager()
 
         // We must reset the global mock store prior to each test
         setupStore()
@@ -53,7 +51,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
     // MARK: GeneralBrowserMiddlewareAction
     func testBrowserDidLoad_dispatchesDidLoadToolbars() throws {
-        let subject = createSubject(manager: toolbarManager)
+        let subject = createSubject()
         let action = GeneralBrowserMiddlewareAction(
             toolbarPosition: .top,
             windowUUID: windowUUID,
@@ -63,14 +61,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? ToolbarActionType)
-        let borderPosition = toolbarManager.getAddressBorderPosition(for: .top, isPrivate: false, scrollY: 0)
-        let displayBorder = toolbarManager.shouldDisplayNavigationBorder(toolbarPosition: .top)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 2)
         XCTAssertEqual(actionType, ToolbarActionType.didLoadToolbars)
         XCTAssertEqual(actionCalled.toolbarPosition, action.toolbarPosition)
-        XCTAssertEqual(actionCalled.addressBorderPosition, borderPosition)
-        XCTAssertEqual(actionCalled.displayNavBorder, displayBorder)
         XCTAssertEqual(actionCalled.middleButton, .newTab)
 
         let lensAction = try XCTUnwrap(mockStore.dispatchedActions.last as? ToolbarMiddlewareAction)
@@ -88,7 +82,6 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let featureFlagsProvider = MockNimbusFeatureFlags()
         featureFlagsProvider.enabledFlags = [.googleLens]
         let subject = createSubject(
-            manager: toolbarManager,
             featureFlagsProvider: featureFlagsProvider,
             searchEnginesManager: MockSearchEnginesManager(
                 searchEngines: [makeSearchEngine(engineID: OpenSearchEngine.googleEngineID)]
@@ -111,7 +104,6 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let featureFlagsProvider = MockNimbusFeatureFlags()
         featureFlagsProvider.enabledFlags = [.googleLens]
         let subject = createSubject(
-            manager: toolbarManager,
             featureFlagsProvider: featureFlagsProvider,
             searchEnginesManager: MockSearchEnginesManager(searchEngines: [makeSearchEngine(engineID: "bing")])
         )
@@ -132,7 +124,6 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let featureFlagsProvider = MockNimbusFeatureFlags()
         featureFlagsProvider.enabledFlags = [.googleLens]
         let subject = createSubject(
-            manager: toolbarManager,
             featureFlagsProvider: featureFlagsProvider,
             searchEnginesManager: MockSearchEnginesManager(
                 searchEngines: [makeSearchEngine(engineID: OpenSearchEngine.googleEngineID)]
@@ -155,7 +146,6 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let featureFlagsProvider = MockNimbusFeatureFlags()
         featureFlagsProvider.enabledFlags = [.googleLens]
         let subject = createSubject(
-            manager: toolbarManager,
             featureFlagsProvider: featureFlagsProvider,
             searchEnginesManager: MockSearchEnginesManager(
                 searchEngines: [makeSearchEngine(engineID: "\(OpenSearchEngine.googleEngineID)-b-1-m")]
@@ -178,7 +168,6 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let featureFlagsProvider = MockNimbusFeatureFlags()
         featureFlagsProvider.enabledFlags = [.googleLens]
         let subject = createSubject(
-            manager: toolbarManager,
             featureFlagsProvider: featureFlagsProvider,
             searchEnginesManager: MockSearchEnginesManager(searchEngines: [makeSearchEngine(engineID: "bing")])
         )
@@ -199,7 +188,6 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let featureFlagsProvider = MockNimbusFeatureFlags()
         featureFlagsProvider.enabledFlags = [.googleLens]
         let subject = createSubject(
-            manager: toolbarManager,
             featureFlagsProvider: featureFlagsProvider,
             searchEnginesManager: MockSearchEnginesManager(
                 searchEngines: [makeSearchEngine(engineID: OpenSearchEngine.googleEngineID, isCustomEngine: true)]
@@ -220,7 +208,6 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
     func testDefaultSearchEngineDidChange_withGoogleLensDisabled_dispatchesGoogleLensDisabled() throws {
         let subject = createSubject(
-            manager: toolbarManager,
             searchEnginesManager: MockSearchEnginesManager(
                 searchEngines: [makeSearchEngine(engineID: OpenSearchEngine.googleEngineID)]
             )
@@ -242,7 +229,6 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let featureFlagsProvider = MockNimbusFeatureFlags()
         featureFlagsProvider.enabledFlags = [.googleLens]
         let subject = createSubject(
-            manager: toolbarManager,
             featureFlagsProvider: featureFlagsProvider,
             userPreferences: makeUserPreferences(googleLensEnabled: true),
             searchEnginesManager: MockSearchEnginesManager(
@@ -263,7 +249,6 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let featureFlagsProvider = MockNimbusFeatureFlags()
         featureFlagsProvider.enabledFlags = [.googleLens]
         let subject = createSubject(
-            manager: toolbarManager,
             featureFlagsProvider: featureFlagsProvider,
             userPreferences: makeUserPreferences(googleLensEnabled: false),
             searchEnginesManager: MockSearchEnginesManager(
@@ -285,7 +270,6 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         featureFlagsProvider.enabledFlags = [.googleLens]
         tabManager.selectedTab = MockTab(profile: profile, isPrivate: true, windowUUID: windowUUID)
         let subject = createSubject(
-            manager: toolbarManager,
             featureFlagsProvider: featureFlagsProvider,
             searchEnginesManager: MockSearchEnginesManager(
                 searchEngines: [makeSearchEngine(engineID: OpenSearchEngine.googleEngineID)]
@@ -308,7 +292,6 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let featureFlagsProvider = MockNimbusFeatureFlags()
         featureFlagsProvider.enabledFlags = [.googleLens]
         let subject = createSubject(
-            manager: toolbarManager,
             featureFlagsProvider: featureFlagsProvider,
             userPreferences: makeUserPreferences(googleLensEnabled: false),
             searchEnginesManager: MockSearchEnginesManager(
@@ -334,7 +317,6 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         featureFlagsProvider.enabledFlags = [.googleLens]
         tabManager.selectedTab = MockTab(profile: profile, isPrivate: true, windowUUID: windowUUID)
         let subject = createSubject(
-            manager: toolbarManager,
             featureFlagsProvider: featureFlagsProvider,
             searchEnginesManager: MockSearchEnginesManager(
                 searchEngines: [makeSearchEngine(engineID: OpenSearchEngine.googleEngineID)]
@@ -359,7 +341,6 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         featureFlagsProvider.enabledFlags = [.googleLens]
         tabManager.selectedTab = MockTab(profile: profile, isPrivate: false, windowUUID: windowUUID)
         let subject = createSubject(
-            manager: toolbarManager,
             featureFlagsProvider: featureFlagsProvider,
             searchEnginesManager: MockSearchEnginesManager(
                 searchEngines: [makeSearchEngine(engineID: OpenSearchEngine.googleEngineID)]
@@ -384,7 +365,6 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         featureFlagsProvider.enabledFlags = [.googleLens]
         tabManager.selectedTab = MockTab(profile: profile, isPrivate: false, windowUUID: windowUUID)
         let subject = createSubject(
-            manager: toolbarManager,
             featureFlagsProvider: featureFlagsProvider,
             searchEnginesManager: MockSearchEnginesManager(
                 searchEngines: [makeSearchEngine(engineID: OpenSearchEngine.googleEngineID)]
@@ -400,7 +380,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     func testBrowserDidLoad_withHomeCustomMiddleButton_dispatchesDidLoadToolbars() throws {
         profile.prefs.setString(NavigationBarMiddleButtonType.home.rawValue,
                                 forKey: PrefsKeys.Settings.navigationToolbarMiddleButton)
-        let subject = createSubject(manager: toolbarManager)
+        let subject = createSubject()
         let action = GeneralBrowserMiddlewareAction(
             toolbarPosition: .top,
             windowUUID: windowUUID,
@@ -410,44 +390,16 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? ToolbarActionType)
-        let borderPosition = toolbarManager.getAddressBorderPosition(for: .top, isPrivate: false, scrollY: 0)
-        let displayBorder = toolbarManager.shouldDisplayNavigationBorder(toolbarPosition: .top)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 2)
         XCTAssertEqual(actionType, ToolbarActionType.didLoadToolbars)
         XCTAssertEqual(actionCalled.toolbarPosition, action.toolbarPosition)
-        XCTAssertEqual(actionCalled.addressBorderPosition, borderPosition)
-        XCTAssertEqual(actionCalled.displayNavBorder, displayBorder)
         XCTAssertEqual(actionCalled.middleButton, .home)
     }
 
-    func testWebsiteDidScroll_dispatchesBorderPositionChanged() throws {
-        let scrollOffset = CGPoint(x: 0, y: 100)
-        let subject = createSubject(manager: toolbarManager)
-        let action = GeneralBrowserMiddlewareAction(
-            scrollOffset: scrollOffset,
-            windowUUID: windowUUID,
-            actionType: GeneralBrowserMiddlewareActionType.websiteDidScroll)
-
-        subject.toolbarProvider.legacyMiddleware(mockStore.state, action)
-
-        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
-        let actionType = try XCTUnwrap(actionCalled.actionType as? ToolbarActionType)
-        let borderPosition = toolbarManager.getAddressBorderPosition(for: .top,
-                                                                     isPrivate: false,
-                                                                     scrollY: scrollOffset.y)
-
-        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
-        XCTAssertEqual(actionType, ToolbarActionType.borderPositionChanged)
-        XCTAssertEqual(actionCalled.toolbarPosition, action.toolbarPosition)
-        XCTAssertEqual(actionCalled.addressBorderPosition, borderPosition)
-    }
-
     func testToolbarPositionChanged_dispatchesToolbarPositionChanged() throws {
-        let scrollOffset = CGPoint(x: 0, y: 100)
-        let subject = createSubject(manager: toolbarManager)
+        let subject = createSubject()
         let action = GeneralBrowserMiddlewareAction(
-            scrollOffset: scrollOffset,
             toolbarPosition: .bottom,
             windowUUID: windowUUID,
             actionType: GeneralBrowserMiddlewareActionType.toolbarPositionChanged)
@@ -456,21 +408,15 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? ToolbarActionType)
-        let borderPosition = toolbarManager.getAddressBorderPosition(for: .bottom,
-                                                                     isPrivate: false,
-                                                                     scrollY: scrollOffset.y)
-        let displayBorder = toolbarManager.shouldDisplayNavigationBorder(toolbarPosition: .bottom)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         XCTAssertEqual(actionType, ToolbarActionType.toolbarPositionChanged)
         XCTAssertEqual(actionCalled.toolbarPosition, action.toolbarPosition)
-        XCTAssertEqual(actionCalled.addressBorderPosition, borderPosition)
-        XCTAssertEqual(actionCalled.displayNavBorder, displayBorder)
     }
 
     func testLoadSummary_whenWebViewIsNil_doesntDispatchToolbarAction() {
         setIsHostedSummaryEnabled(true)
-        let subject = createSubject(manager: toolbarManager)
+        let subject = createSubject()
 
         let action = ToolbarMiddlewareAction(readerModeState: .active,
                                              windowUUID: .XCTestDefaultUUID,
@@ -483,7 +429,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     func testLoadSummary_dispatchesToolbarAction() throws {
         setIsHostedSummaryEnabled(true)
         let expectation = XCTestExpectation(description: "Store should dispatch an action")
-        let subject = createSubject(manager: toolbarManager)
+        let subject = createSubject()
         let tab = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tab.webView = MockTabWebView(tab: tab)
         tabManager.selectedTab = tab
@@ -502,79 +448,9 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(result.canSummarize)
     }
 
-    // MARK: - MicrosurveyPromptMiddlewareAction
-    func testMicrosurveyPromptInitialize_withTopToolbar_dispatchesToolbarPositionChanged() throws {
-        let subject = createSubject(manager: toolbarManager)
-        let action = MicrosurveyPromptMiddlewareAction(
-            windowUUID: windowUUID,
-            actionType: MicrosurveyPromptMiddlewareActionType.initialize)
-        subject.toolbarProvider.legacyMiddleware(mockStore.state, action)
-
-        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
-        let actionType = try XCTUnwrap(actionCalled.actionType as? ToolbarActionType)
-
-        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
-        XCTAssertEqual(actionType, ToolbarActionType.borderPositionChanged)
-        XCTAssertEqual(actionCalled.displayNavBorder, false)
-    }
-
-    func testMicrosurveyPromptInitialize_withBottomToolbar_dispatchesToolbarPositionChanged() throws {
-        mockStore = MockStoreForMiddleware(state: setupToolbarBottomPositionAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-
-        let subject = createSubject(manager: toolbarManager)
-        let action = MicrosurveyPromptMiddlewareAction(
-            windowUUID: windowUUID,
-            actionType: MicrosurveyPromptMiddlewareActionType.initialize)
-        subject.toolbarProvider.legacyMiddleware(mockStore.state, action)
-
-        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
-        let actionType = try XCTUnwrap(actionCalled.actionType as? ToolbarActionType)
-
-        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
-        XCTAssertEqual(actionType, ToolbarActionType.borderPositionChanged)
-        XCTAssertEqual(actionCalled.addressBorderPosition, AddressToolbarBorderPosition.none)
-        XCTAssertEqual(actionCalled.displayNavBorder, false)
-    }
-
-    // MARK: - MicrosurveyPromptAction
-    func testMicrosurveyPromptClosePrompt_withTopToolbar_dispatchesToolbarPositionChanged() throws {
-        let subject = createSubject(manager: toolbarManager)
-        let action = MicrosurveyPromptAction(
-            windowUUID: windowUUID,
-            actionType: MicrosurveyPromptActionType.closePrompt)
-        subject.toolbarProvider.legacyMiddleware(mockStore.state, action)
-
-        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
-        let actionType = try XCTUnwrap(actionCalled.actionType as? ToolbarActionType)
-
-        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
-        XCTAssertEqual(actionType, ToolbarActionType.borderPositionChanged)
-        XCTAssertEqual(actionCalled.displayNavBorder, true)
-    }
-
-    func testMicrosurveyPromptClosePrompt_withBottomToolbar_dispatchesToolbarPositionChanged() throws {
-        mockStore = MockStoreForMiddleware(state: setupToolbarBottomPositionAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-
-        let subject = createSubject(manager: toolbarManager)
-        let action = MicrosurveyPromptAction(
-            windowUUID: windowUUID,
-            actionType: MicrosurveyPromptActionType.closePrompt)
-        subject.toolbarProvider.legacyMiddleware(mockStore.state, action)
-
-        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
-        let actionType = try XCTUnwrap(actionCalled.actionType as? ToolbarActionType)
-
-        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
-        XCTAssertEqual(actionType, ToolbarActionType.borderPositionChanged)
-        XCTAssertEqual(actionCalled.addressBorderPosition, AddressToolbarBorderPosition.top)
-        XCTAssertEqual(actionCalled.displayNavBorder, false)
-    }
-
     // MARK: - ToolbarMiddlewareAction
     func testCustomA11yAction_dispatchesAddToReadingListLongPressAction() throws {
-        let subject = createSubject(manager: toolbarManager)
+        let subject = createSubject()
         let action = ToolbarMiddlewareAction(
             buttonType: .readerMode,
             windowUUID: windowUUID,
@@ -654,7 +530,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     func testDidTapButton_tapOnTabsButton_dispatchesShowTabTray() throws {
-        let subject = createSubject(manager: toolbarManager)
+        let subject = createSubject()
         let action = ToolbarMiddlewareAction(
             buttonType: .tabs,
             gestureType: .tap,
@@ -702,7 +578,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     func testDidTapButton_tapOnMenuButton_dispatchesShowMenu() throws {
-        let subject = createSubject(manager: toolbarManager)
+        let subject = createSubject()
         let action = ToolbarMiddlewareAction(
             buttonType: .menu,
             buttonTapped: UIButton(),
@@ -733,7 +609,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     func testDidTapButton_tapOnCancelEditButton_dispatchesShowMenu() throws {
-        let subject = createSubject(manager: toolbarManager)
+        let subject = createSubject()
         let action = ToolbarMiddlewareAction(
             buttonType: .cancelEdit,
             gestureType: .tap,
@@ -818,7 +694,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     func testDidTapButton_tapOnGoogleLensButton_recordsButtonTappedTelemetry() throws {
-        let subject = createSubject(manager: toolbarManager)
+        let subject = createSubject()
         let action = ToolbarMiddlewareAction(
             buttonType: .googleLens,
             gestureType: .tap,
@@ -868,7 +744,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     func testDidTapButton_tapOnSearchButton_dispatchesDidStartEditingUrl() throws {
-        let subject = createSubject(manager: toolbarManager)
+        let subject = createSubject()
         let action = ToolbarMiddlewareAction(
             buttonType: .search,
             gestureType: .tap,
@@ -966,29 +842,8 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         }
     }
 
-    func testUrlDidChange_dispatchesBorderPositionChanged() throws {
-        let scrollOffset = CGPoint(x: 0, y: 100)
-        let subject = createSubject(manager: toolbarManager)
-        let action = ToolbarMiddlewareAction(
-            scrollOffset: scrollOffset,
-            windowUUID: windowUUID,
-            actionType: ToolbarMiddlewareActionType.urlDidChange)
-
-        subject.toolbarProvider.legacyMiddleware(mockStore.state, action)
-
-        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
-        let actionType = try XCTUnwrap(actionCalled.actionType as? ToolbarActionType)
-        let borderPosition = toolbarManager.getAddressBorderPosition(for: .top,
-                                                                     isPrivate: false,
-                                                                     scrollY: scrollOffset.y)
-
-        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
-        XCTAssertEqual(actionType, ToolbarActionType.borderPositionChanged)
-        XCTAssertEqual(actionCalled.addressBorderPosition, borderPosition)
-    }
-
     func testDidClearSearch_dispatchesSearchTermDidClear() throws {
-        let subject = createSubject(manager: toolbarManager)
+        let subject = createSubject()
         let action = ToolbarMiddlewareAction(
             windowUUID: windowUUID,
             actionType: ToolbarMiddlewareActionType.didClearSearch)
@@ -1015,7 +870,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     func testDidStartDragInteraction_recordsTelemetry() throws {
-        let subject = createSubject(manager: toolbarManager)
+        let subject = createSubject()
         let action = ToolbarMiddlewareAction(
             windowUUID: windowUUID,
             actionType: ToolbarMiddlewareActionType.didStartDragInteraction)
@@ -1033,7 +888,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     func testDidSwipeToOpenTabTray_withTopToolbar_recordsIsAtBottomFalse() throws {
-        let subject = createSubject(manager: toolbarManager)
+        let subject = createSubject()
         let action = ToolbarMiddlewareAction(
             windowUUID: windowUUID,
             actionType: ToolbarMiddlewareActionType.didSwipeToOpenTabTray)
@@ -1052,7 +907,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         mockStore = MockStoreForMiddleware(state: setupToolbarBottomPositionAppState())
         StoreTestUtilityHelper.setupStore(with: mockStore)
 
-        let subject = createSubject(manager: toolbarManager)
+        let subject = createSubject()
         let action = ToolbarMiddlewareAction(
             windowUUID: windowUUID,
             actionType: ToolbarMiddlewareActionType.didSwipeToOpenTabTray)
@@ -1070,7 +925,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
     // MARK: - ToolbarAction
     func testCancelEdit_dispatchesDidClearAlternativeSearchEngine() throws {
-        let subject = createSubject(manager: toolbarManager)
+        let subject = createSubject()
         let action = ToolbarAction(
             windowUUID: windowUUID,
             actionType: ToolbarActionType.cancelEdit)
@@ -1085,7 +940,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     func test_didSubmitSearchTerm_withProperPayload_addsRecentSearchToHistoryStorage() {
-        let subject = createSubject(manager: toolbarManager)
+        let subject = createSubject()
         let action = ToolbarAction(
             url: URL(string: "https://example.com")!,
             searchTerm: "cookies",
@@ -1098,7 +953,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     func test_didSubmitSearchTerm_withoutURL_doesNotAddRecentSearchToHistoryStorage() {
-        let subject = createSubject(manager: toolbarManager)
+        let subject = createSubject()
         let action = ToolbarAction(
             searchTerm: "cookies",
             windowUUID: windowUUID,
@@ -1110,7 +965,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     func test_didSubmitSearchTerm_withoutSearchTerm_doesNotAddRecentSearchToHistoryStorage() {
-        let subject = createSubject(manager: toolbarManager)
+        let subject = createSubject()
         let action = ToolbarAction(
             windowUUID: windowUUID,
             actionType: ToolbarActionType.didSubmitSearchTerm
@@ -1124,7 +979,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         mockStore = MockStoreForMiddleware(state: setupPrivateModeAppState())
         StoreTestUtilityHelper.setupStore(with: mockStore)
 
-        let subject = createSubject(manager: toolbarManager)
+        let subject = createSubject()
         let action = ToolbarAction(
             url: URL(string: "https://example.com")!,
             searchTerm: "cookies",
@@ -1140,7 +995,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         mockStore = MockStoreForMiddleware(state: setupPrivateModeAppState())
         StoreTestUtilityHelper.setupStore(with: mockStore)
 
-        let subject = createSubject(manager: toolbarManager)
+        let subject = createSubject()
         let action = ToolbarAction(
             searchTerm: "cookies",
             windowUUID: windowUUID,
@@ -1155,7 +1010,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         mockStore = MockStoreForMiddleware(state: setupPrivateModeAppState())
         StoreTestUtilityHelper.setupStore(with: mockStore)
 
-        let subject = createSubject(manager: toolbarManager)
+        let subject = createSubject()
         let action = ToolbarAction(
             windowUUID: windowUUID,
             actionType: ToolbarActionType.didSubmitSearchTerm
@@ -1167,13 +1022,11 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
     // MARK: - Helpers
     private func createSubject(
-        manager: ToolbarManager,
         featureFlagsProvider: FeatureFlagProviding = MockNimbusFeatureFlags(),
         userPreferences: UserFeaturePreferring? = nil,
         searchEnginesManager: SearchEnginesManagerProvider = MockSearchEnginesManager()
     ) -> ToolbarMiddleware {
         return ToolbarMiddleware(
-            manager: manager,
             toolbarTelemetry: ToolbarTelemetry(gleanWrapper: mockGleanWrapper),
             profile: profile,
             summarizerConfigFactory: summarizerConfigFactory,
@@ -1206,7 +1059,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     private func didTapButton(buttonType: ToolbarActionConfiguration.ActionType,
                               expectedActionType: GeneralBrowserActionType,
                               expectation: XCTestExpectation? = nil) throws {
-        let subject = createSubject(manager: toolbarManager)
+        let subject = createSubject()
         let action = ToolbarMiddlewareAction(
             buttonType: buttonType,
             gestureType: .tap,
@@ -1234,7 +1087,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
                                     expectedActionType: GeneralBrowserActionType,
                                     expectation: XCTestExpectation? = nil,
                                     assertAction: (GeneralBrowserAction) -> Void = { _ in }) throws {
-        let subject = createSubject(manager: toolbarManager)
+        let subject = createSubject()
         let action = ToolbarMiddlewareAction(
             buttonType: buttonType,
             gestureType: .longPress,
@@ -1262,7 +1115,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     private func didTriggerReaderMode(buttonType: ToolbarActionConfiguration.ActionType,
                                       gestureType: ToolbarButtonGesture,
                                       expectation: XCTestExpectation? = nil) throws {
-        let subject = createSubject(manager: toolbarManager)
+        let subject = createSubject()
         let action = ToolbarMiddlewareAction(
             buttonType: buttonType,
             gestureType: gestureType,

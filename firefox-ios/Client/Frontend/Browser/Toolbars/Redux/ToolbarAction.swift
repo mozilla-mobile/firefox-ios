@@ -22,8 +22,6 @@ struct ToolbarAction: Action {
     let canGoForward: Bool?
     let canSummarize: Bool
     let readerModeState: ReaderModeState?
-    let addressBorderPosition: AddressToolbarBorderPosition?
-    let displayNavBorder: Bool?
     let hasOnlySecureContent: Bool?
     let isWebsiteMode: Bool?
     let safeListedURLImageName: String?
@@ -45,8 +43,6 @@ struct ToolbarAction: Action {
          canGoForward: Bool? = nil,
          canSummarize: Bool = false,
          readerModeState: ReaderModeState? = nil,
-         addressBorderPosition: AddressToolbarBorderPosition = .none,
-         displayNavBorder: Bool? = nil,
          hasOnlySecureContent: Bool? = nil,
          isWebsiteMode: Bool? = nil,
          safeListedURLImageName: String? = nil,
@@ -71,8 +67,6 @@ struct ToolbarAction: Action {
         self.canGoBack = canGoBack
         self.canGoForward = canGoForward
         self.readerModeState = readerModeState
-        self.addressBorderPosition = addressBorderPosition
-        self.displayNavBorder = displayNavBorder
         self.hasOnlySecureContent = hasOnlySecureContent
         self.isWebsiteMode = isWebsiteMode
         self.safeListedURLImageName = safeListedURLImageName
@@ -154,7 +148,6 @@ enum ToolbarModernAction: ModernAction {
 enum ToolbarActionType: ActionType {
     case didLoadToolbars
     case urlDidChange
-    case borderPositionChanged
     case toolbarPositionChanged
     case didStartEditingUrl
     case cancelEdit

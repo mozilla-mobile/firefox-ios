@@ -1549,7 +1549,6 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         let addressToolbar = AddressBarState(
             windowUUID: .XCTestDefaultUUID,
             editingAccessoryAction: nil,
-            borderPosition: nil,
             url: nil,
             searchTerm: nil,
             hasOnlySecureContent: nil,
@@ -1597,7 +1596,8 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
                             previousTabScreenshot: nil,
                             nextTabScreenshot: nil,
                             isAddressBarMinimized: false,
-                            isAccessoryViewVisible: false
+                            isAccessoryViewVisible: false,
+                            isScrolled: false
                         )
                     )
                 ]
