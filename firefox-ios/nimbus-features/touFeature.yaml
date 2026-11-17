@@ -3,8 +3,6 @@ features:
   tou-feature:
     description: >
       This feature is for managing the rollout of the Terms of Use (ToU) implementation.
-    contacts:
-    	- wteichmann@mozilla.com
     variables:
       status:
         description: >
