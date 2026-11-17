@@ -3445,6 +3445,13 @@ extension String {
                 comment: "Title of an onboarding card that introduces the built-in VPN. %1$@ is the app name (for example, Firefox)."
             )
 
+            public static let Subheading = MZLocalizedString(
+                key: "VPN.Onboarding.Subheading.v162",
+                tableName: "Onboarding",
+                value: "Help hide your location from websites while you browse.",
+                comment: "Subtitle text on the VPN onboarding card. Explains that the VPN helps hide where the user is from the websites they visit."
+            )
+
             public static let WifiSubheading = MZLocalizedString(
                 key: "VPN.Onboarding.WifiSubheading.v160",
                 tableName: "Onboarding",
@@ -3485,6 +3492,13 @@ extension String {
                 tableName: "Onboarding",
                 value: "Start using it without signing in",
                 comment: "Body text below the “5 GB, Free Every Month” (VPN.Onboarding.LimitSubheading.v160) subheading on the VPN onboarding card. Explains that the user can start using the VPN without signing in to an account. “it” refers to the VPN."
+            )
+
+            public static let TurnOnVPNButton = MZLocalizedString(
+                key: "VPN.Onboarding.TurnOnVPNButton.v162",
+                tableName: "Onboarding",
+                value: "Turn On VPN",
+                comment: "Text on a button on the VPN onboarding card. Tapping it turns on the VPN."
             )
         }
 
@@ -3672,6 +3686,20 @@ extension String {
                 tableName: "Settings",
                 value: "Finding Locations…",
                 comment: "Text displayed on the locations screen when the app loads a list of locations for the user to pick from. “Locations” here means the locations of VPN servers the user can connect to."
+            )
+
+            public static let NoLocationsTitle = MZLocalizedString(
+                key: "VPN.LocationPicker.NoLocationsTitle.v162",
+                tableName: "Settings",
+                value: "Couldn’t Load Locations",
+                comment: "Title shown on the VPN locations screen when the app fails to load a list of locations for the user to pick from. “Locations” here means the locations of VPN servers the user can connect to."
+            )
+
+            public static let NoLocationsSubtitle = MZLocalizedString(
+                key: "VPN.LocationPicker.NoLocationsSubtitle.v162",
+                tableName: "Settings",
+                value: "Try again in a few minutes.",
+                comment: "Subtitle text shown on the VPN locations screen when the app fails to load a list of locations for the user to pick from. Suggests the user try loading the list of locations again soon. “Locations” here means the locations of VPN servers the user can connect to."
             )
 
             public static let LocationUnavailableTitle = MZLocalizedString(
