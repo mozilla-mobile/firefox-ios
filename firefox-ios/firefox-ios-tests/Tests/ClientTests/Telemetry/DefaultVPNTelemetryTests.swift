@@ -80,6 +80,20 @@ final class DefaultVPNTelemetryTests: XCTestCase {
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
+    func test_recordStopCompleted_recordsEventWithTrigger() throws {
+        let subject = createSubject()
+        let event = GleanMetrics.VpnStop.completed
+        typealias EventExtrasType = GleanMetrics.VpnStop.CompletedExtra
+
+        subject.recordStopCompleted(trigger: .closeAllTabs)
+
+        let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.trigger, "close_all_tabs")
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+    }
+
     func test_startFailureReason_mapsErrors() {
         let cases: [(Error, String)] = [
             (VPNError.notSignedIn, "not_signed_in"),

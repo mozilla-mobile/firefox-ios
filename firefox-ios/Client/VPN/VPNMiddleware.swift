@@ -13,7 +13,7 @@ final class VPNMiddleware {
     private let prefs: Prefs
     private let logger: Logger
     private let userPreferences: UserFeaturePreferring
-    private let telemetry: VPNStartTelemetry
+    private let telemetry: VPNClientTelemetry
     /// Owned here so the proxy session and its pass rotation live as long as the store.
     private let vpnManager: VPNRunnable?
 
@@ -21,7 +21,7 @@ final class VPNMiddleware {
          profile: Profile = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
          userPreferences: UserFeaturePreferring = AppContainer.shared.resolve(),
-         telemetry: VPNStartTelemetry = DefaultVPNTelemetry(),
+         telemetry: VPNClientTelemetry = DefaultVPNTelemetry(),
          vpnManager: VPNRunnable? = VPNMiddleware.makeVPNManager()) {
         self.windowManager = windowManager
         self.prefs = profile.prefs
@@ -97,8 +97,10 @@ final class VPNMiddleware {
         switch action {
         case .start:
             await startVPN(trigger: .user)
-        case .stop, .continueWithoutVPN:
-            await stopVPN()
+        case .stop:
+            await stopVPN(trigger: .user)
+        case .continueWithoutVPN:
+            await stopVPN(trigger: .continueWithoutVPN)
         case .changeLocation(let countryCode):
             await changeVPNLocation(countryCode)
         case .resetVPNAtLaunch:
@@ -112,13 +114,13 @@ final class VPNMiddleware {
             if let selectedTab = tabManager?.selectedTab {
                 tabManager?.removeTab(selectedTab.tabUUID)
             }
-            await stopVPN()
+            await stopVPN(trigger: .closeThisTab)
         case .closeAllTabs:
             for tabManager in windowManager.allWindowTabManagers() {
                 tabManager.removeAllTabs(isPrivateMode: true)
                 tabManager.removeAllTabs(isPrivateMode: false)
             }
-            await stopVPN()
+            await stopVPN(trigger: .closeAllTabs)
         }
     }
 
@@ -183,12 +185,16 @@ final class VPNMiddleware {
         }
     }
 
-    private func stopVPN() async {
+    private func stopVPN(trigger: VPNStopTrigger) async {
         guard let vpnManager else {
             logger.log("VPN stop with no VPNManager registered", level: .warning, category: .vpn)
             return
         }
+        let wasRunning = vpnManager.isRunning
         await vpnManager.stop()
+        if wasRunning {
+            telemetry.recordStopCompleted(trigger: trigger)
+        }
         userPreferences.setPreferenceFor(.vpnFeature, to: false)
     }
 }

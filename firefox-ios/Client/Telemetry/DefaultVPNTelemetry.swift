@@ -48,14 +48,22 @@ enum VPNStartTrigger: String {
     case reconnectAtLaunch = "reconnect_at_launch"
 }
 
+enum VPNStopTrigger: String {
+    case user
+    case continueWithoutVPN = "continue_without_vpn"
+    case closeThisTab = "close_this_tab"
+    case closeAllTabs = "close_all_tabs"
+}
+
 /// Records VPN events that originate in the client rather than in VPNKit.
-protocol VPNStartTelemetry {
+protocol VPNClientTelemetry {
     /// `countryCode` is the selected location, or `VPNServerManager.recommendedCountryCode`.
     func recordStartSucceeded(countryCode: String, trigger: VPNStartTrigger)
     func recordStartFailed(reason: VPNStartFailureReason, countryCode: String, trigger: VPNStartTrigger)
+    func recordStopCompleted(trigger: VPNStopTrigger)
 }
 
-struct DefaultVPNTelemetry: VPNTelemetry, VPNStartTelemetry {
+struct DefaultVPNTelemetry: VPNTelemetry, VPNClientTelemetry {
     private let gleanWrapper: GleanWrapper
 
     init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
@@ -84,5 +92,10 @@ struct DefaultVPNTelemetry: VPNTelemetry, VPNStartTelemetry {
             trigger: trigger.rawValue
         )
         gleanWrapper.recordEvent(for: GleanMetrics.VpnStart.failed, extras: extras)
+    }
+
+    func recordStopCompleted(trigger: VPNStopTrigger) {
+        let extras = GleanMetrics.VpnStop.CompletedExtra(trigger: trigger.rawValue)
+        gleanWrapper.recordEvent(for: GleanMetrics.VpnStop.completed, extras: extras)
     }
 }

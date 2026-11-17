@@ -16,7 +16,7 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
     private var mockProfile: MockProfile!
     private var mockVPNManager: MockVPNManager!
     private var mockUserPreferences: MockUserFeaturePreferences!
-    private var mockTelemetry: MockVPNStartTelemetry!
+    private var mockTelemetry: MockVPNClientTelemetry!
     private var windowManager: WindowManagerImplementation!
     // `AppWindowInfo.tabManager` is weak, so the tab managers are held here.
     private var firstTabManager: MockTabManager!
@@ -30,7 +30,7 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         mockProfile = makeProfile()
         mockVPNManager = MockVPNManager()
         mockUserPreferences = MockUserFeaturePreferences()
-        mockTelemetry = MockVPNStartTelemetry()
+        mockTelemetry = MockVPNClientTelemetry()
         windowManager = WindowManagerImplementation(tabDataStore: MockTabDataStore())
         firstTabManager = MockTabManager(windowUUID: firstWindowUUID)
         secondTabManager = MockTabManager(windowUUID: secondWindowUUID)
@@ -132,6 +132,40 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockUserPreferences.boolPreferences[.vpnFeature], false)
         XCTAssertTrue(firstTabManager.removeTabCalledWith.isEmpty)
         XCTAssertTrue(firstTabManager.removeAllTabsCalledWith.isEmpty)
+    }
+
+    func testStop_whenRunning_recordsUserTrigger() async {
+        mockVPNManager.isRunning = true
+        let subject = createSubject()
+
+        await dispatchAndWaitForPreference(.stop, to: subject)
+
+        XCTAssertEqual(mockTelemetry.stops, [.user])
+    }
+
+    func testStop_whenNotRunning_doesNotRecordTelemetry() async {
+        let subject = createSubject()
+
+        await dispatchAndWaitForPreference(.stop, to: subject)
+
+        XCTAssertEqual(mockVPNManager.stopCalled, 1)
+        XCTAssertTrue(mockTelemetry.stops.isEmpty)
+    }
+
+    func testAlertChoices_whenRunning_recordMatchingTrigger() async {
+        let cases: [(VPNModernAction, VPNStopTrigger)] = [
+            (.continueWithoutVPN, .continueWithoutVPN),
+            (.closeThisTab, .closeThisTab),
+            (.closeAllTabs, .closeAllTabs)
+        ]
+        let subject = createSubject()
+
+        for (action, _) in cases {
+            mockVPNManager.isRunning = true
+            await dispatchAndWaitForPreference(action, to: subject)
+        }
+
+        XCTAssertEqual(mockTelemetry.stops, cases.map { $0.1 })
     }
 
     func testChangeLocation_whenRunning_restartsWithNewCountryCodeWithoutTouchingPreference() async {
@@ -448,7 +482,7 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 }
 
-private final class MockVPNStartTelemetry: VPNStartTelemetry {
+private final class MockVPNClientTelemetry: VPNClientTelemetry {
     struct Failure {
         let reason: VPNStartFailureReason
         let countryCode: String
@@ -457,6 +491,7 @@ private final class MockVPNStartTelemetry: VPNStartTelemetry {
 
     var successes: [(countryCode: String, trigger: VPNStartTrigger)] = []
     var failures: [Failure] = []
+    var stops: [VPNStopTrigger] = []
     var onRecord: (() -> Void)?
 
     func recordStartSucceeded(countryCode: String, trigger: VPNStartTrigger) {
@@ -466,6 +501,11 @@ private final class MockVPNStartTelemetry: VPNStartTelemetry {
 
     func recordStartFailed(reason: VPNStartFailureReason, countryCode: String, trigger: VPNStartTrigger) {
         failures.append(Failure(reason: reason, countryCode: countryCode, trigger: trigger))
+        onRecord?()
+    }
+
+    func recordStopCompleted(trigger: VPNStopTrigger) {
+        stops.append(trigger)
         onRecord?()
     }
 }
