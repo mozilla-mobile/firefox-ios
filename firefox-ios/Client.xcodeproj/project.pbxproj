@@ -24,7 +24,6 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		FD0A00000000000000000003 /* FoxDash in Resources */ = {isa = PBXBuildFile; fileRef = FD0A00000000000000000004 /* FoxDash */; };
 		032CE5F62EBA0C04007CCC0D /* ToUExperiencePointsCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032CE5F52EBA0C04007CCC0D /* ToUExperiencePointsCalculatorTests.swift */; };
 		033A5FCC2E5F001200A84E8A /* TermsOfUseTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033A5FCB2E5F001200A84E8A /* TermsOfUseTelemetryTests.swift */; };
 		033A62002E77FE9900A84E8A /* ResetTermsOfServiceAcceptancePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033A61FF2E77FE9900A84E8A /* ResetTermsOfServiceAcceptancePage.swift */; };
@@ -2541,6 +2540,7 @@
 		FB16062200000000000000B2 /* CameraCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB16062200000000000000B1 /* CameraCoordinatorTests.swift */; };
 		FBADD1700000000000000002 /* LaunchPairingFromURLSettingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBADD1700000000000000001 /* LaunchPairingFromURLSettingTests.swift */; };
 		FC16179B00000000000000B1 /* WebCompatReportViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC16179B00000000000000B2 /* WebCompatReportViewControllerTests.swift */; };
+		FD0A00000000000000000003 /* FoxDash in Resources */ = {isa = PBXBuildFile; fileRef = FD0A00000000000000000004 /* FoxDash */; };
 		FEED00022F00000100000002 /* ThemeManagerResolveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEED00012F00000100000001 /* ThemeManagerResolveTests.swift */; };
 		FEED00042F00000100000004 /* SettingsThemeableViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEED00032F00000100000003 /* SettingsThemeableViewTests.swift */; };
 		FEEDFACE000000000000FB01 /* ChangeVPNEndpointSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEEDFACE000000000000FA01 /* ChangeVPNEndpointSetting.swift */; };
@@ -2883,7 +2883,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		FD0A00000000000000000004 /* FoxDash */ = {isa = PBXFileReference; lastKnownFileType = folder; path = FoxDash; sourceTree = "<group>"; };
 		001348F79CA80B94DCD3E535 /* km */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = km; path = km.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		00218A431FC749D7BC8EC05D /* homepageStoryCategoriesOn.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = homepageStoryCategoriesOn.json; sourceTree = "<group>"; };
 		003141C6B19507C79B6C399C /* ga */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ga; path = ga.lproj/Menu.strings; sourceTree = "<group>"; };
@@ -12946,6 +12945,7 @@
 		FC5142049E673D8E348CE7A5 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Today.strings; sourceTree = "<group>"; };
 		FC9E41DEBDA3C4945EFC2DEA /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		FCA14DC9810D573511E1CA5E /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
+		FD0A00000000000000000004 /* FoxDash */ = {isa = PBXFileReference; lastKnownFileType = folder; path = FoxDash; sourceTree = "<group>"; };
 		FD3845BBA6E359A2667D1F72 /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		FD444D4589CCBBD6E1741575 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/Intro.strings"; sourceTree = "<group>"; };
 		FD5447F394A8151ADC8C32C1 /* hsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hsb; path = hsb.lproj/Storage.strings; sourceTree = "<group>"; };
@@ -12993,8 +12993,6 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		FD0A00000000000000000001 /* FoxDash */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = FoxDash; sourceTree = "<group>"; };
-		FD0A00000000000000000002 /* FoxDash */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = FoxDash; sourceTree = "<group>"; };
 		034784BA2E2690F600D04A84 /* TermsOfUse */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = TermsOfUse; sourceTree = "<group>"; };
 		5FE7F1852E781EB300B0AFEC /* Selectors */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Selectors; sourceTree = "<group>"; };
 		5FE7F18C2E78224100B0AFEC /* PageScreens */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = PageScreens; sourceTree = "<group>"; };
@@ -13004,6 +13002,8 @@
 		BD7A00000000000000000002 /* BrowserDataTransfer */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = BrowserDataTransfer; sourceTree = "<group>"; };
 		ED85DD2C2DE669FF00487807 /* probes */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = probes; sourceTree = "<group>"; };
 		FC16179A00000000000000A1 /* WebCompat */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = WebCompat; sourceTree = "<group>"; };
+		FD0A00000000000000000001 /* FoxDash */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = FoxDash; sourceTree = "<group>"; };
+		FD0A00000000000000000002 /* FoxDash */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = FoxDash; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -19210,9 +19210,9 @@
 				034784BA2E2690F600D04A84 /* TermsOfUse */,
 				BCBE04E22E3A52D4004B6039 /* Summarize */,
 				BD7A00000000000000000001 /* BrowserDataTransfer */,
-				FD0A00000000000000000001 /* FoxDash */,
 				ED85DD2C2DE669FF00487807 /* probes */,
 				FC16179A00000000000000A1 /* WebCompat */,
+				FD0A00000000000000000001 /* FoxDash */,
 			);
 			name = Client;
 			packageProductDependencies = (
