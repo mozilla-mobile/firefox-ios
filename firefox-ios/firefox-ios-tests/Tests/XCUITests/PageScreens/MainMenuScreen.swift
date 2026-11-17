@@ -62,6 +62,27 @@ final class MainMenuScreen {
         BaseTestCase().mozWaitForElementToExist(settings)
     }
 
+    /// Only the badge icon changes with the state: green when Block Ads is on, yellow to orange when off.
+    /// Green and yellow pixels are compared since the background can be saturated (purple in private mode).
+    func assertAdBlockerBadgeIsOn(timeout: TimeInterval = TIMEOUT) {
+        let badge = sel.AD_BLOCKER_BADGE.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(badge, timeout: timeout)
+        let greenHues = 100.0...200.0
+        let yellowHues = 15.0...70.0
+        let minimumIconShare = 0.005
+        let predicate = NSPredicate { _, _ in
+            let green = badge.shareOfPixels(inHueRange: greenHues)
+            return green > minimumIconShare && green > badge.shareOfPixels(inHueRange: yellowHues)
+        }
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: nil)
+        guard XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed else {
+            let green = String(format: "%.3f", badge.shareOfPixels(inHueRange: greenHues))
+            let yellow = String(format: "%.3f", badge.shareOfPixels(inHueRange: yellowHues))
+            XCTFail("Expected the Ad Blocker badge icon to be green (ON), green share \(green), yellow share \(yellow)")
+            return
+        }
+    }
+
     func tapSettings() {
         let settings = sel.SETTINGS_CELL.element(in: app)
         BaseTestCase().mozWaitForElementToExist(settings)

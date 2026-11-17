@@ -53,6 +53,7 @@ protocol SettingsSelectorsSet {
     var SEARCH_CELL: Selector { get }
     var BROWSING_CELL_TITLE: Selector { get }
     var BLOCK_IMAGES_SWITCH_TITLE: Selector { get }
+    var AD_BLOCKER_SWITCH: Selector { get }
 
     // Send Data
     var SEND_DATA_CELL: Selector { get }
@@ -100,6 +101,8 @@ struct SettingsSelectors: SettingsSelectorsSet {
         static let searchCellTitle = AccessibilityIdentifiers.Settings.Search.title
         static let browsingCellTitle = AccessibilityIdentifiers.Settings.Browsing.title
         static let blockImages = AccessibilityIdentifiers.Settings.BlockImages.title
+        // Mirrors PrefsKeys.BlockAds, used as the switch identifier
+        static let adBlockerSwitch = "blockAds"
         static let noImageModeStatus = "NoImageModeStatus"
         static let translationCellTitle = AccessibilityIdentifiers.Settings.Translation.title
         static let summarizeCell = AccessibilityIdentifiers.Settings.Summarize.title
@@ -338,6 +341,12 @@ struct SettingsSelectors: SettingsSelectorsSet {
         groups: ["settings", "browsing"]
     )
 
+    let AD_BLOCKER_SWITCH = Selector.switchById(
+        IDs.adBlockerSwitch,
+        description: "Ad Blocker switch in Browsing settings",
+        groups: ["settings", "browsing"]
+    )
+
     let NO_IMAGE_MODE_STATUS_SWITCH = Selector.anyId(
         IDs.noImageModeStatus,
         description: "No Image Mode Status switch",
@@ -465,7 +474,7 @@ struct SettingsSelectors: SettingsSelectorsSet {
          CLEAR_PRIVATE_DATA_CELL, WEBSITE_DATA_CELL, ALERT_OK_BUTTON, NEW_TAB_CELL, TITLE, TABLE, BROWSING_LINKS_SECTION,
          NAVIGATIONBAR, CONNECT_SETTING, BLOCK_POPUPS_SWITCH, TOOLBAR_CELL, BOTTOM_TOOLBAR_BUTTON, TOP_TOOLBAR_BUTTON,
          HOMEPAGE_CELL, NAVIGATION_TOOLBAR_HOME_BUTTON, NAVIGATION_TOOLBAR_NEW_TAB_BUTTON, DEFAULT_BROWSER_CELL,
-         SEARCH_CELL, BROWSING_CELL_TITLE, BLOCK_IMAGES_SWITCH_TITLE, NO_IMAGE_MODE_STATUS_SWITCH,
+         SEARCH_CELL, BROWSING_CELL_TITLE, BLOCK_IMAGES_SWITCH_TITLE, AD_BLOCKER_SWITCH, NO_IMAGE_MODE_STATUS_SWITCH,
          TRANSLATION_CELL_TITLE, SUMMARIZE_CELL, GENERAL_SECTION_HEADER, SEND_DATA_CELL, SEND_CRASH_REPORTS_CELL,
          APPEARANCE_NAVIGATION_BAR]
     }

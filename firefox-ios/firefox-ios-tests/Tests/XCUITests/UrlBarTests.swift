@@ -13,6 +13,7 @@ class UrlBarTests: BaseTestCase {
     private var tabTrayScreen: TabTrayScreen!
     private var settingScreen: SettingScreen!
     private var homePageScreen: HomePageScreen!
+    private var searchScreen: SearchScreen!
 
     override func setUp() async throws {
         if name.contains("testSearchEngineLogo") {
@@ -29,6 +30,7 @@ class UrlBarTests: BaseTestCase {
         tabTrayScreen = TabTrayScreen(app: app)
         settingScreen = SettingScreen(app: app)
         homePageScreen = HomePageScreen(app: app)
+        searchScreen = SearchScreen(app: app)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306888
@@ -215,6 +217,31 @@ class UrlBarTests: BaseTestCase {
         toolbarScreen.tapHomeButton()
         homePageScreen.assertHomepageIsDisplayed()
         toolbarScreen.assertTabsButtonValue(expectedCount: "2", message: "The Home button opened a new tab")
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3173837
+    // Regression
+    func testSearchSuggestionsUIElements() {
+        // A space keeps domain autocompletion from appending to the typed text
+        let searchQuery = "mozilla firefox"
+
+        // Step 1: open a new tab, the homepage loads. The tab tray is used because on the iPhone
+        // homepage the toolbar's middle button is Search, not "+"
+        toolbarScreen.tapOnTabsButton()
+        tabTrayScreen.tapOnNewTabButton()
+        homePageScreen.assertHomepageIsDisplayed()
+        browserScreen.dismissMicrosurveyIfExists()
+
+        // Step 2: tap the address bar, it is focused and the keyboard is shown
+        browserScreen.tapOnAddressBar()
+        browserScreen.assertAddressBarFocusedWithKeyboard()
+
+        // Step 3: type a query, the text, suggestions, engine icon and Cancel button are shown
+        browserScreen.searchFromAddressBar(term: searchQuery)
+        browserScreen.assertAddressBarValueEquals(searchQuery)
+        searchScreen.assertSearchSuggestionExists(containing: searchQuery)
+        browserScreen.assertSearchEngineLogoExists()
+        browserScreen.assertCancelButtonIsRightOfAddressBar()
     }
 
     private func openMozillaBookFromNewTab() {

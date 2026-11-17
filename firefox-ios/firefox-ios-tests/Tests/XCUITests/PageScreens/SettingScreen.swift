@@ -429,10 +429,18 @@ final class SettingScreen {
         setClosePrivateTabs(on: true)
     }
 
+    private func setClosePrivateTabs(on: Bool) {
+        setSwitch(closePrivateTabsSwitch, on: on, name: "Close Private Tabs")
+    }
+
+    /// Turns on Block Ads from the Browsing settings page.
+    func enableAdBlocker() {
+        setSwitch(sel.AD_BLOCKER_SWITCH.element(in: app), on: true, name: "Ad Blocker")
+    }
+
     /// XCUITest can retry a tap that already registered, which toggles the switch straight back, so
     /// the value is re-checked and corrected rather than toggled once.
-    private func setClosePrivateTabs(on: Bool, attempts: Int = 3) {
-        let switchElement = closePrivateTabsSwitch
+    private func setSwitch(_ switchElement: XCUIElement, on: Bool, name: String, attempts: Int = 3) {
         let expected = on ? "1" : "0"
         BaseTestCase().mozWaitForElementToExist(switchElement)
         BaseTestCase().scrollToElement(switchElement)
@@ -442,7 +450,7 @@ final class SettingScreen {
             _ = switchValueSettles(switchElement, to: expected)
         }
         XCTAssertTrue(switchValueSettles(switchElement, to: expected),
-                      "The Close Private Tabs switch did not settle on \(expected)")
+                      "The \(name) switch did not settle on \(expected)")
     }
 
     private func switchValueSettles(_ element: XCUIElement, to expected: String, timeout: TimeInterval = 2) -> Bool {
