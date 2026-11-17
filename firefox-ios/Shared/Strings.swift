@@ -29,16 +29,16 @@ public enum Strings {
 ///   - comment: The comment is an explanation aimed towards people that will translate the string value. Make sure it follow the l10n documentation
 ///   https://mozilla-l10n.github.io/documentation/localization/dev_best_practices.html#add-localization-notes
 private func MZLocalizedString(
-    key: String,
+    key: StaticString,
     tableName: String?,
     value: String?,
-    comment: String
+    comment: StaticString
 ) -> String {
-    return NSLocalizedString(key,
-                             tableName: tableName,
-                             bundle: Strings.bundle,
-                             value: value ?? "",
-                             comment: comment)
+    return String(localized: key,
+                  defaultValue: String.LocalizationValue(value ?? ""),
+                  table: tableName,
+                  bundle: Strings.bundle,
+                  comment: comment)
 }
 
 // This file contains all strings for Firefox iOS.
@@ -1754,14 +1754,12 @@ extension String {
                 key: "NativeErrorPage.CellularDataRestricted.TitleLabel.v156",
                 tableName: "NativeErrorPage",
                 value: "Cellular data is turned off for %@.",
-                comment: "On error page, title shown when the app can't connect because cellular data is turned off " +
-                         "for this specific app in iOS settings. %@ is the app name (e.g. Firefox).")
+                comment: "On error page, title shown when the app can't connect because cellular data is turned off for this specific app in iOS settings. %@ is the app name (e.g. Firefox).")
             public static let Description = MZLocalizedString(
                 key: "NativeErrorPage.CellularDataRestricted.Description.v156",
                 tableName: "NativeErrorPage",
                 value: "Connect to Wi-Fi or go to iOS Settings and turn on cellular data for %@.",
-                comment: "On error page, message shown when the app can't connect because cellular data is turned off " +
-                         "for the app and explaining to the user how to troubleshoot. %@ is the app name (e.g. Firefox).")
+                comment: "On error page, message shown when the app can't connect because cellular data is turned off for the app and explaining to the user how to troubleshoot. %@ is the app name (e.g. Firefox).")
         }
         public enum GenericError {
             public static let TitleLabel = MZLocalizedString(
