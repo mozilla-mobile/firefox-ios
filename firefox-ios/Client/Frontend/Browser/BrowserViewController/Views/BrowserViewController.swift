@@ -1110,7 +1110,7 @@ class BrowserViewController: UIViewController,
         }
 
         dismissModalsIfStartAtHome()
-        addressToolbarContainer.isHidden = state.homepageSearchBarState.shouldShowSearchBar
+        addressToolbarContainer.isHidden = state.homepageSearchBarState.isShowingCenterSearchBar
     }
 
     private func showToastType(toast: ToastType) {
