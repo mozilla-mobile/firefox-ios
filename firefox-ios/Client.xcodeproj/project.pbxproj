@@ -1585,6 +1585,7 @@
 		AEC0FF0100000000000000A2 /* AIControlsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC0FF0100000000000000A1 /* AIControlsTests.swift */; };
 		AEC0FF0300000000000000C2 /* HTTPSFirstModeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC0FF0300000000000000C1 /* HTTPSFirstModeTests.swift */; };
 		AEC0FF0400000000000000D2 /* HTTPSTimeoutServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC0FF0400000000000000D1 /* HTTPSTimeoutServer.swift */; };
+		AEC0FF0500000000000000E2 /* UntrustedHTTPSServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC0FF0500000000000000E1 /* UntrustedHTTPSServer.swift */; };
 		B0A92F012F31000100DB1EA1 /* MockProfileLifecycleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A92F012F31000100DB1EA0 /* MockProfileLifecycleTests.swift */; };
 		B0A92F022F31000100DB1EA2 /* TemporaryFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2791ABB533A00877008 /* TemporaryFiles.swift */; };
 		B0A92F032F31000100DB1EA3 /* TemporaryFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2791ABB533A00877008 /* TemporaryFiles.swift */; };
@@ -11218,6 +11219,7 @@
 		AEC0FF0100000000000000A1 /* AIControlsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIControlsTests.swift; sourceTree = "<group>"; };
 		AEC0FF0300000000000000C1 /* HTTPSFirstModeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPSFirstModeTests.swift; sourceTree = "<group>"; };
 		AEC0FF0400000000000000D1 /* HTTPSTimeoutServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPSTimeoutServer.swift; sourceTree = "<group>"; };
+		AEC0FF0500000000000000E1 /* UntrustedHTTPSServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UntrustedHTTPSServer.swift; sourceTree = "<group>"; };
 		AED14F92AF90DFCE13507BEB /* hy-AM */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "hy-AM"; path = "hy-AM.lproj/ClearPrivateData.strings"; sourceTree = "<group>"; };
 		AEEC489CB0D0CFEB20EC02D2 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AEEF4058B9DAD16B803B48DF /* lo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lo; path = "lo.lproj/Default Browser.strings"; sourceTree = "<group>"; };
@@ -14251,8 +14253,18 @@
 				338510A2D1FFA7548E64224B /* XCUIElementHelpers.swift */,
 				39EB46981E26DDB4006346E8 /* FxScreenGraph.swift */,
 				5BA0ED001432406BA5B07E0B /* TestConstants.swift */,
+				AEC0FF0600000000000000F1 /* TestServers */,
 			);
 			name = Utils;
+			sourceTree = "<group>";
+		};
+		AEC0FF0600000000000000F1 /* TestServers */ = {
+			isa = PBXGroup;
+			children = (
+				AEC0FF0400000000000000D1 /* HTTPSTimeoutServer.swift */,
+				AEC0FF0500000000000000E1 /* UntrustedHTTPSServer.swift */,
+			);
+			path = TestServers;
 			sourceTree = "<group>";
 		};
 		3BFE4B081D342FB900DDF53F /* XCUITests */ = {
@@ -14304,7 +14316,6 @@
 				EDDC4F722F68697E00E0B8FA /* ModernKitOnboardingTests.swift */,
 				AEC0FF0100000000000000A1 /* AIControlsTests.swift */,
 				AEC0FF0300000000000000C1 /* HTTPSFirstModeTests.swift */,
-				AEC0FF0400000000000000D1 /* HTTPSTimeoutServer.swift */,
 				B15058802AA0A878008B7382 /* OpeningScreenTests.swift */,
 				D4C35390283500A600F7DC7D /* PerformanceTests.swift */,
 				D81127D71F84023B0050841D /* PhotonActionSheetTests.swift */,
@@ -20370,6 +20381,7 @@
 				AEC0FF0100000000000000A2 /* AIControlsTests.swift in Sources */,
 				AEC0FF0300000000000000C2 /* HTTPSFirstModeTests.swift in Sources */,
 				AEC0FF0400000000000000D2 /* HTTPSTimeoutServer.swift in Sources */,
+				AEC0FF0500000000000000E2 /* UntrustedHTTPSServer.swift in Sources */,
 				3B546EC01D95ECAE00BDBE36 /* ActivityStreamTest.swift in Sources */,
 				2CCB296720A99C9500121DD8 /* LoginsTests.swift in Sources */,
 				3D9CA9841EF456A8002434DD /* NightModeTests.swift in Sources */,

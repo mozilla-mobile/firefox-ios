@@ -55,6 +55,9 @@
 /* Label for enabling or disabling autocomplete */
 "Autocomplete.mySites" = "Manas vietnes";
 
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "Apmeklētākās vietnes";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Atpakaļ";
 
@@ -103,14 +106,26 @@
 /* Button text for retrying network connection */
 "Network.Offline.RetryButton" = "Mēģināt vēlreiz";
 
+/* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "Izlaist";
+
 /* Text for a label that indicates the title of the top button from the default browser onboarding screen version 2. */
 "Onboarding.DefaultBrowser.TopButtonTitle.V2" = "Iestatīt kā noklusējuma pārlūku";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+"Onboarding.Incognito.Description" = "%@ ir īpašs privātuma pārlūks ar aizsardzību pret izsekošanu un satura liegšanu.";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Pielāgo iestatījumus, lai vari izvēlēties, cik daudz vai maz kopīgo!";
 
 /* Label for the agreement button in the Terms of Use screen. */
 "Onboarding.TermsOfUse.ButtonText" = "Piekrist un turpināt";
 
 /* Label for the agreement button in the Terms of Use screen. */
 "Onboarding.TermsOfUse.ButtonTextV2" = "Turpināt";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+"Safari.instructionsEnable" = "Iespējot %@";
 
 /* Save button label */
 "Save" = "Saglabāt";

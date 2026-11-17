@@ -149,13 +149,10 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         let reducer = addressBarReducer()
 
         let urlDidChangeState = loadWebsiteAction(state: initialState, reducer: reducer)
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             urlDidChangeState,
-            ToolbarAction(
-                isLoading: true,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.websiteLoadingStateDidChange
-            )
+            ToolbarModernAction.websiteLoadingStateDidChange(isLoading: true),
+            windowUUID
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
@@ -168,13 +165,10 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         let reducer = addressBarReducer()
 
         let urlDidChangeState = loadWebsiteAction(state: initialState, reducer: reducer)
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             urlDidChangeState,
-            ToolbarAction(
-                isLoading: false,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.websiteLoadingStateDidChange
-            )
+            ToolbarModernAction.websiteLoadingStateDidChange(isLoading: false),
+            windowUUID
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
@@ -312,7 +306,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.borderPosition, .top)
     }
 
-    func test_didPasteSearchTermAction_returnsExpectedState() {
+    func test_searchTermDidSetAction_returnsExpectedState() {
         setupStore()
         let initialState = createSubject()
         let reducer = addressBarReducer()
@@ -320,7 +314,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         let newState = reducer.modernReducer(
             initialState,
-            ToolbarModernAction.didPasteSearchTerm(searchTerm: searchTerm),
+            ToolbarModernAction.searchTermDidSet(searchTerm: searchTerm),
             windowUUID
         )
 
@@ -328,6 +322,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.searchTerm, searchTerm)
         XCTAssertTrue(newState.isEditing)
+        XCTAssertTrue(newState.shouldShowKeyboard)
         XCTAssertFalse(newState.shouldSelectSearchTerm)
         XCTAssertFalse(newState.didStartTyping)
         XCTAssertFalse(newState.isEmptySearch)
@@ -582,31 +577,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(newState.didStartTyping)
         XCTAssertFalse(newState.isEmptySearch)
     }
-
-    func test_didSetTextInLocationViewAction_returnsExpectedState() {
-        setupStore()
-        let initialState = createSubject()
-        let reducer = addressBarReducer()
-        let searchTerm = "mozilla"
-
-        let newState = reducer.legacyReducer(
-            initialState,
-            ToolbarAction(
-                searchTerm: searchTerm,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.didSetTextInLocationView
-            )
-        )
-
-        XCTAssertEqual(newState.windowUUID, windowUUID)
-
-        XCTAssertEqual(newState.searchTerm, searchTerm)
-        XCTAssertTrue(newState.isEditing)
-        XCTAssertTrue(newState.shouldShowKeyboard)
-        XCTAssertFalse(newState.shouldSelectSearchTerm)
-        XCTAssertFalse(newState.didStartTyping)
-        XCTAssertFalse(newState.isEmptySearch)
-}
 
     func test_keyboardRequestChangeAction_whenHiding_returnsExpectedState() {
         setupStore()

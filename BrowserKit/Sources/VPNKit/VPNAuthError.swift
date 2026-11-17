@@ -13,6 +13,8 @@ public enum VPNAuthError: Error, Equatable {
     case sessionNotPersisted
     /// The proxy token isn't a JWT with readable `exp` / `nbf` claims
     case invalidToken
+    /// The device has used its monthly bandwidth quota; the token endpoint returned 429
+    case quotaExceeded
 }
 
 extension VPNAuthError {
