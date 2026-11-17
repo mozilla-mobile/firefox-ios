@@ -13,7 +13,6 @@
     violet: '#3A1F6B',
     purple: '#9059FF',
     fox: '#FF7139',
-    foxDark: '#C9461A',
     ember: '#FFBD4F',
     gold: '#FFD23F',
     pink: '#FF4F5E',

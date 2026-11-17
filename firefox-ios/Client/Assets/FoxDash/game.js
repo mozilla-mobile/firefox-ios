@@ -29,7 +29,7 @@
 
   // Hitboxes as [x, y, radius] relative to the fox's feet. They skip the
   // tail and legs so near misses feel fair.
-  const FOX_HITBOX = [[2, -21, 12], [27, -33, 9]];
+  const FOX_HITBOX = [[0, -24, 10], [37, -36, 8]];
 
   const THEMES = theme.skies;
   const THEME_NAMES = Object.keys(THEMES);
@@ -200,10 +200,10 @@
 
   // A tracker that drifts between the ground and BOB_HIGH over ~2.4 s. It
   // always has to be jumped: even at the top its hitbox (r 14.8) reaches
-  // down to the fox's head circle (centre 33, r 9) on the ground, since
-  // 54 - 33 = 21 < 23.8. Clearing it at the top needs the feet above ~60,
-  // and a single jump stays above 60 for ~0.4 s, while the bobber takes at
-  // most 75 units / 426 = 0.18 s to pass the fox at the speed it unlocks.
+  // down to the fox's head circle (centre 36, r 8) on the ground, since
+  // 54 - 36 = 18 < 22.8. Clearing it at the top needs the feet above ~55,
+  // and a single jump stays above 55 for ~0.4 s, while the bobber takes at
+  // most 85 units / 426 = 0.2 s to pass the fox at the speed it unlocks.
   function bobber(x) {
     return { kind: 'tracker', x, h: BOB_LOW, baseH: BOB_LOW, r: 18, extra: 0, t: rng() * 10, bob: srand(2.3, 2.9) };
   }
@@ -584,7 +584,8 @@
     }
 
     const pose = state === 'dying' || state === 'over' ? 'hurt' : fox.h > 0 ? 'jump' : 'run';
-    Sprites.fox(ctx, foxX, groundY - fox.h, 1, fox.phase, pose);
+    const tilt = fox.h > 0 ? clamp(fox.vy / JUMP_V, -1, 1) * 0.2 : 0;
+    Sprites.fox(ctx, foxX, groundY - fox.h, 1, fox.phase, pose, tilt);
     if (ambient) ambient.draw(ctx, { width: viewW, height: viewH, scroll, clock });
     fx.draw(ctx);
 
