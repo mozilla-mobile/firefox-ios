@@ -16,7 +16,7 @@ struct HomepageTelemetryExtras {
 struct HomepageAction: Action {
     let windowUUID: WindowUUID
     let actionType: ActionType
-    let isSearchBarEnabled: Bool?
+    let isCenterSearchEnabled: Bool?
     let shouldShowSpacer: Bool?
     let numberOfTopSitesPerRow: Int?
     let telemetryExtras: HomepageTelemetryExtras?
@@ -25,7 +25,7 @@ struct HomepageAction: Action {
     let availableWallpaperHeight: CGFloat?
 
     init(
-        isSearchBarEnabled: Bool? = nil,
+        isCenterSearchEnabled: Bool? = nil,
         shouldShowSpacer: Bool? = nil,
         numberOfTopSitesPerRow: Int? = nil,
         telemetryExtras: HomepageTelemetryExtras? = nil,
@@ -37,7 +37,7 @@ struct HomepageAction: Action {
     ) {
         self.windowUUID = windowUUID
         self.actionType = actionType
-        self.isSearchBarEnabled = isSearchBarEnabled
+        self.isCenterSearchEnabled = isCenterSearchEnabled
         self.shouldShowSpacer = shouldShowSpacer
         self.numberOfTopSitesPerRow = numberOfTopSitesPerRow
         self.telemetryExtras = telemetryExtras

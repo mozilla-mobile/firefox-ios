@@ -13,20 +13,24 @@ import Shared
 struct SearchBarState: StateType, Equatable {
     var windowUUID: WindowUUID
     let shouldShowSearchBar: Bool
+    let isHomepageVisible: Bool
 
     init(windowUUID: WindowUUID) {
         self.init(
             windowUUID: windowUUID,
-            shouldShowSearchBar: false
+            shouldShowSearchBar: false,
+            isHomepageVisible: false
         )
     }
 
     private init(
         windowUUID: WindowUUID,
-        shouldShowSearchBar: Bool
+        shouldShowSearchBar: Bool,
+        isHomepageVisible: Bool
     ) {
         self.windowUUID = windowUUID
         self.shouldShowSearchBar = shouldShowSearchBar
+        self.isHomepageVisible = isHomepageVisible
     }
 
     static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
@@ -46,10 +50,16 @@ struct SearchBarState: StateType, Equatable {
         case HomepageMiddlewareActionType.configuredSearchBar:
             return handleSearchBarInitialization(action: action, state: state)
 
-        // Hide homepage search bar when entering zero search state or
-        // when address toolbar is shown
+        case HomepageActionType.viewWillAppear:
+            return state.copy(isHomepageVisible: true)
+
+        case HomepageActionType.viewWillDisappear:
+            return state
+                .copy(shouldShowSearchBar: false)
+                .copy(isHomepageVisible: false)
+
+        // Hide homepage search bar when entering zero search state or editing
         case GeneralBrowserActionType.enteredZeroSearchScreen,
-            GeneralBrowserActionType.didUnhideToolbar,
             ToolbarActionType.didStartEditingUrl:
             return handleHidingSearchBar(action: action, state: state)
         default:
@@ -58,12 +68,12 @@ struct SearchBarState: StateType, Equatable {
     }
 
     private static func handleSearchBarInitialization(action: Action, state: Self) -> SearchBarState {
-        guard let isSearchBarEnabled = (action as? HomepageAction)?.isSearchBarEnabled else {
+        guard let isCenterSearchEnabled = (action as? HomepageAction)?.isCenterSearchEnabled else {
             return defaultState(from: state)
         }
 
         return state.copy(
-            shouldShowSearchBar: isSearchBarEnabled
+            shouldShowSearchBar: isCenterSearchEnabled && state.isHomepageVisible
         )
     }
 
@@ -76,7 +86,8 @@ struct SearchBarState: StateType, Equatable {
     static func defaultState(from state: SearchBarState) -> SearchBarState {
         return SearchBarState(
             windowUUID: state.windowUUID,
-            shouldShowSearchBar: state.shouldShowSearchBar
+            shouldShowSearchBar: state.shouldShowSearchBar,
+            isHomepageVisible: state.isHomepageVisible
         )
     }
 }

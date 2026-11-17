@@ -80,7 +80,6 @@ enum GeneralBrowserActionType: ActionType {
     case showPasswordGenerator
     case didSelectedTabChangeToHomepage
     case enteredZeroSearchScreen
-    case didUnhideToolbar
     case didCloseTabFromToolbar
     case didTapReaderModeBarSummarizerButton
     case shakeMotionEnded
