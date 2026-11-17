@@ -126,6 +126,7 @@ final class VPNMiddleware {
         do {
             try await vpnManager.start(countryCode: selectedCountryCode)
             userPreferences.setPreferenceFor(.vpnFeature, to: vpnManager.isRunning)
+            UIAccessibility.post(notification: .announcement, argument: String.VPN.Settings.Connected)
         } catch {
             logger.log("VPN start failed: \(error)", level: .warning, category: .vpn)
         }
@@ -137,7 +138,6 @@ final class VPNMiddleware {
             return
         }
         guard countryCode != vpnManager.selectedCountryCode else { return }
-        prefs.setString(countryCode, forKey: PrefsKeys.VPNSettings.selectedCountryCode)
         vpnManager.selectedCountryCodeDidChange(countryCode: countryCode)
 
         // if the VPN is running when the selected location changes, start a new connection
