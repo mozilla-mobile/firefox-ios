@@ -108,9 +108,6 @@ final class ToolbarMiddleware {
             store.dispatch(action)
             dispatchGoogleLensAvailability(for: uuid)
 
-        case GeneralBrowserMiddlewareActionType.toolbarPositionChanged:
-            updateToolbarPosition(action: action)
-
         default:
             break
         }
@@ -375,16 +372,6 @@ final class ToolbarMiddleware {
         default:
             break
         }
-    }
-
-    // MARK: - Position
-    private func updateToolbarPosition(action: GeneralBrowserMiddlewareAction) {
-        guard let searchBarPosition = action.toolbarPosition else { return }
-
-        let toolbarAction = ToolbarAction(toolbarPosition: searchBarPosition,
-                                          windowUUID: action.windowUUID,
-                                          actionType: ToolbarActionType.toolbarPositionChanged)
-        store.dispatch(toolbarAction)
     }
 
     @MainActor

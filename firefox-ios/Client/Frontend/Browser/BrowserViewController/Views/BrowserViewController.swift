@@ -664,12 +664,8 @@ class BrowserViewController: UIViewController,
         updateToolbarDisplay()
         addOrUpdateMaskViewIfNeeded()
 
-        let action = GeneralBrowserMiddlewareAction(
-            scrollOffset: scrollController.contentOffset,
-            toolbarPosition: effectiveSearchBarPosition,
-            windowUUID: windowUUID,
-            actionType: GeneralBrowserMiddlewareActionType.toolbarPositionChanged)
-        store.dispatch(action)
+        store.dispatch(ToolbarModernAction.toolbarPositionChanged(position: effectiveSearchBarPosition),
+                       forWindowUUID: windowUUID)
         updateSwipingTabs()
 
         searchController?.viewModel.updateBottomSearchBarState(isBottomSearchBar: isBottomSearchBar)
