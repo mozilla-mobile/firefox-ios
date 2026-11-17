@@ -13,7 +13,7 @@ final class ReturnToBrowserTransitionAnimator: NSObject,
                                                UIViewControllerAnimatedTransitioning {
     private enum UX {
         static let duration: TimeInterval = 0.4
-        static let damping: CGFloat = 1.0
+        static let damping: CGFloat = 0.8
         static let stackedTransform = CGAffineTransform(scaleX: 0.92, y: 0.92)
     }
 
@@ -141,7 +141,7 @@ final class ReturnToBrowserTransitionAnimator: NSObject,
     }
 
     private func transitionContentView(in controller: UIViewController?) -> UIView? {
-        let rootController = (controller as? UINavigationController)?.viewControllers.first ?? controller
+        let rootController = (controller as? UINavigationController)?.viewControllers.first
         return (rootController as? QuickAnswersViewController)?.transitionContentView
     }
 
