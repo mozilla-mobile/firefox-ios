@@ -186,7 +186,8 @@ struct ToolbarState: ScreenState, Sendable {
         case .didSetTabScreenshot(let previousTabScreenshot, let nextTabScreenshot):
             return handleDidSetTabScreenshot(state: state, previous: previousTabScreenshot, next: nextTabScreenshot)
 
-        case .didKeyboardRequestChange, .cancelEditOnHomepage, .searchTermDidSet, .lockIconChanged, .searchTermDidChange, .searchTermDidClear, .websiteLoadingStateDidChange:
+        case .didKeyboardRequestChange, .cancelEditOnHomepage, .searchTermDidSet, .lockIconChanged,
+             .searchTermDidChange, .searchTermDidClear, .websiteLoadingStateDidChange:
             // AddressBarState is a nested sub-state, forwards modern call to AddressBarState
             return state.copy(addressToolbar: AddressBarState.reducer.modernReducer(state.addressToolbar,
                                                                                     action,
@@ -196,6 +197,11 @@ struct ToolbarState: ScreenState, Sendable {
 
         case .toolbarPositionChanged(let position):
             return state.copy(toolbarPosition: addressToolbarPositionFromSearchBarPosition(position))
+
+        case .traitCollectionDidChange(let isShowingNavigationToolbar, let isShowingTopTabs):
+            return state
+                .copy(isShowingNavigationToolbar: isShowingNavigationToolbar)
+                .copy(isShowingTopTabs: isShowingTopTabs)
         }
     }
 
@@ -244,9 +250,6 @@ struct ToolbarState: ScreenState, Sendable {
 
         case ToolbarActionType.backForwardButtonStateChanged:
             return handleBackForwardButtonStateChanged(state: state, action: action)
-
-        case ToolbarActionType.traitCollectionDidChange:
-            return handleTraitCollectionDidChange(state: state, action: action)
 
         case SearchEngineSelectionActionType.didTapSearchEngine,
             SearchEngineSelectionMiddlewareActionType.didClearAlternativeSearchEngine:
@@ -301,7 +304,6 @@ struct ToolbarState: ScreenState, Sendable {
             .copy(addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, action))
             .copy(navigationToolbar: NavigationBarState.reducer.legacyReducer(state.navigationToolbar, action))
             .copy(isShowingNavigationToolbar: toolbarAction?.isShowingNavigationToolbar ?? state.isShowingNavigationToolbar)
-            .copy(isShowingTopTabs: toolbarAction?.isShowingTopTabs ?? state.isShowingTopTabs)
             .copy(canGoBack: toolbarAction?.canGoBack ?? state.canGoBack)
             .copy(canGoForward: toolbarAction?.canGoForward ?? state.canGoForward)
             .copy(isTranslationsEnabled: actionIsTranslationsEnabled ?? state.isTranslationsEnabled)
@@ -326,16 +328,6 @@ struct ToolbarState: ScreenState, Sendable {
             .copy(navigationToolbar: NavigationBarState.reducer.legacyReducer(state.navigationToolbar, toolbarAction))
             .copy(canGoBack: toolbarAction.canGoBack ?? state.canGoBack)
             .copy(canGoForward: toolbarAction.canGoForward ?? state.canGoForward)
-    }
-
-    @MainActor
-    private static func handleTraitCollectionDidChange(state: Self, action: Action) -> ToolbarState {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-        return state
-            .copy(addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, toolbarAction))
-            .copy(navigationToolbar: NavigationBarState.reducer.legacyReducer(state.navigationToolbar, toolbarAction))
-            .copy(isShowingNavigationToolbar: toolbarAction.isShowingNavigationToolbar ?? state.isShowingNavigationToolbar)
-            .copy(isShowingTopTabs: toolbarAction.isShowingTopTabs ?? state.isShowingTopTabs)
     }
 
     @MainActor

@@ -3196,13 +3196,11 @@ class BrowserViewController: UIViewController,
               toolbarState.isShowingTopTabs != showTopTabs || toolbarState.isShowingNavigationToolbar != showNavToolbar
         else { return }
 
-        let action = ToolbarAction(
-            isShowingNavigationToolbar: showNavToolbar,
-            isShowingTopTabs: showTopTabs,
-            windowUUID: windowUUID,
-            actionType: ToolbarActionType.traitCollectionDidChange
+        store.dispatch(
+            ToolbarModernAction.traitCollectionDidChange(isShowingNavigationToolbar: showNavToolbar,
+                                                         isShowingTopTabs: showTopTabs),
+            forWindowUUID: windowUUID
         )
-        store.dispatch(action)
     }
 
     func dispatchAvailableContentHeightChangedAction() {
