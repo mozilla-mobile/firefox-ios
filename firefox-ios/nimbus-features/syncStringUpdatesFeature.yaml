@@ -1,0 +1,10 @@
+features:
+  sync-string-updates-feature:
+    description: >
+      Controls the string updates across sync-related screens
+    variables:
+      enabled:
+        description: >
+          Whether the updated sync strings are enabled
+        type: Boolean
+        default: false
