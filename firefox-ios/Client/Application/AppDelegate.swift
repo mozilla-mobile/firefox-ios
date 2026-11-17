@@ -161,7 +161,7 @@ class AppDelegate: UIResponder,
             }
         }
 
-        reconnectVPNIfNeeded()
+        resetVPNAtLaunch()
 
         if #available(iOS 17.0, *) {
             ResetTipsSetting.resetDatastoreIfNeeded(prefs: profile.prefs)
@@ -392,18 +392,11 @@ class AppDelegate: UIResponder,
         }
     }
 
-    // tab restore waits on .vpnReconnect, for now we never reconnect at launch
-    private func reconnectVPNIfNeeded() {
-        let userPreferences: UserFeaturePreferring = AppContainer.shared.resolve()
-        // Set this to false so VPN never reconnects at launch
-        userPreferences.setPreferenceFor(.vpnFeature, to: false)
+    // makes sure VPN doesn't connect at launch
+    private func resetVPNAtLaunch() {
         guard #available(iOS 17.0, *),
-              featureFlagsProvider.isEnabled(.vpnFeature),
-              userPreferences.getPreferenceFor(.vpnFeature) else {
-            AppEventQueue.signal(event: .vpnReconnect)
-            return
-        }
-        store.dispatch(VPNModernAction.reconnectAtLaunch, forWindowUUID: .unavailable)
+              featureFlagsProvider.isEnabled(.vpnFeature) else { return }
+        store.dispatch(VPNModernAction.resetVPNAtLaunch, forWindowUUID: .unavailable)
     }
 
     private func fixSimulatorDevBuild(_ application: UIApplication) {

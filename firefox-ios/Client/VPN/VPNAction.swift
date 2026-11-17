@@ -8,7 +8,7 @@ enum VPNModernAction: ModernAction, Equatable {
     case start
     case stop
     case changeLocation(countryCode: String)
-    case reconnectAtLaunch
+    case resetVPNAtLaunch
     case refreshUsage
     // User choices from the VPN alerts. Each one turns the VPN off.
     case continueWithoutVPN

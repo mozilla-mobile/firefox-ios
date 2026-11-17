@@ -245,7 +245,7 @@ class SceneDelegate: UIResponder,
         sessionManager.launchSessionProvider.openedFromExternalSource = true
 
         if isDeeplinkOptimizationRefactorEnabled {
-            AppEventQueue.wait(for: [.startupFlowComplete, .vpnReconnect]) { [weak self] in
+            AppEventQueue.wait(for: [.startupFlowComplete]) { [weak self] in
                 ensureMainThread {
                     self?.logger.log("Start up flow done, will handle route",
                                      level: .info,
@@ -256,8 +256,8 @@ class SceneDelegate: UIResponder,
             }
         } else {
             AppEventQueue.wait(for: [.startupFlowComplete,
-                                     .tabRestoration(sceneCoordinator.windowUUID),
-                                     .vpnReconnect]) { [weak self] in
+                                     .tabRestoration(sceneCoordinator.windowUUID)
+                                    ]) { [weak self] in
                 ensureMainThread {
                     self?.logger.log("Start up flow and restoration done, will handle route",
                                      level: .info,
