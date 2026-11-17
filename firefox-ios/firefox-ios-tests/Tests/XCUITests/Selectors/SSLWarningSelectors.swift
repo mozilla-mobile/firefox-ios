@@ -10,6 +10,7 @@ protocol SSLWarningSelectorsSet {
     var ADVANCED_BUTTON: Selector { get }
     var VISIT_SITE_ANYWAY_LINK: Selector { get }
     var PAGE_DOMAIN: Selector { get }
+    var UNTRUSTED_PAGE_HEADING: Selector { get }
     var all: [Selector] { get }
 }
 
@@ -51,7 +52,14 @@ struct SSLWarningSelectors: SSLWarningSelectorsSet {
         groups: ["browser", "ssl"]
     )
 
+    let UNTRUSTED_PAGE_HEADING = Selector.staticTextByExactLabel(
+        UntrustedHTTPSServer.pageHeading,
+        in: Selector.webView(description: "Web view showing the untrusted test site"),
+        description: "Heading of the untrusted test site, shown once the warning is bypassed",
+        groups: ["browser", "ssl"]
+    )
+
     var all: [Selector] {
-        [WARNING_MESSAGE, GO_BACK_BUTTON, ADVANCED_BUTTON, VISIT_SITE_ANYWAY_LINK, PAGE_DOMAIN]
+        [WARNING_MESSAGE, GO_BACK_BUTTON, ADVANCED_BUTTON, VISIT_SITE_ANYWAY_LINK, PAGE_DOMAIN, UNTRUSTED_PAGE_HEADING]
     }
 }
