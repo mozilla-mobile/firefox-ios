@@ -31,7 +31,6 @@ webview.error_page.wayback_machine:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16434
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/35045
-      - https://github.com/mozilla-mobile/firefox-ios/pull/36610
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -43,7 +42,6 @@ webview.error_page.wayback_machine:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16434
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/35045
-      - https://github.com/mozilla-mobile/firefox-ios/pull/36610
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -55,7 +53,6 @@ webview.error_page.wayback_machine:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16434
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/35045
-      - https://github.com/mozilla-mobile/firefox-ios/pull/36610
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never

@@ -33,7 +33,6 @@ ai.quick_answers:
       - https://github.com/mozilla-mobile/firefox-ios/issues/35176
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/35175
-      - https://github.com/mozilla-mobile/firefox-ios/pull/36610
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -55,7 +54,6 @@ ai.quick_answers:
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34483
       - https://github.com/mozilla-mobile/firefox-ios/pull/35786
-      - https://github.com/mozilla-mobile/firefox-ios/pull/36610
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -73,7 +71,6 @@ ai.quick_answers:
       - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34483
-      - https://github.com/mozilla-mobile/firefox-ios/pull/36610
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -99,7 +96,6 @@ ai.quick_answers:
       - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34483
-      - https://github.com/mozilla-mobile/firefox-ios/pull/36610
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -117,7 +113,6 @@ ai.quick_answers:
       - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34483
-      - https://github.com/mozilla-mobile/firefox-ios/pull/36610
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -151,7 +146,6 @@ ai.quick_answers:
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34483
       - https://github.com/mozilla-mobile/firefox-ios/pull/35786
-      - https://github.com/mozilla-mobile/firefox-ios/pull/36610
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -172,7 +166,6 @@ ai.quick_answers:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16927
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/35786
-      - https://github.com/mozilla-mobile/firefox-ios/pull/36610
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -184,7 +177,6 @@ ai.quick_answers:
       - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34483
-      - https://github.com/mozilla-mobile/firefox-ios/pull/36610
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -198,7 +190,6 @@ ai.quick_answers:
       - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34483
-      - https://github.com/mozilla-mobile/firefox-ios/pull/36610
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -210,7 +201,6 @@ ai.quick_answers:
       - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34483
-      - https://github.com/mozilla-mobile/firefox-ios/pull/36610
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -227,7 +217,6 @@ ai.quick_answers:
       - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34483
-      - https://github.com/mozilla-mobile/firefox-ios/pull/36610
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
