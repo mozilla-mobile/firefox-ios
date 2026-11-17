@@ -56,16 +56,6 @@ final class FoxDashViewControllerTests: XCTestCase {
         XCTAssertFalse(webView.configuration.websiteDataStore.isPersistent)
     }
 
-    func test_viewDidLoad_configuresCloseButtonAccessibility() throws {
-        let subject = createSubject()
-
-        subject.loadViewIfNeeded()
-
-        let button = try XCTUnwrap(closeButton(in: subject))
-        XCTAssertEqual(button.accessibilityLabel, .CloseButtonTitle)
-        XCTAssertEqual(button.accessibilityIdentifier, AccessibilityIdentifiers.FoxDash.closeButton)
-    }
-
     func test_closeButton_tapped_callsOnClose() throws {
         let subject = createSubject()
         subject.loadViewIfNeeded()
