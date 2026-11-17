@@ -147,10 +147,10 @@ body.game {
   right: 0;
   z-index: 1;
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 12px;
-  padding: max(12px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) 0 calc(max(14px, env(safe-area-inset-left)) + 56px);
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  padding: max(12px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) 0 max(14px, env(safe-area-inset-left));
   pointer-events: none;
 }
 
