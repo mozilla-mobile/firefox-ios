@@ -13,6 +13,7 @@ final class VPNMiddleware {
     private let prefs: Prefs
     private let logger: Logger
     private let userPreferences: UserFeaturePreferring
+    private let telemetry: VPNStartTelemetry
     /// Owned here so the proxy session and its pass rotation live as long as the store.
     private let vpnManager: VPNRunnable?
 
@@ -20,11 +21,13 @@ final class VPNMiddleware {
          profile: Profile = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
          userPreferences: UserFeaturePreferring = AppContainer.shared.resolve(),
+         telemetry: VPNStartTelemetry = DefaultVPNTelemetry(),
          vpnManager: VPNRunnable? = VPNMiddleware.makeVPNManager()) {
         self.windowManager = windowManager
         self.prefs = profile.prefs
         self.logger = logger
         self.userPreferences = userPreferences
+        self.telemetry = telemetry
         self.vpnManager = vpnManager
         Task { [weak self] in
             guard let events = self?.vpnManager?.events else { return }
@@ -93,7 +96,7 @@ final class VPNMiddleware {
     private func handleVPNAction(_ action: VPNModernAction, windowUUID: WindowUUID) async {
         switch action {
         case .start:
-            await startVPN()
+            await startVPN(trigger: .user)
         case .stop, .continueWithoutVPN:
             await stopVPN()
         case .changeLocation(let countryCode):
@@ -123,17 +126,25 @@ final class VPNMiddleware {
         userPreferences.setPreferenceFor(.vpnFeature, to: false)
     }
 
-    private func startVPN() async {
+    private func startVPN(trigger: VPNStartTrigger) async {
         guard let vpnManager else {
             logger.log("VPN start with no VPNManager registered", level: .warning, category: .vpn)
             return
         }
+        let countryCode = selectedCountryCode
+        let telemetryCountryCode = countryCode ?? VPNServerManager.recommendedCountryCode
         do {
-            try await vpnManager.start(countryCode: selectedCountryCode)
+            try await vpnManager.start(countryCode: countryCode)
+            telemetry.recordStartSucceeded(countryCode: telemetryCountryCode, trigger: trigger)
             userPreferences.setPreferenceFor(.vpnFeature, to: vpnManager.isRunning)
             UIAccessibility.post(notification: .announcement, argument: String.VPN.Settings.Connected)
         } catch {
             logger.log("VPN start failed: \(error)", level: .warning, category: .vpn)
+            telemetry.recordStartFailed(
+                reason: VPNStartFailureReason(error),
+                countryCode: telemetryCountryCode,
+                trigger: trigger
+            )
         }
     }
 

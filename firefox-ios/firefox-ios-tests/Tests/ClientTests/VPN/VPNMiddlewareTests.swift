@@ -16,6 +16,7 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
     private var mockProfile: MockProfile!
     private var mockVPNManager: MockVPNManager!
     private var mockUserPreferences: MockUserFeaturePreferences!
+    private var mockTelemetry: MockVPNStartTelemetry!
     private var windowManager: WindowManagerImplementation!
     // `AppWindowInfo.tabManager` is weak, so the tab managers are held here.
     private var firstTabManager: MockTabManager!
@@ -29,6 +30,7 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         mockProfile = makeProfile()
         mockVPNManager = MockVPNManager()
         mockUserPreferences = MockUserFeaturePreferences()
+        mockTelemetry = MockVPNStartTelemetry()
         windowManager = WindowManagerImplementation(tabDataStore: MockTabDataStore())
         firstTabManager = MockTabManager(windowUUID: firstWindowUUID)
         secondTabManager = MockTabManager(windowUUID: secondWindowUUID)
@@ -41,6 +43,7 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         mockProfile = nil
         mockVPNManager = nil
         mockUserPreferences = nil
+        mockTelemetry = nil
         windowManager = nil
         firstTabManager = nil
         secondTabManager = nil
@@ -82,6 +85,41 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         await fulfillment(of: [started, preferenceSet], timeout: 0.2)
 
         XCTAssertNil(mockUserPreferences.boolPreferences[.vpnFeature])
+    }
+
+    func testStart_whenStartSucceeds_recordsSavedCountryCode() async {
+        mockProfile.prefs.setString("DE", forKey: PrefsKeys.VPNSettings.selectedCountryCode)
+        let subject = createSubject()
+
+        await dispatchStart(to: subject)
+
+        XCTAssertEqual(mockTelemetry.successes.count, 1)
+        XCTAssertEqual(mockTelemetry.successes.first?.countryCode, "DE")
+        XCTAssertEqual(mockTelemetry.successes.first?.trigger, .user)
+        XCTAssertTrue(mockTelemetry.failures.isEmpty)
+    }
+
+    func testStart_withNoSavedCountryCode_recordsRecommendedCountryCode() async {
+        let subject = createSubject()
+
+        await dispatchStart(to: subject)
+
+        XCTAssertEqual(mockTelemetry.successes.first?.countryCode, VPNServerManager.recommendedCountryCode)
+        XCTAssertEqual(mockVPNManager.startCountryCodes, [nil])
+    }
+
+    func testStart_whenStartFails_recordsFailureReasonAndCountryCode() async {
+        mockProfile.prefs.setString("DE", forKey: PrefsKeys.VPNSettings.selectedCountryCode)
+        mockVPNManager.startError = VPNError.noServerFound
+        let subject = createSubject()
+
+        await dispatchStart(to: subject)
+
+        XCTAssertTrue(mockTelemetry.successes.isEmpty)
+        XCTAssertEqual(mockTelemetry.failures.count, 1)
+        XCTAssertEqual(mockTelemetry.failures.first?.reason, .noServerFound)
+        XCTAssertEqual(mockTelemetry.failures.first?.countryCode, "DE")
+        XCTAssertEqual(mockTelemetry.failures.first?.trigger, .user)
     }
 
     func testStop_stopsVPNAndClearsPreference() async {
@@ -315,10 +353,19 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
             profile: mockProfile,
             logger: MockLogger(),
             userPreferences: mockUserPreferences,
+            telemetry: mockTelemetry,
             vpnManager: mockVPNManager
         )
 
         return subject
+    }
+
+    /// Waits for start telemetry, recorded on both success and failure.
+    private func dispatchStart(to subject: VPNMiddleware) async {
+        let recorded = expectation(description: "Start telemetry recorded")
+        mockTelemetry.onRecord = { recorded.fulfill() }
+        subject.vpnProvider.modernMiddleware(AppState(), VPNModernAction.start, firstWindowUUID)
+        await fulfillment(of: [recorded], timeout: 1)
     }
 
     private func dispatchChangeLocationAndWait(countryCode: String, expectStart: Bool) async {
@@ -398,5 +445,27 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         }
         subject.vpnProvider.modernMiddleware(AppState(), action, firstWindowUUID)
         await fulfillment(of: [stopped], timeout: 1)
+    }
+}
+
+private final class MockVPNStartTelemetry: VPNStartTelemetry {
+    struct Failure {
+        let reason: VPNStartFailureReason
+        let countryCode: String
+        let trigger: VPNStartTrigger
+    }
+
+    var successes: [(countryCode: String, trigger: VPNStartTrigger)] = []
+    var failures: [Failure] = []
+    var onRecord: (() -> Void)?
+
+    func recordStartSucceeded(countryCode: String, trigger: VPNStartTrigger) {
+        successes.append((countryCode, trigger))
+        onRecord?()
+    }
+
+    func recordStartFailed(reason: VPNStartFailureReason, countryCode: String, trigger: VPNStartTrigger) {
+        failures.append(Failure(reason: reason, countryCode: countryCode, trigger: trigger))
+        onRecord?()
     }
 }
