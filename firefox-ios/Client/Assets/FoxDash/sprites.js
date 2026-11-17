@@ -202,8 +202,8 @@
     body.quadraticCurveTo(1558, 738, 1544, 743);
     body.bezierCurveTo(1520, 748, 1482, 752, 1456, 762);
     body.bezierCurveTo(1436, 772, 1420, 784, 1414, 797);
-    body.bezierCurveTo(1420, 808, 1430, 815, 1436, 824);
-    body.bezierCurveTo(1410, 834, 1380, 834, 1357, 832);
+    body.bezierCurveTo(1414, 806, 1410, 818, 1398, 827);
+    body.bezierCurveTo(1388, 833, 1372, 833, 1357, 832);
     body.bezierCurveTo(1300, 826, 1200, 816, 1150, 826);
     body.bezierCurveTo(1122 + rx, 832, 1102 + rx, 820, 1092 + rx, 800);
     body.closePath();
