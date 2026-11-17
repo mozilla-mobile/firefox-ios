@@ -147,6 +147,7 @@ struct ToolbarState: ScreenState, Sendable {
 
     static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
 
+    // swiftlint:disable:next closure_body_length
     static let modernReducer: ReducerMethod<Self> = { state, action, actionWindowUUID in
         guard let action = action as? ToolbarModernAction,
               actionWindowUUID == .unavailable || actionWindowUUID == state.windowUUID
@@ -185,14 +186,16 @@ struct ToolbarState: ScreenState, Sendable {
         case .didSetTabScreenshot(let previousTabScreenshot, let nextTabScreenshot):
             return handleDidSetTabScreenshot(state: state, previous: previousTabScreenshot, next: nextTabScreenshot)
 
-        case .didKeyboardRequestChange, .cancelEditOnHomepage, .searchTermDidSet, .lockIconChanged,
-             .searchTermDidChange, .searchTermDidClear, .websiteLoadingStateDidChange:
+        case .didKeyboardRequestChange, .cancelEditOnHomepage, .searchTermDidSet, .lockIconChanged, .searchTermDidChange, .searchTermDidClear, .websiteLoadingStateDidChange:
             // AddressBarState is a nested sub-state, forwards modern call to AddressBarState
             return state.copy(addressToolbar: AddressBarState.reducer.modernReducer(state.addressToolbar,
                                                                                     action,
                                                                                     actionWindowUUID))
         case .numberOfTabsChanged(let count):
             return state.copy(numberOfTabs: count)
+
+        case .toolbarPositionChanged(let position):
+            return state.copy(toolbarPosition: addressToolbarPositionFromSearchBarPosition(position))
         }
     }
 
@@ -238,9 +241,6 @@ struct ToolbarState: ScreenState, Sendable {
         case GeneralBrowserMiddlewareActionType.websiteDidScroll,
             ToolbarMiddlewareActionType.urlDidChange:
             return handleScrollOffsetChanged(state: state, action: action)
-
-        case ToolbarActionType.toolbarPositionChanged:
-            return handleToolbarPositionChanged(state: state, action: action)
 
         case ToolbarActionType.backForwardButtonStateChanged:
             return handleBackForwardButtonStateChanged(state: state, action: action)
@@ -316,18 +316,6 @@ struct ToolbarState: ScreenState, Sendable {
         // Update to use isAddressBarMinimized so the address bar is shown and the toast isn't presented a minimized bar.
         return state
             .copy(isAddressBarMinimized: false)
-    }
-
-    @MainActor
-    private static func handleToolbarPositionChanged(state: Self, action: Action) -> ToolbarState {
-        guard let toolbarPosition = (action as? ToolbarAction)?.toolbarPosition
-        else {
-            return defaultState(from: state)
-        }
-
-        let position = addressToolbarPositionFromSearchBarPosition(toolbarPosition)
-        return state
-            .copy(toolbarPosition: position)
     }
 
     @MainActor

@@ -528,17 +528,27 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             initialState,
-            ToolbarAction(
-                toolbarPosition: .bottom,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.toolbarPositionChanged
-            )
+            ToolbarModernAction.toolbarPositionChanged(position: .bottom),
+            windowUUID
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.toolbarPosition, .bottom)
+    }
+
+    func test_toolbarPositionChangedAction_fromAnotherWindow_doesNotChangeState() {
+        let initialState = createSubject()
+        let reducer = toolbarReducer()
+
+        let newState = reducer.modernReducer(
+            initialState,
+            ToolbarModernAction.toolbarPositionChanged(position: .bottom),
+            WindowUUID()
+        )
+
+        XCTAssertEqual(newState.toolbarPosition, initialState.toolbarPosition)
     }
 
     func test_readerModeStateChangedAction_onHomepage_returnsExpectedState() {
