@@ -45,7 +45,6 @@ struct VPNSettingsViewContainer: ThemeableView {
         }
         .background(theme.colors.layer1.color)
         .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
-        .onAppear { viewModel.refreshUsage() }
     }
 
     // MARK: - Sections

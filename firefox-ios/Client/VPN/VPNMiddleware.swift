@@ -99,8 +99,6 @@ final class VPNMiddleware {
             await changeVPNLocation(countryCode)
         case .resetVPNAtLaunch:
             resetVPNAtLaunch()
-        case .refreshUsage:
-            await vpnManager?.refreshUsage()
         case .closeThisTab:
             let tabManager = windowManager.tabManager(for: windowUUID)
             if let selectedTab = tabManager?.selectedTab {

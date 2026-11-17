@@ -10,7 +10,6 @@ import VPNKit
 
 protocol VPNGuardianProviding: Sendable {
     func getPass() async throws -> VPNProxyPass
-    func getUsage() async throws -> VPNProxyUsage
     func passRotation(after initial: VPNProxyPass) -> AsyncThrowingStream<VPNProxyPass, Error>
 }
 
@@ -79,10 +78,6 @@ final class VPNGuardian: VPNGuardianProviding {
 
     func getPass() async throws -> VPNProxyPass {
         return try await tokenProvider.proxyToken()
-    }
-
-    func getUsage() async throws -> VPNProxyUsage {
-        return try await tokenProvider.proxyUsage()
     }
 
     /// Emits a fresh `VPNProxyPass` shortly before the previous one expires. Cancel the consuming

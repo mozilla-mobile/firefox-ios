@@ -35,7 +35,6 @@ protocol VPNRunnable {
     func start(countryCode: String?) async throws
     func stop() async
     func listCountries() async -> [VPNServerManager.Country]
-    func refreshUsage() async
     /// Redraws views reading `selectedCountryCode` after its pref changes.
     func selectedCountryCodeDidChange(countryCode: String)
 }
@@ -179,23 +178,6 @@ final class VPNManager: VPNRunnable {
 
     func listCountries() async -> [VPNServerManager.Country] {
         return await serverManager.listCountries()
-    }
-
-    func refreshUsage() async {
-        guard let guardian, let pass = currentPass else { return }
-        do {
-            let usage = try await guardian.getUsage()
-            let updatedPass = VPNProxyPass(
-                bearerToken: pass.bearerToken,
-                notBefore: pass.notBefore,
-                expiresAt: pass.expiresAt,
-                usage: usage
-            )
-            currentPass = updatedPass
-            eventsContinuation.yield(.passUpdated(updatedPass))
-        } catch {
-            logger.log("Failed to refresh VPN usage: \(error)", level: .warning, category: .vpn)
-        }
     }
 
     func selectedCountryCodeDidChange(countryCode: String) {

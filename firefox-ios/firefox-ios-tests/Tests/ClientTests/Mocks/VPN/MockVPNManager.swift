@@ -43,7 +43,5 @@ final class MockVPNManager: VPNRunnable {
         return []
     }
 
-    func refreshUsage() async {}
-
     func selectedCountryCodeDidChange(countryCode: String) {}
 }
