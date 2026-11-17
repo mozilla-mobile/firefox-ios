@@ -3692,14 +3692,14 @@ extension String {
                 key: "VPN.LocationPicker.NoLocationsTitle.v162",
                 tableName: "Settings",
                 value: "Couldn’t Load Locations",
-                comment: "Title shown on the VPN locations screen when the app fails to load a list of locations for the user to pick from. “Locations” here means the locations of VPN servers the user can connect to."
+                comment: "Title shown on the VPN location picker screen when the app fails to load a list of locations. “Locations” here means the locations of VPN servers the user can connect to."
             )
 
             public static let NoLocationsSubtitle = MZLocalizedString(
                 key: "VPN.LocationPicker.NoLocationsSubtitle.v162",
                 tableName: "Settings",
                 value: "Try again in a few minutes.",
-                comment: "Subtitle text shown on the VPN locations screen when the app fails to load a list of locations for the user to pick from. Suggests the user try loading the list of locations again soon. “Locations” here means the locations of VPN servers the user can connect to."
+                comment: "Subtitle text shown on the VPN location picker screen when the app fails to load a list of locations. Suggests the user try loading the list of locations again soon. “Locations” here means the locations of VPN servers the user can connect to."
             )
 
             public static let LocationUnavailableTitle = MZLocalizedString(
