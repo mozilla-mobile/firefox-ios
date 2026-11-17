@@ -76,9 +76,12 @@ extension BrowserViewController {
             readerModeBar.unread = true
             readerModeBar.added = false
         }
-        readerModeBar.updateContent(
-            shouldShowSummarizerButton: browserViewControllerState?.shouldShowReaderModeBarSummarizerButton ?? false
-        )
+
+        let shouldShowReaderModeBarSummarizerButton = browserViewControllerLens?
+            .browserViewControllerState
+            .shouldShowReaderModeBarSummarizerButton ?? false
+
+        readerModeBar.updateContent(shouldShowSummarizerButton: shouldShowReaderModeBarSummarizerButton)
     }
 
     func showReaderModeBar(animated: Bool) {

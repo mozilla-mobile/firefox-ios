@@ -67,7 +67,7 @@ class BrowserViewController: UIViewController,
         case abandoned
     }
 
-    typealias SubscriberStateType = BrowserViewControllerState
+    typealias SubscriberStateType = BrowserViewControllerLens
 
     private let KVOs: [KVOConstants] = [
         .estimatedProgress,
@@ -449,7 +449,7 @@ class BrowserViewController: UIViewController,
     let contextMenuTelemetry: ContextMenuTelemetry
     let crashTracker: CrashTracker
     let ratingPromptManager: RatingPromptManager
-    private(set) var browserViewControllerState: BrowserViewControllerState?
+    private(set) var browserViewControllerLens: BrowserViewControllerLens?
     var appAuthenticator: AppAuthenticationProtocol
     let searchEnginesManager: SearchEnginesManager
     private let summarizerNimbusUtils: SummarizerNimbusUtils
@@ -1038,7 +1038,11 @@ class BrowserViewController: UIViewController,
     }
 
     private func dismissModalsIfStartAtHome() {
-        guard browserViewControllerState?.shouldStartAtHome ?? false, presentedViewController != nil else { return }
+        guard browserViewControllerLens?.browserViewControllerState.shouldStartAtHome ?? false,
+              presentedViewController != nil else {
+            return
+        }
+
         dismissVC()
     }
 
@@ -1059,7 +1063,7 @@ class BrowserViewController: UIViewController,
         let uuid = self.windowUUID
         store.subscribe(self, transform: {
             $0.select({ appState in
-                return BrowserViewControllerState(appState: appState, uuid: uuid)
+                return BrowserViewControllerLens(appState: appState, uuid: uuid)
             })
         })
     }
@@ -1072,28 +1076,28 @@ class BrowserViewController: UIViewController,
         // Note: actual `store.unsubscribe()` is not strictly needed; Redux uses weak subscribers
     }
 
-    func newState(state: BrowserViewControllerState) {
-        browserViewControllerState = state
+    func newState(state: BrowserViewControllerLens) {
+        browserViewControllerLens = state
 
-        if state.reloadWebView {
-            updateContentInHomePanel(state.browserViewType)
+        if state.browserViewControllerState.reloadWebView {
+            updateContentInHomePanel(state.browserViewControllerState.browserViewType)
         }
 
-        if let toast = state.toast {
+        if let toast = state.browserViewControllerState.toast {
             self.showToastType(toast: toast)
         }
 
-        if state.showOverlay == true {
+        if state.browserViewControllerState.showOverlay == true {
             overlayManager.openNewTab(url: nil, newTabSettings: newTabSettings)
-        } else if state.showOverlay == false {
+        } else if state.browserViewControllerState.showOverlay == false {
             overlayManager.cancelEditing(shouldCancelLoading: false)
         }
 
         executeNavigationAndDisplayActions()
 
-        handleMicrosurvey(state: state)
+        handleMicrosurvey(state: state.browserViewControllerState)
         if featureFlagsProvider.isEnabled(.translationLanguagePicker) {
-            handleAutoTranslatePrompt(state: state)
+            handleAutoTranslatePrompt(state: state.browserViewControllerState)
         }
 
         if let selectedTab = tabManager.selectedTab,
@@ -1106,7 +1110,7 @@ class BrowserViewController: UIViewController,
         }
 
         dismissModalsIfStartAtHome()
-        addressToolbarContainer.isHidden = state.isCenterSearchBarShowing
+        addressToolbarContainer.isHidden = state.homepageSearchBarState.shouldShowSearchBar
     }
 
     private func showToastType(toast: ToastType) {
@@ -2791,7 +2795,7 @@ class BrowserViewController: UIViewController,
     // MARK: - Handle navigation
 
     private func executeNavigationAndDisplayActions() {
-        guard let state = browserViewControllerState else { return }
+        guard let state = browserViewControllerLens?.browserViewControllerState else { return }
 
         switch state {
         case _ where state.navigateTo != nil:
@@ -3102,7 +3106,7 @@ class BrowserViewController: UIViewController,
     }
 
     func didTapOnHome() {
-        guard browserViewControllerState?.navigateTo == .home else { return }
+        guard browserViewControllerLens?.browserViewControllerState.navigateTo == .home else { return }
 
         let page = NewTabAccessors.getHomePage(self.profile.prefs)
         if page == .homePage, let homePageURL = HomeButtonHomePageAccessors.getHomePage(self.profile.prefs) {
@@ -3240,7 +3244,7 @@ class BrowserViewController: UIViewController,
 
     func dispatchAvailableContentHeightChangedAction() {
         // Avoid redundant state updates when neither calculated value changed.
-        guard let browserViewControllerState,
+        guard let browserViewControllerState = browserViewControllerLens?.browserViewControllerState,
            browserViewControllerState.browserViewType == .normalHomepage || contentContainer.hasHomepage,
            let homepageState = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID)
         else { return }
@@ -3922,7 +3926,8 @@ class BrowserViewController: UIViewController,
     // MARK: Overlay View
     // Disable search suggests view only if user is in private mode and setting is enabled
     private var shouldDisableSearchSuggestsForPrivateMode: Bool {
-        let alwaysShowSearchSuggestionsView = browserViewControllerState?
+        let alwaysShowSearchSuggestionsView = browserViewControllerLens?
+            .browserViewControllerState
             .searchScreenState
             .showSearchSugestionsView ?? false
 
