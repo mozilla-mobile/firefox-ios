@@ -24,12 +24,12 @@
   const MILESTONE = 5000;     // 500 m, since the score shows distance / 10
   const BOBBER_TIME = 35;     // seconds survived before trackers start bobbing
   const BOB_LOW = 19;
-  const BOB_HIGH = 54;
+  const BOB_HIGH = 42;
   const HINT_TIME = 2.5;
 
   // Hitboxes as [x, y, radius] relative to the fox's feet. They skip the
   // tail and legs so near misses feel fair.
-  const FOX_HITBOX = [[0, -24, 10], [37, -36, 8]];
+  const FOX_HITBOX = [[-7, -18, 6], [10, -17, 6], [27, -23, 6]];
 
   const THEMES = theme.skies;
   const THEME_NAMES = Object.keys(THEMES);
@@ -71,7 +71,7 @@
   let viewW = VIEW_W;
   let viewH = 800;
   let groundY = 560;
-  let foxX = 86;
+  let foxX = 112;
   let sky = null;
   let skyKey = '';
 
@@ -80,7 +80,7 @@
     viewW = v.width / scale;
     viewH = v.height / scale;
     groundY = Math.round(viewH * 0.7);
-    foxX = viewW * 0.2;
+    foxX = Math.max(112, viewW * 0.2);
     sky = null;
   });
   const ctx = view.ctx;
@@ -200,10 +200,10 @@
 
   // A tracker that drifts between the ground and BOB_HIGH over ~2.4 s. It
   // always has to be jumped: even at the top its hitbox (r 14.8) reaches
-  // down to the fox's head circle (centre 36, r 8) on the ground, since
-  // 54 - 36 = 18 < 22.8. Clearing it at the top needs the feet above ~55,
-  // and a single jump stays above 55 for ~0.4 s, while the bobber takes at
-  // most 85 units / 426 = 0.2 s to pass the fox at the speed it unlocks.
+  // down to the fox's head circle (centre 23, r 6) on the ground, since
+  // 42 - 23 = 19 < 20.8. Clearing it at the top needs the feet above ~46,
+  // and a single jump stays above 46 for ~0.45 s, while the bobber takes at
+  // most 76 units / 426 = 0.18 s to pass the fox at the speed it unlocks.
   function bobber(x) {
     return { kind: 'tracker', x, h: BOB_LOW, baseH: BOB_LOW, r: 18, extra: 0, t: rng() * 10, bob: srand(2.3, 2.9) };
   }
@@ -509,7 +509,7 @@
     fox.jumps = 2;
     fox.buffer = 0;
     shake = 12;
-    fx.burst(foxX + 14, groundY - fox.h - 26, { count: 18, colors: [C.fox, C.snow, C.ink], speed: 300 });
+    fx.burst(foxX + 10, groundY - fox.h - 20, { count: 18, colors: [C.fox, C.snow, C.ink], speed: 300 });
     sfx.crash();
   }
 

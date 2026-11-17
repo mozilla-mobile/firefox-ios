@@ -34,49 +34,60 @@
   // Kit, the Firefox mascot. The colours are fixed so Kit looks the same in
   // every theme.
   const KIT = {
-    tail: ['#FFE65C', '#FFB43A', '#FF7838', '#FF3F62'],
-    flame: 'rgba(255, 238, 130, 0.5)',
-    body: ['#FF4262', '#FF7A30'],
-    belly: 'rgba(255, 196, 80, 0.7)',
-    head: '#FF8A2E',
-    cheek: ['#FFD45A', '#FFB53F'],
+    tail: ['#FFE84E', '#FFB83A', '#FF7A35', '#FF3D5E', '#FF4656'],
+    flame: 'rgba(255, 238, 120, 0.45)',
+    ember: 'rgba(255, 112, 40, 0.35)',
+    body: ['#FF4060', '#FF5A32', '#FF8A2E'],
+    belly: 'rgba(255, 170, 70, 0.6)',
+    cheek: ['#FFC23C', '#FFDC4E'],
     ear: '#E9452F',
+    nearEar: '#FF7A2E',
     leg: ['#F2306B', '#D81B66'],
     farLeg: ['#C81F5E', '#A0104C'],
     eye: '#1D1133',
   };
 
-  // Facing right with the feet on (x, y), roughly 135 × 75 units at s = 1
+  // Kit's paths are traced from the designer's 1920 × 1080 running frame,
+  // where the feet stand on (KIT_X, KIT_Y), and drawn at KIT_SCALE.
+  const KIT_X = 1230;
+  const KIT_Y = 935;
+  const KIT_SCALE = 0.11;
+
+  // Facing right with the feet on (x, y), roughly 140 × 65 units at s = 1
   // including the tail. `phase` drives the gallop, pose is 'run', 'jump' or
   // 'hurt', and `tilt` leans the body nose-up by that many radians.
   function fox(ctx, x, y, s, phase, pose, tilt = 0) {
     ctx.save();
     ctx.translate(x, y);
-    ctx.scale(s, s);
+    ctx.scale(s * KIT_SCALE, s * KIT_SCALE);
+    ctx.translate(-KIT_X, -KIT_Y);
 
     const running = pose === 'run';
     const spread = running ? Math.cos(phase) : 1;
     const gather = (1 - spread) / 2;
-    const bob = running ? -Math.max(0, spread) * 2 : 0;
-    ctx.translate(6, bob - 24);
+    const bob = running ? -Math.max(0, spread) * 18 : 0;
+    ctx.translate(1280, 735 + bob);
     ctx.rotate(-tilt);
-    ctx.translate(-6, 24);
+    ctx.translate(-1280, -735);
 
     const legs = kitLegs(phase, pose);
-    const hind = [-20 + 3 * gather, -23];
-    const front = [21 - 1.5 * gather, -22];
+    const hind = [1080 + 25 * gather, 800];
+    const front = [1400 - 12 * gather, 815];
 
-    kitLeg(ctx, front, legs.farFront, false, KIT.farLeg, KIT.farLeg[0]);
-    kitLeg(ctx, hind, legs.farHind, true, KIT.farLeg, KIT.farLeg[0]);
+    kitLeg(ctx, [front[0] + 10, front[1] - 6], legs.farFront, false, KIT.farLeg, KIT.farLeg[0]);
+    kitLeg(ctx, [hind[0] + 20, hind[1] + 4], legs.farHind, true, KIT.farLeg, KIT.farLeg[0]);
 
-    if (running) kitTail(ctx, -24 + 3 * gather, -27, 0.1 + 0.2 * Math.cos(phase - 0.6), phase, 0.35);
-    else if (pose === 'jump') kitTail(ctx, -24, -27, -0.05 - tilt, 1.2, 0.15);
-    else kitTail(ctx, -24, -27, -0.3, 0.4, 0.2);
+    const tailBase = { x: 1100 + 25 * gather, y: 760 };
+    if (running) kitTail(ctx, tailBase, 0.06 * Math.cos(phase - 0.6), phase, 0.12);
+    else if (pose === 'jump') kitTail(ctx, tailBase, -0.08 - 0.5 * tilt, 1.2, 0.06);
+    else kitTail(ctx, tailBase, -0.25, 0.4, 0.08);
 
+    kitEar(ctx, [1428, 690], [1433, 646], [1490, 696], KIT.ear);
+    kitEar(ctx, [1398, 708], [1406, 648], [1448, 688], KIT.nearEar);
     kitBody(ctx, gather);
     kitLeg(ctx, hind, legs.hind, true, KIT.leg, KIT.body[0]);
-    kitLeg(ctx, front, legs.front, false, KIT.leg, '#FF6A3C');
-    kitHead(ctx, pose === 'hurt');
+    kitLeg(ctx, front, legs.front, false, KIT.leg, '#FF5A3C');
+    kitFace(ctx, pose === 'hurt');
 
     ctx.restore();
   }
@@ -85,24 +96,24 @@
   // foot forward; the bend folds the lower leg back.
   function kitLegs(phase, pose) {
     if (pose === 'jump') {
-      return { hind: [-0.8, 0.2], farHind: [-0.6, 0.3], front: [0.9, 0.25], farFront: [0.7, 0.4] };
+      return { hind: [-0.8, 0.2], farHind: [-0.6, 0.3], front: [1.0, 0.25], farFront: [0.8, 0.4] };
     }
     if (pose === 'hurt') {
       return { hind: [0.7, 0.9], farHind: [0.4, 1.1], front: [1.1, 0.5], farFront: [0.8, 0.8] };
     }
     const hind = (offset) => {
       const p = phase + offset;
-      return [0.15 - 0.75 * Math.cos(p), 0.3 + 0.9 * Math.max(0, Math.sin(p))];
+      return [0.15 - 0.75 * Math.cos(p), 0.3 + 0.9 * Math.max(0, Math.sin(p)) + 0.8 * Math.max(0, -Math.sin(p))];
     };
     const front = (offset) => {
       const p = phase + offset;
-      return [0.1 + 0.75 * Math.cos(p), 0.15 + 1.1 * Math.max(0, -Math.sin(p))];
+      return [0.2 + 0.8 * Math.cos(p), 0.15 + 1.1 * Math.max(0, -Math.sin(p))];
     };
     return { hind: hind(0), farHind: hind(0.5), front: front(0.2), farFront: front(0.7) };
   }
 
   function kitLeg(ctx, hip, [a, bend], isHind, colors, top) {
-    const [upper, lower, thigh] = isHind ? [10.5, 12.5, 9] : [10, 12, 6];
+    const [upper, lower, thigh, knee, paw] = isHind ? [74, 78, 44, 22, 22] : [62, 62, 28, 22, 22];
     const [hx, hy] = hip;
     const kx = hx + Math.sin(a) * upper;
     const ky = hy + Math.cos(a) * upper;
@@ -116,9 +127,9 @@
     fill.addColorStop(0.45, colors[0]);
     fill.addColorStop(1, colors[1]);
     ctx.fillStyle = fill;
-    limb(ctx, hx, hy, thigh, kx, ky, 3.8);
-    limb(ctx, kx, ky, 3.8, px, py, 3.1);
-    limb(ctx, px, py, 3.1, px + Math.sin(toe) * 2.6, py + Math.cos(toe) * 2.6, 3.3);
+    limb(ctx, hx, hy, thigh, kx, ky, knee);
+    limb(ctx, kx, ky, knee, px, py, paw);
+    limb(ctx, px, py, paw, px + Math.sin(toe) * 20, py + Math.cos(toe) * 20, paw + 2);
   }
 
   // Fills a capsule from (x1, y1) to (x2, y2) that tapers from width w1 to w2.
@@ -131,72 +142,74 @@
     ctx.fill();
   }
 
-  // The tail grows from (bx, by) backwards and up. `lift` raises it, and a
-  // ripple of strength `ripple` runs down it as `wave` advances.
-  function kitTail(ctx, bx, by, lift, wave, ripple) {
-    const STEPS = 16;
-    const LENGTH = 62;
-    const spine = [];
-    let x = bx;
-    let y = by;
-    for (let i = 0; i <= STEPS; i++) {
-      const u = i / STEPS;
-      const a = 0.4 + lift - 0.35 * u + ripple * u * Math.sin(wave - 2.6 * u);
-      const dx = -Math.cos(a);
-      const dy = -Math.sin(a);
-      const w = (4 + 9 * smoothstep(0.1, 0.65, u)) * (1 - 0.9 * smoothstep(0.8, 1, u) ** 2);
-      spine.push({ x, y, dx, dy, nx: Math.sin(a), ny: -Math.cos(a), w, u });
-      x += dx * LENGTH / STEPS;
-      y += dy * LENGTH / STEPS;
-    }
+  const S = true;
+  const TAIL = [
+    [1130, 738], [1050, 694], [940, 652], [840, 600], [780, 530], [690, 428], [590, 356], [490, 338],
+    [380, 356], [280, 410, S], [360, 440], [425, 494, S], [355, 528, S], [440, 545], [500, 585],
+    [514, 610, S], [490, 625, S], [550, 650], [640, 720], [730, 772], [840, 804], [960, 794],
+    [1070, 778], [1115, 795],
+  ];
+  const TAIL_STREAKS = [
+    [KIT.flame, [[450, 382], [540, 418], [605, 482], [645, 565, S], [592, 505], [530, 442]]],
+    [KIT.flame, [[495, 518], [565, 522], [615, 562, S], [560, 540]]],
+    [KIT.ember, [[520, 556], [600, 580], [655, 632, S], [592, 598]]],
+    [KIT.ember, [[600, 556], [655, 585], [690, 622, S], [645, 596]]],
+  ];
+  const TAIL_LENGTH = 830;
 
-    const at = (p, side, back = 0) => ({ x: p.x + p.nx * p.w * side + p.dx * back, y: p.y + p.ny * p.w * side + p.dy * back });
-    const end = spine[STEPS];
-    const tip = { x: end.x + end.dx * 3, y: end.y + end.dy * 3, sharp: true };
+  // The tail grows from `base` backwards and up. It bends up by `lift`
+  // radians at the tip, and a ripple of strength `ripple` runs down it as
+  // `wave` advances.
+  function kitTail(ctx, base, lift, wave, ripple) {
+    const shift = base.x - 1100;
+    const bend = ([px, py, sharp]) => {
+      const dx = px + shift - base.x;
+      const dy = py - base.y;
+      const u = Math.min(1, Math.hypot(dx, dy) / TAIL_LENGTH);
+      const a = lift * u + ripple * u * Math.sin(wave - 2.6 * u);
+      const cos = Math.cos(a);
+      const sin = Math.sin(a);
+      return { x: base.x + dx * cos - dy * sin, y: base.y + dx * sin + dy * cos, sharp };
+    };
+    const tail = smoothPath(TAIL.map(bend));
+    const tip = bend(TAIL[9]);
 
-    const top = spine.map((p) => at(p, 1));
-    const bottom = [];
-    for (const p of spine) {
-      bottom.push(at(p, -1));
-      if (p.u === 9 / 16 || p.u === 11 / 16 || p.u === 13 / 16) {
-        bottom.push({ ...at(p, -1.15, 7), sharp: true });
-        bottom.push({ ...at(p, -0.55, 2.5), sharp: true });
-      }
-    }
-    const tail = smoothPath([...top, tip, ...bottom.reverse()]);
-
-    const fill = ctx.createLinearGradient(tip.x, tip.y, bx, by);
-    KIT.tail.forEach((color, i) => fill.addColorStop([0, 0.3, 0.62, 1][i], color));
+    const fill = ctx.createLinearGradient(tip.x + 50, tip.y - 30, base.x - 50, base.y + 20);
+    KIT.tail.forEach((color, i) => fill.addColorStop([0, 0.35, 0.62, 0.85, 1][i], color));
     ctx.fillStyle = fill;
     ctx.fill(tail);
 
     ctx.save();
     ctx.clip(tail);
-    ctx.fillStyle = KIT.flame;
-    for (const [from, side] of [[7, 0.35], [9, -0.3]]) {
-      const run = spine.slice(from);
-      const edge = run.map((p, i) => at(p, side + 0.22 * Math.sin((Math.PI * i) / (run.length - 1))));
-      const inner = run.map((p) => at(p, side - 0.05)).reverse();
-      ctx.fill(smoothPath([...edge, { ...at(end, side, 6), sharp: true }, ...inner]));
+    for (const [color, points] of TAIL_STREAKS) {
+      ctx.fillStyle = color;
+      ctx.fill(smoothPath(points.map(bend)));
     }
     ctx.restore();
   }
 
+  // The body, neck and head as one shape, with the rump pulled forward by
+  // `gather` as the legs bunch up.
   function kitBody(ctx, gather) {
-    const rx = -27 + 3 * gather;
+    const rx = 25 * gather;
     const body = new Path2D();
-    body.moveTo(rx + 2, -18);
-    body.bezierCurveTo(rx - 3, -22, rx - 3, -31, rx + 3, -32.5);
-    body.bezierCurveTo(-12, -34.5 - 2.5 * gather, 8, -32, 22, -35);
-    body.lineTo(31, -29);
-    body.bezierCurveTo(30, -23, 27, -18, 21, -16.5);
-    body.bezierCurveTo(12, -15, 2, -17.5 + gather, -8, -17);
-    body.bezierCurveTo(-15, -16.5, rx + 5, -15.5, rx + 2, -18);
+    body.moveTo(1092 + rx, 800);
+    body.bezierCurveTo(1074 + rx, 780, 1084 + rx, 736, 1106 + rx, 728);
+    body.bezierCurveTo(1170, 714 - 8 * gather, 1280, 724, 1340, 726);
+    body.bezierCurveTo(1370, 722, 1395, 708, 1410, 696);
+    body.bezierCurveTo(1440, 682, 1480, 684, 1505, 704);
+    body.bezierCurveTo(1520, 716, 1538, 724, 1548, 728);
+    body.quadraticCurveTo(1558, 738, 1544, 743);
+    body.bezierCurveTo(1520, 748, 1482, 752, 1456, 762);
+    body.bezierCurveTo(1436, 772, 1420, 784, 1414, 797);
+    body.bezierCurveTo(1420, 808, 1430, 815, 1436, 824);
+    body.bezierCurveTo(1410, 834, 1380, 834, 1357, 832);
+    body.bezierCurveTo(1300, 826, 1200, 816, 1150, 826);
+    body.bezierCurveTo(1122 + rx, 832, 1102 + rx, 820, 1092 + rx, 800);
     body.closePath();
 
-    const fill = ctx.createLinearGradient(rx, 0, 28, 0);
-    fill.addColorStop(0, KIT.body[0]);
-    fill.addColorStop(1, KIT.body[1]);
+    const fill = ctx.createLinearGradient(1090, 0, 1520, 0);
+    KIT.body.forEach((color, i) => fill.addColorStop([0, 0.6, 1][i], color));
     ctx.fillStyle = fill;
     ctx.fill(body);
 
@@ -204,84 +217,63 @@
     ctx.clip(body);
     ctx.fillStyle = KIT.belly;
     ctx.beginPath();
-    ctx.ellipse(10, -15.5, 16, 2.2, -0.06, 0, TAU);
+    ctx.ellipse(1255, 828, 125, 11, 0.03, 0, TAU);
     ctx.fill();
-    ctx.restore();
-  }
 
-  function kitHead(ctx, hurt) {
-    kitEar(ctx, [24, -39], [26.5, -48.5], [30.5, -40], KIT.ear);
-    kitEar(ctx, [28, -40.5], [31.5, -49], [35.5, -39.5], KIT.head);
-    kitEar(ctx, [30, -41], [31.7, -46.5], [33.8, -40.5], KIT.ear);
-
-    const head = new Path2D();
-    head.moveTo(20, -34.5);
-    head.bezierCurveTo(22, -41, 28, -43.5, 34, -42);
-    head.bezierCurveTo(39, -41, 43, -37.5, 50, -34.6);
-    head.quadraticCurveTo(51.6, -33, 49, -32.2);
-    head.bezierCurveTo(44, -31, 39, -29.2, 33, -28.4);
-    head.bezierCurveTo(28, -27.8, 23, -29, 20, -31.5);
-    head.closePath();
-    ctx.fillStyle = KIT.head;
-    ctx.fill(head);
-
-    ctx.save();
-    ctx.clip(head);
-    const cheek = ctx.createLinearGradient(30, -35, 48, -29);
+    const cheek = ctx.createLinearGradient(1400, 0, 1550, 0);
     cheek.addColorStop(0, KIT.cheek[0]);
     cheek.addColorStop(1, KIT.cheek[1]);
     ctx.fillStyle = cheek;
     ctx.beginPath();
-    ctx.moveTo(52, -33.6);
-    ctx.bezierCurveTo(45, -34.2, 39, -34.6, 34, -35.4);
-    ctx.lineTo(28.5, -37.5);
-    ctx.lineTo(30.5, -34.8);
-    ctx.lineTo(25.5, -34.6);
-    ctx.lineTo(29.5, -32.6);
-    ctx.lineTo(25, -30.2);
-    ctx.lineTo(32, -26);
-    ctx.lineTo(52, -26);
+    ctx.moveTo(1560, 731);
+    ctx.bezierCurveTo(1530, 732, 1500, 727, 1470, 724);
+    ctx.bezierCurveTo(1445, 721, 1420, 716, 1404, 718);
+    ctx.quadraticCurveTo(1394, 722, 1405, 726);
+    ctx.quadraticCurveTo(1392, 732, 1402, 737);
+    ctx.quadraticCurveTo(1394, 744, 1412, 746);
+    ctx.quadraticCurveTo(1416, 756, 1432, 752);
+    ctx.bezierCurveTo(1470, 746, 1520, 746, 1560, 744);
     ctx.closePath();
     ctx.fill();
     ctx.restore();
+  }
 
+  function kitFace(ctx, hurt) {
     ctx.fillStyle = KIT.eye;
-    circle(ctx, 50.2, -33.7, 1.15);
+    circle(ctx, 1550, 734, 5.5);
     ctx.fill();
     if (hurt) {
       ctx.strokeStyle = KIT.eye;
-      ctx.lineWidth = 1.5;
+      ctx.lineWidth = 5;
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
       ctx.beginPath();
-      ctx.moveTo(38.6, -39.4);
-      ctx.lineTo(42.2, -37.3);
-      ctx.lineTo(38.6, -35.2);
+      ctx.moveTo(1482, 702);
+      ctx.lineTo(1495, 711);
+      ctx.lineTo(1482, 720);
       ctx.stroke();
     } else {
-      circle(ctx, 40.6, -37.2, 1.4);
+      ctx.beginPath();
+      ctx.ellipse(1489, 712, 6.5, 8, 0, 0, TAU);
       ctx.fill();
       ctx.fillStyle = '#FFFFFF';
-      circle(ctx, 41.1, -37.7, 0.45);
+      circle(ctx, 1491, 709, 2.2);
       ctx.fill();
     }
 
     if (hooks.foxHead) hooks.foxHead(ctx);
   }
 
+  // An ear from `a` up to `tip` and back down to `b`, with a slightly
+  // rounded tip.
   function kitEar(ctx, a, tip, b, color) {
     ctx.beginPath();
     ctx.moveTo(a[0], a[1]);
-    ctx.quadraticCurveTo(tip[0] - 1.5, tip[1] + 2, tip[0], tip[1]);
-    ctx.quadraticCurveTo(tip[0] + 2, tip[1] + 3, b[0], b[1]);
+    ctx.quadraticCurveTo(tip[0] - 6, tip[1] + 14, tip[0], tip[1]);
+    ctx.quadraticCurveTo(tip[0] + 18, tip[1] + 8, b[0], b[1]);
     ctx.closePath();
     ctx.fillStyle = color;
     ctx.fill();
-  }
-
-  function smoothstep(from, to, v) {
-    const t = Math.min(1, Math.max(0, (v - from) / (to - from)));
-    return t * t * (3 - 2 * t);
   }
 
   // A closed path through `points` that rounds every corner except the ones
@@ -485,8 +477,8 @@
 
   const ICONS = {
     fox(ctx, w, h) {
-      const s = Math.min(w / 140, h / 72);
-      fox(ctx, w / 2 + 18 * s, h / 2 + 35 * s, s, 0.6, 'run');
+      const s = Math.min(w / 146, h / 70);
+      fox(ctx, w / 2 + 34 * s, h / 2 + 33 * s, s, 0.6, 'run');
     },
     tracker(ctx, w, h) {
       tracker(ctx, w / 2, h * 0.56, Math.min(w, h) * 0.3, 0.4, { lookX: 0.6, lookY: 0.2, noBlink: true });
