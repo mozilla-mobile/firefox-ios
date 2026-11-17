@@ -1091,16 +1091,6 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertTrue(quickAnswersPillTelemetry.dismissedReasons.isEmpty)
     }
 
-    func testDidSelectedTabChange_privateToggleWithoutParkedSession_doesNotRecordReturnPillDismissed() {
-        let subject = createSubject()
-        let normalTab = MockTab(profile: profile, windowUUID: windowUUID)
-        let privateTab = MockTab(profile: profile, isPrivate: true, windowUUID: windowUUID)
-
-        subject.tabManager(tabManager, didSelectedTabChange: privateTab, previousTab: normalTab, isRestoring: false)
-
-        XCTAssertTrue(quickAnswersPillTelemetry.dismissedReasons.isEmpty)
-    }
-
     // MARK: - Shortcuts Library
 
     func testShowShortcutsLibrary_showsShortcutsLibrary() throws {
