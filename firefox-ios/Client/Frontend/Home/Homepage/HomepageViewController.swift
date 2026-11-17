@@ -59,7 +59,7 @@ final class HomepageViewController: UIViewController,
     private var didFinishFirstLayout = false
     private var wallpaperTopConstraint: NSLayoutConstraint?
     private var wallpaperHeightConstraint: NSLayoutConstraint?
-    private lazy var embeddedAddressBarView: UIView = .build { view in
+    private lazy var embeddedAddressBarView: EmbeddedAddressBarView = .build { view in
         view.isUserInteractionEnabled = false
         view.layer.zPosition = 1
         view.accessibilityIdentifier = a11y.EmbeddedAddressBar.view
@@ -485,7 +485,7 @@ final class HomepageViewController: UIViewController,
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer1
-        embeddedAddressBarView.backgroundColor = theme.colors.actionCritical
+        embeddedAddressBarView.applyTheme(theme: theme)
     }
 
     // MARK: - Layout
@@ -550,10 +550,13 @@ final class HomepageViewController: UIViewController,
 
         NSLayoutConstraint.activate(
             [
-                embeddedAddressBarView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                embeddedAddressBarView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-                embeddedAddressBarView.heightAnchor.constraint(
-                    equalToConstant: HomepageSectionLayoutProvider.UX.embeddedAddressBarHeight
+                embeddedAddressBarView.leadingAnchor.constraint(
+                    equalTo: view.leadingAnchor,
+                    constant: HomepageSectionLayoutProvider.UX.standardInset
+                ),
+                view.trailingAnchor.constraint(
+                    equalTo: embeddedAddressBarView.trailingAnchor,
+                    constant: HomepageSectionLayoutProvider.UX.standardInset
                 ),
                 embeddedAddressBarView.topAnchor.constraint(
                     greaterThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor
@@ -566,7 +569,7 @@ final class HomepageViewController: UIViewController,
         guard embeddedAddressBarView.superview != nil else { return }
         embeddedAddressBarViewTopCellConstraint?.isActive = false
 
-        let constraint = embeddedAddressBarView.topAnchor.constraint(equalTo: cell.topAnchor)
+        let constraint = embeddedAddressBarView.centerYAnchor.constraint(equalTo: cell.centerYAnchor)
         constraint.priority = UILayoutPriority(999)
         embeddedAddressBarViewTopCellConstraint = constraint
         constraint.isActive = true
