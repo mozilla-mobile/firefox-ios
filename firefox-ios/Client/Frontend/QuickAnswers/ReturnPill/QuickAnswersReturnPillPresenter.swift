@@ -57,7 +57,7 @@ final class QuickAnswersReturnPillPresenter {
         onSwipeAway: @escaping () -> Void
     ) {
         let pill = pill ?? QuickAnswersReturnPillView(
-            accessibilityIdentifier: "",
+            accessibilityIdentifier: AccessibilityIdentifiers.Browser.QuickAnswers.returnPill,
             onTap: onTap,
             onSwipeAway: { [weak self] in
                 onSwipeAway()

@@ -121,7 +121,6 @@ final class LocationView: UIView,
         $0.layer.cornerRadius = UX.effectViewCornerRadius
     }
 
-    /// The view drawing the visible capsule: the glass effect view on iOS 26, the container view before it.
     var capsuleView: UIView {
         if #available(iOS 26.0, *) {
             return effectView
