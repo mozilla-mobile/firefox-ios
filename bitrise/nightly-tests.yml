@@ -7,24 +7,24 @@ app:
     XCODEBUILD_OPTIONS: '"ONLY_ACTIVE_ARCH=YES" "COMPILER_INDEX_STORE_ENABLE=NO" -collect-test-diagnostics never -skipMacroValidation'
 
 pipelines:
-  pipeline_firefox_nightly_fullfunctional_iphone:
+  pipeline_firefox_fullfunctional_iphone:
     workflows:
-      Firefox_Nightly_Fullfunctional_Iphone: {}
+      firefox_fullfunctional_iphone: {}
       firefox_fullfunctional_shard:
         depends_on:
-        - Firefox_Nightly_Fullfunctional_Iphone
+        - firefox_fullfunctional_iphone
         parallel: 4
       firefox_fullfunctional_report:
         depends_on:
         - firefox_fullfunctional_shard
         should_always_run: workflow
 
-  pipeline_firefox_fullfunctional_iphone:
+  pipeline_firefox_nightly_fullfunctional_iphone:
     workflows:
-      Firefox_Fullfunctional_Iphone: {}
+      firefox_nightly_fullfunctional_iphone: {}
       firefox_fullfunctional_shard:
         depends_on:
-        - Firefox_Fullfunctional_Iphone
+        - firefox_nightly_fullfunctional_iphone
         parallel: 4
       firefox_fullfunctional_report:
         depends_on:
@@ -33,10 +33,10 @@ pipelines:
 
   pipeline_firefox_fullfunctional_ipad:
     workflows:
-      Firefox_Fullfunctional_Ipad: {}
+      firefox_fullfunctional_ipad: {}
       firefox_fullfunctional_shard:
         depends_on:
-        - Firefox_Fullfunctional_Ipad
+        - firefox_fullfunctional_ipad
         parallel: 4
       firefox_fullfunctional_report:
         depends_on:
@@ -45,10 +45,10 @@ pipelines:
 
   pipeline_firefox_fullfunctional_iphoneduo:
     workflows:
-      Firefox_Fullfunctional_IphoneDuo: {}
+      firefox_fullfunctional_iphoneduo: {}
       firefox_fullfunctional_shard:
         depends_on:
-        - Firefox_Fullfunctional_IphoneDuo
+        - firefox_fullfunctional_iphoneduo
         parallel: 4
       firefox_fullfunctional_report:
         depends_on:
@@ -57,13 +57,13 @@ pipelines:
 
   pipeline_firefox_tests_ios18:
     workflows:
-      Firefox_Tests_iOS18: {}
+      firefox_tests_ios18: {}
       firefox_smoketest_run:
         depends_on:
-        - Firefox_Tests_iOS18
+        - firefox_tests_ios18
       firefox_fullfunctional_shard:
         depends_on:
-        - Firefox_Tests_iOS18
+        - firefox_tests_ios18
         parallel: 4
       firefox_fullfunctional_report:
         depends_on:
@@ -73,13 +73,13 @@ pipelines:
 
   pipeline_firefox_tests_ios26:
     workflows:
-      Firefox_Tests_iOS26: {}
+      firefox_tests_ios26: {}
       firefox_smoketest_run:
         depends_on:
-        - Firefox_Tests_iOS26
+        - firefox_tests_ios26
       firefox_fullfunctional_shard:
         depends_on:
-        - Firefox_Tests_iOS26
+        - firefox_tests_ios26
         parallel: 4
       firefox_fullfunctional_report:
         depends_on:
@@ -88,7 +88,7 @@ pipelines:
         should_always_run: workflow
 
 workflows:
-  Firefox_Nightly_SmokeTest_Iphone:
+  firefox_nightly_smoketest_iphone:
     envs:
     - SLACK_TITLE: Nightly Smoketest iPhone (Fennec Scheme)
     - DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
@@ -96,7 +96,7 @@ workflows:
     after_run:
     - _firefox_smoketest
 
-  Firefox_SmokeTest_Iphone:
+  firefox_smoketest_iphone:
     envs:
     - SLACK_TITLE: Smoketest iPhone
     - DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
@@ -104,7 +104,7 @@ workflows:
     after_run:
     - _firefox_smoketest
 
-  Firefox_SmokeTest_Ipad:
+  firefox_smoketest_ipad:
     envs:
     - SLACK_TITLE: Smoketest iPad
     - DESTINATION: platform=iOS Simulator,name=iPad (A16),OS=27.0
@@ -112,7 +112,7 @@ workflows:
     after_run:
     - _firefox_smoketest
 
-  Firefox_SmokeTest_IphoneDuo:
+  firefox_smoketest_iphoneduo:
     envs:
     - SLACK_TITLE: Smoketest iPhone Duo
     - DESTINATION: platform=iOS Simulator,name=iPhone Duo,OS=27.1
@@ -120,7 +120,7 @@ workflows:
     after_run:
     - _firefox_smoketest
 
-  Firefox_Nightly_Fullfunctional_Iphone:
+  firefox_nightly_fullfunctional_iphone:
     envs:
     - SLACK_TITLE: Nightly Full Functional Tests iPhone (Fennec Scheme)
     - DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
@@ -128,7 +128,7 @@ workflows:
     after_run:
     - _firefox_fullfunctional_build
 
-  Firefox_Fullfunctional_Iphone:
+  firefox_fullfunctional_iphone:
     envs:
     - SLACK_TITLE: Full Functional Tests iPhone
     - DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
@@ -136,7 +136,7 @@ workflows:
     after_run:
     - _firefox_fullfunctional_build
 
-  Firefox_Fullfunctional_Ipad:
+  firefox_fullfunctional_ipad:
     envs:
     - SLACK_TITLE: Full Functional Tests iPad
     - DESTINATION: platform=iOS Simulator,name=iPad (A16),OS=27.0
@@ -144,7 +144,7 @@ workflows:
     after_run:
     - _firefox_fullfunctional_build
 
-  Firefox_Fullfunctional_IphoneDuo:
+  firefox_fullfunctional_iphoneduo:
     envs:
     - SLACK_TITLE: Full Functional Tests iPhone Duo
     - DESTINATION: platform=iOS Simulator,name=iPhone Duo,OS=27.1
@@ -152,7 +152,7 @@ workflows:
     after_run:
     - _firefox_fullfunctional_build
 
-  Firefox_Tests_iOS18:
+  firefox_tests_ios18:
     envs:
     - SLACK_TITLE: Smoketest and Full Functional Tests iPhone (iOS 18.6)
     - DESTINATION: platform=iOS Simulator,name=iPhone 16,OS=18.6
@@ -160,7 +160,7 @@ workflows:
     after_run:
     - _firefox_fullfunctional_build
 
-  Firefox_Tests_iOS26:
+  firefox_tests_ios26:
     envs:
     - SLACK_TITLE: Smoketest and Full Functional Tests iPhone (iOS 26.5)
     - DESTINATION: platform=iOS Simulator,name=iPhone 17,OS=26.5
@@ -168,7 +168,7 @@ workflows:
     after_run:
     - _firefox_fullfunctional_build
 
-  Focus_Tests_iOS18:
+  focus_tests_ios18:
     envs:
     - SLACK_TITLE: Smoketest and Full Functional Tests iPhone and iPad (iOS 18.6)
     - IPHONE_DESTINATION: platform=iOS Simulator,name=iPhone 16,OS=18.6
@@ -176,7 +176,7 @@ workflows:
     after_run:
     - _focus_smoke_fullfunctional_tests
 
-  Focus_Tests_iOS26:
+  focus_tests_ios26:
     envs:
     - SLACK_TITLE: Smoketest and Full Functional Tests iPhone and iPad (iOS 26.5)
     - IPHONE_DESTINATION: platform=iOS Simulator,name=iPhone 17,OS=26.5
@@ -184,7 +184,7 @@ workflows:
     after_run:
     - _focus_smoke_fullfunctional_tests
 
-  Focus_Tests_iOS27:
+  focus_tests_ios27:
     envs:
     - SLACK_TITLE: Smoketest and Full Functional Tests iPhone, iPad and iPhone Duo (iOS 27.0)
     - IPHONE_DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
