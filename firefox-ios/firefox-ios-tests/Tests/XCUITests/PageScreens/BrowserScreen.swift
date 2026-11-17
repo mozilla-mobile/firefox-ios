@@ -831,7 +831,7 @@ final class BrowserScreen {
     func searchFromAddressBar(term: String, maxAttempts: Int = 3) {
         let hasTerm = NSPredicate(format: "value BEGINSWITH %@", term)
         for _ in 0..<maxAttempts {
-            tapOnAddressBar()
+            addressBar.tapUntilKeyboardFocused()
             clearAddressBarText()
             typeOnSearchBar(text: term)
             let expectation = XCTNSPredicateExpectation(predicate: hasTerm, object: addressBar)

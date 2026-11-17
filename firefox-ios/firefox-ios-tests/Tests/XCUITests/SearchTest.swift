@@ -302,16 +302,17 @@ class SearchTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2436092
     // Smoketest
     func testSearchAfterTypingTwoWords() {
-        let browserScreen = BrowserScreen(app: app)
-        let fooText = "foo bar"
+        let searchTerm = "foo bar"
         // With the flag on, the address bar shows the search term instead of the URL once the
         // results page of the search engine has loaded.
         addLaunchArgument(jsonFileName: "searchTermInAddressBarOn", featureName: "toolbar-refactor-feature")
         app.launch()
-        navigator.goto(URLBarOpen)
-        app.typeText(fooText)
-        app.typeText(XCUIKeyboardKey.return.rawValue)
-        browserScreen.assertAddressBarContains(value: fooText, timeout: TIMEOUT)
+        browserScreen.searchFromAddressBar(term: searchTerm)
+        browserScreen.assertAddressBarValueEquals(searchTerm, timeout: TIMEOUT_PICKER_PROBE)
+        browserScreen.typeOnSearchBar(text: XCUIKeyboardKey.return.rawValue)
+        browserScreen.assertAddressBarLeftEditMode()
+        waitUntilPageLoad()
+        browserScreen.assertAddressBarContains(value: searchTerm)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306943
