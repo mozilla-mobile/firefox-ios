@@ -84,7 +84,7 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
             self.handleNotificationCardDismissed(action: action)
 
         case HomepageActionType.viewWillTransition, HomepageActionType.viewWillAppear,
-            // FIXME: FXIOS-17348 cancelEdit doesn't fire when scrolling mid edit (cancelEditOnHomepage)
+            // FIXME: FXIOS-17387 cancelEdit doesn't fire when scrolling mid edit (cancelEditOnHomepage)
             ToolbarActionType.cancelEdit,
             ToolbarActionType.toolbarPositionChanged,
             GeneralBrowserActionType.navigateBack,
