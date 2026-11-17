@@ -33,19 +33,11 @@ public class NativeBottomSheetViewController: UIViewController,
     /// Closure called when the bottom sheet is dismissed via the close button
     public var onDismiss: (() -> Void)?
 
-    private lazy var closeButton: UIButton = .build { [weak self] in
+    private lazy var closeButton: GlassCloseButton = .build { [weak self] in
         $0.addAction(UIAction(handler: { _ in
             self?.onDismiss?()
             self?.dismiss(animated: true)
         }), for: .touchUpInside)
-        if #available(iOS 26, *) {
-            $0.configuration = .prominentClearGlass()
-        } else {
-            $0.configuration = .filled()
-            $0.configuration?.cornerStyle = .capsule
-        }
-        $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.cross)?
-            .withRenderingMode(.alwaysTemplate)
     }
     private lazy var backgroundView: UIVisualEffectView = .build {
         if #unavailable(iOS 26.0) {
@@ -89,8 +81,7 @@ public class NativeBottomSheetViewController: UIViewController,
     ///
     /// Make sure to call this methid just once, otherwise it won't update the new child.
     public func configure(closeButtonModel: CloseButtonViewModel, child: UIViewController) {
-        closeButton.accessibilityLabel = closeButtonModel.a11yLabel
-        closeButton.accessibilityIdentifier = closeButtonModel.a11yIdentifier
+        closeButton.configure(viewModel: closeButtonModel)
 
         // Add the child only if it wasn't added yet.
         guard child.view.superview == nil else { return }
@@ -114,8 +105,6 @@ public class NativeBottomSheetViewController: UIViewController,
     }
 
     private func setupLayout(child: UIViewController) {
-        closeButton.scalesLargeContentImage = true
-
         addChild(child)
         view.addSubviews(backgroundView, contentView, closeButton)
         view.accessibilityElements = [closeButton, contentView]
@@ -185,14 +174,12 @@ public class NativeBottomSheetViewController: UIViewController,
         let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
         let backgroundAlpha = UIAccessibility.isReduceTransparencyEnabled ? 1.0 : UX.backgroundAlpha
         view.backgroundColor = theme.colors.layer1.withAlphaComponent(backgroundAlpha)
+        closeButton.applyTheme(theme: theme)
         // The background view is not needed when presenting a bottom sheet in iOS 26.
         // The bottom sheet presentation already contains the glass effect.
         if #unavailable(iOS 26.0) {
             backgroundView.alpha = 1.0
-            closeButton.configuration?.baseBackgroundColor = theme.colors.layer2
-            closeButton.configuration?.baseForegroundColor = theme.colors.iconPrimary
         } else {
-            closeButton.tintColor = theme.colors.iconPrimary
             backgroundView.alpha = 0.0
         }
     }
