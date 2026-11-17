@@ -3450,9 +3450,7 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Toolbar Refactor Deeplink Helper Method.
     private func cancelEditMode() {
-        let action = ToolbarAction(windowUUID: self.windowUUID,
-                                   actionType: ToolbarActionType.cancelEdit)
-        store.dispatch(action)
+        store.dispatch(ToolbarModernAction.cancelEdit(url: nil), forWindowUUID: windowUUID)
     }
 
     func closeAllPrivateTabs() {
@@ -4578,11 +4576,7 @@ extension BrowserViewController {
                                 theme: currentTheme(),
                                 completion: { buttonPressed in
             if buttonPressed {
-                let toolbarAction = ToolbarAction(
-                    windowUUID: self.windowUUID,
-                    actionType: ToolbarActionType.cancelEdit
-                )
-                store.dispatch(toolbarAction)
+                store.dispatch(ToolbarModernAction.cancelEdit(url: nil), forWindowUUID: self.windowUUID)
                 self.tabManager.selectTab(tab)
             }
         })

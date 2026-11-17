@@ -395,10 +395,6 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
     func test_toolbarCancelEditAction_configuresSearchBar() throws {
         setupNimbusAnimatedCenterSearchBarTesting(isEnabled: true)
         let subject = createSubject()
-        let action = ToolbarAction(
-            windowUUID: .XCTestDefaultUUID,
-            actionType: ToolbarActionType.cancelEdit
-        )
 
         let dispatchExpectation = XCTestExpectation(description: "Search bar configured middleware action dispatched")
 
@@ -406,7 +402,11 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
             dispatchExpectation.fulfill()
         }
 
-        subject.homepageProvider.legacyMiddleware(AppState(), action)
+        subject.homepageProvider.modernMiddleware(
+            AppState(),
+            ToolbarModernAction.cancelEdit(url: nil),
+            .XCTestDefaultUUID
+        )
 
         wait(for: [dispatchExpectation], timeout: 1)
 
@@ -424,17 +424,17 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
     func test_toolbarCancelEditAction_doesNotConfigureSearchBar() throws {
         setupNimbusAnimatedCenterSearchBarTesting(isEnabled: false)
         let subject = createSubject()
-        let action = ToolbarAction(
-            windowUUID: .XCTestDefaultUUID,
-            actionType: ToolbarActionType.cancelEdit
-        )
         let dispatchExpectation = XCTestExpectation(description: "Search bar configured middleware action dispatched")
 
         mockStore.dispatchCalled = {
             dispatchExpectation.fulfill()
         }
 
-        subject.homepageProvider.legacyMiddleware(AppState(), action)
+        subject.homepageProvider.modernMiddleware(
+            AppState(),
+            ToolbarModernAction.cancelEdit(url: nil),
+            .XCTestDefaultUUID
+        )
 
         wait(for: [dispatchExpectation], timeout: 1)
 

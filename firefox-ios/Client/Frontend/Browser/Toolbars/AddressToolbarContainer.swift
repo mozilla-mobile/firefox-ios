@@ -791,8 +791,7 @@ final class AddressToolbarContainer: UIView,
         delegate?.addressToolbar(self, didLeaveOverlayModeForReason: reason)
 
         if toolbarState.addressToolbar.isEditing {
-            let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
-            store.dispatch(action)
+            store.dispatch(ToolbarModernAction.cancelEdit(url: nil), forWindowUUID: windowUUID)
         }
     }
 
