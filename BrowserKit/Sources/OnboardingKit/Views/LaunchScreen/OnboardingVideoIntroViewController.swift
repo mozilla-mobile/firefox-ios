@@ -8,7 +8,7 @@ import UIKit
 import ComponentLibrary
 
 public final class OnboardingVideoIntroViewController: UIViewController, Themeable, Notifiable {
-    private struct UX {
+    private enum UX {
         static let buttonHorizontalPadding: CGFloat = 24
         static let buttonBottomPadding: CGFloat = 16
         static let buttonMaxWidth: CGFloat = 400.0

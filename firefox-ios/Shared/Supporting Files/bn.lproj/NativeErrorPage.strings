@@ -1,0 +1,6 @@
+/* Body text of the error page shown when a website fails to load while the VPN is on. Suggests turning off the VPN first, then refreshing the page or checking the internet connection if that doesn't help. */
+"VPN.ErrorPage.Body.v160" = "ভিপিএন বন্ধ করে দেখুন। এরপরও সাইটটি লোড না হলে, পেজটি রিফ্রেশ করুন অথবা আপনার ইন্টারনেট সংযোগ চেক করুন।";
+
+/* Title of an error page shown when a website fails to load while the VPN is on and the exact cause is unknown. “Can't be reached” means the website couldn't be loaded. */
+"VPN.ErrorPage.Title.v160" = "এই সাইটটিতে প্রবেশ করা যাচ্ছে না।";
+

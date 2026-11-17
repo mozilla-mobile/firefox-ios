@@ -55,14 +55,14 @@ class TabWebViewTests: XCTestCaseRootViewController, UIGestureRecognizerDelegate
     }
 
     func testTabWebView_doesntLeak() {
-        let tab = Tab(profile: MockProfile(), windowUUID: windowUUID)
+        let tab = Tab(profile: makeProfile(), windowUUID: windowUUID)
         tab.createWebview(configuration: configuration)
 
         trackForMemoryLeaks(tab)
     }
 
     func testTabWebView_load_doesntLeak() {
-        let tab = Tab(profile: MockProfile(), windowUUID: windowUUID)
+        let tab = Tab(profile: makeProfile(), windowUUID: windowUUID)
         tab.createWebview(configuration: configuration)
         tab.loadRequest(URLRequest(url: URL(string: "https://www.mozilla.com")!))
 
@@ -70,7 +70,7 @@ class TabWebViewTests: XCTestCaseRootViewController, UIGestureRecognizerDelegate
     }
 
     func testTabWebView_withLegacySessionData_doesntLeak() {
-        let tab = Tab(profile: MockProfile(), windowUUID: windowUUID)
+        let tab = Tab(profile: makeProfile(), windowUUID: windowUUID)
         tab.url = URL(string: "http://yahoo.com/")!
         tab.createWebview(configuration: configuration)
 
@@ -78,14 +78,14 @@ class TabWebViewTests: XCTestCaseRootViewController, UIGestureRecognizerDelegate
     }
 
     func testTabWebView_withSessionData_doesntLeak() {
-        let tab = Tab(profile: MockProfile(), windowUUID: windowUUID)
+        let tab = Tab(profile: makeProfile(), windowUUID: windowUUID)
         tab.createWebview(with: Data(), configuration: configuration)
 
         trackForMemoryLeaks(tab)
     }
 
     func testTabWebView_withURL_doesntLeak() {
-        let tab = Tab(profile: MockProfile(), windowUUID: windowUUID)
+        let tab = Tab(profile: makeProfile(), windowUUID: windowUUID)
         tab.url = URL(string: "https://www.mozilla.com")!
         tab.createWebview(configuration: configuration)
 
@@ -93,7 +93,7 @@ class TabWebViewTests: XCTestCaseRootViewController, UIGestureRecognizerDelegate
     }
 
     func testHasOnlySecureContent_returnsTrue_ForLocalPDFFile() throws {
-        let tab = Tab(profile: MockProfile(), windowUUID: windowUUID)
+        let tab = Tab(profile: makeProfile(), windowUUID: windowUUID)
         tab.url = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("test.pdf")
         tab.createWebview(configuration: configuration)
 
@@ -109,7 +109,7 @@ class TabWebViewTests: XCTestCaseRootViewController, UIGestureRecognizerDelegate
         let subject = TabWebView(frame: CGRect(origin: .zero, size: CGSize(width: 100, height: 100)),
                                  configuration: .init(),
                                  windowUUID: windowUUID,
-                                 certStore: MockProfile().certStore)
+                                 certStore: makeProfile().certStore)
         try await Task.sleep(nanoseconds: sleepTime)
         subject.configure(delegate: tabWebViewDelegate, navigationDelegate: navigationDelegate)
         trackForMemoryLeaks(subject)

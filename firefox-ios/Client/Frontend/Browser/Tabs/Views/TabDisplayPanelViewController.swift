@@ -20,6 +20,10 @@ final class TabDisplayPanelViewController: UIViewController,
                                      TabTrayThemeable {
     typealias SubscriberStateType = TabsPanelState
 
+    private enum UX {
+        static let verticalBarTopPadding: CGFloat = 16
+    }
+
     let panelType: TabTrayPanelType
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
@@ -131,7 +135,6 @@ final class TabDisplayPanelViewController: UIViewController,
                                               actionType: TabPanelViewActionType.tabPanelWillAppear))
             viewHasAppeared = true
         }
-        updateInsets()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -142,13 +145,21 @@ final class TabDisplayPanelViewController: UIViewController,
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        updateInsets()
         gradientLayer.frame = fadeView.bounds
         adjustStatusBarFrameIfNeeded()
     }
 
     override func viewSafeAreaInsetsDidChange() {
-        super.view.safeAreaInsetsDidChange()
-        updateInsets()
+        super.viewSafeAreaInsetsDidChange()
+        view.setNeedsLayout()
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if isViewLoaded, previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass {
+            shouldShowFadeView()
+        }
     }
 
     // MARK: - Setup
@@ -223,10 +234,15 @@ final class TabDisplayPanelViewController: UIViewController,
         return tabTrayState?.isPrivateMode ?? false
     }
 
+    /// This override predates the Nova implementation and must remain unchanged.
+    var isSubjectToNovaPrivateOverride: Bool {
+        return false
+    }
+
     // MARK: - Fade view & status bar view
 
     private func setupFadeView() {
-        guard isTabTrayUIExperimentsEnabled, isCompactLayout else { return }
+        guard isTabTrayUIExperimentsEnabled else { return }
         fadeView.layer.addSublayer(gradientLayer)
         view.addSubview(fadeView)
 
@@ -240,7 +256,10 @@ final class TabDisplayPanelViewController: UIViewController,
     }
 
     private func shouldShowFadeView() {
-        guard isTabTrayUIExperimentsEnabled, isCompactLayout else { return }
+        guard isTabTrayUIExperimentsEnabled, traitCollection.horizontalSizeClass == .compact else {
+            fadeView.isHidden = true
+            return
+        }
         let isPrivateModeFadeViewNeeded = !tabsState.tabs.isEmpty && tabsState.isPrivateMode
         let shouldShow = !tabsState.isPrivateMode || isPrivateModeFadeViewNeeded
         fadeView.isHidden = !shouldShow
@@ -273,18 +292,21 @@ final class TabDisplayPanelViewController: UIViewController,
     private func adjustStatusBarFrameIfNeeded() {
         guard isTabTrayUIExperimentsEnabled, UIAccessibility.isReduceTransparencyEnabled else { return }
 
-        let isLandscape = UIDevice.current.orientation.isLandscape
-        statusBarView.isHidden = isLandscape
-        guard !isLandscape else { return }
+        // Compact height means landscape on iPhone, where the system hides the status bar.
+        // iPad and unfolded foldables keep a regular height and the status bar in landscape.
+        let isStatusBarHiddenBySystem = traitCollection.verticalSizeClass == .compact
+        statusBarView.isHidden = isStatusBarHiddenBySystem
+        guard !isStatusBarHiddenBySystem else { return }
 
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+        if let windowScene = view.window?.windowScene,
            let statusBarHeight = windowScene.statusBarManager?.statusBarFrame.height {
-            statusBarView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: statusBarHeight)
+            statusBarView.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: statusBarHeight)
         }
     }
 
     private func updateInsets() {
         if isCompactLayout {
+            let topInset = traitCollection.hasVerticalSystemBar ? UX.verticalBarTopPadding : 0
             let bottomInset = if emptyPrivateTabsView.needsSafeArea {
                 DefaultTabTrayUtils().segmentedControlHeight + view.safeAreaInsets.bottom
             } else {
@@ -292,7 +314,7 @@ final class TabDisplayPanelViewController: UIViewController,
             }
 
             emptyPrivateTabsView.updateInsets(top: 0, bottom: bottomInset)
-            tabDisplayView.updateInsets(top: 0, bottom: DefaultTabTrayUtils().segmentedControlHeight)
+            tabDisplayView.updateInsets(top: topInset, bottom: DefaultTabTrayUtils().segmentedControlHeight)
         } else {
             emptyPrivateTabsView.updateInsets(top: view.safeAreaInsets.top, bottom: 0)
             tabDisplayView.updateInsets(top: 0, bottom: 0)

@@ -13,7 +13,18 @@ protocol MainMenuSelectorSet {
 	var SIGN_IN_CELL: Selector { get }
     var SETTINGS_CELL: Selector { get }
     var BOOKMARK_PAGE: Selector { get }
+    var ADD_TO_SHORTCUTS: Selector { get }
+    var REMOVE_FROM_SHORTCUTS: Selector { get }
     var SITE_PROTECTIONS: Selector { get }
+    var PAGE_ZOOM: Selector { get }
+    var READER_VIEW: Selector { get }
+    var MENU_ITEM_STATUS_ON: Selector { get }
+    var MENU_ITEM_STATUS_OFF: Selector { get }
+    var WEBSITE_DARK_MODE: Selector { get }
+    var FIND_IN_PAGE: Selector { get }
+    var SUMMARIZE_PAGE: Selector { get }
+    var REPORT_BROKEN_SITE: Selector { get }
+    var CLOSE_BUTTON: Selector { get }
     var all: [Selector] { get }
 }
 
@@ -27,7 +38,19 @@ struct MainMenuSelectors: MainMenuSelectorSet {
         static let signIn = AccessibilityIdentifiers.MainMenu.signIn
         static let settings  = AccessibilityIdentifiers.MainMenu.settings
         static let bookmarkPage = AccessibilityIdentifiers.MainMenu.bookmarkPage
+        static let addToShortcuts = AccessibilityIdentifiers.MainMenu.addToShortcuts
+        static let removeFromShortcuts = String.MainMenu.Submenus.Save.AccessibilityLabels.RemoveFromShortcuts
         static let siteProtections = "Protections"
+        static let pageZoom = AccessibilityIdentifiers.MainMenu.zoom
+        static let readerView = AccessibilityIdentifiers.MainMenu.readerView
+        // Info-cell statuses (Reader View, Desktop Site, Website Dark Mode) have no identifier, match on label
+        static let menuItemStatusOn = "On"
+        static let menuItemStatusOff = "Off"
+        static let websiteDarkMode = AccessibilityIdentifiers.MainMenu.nightMode
+        static let findInPage = AccessibilityIdentifiers.MainMenu.findInPage
+        static let summarizePage = AccessibilityIdentifiers.MainMenu.summarizePage
+        static let reportBrokenSite = AccessibilityIdentifiers.MainMenu.reportBrokenSite
+        static let closeButton = AccessibilityIdentifiers.MainMenu.HeaderView.closeButton
     }
 
     let DESKTOP_SITE = Selector.cellById(
@@ -83,7 +106,76 @@ struct MainMenuSelectors: MainMenuSelectorSet {
         groups: ["MainMenu"]
     )
 
+    let ADD_TO_SHORTCUTS = Selector.tableCellById(
+        IDs.addToShortcuts,
+        description: "Add to Shortcuts cell in the expanded Main Menu",
+        groups: ["MainMenu"]
+    )
+
+    // Shares the Add to Shortcuts identifier, only the label changes once the page is pinned
+    let REMOVE_FROM_SHORTCUTS = Selector.cellByLabel(
+        IDs.removeFromShortcuts,
+        description: "Remove from Shortcuts cell in the expanded Main Menu",
+        groups: ["MainMenu"]
+    )
+
+    let PAGE_ZOOM = Selector.tableCellById(
+        IDs.pageZoom,
+        description: "Page Zoom cell in the expanded Main Menu",
+        groups: ["MainMenu"]
+    )
+
+    let READER_VIEW = Selector.tableCellById(
+        IDs.readerView,
+        description: "Reader View cell in the expanded Main Menu",
+        groups: ["MainMenu"]
+    )
+
+    let MENU_ITEM_STATUS_ON = Selector.staticTextByLabel(
+        IDs.menuItemStatusOn,
+        description: "On status label inside a Main Menu info cell",
+        groups: ["MainMenu"]
+    )
+
+    let MENU_ITEM_STATUS_OFF = Selector.staticTextByLabel(
+        IDs.menuItemStatusOff,
+        description: "Off status label inside a Main Menu info cell",
+        groups: ["MainMenu"]
+    )
+
+    let WEBSITE_DARK_MODE = Selector.tableCellById(
+        IDs.websiteDarkMode,
+        description: "Website Dark Mode cell in the expanded Main Menu",
+        groups: ["MainMenu"]
+    )
+
+    let FIND_IN_PAGE = Selector.tableCellById(
+        IDs.findInPage,
+        description: "Find in Page cell in Main Menu",
+        groups: ["MainMenu"]
+    )
+
+    let SUMMARIZE_PAGE = Selector.tableCellById(
+        IDs.summarizePage,
+        description: "Summarize Page cell in Main Menu, shown once the page is known to be summarizable",
+        groups: ["MainMenu"]
+    )
+
+    let REPORT_BROKEN_SITE = Selector.tableCellById(
+        IDs.reportBrokenSite,
+        description: "Report Broken Site cell in the expanded Main Menu",
+        groups: ["MainMenu"]
+    )
+
+    let CLOSE_BUTTON = Selector.buttonId(
+        IDs.closeButton,
+        description: "Close button in the Main Menu header",
+        groups: ["MainMenu"]
+    )
+
     var all: [Selector] { [DESKTOP_SITE, BOOKMARKS_BUTTON, HISTORY_BUTTON, DOWNLOADS_BUTTON,
                            PASSWORDS_BUTTON, SIGN_IN_CELL, SETTINGS_CELL, BOOKMARK_PAGE,
-                           SITE_PROTECTIONS] }
+                           ADD_TO_SHORTCUTS, REMOVE_FROM_SHORTCUTS, SITE_PROTECTIONS, PAGE_ZOOM,
+                           READER_VIEW, MENU_ITEM_STATUS_ON, MENU_ITEM_STATUS_OFF, WEBSITE_DARK_MODE,
+                           FIND_IN_PAGE, SUMMARIZE_PAGE, REPORT_BROKEN_SITE, CLOSE_BUTTON] }
 }

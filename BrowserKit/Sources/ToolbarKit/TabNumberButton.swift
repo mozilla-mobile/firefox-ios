@@ -7,7 +7,7 @@ import Common
 
 final class TabNumberButton: ToolbarButton, TabCountable {
     // MARK: - UX Constants
-    struct UX {
+    enum UX {
         static let cornerRadius: CGFloat = 2
         static let dimmedOpacity: CGFloat = 0.2
         static let titleFont = FXFontStyles.Bold.caption2.systemFont()
@@ -58,8 +58,11 @@ final class TabNumberButton: ToolbarButton, TabCountable {
     }
 
     override func updateConfiguration() {
-        super.updateConfiguration()
-        countLabel.textColor = configuration?.baseForegroundColor
+        UIView.performWithoutAnimation {
+                   super.updateConfiguration()
+                   countLabel.textColor = configuration?.baseForegroundColor
+                   imageView?.tintColor = configuration?.baseForegroundColor
+        }
     }
 
     // MARK: - Layout

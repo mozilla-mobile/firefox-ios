@@ -13,6 +13,9 @@ final class SearchSettingsScreen {
     private var trendingSearchesToggle: XCUIElement { sel.TRENDING_SEARCH_SWITCH.element(in: app) }
     private var recentSearchesToggle: XCUIElement { sel.RECENT_SEARCH_SWITCH.element(in: app) }
     private var defaultSearchEngineSectionTitle: XCUIElement { sel.DEFAULT_SEARCH_ENGINE_SECTION_TITLE.element(in: app) }
+    private var defaultSearchEngineRow: XCUIElement { sel.DEFAULT_SEARCH_ENGINE_ROW.element(in: app) }
+    private var googleLensRow: XCUIElement { sel.GOOGLE_LENS_ROW.element(in: app) }
+    private var googleLensToggle: XCUIElement { googleLensRow.switches.firstMatch }
     private var alternativeSearchEnginesSectionTitle: XCUIElement {
         sel.ALTERNATIVE_SEARCH_ENGINES_SECTION_TITLE.element(in: app)
     }
@@ -81,6 +84,48 @@ final class SearchSettingsScreen {
     func waitForSearchEngineSelectionComplete(timeout: TimeInterval = TIMEOUT) {
         let defaultSearchEngineNavBar = sel.DEFAULT_SEARCH_ENGINE_NAVBAR.element(in: app)
         BaseTestCase().mozWaitForElementToNotExist(defaultSearchEngineNavBar, timeout: timeout)
+    }
+
+    /// Opens the default engine picker from Settings → Search and picks `engineName`.
+    func selectDefaultSearchEngine(named engineName: String) {
+        defaultSearchEngineRow.waitAndTap()
+        sel.searchEngineRow(named: engineName).element(in: app).waitAndTap()
+        waitForSearchEngineSelectionComplete()
+    }
+
+    func assertDefaultSearchEngine(is engineName: String) {
+        BaseTestCase().mozWaitForElementToExist(defaultSearchEngineRow)
+        BaseTestCase().mozWaitForValueContains(defaultSearchEngineRow, value: engineName)
+    }
+
+    func assertAlternativeSearchEngineIsEnabled(named engineName: String) {
+        let engineRow = sel.alternativeSearchEngineRow(named: engineName).element(in: app)
+        assertSwitch(engineRow.switches.firstMatch, named: "\(engineName) alternative engine", isOn: true)
+    }
+
+    func assertGoogleLensToggleExists() {
+        BaseTestCase().mozWaitForElementToExist(googleLensRow)
+    }
+
+    func assertGoogleLensToggleDoesNotExist() {
+        BaseTestCase().mozWaitForElementToNotExist(googleLensRow)
+    }
+
+    /// The row's label joins the title and description, and the rest of the copy is the section footnote.
+    func assertGoogleLensToggleIsDisplayedWithDescription() {
+        let copy = String.Settings.Search.GoogleLens.self
+        let footnote = sel.GOOGLE_LENS_FOOTNOTE.element(in: app)
+        BaseTestCase().waitForElementsToExist([googleLensRow, googleLensToggle, footnote])
+        XCTAssertTrue(googleLensRow.isHittable, "Expected the Google Lens toggle to be on screen")
+        XCTAssertEqual(googleLensRow.label, "\(copy.Title), \(copy.Description)")
+    }
+
+    func tapOnGoogleLensToggle() {
+        googleLensToggle.waitAndTap()
+    }
+
+    func assertGoogleLensToggle(isOn: Bool) {
+        assertSwitch(googleLensToggle, named: "Google Lens toggle", isOn: isOn)
     }
 
     func assertDefaultSearchEngineSectionExists() {
@@ -181,7 +226,12 @@ final class SearchSettingsScreen {
     private func tapOnSwitch(_ selector: Selector) {
         let toggle = selector.element(in: app)
         BaseTestCase().scrollToElement(toggle, isHittable: true)
+        let initialValue = toggle.value as? String
         toggle.waitAndTap()
+        // A tap landing while the table still decelerates from the scroll only stops it
+        if toggle.value as? String == initialValue {
+            toggle.waitAndTap()
+        }
     }
 
     /// A row's title and description are set on its switch as one accessibility label, so that is
@@ -200,7 +250,10 @@ final class SearchSettingsScreen {
     }
 
     private func assertSwitch(_ selector: Selector, isOn: Bool) {
-        let element = selector.element(in: app)
+        assertSwitch(selector.element(in: app), named: selector.description, isOn: isOn)
+    }
+
+    private func assertSwitch(_ element: XCUIElement, named name: String, isOn: Bool) {
         BaseTestCase().scrollToElement(element)
         BaseTestCase().mozWaitForElementToExist(element)
 
@@ -209,7 +262,7 @@ final class SearchSettingsScreen {
         XCTAssertEqual(
             value,
             expectedValue,
-            "Expected '\(selector.description)' to be \(isOn ? "ON" : "OFF"), but got \(String(describing: value))"
+            "Expected '\(name)' to be \(isOn ? "ON" : "OFF"), but got \(String(describing: value))"
         )
     }
 }

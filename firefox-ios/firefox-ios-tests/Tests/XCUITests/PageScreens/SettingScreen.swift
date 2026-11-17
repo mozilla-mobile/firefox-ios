@@ -29,11 +29,22 @@ final class SettingScreen {
     private var translationCell: XCUIElement { sel.TRANSLATION_CELL_TITLE.element(in: app) }
     private var toolbarCell: XCUIElement { sel.TOOLBAR_CELL.element(in: app) }
     private var bottomToolbarButton: XCUIElement { sel.BOTTOM_TOOLBAR_BUTTON.element(in: app) }
+    private var topToolbarButton: XCUIElement { sel.TOP_TOOLBAR_BUTTON.element(in: app) }
+    private var summarizeCell: XCUIElement { sel.SUMMARIZE_CELL.element(in: app) }
 
     func closeSettingsWithDoneButton() {
         let doneButton = sel.DONE_BUTTON.element(in: app)
+        BaseTestCase().scrollToElement(doneButton, swipe: "down")
         BaseTestCase().mozWaitElementHittable(element: doneButton, timeout: TIMEOUT)
         doneButton.waitAndTap()
+    }
+
+    /// Asserts the native settings table renders with the light app theme, judged by its average luminance.
+    func assertSettingsTableIsLight(timeout: TimeInterval = TIMEOUT) {
+        let table = sel.MAIN_SETTINGS_TABLE.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(table, timeout: timeout)
+        let isLight = table.waitForLuminance(timeout: timeout) { $0 > 0.65 }
+        XCTAssertTrue(isLight, "The app theme should stay light, settings luminance: \(table.averageLuminance())")
     }
 
     func rotateDevice(to orientation: UIDeviceOrientation) {
@@ -72,6 +83,15 @@ final class SettingScreen {
         okButton.waitAndTap()
     }
 
+    /// From the Settings root, opens Data Management and then Website Data.
+    func openWebsiteData() {
+        let settingsTable = sel.SETTINGS_TABLE.element(in: app)
+        let dataManagementCell = settingsTable.cells[sel.CLEAR_DATA_CELL.value]
+        BaseTestCase().scrollToElement(dataManagementCell, swipeableElement: settingsTable)
+        dataManagementCell.waitAndTap()
+        sel.WEBSITE_DATA_CELL.element(in: app).waitAndTap()
+    }
+
     func tryTapClearPrivateDataButton() {
         clearDataCell.waitAndTap()
     }
@@ -88,6 +108,16 @@ final class SettingScreen {
         let newTab = sel.NEW_TAB_CELL.element(in: app)
         BaseTestCase().mozWaitForElementToExist(newTab)
         newTab.swipeUp()
+    }
+
+    func waitForSettingsRoot(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(sel.SETTINGS_TITLE.element(in: app), timeout: timeout)
+    }
+
+    /// Waits on the theme buttons rather than the "Appearance" title: Appearance opened through
+    /// a deeplink has no navigation title.
+    func waitForThemeOptions(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(sel.DARK_THEME_BUTTON.element(in: app), timeout: timeout)
     }
 
     func waitForBrowsingLinksSection() {
@@ -157,6 +187,10 @@ final class SettingScreen {
         BaseTestCase().mozWaitForElementToExist(table)
     }
 
+    func assertSettingsScreenDismissed(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToNotExist(sel.MAIN_SETTINGS_TABLE.element(in: app), timeout: timeout)
+    }
+
     func assertLayout() {
         let title = sel.SETTINGS_TITLE.element(in: app)
         let done = sel.DONE_BUTTON.element(in: app)
@@ -175,8 +209,13 @@ final class SettingScreen {
         // Toolbar check only on iPhone
         if !BaseTestCase().iPad() {
             let toolbar = sel.TOOLBAR_CELL.element(in: app)
+            let doneButton = sel.DONE_BUTTON.element(in: app)
             BaseTestCase().mozWaitForElementToExist(toolbar)
+            BaseTestCase().scrollToElement(toolbar)
             XCTAssertTrue(toolbar.isVisible())
+
+            // Ensure we start from the very top
+            BaseTestCase().scrollToElement(doneButton, swipe: "down")
         }
 
         // Iterate over all expected cells
@@ -194,6 +233,10 @@ final class SettingScreen {
         cell.waitAndTap()
     }
 
+    func openHomepageSettings() {
+        sel.HOMEPAGE_CELL.element(in: app).waitAndTap()
+    }
+
     func navigateToToolbarSettings() {
         BaseTestCase().mozWaitForElementToExist(toolbarCell)
         toolbarCell.waitAndTap()
@@ -202,6 +245,11 @@ final class SettingScreen {
     func selectBottomToolbar() {
         BaseTestCase().mozWaitForElementToExist(bottomToolbarButton)
         bottomToolbarButton.waitAndTap()
+    }
+
+    func selectTopToolbar() {
+        BaseTestCase().mozWaitForElementToExist(topToolbarButton)
+        topToolbarButton.waitAndTap()
     }
 
     /// Picks which button sits in the middle of the navigation toolbar. The Home option is what makes
@@ -271,10 +319,14 @@ final class SettingScreen {
 
     func tapBackToSettings() {
         guard !app.navigationBars["Settings"].exists else { return }
-        let backButton = app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0)
+        // On iPhone Duo the back button lives in a toolbar, not the navigation bar.
+        let backButton = BaseTestCase().iPhoneDuo()
+            ? app.buttons["BackButton"].firstMatch
+            : app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0)
         BaseTestCase().mozWaitElementHittable(element: backButton, timeout: TIMEOUT)
         backButton.tap()
         BaseTestCase().mozWaitForElementToExist(app.navigationBars["Settings"])
+        BaseTestCase().mozWaitForElementToExist(app.buttons["Done"])
     }
 
     func navigateToAutofillPasswordSettings() {
@@ -317,10 +369,26 @@ final class SettingScreen {
         cell.waitAndTap()
     }
 
+    func assertSummarizeSettingsIsInGeneralSection(timeout: TimeInterval = TIMEOUT) {
+        let cell = summarizeCell
+        let header = sel.GENERAL_SECTION_HEADER.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(sel.SETTINGS_TABLE.element(in: app))
+        BaseTestCase().mozWaitForElementToExist(cell)
+        BaseTestCase().mozWaitForElementToExist(header)
+
+        // Each frame comes from its own snapshot, so poll until the table stops moving after launch
+        let isBelowHeader = NSPredicate { _, _ in cell.isBelow(element: header) }
+        let expectation = XCTNSPredicateExpectation(predicate: isBelowHeader, object: nil)
+        XCTAssertEqual(
+            XCTWaiter().wait(for: [expectation], timeout: timeout),
+            .completed,
+            "'\(sel.SUMMARIZE_CELL.description)' (\(cell.frame)) is not below the General header (\(header.frame))"
+        )
+    }
+
     func openSummarizeSettings() {
-        let cell = app.tables.cells[AccessibilityIdentifiers.Settings.Summarize.title]
-        BaseTestCase().scrollToElement(cell)
-        cell.waitAndTap()
+        BaseTestCase().scrollToElement(summarizeCell)
+        summarizeCell.waitAndTap()
     }
 
     func assertTranslationSettingsDoesNotExist() {

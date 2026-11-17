@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
 
 /// The backend environment the VPN App Attest (IPN)
 public enum VPNEnvironment: String, Sendable {
@@ -11,16 +12,19 @@ public enum VPNEnvironment: String, Sendable {
     case prod
 
     var baseURL: URL? {
-        // TODO: Replace with the real VPN IPN hosts once the backend endpoints are provisioned.
-        // See https://mozilla-hub.atlassian.net/browse/GS-198
         switch self {
         case .dev:
-            return URL(string: "https://dev.guardian.nonprod.cloudops.mozgcp.net")
+            return URL(string: "https://dev.vpn.nonprod.webservices.mozgcp.net")
         case .stage:
-            return URL(string: "https://stage.guardian.nonprod.cloudops.mozgcp.net")
+            return URL(string: "https://vpn.allizom.org")
         case .prod:
             return URL(string: "https://vpn.mozilla.org")
         }
+    }
+
+    public init(prefs: Prefs) {
+        let environmentKey = prefs.stringForKey(PrefsKeys.VPNSettings.endpointEnvironment) ?? ""
+        self = VPNEnvironment(rawValue: environmentKey) ?? .prod
     }
 }
 
@@ -32,9 +36,12 @@ public enum VPNConstants {
     static let contentTypeJSON = "application/json"
     static let POST = "POST"
     static let GET = "GET"
+    static let quotaLimitHeader = "X-Quota-Limit"
+    static let quotaRemainingHeader = "X-Quota-Remaining"
+    static let quotaResetHeader = "X-Quota-Reset"
 
     static func challengeEndpoint(with env: VPNEnvironment) -> URL? {
-        env.baseURL?.appendingPathComponent("api/v1/ipn/attest/challenge")
+        env.baseURL?.appendingPathComponent("api/v1/ipn/challenge")
     }
 
     static func enrollmentEndpoint(with env: VPNEnvironment) -> URL? {
@@ -47,5 +54,9 @@ public enum VPNConstants {
 
     static func tokenEndpoint(with env: VPNEnvironment) -> URL? {
         env.baseURL?.appendingPathComponent("api/v1/ipn/token")
+    }
+
+    static func entitlementEndpoint(with env: VPNEnvironment) -> URL? {
+        env.baseURL?.appendingPathComponent("api/v1/ipn/entitlement")
     }
 }

@@ -1,0 +1,24 @@
+/* Title for the cancel button in the remove address alert. */
+"Addresses.EditAddress.Alert.CancelButton.v129" = "বাতিল";
+
+/* Title for the remove button in the remove address alert. */
+"Addresses.EditAddress.Alert.RemoveButton.v129" = "অপসারণ";
+
+/* Title for the alert indicating the action to remove an address. */
+"Addresses.EditAddress.Alert.Title.v129" = "ঠিকানা মুছে ফেলুন";
+
+/* Label for the field where users can input the name of their neighborhood. This detail adds precision to addresses, especially in densely populated areas, improving the accuracy of autofill. */
+"Addresses.EditAddress.AutofillAddressNeighborhood.v129" = "প্রতিবেশী";
+
+/* Label for the input field designated for the organization's name related to the address. Helps in distinguishing addresses used for business or personal purposes in autofill settings. */
+"Addresses.EditAddress.AutofillAddressOrganization.v129" = "প্রতিষ্ঠান";
+
+/* Label for the button to cancel the current autofill operation or exit the form without saving changes. Provides users with an option to back out of a process without making any modifications. */
+"Addresses.EditAddress.AutofillCancelButton.v129" = "বাতিল";
+
+/* Title for the option allowing users to edit an existing saved address. This is used within the settings for autofill, enabling users to update their address details for accurate form autofilling. */
+"Addresses.EditAddress.AutofillEditAddressTitle.v129" = "ঠিকানা সম্পাদনা";
+
+/* Label for the button to save the current address details entered or edited by the user. This action confirms the user's changes and updates their autofill settings accordingly. */
+"Addresses.EditAddress.AutofillSaveButton.v129" = "সংরক্ষণ";
+

@@ -7,8 +7,8 @@ import Shared
 import UIKit
 
 class LibraryViewController: UIViewController, Themeable {
-    struct UX {
-        struct NavigationMenu {
+    enum UX {
+        enum NavigationMenu {
             static let height: CGFloat = 40
             static let horizontalPadding: CGFloat = 15
             static let bottomPadding: CGFloat = 12
@@ -25,6 +25,9 @@ class LibraryViewController: UIViewController, Themeable {
     var logger: Logger
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
+
+    var shouldUsePrivateOverride: Bool { return true }
+    var shouldBeInPrivateTheme: Bool { return false }
 
     // Views
     private var controllerContainerView: UIView = .build { view in }
@@ -236,6 +239,7 @@ class LibraryViewController: UIViewController, Themeable {
             )
         }
         librarySegmentControl.selectedSegmentIndex = viewModel.selectedPanel?.rawValue ?? 0
+        view.setNeedsLayout()
     }
 
     private func hideCurrentPanel() {
@@ -393,7 +397,9 @@ class LibraryViewController: UIViewController, Themeable {
     }
 
     private func currentTheme() -> Theme {
-        return themeManager.getCurrentTheme(for: windowUUID)
+        return themeManager.resolveTheme(for: windowUUID,
+                                         shouldUsePrivateOverride: shouldUsePrivateOverride,
+                                         shouldBeInPrivateTheme: shouldBeInPrivateTheme)
     }
 
     func applyTheme() {
@@ -404,6 +410,7 @@ class LibraryViewController: UIViewController, Themeable {
         navigationController?.navigationBar.shadowImage = UIImage()
 
         let theme = currentTheme()
+        navigationController?.overrideUserInterfaceStyle = theme.type.getInterfaceStyle()
         view.backgroundColor = theme.colors.layer1
         navigationController?.navigationBar.barTintColor = theme.colors.layer1
         navigationController?.navigationBar.tintColor = theme.colors.actionPrimary

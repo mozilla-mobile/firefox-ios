@@ -1,0 +1,21 @@
+/* Button on the popup shown when the VPN stops working while the user is browsing. Tapping it closes all of the user's open tabs. */
+"VPN.ErrorBrowsingPopup.CloseAllTabs.v160" = "Пӯшидани ҳамаи варақаҳо";
+
+/* Button on the popup shown when the VPN stops working while the user is browsing. Tapping it closes only the tab the user is currently viewing. */
+"VPN.ErrorBrowsingPopup.CloseThisTab.v160" = "Пӯшидани варақаи ҷорӣ";
+
+/* Button on the popup shown when the app fails to connect to the VPN. Tapping it closes the popup. */
+"VPN.ErrorConnectingPopup.CloseButtonText.v160" = "Пӯшидан";
+
+/* Button on the popup shown when the app fails to connect to the VPN. Tapping it tries to connect to the VPN again. */
+"VPN.ErrorConnectingPopup.RetryButtonText.v160" = "Аз нав кӯшиш кардан";
+
+/* Title of a popup shown when the app fails to connect to the VPN. */
+"VPN.ErrorConnectingPopup.Title.v160" = "Ба «VPN» пайваст шуда натавонист";
+
+/* Button on the popup shown when the user runs out of free monthly VPN data. Tapping it closes all of the user's open tabs. */
+"VPN.ReachedDataLimitPopup.CloseAllTabs.v160" = "Пӯшидани ҳамаи варақаҳо";
+
+/* Button on the popup shown when the user runs out of free monthly VPN data. Tapping it closes only the tab the user is currently viewing. */
+"VPN.ReachedDataLimitPopup.CloseThisTab.v160" = "Пӯшидани варақаи ҷорӣ";
+

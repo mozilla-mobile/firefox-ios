@@ -404,7 +404,7 @@
 "FxA.SyncNow" = "Sincrunizà avà";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox Sync s'hè cunnessu à %@";
+"FxAPush_DeviceConnected_body" = "Firefox Sync s’hè cunnessu à %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Sync cunnessu";
@@ -1500,6 +1500,9 @@
 
 /* Button label that appears in the settings to prompt the user to sign in to Firefox for iOS sync service to sync and save data. */
 "Settings.Sync.ButtonTitle.v103" = "Sincrunizà è arregistrà i dati";
+
+/* In the settings account row, shown transiently while the user is being signed out of their account. */
+"Settings.Sync.SigningOut.Title.v154" = "Scunnessione…";
 
 /* Title for the page where the user sign in to their Firefox Sync account. */
 "Settings.Sync.SignInView.Title.v103" = "Sincrunizà è arregistrà i dati";

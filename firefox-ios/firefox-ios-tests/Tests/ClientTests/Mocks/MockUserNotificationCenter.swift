@@ -24,9 +24,12 @@ class MockUserNotificationCenter: UserNotificationCenterProtocol, @unchecked Sen
     }
 
     var addWasCalled = false
+    var addedRequest: UNNotificationRequest?
+    var addError: Error?
     func add(_ request: UNNotificationRequest,
              withCompletionHandler completionHandler: ((Error?) -> Void)?) {
         addWasCalled = true
+        addedRequest = request
     }
 
     var getDeliveredWasCalled = false

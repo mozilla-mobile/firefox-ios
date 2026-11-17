@@ -5,7 +5,7 @@
 import ContentBlockingGenerator
 
 @main
-public struct MainContentBlockerGenerator {
+public enum MainContentBlockerGenerator {
     // FXIOS-14548 ContentBlockerGenerator is not thread safe
     nonisolated(unsafe) static let generator = ContentBlockerGenerator.factory()
 

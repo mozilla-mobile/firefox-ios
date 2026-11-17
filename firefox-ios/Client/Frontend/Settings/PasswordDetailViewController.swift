@@ -10,7 +10,7 @@ import struct MozillaAppServices.LoginEntry
 
 class PasswordDetailViewController: SensitiveViewController,
                                     Themeable {
-    private struct UX {
+    private enum UX {
         static let horizontalMargin: CGFloat = 14
     }
 
@@ -30,6 +30,9 @@ class PasswordDetailViewController: SensitiveViewController,
     weak var coordinator: PasswordManagerFlowDelegate?
 
     private var viewModel: PasswordDetailViewControllerModel
+
+    var shouldUsePrivateOverride: Bool { return true }
+    var shouldBeInPrivateTheme: Bool { return false }
 
     private var isEditingFieldData = false {
         didSet {
@@ -120,7 +123,9 @@ class PasswordDetailViewController: SensitiveViewController,
     }
 
     private func currentTheme() -> Theme {
-        return themeManager.getCurrentTheme(for: windowUUID)
+        return themeManager.resolveTheme(for: windowUUID,
+                                         shouldUsePrivateOverride: shouldUsePrivateOverride,
+                                         shouldBeInPrivateTheme: shouldBeInPrivateTheme)
     }
 
     func applyTheme() {
@@ -400,8 +405,8 @@ extension PasswordDetailViewController {
         viewModel.profile.hasSyncedLogins()
             .uponQueue(.main) { yes in
                 // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
-                MainActor.assumeIsolated {
-                    self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
+                MainActor.assumeIsolated { [unowned self] in
+                    self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ _ in
                         self.sendLoginsDeletedTelemetry()
                         self.viewModel.profile.logins.deleteLogin(id: self.viewModel.login.id) { _ in
                             DispatchQueue.main.async { [weak self] in

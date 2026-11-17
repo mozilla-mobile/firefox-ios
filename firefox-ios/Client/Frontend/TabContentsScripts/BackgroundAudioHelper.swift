@@ -111,14 +111,12 @@ class BackgroundAudioHelper: Notifiable {
     }
 
     private func handleWillResignActive() {
-        try? AVAudioSession.sharedInstance().setCategory(.playback)
         for webView in Self.selectedTabWebViews() {
             webView.evaluateJavaScript(Self.tagPlayingMediaJS)
         }
     }
 
     private func handleDidBecomeActive() {
-        try? AVAudioSession.sharedInstance().setCategory(.soloAmbient)
         for webView in Self.selectedTabWebViews() {
             webView.evaluateJavaScript(Self.removeVisibilityOverridesJS, in: nil, in: .page)
         }

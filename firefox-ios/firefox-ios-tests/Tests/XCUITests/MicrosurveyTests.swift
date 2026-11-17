@@ -13,6 +13,8 @@ final class MicrosurveyTests: BaseTestCase {
     private var settingScreen: SettingScreen!
 
     override func setUp() async throws {
+        throw XCTSkip("Moved out of the full functional test suite")
+        /*
         launchArguments = [
             LaunchArguments.SkipIntro,
             LaunchArguments.ResetMicrosurveyExpirationCount
@@ -27,6 +29,7 @@ final class MicrosurveyTests: BaseTestCase {
         toolbarScreen = ToolbarScreen(app: app)
         tabTrayScreen = TabTrayScreen(app: app)
         settingScreen = SettingScreen(app: app)
+        */
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2776931

@@ -7,7 +7,7 @@ import Common
 
 final class StackedTabButton: ToolbarButton, TabCountable {
     // MARK: - UX Constants
-    private struct UX {
+    private enum UX {
         static let tabImageViewSize: CGSize = .init(width: 27, height: 27)
         static let tabImageViewCornerRadius: CGFloat = 4
         static let tabImageViewBorderWidth: CGFloat = 0.5

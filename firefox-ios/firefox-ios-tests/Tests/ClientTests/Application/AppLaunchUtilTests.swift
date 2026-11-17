@@ -15,7 +15,7 @@ final class AppLaunchUtilTests: XCTestCase {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         TelemetryContextualIdentifier.clearUserDefaults()
-        profile = MockProfile()
+        profile = makeProfile()
     }
 
     override func tearDown() async throws {
@@ -61,7 +61,7 @@ final class AppLaunchUtilTests: XCTestCase {
     }
 
     private func setupNimbusToSForTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.tosFeature.with { _, _ in
+        FxNimbus.shared.features.tosFeature.with { _ in
             return TosFeature(
                 status: isEnabled
             )

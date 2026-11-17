@@ -10,6 +10,12 @@
 /* When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the title for the alert. */
 "Alerts.AddToCalendar.Title.v134" = "Rnu ɣer uwitay?";
 
+/* Secondary Button in dialogue window. If tapped, cancels the download and closes the window. */
+"Alerts.ConfigurationProfile.Button.Cancel.v160.1" = "Sefsex";
+
+/* Primary Button in dialogue window. If tapped, confirms the user wants to download the configuration profile and the download starts. */
+"Alerts.ConfigurationProfile.Button.Continue.v160.1" = "Kemmel";
+
 /* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the body text for the alert. */
 "Alerts.FeltDeletion.Body.v122" = "Mdel meṛṛa accaren usligen syen kkes azray, inagan n tuqqna, akked yisefka niḍen n yismal.";
 

@@ -52,26 +52,53 @@
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the brand title for the section containing the Wrexham AFC wallpapers. */
 "Settings.Home.Option.Wallpaper.WrexhamBrandTitle.v155" = "Wrexham A.F.C.";
 
+/* This is the description for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
+"Settings.Notifications.SyncNotificationsStatus.v112" = "Šim ir jābūt ieslēgtam, lai saņemtu cilnes un paziņojumus par pieteikšanos citā ierīcē.";
+
 /* This is the title for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. */
 "Settings.Notifications.TipsAndFeaturesNotificationsTitle.v112" = "Padomi un iespējas";
 
 /* Title for a link that explains what Mozilla means by Rollouts */
 "Settings.Rollouts.Link.v148" = "Uzzināt vairāk";
 
+/* Accessibility label for default search engine setting. */
+"Settings.Search.Accessibility.DefaultSearchEngine.v121" = "Noklusējuma meklētājs";
+
 /* Accessibility label for Learn more about Firefox Suggest. */
 "Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "Uzzināt vairāk par Firefox Suggest";
+
+/* Title for alternate search engines settings section in the Search page in the Settings menu. */
+"Settings.Search.AlternateSearchEngines.Title.v124.v2" = "Citi meklētāji";
+
+/* Title for the `default search engine` settings section in the Search page in the Settings menu. */
+"Settings.Search.DefaultSearchEngine.Title.v121" = "Noklusējuma meklētājs";
 
 /* Title for the `Suggestions from Search Engines` settings section in the Search page in the Settings menu. */
 "Settings.Search.EnginesSuggestions.Title.v124" = "Ieteikumi no meklētājiem";
 
+/* Navigation title for search page in the Settings menu. */
+"Settings.Search.PageTitle.v121" = "Meklēt";
+
 /* Description for `Show in Private Sessions` toggle, located in `Suggestions from Search Engines` section in the Search page in the Settings menu. */
 "Settings.Search.PrivateSession.Description.v125" = "Rādīt meklētāju ieteikumus privātajās sesijās";
+
+/* Label for the `show search suggestions` setting, in the Search Settings page. */
+"Settings.Search.ShowSuggestions.v121" = "Rādīt meklēšanas ieteikumus";
 
 /* In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest. */
 "Settings.Search.Suggest.LearnAboutSuggestions.v124" = "Uzzināt vairāk par Firefox Suggest";
 
+/* In the Search page of the Settings menu, the title for the setting to enable search browsing history. */
+"Settings.Search.Suggest.SearchBrowsingHistory.Title.v124" = "Meklēt pārlūkošanas vēsturē";
+
+/* In the Search page of the Settings menu, the title for the setting to enable search bookmarks. */
+"Settings.Search.Suggest.SearchSearchBookmarks.Title.v124" = "Meklēt grāmatzīmes";
+
 /* In the Search page of the Settings menu, the title for the setting to enable synced tabs. */
 "Settings.Search.Suggest.SearchSyncedTabs.Title.v124" = "Meklēt vienādotajās cilnēs";
+
+/* In the Search page of the Settings menu, the description for the setting to enable Suggestions from sponsors. %@ is the app name (e.g. Firefox). - Firefox. */
+"Settings.Search.Suggest.ShowSponsoredSuggestions.Description.v124" = "Atbalsti %@ ar apmaksātiem ieteikumiem, kas parādās laiku pa laikam";
 
 /* Title for a link that explains what Mozilla means by Studies */
 "Settings.Studies.Link.v136" = "Uzzināt vairāk";
@@ -82,9 +109,69 @@
 /* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v136" = "Uzzināt vairāk";
 
+/* Placeholder text for the search bar in the translation language picker. */
+"Settings.Translation.LanguagePicker.SearchPlaceholder.v151" = "Meklēt";
+
 /* Row label in the preferred languages list that opens the language picker to add a new preferred language for translation. */
 "Settings.Translation.PreferredLanguages.AddLanguage.v151" = "Pievienot valodu…";
 
 /* Section header for the preferred languages list in the Translation settings screen. */
 "Settings.Translation.PreferredLanguages.SectionTitle.v151" = "Vēlamās valodas";
+
+/* Text displayed on the locations screen when the app loads a list of locations for the user to pick from. “Locations” here means the locations of VPN servers the user can connect to. */
+"VPN.LocationPicker.FindingLocationsText.v160" = "Meklē atrašanās vietas…";
+
+/* Option in the VPN server location list. Choosing it lets the app pick the server with the fastest connection. */
+"VPN.LocationPicker.RecommendedMainText.v160" = "Ieteicama";
+
+/* Description below the Recommended option in the VPN server location list. %1$@ is the app name (for example, Firefox). */
+"VPN.LocationPicker.RecommendedSubText.v160" = "%1$@ atrod ātrāko atrašanās vietu.";
+
+/* Announced by VoiceOver on the VPN settings screen when the VPN finishes connecting after the user turns on the VPN switch. */
+"VPN.Settings.Connected.v161" = "Izveidots VPN savienojums";
+
+/* Shown next to the VPN switch on the VPN settings screen while the VPN is connecting, right after the user turns it on. */
+"VPN.Settings.Connecting.v160" = "Savienojas…";
+
+/* Read aloud by VoiceOver for the Data Limit section on the VPN settings screen. %1$@ is the amount of VPN data used this month and %2$@ is the monthly limit, both in gigabytes (for example, “1.0 of 5.0 gigabytes used”). The second sentence explains that the user’s free monthly VPN data resets on the first day of each month. */
+"VPN.Settings.DataLimit.AccessibilityValue.v161" = "Izmantoti %1$@ no %2$@ gigabaitiem. Atjaunojas katra mēneša pirmajā dienā.";
+
+/* Footer below the Data Limit section on the VPN settings screen. Explains when the user's free VPN data resets. %1$@ is the monthly limit in gigabytes (for example, 5.0). “GB” stands for gigabytes. */
+"VPN.Settings.DataLimitResetFooter.v160" = "Tiek atiestatīts uz %1$@ GB katra mēneša pirmajā dienā";
+
+/* Title of the section on the VPN settings screen that shows how much of the user's free monthly VPN data they have used. */
+"VPN.Settings.DataLimitTitle.v160" = "Datu ierobežojums";
+
+/* Read aloud by VoiceOver for the data usage on the VPN settings screen. Same as the visible text, but with “gigabytes” written out instead of “GB”. %1$@ is the amount of VPN data used this month and %2$@ is the monthly limit (for example, “1.0 of 5.0 gigabytes used”). */
+"VPN.Settings.DataUsage.AccessibilityLabel.v160" = "Izmantoti %1$@ no %2$@ gigabaitiem";
+
+/* Shown next to the Data Limit title on the VPN settings screen. %1$@ is the amount of VPN data used this month and %2$@ is the monthly limit, both in gigabytes (for example, “1.0 of 5.0 GB used”). “GB” stands for gigabytes. */
+"VPN.Settings.DataUsage.v160" = "Izmantoti %1$@ no %2$@ GB";
+
+/* Short description below the title at the top of the VPN settings screen. Explains what the VPN does. */
+"VPN.Settings.Description.v160" = "Pārlūko ar papildu aizsardzību ar savas atrašanās vietas slēpšanu, pat publiskos Wi-Fi!";
+
+/* Link below the description at the top of the VPN settings screen. Tapping it opens a support article about the VPN. */
+"VPN.Settings.LearnMore.v160" = "Uzzināt vairāk…";
+
+/* Shown on the right side of the Location row on the VPN settings screen when the user lets Firefox select the location in their stead. The recommended location is the one with the fastest connection. */
+"VPN.Settings.LocationRecommended.v160" = "Ieteicama";
+
+/* Used in two places: as the name of a row on the VPN settings screen, and as the title of the screen that row opens. On that screen, the user picks which VPN server location (country or region) to connect through. “Location” means the VPN server’s location, not the user’s own location. */
+"VPN.Settings.LocationTitle.v160" = "Atrašanās vieta";
+
+/* VPN status shown when the VPN is not connected. Used in two places: on the right side of the VPN row in the Privacy section of Settings, and on the small capsule-shaped VPN status indicator. */
+"VPN.Settings.StatusOff.v160" = "Izslēgts";
+
+/* VPN status shown when the VPN is connected. Used in two places: on the right side of the VPN row in the Privacy section of Settings, and on the small capsule-shaped VPN status indicator. */
+"VPN.Settings.StatusOn.v160" = "Ieslēgts";
+
+/* VPN status shown when the VPN is temporarily paused. Used in two places: on the right side of the VPN row in the Privacy section of Settings, and on the small capsule-shaped VPN status indicator. */
+"VPN.Settings.StatusPaused.v160" = "Apturēts";
+
+/* Name of the VPN row in the Privacy section of Settings. Also used as the title of the VPN settings screen. */
+"VPN.Settings.Title.v160" = "Iebūvēts VPN";
+
+/* Used in two places: as the label for the toggle switch on the VPN settings screen that turns the VPN on or off, and as the label on the small capsule-shaped VPN status indicator, where it appears together with the current status (On, Off or Paused). */
+"VPN.Settings.ToggleTitle.v160" = "VPN";
 

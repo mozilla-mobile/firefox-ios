@@ -147,6 +147,11 @@
           "name" : "QuickAnswersKit"
         },
         {
+          "containerPath" : "container:..\/BrowserKit",
+          "identifier" : "WebDataTransfer",
+          "name" : "WebDataTransfer"
+        },
+        {
           "containerPath" : "container:..\/MozillaRustComponents",
           "identifier" : "MozillaRustComponents",
           "name" : "MozillaRustComponents"
@@ -197,6 +202,13 @@
         "containerPath" : "container:..\/BrowserKit",
         "identifier" : "QuickAnswersKitTests",
         "name" : "QuickAnswersKitTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..\/BrowserKit",
+        "identifier" : "WebDataTransferTests",
+        "name" : "WebDataTransferTests"
       }
     },
     {
@@ -292,6 +304,7 @@
         "HistoryHighlightsDataAdaptorTests\/testReloadDataOnNotification()",
         "HistoryHighlightsTests",
         "IntroViewControllerTests\/testBasicSetupReturnsExpectedItems()",
+        "NotificationManagerTests\/testGetNotificationSettings()",
         "OnboardingTelemetryUtilityTests\/testSendOnboardingCardView_WelcomeCard_Success()",
         "RustSyncManagerTests\/testGetEnginesAndKeys()",
         "RustSyncManagerTests\/testGetEnginesAndKeysWithNoKey()",

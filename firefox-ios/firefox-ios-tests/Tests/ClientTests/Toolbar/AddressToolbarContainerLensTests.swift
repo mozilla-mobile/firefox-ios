@@ -11,72 +11,275 @@ import ToolbarKit
 @MainActor
 final class AddressToolbarContainerLensTests: XCTestCase {
     private let windowUUID: WindowUUID = .XCTestDefaultUUID
+    private let url = URL(string: "https://example.com")
+
+    override func setUp() async throws {
+        try await super.setUp()
+        DependencyHelperMock().bootstrapDependencies(injectedTabManager: MockTabManager())
+    }
+
+    override func tearDown() async throws {
+        DependencyHelperMock().reset()
+        try await super.tearDown()
+    }
 
     func testInit_withoutToolbarState_returnsEmptyLeadingPageActions() {
         let appState = AppState(presentedComponents: PresentedComponentsState(components: []))
-        let lens = AddressToolbarContainerLens(appState: appState, uuid: windowUUID)
+        let subject = AddressToolbarContainerLens(appState: appState, uuid: windowUUID)
 
-        XCTAssertTrue(lens.leadingPageActions.isEmpty)
+        XCTAssertTrue(subject.leadingPageActions.isEmpty)
+        XCTAssertTrue(subject.navigationActions.isEmpty)
+    }
+
+    // MARK: - navigationActions, derived straight from ToolbarState (no action involved)
+
+    func testInit_showingNavigationToolbar_returnsEmptyNavigationActions() {
+        let subject = createSubject(isShowingNavigationToolbar: true, canGoBack: true, canGoForward: true)
+
+        XCTAssertTrue(subject.navigationActions.isEmpty)
+    }
+
+    func testInit_notShowingNavigationToolbar_returnsBackAndForwardActions() {
+        let subject = createSubject(isShowingNavigationToolbar: false, canGoBack: true, canGoForward: false)
+
+        XCTAssertEqual(subject.navigationActions.count, 2)
+        XCTAssertEqual(subject.navigationActions[0].actionType, .back)
+        XCTAssertEqual(subject.navigationActions[0].isEnabled, true)
+        XCTAssertEqual(subject.navigationActions[1].actionType, .forward)
+        XCTAssertEqual(subject.navigationActions[1].isEnabled, false)
     }
 
     func testInit_onRealWebsite_returnsShareAction() {
-        let lens = subject(url: URL(string: "https://example.com"))
+        let subject = createSubject(url: url)
 
-        XCTAssertEqual(lens.leadingPageActions.first?.actionType, .share)
+        XCTAssertEqual(subject.leadingPageActions.first?.actionType, .share)
+    }
+
+    // MARK: - trailingPageActions, derived straight from ToolbarState (no action involved)
+
+    func testInit_withEmptySearch_returnsEmptyTrailingPageActions() {
+        let subject = createSubject(isEmptySearch: true, url: url)
+
+        XCTAssertTrue(subject.trailingPageActions.isEmpty)
+    }
+
+    func testInit_notLoading_returnsTrailingReloadAction() {
+        let subject = createSubject(isEmptySearch: false, isLoading: false, url: url)
+
+        XCTAssertEqual(subject.trailingPageActions.last?.actionType, .reload)
+    }
+
+    func testInit_loading_returnsTrailingStopLoadingAction() {
+        let subject = createSubject(isEmptySearch: false, isLoading: true, url: url)
+
+        XCTAssertEqual(subject.trailingPageActions.last?.actionType, .stopLoading)
     }
 
     // MARK: - hasAlternativeLocationColor, derived straight from ToolbarState (no action involved)
 
     func testInit_withTopPosition_noTopTabs_showingNavToolbar_disablesCustomColor() {
-        let lens = subject(toolbarPosition: .top,
-                           isShowingTopTabs: false,
-                           isShowingNavigationToolbar: true,
-                           url: URL(string: "https://example.com"))
+        let subject = createSubject(toolbarPosition: .top,
+                                    isShowingTopTabs: false,
+                                    isShowingNavigationToolbar: true,
+                                    url: url)
 
-        XCTAssertEqual(lens.leadingPageActions.first?.hasCustomColor, false)
+        XCTAssertEqual(subject.leadingPageActions.first?.hasCustomColor, false)
     }
 
     func testInit_withTopPosition_topTabsShown_enablesCustomColor() {
-        let lens = subject(toolbarPosition: .top,
-                           isShowingTopTabs: true,
-                           isShowingNavigationToolbar: true,
-                           url: URL(string: "https://example.com"))
+        let subject = createSubject(toolbarPosition: .top,
+                                    isShowingTopTabs: true,
+                                    isShowingNavigationToolbar: true,
+                                    url: url)
 
-        XCTAssertEqual(lens.leadingPageActions.first?.hasCustomColor, true)
+        XCTAssertEqual(subject.leadingPageActions.first?.hasCustomColor, true)
     }
 
     func testInit_withTopPosition_navToolbarHidden_enablesCustomColor() {
-        let lens = subject(toolbarPosition: .top,
-                           isShowingTopTabs: false,
-                           isShowingNavigationToolbar: false,
-                           url: URL(string: "https://example.com"))
+        let subject = createSubject(toolbarPosition: .top,
+                                    isShowingTopTabs: false,
+                                    isShowingNavigationToolbar: false,
+                                    url: url)
 
-        XCTAssertEqual(lens.leadingPageActions.first?.hasCustomColor, true)
+        XCTAssertEqual(subject.leadingPageActions.first?.hasCustomColor, true)
     }
 
     func testInit_withBottomPosition_enablesCustomColor() {
-        let lens = subject(toolbarPosition: .bottom,
-                           isShowingTopTabs: false,
-                           isShowingNavigationToolbar: true,
-                           url: URL(string: "https://example.com"))
+        let subject = createSubject(toolbarPosition: .bottom,
+                                    isShowingTopTabs: false,
+                                    isShowingNavigationToolbar: true,
+                                    url: url)
 
-        XCTAssertEqual(lens.leadingPageActions.first?.hasCustomColor, true)
+        XCTAssertEqual(subject.leadingPageActions.first?.hasCustomColor, true)
+    }
+
+    // MARK: - browserActions, derived straight from ToolbarState (no action involved)
+
+    func testInit_whenEditing_returnsOnlyCancelEditBrowserAction() {
+        let subject = createSubject(isShowingNavigationToolbar: true, isEditing: true)
+
+        XCTAssertEqual(subject.browserActions.count, 1)
+        XCTAssertEqual(subject.browserActions[0].actionType, .cancelEdit)
+    }
+
+    func testInit_notEditing_showingNavigationToolbar_returnsEmptyBrowserActions() {
+        let subject = createSubject(isShowingNavigationToolbar: true, isEditing: false)
+
+        XCTAssertTrue(subject.browserActions.isEmpty)
+    }
+
+    func testInit_notEditing_notShowingNavToolbar_notShowingTopTabs_returnsNewTabMenuAndTabsActions() {
+        let subject = createSubject(isShowingTopTabs: false,
+                                    isShowingNavigationToolbar: false,
+                                    numberOfTabs: 2,
+                                    url: url)
+
+        XCTAssertEqual(subject.browserActions.count, 3)
+        XCTAssertEqual(subject.browserActions[0].actionType, .newTab)
+        XCTAssertEqual(subject.browserActions[1].actionType, .menu)
+        XCTAssertEqual(subject.browserActions[2].actionType, .tabs)
+        XCTAssertEqual(subject.browserActions[2].numberOfTabs, 2)
+    }
+
+    // MARK: - navigationToolbarActions, derived straight from ToolbarState (no action involved)
+
+    func testInit_navigationToolbarActions_onHomepage_returnsSearchMiddleAction() {
+        let subject = createSubject(url: nil, middleButton: .home)
+
+        XCTAssertEqual(subject.navigationToolbarActions.map(\.actionType), [.back, .forward, .search, .menu, .tabs])
+    }
+
+    func testInit_navigationToolbarActions_onWebsite_returnsConfiguredMiddleAction() {
+        let subjectHomeButton = createSubject(url: url, middleButton: .home)
+        XCTAssertEqual(subjectHomeButton.navigationToolbarActions[2].actionType, .home)
+
+        let subjectNewTab = createSubject(url: url, middleButton: .newTab)
+        XCTAssertEqual(subjectNewTab.navigationToolbarActions[2].actionType, .newTab)
+    }
+
+    func testInit_navigationToolbarActions_returnsBackAndForwardEnabledState() {
+        let subject = createSubject(canGoBack: true, canGoForward: false)
+
+        XCTAssertEqual(subject.navigationToolbarActions[0].isEnabled, true)
+        XCTAssertEqual(subject.navigationToolbarActions[1].isEnabled, false)
+    }
+
+    func testInit_navigationToolbarActions_returnsNumberOfTabs() {
+        let subject = createSubject(numberOfTabs: 2)
+
+        XCTAssertEqual(subject.navigationToolbarActions[4].actionType, .tabs)
+        XCTAssertEqual(subject.navigationToolbarActions[4].numberOfTabs, 2)
+    }
+
+    func testInit_navigationToolbarActions_withMenuWarningBadge_returnsBadgedMenuAction() {
+        let subject = createSubject(showMenuWarningBadge: true)
+
+        XCTAssertEqual(subject.navigationToolbarActions[3].actionType, .menu)
+        XCTAssertNotNil(subject.navigationToolbarActions[3].badgeImageName)
+        XCTAssertNotNil(subject.navigationToolbarActions[3].maskImageName)
+    }
+
+    func testInit_navigationToolbarActions_versionTwoLayout_returnsTabsBeforeMenu() {
+        let subject = createSubject(toolbarLayout: .version2)
+
+        XCTAssertEqual(subject.navigationToolbarActions.map(\.actionType), [.back, .forward, .search, .tabs, .menu])
     }
 
     // MARK: - Helpers
 
-    private func subject(
+    // MARK: - lockIconState, derived from hasOnlySecureContent, isWebsiteMode and readerModeState
+
+    func testInit_withoutToolbarState_returnsNoLockIcon() {
+        let appState = AppState(presentedComponents: PresentedComponentsState(components: []))
+        let subject = AddressToolbarContainerLens(appState: appState, uuid: windowUUID)
+
+        XCTAssertNil(subject.lockIconState.imageName)
+        XCTAssertNil(subject.lockIconState.a11yId)
+        XCTAssertTrue(subject.lockIconState.needsTheming)
+    }
+
+    func testInit_withoutSecureContentInfo_returnsNoLockIcon() {
+        let subject = createSubject(hasOnlySecureContent: nil)
+
+        XCTAssertNil(subject.lockIconState.imageName)
+        XCTAssertNil(subject.lockIconState.a11yId)
+        XCTAssertTrue(subject.lockIconState.needsTheming)
+    }
+
+    func testInit_secureWebsite_returnsSecureLockIcon() {
+        let subject = createSubject(hasOnlySecureContent: true, isWebsiteMode: true)
+
+        XCTAssertEqual(subject.lockIconState.imageName, StandardImageIdentifiers.Small.shieldCheckmarkFill)
+        XCTAssertEqual(subject.lockIconState.a11yId, AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon)
+        XCTAssertTrue(subject.lockIconState.needsTheming)
+    }
+
+    func testInit_insecureWebsite_returnsInsecureLockIcon() {
+        let subject = createSubject(hasOnlySecureContent: false, isWebsiteMode: true)
+
+        XCTAssertEqual(subject.lockIconState.imageName, StandardImageIdentifiers.Small.shieldSlashFillMulticolor)
+        XCTAssertEqual(subject.lockIconState.a11yId, AccessibilityIdentifiers.Browser.AddressToolbar.lockIconOff)
+        XCTAssertFalse(subject.lockIconState.needsTheming)
+    }
+
+    func testInit_notWebsiteMode_hidesLockIconButKeepsA11yId() {
+        let subject = createSubject(hasOnlySecureContent: true, isWebsiteMode: false)
+
+        XCTAssertNil(subject.lockIconState.imageName)
+        XCTAssertEqual(subject.lockIconState.a11yId, AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon)
+    }
+
+    func testInit_readerModeActive_hidesLockIcon() {
+        let subject = createSubject(hasOnlySecureContent: true, isWebsiteMode: true, readerModeState: .active)
+
+        XCTAssertNil(subject.lockIconState.imageName)
+    }
+
+    func testInit_readerModeNoLongerActive_restoresLockIcon() {
+        let subject = createSubject(hasOnlySecureContent: true, isWebsiteMode: true, readerModeState: .available)
+
+        XCTAssertEqual(subject.lockIconState.imageName, StandardImageIdentifiers.Small.shieldCheckmarkFill)
+    }
+
+    private func createSubject(
         toolbarPosition: AddressToolbarPosition = .top,
         isShowingTopTabs: Bool = true,
         isShowingNavigationToolbar: Bool = true,
-        url: URL? = nil
+        canGoBack: Bool = false,
+        canGoForward: Bool = false,
+        isEditing: Bool = false,
+        isEmptySearch: Bool = true,
+        isLoading: Bool = false,
+        numberOfTabs: Int = 1,
+        url: URL? = nil,
+        middleButton: NavigationBarMiddleButtonType = .newTab,
+        showMenuWarningBadge: Bool = false,
+        toolbarLayout: ToolbarLayoutStyle = .version1,
+        hasOnlySecureContent: Bool? = nil,
+        isWebsiteMode: Bool = true,
+        readerModeState: ReaderModeState? = nil
     ) -> AddressToolbarContainerLens {
-        let addressToolbar = AddressBarState(windowUUID: windowUUID).copy(url: url)
+        let addressToolbar = AddressBarState(windowUUID: windowUUID)
+            .copy(url: url)
+            .copy(isEditing: isEditing)
+            .copy(isLoading: isLoading)
+            .copy(isEmptySearch: isEmptySearch)
+            .copy(hasOnlySecureContent: hasOnlySecureContent)
+            .copy(isWebsiteMode: isWebsiteMode)
+            .copy(readerModeState: readerModeState)
+
         let toolbarState = ToolbarState(windowUUID: windowUUID)
             .copy(toolbarPosition: toolbarPosition)
             .copy(addressToolbar: addressToolbar)
             .copy(isShowingNavigationToolbar: isShowingNavigationToolbar)
             .copy(isShowingTopTabs: isShowingTopTabs)
+            .copy(canGoBack: canGoBack)
+            .copy(canGoForward: canGoForward)
+            .copy(numberOfTabs: numberOfTabs)
+            .copy(showMenuWarningBadge: showMenuWarningBadge)
+            .copy(toolbarLayout: toolbarLayout)
+            .copy(navigationToolbar: NavigationBarState(windowUUID: windowUUID).copy(middleButton: middleButton))
+
         let appState = AppState(presentedComponents: PresentedComponentsState(components: [.toolbar(toolbarState)]))
         return AddressToolbarContainerLens(appState: appState, uuid: windowUUID)
     }

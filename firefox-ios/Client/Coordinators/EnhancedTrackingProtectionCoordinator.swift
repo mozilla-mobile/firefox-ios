@@ -21,7 +21,7 @@ protocol ETPCoordinatorSSLStatusDelegate: AnyObject {
 class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
                                              TrackingProtectionMenuDelegate,
                                              FeatureFlaggable {
-    private struct UX {
+    private enum UX {
         static let popoverPreferredSize = CGSize(width: 480, height: 540)
     }
 
@@ -38,7 +38,6 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
     ) {
         let tab = tabManager.selectedTab
         let url = tab?.url ?? URL(fileURLWithPath: "")
-        let displayTitle = tab?.displayTitle ?? ""
         let contentBlockerStatus = tab?.contentBlocker?.status ?? .blocking
         let contentBlockerStats = tab?.contentBlocker?.stats
         let connectionSecure = secureConnectionDelegate.showHasOnlySecureContentInTrackingPanel
@@ -49,7 +48,6 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
         let etpViewModel = TrackingProtectionModel(
             userDefaults: UserDefaults(suiteName: AppInfo.sharedContainerIdentifier),
             url: url,
-            displayTitle: displayTitle,
             connectionSecure: connectionSecure,
             globalETPIsEnabled: FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs),
             contentBlockerStatus: contentBlockerStatus,

@@ -19,7 +19,7 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
 
-        profile = MockProfile()
+        profile = makeProfile()
         urlBar = MockURLBarView()
         overlayState = MockOverlayModeManager()
         overlayState.setURLBar(urlBarView: urlBar)
@@ -27,7 +27,6 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
     }
 
     override func tearDown() async throws {
-        profile.shutdown()
         profile = nil
         urlBar = nil
         overlayState = nil

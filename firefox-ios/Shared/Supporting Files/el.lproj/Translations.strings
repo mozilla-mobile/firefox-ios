@@ -47,7 +47,7 @@
 "Translations.Sheet.ChooseLanguage.v145" = "Επιλογή γλώσσας";
 
 /* On the translation feature bottom sheet, this is the text that describes that an error has occurred. */
-"Translations.Sheet.Error.GeneralSubtitle.v145" = "Παρακαλούμε προσπαθήστε ξανά.";
+"Translations.Sheet.Error.GeneralSubtitle.v145" = "Δοκιμάστε ξανά.";
 
 /* On the translation feature bottom sheet, this is the text that describes that an error has occurred. */
 "Translations.Sheet.Error.GeneralTitle.v145" = "Δεν ήταν δυνατή η μετάφραση της σελίδας";

@@ -55,6 +55,7 @@ class SearchProviderTest: BaseTestCase {
         urlbarUrltextTextField.typeText(query)
         app.buttons["OverlayView.searchButton"].firstMatch.tap()
         waitForWebPageLoad()
+        waitForValueContains(urlbarUrltextTextField, value: provider.lowercased())
 
         urlbarUrltextTextField.tap()
         waitForValueContains(urlbarUrltextTextField, value: query)

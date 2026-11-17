@@ -11,6 +11,7 @@ struct OnboardingCardView<ViewModel: OnboardingCardInfoModelProtocol>: View {
     var themeManager: ThemeManager
     let viewModel: ViewModel
     let variant: OnboardingVariant
+    let selectedAction: ViewModel.OnboardingMultipleChoiceActionType?
     let onBottomButtonAction: (ViewModel.OnboardingActionType, String) -> Void
     let onMultipleChoiceAction: (ViewModel.OnboardingMultipleChoiceActionType, String) -> Void
 
@@ -19,6 +20,7 @@ struct OnboardingCardView<ViewModel: OnboardingCardInfoModelProtocol>: View {
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
         variant: OnboardingVariant,
+        selectedAction: ViewModel.OnboardingMultipleChoiceActionType?,
         onBottomButtonAction: @escaping (ViewModel.OnboardingActionType, String) -> Void,
         onMultipleChoiceAction: @escaping (ViewModel.OnboardingMultipleChoiceActionType, String) -> Void
     ) {
@@ -26,12 +28,15 @@ struct OnboardingCardView<ViewModel: OnboardingCardInfoModelProtocol>: View {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.variant = variant
+        self.selectedAction = selectedAction
         self.onBottomButtonAction = onBottomButtonAction
         self.onMultipleChoiceAction = onMultipleChoiceAction
     }
 
     var body: some View {
-        Group {
+        // Fills the page without asking the card for its size, otherwise the paging
+        // TabView snaps between cards instead of sliding.
+        GeometryReader { _ in
             switch viewModel.cardType {
             case .basic:
                 OnboardingBasicCardView(
@@ -47,6 +52,7 @@ struct OnboardingCardView<ViewModel: OnboardingCardInfoModelProtocol>: View {
                     windowUUID: windowUUID,
                     themeManager: themeManager,
                     variant: variant,
+                    selectedAction: selectedAction,
                     onBottomButtonAction: onBottomButtonAction,
                     onMultipleChoiceAction: onMultipleChoiceAction
                 )

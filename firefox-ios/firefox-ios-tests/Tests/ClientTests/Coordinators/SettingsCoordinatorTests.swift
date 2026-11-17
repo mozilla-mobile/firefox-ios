@@ -320,7 +320,8 @@ final class SettingsCoordinatorTests: XCTestCase {
         subject.showDevicePassCode()
 
         XCTAssertEqual(mockRouter.pushCalled, 1)
-        XCTAssertTrue(mockRouter.pushedViewController is DevicePasscodeRequiredViewController)
+        let passcodeViewController = mockRouter.pushedViewController as? DevicePasscodeRequiredViewController
+        XCTAssertEqual(passcodeViewController?.shouldUsePrivateOverride, true)
     }
 
     func testCreditCardSettings_showsCreditCardVC() {
@@ -548,6 +549,16 @@ final class SettingsCoordinatorTests: XCTestCase {
         XCTAssertTrue(mockRouter.pushedViewController is ContentBlockerSettingViewController)
     }
 
+    func testPrivacySettingsDelegate_pushedVPN() {
+        guard #available(iOS 17.0, *) else { return }
+        let subject = createSubject()
+
+        subject.pressedVPN()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is VPNSettingsViewController)
+    }
+
     func testPrivacySettingsDelegate_handlePasswordRoute() {
         let subject = createSubject()
         subject.settingsViewController = mockSettingsVC
@@ -681,7 +692,7 @@ final class SettingsCoordinatorTests: XCTestCase {
             tabManager: MockTabManager(),
             relayController: MockRelayController(),
             gleanUsageReportingMetricsService: MockGleanUsageReportingMetricsService(
-                profile: MockProfile()
+                profile: makeProfile()
             )
         )
         trackForMemoryLeaks(subject)
@@ -695,7 +706,7 @@ final class SettingsCoordinatorTests: XCTestCase {
     }
 
     private func setLanguagePickerEnabled(_ enabled: Bool) {
-        FxNimbus.shared.features.translationsFeature.with { _, _ in
+        FxNimbus.shared.features.translationsFeature.with { _ in
             TranslationsFeature(languagePickerEnabled: enabled)
         }
     }

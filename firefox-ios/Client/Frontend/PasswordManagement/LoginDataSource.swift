@@ -54,6 +54,7 @@ class LoginDataSource: NSObject, UITableViewDataSource {
             loginSavedSetting.onConfigureCell(cell, theme: viewModel.theme)
             if hideSettings {
                 cell.isHidden = true
+                cell.accessibilityElements = nil
             } else if viewModel.isDuringSearchControllerDismiss {
                 // Fade in the cell while dismissing the search or the cell showing suddenly looks janky
                 cell.isHidden = false

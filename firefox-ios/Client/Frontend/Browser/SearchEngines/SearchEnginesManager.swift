@@ -7,6 +7,16 @@ import Common
 import Shared
 import Storage
 
+enum SearchEngineFlags {
+    static var isSearchConfigV3Enabled: Bool {
+        let flagProvider: FeatureFlagProviding = AppContainer.shared.resolve()
+        let flag = flagProvider.isEnabled(.searchConfigV3)
+        DefaultLogger.shared.log("[SEC][v3] Search config v3 enabled: \(flag)", level: .info, category: .remoteSettings)
+
+        return flag
+    }
+}
+
 protocol SearchEnginesManagerProvider: AnyObject, Sendable {
     @MainActor
     var defaultEngine: OpenSearchEngine? { get }
@@ -23,7 +33,7 @@ protocol SearchEngineDelegate: AnyObject {
     func searchEnginesDidUpdate()
 }
 
-struct SearchEngineProviderFactory {
+enum SearchEngineProviderFactory {
     static let defaultSearchEngineProvider: SearchEngineProvider = ASSearchEngineProvider()
 }
 
@@ -137,14 +147,14 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
 
             self.enableEngine(defaultEngine)
             // The default engine is always first in the list.
-            var orderedEngines = self.orderedEngines.filter { engine in engine.shortName != defaultEngine.shortName }
+            var orderedEngines = self.orderedEngines.filter { engine in engine.engineID != defaultEngine.engineID }
             orderedEngines.insert(defaultEngine, at: 0)
             self.orderedEngines = orderedEngines
         }
     }
 
     func isEngineDefault(_ engine: OpenSearchEngine) -> Bool {
-        return defaultEngine?.shortName == engine.shortName
+        return defaultEngine?.engineID == engine.engineID
     }
 
     // The keys of this dictionary are used as a set.

@@ -13,6 +13,9 @@
 /* String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch */
 "Open Last Bookmark" = "Открыть последнюю закладку";
 
+/* On iPad, label for the home screen Quick Action (long-press the app icon) that combines the tabs from all other open Firefox windows into the current window and closes those other windows. */
+"QuickActions.CombineWindows.Title.v155" = "Объединение окон";
+
 /* Label for preview action on Tab Tray Tab to send the current tab to another device */
 "Send to Device" = "Отправить на устройство";
 

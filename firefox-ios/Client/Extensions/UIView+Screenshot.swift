@@ -45,11 +45,14 @@ extension UIView: Screenshotable {
 
         let targetScale: CGFloat = 1.0
         let offset = offset ?? .zero
+        // Views outside a window may report an unspecified (0) display scale, which the context would treat
+        // as the screen's native scale instead of the target scale.
+        let displayScale = traitCollection.displayScale > 0 ? traitCollection.displayScale : targetScale
 
         UIGraphicsBeginImageContextWithOptions(
             size,
             false,
-            min(UIScreen.main.scale, targetScale) * quality
+            min(displayScale, targetScale) * quality
         )
         drawHierarchy(
             in: CGRect(origin: offset, size: frame.size),

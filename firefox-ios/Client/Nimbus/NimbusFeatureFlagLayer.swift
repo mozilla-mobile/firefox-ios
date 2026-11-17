@@ -63,8 +63,20 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .bookmarksSearchFeature:
             return checkBookmarksSearchFeature()
 
+        case .browserDataExport:
+            return nimbus.features.browserDataTransferFeature.value().exportEnabled
+
+        case .browserDataImport:
+            return nimbus.features.browserDataTransferFeature.value().importEnabled
+
         case .cellularDataRestrictedErrorPage:
             return checkCellularDataRestrictedErrorPageFeature()
+
+        case .checkForReinstalls:
+            return checkForReinstallsFeature()
+
+        case .configurationProfile:
+            return checkConfigurationProfileFeature()
 
         case .customReaderModeScheme:
             return checkCustomReaderModeSchemeFeature()
@@ -83,6 +95,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .googleLens:
             return checkGoogleLensFeature()
+
+        case .googleLensSearchInterstitial:
+            return checkGoogleLensSearchInterstitialFeature()
 
         case .homepageAddShortcutTile:
             return checkHomepageAddShortcutTile()
@@ -119,6 +134,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .improvedAppStoreReviewTriggerFeature:
             return checkImprovedAppStoreReviewTriggerFeature()
 
+        case .mergeWindows:
+            return checkMergeWindowsFeature()
+
         case .microsurvey:
             return checkMicrosurveyFeature()
 
@@ -145,6 +163,12 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .quickAnswers:
             return checkQuickAnswersFeature()
 
+        case .quickAnswersOptInRedesign:
+            return checkQuickAnswersOptInRedesignFeature()
+
+        case .quickAnswersFollowUp:
+            return checkQuickAnswersFollowUpFeature()
+
         case .recentSearches:
             return checkRecentSearchesFeature()
 
@@ -153,6 +177,12 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .reportBrokenSite:
             return checkReportBrokenSiteFeature()
+
+        case .searchConfigV3:
+            return checkSearchConfigV3Feature()
+
+        case .searchTermInAddressBar:
+            return checkSearchTermInAddressBarFeature()
 
         case .sentFromFirefox:
             return checkSentFromFirefoxFeature()
@@ -177,6 +207,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .summarizerPermissiveGuardrails:
             return checkSummarizerPermissiveGuardrailsFeature()
+
+        case .tabGroups:
+            return checkTabGroupsFeature()
 
         case .tabScrollRefactorFeature:
             return checkTabScrollRefactorFeature()
@@ -216,6 +249,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .vpnFeature:
             return checkVPNFeature()
+
+        case .wallpaperEngagementSheet:
+            return checkWallpaperEngagementSheetFeature()
 
         case .waybackMachine:
             return checkWaybackMachineFeature()
@@ -265,6 +301,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         return nimbus.features.homepageRedesignFeature.value().categoriesEnabled
     }
 
+    private func checkTabGroupsFeature() -> Bool {
+        return nimbus.features.tabGroupsFeature.value().enabled
+    }
+
     private func checkTabScrollRefactorFeature() -> Bool {
         return nimbus.features.tabScrollRefactorFeature.value().enabled
     }
@@ -291,6 +331,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
     private func checkUnifiedSearchFeature() -> Bool {
         let config = nimbus.features.toolbarRefactorFeature.value()
         return config.unifiedSearch
+    }
+
+    private func checkSearchTermInAddressBarFeature() -> Bool {
+        return nimbus.features.toolbarRefactorFeature.value().searchTermInAddressBar
     }
 
     private func checkRelayIntegration() -> Bool {
@@ -320,6 +364,14 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkQuickAnswersFeature() -> Bool {
         return nimbus.features.quickAnswersFeature.value().enabled
+    }
+
+    private func checkQuickAnswersOptInRedesignFeature() -> Bool {
+        return nimbus.features.quickAnswersFeature.value().optInRedesign
+    }
+
+    private func checkQuickAnswersFollowUpFeature() -> Bool {
+        return nimbus.features.quickAnswersFeature.value().followUpEnabled
     }
 
     private func checkStartAtHomeFeature(for featureID: FeatureFlagID) -> StartAtHome {
@@ -366,6 +418,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         return nimbus.features.googleLensFeature.value().enabled
     }
 
+    private func checkGoogleLensSearchInterstitialFeature() -> Bool {
+        return nimbus.features.googleLensFeature.value().searchInterstitialEnabled
+    }
+
     private func checkMicrosurveyFeature() -> Bool {
         let config = nimbus.features.microsurveyFeature.value()
 
@@ -378,6 +434,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkImprovedAppStoreReviewTriggerFeature() -> Bool {
         return nimbus.features.improvedAppStoreReviewTriggerFeature.value().enabled
+    }
+
+    private func checkForReinstallsFeature() -> Bool {
+        return nimbus.features.checkForReinstallsFeature.value().enabled
     }
 
     // MARK: - Summarizer Feature
@@ -498,8 +558,16 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         return nimbus.features.webViewDocumentFetchRefactorFeature.value().enabled
     }
 
+    private func checkMergeWindowsFeature() -> Bool {
+        return nimbus.features.mergeWindowsFeature.value().enabled
+    }
+
     private func checkVPNFeature() -> Bool {
         return nimbus.features.vpnFeature.value().enabled
+    }
+
+    private func checkWallpaperEngagementSheetFeature() -> Bool {
+        return nimbus.features.wallpaperEngagementSheetFeature.value().enabled
     }
 
     private func checkPrivacyDashboardFeature() -> Bool {
@@ -510,7 +578,15 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         return nimbus.features.cellularDataRestrictedErrorPageFeature.value().enabled
     }
 
+    private func checkConfigurationProfileFeature() -> Bool {
+        return nimbus.features.configurationProfileFeature.value().enabled
+    }
+
     private func checkMultiDayOnboardingFeature() -> Bool {
         return nimbus.features.multiDayOnboardingFeature.value().useMultiDayOnboarding
+    }
+
+    private func checkSearchConfigV3Feature() -> Bool {
+        return nimbus.features.searchConfigV3Feature.value().enabled
     }
 }

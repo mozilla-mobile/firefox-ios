@@ -10,6 +10,7 @@ public protocol CrashManager: Sendable {
     var crashedLastLaunch: Bool { get }
     func captureError(error: Error)
     func setup(sendCrashReports: Bool)
+    func setFeatureFlags(_ featureBranches: [String: String])
     func send(message: String,
               category: LoggerCategory,
               level: LoggerLevel,
@@ -30,13 +31,16 @@ public protocol CustomCrashReport {
     var message: String { get }
 }
 
-/// **Note**: This class is safely `@unchecked Sendable` because we protect the only mutable state (`enabled`) with a manual
-/// synchronization method (a lock).
+/// **Note**: This class is safely `@unchecked Sendable` because we protect the mutable state (`enabled` and
+/// `featureBranches`) with a manual synchronization method (a lock).
 public final class DefaultCrashManager: CrashManager, @unchecked Sendable {
     enum Environment: String {
         case nightly = "Nightly"
         case production = "Production"
     }
+
+    /// Matches Sentry's default `Options.maxFeatureFlags`, above which it drops the oldest flags
+    static let maxFeatureFlags = 100
 
     // MARK: - Properties
     private let deviceAppHashKey = "SentryDeviceAppHash"
@@ -46,6 +50,7 @@ public final class DefaultCrashManager: CrashManager, @unchecked Sendable {
     // We are using a lock to manually protect our mutable state to make this class @unchecked Sendable
     private let enabledLock = NSLock()
     private var enabled = false
+    private var featureBranches: [String: String] = [:]
 
     private var shouldSetup: Bool {
         enabledLock.lock()
@@ -59,26 +64,28 @@ public final class DefaultCrashManager: CrashManager, @unchecked Sendable {
     private var isValidReleaseName: Bool {
         if skipReleaseNameCheck { return true }
 
-        return AppInfo.bundleIdentifier == "org.mozilla.ios.Firefox"
-                || AppInfo.bundleIdentifier == "org.mozilla.ios.FirefoxBeta"
+        return bundleIdentifier() == "org.mozilla.ios.Firefox"
+                || bundleIdentifier() == "org.mozilla.ios.FirefoxBeta"
     }
 
     private var environment: Environment {
         var environment = Environment.production
-        if AppInfo.appVersion == appInfo.nightlyAppVersion, appInfo.buildChannel == .beta {
+        if appVersion() == appInfo.nightlyAppVersion, appInfo.buildChannel == .beta {
             environment = Environment.nightly
         }
         return environment
     }
 
     private var releaseName: String {
-        return "\(AppInfo.bundleIdentifier)@\(AppInfo.appVersion)"
+        return "\(bundleIdentifier())@\(appVersion())"
     }
 
     private let appInfo: BrowserKitInformation
     private let sentryWrapper: SentryWrapper
     private let isSimulator: Bool
     private let skipReleaseNameCheck: Bool
+    private let bundleIdentifier: @Sendable () -> String
+    private let appVersion: @Sendable () -> String
 
     // Only enable app hang tracking in Beta for now
     private var shouldEnableAppHangTracking: Bool {
@@ -95,14 +102,21 @@ public final class DefaultCrashManager: CrashManager, @unchecked Sendable {
 
     // MARK: - Init
 
+    /// - Parameters:
+    ///   - bundleIdentifier: Provides the app's bundle identifier, read lazily since `AppInfo` requires an app bundle
+    ///   - appVersion: Provides the app's version, read lazily since `AppInfo` requires an app bundle
     public init(appInfo: BrowserKitInformation = BrowserKitInformation.shared,
                 sentryWrapper: SentryWrapper = DefaultSentry(),
                 isSimulator: Bool = DeviceInfo.isSimulator(),
-                skipReleaseNameCheck: Bool = false) {
+                skipReleaseNameCheck: Bool = false,
+                bundleIdentifier: @escaping @Sendable () -> String = { AppInfo.bundleIdentifier },
+                appVersion: @escaping @Sendable () -> String = { AppInfo.appVersion }) {
         self.appInfo = appInfo
         self.sentryWrapper = sentryWrapper
         self.isSimulator = isSimulator
         self.skipReleaseNameCheck = skipReleaseNameCheck
+        self.bundleIdentifier = bundleIdentifier
+        self.appVersion = appVersion
     }
 
     // MARK: - CrashManager protocol
@@ -159,6 +173,25 @@ public final class DefaultCrashManager: CrashManager, @unchecked Sendable {
         configureScope()
         configureIdentifier()
         setupIgnoreException()
+    }
+
+    public func setFeatureFlags(_ featureBranches: [String: String]) {
+        enabledLock.lock()
+        defer { enabledLock.unlock() }
+        self.featureBranches = featureBranches
+        guard enabled else { return }
+
+        configureFeatureFlagsScope()
+    }
+
+    /// Converts feature branches to Sentry feature flag names. Sentry flags only support boolean results, so each
+    /// enrollment is encoded as a `feature:branch` flag that evaluated to `true`.
+    static func featureFlagNames(from featureBranches: [String: String]) -> [String] {
+        let names = featureBranches
+            .map { "\($0.key):\($0.value)" }
+            .sorted()
+            .prefix(maxFeatureFlags)
+        return Array(names)
     }
 
     private func alterEventForCustomCrash(event: Sentry.Event, crash: CustomCrashReport) {
@@ -254,11 +287,27 @@ public final class DefaultCrashManager: CrashManager, @unchecked Sendable {
     private func configureScope() {
         let deviceAppHash = UserDefaults(suiteName: appInfo.sharedContainerIdentifier)?
             .string(forKey: self.deviceAppHashKey)
+        let featureFlagNames = Self.featureFlagNames(from: featureBranches)
         sentryWrapper.configureScope(scope: { scope in
             scope.setContext(value: [
                 "device_app_hash": deviceAppHash ?? self.defaultDeviceAppHash
             ], key: "appContext")
+            Self.apply(featureFlagNames: featureFlagNames, to: scope)
         })
+    }
+
+    private func configureFeatureFlagsScope() {
+        let featureFlagNames = Self.featureFlagNames(from: featureBranches)
+        sentryWrapper.configureScope(scope: { scope in
+            Self.apply(featureFlagNames: featureFlagNames, to: scope)
+        })
+    }
+
+    private static func apply(featureFlagNames: [String], to scope: Scope) {
+        scope.clearFeatureFlags()
+        for name in featureFlagNames {
+            scope.addFeatureFlag(name: name, result: true)
+        }
     }
 
     /// If we have not already for this install, generate a completely random identifier for this device.

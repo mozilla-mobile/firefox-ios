@@ -7,7 +7,7 @@ import Common
 
 struct AutofillHeaderView: View {
     // Constants for UI layout and styling
-    private struct UX {
+    private enum UX {
         static let headerElementsSpacing: CGFloat = 7.0
         static let mainContainerElementsSpacing: CGFloat = 10
         static let bottomSpacing: CGFloat = 24.0

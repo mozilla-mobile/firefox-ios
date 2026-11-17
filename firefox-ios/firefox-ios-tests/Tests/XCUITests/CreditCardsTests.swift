@@ -568,17 +568,26 @@ class CreditCardsTests: BaseTestCase {
 
     func tapCardName() {
         initCardFields()
-        nameOnCard.tapUntilKeyboardFocused()
+        tapUntilKeyboardFocusedClosingNumberPad(nameOnCard)
     }
 
     func tapCardNr() {
         initCardFields()
-        cardNr.tapUntilKeyboardFocused()
+        tapUntilKeyboardFocusedClosingNumberPad(cardNr)
     }
 
     func tapExpiration() {
         initCardFields()
-        expiration.tapUntilKeyboardFocused()
+        tapUntilKeyboardFocusedClosingNumberPad(expiration)
+    }
+
+    /// On iPad the number pad is a popover that can cover the fields (more so because of #36545), and
+    /// only a tap outside it closes it, so the far end of the field is tapped first.
+    private func tapUntilKeyboardFocusedClosingNumberPad(_ field: XCUIElement) {
+        if iPad(), field.mozWaitForElementToExist(failOnTimeout: false), !field.isHittable {
+            field.coordinate(withNormalizedOffset: CGVector(dx: 0.95, dy: 0.5)).tap()
+        }
+        field.tapUntilKeyboardFocused()
     }
 
     func typeCardName(name: String) {

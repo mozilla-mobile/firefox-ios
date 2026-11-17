@@ -16,7 +16,7 @@ import UIKit
 /// `preferredContentSize`, because the default page sheet there is a fixed-height card that would leave a gap
 /// below the content.
 final class TrackerBlockerSheetViewController: UIViewController, Themeable, Notifiable {
-    private struct UX {
+    private enum UX {
         static let contentHorizontalPadding: CGFloat = 22
         static let contentTopPadding: CGFloat = 44
         static let contentBottomPadding: CGFloat = 16
@@ -80,7 +80,7 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
 
     // The asset is already coloured, so it is drawn as-is rather than tinted from the theme.
     private let shieldImageView: UIImageView = .build { imageView in
-        imageView.image = UIImage(named: ImageIdentifiers.shieldCheckmarkColored)
+        imageView.image = UIImage(named: StandardIllustrationIdentifiers.Exports.picShieldCheckmark)
         imageView.contentMode = .scaleAspectFit
         imageView.isAccessibilityElement = false
         imageView.accessibilityIdentifier =

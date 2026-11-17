@@ -51,7 +51,7 @@ final class AdBlockerSetting: BoolSetting {
             isEnabled: enabled
         )
         displayBool(control.switchView)
-        control.switchView.accessibilityLabel = "\(title), \(subtitleText)"
+        configureSwitchAccessibility(for: cell)
         if let accessibilityIdentifier {
             cell.setAccessibilities(traits: .none, identifier: accessibilityIdentifier)
         }

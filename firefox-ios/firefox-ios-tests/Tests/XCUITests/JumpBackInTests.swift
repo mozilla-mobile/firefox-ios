@@ -66,6 +66,8 @@ class JumpBackInTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306920
     func testPrivateTab() throws {
+        throw XCTSkip("Moved out of the full functional test suite")
+        /*
         prepareTest()
         // Visit https://www.wikipedia.org
         browserScreen.navigateToURL("https://www.wikipedia.org")
@@ -159,6 +161,7 @@ class JumpBackInTests: FeatureFlaggedTestBase {
         // mozWaitForElementToNotExist(app.cells["JumpBackInCell"].staticTexts["Example Domain"])
         jumpBackInScreen.assertItemExists(title: "Wikipedia")
         jumpBackInScreen.assertItemNotExists(title: "YouTube")
+        */
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2445811

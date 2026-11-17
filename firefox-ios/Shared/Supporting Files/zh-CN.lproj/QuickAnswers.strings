@@ -10,8 +10,20 @@
 /* Loading label shown in the Quick Answers view while an answer is being fetched. */
 "QuickAnswers.ContentView.Answering.v158" = "正在回答…";
 
+/* Button shown below a Quick Answers result that the user taps to ask a follow-up question about the answer. */
+"QuickAnswers.ContentView.FollowUpButton.v160" = "继续提问";
+
+/* Footer text displayed below the Quick Answers result. %@ is the name of the AI model providing the answer, for example Liner or Exa. */
+"QuickAnswers.ContentView.Footer.v158" = "由 %@ 提供 · 回答可能包含错误。";
+
 /* Placeholder text shown in the Quick Answers view while the microphone is active and waiting for the user to speak. */
 "QuickAnswers.ContentView.Listening.v158" = "正在聆听，请随便问…";
+
+/* Placeholder text shown in the Quick Answers view while the microphone is active and waiting for the user to ask a follow-up question about the previous answer. */
+"QuickAnswers.ContentView.ListeningFollowUp.v160" = "正在聆听，请继续提问…";
+
+/* Header label shown above the body of a Quick Answers result, labeling the text below it as a short answer to the user's question. */
+"QuickAnswers.ContentView.ResultHeader.v160" = "快问快答";
 
 /* Loading label shown in the Quick Answers view while the feature searches for sources to construct an answer. */
 "QuickAnswers.ContentView.SearchingSources.v158" = "正在搜索来源…";
@@ -108,4 +120,7 @@
 
 /* Message of the tooltip that introduces the Quick Answers feature on the homepage. */
 "QuickAnswers.Tip.Message.v158" = "轻点此处开始使用。";
+
+/* Title of the tooltip that introduces the Quick Answers feature on the homepage. */
+"QuickAnswers.Tip.Title.v158" = "说出您的问题，快速获取回答";
 

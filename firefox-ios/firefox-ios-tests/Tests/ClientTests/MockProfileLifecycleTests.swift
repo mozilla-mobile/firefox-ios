@@ -83,7 +83,7 @@ struct MockProfileLifecycleTests {
     @Test("a released profile removes its directory")
     func releasedProfileRemovesDirectory() async {
         let root = autoreleasepool {
-            let profile = MockProfile()
+            let profile = MockProfile.unmanaged()
             _ = profile.places
             return profile.files.rootPath
         }

@@ -6,7 +6,7 @@ import Common
 import Foundation
 
 final class NewsAffordanceHeaderView: UIView, ThemeApplicable {
-    struct UX {
+    enum UX {
         static let stackTopInset: CGFloat = 4
         static let stackBottomInset: CGFloat = 8
         static let stackHorizontalInset: CGFloat = 20

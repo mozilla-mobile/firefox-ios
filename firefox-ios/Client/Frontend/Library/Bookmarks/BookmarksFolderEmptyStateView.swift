@@ -7,7 +7,7 @@ import Common
 import ComponentLibrary
 
 final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let a11yTopMargin: CGFloat = 16
         static let titleTopMargin: CGFloat = 16
         static let bodyTopMargin: CGFloat = 8
@@ -107,9 +107,11 @@ final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
             bodyLabel.trailingAnchor.constraint(
                 equalTo: stackViewWrapper.trailingAnchor, constant: -UX.contentLeftRightMargins),
 
-            signInButton.widthAnchor.constraint(equalToConstant: UX.signInButtonMaxWidth),
+            signInButton.widthAnchor.constraint(equalToConstant: UX.signInButtonMaxWidth).priority(.defaultHigh),
+            signInButton.widthAnchor.constraint(lessThanOrEqualTo: stackViewWrapper.widthAnchor),
 
-            logoImage.widthAnchor.constraint(equalToConstant: UX.imageWidth),
+            logoImage.widthAnchor.constraint(equalToConstant: UX.imageWidth).priority(UILayoutPriority(999)),
+            logoImage.widthAnchor.constraint(lessThanOrEqualTo: stackViewWrapper.widthAnchor),
             logoImage.heightAnchor.constraint(equalTo: logoImage.widthAnchor, multiplier: aspectRatio)
         ])
     }

@@ -35,7 +35,7 @@ class EditBookmarkViewModelTests: XCTestCase {
         try await super.setUp()
         folderFetcher = MockFolderHierarchyFetcher()
         bookmarksSaver = MockBookmarksSaver()
-        profile = MockProfile()
+        profile = makeProfile()
     }
 
     override func tearDown() async throws {

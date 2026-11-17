@@ -1,0 +1,12 @@
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescription" = "یک میان‌بر %@ به صفحهٔ اصلی‌تان اضافه کنید. پس از افزودن ابزارک، انگشتتان را روی آن نگه دارید تا ویرایشش کنید و میان‌بر دیگری انتخاب کنید.";
+
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescriptionV2" = "یک جست‌وجوی خصوصی در %@ با موتور جست‌وجوی پیش‌فرضتان شروع کنید.";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "کنش‌های سریع";
+
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp" = "جست‌وجو در %@";
+

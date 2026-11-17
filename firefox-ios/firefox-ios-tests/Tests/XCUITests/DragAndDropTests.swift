@@ -20,7 +20,6 @@ let secondWebsiteUnselected = (
     tabName: "The Book of Mozilla"
 )
 let homeTabName = "Homepage"
-let websiteWithSearchField = "https://developer.mozilla.org/en-US/"
 let tabTrayCollectionView = AccessibilityIdentifiers.TabTray.collectionView
 
 class DragAndDropTests: BaseTestCase {
@@ -46,9 +45,14 @@ class DragAndDropTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2390210
+    // Regression
     func testRearrangeMoreThan3TabsTabTraytab() {
+        let tabTrayScreen = TabTrayScreen(app: app)
         // Arranging more than 3 to check that it works moving tabs between lines
-        let thirdWebsite = (url: "example.com", tabName: "Example Domain. Currently selected tab.")
+        let thirdWebsite = (
+            url: path(forTestPage: TestPages.exampleHTML),
+            tabName: "Example Domain. Currently selected tab."
+        )
 
         // Open three websites and home tab
         openTwoWebsites()
@@ -64,13 +68,9 @@ class DragAndDropTests: BaseTestCase {
         waitForTabsButton()
         navigator.goto(TabTray)
 
-        let fourthWebsitePosition = app.collectionViews[tabTrayCollectionView].cells.element(boundBy: 3).label
-        checkTabsOrder(
-            dragAndDropTab: false,
-            firstTab: firstWebsite.tabName,
-            secondTab: secondWebsiteUnselected.tabName
+        tabTrayScreen.assertTabTitles(
+            inOrder: [firstWebsite.tabName, secondWebsiteUnselected.tabName, homeTabName, TestLabels.exampleDomain]
         )
-        XCTAssertEqual(fourthWebsitePosition, thirdWebsite.tabName, "last tab before is not correct")
 
         if #available(iOS 17, *) {
             dragAndDrop(
@@ -78,13 +78,10 @@ class DragAndDropTests: BaseTestCase {
                 dropOnElement: app.collectionViews.cells[thirdWebsite.tabName].firstMatch
             )
 
-            let thirdWebsitePosition = app.collectionViews[tabTrayCollectionView].cells.element(boundBy: 2).label
-            // Disabling validation on iPad. Dragging and dropping action for the first and last tab is not working.
-            // This is just automation related, manually the action performs successfully.
-            if !iPad() {
-                checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsiteUnselected.tabName, secondTab: homeTabName)
-                XCTAssertEqual(thirdWebsitePosition, thirdWebsite.tabName, "last tab after is not correct")
-            }
+            // The dragged tab moves to the end and the others shift left
+            tabTrayScreen.assertTabTitles(
+                inOrder: [secondWebsiteUnselected.tabName, homeTabName, TestLabels.exampleDomain, firstWebsite.tabName]
+            )
         }
     }
 
@@ -109,6 +106,7 @@ class DragAndDropTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2361192
+    // Regression
     func testDragAndDropHomeTabTabsTray() {
         navigator.openNewURL(urlString: secondWebsite.url)
         waitUntilPageLoad()
@@ -265,6 +263,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2361413
+    // Regression
     func testRearrangeTabsTabTrayIsKeptinTopTabs() {
         if skipPlatform { return }
         openTwoWebsites()
@@ -286,25 +285,22 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2417438
+    // https://mozilla.testrail.io/index.php?/cases/view/3275914
     // This test drags the address bar and since it is not possible to drop it on another app,
-    // lets do it in a search box
+    // lets do it in a text field of a local page
+    // Regression
     func testDragAddressBarIntoSearchBox() {
         if skipPlatform { return }
 
-        navigator.openURL("developer.mozilla.org/en-US")
+        let browserScreen = BrowserScreen(app: app)
+        let webFormScreen = WebFormScreen(app: app)
+        navigator.openURL(urlLogin)
         waitUntilPageLoad()
-        let searchField = app.webViews["Web content"].textFields.firstMatch
-        app.webViews["Web content"].buttons["Search"].waitAndTap()
+        webFormScreen.waitForLoginForm()
 
-        // DragAndDrop the url for only one second so that the TP menu is not shown and the search box is not covered
-        let searchTextField = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
-        mozWaitForElementToExist(searchField)
-        let centerSearchField = searchField.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
-        let addressBarLocation = app.textFields[searchTextField].coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
-        addressBarLocation.press(forDuration: 1, thenDragTo: centerSearchField)
+        browserScreen.dragAddressBar(onto: webFormScreen.getUsernameField())
 
-        // Verify that the text in the search field is the same as the text in the url text field
-        XCTAssertEqual(searchField.value as? String, websiteWithSearchField, "The url has not been dropped correctly")
+        // The dropped text is the page URL, not the shortened host the address bar displays
+        webFormScreen.assertUsernameFieldValue(urlLogin)
     }
 }

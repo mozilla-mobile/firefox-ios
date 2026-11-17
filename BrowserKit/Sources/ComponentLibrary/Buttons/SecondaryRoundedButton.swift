@@ -6,7 +6,7 @@ import Common
 import UIKit
 
 public final class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static var buttonCornerRadius: CGFloat {
             if #available(iOS 26.0, *) {
                 return 32

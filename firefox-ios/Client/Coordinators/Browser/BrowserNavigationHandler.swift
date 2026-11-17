@@ -134,6 +134,14 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     @MainActor
     func showGoogleLensCamera()
 
+    /// Shows the alert for a VPN failure over whatever is currently presented in this window.
+    @MainActor
+    func showVPNFailureAlert()
+
+    /// Shows the alert for reaching the monthly VPN data limit in this window.
+    @MainActor
+    func showVPNDataLimitAlert(dataLimitBytes: Int64)
+
     @MainActor
     func searchGoogleLens(with image: UIImage,
                           source: GoogleLensTelemetry.Source,

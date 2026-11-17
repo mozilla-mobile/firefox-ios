@@ -220,8 +220,8 @@ protocol LoginsProtocol {
     func updateLogin(id: String, login: LoginEntry, completionHandler: @escaping @Sendable (Result<Login?, Error>) -> Void)
     func use(login: Login, completionHandler: @escaping @Sendable (Result<Login?, Error>) -> Void)
     func searchLoginsWithQuery(_ query: String?, completionHandler: @escaping @Sendable (Result<[Login], Error>) -> Void)
-    func deleteLogins(ids: [String], completionHandler: @escaping @Sendable (Result<[Result<Bool?, Error>], Error>) -> Void)
-    func deleteLogin(id: String, completionHandler: @escaping @Sendable (Result<Bool?, Error>) -> Void)
+    func deleteLogins(ids: [String], completionHandler: @escaping @Sendable (Result<[Result<Void, Error>], Error>) -> Void)
+    func deleteLogin(id: String, completionHandler: @escaping @Sendable (Result<Void, Error>) -> Void)
 }
 
 /// TODO(FXIOS-12942): Implement proper thread-safety
@@ -559,7 +559,7 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
 
     public func deleteLogins(
         ids: [String],
-        completionHandler: @escaping @Sendable (Result<[Result<Bool?, Error>], Error>) -> Void
+        completionHandler: @escaping @Sendable (Result<[Result<Void, Error>], Error>) -> Void
     ) {
         queue.async {
             guard self.isOpen else {
@@ -568,12 +568,12 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
                 return
             }
 
-            var results: [Result<Bool?, Error>] = []
+            var results: [Result<Void, Error>] = []
 
             for id in ids {
                 do {
-                    let existed = try self.storage?.delete(id: id)
-                    results.append(.success(existed))
+                    try self.storage?.delete(id: id)
+                    results.append(.success(()))
                 } catch {
                     results.append(.failure(error))
                 }
@@ -583,7 +583,7 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
         }
     }
 
-    public func deleteLogin(id: String, completionHandler: @escaping @Sendable (Result<Bool?, Error>) -> Void) {
+    public func deleteLogin(id: String, completionHandler: @escaping @Sendable (Result<Void, Error>) -> Void) {
         queue.async {
             guard self.isOpen else {
                 let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
@@ -592,8 +592,8 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
             }
 
             do {
-                let existed = try self.storage?.delete(id: id)
-                completionHandler(.success(existed))
+                try self.storage?.delete(id: id)
+                completionHandler(.success(()))
             } catch let err as NSError {
                 completionHandler(.failure(err))
             }

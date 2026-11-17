@@ -12,7 +12,7 @@ final class TermsOfUseViewController: UIViewController,
                                       UITextViewDelegate,
                                       StoreSubscriber,
                                       PreventsDismissal {
-    private struct UX {
+    private enum UX {
         static let cornerRadius: CGFloat = 20
         static let stackSpacing: CGFloat = 16
         static let stackSidePadding: CGFloat = 24
@@ -254,10 +254,13 @@ final class TermsOfUseViewController: UIViewController,
             grabberView.widthAnchor.constraint(equalToConstant: UX.grabberWidth),
             grabberHeight,
 
-            stackView.leadingAnchor.constraint(equalTo: sheetContainer.leadingAnchor, constant: UX.stackSidePadding),
-            stackView.trailingAnchor.constraint(equalTo: sheetContainer.trailingAnchor, constant: -UX.stackSidePadding),
+            stackView.leadingAnchor.constraint(equalTo: sheetContainer.safeAreaLayoutGuide.leadingAnchor,
+                                               constant: UX.stackSidePadding),
+            stackView.trailingAnchor.constraint(equalTo: sheetContainer.safeAreaLayoutGuide.trailingAnchor,
+                                                constant: -UX.stackSidePadding),
             stackView.topAnchor.constraint(equalTo: grabberView.bottomAnchor, constant: UX.stackSpacing),
-            stackView.bottomAnchor.constraint(equalTo: sheetContainer.bottomAnchor, constant: -UX.stackSidePadding)
+            stackView.bottomAnchor.constraint(equalTo: sheetContainer.safeAreaLayoutGuide.bottomAnchor,
+                                              constant: -UX.stackSidePadding)
         ])
     }
 

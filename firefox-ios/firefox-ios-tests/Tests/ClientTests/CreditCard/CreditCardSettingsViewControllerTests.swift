@@ -14,7 +14,7 @@ final class CreditCardSettingsViewControllerTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         await DependencyHelperMock().bootstrapDependencies()
-        profile = MockProfile()
+        profile = makeProfile()
         viewModel = CreditCardInputViewModel(profile: profile, creditCardProvider: MockCreditCardProvider())
     }
 

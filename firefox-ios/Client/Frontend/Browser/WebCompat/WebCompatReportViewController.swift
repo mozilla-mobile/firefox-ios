@@ -330,10 +330,7 @@ final class WebCompatReportViewController: UINavigationController,
 
     /// UIKit calls this only for the interactive swipe, not for programmatic dismissal.
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        store.dispatch(WebCompatReporterViewAction(
-            windowUUID: windowUUID,
-            actionType: WebCompatReporterViewActionType.cancel
-        ))
+        finishReport()
     }
 
     /// Kept here so the cancel action is dispatched from the one place that talks to the store.

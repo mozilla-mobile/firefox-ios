@@ -7,7 +7,7 @@ import UIKit
 import ComponentLibrary
 
 class ThemedLearnMoreTableViewCell: ThemedTableViewCell {
-    private struct UX {
+    private enum UX {
         static let verticalMargin: CGFloat = 10
         static let labelsSpacing: CGFloat = 3
     }

@@ -5,17 +5,46 @@
 final class TabCellCustomImage: UIImageView {
     private var lastBounds: CGRect = .zero
     private var lastImageSize: CGSize = .zero
+    private var lastUsesTopAlignment: Bool?
+
+    override var image: UIImage? {
+        didSet { setNeedsLayout() }
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        contentMode = .scaleAspectFill
+        clipsToBounds = true
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // Used to display an image content starting from the top left corner instead of image center
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        guard let image = image, bounds != lastBounds || image.size != lastImageSize else { return }
+        let usesTopAlignment = traitCollection.horizontalSizeClass == .regular &&
+            traitCollection.verticalSizeClass == .regular
+        guard let image = image,
+              bounds != lastBounds || image.size != lastImageSize || usesTopAlignment != lastUsesTopAlignment
+        else { return }
 
         lastBounds = bounds
         lastImageSize = image.size
+        lastUsesTopAlignment = usesTopAlignment
 
-        updateContentsRect(for: image)
+        if usesTopAlignment {
+            updateContentsRect(for: image)
+        } else {
+            layer.contentsRect = CGRect(x: 0, y: 0, width: 1, height: 1)
+        }
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        setNeedsLayout()
     }
 
     private func updateContentsRect(for image: UIImage) {
@@ -31,7 +60,5 @@ final class TabCellCustomImage: UIImageView {
         let cropHeight = viewSize.height / scaledHeight
 
         layer.contentsRect = CGRect(x: 0, y: 0, width: 1, height: cropHeight)
-        contentMode = .scaleAspectFill
-        clipsToBounds = true
     }
 }

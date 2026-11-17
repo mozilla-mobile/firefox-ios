@@ -18,12 +18,11 @@ final class BrowserViewControllerJSAlertTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         tabManager = MockTabManager()
-        profile = MockProfile()
+        profile = makeProfile()
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: tabManager)
     }
 
     override func tearDown() async throws {
-        profile.shutdown()
         profile = nil
         tabManager = nil
         DependencyHelperMock().reset()

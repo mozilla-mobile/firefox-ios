@@ -25,7 +25,7 @@ func registerTabTrayNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAppl
                 transitionTo: HomePanelsScreen
             )
             screenState.tap(
-                app.tables.cells.buttons[StandardImageIdentifiers.Large.privateMode],
+                app.cells.buttons[StandardImageIdentifiers.Large.privateMode],
                 forAction: Action.OpenPrivateTabLongPressTabsButton,
                 transitionTo: NewTabScreen
             ) { userState in

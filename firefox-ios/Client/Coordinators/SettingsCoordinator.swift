@@ -196,7 +196,7 @@ final class SettingsCoordinator: BaseCoordinator,
                 let viewModel = WallpaperSettingsViewModel(
                     wallpaperManager: wallpaperManager,
                     tabManager: tabManager,
-                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                    theme: themeManager.resolveTheme(for: windowUUID, privateOverride: false),
                     windowUUID: windowUUID
                 )
                 let wallpaperVC = WallpaperSettingsViewController(viewModel: viewModel, windowUUID: windowUUID)
@@ -367,6 +367,12 @@ final class SettingsCoordinator: BaseCoordinator,
         router.push(viewController)
     }
 
+    func pressedVPN() {
+        guard #available(iOS 17.0, *) else { return }
+        let viewController = VPNSettingsViewController(windowUUID: windowUUID, prefs: profile.prefs)
+        router.push(viewController)
+    }
+
     func pressedContentBlocker() {
         let viewController = ContentBlockerSettingViewController(windowUUID: windowUUID, prefs: profile.prefs)
         viewController.settingsDelegate = self
@@ -388,7 +394,11 @@ final class SettingsCoordinator: BaseCoordinator,
 
     func askedToOpen(url: URL?, withTitle title: NSAttributedString?) {
         guard let url = url else { return }
-        let viewController = SettingsContentViewController(windowUUID: windowUUID)
+        let viewController = SettingsContentViewController(
+            windowUUID: windowUUID,
+            shouldUsePrivateOverride: true,
+            shouldBeInPrivateTheme: false
+        )
         viewController.settingsTitle = title
         viewController.url = url
         router.push(viewController)
@@ -591,7 +601,7 @@ final class SettingsCoordinator: BaseCoordinator,
         let viewModel = WallpaperSettingsViewModel(
             wallpaperManager: wallpaperManager,
             tabManager: tabManager,
-            theme: themeManager.getCurrentTheme(for: windowUUID),
+            theme: themeManager.resolveTheme(for: windowUUID, privateOverride: false),
             windowUUID: windowUUID
         )
         let viewController = WallpaperSettingsViewController(viewModel: viewModel, windowUUID: windowUUID)
@@ -607,14 +617,22 @@ final class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedLicense(url: URL, title: NSAttributedString) {
-        let viewController = SettingsContentViewController(windowUUID: windowUUID)
+        let viewController = SettingsContentViewController(
+            windowUUID: windowUUID,
+            shouldUsePrivateOverride: true,
+            shouldBeInPrivateTheme: false
+        )
         viewController.settingsTitle = title
         viewController.url = url
         router.push(viewController)
     }
 
     func pressedYourRights(url: URL, title: NSAttributedString) {
-        let viewController = SettingsContentViewController(windowUUID: windowUUID)
+        let viewController = SettingsContentViewController(
+            windowUUID: windowUUID,
+            shouldUsePrivateOverride: true,
+            shouldBeInPrivateTheme: false
+        )
         viewController.settingsTitle = title
         viewController.url = url
         router.push(viewController)

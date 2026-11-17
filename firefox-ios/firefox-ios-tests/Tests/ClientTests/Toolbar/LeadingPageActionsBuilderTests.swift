@@ -13,7 +13,7 @@ final class LeadingPageActionsBuilderTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: MockTabManager())
     }
 
@@ -143,7 +143,7 @@ final class LeadingPageActionsBuilderTests: XCTestCase {
     // MARK: - Helpers
 
     private func setTranslationsFeatureEnabled(enabled: Bool) {
-        FxNimbus.shared.features.translationsFeature.with { _, _ in
+        FxNimbus.shared.features.translationsFeature.with { _ in
             return TranslationsFeature(enabled: enabled)
         }
     }

@@ -4,18 +4,18 @@
 
 import Foundation
 
-/// This struct defines all the standard image identifiers of icons and images used in the app.
+/// This struct defines all the standard image identifiers of icons used in the app.
 /// When adding new identifiers, please respect alphabetical order.
 /// Sing the song if you must.
-public struct StandardImageIdentifiers {
+public enum StandardImageIdentifiers {
     // Icon size 8x8
-    public struct ExtraSmall {
+    public enum ExtraSmall {
         public static let chevronDown = "chevronDownExtraSmall"
         public static let pin = "pinExtraSmall"
     }
 
     // Icon size 16x16
-    public struct Small {
+    public enum Small {
         public static let externalLink = "externalLinkSmall"
         public static let notificationDot = "notificationDotSmall"
         public static let notificationDotFill = "notificationDotFillSmall"
@@ -26,7 +26,7 @@ public struct StandardImageIdentifiers {
     }
 
     // Icon size 20x20
-    public struct Medium {
+    public enum Medium {
         public static let adBlockerCheckmark = "adBlockerCheckmarkMedium"
         public static let adBlockerCross = "adBlockerCrossMedium"
         public static let arrowClockwise = "arrowClockwiseMedium"
@@ -46,7 +46,7 @@ public struct StandardImageIdentifiers {
     }
 
     // Icon size 24x24
-    public struct Large {
+    public enum Large {
         public static let appendDownLeft = "appendDownLeftLarge"
         public static let appendUpLeft = "appendUpLeftLarge"
         public static let arrowClockwise = "arrowClockwiseLarge"
@@ -124,24 +124,29 @@ public struct StandardImageIdentifiers {
         public static let shieldSlash = "shieldSlashLarge"
         public static let soccerBall = "soccerBallLarge"
         public static let socialMedia = "socialMediaLarge"
+        public static let sparkle = "sparkleLarge"
         public static let subtract = "subtractLarge"
         public static let summarizer = "summarizerLarge"
         public static let sync = "syncLarge"
         public static let syncTabs = "syncTabsLarge"
         public static let tab = "tabLarge"
         public static let tabTray = "tabTrayLarge"
+        public static let textSettings = "textSettingsLarge"
         public static let translateActiveAltMulticolor = "translateActiveAltMulticolorLarge"
         public static let warning = "warningLarge"
         public static let warningFill = "warningFillLarge"
     }
 
     // Icon size 30x30
-    public struct ExtraLarge {
+    public enum ExtraLarge {
         public static let crossCircleFill = "crossCircleFillExtraLarge"
+        public static let database = "databaseExtraLarge"
+        public static let personSpeaking = "personSpeakingExtraLarge"
+        public static let saveArrow = "saveArrowExtraLarge"
     }
 
     // Icon size 72x72
-    public struct ExtraExtraExtraLarge {
+    public enum ExtraExtraExtraLarge {
         public static let privateModeCircleFillMulticolor = "privateModeCircleFillMulticolorExtraExtraExtraLarge"
     }
 }

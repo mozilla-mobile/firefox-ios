@@ -32,7 +32,7 @@ final class ShareTelemetryTests: XCTestCase {
     }
 
     func testSharedTo_withNoActivityType() throws {
-        Self.setupTelemetry(with: MockProfile())
+        Self.setupTelemetry(with: makeProfile())
         let subject = createSubject()
         let event = GleanMetrics.ShareSheet.sharedTo
         let testActivityType: UIActivity.ActivityType? = nil
@@ -67,7 +67,7 @@ final class ShareTelemetryTests: XCTestCase {
     }
 
     func testSharedTo_withActivityType() throws {
-        Self.setupTelemetry(with: MockProfile())
+        Self.setupTelemetry(with: makeProfile())
         let subject = createSubject()
         let event = GleanMetrics.ShareSheet.sharedTo
         let testActivityType = UIActivity.ActivityType("com.some.activity.identifier")

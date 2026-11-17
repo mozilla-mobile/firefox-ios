@@ -12,7 +12,10 @@ class VPNDebugSetting: HiddenSetting {
     fileprivate let prefs: Prefs = { return (AppContainer.shared.resolve() as Profile).prefs }()
     fileprivate let creator: VPNAuthCreating
 
-    init(settings: SettingsTableViewController, creator: VPNAuthCreating = VPNAuthCreator()) {
+    init(
+        settings: SettingsTableViewController,
+        creator: VPNAuthCreating = VPNAuthCreator(telemetry: DefaultVPNTelemetry())
+    ) {
         self.creator = creator
         super.init(settings: settings)
     }
@@ -151,8 +154,8 @@ final class FetchVPNProxyTokenSetting: VPNDebugSetting {
 
         Task { @MainActor in
             do {
-                let proxyToken = try await service.fetchProxyToken()
-                present(title: "\(alertTitle) ✅", message: Self.describe(proxyToken))
+                let pass = try await service.fetchProxyPass()
+                present(title: "\(alertTitle) ✅", message: Self.describe(pass))
             } catch VPNAuthError.noStoredSession {
                 present(title: "\(alertTitle) ❌",
                         message: "No stored session. Run Authenticate first.\n\nStrict mode: this button never enrolls.")
@@ -162,23 +165,25 @@ final class FetchVPNProxyTokenSetting: VPNDebugSetting {
         }
     }
 
-    private static func describe(_ proxyToken: VPNProxyToken) -> String {
-        let claims = decodeClaims(proxyToken.token)
+    private static func describe(_ pass: VPNProxyPass) -> String {
+        let claims = decodeClaims(pass.bearerToken)
         // Falls back to the signature tail, which is the only part that differs between two
         // otherwise-identical tokens.
         let identifier = claims["jti"] as? String
-            ?? String(proxyToken.token.split(separator: ".").last ?? "?")
+            ?? String(pass.bearerToken.split(separator: ".").last ?? "?")
 
         var lines = ["token id: \(identifier.prefix(12))…"]
-        lines.append("expiresIn: \(proxyToken.expiresIn)s")
-        if proxyToken.expiresIn <= 180 {
-            lines.append("(short TTL — DSJ is past renewAfter)")
+        if let exp = claims["exp"] as? TimeInterval {
+            // No TTL is sent; Guardian drops 600s to ~180s once the DSJ is past renewAfter.
+            let remaining = Int(exp - Date().timeIntervalSince1970)
+            lines.append("expires in: \(remaining)s")
+            if remaining <= 180 {
+                lines.append("(short TTL — DSJ is past renewAfter)")
+            }
+            lines.append("expires: \(format(msSinceEpoch: Int64(exp * 1000)))")
         }
         lines.append("subject: \(claims["sub"] as? String ?? "?")")
         lines.append("audience: \(claims["aud"] as? String ?? "?")")
-        if let exp = claims["exp"] as? TimeInterval {
-            lines.append("expires: \(format(msSinceEpoch: Int64(exp * 1000)))")
-        }
         return lines.joined(separator: "\n")
     }
 }
@@ -191,5 +196,41 @@ final class ClearVPNSessionSetting: VPNDebugSetting {
     override func perform(with service: VPNAuthenticating) async throws -> String {
         try service.reset()
         return "Cleared stored DSJ and App Attest key."
+    }
+}
+
+/// Shows the VPN failure alert through the same Redux path `VPNMiddleware` uses.
+final class ShowVPNFailureAlertSetting: HiddenSetting {
+    override var title: NSAttributedString? {
+        guard let theme else { return nil }
+        return NSAttributedString(
+            string: "VPN: Show Failure Alert",
+            attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]
+        )
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        store.dispatch(VPNAlertModernAction.showFailureAlert, forWindowUUID: settings.windowUUID)
+    }
+}
+
+/// Shows the VPN data limit alert through the same Redux path `VPNMiddleware` uses.
+final class ShowVPNDataLimitAlertSetting: HiddenSetting {
+    // Arbitrary 50 GB limit, only used for the alert copy
+    private let dataLimitBytes: Int64 = 50_000_000_000
+
+    override var title: NSAttributedString? {
+        guard let theme else { return nil }
+        return NSAttributedString(
+            string: "VPN: Show Data Limit Alert",
+            attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]
+        )
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        store.dispatch(
+            VPNAlertModernAction.showDataLimitAlert(dataLimitBytes: dataLimitBytes),
+            forWindowUUID: settings.windowUUID
+        )
     }
 }

@@ -39,7 +39,8 @@ class O_AddressesTests: BaseTestCase {
 
     override func tearDown() async throws {
         if name.contains("testAddressOptionIsAvailableInSettingsMenu") {
-            switchThemeToDarkOrLight(theme: "Light")
+            settingsScreen.navigateToDisplaySettings()
+            settingsScreen.selectLightTheme()
             XCUIDevice.shared.orientation = .portrait
         }
         app.terminate()
@@ -338,6 +339,7 @@ class O_AddressesTests: BaseTestCase {
         if #unavailable(iOS 16) {
             throw XCTSkip("Addresses setting is not available for iOS 15")
         }
+        markKnownFailure(onIOS: [17, 18], issue: "https://github.com/mozilla-mobile/firefox-ios/issues/35942")
         addAddressAndReachAutofillForm(indexField: 7)
     }
 

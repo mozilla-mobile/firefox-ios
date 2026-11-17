@@ -10,7 +10,7 @@ import Common
 import struct MozillaAppServices.LoginEntry
 import struct MozillaAppServices.Login
 
-class Authenticator {
+enum Authenticator {
     fileprivate static let MaxAuthenticationAttempts = 3
 
     @MainActor
@@ -243,9 +243,9 @@ class Authenticator {
         let action = UIAlertAction(
             title: .AuthenticatorLogin,
             style: .default
-        ) { (action) in
-            guard let user = alert.textFields?[0].text,
-                  let pass = alert.textFields?[1].text
+        ) { [weak alert] _ in
+            guard let user = alert?.textFields?[0].text,
+                  let pass = alert?.textFields?[1].text
             else {
                 completionHandler(.failure(LoginRecordError(description: "Username and Password required")))
                 return

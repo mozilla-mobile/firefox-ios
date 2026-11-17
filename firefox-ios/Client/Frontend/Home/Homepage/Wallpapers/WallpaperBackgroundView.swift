@@ -20,6 +20,8 @@ class WallpaperBackgroundView: UIView {
         }
     }
 
+    private var lastLayoutSize: CGSize = .zero
+
     // MARK: - Initializers & Setup
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -43,9 +45,38 @@ class WallpaperBackgroundView: UIView {
         ])
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        guard bounds.size != lastLayoutSize else { return }
+        lastLayoutSize = bounds.size
+        updateImageToCurrentWallpaper()
+    }
+
     // MARK: - Methods
     public func updateImageForOrientationChange() {
         updateImageToCurrentWallpaper()
+    }
+
+    /// Draws the current wallpaper image into the current graphics context, scaled to aspect fill `rect`
+    /// the same way it is displayed on screen, and clipped to `clipRect`.
+    func drawWallpaper(aspectFilling rect: CGRect, clippedTo clipRect: CGRect) {
+        guard let image = pictureView.image, let context = UIGraphicsGetCurrentContext() else { return }
+        context.saveGState()
+        context.clip(to: clipRect)
+        image.draw(in: WallpaperBackgroundView.aspectFillRect(for: image.size, in: rect))
+        context.restoreGState()
+    }
+
+    static func aspectFillRect(for imageSize: CGSize, in rect: CGRect) -> CGRect {
+        guard imageSize.width > 0, imageSize.height > 0 else { return rect }
+        let scale = max(rect.width / imageSize.width, rect.height / imageSize.height)
+        let size = CGSize(width: imageSize.width * scale, height: imageSize.height * scale)
+        return CGRect(
+            x: rect.midX - size.width / 2,
+            y: rect.midY - size.height / 2,
+            width: size.width,
+            height: size.height
+        )
     }
 
     private func updateImageToCurrentWallpaper() {
@@ -59,9 +90,15 @@ class WallpaperBackgroundView: UIView {
     }
 
     private func currentWallpaperImage(from wallpaperState: WallpaperState) -> UIImage? {
+        let configuration = wallpaperState.wallpaperConfiguration
         let isLandscape = UIDevice.current.orientation.isLandscape
-        return isLandscape ?
-        wallpaperState.wallpaperConfiguration.landscapeImage :
-         wallpaperState.wallpaperConfiguration.portraitImage
+
+        let iPadImage = isLandscape ? configuration.iPadLandscapeImage : configuration.iPadPortraitImage
+        let iPhoneImage = isLandscape ? configuration.iPhoneLandscapeImage : configuration.iPhonePortraitImage
+
+        if traitCollection.horizontalSizeClass == .regular {
+            return iPadImage ?? iPhoneImage
+        }
+        return iPhoneImage ?? iPadImage
     }
 }

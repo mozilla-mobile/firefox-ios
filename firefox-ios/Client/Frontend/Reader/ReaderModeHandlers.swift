@@ -29,8 +29,7 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
     }
 
     static func register(_ webServer: WebServer, profile: Profile) {
-        // Register our fonts and css, which we want to expose to web content that we present in the WebView
-        webServer.registerMainBundleResourcesOfType("otf", module: "reader-mode/fonts")
+        // Register our css to expose to web content that we present in the WebView
         webServer.registerMainBundleResource("Reader.css", module: "reader-mode/styles")
 
         // Register a handler that simply lets us know if a document is in the cache or not. This is called from the
@@ -140,17 +139,7 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
             initialStyle: readerModeStyle
         ),
               let response = GCDWebServerDataResponse(html: html) else { return nil }
-        // Apply a Content Security Policy that disallows everything except:
-        // - images from anywhere
-        // - styles including inline styles from our internal server
-        // - scripts including inline scripts from our internal server
-        // - fonts our internal server
-        let csp = """
-            default-src 'none';
-            img-src *;
-            style-src 'unsafe-inline' http://localhost:*;
-            font-src http://localhost:*;
-        """
+        let csp = ReaderModeUtils.contentSecurityPolicy(origin: "http://localhost:*")
         response.setValue(csp, forAdditionalHeader: "Content-Security-Policy")
         return response
     }

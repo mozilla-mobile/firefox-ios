@@ -103,12 +103,12 @@ struct ConfirmPanelAlert: JavaScriptAlertInfo {
             alertInfo: self
         )
 
-        alertController.addAction(UIAlertAction(title: .OKString, style: .default) { _ in
-            alertController.setDismissalResult(true)
+        alertController.addAction(UIAlertAction(title: .OKString, style: .default) { [weak alertController] _ in
+            alertController?.setDismissalResult(true)
             self.continuation?.resume(returning: true)
         })
-        alertController.addAction(UIAlertAction(title: .CancelString, style: .cancel) { _ in
-            alertController.setDismissalResult(false)
+        alertController.addAction(UIAlertAction(title: .CancelString, style: .cancel) { [weak alertController] _ in
+            alertController?.setDismissalResult(false)
             self.continuation?.resume(returning: false)
         })
         return alertController
@@ -147,14 +147,14 @@ struct TextInputAlert: JavaScriptAlertInfo {
             textField.text = self.defaultText
         }
 
-        alertController.addAction(UIAlertAction(title: .OKString, style: .default) { _ in
-            let result = alertController.textFields?.first?.text
-            alertController.setDismissalResult(result)
+        alertController.addAction(UIAlertAction(title: .OKString, style: .default) { [weak alertController] _ in
+            let result = alertController?.textFields?.first?.text
+            alertController?.setDismissalResult(result)
             self.continuation?.resume(returning: result)
         })
 
-        alertController.addAction(UIAlertAction(title: .CancelString, style: .cancel) { _ in
-            alertController.setDismissalResult(nil)
+        alertController.addAction(UIAlertAction(title: .CancelString, style: .cancel) { [weak alertController] _ in
+            alertController?.setDismissalResult(nil)
             self.continuation?.resume(returning: nil)
         })
 

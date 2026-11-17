@@ -70,6 +70,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
     private var applicationHelper: ApplicationHelper
     private let logger: Logger
     private let gleanUsageReportingMetricsService: GleanUsageReportingMetricsService
+    private let installationTelemetryService: InstallationTelemetryService
     private var hasAppearedBefore = false
     private let searchEnginesManager: SearchEnginesManagerProvider
     private let summarizerNimbusUtils: SummarizerNimbusUtils
@@ -94,13 +95,15 @@ class AppSettingsTableViewController: SettingsTableViewController,
         applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
         summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
         logger: Logger = DefaultLogger.shared,
-        searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve()
+        searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
+        installationTelemetryService: InstallationTelemetryService = AppContainer.shared.resolve()
     ) {
         self.summarizerNimbusUtils = summarizerNimbusUtils
         self.appAuthenticator = appAuthenticator
         self.applicationHelper = applicationHelper
         self.logger = logger
         self.gleanUsageReportingMetricsService = gleanUsageReportingMetricsService
+        self.installationTelemetryService = installationTelemetryService
         self.searchEnginesManager = searchEnginesManager
 
         super.init(windowUUID: tabManager.windowUUID)
@@ -271,10 +274,11 @@ class AppSettingsTableViewController: SettingsTableViewController,
             settingsDelegate: parentCoordinator
         )
 
-        sendTechnicalDataSettings.settingDidChange = { value in
+        sendTechnicalDataSettings.settingDidChange = { [weak self] value in
             DefaultGleanWrapper().setUpload(isEnabled: value)
             Experiments.setTelemetrySetting(value)
             studiesSetting.updateSetting(for: value)
+            self?.installationTelemetryService.update()
         }
         sendTechnicalDataSetting = sendTechnicalDataSettings
 
@@ -344,7 +348,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             string: String.FirefoxHomepage.HomeTabBanner.EvergreenMessage.HomeTabBannerDescription)
 
         return [SettingSection(footerTitle: footerTitle,
-                               children: [DefaultBrowserSetting(theme: themeManager.getCurrentTheme(for: windowUUID))])]
+                               children: [DefaultBrowserSetting(theme: currentTheme())])]
     }
 
     private func getAccountSetting() -> [SettingSection] {
@@ -375,7 +379,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             SearchSetting(
                 settingsDelegate: parentCoordinator,
                 searchEnginesManager: searchEnginesManager,
-                theme: themeManager.getCurrentTheme(for: windowUUID)
+                theme: currentTheme()
             ),
             NewTabPageSetting(settings: self, settingsDelegate: parentCoordinator),
             HomeSetting(settings: self, settingsDelegate: parentCoordinator),
@@ -393,7 +397,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         if UIApplication.shared.supportsAlternateIcons {
             generalSettings.append(
                 AppIconSetting(
-                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                    theme: currentTheme(),
                     settingsDelegate: parentCoordinator
                 )
             )
@@ -434,7 +438,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             privacySettings.append(
                 BoolSetting(
                     prefs: profile.prefs,
-                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                    theme: currentTheme(),
                     prefKey: PrefsKeys.Settings.closePrivateTabs,
                     defaultValue: true,
                     titleText: .AppSettingsClosePrivateTabsTitle,
@@ -448,15 +452,20 @@ class AppSettingsTableViewController: SettingsTableViewController,
             )
         }
 
+        // VPN backend is only possible on iOS 17 and later
+        if #available(iOS 17.0, *), featureFlagsProvider.isEnabled(.vpnFeature) {
+            privacySettings.append(VPNSetting(settings: self, settingsDelegate: parentCoordinator))
+        }
+
         privacySettings.append(ContentBlockerSetting(settings: self, settingsDelegate: parentCoordinator))
 
         if let profile {
-            privacySettings.append(NotificationsSetting(theme: themeManager.getCurrentTheme(for: windowUUID),
+            privacySettings.append(NotificationsSetting(theme: currentTheme(),
                                                         profile: profile,
                                                         settingsDelegate: parentCoordinator))
         }
 
-        privacySettings.append(PrivacyPolicySetting(theme: themeManager.getCurrentTheme(for: windowUUID),
+        privacySettings.append(PrivacyPolicySetting(theme: currentTheme(),
                                                     settingsDelegate: parentCoordinator))
 
         return [SettingSection(title: NSAttributedString(string: .AppSettingsPrivacyTitle),
@@ -475,7 +484,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
                 SentFromFirefoxSetting(
                     prefs: profile.prefs,
                     delegate: settingsDelegate,
-                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                    theme: currentTheme(),
                     settingsDelegate: parentCoordinator
                 )
             )
@@ -499,7 +508,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         supportSettings.append(contentsOf: [
             OpenSupportPageSetting(delegate: settingsDelegate,
-                                   theme: themeManager.getCurrentTheme(for: windowUUID),
+                                   theme: currentTheme(),
                                    settingsDelegate: parentCoordinator),
         ])
 
@@ -557,7 +566,11 @@ class AppSettingsTableViewController: SettingsTableViewController,
         hiddenDebugOptions.append(RefreshVPNSessionSetting(settings: self))
         hiddenDebugOptions.append(FetchVPNProxyTokenSetting(settings: self))
         hiddenDebugOptions.append(ClearVPNSessionSetting(settings: self))
+        hiddenDebugOptions.append(ShowVPNFailureAlertSetting(settings: self))
+        hiddenDebugOptions.append(ShowVPNDataLimitAlertSetting(settings: self))
         hiddenDebugOptions.append(DeleteAppAttestKeySetting(settings: self))
+        hiddenDebugOptions.append(InstallationDetailsSetting(settings: self))
+        hiddenDebugOptions.append(ResetInstallationHistorySetting(settings: self))
         hiddenDebugOptions.append(PrivacyNoticeUpdate(settings: self))
         if featureFlagsProvider.isEnabled(.multiDayOnboarding) {
             hiddenDebugOptions.append(AdvanceOnboardingDripSetting(settings: self, settingsDelegate: self))
@@ -569,7 +582,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
             }
         }
         hiddenDebugOptions.append(FeatureFlagsSettings(settings: self, settingsDelegate: self))
+        hiddenDebugOptions.append(MockBreachAlertsSetting(settings: self, settingsDelegate: self))
         #endif
+
+        hiddenDebugOptions.append(SafeAreaGuidesSetting(settings: self))
 
         return [SettingSection(title: NSAttributedString(string: "Debug"), children: hiddenDebugOptions)]
     }
@@ -659,7 +675,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
     override func applyTheme() {
         super.applyTheme()
         if #available(iOS 26.0, *) {
-            let theme = themeManager.getCurrentTheme(for: windowUUID)
+            let theme = currentTheme()
             navigationItem.rightBarButtonItem?.tintColor = theme.isNova
                 ? theme.colors.actionPrimary
                 : theme.colors.textPrimary

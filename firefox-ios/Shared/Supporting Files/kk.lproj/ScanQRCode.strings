@@ -2,7 +2,7 @@
 "ScanQRCode.ConfirmOpenURL.AllowButton.v129" = "Рұқсат ету";
 
 /* Deny button to cancel opening URL from scanned QR Code */
-"ScanQRCode.ConfirmOpenURL.DenyButton.v129" = "Тайдыру";
+"ScanQRCode.ConfirmOpenURL.DenyButton.v129" = "Рұқсат етпеу";
 
 /* Text of the prompt to ask user permission to open a URL from a scanned QR code. %@ is the app name (e.g. Firefox). */
 "ScanQRCode.ConfirmOpenURL.Message.v129" = "%@ ашуға рұқсат ету керек пе?";

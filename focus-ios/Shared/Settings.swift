@@ -43,7 +43,7 @@ extension SettingsToggle {
     }
 }
 
-struct Settings {
+enum Settings {
     private static let prefs = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
 
     private static let customDomainSettingKey = "customDomains"

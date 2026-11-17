@@ -13,6 +13,25 @@ transforms:
 kind-dependencies:
     - promote
 
+task-defaults:
+    routes:
+        by-level:
+            '3':
+                - notify.slack-channel.C03PKCHHSSD.on-failed  # firefox-ios-releases
+            default: []
+    scopes:
+        by-level:
+            '3':
+                - queue:route:notify.slack-channel.C03PKCHHSSD.on-failed
+                - notify:slack-channel:C03PKCHHSSD
+            default: []
+    extra:
+        notify:
+            slackText: >-
+                Push failed: ${task.metadata.name}
+                | <${rootUrl}/tasks/${status.taskId}|Taskcluster>
+                | <${task.metadata.source}|Source>
+
 tasks:
     appstoreconnect:
       description: Start push workflow

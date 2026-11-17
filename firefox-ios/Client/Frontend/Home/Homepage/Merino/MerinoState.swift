@@ -16,7 +16,7 @@ struct MerinoState: StateType, Equatable {
     let hasMerinoResponseContent: Bool
     let shouldShowSection: Bool
 
-    struct Constants {
+    enum Constants {
         static let footerURL = SupportUtils.URLForPocketLearnMore
     }
 
@@ -96,7 +96,6 @@ struct MerinoState: StateType, Equatable {
         return state
             .copy(merinoData: merinoResponse)
             .copy(hasMerinoResponseContent: merinoContentExists)
-            .copy(shouldShowSection: merinoContentExists && state.shouldShowSection)
     }
 
     private static func handleSettingsToggleAction(_ action: Action, state: MerinoState) -> MerinoState {

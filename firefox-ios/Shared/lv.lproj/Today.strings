@@ -1,0 +1,12 @@
+/* Open New Tab button label */
+"TodayWidget.NewTabButtonLabelV1" = "Jauna meklēšana";
+
+/* Open New Private Tab button label */
+"TodayWidget.PrivateTabButtonLabelV1" = "Privāta meklēšana";
+
+/* Search in Firefox. Do not translate the word Firefox */
+"TodayWidget.SearchInFirefoxV2" = "Meklēt\nFirefox";
+
+/* Search in private tab */
+"TodayWidget.SearchInPrivateTabLabelV2" = "Meklēt\nprivātā cilnē";
+

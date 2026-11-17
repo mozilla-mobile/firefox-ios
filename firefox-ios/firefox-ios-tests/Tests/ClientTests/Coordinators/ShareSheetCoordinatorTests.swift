@@ -36,7 +36,7 @@ final class ShareSheetCoordinatorTests: XCTestCase {
     func testDidFinishCalled_whenDevicePickerDidCancel() {
         let subject = createSubject()
 
-        subject.devicePickerViewControllerDidCancel(DevicePickerViewController(profile: MockProfile()))
+        subject.devicePickerViewControllerDidCancel(DevicePickerViewController(profile: makeProfile()))
 
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
         XCTAssertEqual(mockRouter.dismissCalled, 1)
@@ -46,7 +46,7 @@ final class ShareSheetCoordinatorTests: XCTestCase {
         let subject = createSubject()
 
         subject.devicePickerViewController(
-            DevicePickerViewController(profile: MockProfile()),
+            DevicePickerViewController(profile: makeProfile()),
             didPickDevices: []
         )
 
@@ -77,7 +77,7 @@ final class ShareSheetCoordinatorTests: XCTestCase {
         mockRouter = MockRouter(navigationController: UINavigationController())
         let subject = ShareSheetCoordinator(
             router: mockRouter,
-            profile: MockProfile(),
+            profile: makeProfile(),
             tabManager: MockTabManager(),
             parentCoordinator: parentCoordinator)
         trackForMemoryLeaks(subject)

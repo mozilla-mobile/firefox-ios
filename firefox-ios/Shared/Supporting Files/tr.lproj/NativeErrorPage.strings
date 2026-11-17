@@ -49,8 +49,20 @@
 /* On error page, this is the description for a generic error. %@ is the site url. */
 "NativeErrorPage.GenericError.Description.v134" = "%@ sitesinin sahibi siteyi düzgün kurmadığı için güvenli bir bağlantı oluşturulamıyor.";
 
+/* Additional explanation displayed on the native error page for the generic error. Lists possible causes and advises the user to check their connection settings and try again. */
+"NativeErrorPage.GenericError.Description.v158" = "Site geçici olarak kullanılamıyor olabilir, başka bir adrese taşınmış olabilir, güvenlik duvarınız veya vekil sunucunuz bağlantıyı engelliyor olabilir.\n\nBağlantı ayarlarınızı kontrol edip yeniden deneyin.";
+
+/* First sentence of the generic error description when the requested URL is not available. %1$@ is the app name. */
+"NativeErrorPage.GenericError.Description.v158.withoutURL" = "%1$@ istenen adrese ulaşamadı.";
+
+/* First sentence of the generic error description when the requested URL is known. %1$@ is the app name and %2$@ is the requested URL. */
+"NativeErrorPage.GenericError.Description.v158.withURL" = "%1$@ %2$@ adresine bağlanamadı.";
+
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Dikkatli olun. Doğru görünmeyen bir şeyler var.";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v158" = "Bu siteyle ilgili bir sorun var";
 
 /* On error page, this is the text on a button that will go back to the previous page. Recommended action. */
 "NativeErrorPage.GoBackButton.v149" = "Geri dön (önerilir)";
@@ -93,4 +105,10 @@
 
 /* Accessibility hint read by VoiceOver describing what happens when the 'Check for earlier version' button is clicked. */
 "NativeErrorPage.Wayback.Error.WaybackButtonA11yHint.v154" = "Bu sayfanın arşivlenmiş bir sürümünü Wayback Machine’de arar.";
+
+/* Body text of the error page shown when a website fails to load while the VPN is on. Suggests turning off the VPN first, then refreshing the page or checking the internet connection if that doesn't help. */
+"VPN.ErrorPage.Body.v160" = "VPN’i kapatmayı deneyin. Site hâlâ yüklenmiyorsa sayfayı tazeleyin veya internet bağlantınızı kontrol edin.";
+
+/* Title of an error page shown when a website fails to load while the VPN is on and the exact cause is unknown. “Can't be reached” means the website couldn't be loaded. */
+"VPN.ErrorPage.Title.v160" = "Bu siteye ulaşılamıyor.";
 

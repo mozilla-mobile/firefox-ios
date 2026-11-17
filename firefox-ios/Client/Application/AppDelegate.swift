@@ -32,7 +32,11 @@ class AppDelegate: UIResponder,
 
     lazy var themeManager: ThemeManager = DefaultThemeManager(
         sharedContainerIdentifier: AppInfo.sharedContainerIdentifier,
-        isNovaDesignOnClosure: { self.featureFlagsProvider.isEnabled(.novaDesign) }
+        isNovaDesignOnClosure: { self.featureFlagsProvider.isEnabled(.novaDesign) },
+        isPrivateThemeOverrideEnabledClosure: {
+            self.featureFlagsProvider.isEnabled(.novaDesign) &&
+            self.featureFlagsProvider.isEnabled(.novaPrivateThemeOverride)
+        }
     )
     lazy var documentLogger = DocumentLogger(logger: logger)
     lazy var appSessionManager: AppSessionProvider = AppSessionManager()
@@ -45,6 +49,7 @@ class AppDelegate: UIResponder,
     }()
     lazy var shareTelemetry = ShareTelemetry()
     lazy var gleanUsageReportingMetricsService = GleanUsageReportingMetricsService(profile: profile)
+    lazy var installationTelemetryService = InstallationTelemetryService(profilePrefs: profile.prefs)
     private var isLoadingBackgroundTabs = false
 
     private var shutdownWebServer: DispatchSourceTimer?
@@ -129,10 +134,7 @@ class AppDelegate: UIResponder,
         backgroundWorkUtility = BackgroundFetchAndProcessingUtility()
         backgroundWorkUtility?.registerUtility(BackgroundSyncUtility(profile: profile, application: application))
         backgroundWorkUtility?.registerUtility(BackgroundNotificationSurfaceUtility())
-
-        if let firefoxSuggest = profile.firefoxSuggest {
-            suggestBackgroundUtility = BackgroundFirefoxSuggestIngestUtility(firefoxSuggest: firefoxSuggest)
-        }
+        suggestBackgroundUtility = BackgroundFirefoxSuggestIngestUtility(firefoxSuggest: profile.firefoxSuggest)
 
         metricKitWrapper.beginObservingMXPayloads()
 
@@ -193,6 +195,8 @@ class AppDelegate: UIResponder,
             profile.removeAccount()
         }
 
+        installationTelemetryService.update()
+
         profile.syncManager?.applicationDidBecomeActive()
         webServerUtil?.setUpWebServer()
 
@@ -200,6 +204,9 @@ class AppDelegate: UIResponder,
         TelemetryWrapper.shared.processPendingAppExtensionTelemetry(profile: profile)
 
         TelemetryWrapper.recordEvent(category: .action, method: .foreground, object: .app)
+
+        ConversionActivityLogger().recordActiveToday()
+        ConversionEventTracker().recordActivityEvents()
 
         // update top sites widget
         updateTopSitesWidget()

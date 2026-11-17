@@ -217,7 +217,7 @@ class IntegrationTests: BaseTestCase {
         mozWaitForElementToExist(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"])
         XCTAssertEqual(
             app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"].value! as? String,
-            "Fennec (admin) on iOS"
+            "\(app.label) on iOS"
         )
 
         // Sync again just to make sure to sync after new name is shown

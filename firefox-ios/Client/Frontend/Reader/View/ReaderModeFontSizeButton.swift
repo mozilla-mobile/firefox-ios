@@ -36,8 +36,9 @@ class ReaderModeFontSizeButton: ReaderModeSettingsButton, ThemeApplicable {
         guard fontSizeAction != .reset else { return }
 
         sansSerifFont = FXFontStyles.Regular.title3.scaledFont()
-        serifFont = UIFont(name: UX.serifFontName,
-                           size: FXFontStyles.Regular.title3.systemFont().pointSize)
+
+        let descriptor = sansSerifFont.fontDescriptor.withDesign(.serif) ?? sansSerifFont.fontDescriptor
+        serifFont = UIFont(descriptor: descriptor, size: sansSerifFont.pointSize)
     }
 
     // MARK: ThemeApplicable

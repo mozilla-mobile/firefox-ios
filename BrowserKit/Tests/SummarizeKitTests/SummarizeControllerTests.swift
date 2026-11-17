@@ -58,9 +58,7 @@ final class SummarizeControllerTests: XCTestCase {
         ),
         brandView: BrandViewConfiguration(
             brandLabel: "",
-            brandLabelA11yId: "",
-            brandImage: nil,
-            brandImageA11yId: ""
+            brandLabelA11yId: ""
         ),
         closeButton: CloseButtonViewModel(a11yLabel: "", a11yIdentifier: ""),
         errorMessages: LocalizedErrorsViewConfiguration(
@@ -143,6 +141,15 @@ final class SummarizeControllerTests: XCTestCase {
         XCTAssertTrue(onSummarizeDisplayCalled)
     }
 
+    func test_viewDidLoad_closeButtonIsOnTheLeading() {
+        let subject = createSubject()
+
+        _ = subject.view
+
+        XCTAssertNotNil(subject.navigationItem.leftBarButtonItem)
+        XCTAssertNil(subject.navigationItem.rightBarButtonItem)
+    }
+
     func test_viewDidAppear() {
         let subject = createSubject()
 
@@ -153,13 +160,24 @@ final class SummarizeControllerTests: XCTestCase {
         XCTAssertEqual(snapshotLayoutCalculator.didCallCalculateViewDidAppearTransform, 1)
     }
 
-    func test_viewWillTransition() {
+    func test_viewWillTransition_whenLoading() {
         let subject = createSubject()
 
         subject.viewWillTransition(to: .zero, with: MockUIViewControllerTransitionCoordinator())
 
-        XCTAssertTrue(snapshotLayoutCalculator.didRotateInterface)
-        XCTAssertEqual(snapshotLayoutCalculator.didCallCalculateDidRotateTransform, 1)
+        XCTAssertEqual(snapshotLayoutCalculator.didCallCalculateInfoTransform, 1)
+        XCTAssertEqual(snapshotLayoutCalculator.didCallCalculateSummaryTransform, 0)
+    }
+
+    func test_viewWillTransition_whenShowingSummary() {
+        let subject = createSubject()
+        viewModel.injectedSummarizeResult = .success("Test")
+        _ = subject.view
+
+        subject.viewWillTransition(to: .zero, with: MockUIViewControllerTransitionCoordinator())
+
+        XCTAssertEqual(snapshotLayoutCalculator.didCallCalculateSummaryTransform, 2)
+        XCTAssertEqual(snapshotLayoutCalculator.didCallCalculateInfoTransform, 0)
     }
 
     func test_dismiss() {

@@ -516,7 +516,10 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
   }
 
   function onFocusIn(event) {
-    const form = event.target?.form;
+    if (!HTMLInputElement.isInstance(event.target)) {
+      return;
+    }
+    const form = event.target.form;
     // Only allow formless and passwordless logins with new updated password manager
     const updatedPasswordManagerEnabled = LoginManagerContent.updatedPasswordManagerEnabled;
     if (!updatedPasswordManagerEnabled && !form) {

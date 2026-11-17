@@ -60,6 +60,8 @@ enum HomepageActionType: ActionType {
     case sectionSeen
     case availableContentHeightDidChange
     case privacyNoticeCloseButtonTapped
+    case notificationCardCloseButtonTapped
+    case notificationCardEnableButtonTapped
 }
 
 enum HomepageMiddlewareActionType: ActionType {
@@ -71,4 +73,5 @@ enum HomepageMiddlewareActionType: ActionType {
     case didEnterBackground
     case configuredPrivacyNotice
     case configuredSearchBar
+    case configuredNotificationCard
 }

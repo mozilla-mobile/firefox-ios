@@ -8,7 +8,7 @@ import MenuKit
 import Shared
 
 struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
-    private struct Icons {
+    private enum Icons {
         static let findInPage = StandardImageIdentifiers.Large.search
         static let bookmarksTray = StandardImageIdentifiers.Large.bookmarkTray
         static let history = StandardImageIdentifiers.Large.history

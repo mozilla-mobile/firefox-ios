@@ -161,6 +161,13 @@ open class FxAccountManager: @unchecked Sendable {
     ) {
         fxaFsmQueue.async {
             let actualScopes = scopes.isEmpty ? self.applicationScopes : scopes
+            // The Rust state machine has no `AuthIssues -> BeginPairingFlow` transition, so an account
+            // whose sync is paused could never re-pair. Disconnect first so pairing starts from
+            // `.disconnected`, as on a fresh install.
+            if self.state == .authIssues {
+                FxALog.info("beginPairingAuthentication: disconnecting account in authIssues before pairing.")
+                self.processEvent(.disconnect)
+            }
             self.processEvent(.beginPairingFlow(pairingUrl: pairingUrl, service: "", scopes: actualScopes, entrypoint: entrypoint))
             let result: Result<URL, Error>
             if case let .authenticating(oauthUrl, _) = self.state, let url = URL(string: oauthUrl) {
@@ -181,6 +188,7 @@ open class FxAccountManager: @unchecked Sendable {
     ) {
         fxaFsmQueue.async {
             self.pendingAuthType = authData.authType
+            let prevState = self.state
             let event = FxaEvent.completeOAuthFlow(code: authData.code, state: authData.state)
             do {
                 self.state = try self.requireAccount().processEvent(event: event)
@@ -190,7 +198,7 @@ open class FxAccountManager: @unchecked Sendable {
                 DispatchQueue.main.async { completionHandler(.failure(error)) }
                 return
             }
-            self.accountStateSideEffects(forState: self.state, via: event)
+            self.accountStateSideEffects(via: event, prevState: prevState)
             let result: Result<Void, Error>
             if case .connected = self.state {
                 result = .success(())
@@ -370,6 +378,7 @@ open class FxAccountManager: @unchecked Sendable {
     /// Must be called on `fxaFsmQueue`.
     func processEvent(_ fxaEvent: FxaEvent) {
         FxALog.debug("processEvent: event '\(fxaEvent)'")
+        let prevState = state
         do {
             state = try requireAccount().processEvent(event: fxaEvent)
         } catch {
@@ -377,11 +386,11 @@ open class FxAccountManager: @unchecked Sendable {
             return
         }
         FxALog.debug("processEvent: new FxaState '\(state)'")
-        accountStateSideEffects(forState: state, via: fxaEvent)
+        accountStateSideEffects(via: fxaEvent, prevState: prevState)
     }
 
-    func accountStateSideEffects(forState: FxaState, via: FxaEvent) {
-        switch forState {
+    func accountStateSideEffects(via: FxaEvent, prevState: FxaState) {
+        switch state {
         case .disconnected:
             switch via {
             case .disconnect:
@@ -415,9 +424,13 @@ open class FxAccountManager: @unchecked Sendable {
                 pendingAuthType = nil
                 ignoreCache = true
             case .checkAuthorizationStatus:
-                // Recovered from auth problem
-                authType = .recovered
-                ignoreCache = true
+                if prevState == .authIssues {
+                    // Recovered from auth problem
+                    authType = .recovered
+                    ignoreCache = true
+                } else {
+                    return
+                }
             default:
                 return
             }

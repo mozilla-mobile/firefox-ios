@@ -112,9 +112,11 @@ final class ZoomingTests: BaseTestCase {
         validateZoomLevelOnSwitchingTabs()
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2609150
+    // https://mozilla.testrail.io/index.php?/cases/view/2306948
     func testSwitchingZoomedTabsLandscape() {
         XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
+        waitForRotation(to: .landscapeLeft)
+        waitForTabsButtonHittable()
         validateZoomLevelOnSwitchingTabs()
     }
 

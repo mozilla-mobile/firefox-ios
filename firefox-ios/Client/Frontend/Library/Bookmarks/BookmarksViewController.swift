@@ -17,7 +17,7 @@ final class BookmarksViewController: SiteTableViewController,
                                      UIGestureRecognizerDelegate,
                                      Notifiable,
                                      FeatureFlaggable {
-    struct UX {
+    enum UX {
         static let FolderIconSize = CGSize(width: 24, height: 24)
         static let RowFlashDelay: TimeInterval = 0.4
         static let toastDismissDelay = DispatchTimeInterval.seconds(8)
@@ -34,9 +34,8 @@ final class BookmarksViewController: SiteTableViewController,
     private var logger: Logger
     private let bookmarksTelemetry = BookmarksTelemetry()
     private weak var previousInteractivePopGestureDelegate: (any UIGestureRecognizerDelegate)?
-
-    // MARK: - Search Properties
-    var keyboardState: KeyboardState?
+    override var shouldUsePrivateOverride: Bool { return true }
+    override var tableViewStyle: UITableView.Style { return .libraryPanel }
 
     // MARK: - Search UI (History-style bottom search bar)
     var bottomStackView: BaseAlphaStackView = .build { _ in }
@@ -185,8 +184,6 @@ final class BookmarksViewController: SiteTableViewController,
     // FIXME: FXIOS-12996 Use Themeable instead of custom theme setting
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        KeyboardHelper.defaultHelper.addDelegate(self)
 
         let tableViewLongPressRecognizer = UILongPressGestureRecognizer(target: self,
                                                                         action: #selector(didLongPressTableView))
@@ -491,30 +488,24 @@ final class BookmarksViewController: SiteTableViewController,
 
         NSLayoutConstraint.activate([
             bottomStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            bottomStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            bottomStackView.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor),
             bottomStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
         ])
 
         bottomStackView.applyTheme(theme: currentTheme())
     }
 
-    func updateLayoutForKeyboard() {
-        guard let keyboardHeight = keyboardState?.intersectionHeightForView(view),
-              keyboardHeight > 0 else {
-            bottomStackView.removeKeyboardSpacer()
-            return
-        }
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
 
-        let spacerHeight = keyboardHeight - UIConstants.BottomToolbarHeight
-        bottomStackView.addKeyboardSpacer(spacerHeight: spacerHeight)
+        let bottomInset = bottomStackView.isHidden ? 0 : max(0, tableView.frame.maxY - bottomStackView.frame.minY)
+        tableView.contentInset.bottom = bottomInset
+        tableView.verticalScrollIndicatorInsets.bottom = bottomInset
     }
 
     private func updateBottomSearchBarLayout(isHidden: Bool) {
         bottomStackView.isHidden = isHidden
-
-        let bottomInset = isHidden ? 0 : searchbar.bounds.height
-        tableView.contentInset.bottom = bottomInset
-        tableView.verticalScrollIndicatorInsets.bottom = bottomInset
+        view.setNeedsLayout()
     }
 
     private func setupEmptyStateView() {
@@ -523,8 +514,8 @@ final class BookmarksViewController: SiteTableViewController,
         a11yEmptyStateScrollView.isHidden = true
         NSLayoutConstraint.activate(
             [
-                a11yEmptyStateScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                a11yEmptyStateScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                a11yEmptyStateScrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+                a11yEmptyStateScrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
                 a11yEmptyStateScrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
                 a11yEmptyStateScrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
 
@@ -629,7 +620,9 @@ final class BookmarksViewController: SiteTableViewController,
             }
 
             cell.configure(viewModel: viewModel)
-            cell.applyTheme(theme: currentTheme())
+            let theme = currentTheme()
+            cell.applyTheme(theme: theme)
+            cell.applyGroupedBackground(theme: theme, in: tableView)
             if currentTheme().isNova {
                 cell.editingAccessoryView?.tintColor = currentTheme().colors.textSecondary
             }
@@ -637,7 +630,9 @@ final class BookmarksViewController: SiteTableViewController,
         } else {
             if let cell = tableView.dequeueReusableCell(withIdentifier: SeparatorTableViewCell.cellIdentifier,
                                                         for: indexPath) as? SeparatorTableViewCell {
-                cell.applyTheme(theme: currentTheme())
+                let theme = currentTheme()
+                cell.applyTheme(theme: theme)
+                cell.applyGroupedBackground(theme: theme, in: tableView)
                 return cell
             } else {
                 return UITableViewCell()
@@ -694,10 +689,6 @@ final class BookmarksViewController: SiteTableViewController,
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 0
-    }
-
-    private func currentTheme() -> Theme {
-        return themeManager.getCurrentTheme(for: windowUUID)
     }
 
     private func applyThemeToSearchBar() {
@@ -828,7 +819,9 @@ extension BookmarksViewController: LibraryPanelContextMenu {
                                                    bookmarkFolderTitle: folder.title,
                                                    modalStyle: .overFullScreen)
 
-        let contextMenu = PhotonActionSheet(viewModel: viewModel, windowUUID: windowUUID)
+        let contextMenu = PhotonActionSheet(viewModel: viewModel,
+                                            windowUUID: windowUUID,
+                                            shouldUsePrivateOverride: shouldUsePrivateOverride)
         contextMenu.modalTransitionStyle = .crossDissolve
 
         let generator = UIImpactFeedbackGenerator(style: .heavy)
@@ -1022,27 +1015,4 @@ extension BookmarksViewController: UISearchBarDelegate {
     private func handleEmptySearch() {
         resetSearch()
     }
-}
-
-// MARK: - KeyboardHelperDelegate
-extension BookmarksViewController: KeyboardHelperDelegate {
-    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
-        keyboardState = state
-        updateLayoutForKeyboard()
-        UIView.animate(
-            withDuration: state.animationDuration,
-            delay: 0,
-            options: [UIView.AnimationOptions(rawValue: UInt(state.animationCurve.rawValue << 16))],
-            animations: {
-                self.bottomStackView.layoutIfNeeded()
-            })
-    }
-
-    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
-        keyboardState = nil
-        updateLayoutForKeyboard()
-    }
-
-    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {}
-    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {}
 }

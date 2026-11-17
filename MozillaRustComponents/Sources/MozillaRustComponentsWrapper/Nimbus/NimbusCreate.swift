@@ -86,6 +86,14 @@ final class GleanMetricsHandler: MetricsHandler {
     func submitTargetingContext() {
         GleanMetrics.Pings.shared.nimbusTargetingContext.submit()
     }
+
+    func recordRolloutsOptOut() {
+        GleanMetrics.NimbusEvents.rolloutsOptOut.record()
+    }
+
+    func recordStudiesOptOut() {
+        GleanMetrics.NimbusEvents.studiesOptOut.record()
+    }
 }
 
 public extension Nimbus {
@@ -108,7 +116,6 @@ public extension Nimbus {
         dbPath: String,
         resourceBundles: [Bundle] = [Bundle.main],
         enabled: Bool = true,
-        userDefaults: UserDefaults? = nil,
         errorReporter: @escaping NimbusErrorReporter = defaultErrorReporter,
         recordedContext: RecordedContext? = nil
     ) throws -> NimbusInterface {
@@ -130,7 +137,6 @@ public extension Nimbus {
         return Nimbus(
             nimbusClient: nimbusClient,
             resourceBundles: resourceBundles,
-            userDefaults: userDefaults,
             errorReporter: errorReporter
         )
     }

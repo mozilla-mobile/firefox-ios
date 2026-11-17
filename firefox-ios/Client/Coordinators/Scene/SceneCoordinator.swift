@@ -30,8 +30,8 @@ class SceneCoordinator: BaseCoordinator,
         // The logic is handled by `reserveNextAvailableWindowUUID`, but this is the point at which a window's UUID
         // is set; this same UUID will be injected throughout several of the window's related components
         // such as its TabManager instance, which also has the window UUID property as a convenience.
-        let isIpad = (UIDevice.current.userInterfaceIdiom == .pad)
-        let reserved = windowManager.reserveNextAvailableWindowUUID(isIpad: isIpad)
+        let supportsMultipleWindows = UIApplication.shared.supportsMultipleScenes
+        let reserved = windowManager.reserveNextAvailableWindowUUID(supportsMultipleWindows: supportsMultipleWindows)
         self.reservedWindowUUID = reserved
         self.window = sceneSetupHelper.configureWindowFor(scene,
                                                           windowUUID: reserved.uuid,
@@ -146,6 +146,7 @@ class SceneCoordinator: BaseCoordinator,
 
         let windowInfo = AppWindowInfo(tabManager: tabManager, sceneCoordinator: self)
         windowManager.newBrowserWindowConfigured(windowInfo, uuid: windowUUID)
+        MergeWindowsQuickActionController().update()
 
         add(child: browserCoordinator)
         browserCoordinator.start(with: launchType)

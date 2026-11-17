@@ -6,7 +6,7 @@ import Foundation
 import Shared
 
 /// Accessors to find what a new tab should do when created without a URL.
-struct NewTabAccessors {
+enum NewTabAccessors {
     static let NewTabPrefKey = PrefsKeys.KeyNewTab
     static let HomePrefKey = PrefsKeys.HomePageTab
     static let Default = NewTabPage.topSites

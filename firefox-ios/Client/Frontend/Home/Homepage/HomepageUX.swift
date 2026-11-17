@@ -4,7 +4,7 @@
 
 import UIKit
 
-struct HomepageUX {
+enum HomepageUX {
     // Shadow
     static let shadowRadius: CGFloat = 4
     static let shadowOffset = CGSize(width: 0, height: 2)

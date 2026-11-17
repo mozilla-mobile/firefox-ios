@@ -6,10 +6,12 @@ import WebKit
 import Common
 import Shared
 import Storage
+import XCTest
 @testable import Client
 
 final class MockTabWebView: TabWebView {
     var loadCalled = 0
+    var loadCalledExpectation: XCTestExpectation?
     var loadedRequest: URLRequest?
     var loadFileURLCalled = 0
     var goBackCalled = 0
@@ -23,7 +25,15 @@ final class MockTabWebView: TabWebView {
     var mockHasOnlySecureContent = false
     var mockCanGoBack = false
     var mockCanGoForward = false
+    var mockIsLoading = false {
+        willSet { willChangeValue(forKey: #keyPath(WKWebView.isLoading)) }
+        didSet { didChangeValue(forKey: #keyPath(WKWebView.isLoading)) }
+    }
     var mockInteractionState: Data?
+    var evaluatedScripts: [(script: String, world: WKContentWorld)] = []
+    var completesJavaScriptEvaluation = false
+    var mockNavigation: WKNavigation?
+    var navigationDelegateAtLoad: WKNavigationDelegate?
 
     override var title: String? {
         return mockTitle
@@ -45,20 +55,34 @@ final class MockTabWebView: TabWebView {
         return mockCanGoForward
     }
 
+    override var isLoading: Bool {
+        return mockIsLoading
+    }
+
     override var interactionState: Any? {
         get { return mockInteractionState }
         set { mockInteractionState = newValue as? Data }
     }
 
-    override init(frame: CGRect, configuration: WKWebViewConfiguration, windowUUID: WindowUUID, certStore: CertStore) {
-        super.init(frame: frame, configuration: configuration, windowUUID: windowUUID, certStore: certStore)
+    override init(
+        frame: CGRect,
+        configuration: WKWebViewConfiguration,
+        windowUUID: WindowUUID,
+        certStore: CertStore,
+        notificationCenter: NotificationProtocol = NotificationCenter.default
+    ) {
+        super.init(frame: frame,
+                   configuration: configuration,
+                   windowUUID: windowUUID,
+                   certStore: certStore,
+                   notificationCenter: notificationCenter)
     }
 
     init(tab: Tab) {
         super.init(frame: .zero,
                    configuration: WKWebViewConfiguration(),
                    windowUUID: .XCTestDefaultUUID,
-                   certStore: MockProfile().certStore)
+                   certStore: CertStore())
         // Simulating the observer setup is required to use this mock because in production
         // the observers are set up in Tab.createWebView() which we don't call during test
         // and the observers are removed every time we call Tab.deinit(), so an error occurs
@@ -76,11 +100,27 @@ final class MockTabWebView: TabWebView {
         addObserver(target, forKeyPath: KVOConstants.hasOnlySecureContent.rawValue, context: nil)
     }
 
+    override func __evaluateJavaScript(
+        _ javaScriptString: String,
+        inFrame frame: WKFrameInfo?,
+        in contentWorld: WKContentWorld,
+        completionHandler: (@MainActor @Sendable (Any?, Error?) -> Void)? = nil
+    ) {
+        evaluatedScripts.append((javaScriptString, contentWorld))
+        if completesJavaScriptEvaluation {
+            completionHandler?(nil, nil)
+            return
+        }
+        super.__evaluateJavaScript(javaScriptString, inFrame: frame, in: contentWorld, completionHandler: completionHandler)
+    }
+
     override func load(_ request: URLRequest) -> WKNavigation? {
         loadCalled += 1
+        loadCalledExpectation?.fulfill()
         loadedRequest = request
         loadedURL = request.url
-        return nil
+        navigationDelegateAtLoad = navigationDelegate
+        return mockNavigation
     }
 
     override func loadFileURL(_ URL: URL, allowingReadAccessTo readAccessURL: URL) -> WKNavigation? {
@@ -126,9 +166,13 @@ class MockTab: Tab {
     var enqueueDocumentCalled = 0
     var overrideReaderModeState: ReaderModeState?
 
-    init(profile: Profile, isPrivate: Bool = false, windowUUID: WindowUUID, isHomePage: Bool = false) {
+    init(profile: Profile,
+         isPrivate: Bool = false,
+         groupID: TabGroupID? = nil,
+         windowUUID: WindowUUID,
+         isHomePage: Bool = false) {
         self.isHomePage = isHomePage
-        super.init(profile: profile, isPrivate: isPrivate, windowUUID: windowUUID)
+        super.init(profile: profile, isPrivate: isPrivate, groupID: groupID, windowUUID: windowUUID)
     }
 
     override var readerModeState: ReaderModeState? {

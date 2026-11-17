@@ -60,7 +60,7 @@ public final class SpinLock: ReadWriteLock {
 
 /// Test comment 2
 public final class CASSpinLock: ReadWriteLock {
-    private struct Masks {
+    private enum Masks {
         static let WRITER_BIT: Int32         = 0x40000000
         static let WRITER_WAITING_BIT: Int32 = 0x20000000
         static let MASK_WRITER_BITS          = WRITER_BIT | WRITER_WAITING_BIT

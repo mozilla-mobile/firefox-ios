@@ -6,12 +6,11 @@ import Foundation
 @testable import SummarizeKit
 
 final class MockSnapshotLayoutCalculator: SnapshotLayoutCalculator {
-    var didRotateInterface = false
     var didCallCalculateSummaryTransform = 0
     var didCallCalculateInfoTransform = 0
     var didCallCalculateDismissTransform = 0
     var didCallCalculateViewDidAppearTransform = 0
-    var didCallCalculateDidRotateTransform = 0
+    var didCallCalculateBlobsTransform = 0
 
     func calculateSummaryTransform(context: SummarizeKit.LayoutContext) -> CGAffineTransform {
         didCallCalculateSummaryTransform += 1
@@ -33,8 +32,8 @@ final class MockSnapshotLayoutCalculator: SnapshotLayoutCalculator {
         return .identity
     }
 
-    func calculateDidRotateTransform(context: SummarizeKit.LayoutContext) -> CGAffineTransform {
-        didCallCalculateDidRotateTransform += 1
+    func calculateBlobsTransform(context: SummarizeKit.LayoutContext) -> CGAffineTransform {
+        didCallCalculateBlobsTransform += 1
         return .identity
     }
 }

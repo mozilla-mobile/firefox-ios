@@ -73,7 +73,7 @@ final class SendDataSetting: BoolSetting {
         )
 
         displayBool(control.switchView)
-        control.switchView.accessibilityLabel = "\(title), \(subtitle)"
+        configureSwitchAccessibility(for: cell)
         if let accessibilityIdentifier {
             cell.setAccessibilities(traits: .none, identifier: accessibilityIdentifier)
         }

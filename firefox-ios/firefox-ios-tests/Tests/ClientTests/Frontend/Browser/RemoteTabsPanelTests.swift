@@ -72,7 +72,7 @@ final class RemoteTabsPanelTests: XCTestCase, StoreTestUtility {
             refreshState: .refreshing,
             allowsRefresh: false,
             clientAndTabs: [],
-            showingEmptyState: nil,
+            contentState: .tabs,
             devices: []
         )
         subject.newState(state: newState)
@@ -143,6 +143,17 @@ final class RemoteTabsPanelTests: XCTestCase, StoreTestUtility {
     }
 
     // MARK: - RemoteTabsEmptyViewDelegate
+    @MainActor
+    func testRemotePanelDidRequestToRefreshTabs_dispatchesRefreshTabsAction() throws {
+        let subject = createSubject()
+        subject.remotePanelDidRequestToRefreshTabs()
+
+        let action = try XCTUnwrap(mockStore.dispatchedActions.last)
+        let actionType = try XCTUnwrap(action.actionType as? RemoteTabsPanelActionType)
+
+        XCTAssertEqual(actionType, RemoteTabsPanelActionType.refreshTabs)
+    }
+
     @MainActor
     func testRemotePanelDidRequestToOpenInNewTab_dispatchesCloseSelectedRemoteURLAction() throws {
         let subject = createSubject()

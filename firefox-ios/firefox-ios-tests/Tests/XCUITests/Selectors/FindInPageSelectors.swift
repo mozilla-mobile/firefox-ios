@@ -7,6 +7,7 @@ import XCTest
 protocol FindInPageSelectorsSet {
     var FIND_NEXT_BUTTON: Selector { get }
     var FIND_PREVIOUS_BUTTON: Selector { get }
+    var FIND_DONE_BUTTON: Selector { get }
     var FIND_SEARCH_FIELD_IOS: Selector { get } // searchField for iOS 16+
     var FIND_SEARCH_FIELD_LEGACY: Selector { get } // textField for iOS < 16
     var all: [Selector] { get }
@@ -17,6 +18,7 @@ struct FindInPageSelectors: FindInPageSelectorsSet {
     private enum IDs {
         static let findNextButton = AccessibilityIdentifiers.FindInPage.findNextButton
         static let findPreviousButton = AccessibilityIdentifiers.FindInPage.findPreviousButton
+        static let findDoneButton = AccessibilityIdentifiers.FindInPage.findInPageCloseButton
         // The IDs for iOS 16 are different
         static let searchFieldLegacy = "FindInPage.searchField"
         static let searchFieldiOS = "find.searchField"
@@ -31,6 +33,12 @@ struct FindInPageSelectors: FindInPageSelectorsSet {
     let FIND_PREVIOUS_BUTTON = Selector.buttonId(
         IDs.findPreviousButton,
         description: "Find Previous button in Find In Page bar",
+        groups: ["findinpage"]
+    )
+
+    let FIND_DONE_BUTTON = Selector.buttonId(
+        IDs.findDoneButton,
+        description: "Done button in Find In Page bar",
         groups: ["findinpage"]
     )
 
@@ -56,6 +64,6 @@ struct FindInPageSelectors: FindInPageSelectorsSet {
     }
 
     var all: [Selector] {
-        [FIND_NEXT_BUTTON, FIND_PREVIOUS_BUTTON, FIND_SEARCH_FIELD_IOS, FIND_SEARCH_FIELD_LEGACY]
+        [FIND_NEXT_BUTTON, FIND_PREVIOUS_BUTTON, FIND_DONE_BUTTON, FIND_SEARCH_FIELD_IOS, FIND_SEARCH_FIELD_LEGACY]
     }
 }

@@ -9,7 +9,7 @@ import UIKit
 /// Holds section layout logic for the new homepage as part of the rebuild project
 @MainActor
 final class HomepageSectionLayoutProvider: FeatureFlaggable {
-    struct UX {
+    enum UX {
         static let topSpacing: CGFloat = 40
         static let standardInset: CGFloat = 16
         static let headerSectionSpacing: CGFloat = 16
@@ -19,6 +19,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         static let spacingBetweenSections: CGFloat = 44
         static let standardSingleItemHeight: CGFloat = 100
         static let sectionHeaderHeight: CGFloat = 75
+        static let embeddedAddressBarHeight: CGFloat = 50
 
         @MainActor
         static func leadingInset(
@@ -31,19 +32,19 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             return traitCollection.horizontalSizeClass == .regular ? iPadInset : standardInset
         }
 
-        struct HeaderConstants {
+        enum HeaderConstants {
             static let bottomSpacing: CGFloat = 30
         }
 
-        struct PrivacyNoticeConstants {
+        enum PrivacyNoticeConstants {
             static let bottomInsets: CGFloat = 24
         }
 
-        struct MessageCardConstants {
+        enum MessageCardConstants {
             static let height: CGFloat = 180
         }
 
-        struct PocketConstants {
+        enum PocketConstants {
             static let preferredCellSize = CGSize(width: 361, height: 282)
             static let minimumCellWidth: CGFloat = 320
             static let minimumCellsPerRow = 1
@@ -72,7 +73,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             }
         }
 
-        struct JumpBackInConstants {
+        enum JumpBackInConstants {
             static let itemHeight: CGFloat = 112
             static let syncedItemHeight: CGFloat = 232
             static let syncedItemCompactHeight: CGFloat = 182
@@ -97,12 +98,12 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             }
         }
 
-        struct TrackerBlockerModuleConstants {
+        enum TrackerBlockerModuleConstants {
             /// The section grows past this when the pill needs more room, e.g. with larger dynamic type
             static let minimumHeight: CGFloat = 50
         }
 
-        struct BookmarksConstants {
+        enum BookmarksConstants {
             static let cellWidth: CGFloat = 134
         }
     }
@@ -144,6 +145,12 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             return createSingleItemSectionLayout(
                 for: traitCollection,
                 itemHeight: UX.MessageCardConstants.height,
+                bottomInsets: UX.spacingBetweenSections
+            )
+        case .notificationCard:
+            return createSingleItemSectionLayout(
+                for: traitCollection,
+                topInsets: UX.standardInset,
                 bottomInsets: UX.spacingBetweenSections
             )
         case .topSites(_, let numberOfTilesPerRow, let shouldShowSectionHeader):

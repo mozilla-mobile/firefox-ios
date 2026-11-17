@@ -5,7 +5,7 @@
 import Foundation
 import Localizations
 
-open class DefaultSuggestedSites {
+public enum DefaultSuggestedSites {
     public static let firefoxJpGuideURL = "https://blog.mozilla.org/ja/firefox-ja/ios-guide/"
 
     private static let urlMap = [

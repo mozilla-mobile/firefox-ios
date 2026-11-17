@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct LoginOnboarding {
+enum LoginOnboarding {
     static let HasSeenLoginOnboardingKey = "HasSeenLoginOnboarding"
 
     static func shouldShow() -> Bool {

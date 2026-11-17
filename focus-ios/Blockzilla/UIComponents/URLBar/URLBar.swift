@@ -223,6 +223,7 @@ final class URLBar: UIView {
     public var contextMenuButtonAnchor: UIView { contextMenuButton }
     public var deleteButtonAnchor: UIView { deleteButton }
     public var textFieldAnchor: UIView { urlTextField }
+    var isUrlTextFieldFirstResponder: Bool { urlTextField.isFirstResponder }
 
     private let leftBarViewLayoutGuide = UILayoutGuide()
     private let rightBarViewLayoutGuide = UILayoutGuide()

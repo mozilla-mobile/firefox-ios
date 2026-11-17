@@ -101,14 +101,39 @@ final class SpringboardScreen {
 
     func longPressFennecIcon(at index: Int = 0, duration: TimeInterval = 1.0) {
         let icon = index == 0 ? fennecIconsQuery.firstMatch : fennecIconsQuery.element(boundBy: index)
-        BaseTestCase().mozWaitForElementToExist(icon)
-        icon.press(forDuration: duration)
+        longPressUntilQuickActionsShow(icon, duration: duration)
     }
 
     func longPressFirefoxIcon(at index: Int = 0, duration: TimeInterval = 1.0) {
         let icon = index == 0 ? firefoxIconQuery.firstMatch : firefoxIconQuery.element(boundBy: index)
+        longPressUntilQuickActionsShow(icon, duration: duration)
+    }
+
+    /// Long presses `icon` and retries once from the home screen when the quick actions menu does not open,
+    /// which happens after removeApp() when the reinstalled icon is no longer on the visible page.
+    private func longPressUntilQuickActionsShow(_ icon: XCUIElement, duration: TimeInterval, maxAttempts: Int = 2) {
         BaseTestCase().mozWaitForElementToExist(icon)
-        icon.press(forDuration: duration)
+        for attempt in 1...maxAttempts {
+            swipeToPageShowing(icon)
+            icon.press(forDuration: duration)
+            let menuOpened = appIconButton.mozWaitForElementToExist(timeout: TIMEOUT_PICKER_PROBE, failOnTimeout: false)
+            if menuOpened || attempt == maxAttempts { return }
+            pressHomeButton()
+        }
+    }
+
+    private func swipeToPageShowing(_ icon: XCUIElement, maxSwipes: Int = 3) {
+        var swipes = 0
+        while !icon.isVisible() && swipes < maxSwipes {
+            if icon.frame.minX >= springboard.frame.maxX {
+                springboard.swipeLeft()
+            } else if icon.frame.maxX <= springboard.frame.minX {
+                springboard.swipeRight()
+            } else {
+                return
+            }
+            swipes += 1
+        }
     }
 
     // MARK: - Context Menu Actions

@@ -163,7 +163,7 @@ final class URLActivityItemProviderTests: XCTestCase {
     }
 
     private func setupNimbusSentFromFirefoxTesting(isEnabled: Bool, isTreatmentA: Bool) {
-        FxNimbus.shared.features.sentFromFirefoxFeature.with { _, _ in
+        FxNimbus.shared.features.sentFromFirefoxFeature.with { _ in
             return SentFromFirefoxFeature(
                 enabled: isEnabled,
                 isTreatmentA: isTreatmentA

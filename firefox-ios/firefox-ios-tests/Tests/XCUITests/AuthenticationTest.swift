@@ -10,6 +10,7 @@ class AuthenticationTest: BaseTestCase {
     let username = "Username"
     let password = "Password"
     // https://mozilla.testrail.io/index.php?/cases/view/2360560
+    // Regression
     func testBasicHTTPAuthenticationPromptVisibleAndLogin() {
         navigator.openURL(testBasicHTTPAuthURL)
         waitUntilPageLoad()

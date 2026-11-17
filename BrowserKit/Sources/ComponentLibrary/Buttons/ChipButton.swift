@@ -7,7 +7,7 @@ import UIKit
 
 /// `ChipButton` is a capsule-style button used in chip pickers
 public final class ChipButton: UIButton, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let verticalInset: CGFloat = 8
         static let horizontalInset: CGFloat = 12
     }

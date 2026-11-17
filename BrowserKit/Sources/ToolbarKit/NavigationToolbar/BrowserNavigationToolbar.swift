@@ -71,10 +71,12 @@ public final class BrowserNavigationToolbar: UIView,
             toolbarBorderView.topAnchor.constraint(equalTo: topAnchor),
             toolbarBorderView.trailingAnchor.constraint(equalTo: trailingAnchor),
 
-            actionStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.horizontalEdgeSpace),
+            actionStack.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor,
+                                                 constant: UX.horizontalEdgeSpace),
             actionStack.topAnchor.constraint(equalTo: toolbarBorderView.bottomAnchor),
             actionStack.bottomAnchor.constraint(equalTo: bottomAnchor),
-            actionStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalEdgeSpace),
+            actionStack.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor,
+                                                  constant: -UX.horizontalEdgeSpace),
         ])
 
         setupAccessibility()

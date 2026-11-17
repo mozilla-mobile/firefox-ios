@@ -20,7 +20,7 @@ final class ShareManagerTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        DependencyHelperMock().bootstrapDependencies(injectedProfile: MockProfile())
+        DependencyHelperMock().bootstrapDependencies(injectedProfile: makeProfile())
         testTab = MockShareTab(
             title: testWebpageDisplayTitle,
             url: testWebURL,
@@ -799,7 +799,7 @@ final class ShareManagerTests: XCTestCase {
     }
 
     private func setupNimbusSentFromFirefoxTesting(isEnabled: Bool, isTreatmentA: Bool) {
-        FxNimbus.shared.features.sentFromFirefoxFeature.with { _, _ in
+        FxNimbus.shared.features.sentFromFirefoxFeature.with { _ in
             return SentFromFirefoxFeature(
                 enabled: isEnabled,
                 isTreatmentA: isTreatmentA

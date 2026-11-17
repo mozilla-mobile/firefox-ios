@@ -21,6 +21,24 @@ class BaseTestCase: XCTestCase {
         app.terminate()
     }
 
+    /// Skips the current test when a third-party page it depends on is unreachable or answers with a
+    /// server error (5xx), so an outage of a site outside our control does not fail the run.
+    func skipIfSiteIsDown(_ urlString: String) throws {
+        guard let url = URL(string: urlString) else { return }
+        var request = URLRequest(url: url, timeoutInterval: 15)
+        request.httpMethod = "HEAD"
+        var statusCode: Int?
+        let semaphore = DispatchSemaphore(value: 0)
+        URLSession.shared.dataTask(with: request) { _, response, _ in
+            statusCode = (response as? HTTPURLResponse)?.statusCode
+            semaphore.signal()
+        }.resume()
+        semaphore.wait()
+        guard let statusCode, statusCode < 500 else {
+            throw XCTSkip("\(urlString) is down (\(statusCode.map { "HTTP \($0)" } ?? "unreachable"))")
+        }
+    }
+
     // If it is a first run, first run window should be gone
     func dismissFirstRunUI() {
         let firstRunUI = XCUIApplication().buttons["OK, Got It!"]
@@ -49,6 +67,20 @@ class BaseTestCase: XCTestCase {
             return true
         }
         return false
+    }
+
+    /// iPhone Duo reports `.phone` as its idiom, so it is identified by its simulator model identifier.
+    func iPhoneDuo() -> Bool {
+        return ProcessInfo.processInfo.environment["SIMULATOR_MODEL_IDENTIFIER"] == "iPhone19,4"
+    }
+
+    /// On iPhone Duo the back button lives in a toolbar, not the navigation bar.
+    func tapBackButton() {
+        let backButton = iPhoneDuo()
+            ? app.buttons["BackButton"].firstMatch
+            : app.navigationBars.buttons.element(boundBy: 0)
+        waitForHittable(backButton)
+        backButton.tap()
     }
 
     func waitForEnable(_ element: XCUIElement, timeout: TimeInterval = 30.0, file: String = #file, line: UInt = #line) {

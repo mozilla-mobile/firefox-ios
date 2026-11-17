@@ -21,6 +21,6 @@ public class Viaduct {
 
     public func initialize(userAgent: String) {
         setGlobalDefaultUserAgent(userAgent: userAgent)
-        viaductInitBackendHyper()
+        viaductInitBackendRust()
     }
 }

@@ -13,7 +13,7 @@ final class TrackingProtectionStateTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         await DependencyHelperMock().bootstrapDependencies()
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
     }
 
     override func tearDown() async throws {

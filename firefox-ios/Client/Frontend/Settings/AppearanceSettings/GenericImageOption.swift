@@ -7,7 +7,7 @@ import Common
 
 /// A view that represents a selectable option with an image and a radio button.
 struct GenericImageOption: View, FeatureFlaggable {
-    private struct UX {
+    private enum UX {
         static let optionWidth: CGFloat = 60
         static let optionHeight: CGFloat = 100
         static let cornerRadius: CGFloat = 12

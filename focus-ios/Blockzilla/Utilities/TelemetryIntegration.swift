@@ -4,11 +4,11 @@
 
 import Foundation
 
-final class TelemetryEventCategory {
+enum TelemetryEventCategory {
     public static let action = "action"
 }
 
-final class TelemetryEventMethod {
+enum TelemetryEventMethod {
     public static let background = "background"
     public static let foreground = "foreground"
     public static let typeURL = "type_url"
@@ -31,7 +31,7 @@ final class TelemetryEventMethod {
     public static let siri = "siri"
 }
 
-final class TelemetryEventObject {
+enum TelemetryEventObject {
     public static let app = "app"
     public static let searchBar = "search_bar"
     public static let eraseButton = "erase_button"

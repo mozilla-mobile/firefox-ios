@@ -25,7 +25,7 @@ class ToggleModel: ObservableObject {
 }
 
 struct CreditCardAutofillToggle: View {
-    private struct UX {
+    private enum UX {
         static let paddingSize: CGFloat = 4
         static let dividerHeight: CGFloat = 0.7
         static let padding: CGFloat = 16
@@ -61,11 +61,11 @@ struct CreditCardAutofillToggle: View {
         }
         .background(backgroundColor)
         .onAppear {
-            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            applyTheme(theme: themeManager.resolveTheme(for: windowUUID, privateOverride: false))
         }
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
             guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
-            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            applyTheme(theme: themeManager.resolveTheme(for: windowUUID, privateOverride: false))
         }
     }
 

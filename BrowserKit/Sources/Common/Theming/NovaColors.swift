@@ -7,7 +7,7 @@ import UIKit
 // This class contains Nova colors referenced in
 // https://www.figma.com/design/13nzUgAKwSiWeqvyWnp2KY/branch/XrQf2Lqhpi2s5N03lTtJ5h/iOS-Library--2025-?node-id=12098-204
 // These should never be called directly; they should only be used from a Nova theme.
-final class NovaColors {
+enum NovaColors {
     // MARK: - Black & White
     static let Black = UIColor(rgb: 0x000000)
     static let White = UIColor(rgb: 0xffffff)

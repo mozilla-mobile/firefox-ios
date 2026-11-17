@@ -64,7 +64,7 @@ final class ErrorPageHandlerTests: XCTestCase {
             frame: .zero,
             configuration: WKWebViewConfiguration(),
             windowUUID: .XCTestDefaultUUID,
-            certStore: MockProfile().certStore
+            certStore: makeProfile().certStore
         )
         let failingURL = URL(string: "https://expired.badssl.com/")!
         let error = NSError(domain: NSURLErrorDomain, code: NSURLErrorServerCertificateUntrusted)
@@ -89,7 +89,7 @@ final class ErrorPageHandlerTests: XCTestCase {
             frame: .zero,
             configuration: WKWebViewConfiguration(),
             windowUUID: .XCTestDefaultUUID,
-            certStore: MockProfile().certStore
+            certStore: makeProfile().certStore
         )
         let failingURL = URL(string: "https://example.com/")!
         let error = NSError(
@@ -146,7 +146,7 @@ final class ErrorPageHandlerTests: XCTestCase {
             frame: .zero,
             configuration: WKWebViewConfiguration(),
             windowUUID: .XCTestDefaultUUID,
-            certStore: MockProfile().certStore
+            certStore: makeProfile().certStore
         )
         let failingURL = URL(string: "https://example.com/")!
         let error = NSError(
@@ -173,7 +173,7 @@ final class ErrorPageHandlerTests: XCTestCase {
             frame: .zero,
             configuration: WKWebViewConfiguration(),
             windowUUID: .XCTestDefaultUUID,
-            certStore: MockProfile().certStore
+            certStore: makeProfile().certStore
         )
         let failingURL = URL(string: "https://example.com/")!
         let error = NSError(
@@ -224,13 +224,13 @@ private extension ErrorPageHandlerTests {
     }
 
     func setupNimbusNativeErrorPageTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.nativeErrorPageFeature.with { _, _ in
+        FxNimbus.shared.features.nativeErrorPageFeature.with { _ in
             return NativeErrorPageFeature(enabled: isEnabled)
         }
     }
 
     func setupNimbusCellularDataRestrictedErrorPageTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.cellularDataRestrictedErrorPageFeature.with { _, _ in
+        FxNimbus.shared.features.cellularDataRestrictedErrorPageFeature.with { _ in
             return CellularDataRestrictedErrorPageFeature(enabled: isEnabled)
         }
     }

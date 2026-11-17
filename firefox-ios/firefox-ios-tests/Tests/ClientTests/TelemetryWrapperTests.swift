@@ -18,7 +18,7 @@ class TelemetryWrapperTests: XCTestCase {
     @MainActor
     override func setUp() async throws {
         try await super.setUp()
-        profile = MockProfile()
+        profile = makeProfile()
         Self.setupTelemetry(with: profile)
         Experiments.events.clearEvents()
     }
@@ -810,24 +810,6 @@ class TelemetryWrapperTests: XCTestCase {
                                      extras: eventExtra)
 
         try testEventMetricRecordingSuccess(metric: GleanMetrics.AppErrors.hangException)
-    }
-
-    func test_error_tabLossDetectedIsCalled() throws {
-        TelemetryWrapper.recordEvent(category: .information,
-                                     method: .error,
-                                     object: .app,
-                                     value: .tabLossDetected)
-
-        try testEventMetricRecordingSuccess(metric: GleanMetrics.AppErrors.tabLossDetected)
-    }
-
-    func test_error_tabDiscrepancyIsCalled() throws {
-        TelemetryWrapper.recordEvent(category: .information,
-                                     method: .error,
-                                     object: .app,
-                                     value: .tabCountDiscrepancy)
-
-        try testEventMetricRecordingSuccess(metric: GleanMetrics.AppErrors.tabCountDiscrepancy)
     }
 
     // MARK: - RecordSearch

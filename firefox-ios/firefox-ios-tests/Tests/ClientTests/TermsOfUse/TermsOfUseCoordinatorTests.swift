@@ -24,7 +24,7 @@ final class TermsOfUseCoordinatorTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        profile = MockProfile()
+        profile = makeProfile()
         router = MockRouter(navigationController: MockNavigationController())
         notificationCenter = MockNotificationCenter()
         setupNimbusTouFeatureForTesting(isEnabled: true, maxRemindersCount: 5)
@@ -135,7 +135,7 @@ final class TermsOfUseCoordinatorTests: XCTestCase {
         enableDragToDismiss: Bool = true,
         contentOption: TermsOfUsePromptContentOption = .value0
     ) {
-        FxNimbus.shared.features.touFeature.with { _, _ in
+        FxNimbus.shared.features.touFeature.with { _ in
             return TouFeature(
                 contentOption: contentOption,
                 enableDragToDismiss: enableDragToDismiss,

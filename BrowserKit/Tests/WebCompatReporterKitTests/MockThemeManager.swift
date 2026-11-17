@@ -10,6 +10,7 @@ import UIKit
 @MainActor
 final class MockThemeManager: ThemeManager {
     var currentTheme: Theme = LightTheme()
+    var isPrivateThemeOverrideEnabled = true
 
     var systemThemeIsOn = false
     var automaticBrightnessIsOn = false

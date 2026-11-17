@@ -108,6 +108,34 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .browserDataExport,
+                titleText: format(string: "Browser Data Export"),
+                statusText: format(string: "Toggle to enable exporting bookmarks and history to another browser")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .browserDataImport,
+                titleText: format(string: "Browser Data Import"),
+                statusText: format(string: "Toggle to enable importing bookmarks and history from another browser")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .checkForReinstalls,
+                titleText: format(string: "Check for Reinstalls"),
+                statusText: format(string: "Toggle to enable app reinstallation checks")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .configurationProfile,
+                titleText: format(string: "Configuration Profile"),
+                statusText: format(string: "Toggle to offer opening .mobileconfig profiles in Safari")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .customReaderModeScheme,
                 titleText: format(string: "Custom Reader Mode Scheme"),
                 statusText: format(string: "Toggle to serve reader mode via the readermode:// scheme handler")
@@ -132,6 +160,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .googleLens,
                 titleText: format(string: "Google Lens"),
                 statusText: format(string: "Toggle to enable Google Lens entry points")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .googleLensSearchInterstitial,
+                titleText: format(string: "Google Lens Search Interstitial"),
+                statusText: format(string: "Toggle to enable the Google Lens search interstitial")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -185,6 +220,14 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .mergeWindows,
+                titleText: format(string: "Combine Windows"),
+                statusText: format(string: "Toggle to show the Combine Windows home screen Quick Action on iPad")
+            ) { [weak self] _ in
+                MergeWindowsQuickActionController().update()
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .microsurvey,
                 titleText: format(string: "Microsurvey"),
                 statusText: format(string: "Toggle to reset microsurvey expiration")
@@ -214,13 +257,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .novaDesign,
-                titleText: format(string: "Nova Design"),
-                statusText: format(string: "Toggle to enable Nova design")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .novaPrivateThemeOverride,
                 titleText: format(string: "Nova Private Theme Override"),
                 statusText: format(string: "Toggle to disable purple theme for private mode")
@@ -242,6 +278,20 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .quickAnswersOptInRedesign,
+                titleText: format(string: "Quick Answers Opt-in Redesign"),
+                statusText: format(string: "Toggle to show the redesigned Quick Answers opt-in sheet")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .quickAnswersFollowUp,
+                titleText: format(string: "Quick Answers Follow Up"),
+                statusText: format(string: "Toggle to enable follow up questions in Quick Answers")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .relayIntegration,
                 titleText: format(string: "Relay Email Masks"),
                 statusText: format(string: "Toggle to enable Relay mask feature")
@@ -256,6 +306,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .searchConfigV3,
+                titleText: format(string: "Search Config V3"),
+                statusText: format(string: "Toggle to switch to V3 search configuration (Remote Settings)")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .recentSearches,
                 titleText: format(string: "Search - Recent"),
                 statusText: format(string: "Toggle to enable the recent searches feature")
@@ -266,6 +323,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .trendingSearches,
                 titleText: format(string: "Search - Trending"),
                 statusText: format(string: "Toggle to enable the trending searches feature")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .searchTermInAddressBar,
+                titleText: format(string: "Search Term in Address Bar"),
+                statusText: format(string: "Toggle to show the search term instead of the URL for default engine searches")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -294,6 +358,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .summarizerPermissiveGuardrails,
                 titleText: format(string: "Summarizer Permissive Guardrails Feature"),
                 statusText: format(string: "Toggle to enable the permissive guardrails for the summarizer feature")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .tabGroups,
+                titleText: format(string: "Tab Groups"),
+                statusText: format(string: "Toggle to enable Tab Groups")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -408,7 +479,7 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
     }
 
     private func format(string: String) -> NSAttributedString {
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        let theme = currentTheme()
         return NSAttributedString(
             string: string,
             attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]

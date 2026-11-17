@@ -1,0 +1,18 @@
+/* Body of notification sent to user after inactivity to encourage them to use the search feature. */
+"Engagement.Notification.Body.v112" = "چیزی در نزدیکی پیدا کنید یا چیز جالبی کشف کنید.";
+
+/* Title of notification sent to user after inactivity to encourage them to use the search feature. */
+"Engagement.Notification.Title.v112" = "اولین جست‌و‌جوی خود را شروع کنید";
+
+/* Body of notification sent to user after inactivity to encourage them to use the private browsing feature. %@ is the app name (e.g. Firefox). */
+"Engagement.Notification.Treatment.A.Body.v114" = "مرور خصوصی در %@ اطلاعات شما را ذخیره نمی‌کند و ردیاب‌های پنهان را مسدود می‌کند.";
+
+/* Title of notification sent to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.A.Title.v114" = "بدون برجا گذاشتن ردپا مرور کنید";
+
+/* Body of notification sent to user after inactivity to encourage them to use the private browsing feature. %@ is the app name (e.g. Firefox). */
+"Engagement.Notification.Treatment.B.Body.v114" = "در %@ بدون ذخیرهٔ کوکی یا تاریخچه مرور کنید.";
+
+/* Title of notification sent to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.B.Title.v114" = "مرور خصوصی را امتحان کنید";
+

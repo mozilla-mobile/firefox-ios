@@ -9,7 +9,7 @@ import Common
 /// A label that reveals the characters appended by each transcript update by fading them in
 /// from the bottom while they sharpen out of a blur.
 final class TranscriptLabel: UILabel {
-    private struct UX {
+    private enum UX {
         static let animationDuration: TimeInterval = 0.2
         static let chunkInitialOffset: CGFloat = 6.0
         /// The radius the appended text is blurred by when it starts animating in. It ramps down
@@ -32,7 +32,7 @@ final class TranscriptLabel: UILabel {
     private var blurStartTimestamp: CFTimeInterval = 0
     private var lastRenderedRadius: CGFloat = -1
     /// The last transcript reported by the transcriber.
-    private var transcript = ""
+    private(set) var transcript = ""
     /// The part of `transcript` that has already been animated in.
     private var revealedTranscript = ""
     private var isAnimatingAppendedText = false
@@ -84,6 +84,13 @@ final class TranscriptLabel: UILabel {
             return
         }
         animateAppendedText()
+    }
+
+    /// Recolors the displayed transcript. While text is animating in, the new color is applied once it settles.
+    func applyForegroundColor(_ color: UIColor) {
+        foregroundColor = color
+        guard !isAnimatingAppendedText else { return }
+        showFullTranscript()
     }
 
     private func animateAppendedText() {

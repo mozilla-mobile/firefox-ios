@@ -21,7 +21,7 @@ final class BlockedTrackersTableViewController: UIViewController,
                                           UITableViewDelegate,
                                           Notifiable,
                                           UITextViewDelegate {
-    private struct UX {
+    private enum UX {
         static let baseCellHeight: CGFloat = 44
         static let baseDistance: CGFloat = 20
         static let headerDistance: CGFloat = 8
@@ -105,10 +105,10 @@ final class BlockedTrackersTableViewController: UIViewController,
                 constant: TPMenuUX.UX.popoverTopDistance
             ),
             navigationView.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor
+                equalTo: view.safeAreaLayoutGuide.trailingAnchor
             ),
             navigationView.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor
+                equalTo: view.safeAreaLayoutGuide.leadingAnchor
             )
         ]
         constraints.append(contentsOf: navigationViewContraints)

@@ -101,8 +101,8 @@ struct TermsOfServiceView: View {
 
 // MARK: - Constants
 
-struct OnboardingConstants {
-    struct Spacing {
+enum OnboardingConstants {
+    enum Spacing {
         static let standard: CGFloat = 20
         static let small: CGFloat = 10
         static let contentPadding: CGFloat = 24
@@ -110,7 +110,7 @@ struct OnboardingConstants {
         static let vertical: CGFloat = 16
     }
     
-    struct Layout {
+    enum Layout {
         static let logoSize = CGSize(width: 150, height: 150)
         static let buttonCornerRadius: CGFloat = 12
     }

@@ -61,6 +61,43 @@ final class FindInPageScreen {
         previousButton.waitAndTap()
     }
 
+    private var doneButton: XCUIElement {
+        return sel.FIND_DONE_BUTTON.element(in: app)
+    }
+
+    private var firstPageText: XCUIElement {
+        return BrowserSelectors().WEB_VIEW.element(in: app).staticTexts.firstMatch
+    }
+
+    /// Asserts the bar is shown with the search field focused and the keyboard up, without tapping it.
+    func assertFindInPageBarIsReadyForInput(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().waitForElementsToExist([nextButton, previousButton, searchField], timeout: timeout)
+        XCTAssertTrue(searchField.waitForKeyboardFocus(timeout: timeout), "The search field should have keyboard focus.")
+        BaseTestCase().mozWaitForElementToExist(app.keyboards.element, timeout: timeout)
+    }
+
+    func tapDone() {
+        doneButton.waitAndTap()
+    }
+
+    func firstPageTextOriginY() -> CGFloat {
+        BaseTestCase().mozWaitForElementToExist(firstPageText)
+        return firstPageText.frame.minY
+    }
+
+    /// Asserts the web content moved up from `originY`, i.e. the page scrolled down to a later match.
+    func assertPageScrolledDown(from originY: CGFloat, timeout: TimeInterval = TIMEOUT) {
+        let element = firstPageText
+        let predicate = NSPredicate { _, _ in element.frame.minY < originY }
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: nil)
+        let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
+        XCTAssertEqual(result, .completed, "The page did not scroll to the selected match.")
+    }
+
+    func assertKeyboardIsDismissed(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToNotExist(app.keyboards.element, timeout: timeout)
+    }
+
     func assertSearchBarDisappeared(searchKeyword: String, timeout: TimeInterval = TIMEOUT) {
         BaseTestCase().mozWaitForElementToNotExist(searchField, timeout: timeout)
     }

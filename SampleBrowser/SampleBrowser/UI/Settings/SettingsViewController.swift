@@ -7,7 +7,7 @@ import WebKit
 
 /// The settings page
 class SettingsViewController: UIViewController, UITableViewDelegate {
-    private struct UX {
+    private enum UX {
         static let titleLabelVerticalSpacing: CGFloat = 16
         static let titleLabelHorizontalSpacing: CGFloat = 8
     }

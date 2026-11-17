@@ -14,6 +14,9 @@ protocol SearchSettingsSelectorsSet {
     var RECENT_SEARCH_SWITCH: Selector { get }
     var DEFAULT_SEARCH_ENGINE_NAVBAR: Selector { get }
     var DEFAULT_SEARCH_ENGINE_SECTION_TITLE: Selector { get }
+    var DEFAULT_SEARCH_ENGINE_ROW: Selector { get }
+    var GOOGLE_LENS_ROW: Selector { get }
+    var GOOGLE_LENS_FOOTNOTE: Selector { get }
     var ALTERNATIVE_SEARCH_ENGINES_SECTION_TITLE: Selector { get }
     var ADD_SEARCH_ENGINE_ROW: Selector { get }
     var SHOW_SEARCH_SUGGESTIONS_SWITCH: Selector { get }
@@ -31,6 +34,7 @@ protocol SearchSettingsSelectorsSet {
     /// The 'Search Browsing History' row has no description, so its accessibility label is the title alone.
     var SEARCH_BROWSING_HISTORY_DISPLAYED_TEXT: String { get }
     func searchEngineRow(named engineName: String) -> Selector
+    func alternativeSearchEngineRow(named engineName: String) -> Selector
     var all: [Selector] { get }
 }
 
@@ -43,6 +47,9 @@ struct SearchSettingsSelectors: SearchSettingsSelectorsSet {
         static let backButton               = AccessibilityIdentifiers.Settings.Search.backButton
         static let defaultSearchEngineNavBar = "Default Search Engine"
         static let defaultSearchEngineSectionTitle = "Default Search Engine"
+        static let defaultSearchEngineRow = String.Settings.Search.AccessibilityLabels.DefaultSearchEngine
+        static let googleLensRow = String.Settings.Search.GoogleLens.Title
+        static let googleLensFootnote = String.Settings.Search.GoogleLens.Footnote
         static let alternativeSearchEnginesSectionTitle = "Alternative Search Engines"
         static let addSearchEngineRow          = AccessibilityIdentifiers.Settings.Search.customEngineViewButton
         static let showSearchSuggestionsSwitch = AccessibilityIdentifiers.Settings.Search.showSearchSuggestions
@@ -109,6 +116,26 @@ struct SearchSettingsSelectors: SearchSettingsSelectorsSet {
     let DEFAULT_SEARCH_ENGINE_SECTION_TITLE = Selector.staticTextByExactLabel(
         IDs.defaultSearchEngineSectionTitle,
         description: "Section title for the default search engine on Settings → Search",
+        groups: ["settings", "search"]
+    )
+
+    // The row's value is the default engine's name.
+    let DEFAULT_SEARCH_ENGINE_ROW = Selector.cellByLabel(
+        IDs.defaultSearchEngineRow,
+        description: "Row showing the default search engine on Settings → Search, which opens the engine picker",
+        groups: ["settings", "search"]
+    )
+
+    // The toggle has no identifier, and the row's label is the title followed by its description.
+    let GOOGLE_LENS_ROW = Selector.cellLabelBeginsWith(
+        IDs.googleLensRow,
+        description: "Google Lens toggle row on Settings → Search, shown only while Google is the default engine",
+        groups: ["settings", "search"]
+    )
+
+    let GOOGLE_LENS_FOOTNOTE = Selector.staticTextByExactLabel(
+        IDs.googleLensFootnote,
+        description: "Footnote under the Google Lens toggle on Settings → Search",
         groups: ["settings", "search"]
     )
 
@@ -188,10 +215,22 @@ struct SearchSettingsSelectors: SearchSettingsSelectorsSet {
         )
     }
 
+    /// Alternative engine rows have no label, so a row is found through the name text it contains. Only rows
+    /// with a switch match, which leaves out the default engine row that also shows the engine name.
+    func alternativeSearchEngineRow(named engineName: String) -> Selector {
+        Selector.switchCellContainingStaticText(
+            engineName,
+            description: "Alternative search engine row for '\(engineName)' on Settings → Search",
+            groups: ["settings", "search"]
+        )
+    }
+
     var all: [Selector] {
         [
             NAVBAR, BACK_BUTTON_iOS26, BACK_BUTTON, TRENDING_SEARCH_SWITCH, RECENT_SEARCH_SWITCH,
-            DEFAULT_SEARCH_ENGINE_NAVBAR, DEFAULT_SEARCH_ENGINE_SECTION_TITLE, ALTERNATIVE_SEARCH_ENGINES_SECTION_TITLE,
+            DEFAULT_SEARCH_ENGINE_NAVBAR, DEFAULT_SEARCH_ENGINE_SECTION_TITLE, DEFAULT_SEARCH_ENGINE_ROW, GOOGLE_LENS_ROW,
+            GOOGLE_LENS_FOOTNOTE,
+            ALTERNATIVE_SEARCH_ENGINES_SECTION_TITLE,
             ADD_SEARCH_ENGINE_ROW, SHOW_SEARCH_SUGGESTIONS_SWITCH, SHOW_IN_PRIVATE_SESSIONS_SWITCH,
             SEARCH_BROWSING_HISTORY_SWITCH, SEARCH_BOOKMARKS_SWITCH, SEARCH_SYNCED_TABS_SWITCH,
             SUGGESTIONS_FROM_THE_WEB_SWITCH, SUGGESTIONS_FROM_SPONSORS_SWITCH, LEARN_MORE_ABOUT_FIREFOX_SUGGEST_ROW

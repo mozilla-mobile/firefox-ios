@@ -49,8 +49,20 @@
 /* On error page, this is the description for a generic error. %@ is the site url. */
 "NativeErrorPage.GenericError.Description.v134" = "Ο ιδιοκτήτης του %@ δεν έχει το έχει ρυθμίσει σωστά και δεν είναι δυνατή η πραγματοποίηση μιας ασφαλούς σύνδεσης.";
 
+/* Additional explanation displayed on the native error page for the generic error. Lists possible causes and advises the user to check their connection settings and try again. */
+"NativeErrorPage.GenericError.Description.v158" = "Ο ιστότοπος ενδέχεται να μην είναι προσωρινά διαθέσιμος, να έχει μεταφερθεί σε άλλη διεύθυνση ή η σύνδεση να αποκλείεται από το τείχος προστασίας ή τον διακομιστή μεσολάβησής σας.\n\nΕλέγξτε τις ρυθμίσεις σύνδεσης και δοκιμάστε ξανά.";
+
+/* First sentence of the generic error description when the requested URL is not available. %1$@ is the app name. */
+"NativeErrorPage.GenericError.Description.v158.withoutURL" = "Δεν ήταν δυνατή η σύνδεση του %1$@ στο ζητούμενο URL.";
+
+/* First sentence of the generic error description when the requested URL is known. %1$@ is the app name and %2$@ is the requested URL. */
+"NativeErrorPage.GenericError.Description.v158.withURL" = "Δεν ήταν δυνατή η σύνδεση του %1$@ στο %2$@.";
+
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Να προσέχετε. Κάτι δεν πάει καλά.";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v158" = "Φαίνεται ότι υπάρχει κάποιο πρόβλημα με αυτόν τον ιστότοπο";
 
 /* On error page, this is the text on a button that will go back to the previous page. Recommended action. */
 "NativeErrorPage.GoBackButton.v149" = "Επιστροφή (Προτείνεται)";
@@ -93,4 +105,10 @@
 
 /* Accessibility hint read by VoiceOver describing what happens when the 'Check for earlier version' button is clicked. */
 "NativeErrorPage.Wayback.Error.WaybackButtonA11yHint.v154" = "Κάνει αναζήτηση στο Wayback Machine για μια αρχειοθετημένη έκδοση αυτής της σελίδας.";
+
+/* Body text of the error page shown when a website fails to load while the VPN is on. Suggests turning off the VPN first, then refreshing the page or checking the internet connection if that doesn't help. */
+"VPN.ErrorPage.Body.v160" = "Δοκιμάστε να απενεργοποιήσετε το VPN. Αν ο ιστότοπος εξακολουθεί να μην φορτώνει, ανανεώστε τη σελίδα ή ελέγξτε τη σύνδεσή σας στο διαδίκτυο.";
+
+/* Title of an error page shown when a website fails to load while the VPN is on and the exact cause is unknown. “Can't be reached” means the website couldn't be loaded. */
+"VPN.ErrorPage.Title.v160" = "Δεν είναι δυνατή η πρόσβαση σε αυτόν τον ιστότοπο.";
 

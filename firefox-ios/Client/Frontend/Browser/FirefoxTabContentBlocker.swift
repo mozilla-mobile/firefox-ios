@@ -6,13 +6,13 @@ import Common
 import WebKit
 import Shared
 
-struct ContentBlockingConfig {
-    struct Prefs {
+enum ContentBlockingConfig {
+    enum Prefs {
         static let StrengthKey = "prefkey.trackingprotection.strength"
         static let EnabledKey = "prefkey.trackingprotection.normalbrowsing"
     }
 
-    struct Defaults {
+    enum Defaults {
         static let NormalBrowsing = !AppInfo.isChinaEdition
     }
 }

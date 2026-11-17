@@ -31,14 +31,14 @@ class DefaultBrowserUtility {
         self.logger = logger
     }
 
-    struct UserDefaultsKey {
+    enum UserDefaultsKey {
         public static let isBrowserDefault = "com.moz.isBrowserDefault.key"
         public static let shouldNotPerformMigration = "com.moz.shouldNotPerformMigration.key"
         public static let retryDate = "com.moz.defaultBrowserAPIRetryDate.key"
         public static let apiQuery = "com.moz.defaultBrowserAPIQuery.key"
     }
 
-    struct APIErrorDateKeys {
+    enum APIErrorDateKeys {
         static let retryDate = "UIApplicationCategoryDefaultRetryAvailabilityDateErrorKey"
         static let lastProvidedDate = "UIApplicationCategoryDefaultStatusLastProvidedDateErrorKey"
     }

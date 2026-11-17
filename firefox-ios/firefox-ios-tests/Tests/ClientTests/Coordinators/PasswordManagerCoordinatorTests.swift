@@ -98,7 +98,7 @@ final class PasswordManagerCoordinatorTests: XCTestCase {
             protectionSpace: URLProtectionSpace.fromOrigin("https://test.com")
         )
         let mockModel = PasswordDetailViewControllerModel(
-            profile: MockProfile(),
+            profile: makeProfile(),
             login: mockLoginRecord,
             breachRecord: nil
         )
@@ -120,7 +120,7 @@ final class PasswordManagerCoordinatorTests: XCTestCase {
 
     func testAddPassword() {
         let subject = createSubject()
-        let passwordManagerSpy = PasswordManagerListViewControllerSpy(profile: MockProfile(), windowUUID: windowUUID)
+        let passwordManagerSpy = PasswordManagerListViewControllerSpy(profile: makeProfile(), windowUUID: windowUUID)
         subject.passwordManager = passwordManagerSpy
 
         subject.pressedAddPassword { _ in }
@@ -141,7 +141,7 @@ final class PasswordManagerCoordinatorTests: XCTestCase {
 
     // MARK: - Helper
     func createSubject() -> PasswordManagerCoordinator {
-        let subject = PasswordManagerCoordinator(router: mockRouter, profile: MockProfile(), windowUUID: windowUUID)
+        let subject = PasswordManagerCoordinator(router: mockRouter, profile: makeProfile(), windowUUID: windowUUID)
         subject.parentCoordinator = mockParentCoordinator
         trackForMemoryLeaks(subject)
         return subject

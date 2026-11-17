@@ -260,7 +260,7 @@
 "Onboarding.TermsOfUse.Title" = "Boas-vindas ao %@";
 
 /* Text for a label that indicates the title for onboarding screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
-"Onboarding.Title" = "Bem-vindo(a) ao Firefox %@!";
+"Onboarding.Title" = "Boas-vindas ao Firefox %@!";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Toque no Safari, depois selecione Bloqueadores de Conteúdo";

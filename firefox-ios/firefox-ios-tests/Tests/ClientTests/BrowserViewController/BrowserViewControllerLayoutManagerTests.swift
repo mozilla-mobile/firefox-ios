@@ -146,10 +146,15 @@ final class BrowserViewControllerLayoutManagerTests: XCTestCase {
         XCTAssertTrue(topConstraint?.secondItem is UILayoutGuide)
     }
 
-    func test_setupHeaderConstraints_topToolbarWithoutNavToolbar_usesViewTop() {
+    func test_setupHeaderConstraints_topToolbarWithoutNavToolbar_compactHeight_usesViewTop() throws {
+        guard #available(iOS 17.0, *) else {
+            throw XCTSkip("traitOverrides requires iOS 17+")
+        }
         let subject = createSubject()
         toolbarHelper.shouldShowNavigationToolbar = false
-        toolbarHelper.shouldShowTopTabs = false
+        toolbarHelper.shouldShowTabStrip = false
+        parentView.traitOverrides.verticalSizeClass = .compact
+        parentView.updateTraitsIfNeeded()
         subject.setupHeaderConstraints(isBottomSearchBar: false)
 
         let topConstraint = parentView.constraints.first {
@@ -160,10 +165,27 @@ final class BrowserViewControllerLayoutManagerTests: XCTestCase {
         XCTAssertTrue(topConstraint?.secondItem === parentView)
     }
 
+    func test_setupHeaderConstraints_topToolbarWithoutNavToolbar_regularHeight_usesSafeArea() throws {
+        guard #available(iOS 17.0, *) else {
+            throw XCTSkip("traitOverrides requires iOS 17+")
+        }
+        let subject = createSubject()
+        toolbarHelper.shouldShowNavigationToolbar = false
+        parentView.traitOverrides.verticalSizeClass = .regular
+        parentView.updateTraitsIfNeeded()
+        subject.setupHeaderConstraints(isBottomSearchBar: false)
+
+        let topConstraint = parentView.constraints.first {
+            ($0.firstItem === headerView && $0.firstAttribute == .top)
+        }
+
+        XCTAssertTrue(topConstraint?.secondItem === parentView.safeAreaLayoutGuide)
+    }
+
     func test_setupHeaderConstraints_bottomSearchBar_alwaysUsesSafeArea() {
         let subject = createSubject()
         toolbarHelper.shouldShowNavigationToolbar = false
-        toolbarHelper.shouldShowTopTabs = false
+        toolbarHelper.shouldShowTabStrip = false
         subject.setupHeaderConstraints(isBottomSearchBar: true)
 
         let topConstraint = parentView.constraints.first {
@@ -408,7 +430,7 @@ final class BrowserViewControllerLayoutManagerTests: XCTestCase {
         subject.setupOverKeyboardContainerConstraints()
         subject.setupBottomContentStackViewConstraints()
 
-        subject.updateBottomContentStackViewConstraints(isBottomSearchBar: true, keyboardState: nil)
+        subject.updateBottomContentStackViewConstraints(shouldPushAboveKeyboardContainer: true, keyboardState: nil)
 
         // the bottom anchor should be pin to overkeyboard top
         let activeMaxConstraints = parentView.constraints.filter {
@@ -426,7 +448,7 @@ final class BrowserViewControllerLayoutManagerTests: XCTestCase {
         subject.setupBottomContentStackViewConstraints()
         navigationToolbarContainer.isHidden = true
 
-        subject.updateBottomContentStackViewConstraints(isBottomSearchBar: false,
+        subject.updateBottomContentStackViewConstraints(shouldPushAboveKeyboardContainer: false,
                                                         keyboardState: nil)
 
         // Basic constraint (equalTo safeArea bottom) should be active

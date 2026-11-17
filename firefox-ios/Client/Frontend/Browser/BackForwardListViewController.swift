@@ -8,7 +8,7 @@ import WebKit
 import Storage
 import Common
 
-private struct BackForwardViewUX {
+private enum BackForwardViewUX {
     static let RowHeight: CGFloat = 50
 }
 

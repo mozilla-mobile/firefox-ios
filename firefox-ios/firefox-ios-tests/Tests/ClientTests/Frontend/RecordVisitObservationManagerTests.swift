@@ -19,7 +19,7 @@ final class RecordVisitObservationManagerTests: XCTestCase {
         try await super.setUp()
         historyHandler = MockHistoryHandler()
         logger = MockLogger()
-        profile = MockProfile()
+        profile = makeProfile()
     }
 
     override func tearDown() async throws {

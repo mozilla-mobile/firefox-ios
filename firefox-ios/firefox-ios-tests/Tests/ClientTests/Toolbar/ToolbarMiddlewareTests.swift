@@ -28,7 +28,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         mockGleanWrapper = MockGleanWrapper()
         mockRecentSearchProvider = MockRecentSearchProvider()
         tabManager = MockTabManager()
-        profile = MockProfile()
+        profile = makeProfile()
         summarizerConfigFactory = MockSummarizerConfigFactory()
         windowManager = MockWindowManager(wrappedManager: WindowManagerImplementation(), tabManager: tabManager)
         DependencyHelperMock().bootstrapDependencies(injectedWindowManager: windowManager,
@@ -484,7 +484,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         setIsHostedSummaryEnabled(true)
         let expectation = XCTestExpectation(description: "Store should dispatch an action")
         let subject = createSubject(manager: toolbarManager)
-        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tab.webView = MockTabWebView(tab: tab)
         tabManager.selectedTab = tab
         summarizerConfigFactory.returnedConfig = .defaultConfig
@@ -898,7 +898,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
     func testDidTapButton_tapOnSummarizerButton_dispatchesShowSummarizer() throws {
         summarizerConfigFactory.returnedConfig = .defaultConfig
-        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tab.webView = MockTabWebView(tab: tab)
         tabManager.selectedTab = tab
 
@@ -938,62 +938,6 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
             mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.ForwardLongPressExtra
         )
         let event = GleanMetrics.Toolbar.forwardLongPress
-
-        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
-        XCTAssertEqual(savedExtras.isPrivate, false)
-    }
-
-    func testDidTapButton_longPressOnTabsButton_dispatchesShowTabsLongPressActions() throws {
-        try didLongPressButton(buttonType: .tabs, expectedActionType: GeneralBrowserActionType.showTabsLongPressActions)
-
-        let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.TabTrayLongPressExtra>
-        )
-        let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.TabTrayLongPressExtra
-        )
-        let event = GleanMetrics.Toolbar.tabTrayLongPress
-
-        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
-        XCTAssertEqual(savedExtras.isPrivate, false)
-    }
-
-    func testDidTapButton_longPressOnLocationView_dispatchesShowLocationViewLongPressActionSheet() throws {
-        try didLongPressButton(buttonType: .locationView,
-                               expectedActionType: GeneralBrowserActionType.showLocationViewLongPressActionSheet)
-    }
-
-    func testDidTapButton_longPressOnReloadButton_dispatchesShowReloadLongPressAction() throws {
-        let subject = createSubject(manager: toolbarManager)
-        let action = ToolbarMiddlewareAction(
-            buttonType: .reload,
-            buttonTapped: UIButton(),
-            gestureType: .longPress,
-            windowUUID: windowUUID,
-            actionType: ToolbarMiddlewareActionType.didTapButton)
-
-        subject.toolbarProvider.legacyMiddleware(mockStore.state, action)
-
-        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? GeneralBrowserAction)
-        let actionType = try XCTUnwrap(actionCalled.actionType as? GeneralBrowserActionType)
-
-        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
-        XCTAssertEqual(actionType, GeneralBrowserActionType.showReloadLongPressAction)
-    }
-
-    func testDidTapButton_longPressOnNewTabButton_dispatchesShowNewTabLongPressActions() throws {
-        try didLongPressButton(buttonType: .newTab,
-                               expectedActionType: GeneralBrowserActionType.showNewTabLongPressActions)
-
-        let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.OneTapNewTabLongPressExtra>
-        )
-        let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.OneTapNewTabLongPressExtra
-        )
-        let event = GleanMetrics.Toolbar.oneTapNewTabLongPress
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
@@ -1043,18 +987,19 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionCalled.addressBorderPosition, borderPosition)
     }
 
-    func testDidClearSearch_dispatchesClearSearch() throws {
+    func testDidClearSearch_dispatchesSearchTermDidClear() throws {
         let subject = createSubject(manager: toolbarManager)
         let action = ToolbarMiddlewareAction(
             windowUUID: windowUUID,
             actionType: ToolbarMiddlewareActionType.didClearSearch)
         subject.toolbarProvider.legacyMiddleware(mockStore.state, action)
 
-        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
-        let actionType = try XCTUnwrap(actionCalled.actionType as? ToolbarActionType)
-
-        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
-        XCTAssertEqual(actionType, ToolbarActionType.clearSearch)
+        XCTAssertEqual(mockStore.dispatchedModernActions.count, 1)
+        let isSearchTermDidClear = mockStore.dispatchedModernActions.first.map { action -> Bool in
+            guard case .searchTermDidClear = action as? ToolbarModernAction else { return false }
+            return true
+        }
+        XCTAssertEqual(isSearchTermDidClear, true)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.ClearSearchButtonTappedExtra>
@@ -1354,7 +1299,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     private func setIsHostedSummaryEnabled(_ isEnabled: Bool) {
-        return FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
+        return FxNimbus.shared.features.hostedSummarizerFeature.with { _ in
             return HostedSummarizerFeature(enabled: isEnabled)
         }
     }

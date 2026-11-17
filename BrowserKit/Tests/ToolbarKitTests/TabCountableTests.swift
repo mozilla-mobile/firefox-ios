@@ -124,7 +124,6 @@ final class TabCountableTests: XCTestCase {
             a11yLabel: "Tabs",
             a11yHint: nil,
             a11yId: "testTabCountButton",
-            hasLongPressAction: false,
             onSelected: nil
         )
     }

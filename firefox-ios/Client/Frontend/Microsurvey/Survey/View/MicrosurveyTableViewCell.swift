@@ -6,7 +6,7 @@ import Foundation
 import Common
 
 final class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable, FeatureFlaggable {
-    private struct UX {
+    private enum UX {
         static let radioButtonSize = CGSize(width: 24, height: 24)
         static let spacing: CGFloat = 12
         static let padding = NSDirectionalEdgeInsets(
@@ -17,7 +17,7 @@ final class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplic
         )
         static let separatorWidth = 0.5
 
-        struct Images {
+        enum Images {
             static let selected = ImageIdentifiers.radioButtonSelected
             static let notSelected = ImageIdentifiers.radioButtonNotSelected
             static let selectedNova = ImageIdentifiers.radioButtonSelectedNova

@@ -6,7 +6,7 @@ import Common
 import WebKit
 import UIKit
 
-open class UserAgent {
+public enum UserAgent {
     public static let uaBitSafari = "Safari/604.1"
     public static let uaBitMobile = "Mobile/15E148"
     public static let uaBitFx = "FxiOS/\(AppInfo.appVersion)"
@@ -102,7 +102,7 @@ public enum UserAgentPlatform {
     case Mobile
 }
 
-struct CustomUserAgentConstant {
+enum CustomUserAgentConstant {
     private static let defaultMobileUA = UserAgentBuilder.defaultMobileUserAgent().userAgent()
     private static let safariMobileUA = UserAgentBuilder.defaultMobileUserAgent().clone(extensions: "Version/26.4 \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")
 

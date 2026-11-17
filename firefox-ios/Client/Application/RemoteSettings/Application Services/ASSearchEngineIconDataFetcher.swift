@@ -6,6 +6,14 @@ import MozillaAppServices
 import Common
 import SwiftDraw
 
+/// Search engine definitions that can be matched to their icon records by identifier.
+protocol SearchEngineIdentifiable {
+    var identifier: String { get }
+}
+
+extension SearchEngineDefinition: SearchEngineIdentifiable {}
+extension SearchEngineDefinitionV3: SearchEngineIdentifiable {}
+
 protocol ASSearchEngineIconDataFetcherProtocol: Sendable {
     /// Accepts a list of Search Engines models and populates them with the correct
     /// icon data based on the Remote Settings `search-config-icon` records.
@@ -14,6 +22,10 @@ protocol ASSearchEngineIconDataFetcherProtocol: Sendable {
     ///   - completion: a list of paired engines and their associated icons.
     func populateEngineIconData(_ engines: [SearchEngineDefinition],
                                 completion: @escaping ([(SearchEngineDefinition, UIImage)]) -> Void)
+
+    /// Same as `populateEngineIconData`, for search-config-v3 engines.
+    func populateEngineIconDataV3(_ engines: [SearchEngineDefinitionV3],
+                                  completion: @escaping ([(SearchEngineDefinitionV3, UIImage)]) -> Void)
 }
 
 /// Utility class for fetching search engine icon records from Remote Settings.
@@ -34,6 +46,20 @@ final class ASSearchEngineIconDataFetcher: ASSearchEngineIconDataFetcherProtocol
 
     func populateEngineIconData(_ engines: [SearchEngineDefinition],
                                 completion: @escaping ([(SearchEngineDefinition, UIImage)]) -> Void) {
+        populateIconData(engines, completion: completion)
+    }
+
+    func populateEngineIconDataV3(_ engines: [SearchEngineDefinitionV3],
+                                  completion: @escaping ([(SearchEngineDefinitionV3, UIImage)]) -> Void) {
+        populateIconData(engines, completion: completion)
+    }
+
+    // MARK: - Private Utilities
+
+    private func populateIconData<Engine: SearchEngineIdentifiable>(
+        _ engines: [Engine],
+        completion: @escaping ([(Engine, UIImage)]) -> Void
+    ) {
         // Reminder: client creation must happen before sync() or the sync won't pull data for that client's collection
         guard let client, let records = client.getRecords() else {
             // If we can't fetch icons, return the input engines list with blank icons
@@ -92,8 +118,6 @@ final class ASSearchEngineIconDataFetcher: ASSearchEngineIconDataFetcherProtocol
 
         completion(mapped)
     }
-
-    // MARK: - Private Utilities
 
     private func fetchIcon(for iconRecord: ASSearchEngineIconRecord) -> UIImage? {
         guard let client else { return fallbackEngineIcon }

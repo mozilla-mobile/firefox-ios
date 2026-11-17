@@ -71,6 +71,9 @@ let package = Package(
         .library(
             name: "WebCompatReporterKit",
             targets: ["WebCompatReporterKit"]),
+        .library(
+            name: "WebDataTransfer",
+            targets: ["WebDataTransfer"]),
         .executable(
             name: "ExecutableContentBlockingGenerator",
             targets: ["ExecutableContentBlockingGenerator"]),
@@ -81,7 +84,7 @@ let package = Package(
             branch: "master"),
         .package(
             url: "https://github.com/onevcat/Kingfisher.git",
-            exact: "8.13.0"),
+            exact: "8.15.0"),
         .package(
             url: "https://github.com/AliSoftware/Dip.git",
             exact: "7.1.1"),
@@ -90,7 +93,7 @@ let package = Package(
             exact: "2.1.1"),
         .package(
             url: "https://github.com/getsentry/sentry-cocoa.git",
-            exact: "9.10.0"),
+            exact: "9.32.0"),
         .package(
             url: "https://github.com/nbhasin2/GCDWebServer.git",
             branch: "master"),
@@ -233,6 +236,15 @@ let package = Package(
             dependencies: ["WebCompatReporterKit", "TestKit"],
             swiftSettings: [
             ]
+        ),
+        .target(
+            name: "WebDataTransfer",
+            swiftSettings: [
+                .unsafeFlags(["-enable-testing"]),
+            ]),
+        .testTarget(
+            name: "WebDataTransferTests",
+            dependencies: ["WebDataTransfer"]
         ),
         .target(
             name: "AppAttestKit",

@@ -42,7 +42,7 @@ class OpenWithSetting: Setting {
         self.windowUUID = settings.windowUUID
         self.settingsDelegate = settingsDelegate
 
-        let theme = settings.themeManager.getCurrentTheme(for: windowUUID)
+        let theme = settings.currentTheme()
         super.init(
             title: NSAttributedString(
                 string: .SettingsOpenWithSectionName,

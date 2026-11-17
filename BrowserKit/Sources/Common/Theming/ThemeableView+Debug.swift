@@ -12,12 +12,21 @@ extension ThemeChangeListener {
     /// Handles debug-specific theme changes for SwiftUI previews.
     /// Since NotificationCenter doesn't work in preview environment,
     /// this responds to Xcode's light/dark mode toggle instead.
-    var debugThemeHandler: some View {
-        content
+    func debugThemeHandler(for base: some View) -> some View {
+        base
             .onChange(of: colorScheme) { newScheme in
-                let newTheme: any Theme = newScheme == .dark ? DarkTheme() : LightTheme()
-                theme = newTheme
+                guard isRunningForPreviews else { return }
+
+                if let privacyOverride {
+                    theme = manager.resolvedTheme(with: privacyOverride)
+                } else {
+                    theme = newScheme == .dark ? DarkTheme() : LightTheme()
+                }
             }
+    }
+
+    private var isRunningForPreviews: Bool {
+        return ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1"
     }
 }
 #endif

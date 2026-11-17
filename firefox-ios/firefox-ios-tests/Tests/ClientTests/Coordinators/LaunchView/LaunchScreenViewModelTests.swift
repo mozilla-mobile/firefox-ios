@@ -17,7 +17,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        profile = MockProfile()
+        profile = makeProfile()
         DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
         delegate = MockLaunchFinishedLoadingDelegate()
         messageManager = MockGleanPlumbMessageManagerProtocol()
@@ -293,7 +293,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
     // MARK: - Helpers
 
     private func setTermsOfServiceFeatureEnabled(_ enabled: Bool) {
-        FxNimbus.shared.features.tosFeature.with(initializer: { _, _ in
+        FxNimbus.shared.features.tosFeature.with(initializer: { _ in
             TosFeature(status: enabled)
         })
     }

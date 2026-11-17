@@ -1,0 +1,27 @@
+/* Accessibility label for the close button on the Quick Answers screen. */
+"QuickAnswers.AccessibilityLabels.Close.v158" = "Mbylle";
+
+/* Header label shown above the body of a Quick Answers result, labeling the text below it as a short answer to the user's question. */
+"QuickAnswers.ContentView.ResultHeader.v160" = "PËRGJIGJE E SHPEJTË";
+
+/* Header label for the sources section shown below a Quick Answers result. */
+"QuickAnswers.ContentView.Sources.v158" = "Burime";
+
+/* Button label on the Quick Answers permission alert to dismiss the alert without taking action. */
+"QuickAnswers.Errors.Cancel.v158" = "Anuloje";
+
+/* Title of the alert shown when Quick Answers encounters an unexpected error. */
+"QuickAnswers.Errors.GenericErrorTitle.v158" = "S’u mor përgjigje";
+
+/* Button label to dismiss the Quick Answers error alert. */
+"QuickAnswers.Errors.OK.v158" = "OK";
+
+/* Button label on the permission alert that opens the iOS Settings app so the user can grant permissions. */
+"QuickAnswers.Errors.OpenSettings.v158" = "Hap Rregullimet";
+
+/* Link text that opens more information about how Quick Answers works and how it uses your data. */
+"QuickAnswers.LearnMore.v158" = "Mësoni më tepër…";
+
+/* Button on the Quick Answers opt-in screen that the user taps to accept and start using the feature. */
+"QuickAnswers.OptIn.ContinueButton.v158" = "Vazhdo";
+

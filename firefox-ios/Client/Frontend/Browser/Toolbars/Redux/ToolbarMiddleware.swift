@@ -159,8 +159,7 @@ final class ToolbarMiddleware {
         case ToolbarMiddlewareActionType.didClearSearch:
             guard let toolbarState = state.componentState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
             else { return }
-            let action = ToolbarAction(windowUUID: action.windowUUID, actionType: ToolbarActionType.clearSearch)
-            store.dispatch(action)
+            store.dispatch(ToolbarModernAction.searchTermDidClear, forWindowUUID: action.windowUUID)
             toolbarTelemetry.clearSearchButtonTapped(isPrivate: toolbarState.isPrivateMode)
 
         case ToolbarMiddlewareActionType.didStartDragInteraction:
@@ -381,25 +380,6 @@ final class ToolbarMiddleware {
             toolbarTelemetry.forwardButtonLongPressed(isPrivate: toolbarState.isPrivateMode)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showBackForwardList)
-            store.dispatch(action)
-        case .tabs:
-            toolbarTelemetry.tabTrayButtonLongPressed(isPrivate: toolbarState.isPrivateMode)
-            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
-                                              actionType: GeneralBrowserActionType.showTabsLongPressActions)
-            store.dispatch(action)
-        case .locationView:
-            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
-                                              actionType: GeneralBrowserActionType.showLocationViewLongPressActionSheet)
-            store.dispatch(action)
-        case .reload:
-            let action = GeneralBrowserAction(buttonTapped: action.buttonTapped,
-                                              windowUUID: action.windowUUID,
-                                              actionType: GeneralBrowserActionType.showReloadLongPressAction)
-            store.dispatch(action)
-        case .newTab:
-            toolbarTelemetry.oneTapNewTabButtonLongPressed(isPrivate: toolbarState.isPrivateMode)
-            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
-                                              actionType: GeneralBrowserActionType.showNewTabLongPressActions)
             store.dispatch(action)
         case .readerMode:
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,

@@ -1,0 +1,30 @@
+/* Displayed in a CFR help message to inform users about the availability of Relay email masking features now being available on mobile. %@ is the name of the app (e.g. 'Firefox') */
+"RelayMask.RelayEmailMaskAvailableCFR.v146" = "جدید! %@ Relay رایانامه پوشان‌ها هستند اکنون در دسترس در تلفن همراه.";
+
+/* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
+"RelayMask.RelayEmailMaskFreeTierLimitReached.v147" = "از ۵ پوشان رایانامهٔ رایگان خود استفاده کرده‌اید، بنابراین یکی را برای استفادهٔ دوباره انتخاب کردیم.";
+
+/* Generic error message displayed to users when an unexpected error occurs while attempting to generate a Relay email mask. */
+"RelayMask.RelayEmailMaskGenericErrorMessage.v146" = "پوشان‌های رایانامه در حال حاضر در دسترس نیستند. چند دقیقهٔ دیگر دوباره تلاش کنید.";
+
+/* VoiceOver announcement spoken aloud to accessibility users when an email mask is inserted successfully. */
+"RelayMask.RelayEmailMaskInsertedA11yAnnouncement.v147" = "رایانامه پوشان درج‌شده";
+
+/* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
+"RelayMask.RelayEmailMaskSettingsDetailInfo.v147" = "رایانامهٔ واقعی خود را پنهان کنید تا از صندوق ورودی در برابر هرزنامه محافظت شود. برخی وبگاه‌ها از پوشان‌های رایانامه پشتیبانی نمی‌کنند.";
+
+/* Website link title that takes users to a website to learn additional information about the Relay email mask feature. */
+"RelayMask.RelayEmailMaskSettingsLearnMore.v146" = "بیشتر بدانید";
+
+/* Button title which takes users to a webpage to manage their Relay email masks and related settings. */
+"RelayMask.RelayEmailMaskSettingsManageEmailMasks.v146" = "مدیریت رایانامه پوشان‌ها";
+
+/* Title for settings related to Relay email masking, which provides options for enabling or disabling the suggestion of anonymous email masks services via Relay. */
+"RelayMask.RelayEmailMaskSettingsTitle.v146" = "رایانامه پوشان‌ها";
+
+/* Label for settings toggle which allows users to enable or disable the suggestion of Relay email masks on registration forms, to provide anonymous email masking. */
+"RelayMask.RelayEmailMaskSuggestMasksToggle.v146" = "Suggest رایانامه پوشان‌ها";
+
+/* Displayed inside the keyboard hint when a user is entering an email in a web form. Indicates that the user has the option to use an anonymous Relay email mask instead of their personal email. Tapping on this option will populate the field with a Relay mask automatically. */
+"RelayMask.UseRelayEmailMaskFromKeyboard.v146" = "استفاده رایانامه پوشان";
+

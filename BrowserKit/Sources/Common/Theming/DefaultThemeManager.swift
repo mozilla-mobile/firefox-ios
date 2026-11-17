@@ -34,6 +34,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     private var sharedContainerIdentifier: String
 
     private var isNovaDesignOnClosure: () -> Bool
+    private var isPrivateThemeOverrideEnabledClosure: () -> Bool
 
     private var nightModeIsOn: Bool {
         return userDefaults.bool(forKey: ThemeKeys.NightMode.isOn)
@@ -55,6 +56,10 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         return isNovaDesignOnClosure()
     }
 
+    public var isPrivateThemeOverrideEnabled: Bool {
+        return isPrivateThemeOverrideEnabledClosure()
+    }
+
     // MARK: - Initializers
 
     public init(
@@ -62,13 +67,15 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         mainQueue: DispatchQueueInterface = DispatchQueue.main,
         sharedContainerIdentifier: String,
-        isNovaDesignOnClosure: @escaping () -> Bool = { false }
+        isNovaDesignOnClosure: @escaping () -> Bool = { false },
+        isPrivateThemeOverrideEnabledClosure: @escaping () -> Bool = { false }
     ) {
         self.userDefaults = userDefaults
         self.notificationCenter = notificationCenter
         self.mainQueue = mainQueue
         self.sharedContainerIdentifier = sharedContainerIdentifier
         self.isNovaDesignOnClosure = isNovaDesignOnClosure
+        self.isPrivateThemeOverrideEnabledClosure = isPrivateThemeOverrideEnabledClosure
 
         self.userDefaults.register(defaults: [
             ThemeKeys.systemThemeIsOn: true,
@@ -95,7 +102,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     }
 
     public func resolvedTheme(with shouldShowPrivateTheme: Bool) -> Theme {
-        return getThemeFrom(type: shouldShowPrivateTheme ? .privateMode : determineUserTheme())
+        return getThemeFrom(type: shouldShowPrivateTheme ? .privateMode : determineUserTheme(for: nil))
     }
 
     @MainActor
@@ -125,8 +132,9 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         applyThemeUpdatesToWindows()
     }
 
-    private func getThemeTypeBasedOnSystem() -> ThemeType {
-        return UIScreen.main.traitCollection.userInterfaceStyle == .dark ? ThemeType.dark : ThemeType.light
+    private func getThemeTypeBasedOnSystem(for window: WindowUUID? = nil) -> ThemeType {
+        let traitCollection = windowScene(for: window)?.traitCollection ?? UITraitCollection.current
+        return traitCollection.userInterfaceStyle == .dark ? ThemeType.dark : ThemeType.light
     }
 
     // MARK: - Private theme functions
@@ -152,8 +160,9 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         applyThemeUpdatesToWindows()
     }
 
-    private func getThemeTypeBasedOnBrightness() -> ThemeType {
-        return Float(UIScreen.main.brightness) < automaticBrightnessValue ? .dark : .light
+    private func getThemeTypeBasedOnBrightness(for window: WindowUUID?) -> ThemeType {
+        guard let screen = windowScene(for: window)?.screen else { return getUserManualTheme() }
+        return Float(screen.brightness) < automaticBrightnessValue ? .dark : .light
     }
 
     // MARK: - Window specific functions
@@ -204,14 +213,20 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     private func determineThemeType(for window: WindowUUID) -> ThemeType {
         if getPrivateThemeIsOn(for: window) { return .privateMode }
-        return determineUserTheme()
+        return determineUserTheme(for: window)
     }
 
-    private func determineUserTheme() -> ThemeType {
-        if systemThemeIsOn { return getThemeTypeBasedOnSystem() }
-        if automaticBrightnessIsOn { return getThemeTypeBasedOnBrightness() }
+    private func determineUserTheme(for window: WindowUUID?) -> ThemeType {
+        if systemThemeIsOn { return getThemeTypeBasedOnSystem(for: window) }
+        if automaticBrightnessIsOn { return getThemeTypeBasedOnBrightness(for: window) }
 
         return getUserManualTheme()
+    }
+
+    /// Returns the scene of the given window, or of any tracked window if that one is unknown or nil.
+    private func windowScene(for window: WindowUUID?) -> UIWindowScene? {
+        if let window, let scene = windows[window]?.windowScene { return scene }
+        return windows.values.lazy.compactMap { $0.windowScene }.first
     }
 
     private func getThemeFrom(type: ThemeType) -> Theme {

@@ -23,7 +23,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
 
     override func setUp() async throws {
         try await super.setUp()
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
         mockLogger = MockLogger()
         mockTabManager = MockTabManager()
         mockWindowManager = MockWindowManager(
@@ -194,7 +194,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
 
     func test_pageDidReportTranslationState_whenTranslated_persistsActiveStateOnTab() throws {
         setTranslationsFeatureEnabled(enabled: true)
-        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tab.webView = MockTabWebView(tab: tab)
         mockTabManager.selectedTab = tab
         let subject = createSubject()
@@ -326,7 +326,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
     /// page we navigated away from, otherwise the icon stays blue over untranslated content.
     func test_pageDidReportTranslationState_whenNotTranslated_clearsStaleActiveStateOnTab() throws {
         setTranslationsFeatureEnabled(enabled: true)
-        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tab.webView = MockTabWebView(tab: tab)
         tab.translationConfiguration = TranslationConfiguration(
             prefs: mockProfile.prefs,
@@ -349,7 +349,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
 
     func test_pageDidReportTranslationState_whenNotTranslatedAndEligible_persistsInactiveStateOnTab() throws {
         setTranslationsFeatureEnabled(enabled: true)
-        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tab.webView = MockTabWebView(tab: tab)
         mockTabManager.selectedTab = tab
         let subject = createSubject(
@@ -419,7 +419,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         let mockTranslationService = MockTranslationsService(
             shouldOfferTranslationResult: .success(true)
         )
-        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tab.mimeType = MIMEType.PDF
         tab.translationConfiguration = TranslationConfiguration(prefs: mockProfile.prefs, state: .inactive)
         mockTabManager.selectedTab = tab
@@ -443,7 +443,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         let mockTranslationService = MockTranslationsService(
             shouldOfferTranslationResult: .success(true)
         )
-        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tab.mimeType = MIMEType.JPEG
         tab.translationConfiguration = TranslationConfiguration(prefs: mockProfile.prefs, state: .inactive)
         mockTabManager.selectedTab = tab
@@ -503,7 +503,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
     func test_didSelectTargetLanguage_persistsActiveStateOnTab() throws {
         setTranslationsFeatureEnabled(enabled: true)
         mockProfile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationAutoTranslatePromptShown)
-        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tab.webView = MockTabWebView(tab: tab)
         mockTabManager.selectedTab = tab
         let subject = createSubject()
@@ -532,9 +532,9 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
     func test_didSelectTargetLanguage_tabSwitchMidTranslation_persistsOnOriginatingTab() throws {
         setTranslationsFeatureEnabled(enabled: true)
         mockProfile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationAutoTranslatePromptShown)
-        let tabA = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tabA = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tabA.webView = MockTabWebView(tab: tabA)
-        let tabB = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tabB = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tabB.webView = MockTabWebView(tab: tabB)
         mockTabManager.selectedTab = tabA
 
@@ -569,7 +569,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         let mockTranslationsService = MockTranslationsService(
             translateResult: .failure(TestError.example)
         )
-        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tab.webView = MockTabWebView(tab: tab)
         mockTabManager.selectedTab = tab
 
@@ -891,7 +891,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
     /// Restore-active tap persists `.inactive` and registers an `onNextCommit` handler on the tab.
     func test_didTapButton_whenActive_persistsRestoreStateOnTab() throws {
         setTranslationsFeatureEnabled(enabled: true)
-        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tab.webView = MockTabWebView(tab: tab)
         tab.translationConfiguration = TranslationConfiguration(
             prefs: mockProfile.prefs,
@@ -1526,13 +1526,13 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
     }
 
     private func setupWebViewForTabManager() {
-        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tab.webView = MockTabWebView(tab: tab)
         mockTabManager.selectedTab = tab
     }
 
     private func setTranslationsFeatureEnabled(enabled: Bool, languagePickerEnabled: Bool = false) {
-        FxNimbus.shared.features.translationsFeature.with { _, _ in
+        FxNimbus.shared.features.translationsFeature.with { _ in
             return TranslationsFeature(enabled: enabled, languagePickerEnabled: languagePickerEnabled)
         }
     }
@@ -1548,16 +1548,12 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         }
         let addressToolbar = AddressBarState(
             windowUUID: .XCTestDefaultUUID,
-            navigationActions: [],
-            trailingPageActions: [],
-            browserActions: [],
             editingAccessoryAction: nil,
             borderPosition: nil,
             url: nil,
             searchTerm: nil,
-            lockIconButtonA11yId: nil,
-            lockIconImageName: nil,
-            lockIconNeedsTheming: true,
+            hasOnlySecureContent: nil,
+            isWebsiteMode: false,
             safeListedURLImageName: nil,
             isEditing: false,
             shouldShowKeyboard: false,
@@ -1725,7 +1721,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         setTranslationsFeatureEnabled(enabled: true)
         mockProfile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationAutoTranslatePromptShown)
         let stallingService = StallingTranslationsService()
-        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tab.webView = MockTabWebView(tab: tab)
         mockTabManager.selectedTab = tab
         let subject = createSubject(translationsService: stallingService)
@@ -1776,7 +1772,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
     func test_foreground_afterLongBackground_withActiveTranslation_autoRetranslates() throws {
         setTranslationsFeatureEnabled(enabled: true)
         mockProfile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationAutoTranslatePromptShown)
-        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tab.webView = MockTabWebView(tab: tab)
         mockTabManager.selectedTab = tab
         let subject = createSubject()
@@ -1806,7 +1802,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         setTranslationsFeatureEnabled(enabled: true)
         mockProfile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationAutoTranslatePromptShown)
         let stallingService = StallingTranslationsService()
-        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tab.webView = MockTabWebView(tab: tab)
         mockTabManager.selectedTab = tab
         let subject = createSubject(translationsService: stallingService)
@@ -1851,7 +1847,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         let stallingService = StallingTranslationsService(
             firstResponseReceivedBehavior: .throwAfterCancel
         )
-        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tab.webView = MockTabWebView(tab: tab)
         mockTabManager.selectedTab = tab
         let subject = createSubject(translationsService: stallingService)

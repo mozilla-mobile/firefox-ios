@@ -24,6 +24,7 @@ class ShareSheetCoordinator: BaseCoordinator,
     private let profile: Profile
     private weak var parentCoordinator: ParentCoordinatorDelegate?
     private weak var delegate: ShareSheetCoordinatorDelegate?
+    private let shouldUsePrivateOverride: Bool
     var windowUUID: WindowUUID { return tabManager.windowUUID }
 
     // MARK: - Initializers
@@ -34,13 +35,15 @@ class ShareSheetCoordinator: BaseCoordinator,
         tabManager: TabManager,
         parentCoordinator: ParentCoordinatorDelegate? = nil,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
-        delegate: ShareSheetCoordinatorDelegate? = nil
+        delegate: ShareSheetCoordinatorDelegate? = nil,
+        shouldUsePrivateOverride: Bool = false
     ) {
         self.profile = profile
         self.tabManager = tabManager
         self.themeManager = themeManager
         self.parentCoordinator = parentCoordinator
         self.delegate = delegate
+        self.shouldUsePrivateOverride = shouldUsePrivateOverride
         super.init(router: router)
     }
 
@@ -139,7 +142,9 @@ class ShareSheetCoordinator: BaseCoordinator,
             shareItem = ShareItem(url: url.absoluteString, title: nil)
         }
 
-        let themeColors = themeManager.getCurrentTheme(for: windowUUID).colors
+        let themeColors = themeManager.resolveTheme(for: windowUUID,
+                                                    shouldUsePrivateOverride: shouldUsePrivateOverride,
+                                                    shouldBeInPrivateTheme: false).colors
         let colors = SendToDeviceHelper.Colors(defaultBackground: themeColors.layer1,
                                                textColor: themeColors.textPrimary,
                                                iconColor: themeColors.iconDisabled)

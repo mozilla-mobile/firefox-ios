@@ -1,0 +1,156 @@
+/* Explanatory caption below the Additional Info section. %1$@ is the app name (e.g. Firefox). %2$@ is replaced by the tappable 'Learn more' link, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.FooterText.v154" = "U vostru signalamentu ci aiuta à capisce è currege i prublemi in %1$@ per amendallu per tutti. %2$@";
+
+/* Label of the toggle that includes the list of trackers blocked on the page with the report, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.IncludeBlockedList.v154" = "Mandate a lista di l’elementi bluccati da a prutezzione contr’à u spiunagiu";
+
+/* Label of the toggle that includes a screenshot of the page with the report, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.IncludeScreenshot.v154" = "Include autumaticamente una cattura di screnu per illustrà u prublema";
+
+/* Tappable link at the end of the Additional Info caption that opens a page explaining how the report data is used, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.LearnMore.v154" = "Sapene di più";
+
+/* Header of the section containing optional toggles that control extra data included with the report, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.Title.v154" = "Infurmazioni cumplementarie";
+
+/* Title of the issue category a user picks when a site's layout or design is broken, in the Report a Website Issue form. */
+"WebCompatReporter.Category.DesignBroken.v154" = "Prublema di cuncezzione o d’affissera";
+
+/* Title of the issue category a user picks for problems not covered by the other options, in the Report a Website Issue form. */
+"WebCompatReporter.Category.Other.v154" = "Altru";
+
+/* Title of the issue category a user picks when a site does not work at all, in the Report a Website Issue form. */
+"WebCompatReporter.Category.SiteNotUsable.v154" = "U situ ùn si pò impiegà";
+
+/* Title of the issue category a user picks when video or audio does not play on a site, in the Report a Website Issue form. */
+"WebCompatReporter.Category.VideoOrAudio.v154" = "Video o audio ùn funziuneghja micca";
+
+/* Accessibility hint spoken on the Preview and Send Report buttons when they are disabled because no issue type has been selected yet, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.ChooseIssueTypeAccessibilityHint.v156" = "In primu locu, sceglie un tipu di prublema";
+
+/* Accessibility hint spoken on the Preview and Send Report buttons when they are disabled because no specific problem has been selected yet, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.ChooseSubOptionAccessibilityHint.v156" = "Sceglie un prublema specificu per u tipu selezziunatu";
+
+/* Accessibility label for the multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.DetailsAccessibilityLabel.v154" = "Discrivite in detaglii u prublema scontru";
+
+/* Placeholder shown in the optional multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.DetailsPlaceholder.v154" = "Discrivite in detaglii u prublema scontru (ozzionale)";
+
+/* Error message shown under the URL field when the address entered has an invalid format, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.URLError.v155" = "Stampittate un indirizzu web accettevule";
+
+/* Leading label of the editable row showing the web address being reported, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.URLLabel.v154" = "Indirizzu web";
+
+/* Placeholder shown in the URL field when no web address has been entered, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.URLPlaceholder.v154" = "URL";
+
+/* Placeholder shown in the issue-type pull-down before the user has picked a website problem category, in the Report a Website Issue form. */
+"WebCompatReporter.IssueSection.CategoryPlaceholder.v154" = "Sceglie u tipu di prublema…";
+
+/* Header of the section where the user picks the type of website problem they are reporting, in the Report a Website Issue form. */
+"WebCompatReporter.IssueSection.Title.v154" = "Prublema di situ";
+
+/* Bullet on the Report Preview screen, for the amount of memory the device has. */
+"WebCompatReporter.Preview.Data.AvailableMemory.v155" = "Memoria dispunibule nant’à u vostru apparechju";
+
+/* Bullet on the Report Preview screen, for trackers blocked on the reported page. */
+"WebCompatReporter.Preview.Data.BlockedTrackers.v155" = "Nomi d’ospite di i perseguitatori bluccati nant’à sta pagina";
+
+/* Bullet on the Report Preview screen, for the device's own language and region settings. */
+"WebCompatReporter.Preview.Data.DeviceLocale.v155" = "Lingua principale è paese di u vostru apparechju";
+
+/* Bullet on the Report Preview screen, for whether the device has a touchscreen. */
+"WebCompatReporter.Preview.Data.HasTouchscreen.v155" = "S’è u vostru apparechju hà un screnu tattile";
+
+/* Bullet on the Report Preview screen, for the problem picked and the details typed. */
+"WebCompatReporter.Preview.Data.IssueAndDescription.v155" = "Tipu di prublema chì vo avete selezziunatu è a discrizzione eventuale chì vo avete aghjunta";
+
+/* Bullet on the Report Preview screen. Only tablet or not is sent, no device make or model. */
+"WebCompatReporter.Preview.Data.IsTablet.v155" = "S’è u vostru apparechju hè una tavulella";
+
+/* Bullet on the Report Preview screen, for web frameworks known to break mobile pages. */
+"WebCompatReporter.Preview.Data.PageElements.v155" = "Infurmazione apprupositu di l’elementi di pagina chì sò cunnisciuti per cagiunà prublemi cù i siti";
+
+/* Bullet on the Report Preview screen, for a list of the user's preferred languages for websites as they were communicated by the browser to the page */
+"WebCompatReporter.Preview.Data.PageLanguages.v155" = "Preferenze linguistiche mandate à sta pagina";
+
+/* Bullet on the Report Preview screen. The reported page's address is shown underneath it. */
+"WebCompatReporter.Preview.Data.PageURL.v155" = "Indirizzu web di a pagina";
+
+/* Bullet on the Report Preview screen, for the screen's physical pixels per layout point. */
+"WebCompatReporter.Preview.Data.PixelDensity.v155" = "A densità di pizzeli di u vostru screnu";
+
+/* Bullet on the Report Preview screen, for whether the page was open in private browsing. */
+"WebCompatReporter.Preview.Data.PrivateBrowsingStatus.v155" = "Statu di a navigazione privata : attivata o disattivata";
+
+/* Bullet on the Report Preview screen, for the tracking protection strength the user has chosen. */
+"WebCompatReporter.Preview.Data.TrackingProtectionSetting.v155" = "Parametri di a prutezzione rinfurzata contr’à u spiunagiu per stu situ";
+
+/* Bullet on the Report Preview screen. Those three versions are only ever sent as tokens inside the user agent, never as fields of their own. %@ is the app name (e.g. Firefox). */
+"WebCompatReporter.Preview.Data.UserAgent.v155" = "L’agente utilizatore di u vostru navigatore, chì cumprende a vostra versione d’iOS, a versione di %@ è quella di u mutore di u navigatore";
+
+/* Accessibility label for the page screenshot thumbnail on the Report Preview screen. */
+"WebCompatReporter.Preview.ScreenshotAccessibilityLabel.v154" = "Cattura di screnu di a pagina chì vo signalate. Picchichjà duie volte per affissà in screnu sanu.";
+
+/* Accessibility label for the button that closes the full-screen screenshot viewer on the Report Preview screen. */
+"WebCompatReporter.Preview.ScreenshotCloseAccessibilityLabel.v154" = "Chjode";
+
+/* Row on the Report Preview screen that opens the Technical Data screen, and that screen's title. */
+"WebCompatReporter.Preview.TechnicalData.v155" = "Dati tecnichi";
+
+/* Title of the Report Preview screen, which shows the data that will be sent with a website issue report. */
+"WebCompatReporter.Preview.Title.v154" = "Fighjulata di u signalamentu";
+
+/* Title of the button that submits the website issue report, in the Report a Website Issue form. */
+"WebCompatReporter.SendButton.Title.v154" = "Mandà u raportu";
+
+/* Accessibility label for the navigation bar button that dismisses the Report a Website Issue form without sending a report. */
+"WebCompatReporter.Sheet.CloseButtonAccessibilityLabel.v154" = "Chjode";
+
+/* Title of the navigation bar button that opens a preview of the report before sending, in the Report a Website Issue form. */
+"WebCompatReporter.Sheet.PreviewButton.v154" = "Fighjulata";
+
+/* A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.BrowserBlocked.v154" = "U navigatore hè bluccatu o ùn hè micca accettatu";
+
+/* A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ButtonsNotWorking.v154" = "Buttoni o liami ùn funziuneghjanu micca";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.CaptionsMissing.v154" = "I sottutituli sò assente";
+
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ImagesNotLoaded.v154" = "E fiure ùn sò micca caricate";
+
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ItemsMisaligned.v154" = "Certi elementi ùn sò micca alineati bè";
+
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ItemsNotVisible.v154" = "Certi elementi ùn sò micca videvule sanu sanu";
+
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ItemsOverlapped.v154" = "Certi elementi s’accavalcanu";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.MediaControlsBroken.v154" = "I cuntrolli multimedia sò dannighjati o assenti";
+
+/* A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.MissingItems.v154" = "Certi elementi sò assenti";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.NoAudio.v154" = "Ùn ci hè alcunu audio";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.NoVideo.v154" = "Ùn ci hè alcuna video";
+
+/* A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.PageNotLoading.v154" = "A pagina ùn si carichaghja micca currettamente";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.PlaybackFails.v154" = "A video o l’audio ùn funziuneghja micca";
+
+/* Message of the toast shown after the user successfully submits a website issue report. */
+"WebCompatReporter.Toast.ReportSent.v155" = "Raportu mandatu";
+

@@ -1481,7 +1481,7 @@
 "Settings.Siri.OpenTabShortcut" = "ახალი ჩანართის გახსნა";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Siri-ს მალსახმობების გამოყენება, Firefox-ის სწრაფად გახსნისთვის";
+"Settings.Siri.SectionDescription" = "Siri-ს მალსახმობების გამოყენება, Firefox რომ სწრაფად გაიხსნას";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri-ს მალსახმობები";

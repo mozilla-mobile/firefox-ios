@@ -9,6 +9,34 @@ struct LockIconState: Equatable {
     let imageName: String?
     let a11yId: String?
     let needsTheming: Bool
+
+    /// No lock icon is shown, on the homepage where there is no secure content information.
+    static let none = LockIconState(imageName: nil, a11yId: nil, needsTheming: true)
+}
+
+extension LockIconState {
+    /// - Parameters:
+    ///   - hasOnlySecureContent: Whether the page has only secure content, `nil` when unknown (no icon is shown).
+    ///   - isWebsiteMode: `false` for pages where the icon is hidden, like reader mode.
+    init(hasOnlySecureContent: Bool?, isWebsiteMode: Bool) {
+        guard let hasOnlySecureContent else {
+            self = .none
+            return
+        }
+
+        let imageName = hasOnlySecureContent ?
+            StandardImageIdentifiers.Small.shieldCheckmarkFill :
+            StandardImageIdentifiers.Small.shieldSlashFillMulticolor
+        let a11yId = hasOnlySecureContent ?
+            AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon :
+            AccessibilityIdentifiers.Browser.AddressToolbar.lockIconOff
+
+        self.init(
+            imageName: isWebsiteMode ? imageName : nil,
+            a11yId: a11yId,
+            needsTheming: hasOnlySecureContent
+        )
+    }
 }
 
 protocol ToolbarHelperInterface {
@@ -25,12 +53,10 @@ protocol ToolbarHelperInterface {
     var novaToolbarGlassEffectAlpha: CGFloat { get }
 
     func shouldShowNavigationToolbar(for traitCollection: UITraitCollection) -> Bool
-    func shouldShowTopTabs(for traitCollection: UITraitCollection) -> Bool
+    func shouldShowTabStrip(for traitCollection: UITraitCollection) -> Bool
 
     @MainActor
     func shouldBlur() -> Bool
-
-    func getLockIconState(hasOnlySecureContent: Bool, isWebsiteMode: Bool) -> LockIconState
 }
 
 final class ToolbarHelper: ToolbarHelperInterface, FeatureFlaggable {
@@ -71,7 +97,7 @@ final class ToolbarHelper: ToolbarHelperInterface, FeatureFlaggable {
                && traitCollection.horizontalSizeClass != .regular
     }
 
-    func shouldShowTopTabs(for traitCollection: UITraitCollection) -> Bool {
+    func shouldShowTabStrip(for traitCollection: UITraitCollection) -> Bool {
         return traitCollection.verticalSizeClass == .regular
                && traitCollection.horizontalSizeClass == .regular
     }
@@ -86,24 +112,5 @@ final class ToolbarHelper: ToolbarHelperInterface, FeatureFlaggable {
         userInterfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom
     ) {
         self.userInterfaceIdiom = userInterfaceIdiom
-    }
-
-    static func computeLockIconState(hasOnlySecureContent: Bool, isWebsiteMode: Bool) -> LockIconState {
-        let lockIconImageName = hasOnlySecureContent ?
-            StandardImageIdentifiers.Small.shieldCheckmarkFill :
-            StandardImageIdentifiers.Small.shieldSlashFillMulticolor
-        let lockIconButtonA11yId = hasOnlySecureContent ?
-            AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon :
-            AccessibilityIdentifiers.Browser.AddressToolbar.lockIconOff
-
-        return LockIconState(
-            imageName: isWebsiteMode ? lockIconImageName : nil,
-            a11yId: lockIconButtonA11yId,
-            needsTheming: hasOnlySecureContent
-        )
-    }
-
-    func getLockIconState(hasOnlySecureContent: Bool, isWebsiteMode: Bool) -> LockIconState {
-        return Self.computeLockIconState(hasOnlySecureContent: hasOnlySecureContent, isWebsiteMode: isWebsiteMode)
     }
 }

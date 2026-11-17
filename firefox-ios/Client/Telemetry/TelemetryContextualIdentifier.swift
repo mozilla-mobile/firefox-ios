@@ -6,7 +6,7 @@ import Foundation
 import Glean
 
 // Contextual identifier used for the sponsored tiles in top sites and the suggestions in the search view
-struct TelemetryContextualIdentifier {
+enum TelemetryContextualIdentifier {
     enum UserDefaultsKey: String {
         case keyContextId = "com.moz.contextId.key"
     }

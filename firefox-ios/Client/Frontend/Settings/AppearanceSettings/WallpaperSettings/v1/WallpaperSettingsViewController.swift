@@ -7,7 +7,7 @@ import UIKit
 
 class WallpaperSettingsViewController: WallpaperBaseViewController, Themeable {
     @MainActor
-    private struct UX {
+    private enum UX {
         static let cardWidth: CGFloat = UIDevice().isTinyFormFactor ? 88 : 97
         static let cardHeight: CGFloat = UIDevice().isTinyFormFactor ? 80 : 88
         static let inset: CGFloat = 8
@@ -23,6 +23,15 @@ class WallpaperSettingsViewController: WallpaperBaseViewController, Themeable {
     weak var settingsDelegate: SettingsDelegate?
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
+
+    var shouldUsePrivateOverride: Bool { return true }
+    var shouldBeInPrivateTheme: Bool { return false }
+
+    private func currentTheme() -> Theme {
+        return themeManager.resolveTheme(for: windowUUID,
+                                         shouldUsePrivateOverride: shouldUsePrivateOverride,
+                                         shouldBeInPrivateTheme: shouldBeInPrivateTheme)
+    }
 
     // Views
     private lazy var contentView: UIView = .build { _ in }
@@ -101,7 +110,7 @@ class WallpaperSettingsViewController: WallpaperBaseViewController, Themeable {
     }
 
     func applyTheme() {
-        contentView.backgroundColor = themeManager.getCurrentTheme(for: windowUUID).colors.layer5
+        contentView.backgroundColor = currentTheme().colors.layer5
     }
 }
 
@@ -143,7 +152,7 @@ extension WallpaperSettingsViewController: UICollectionViewDelegate, UICollectio
         else { return UICollectionViewCell() }
 
         cell.viewModel = cellViewModel
-        cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        cell.applyTheme(theme: currentTheme())
         return cell
     }
 
@@ -231,7 +240,7 @@ private extension WallpaperSettingsViewController {
                                              buttonText: WallpaperSettingsViewModel.Constants.Strings.Toast.button)
         let toast = ButtonToast(
             viewModel: viewModel,
-            theme: themeManager.getCurrentTheme(for: windowUUID),
+            theme: currentTheme(),
             completion: { [weak self] buttonPressed in
                 if buttonPressed { self?.dismissView() }
             })

@@ -50,7 +50,7 @@ final class SceneCoordinatorTests: XCTestCase {
 
     func testLaunchWithLaunchType_launchFromScene() {
         let subject = createSubject()
-        subject.launchWith(launchType: .intro(manager: IntroScreenManager(prefs: MockProfile().prefs)))
+        subject.launchWith(launchType: .intro(manager: IntroScreenManager(prefs: makeProfile().prefs)))
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertNotNil(subject.childCoordinators.first as? LaunchCoordinator)
@@ -75,7 +75,7 @@ final class SceneCoordinatorTests: XCTestCase {
 
     func testChildLaunchCoordinatorIsDone_startsBrowser() throws {
         let subject = createSubject()
-        subject.launchWith(launchType: .intro(manager: IntroScreenManager(prefs: MockProfile().prefs)))
+        subject.launchWith(launchType: .intro(manager: IntroScreenManager(prefs: makeProfile().prefs)))
 
         let childLaunchCoordinator = try XCTUnwrap(subject.childCoordinators.first as? LaunchCoordinator)
         subject.didFinishLaunch(from: childLaunchCoordinator)
@@ -173,7 +173,7 @@ final class SceneCoordinatorTests: XCTestCase {
     }
 
     private func setupNimbusDeeplinkOptimization(isEnabled: Bool) {
-        FxNimbus.shared.features.deeplinkOptimizationRefactorFeature.with { _, _ in
+        FxNimbus.shared.features.deeplinkOptimizationRefactorFeature.with { _ in
             return DeeplinkOptimizationRefactorFeature(enabled: isEnabled)
         }
     }

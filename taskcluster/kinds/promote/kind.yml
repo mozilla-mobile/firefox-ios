@@ -11,6 +11,23 @@ transforms:
 
 
 task-defaults:
+  routes:
+    by-level:
+      '3':
+        - notify.slack-channel.C03PKCHHSSD.on-failed  # firefox-ios-releases
+      default: []
+  scopes:
+    by-level:
+      '3':
+        - queue:route:notify.slack-channel.C03PKCHHSSD.on-failed
+        - notify:slack-channel:C03PKCHHSSD
+      default: []
+  extra:
+    notify:
+      slackText: >-
+        Promote failed: ${task.metadata.name}
+        | <${rootUrl}/tasks/${status.taskId}|Taskcluster>
+        | <${task.metadata.source}|Source>
   run-on-tasks-for: []
   treeherder:
     symbol:

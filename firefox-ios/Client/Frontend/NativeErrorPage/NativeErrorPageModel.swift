@@ -10,12 +10,15 @@ enum ErrorPageModel: Equatable {
     case badCertDomain(BadCertDomainModel)
     case generic(GenericErrorModel)
     case wayback(WaybackErrorModel)
+    case vpnConnection(VPNConnectionErrorModel)
+
     var title: String {
         switch self {
         case .internetConnection: return .NativeErrorPage.NoInternetConnection.TitleLabel
         case .badCertDomain: return String.NativeErrorPage.BadCertDomain.TitleLabel
         case .generic: return .NativeErrorPage.GenericError.TitleLabel
         case .wayback: return .NativeErrorPage.Wayback.TitleLabel
+        case .vpnConnection: return .VPN.ErrorPage.Title
         }
     }
 
@@ -35,6 +38,7 @@ enum ErrorPageModel: Equatable {
                        String.NativeErrorPage.GenericError.DescriptionSuffix
             }
         case .wayback: return String(format: .NativeErrorPage.Wayback.Description, AppName.shortName.description)
+        case .vpnConnection: return .VPN.ErrorPage.Body
         }
     }
 
@@ -43,6 +47,7 @@ enum ErrorPageModel: Equatable {
         case .internetConnection, .generic, .wayback:
             return ImageIdentifiers.NativeErrorPage.noInternetConnection
         case .badCertDomain: return ImageIdentifiers.NativeErrorPage.securityError
+        case .vpnConnection: return ImageIdentifiers.NativeErrorPage.vpnConnectionError
         }
     }
 
@@ -52,6 +57,7 @@ enum ErrorPageModel: Equatable {
         case .badCertDomain(let model): return model.url
         case .generic(let model): return model.url
         case .wayback(let model): return model.url
+        case .vpnConnection(let model): return model.url
         }
     }
 
@@ -64,7 +70,7 @@ enum ErrorPageModel: Equatable {
 
     var isRegularUI: Bool {
         switch self {
-        case .internetConnection, .generic, .wayback: return true
+        case .internetConnection, .generic, .wayback, .vpnConnection: return true
         case .badCertDomain: return false
         }
     }
@@ -93,5 +99,9 @@ struct GenericErrorModel: Equatable {
 }
 
 struct WaybackErrorModel: Equatable {
+    let url: URL
+}
+
+struct VPNConnectionErrorModel: Equatable {
     let url: URL
 }

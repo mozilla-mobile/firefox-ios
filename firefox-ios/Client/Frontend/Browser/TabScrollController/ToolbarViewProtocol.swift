@@ -30,7 +30,7 @@ final class ToolbarAnimator {
         func dispatchScrollAlphaChange(alpha: CGFloat)
     }
 
-    struct UX {
+    enum UX {
         static let transitionDuration: TimeInterval = 0.2
         static let topToolbarDuration: TimeInterval = 0.3
         static let bottomToolbarDuration: TimeInterval = 0.4
@@ -163,6 +163,7 @@ final class ToolbarAnimator {
                 view.header.transform = .identity
                 view.topBlurView.transform = .identity
             }
+            view.header.updateScrollCollapsibleView(isCollapsed: !isShowing)
         }
         delegate?.dispatchScrollAlphaChange(alpha: alpha)
    }

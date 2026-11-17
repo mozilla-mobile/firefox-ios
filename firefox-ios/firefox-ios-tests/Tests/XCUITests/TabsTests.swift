@@ -25,6 +25,15 @@ class TabsTests: BaseTestCase {
     var newTabsScreen: NewTabsScreen!
     var firefoxHomePageScreen: FirefoxHomePageScreen!
 
+    /// This test launches the app itself, with its first page already open in private mode through a deeplink.
+    override func setUpApp() {
+        if name.contains("testCloseAllTabsPrivateModeUndo") {
+            setUpAppWithoutLaunching()
+        } else {
+            super.setUpApp()
+        }
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2307042
     // Smoketest
     // (Steps 9-10 in testAddTabFromTabTray from IntegrationTests)
@@ -107,6 +116,7 @@ class TabsTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2354300
+    // Regression
     func testAddTabFromContext() {
         navigator.openURL(urlExample)
         // Initially there is only one tab open
@@ -127,6 +137,7 @@ class TabsTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2354447
+    // Regression
     func testSwitchBetweenTabs() {
         // Open two urls from tab tray and switch between them
         navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
@@ -197,11 +208,7 @@ class TabsTests: BaseTestCase {
         toolBarScreen = ToolbarScreen(app: app)
         tabTrayScreen = TabTrayScreen(app: app)
         // A different tab than home is open to do the proper checks
-        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.nowAt(BrowserTab)
-        navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
-        waitUntilPageLoad()
+        launchOpening(path(forTestPage: TestPages.mozillaOrg), isPrivate: true)
         toolBarScreen.assertTabsButtonExists()
 
         if iPad() {
@@ -223,6 +230,7 @@ class TabsTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2354579
+    // Regression
     func testCloseAllTabs() {
         // A different tab than home is open to do the proper checks
         navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
@@ -246,6 +254,7 @@ class TabsTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2354580
+    // Regression
     func testCloseAllTabsPrivateMode() {
         // A different tab than home is open to do the proper checks
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
@@ -262,6 +271,50 @@ class TabsTests: BaseTestCase {
         // Close all tabs and check that the number of tabs is correct
         navigator.performAction(Action.AcceptRemovingAllTabs)
         mozWaitForElementToExist(app.staticTexts["Private Browsing"])
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3167567
+    // Regression
+    func testCloseTabsBySwiping() {
+        tabTrayScreen = TabTrayScreen(app: app)
+        let pages = [TestPages.exampleHTML, TestPages.mozillaBook, TestPages.exampleDomainsHTML]
+        let tabTitles = [TestLabels.exampleDomain, TestLabels.mozillaBook, TestLabels.exampleDomains]
+        navigator.nowAt(NewTabScreen)
+
+        // Step 1: open multiple tabs, next to the homepage tab the app starts with
+        openTabsAndShowTabTray(pages)
+        tabTrayScreen.assertTabCount(4)
+
+        // Step 2: the swiped tab is closed
+        tabTrayScreen.swipeToCloseTab(named: tabTitles[0])
+        tabTrayScreen.assertCellDoesNotExist(named: tabTitles[0])
+        tabTrayScreen.assertTabCount(3)
+
+        // Step 3: another swiped tab is also closed, and the others stay open
+        tabTrayScreen.swipeToCloseTab(named: tabTitles[1])
+        tabTrayScreen.assertCellDoesNotExist(named: tabTitles[1])
+        tabTrayScreen.assertTabCount(2)
+        tabTrayScreen.assertCellExists(named: tabTitles[2])
+
+        // Step 4: in private browsing, every swiped tab is closed
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        openTabsAndShowTabTray(pages)
+        tabTrayScreen.assertTabCount(3)
+        for title in tabTitles {
+            tabTrayScreen.swipeToCloseTab(named: title)
+            tabTrayScreen.assertCellDoesNotExist(named: title)
+        }
+        tabTrayScreen.assertNoPrivateTabs()
+    }
+
+    private func openTabsAndShowTabTray(_ pages: [String]) {
+        for page in pages {
+            navigator.performAction(Action.OpenNewTabFromTabTray)
+            navigator.openURL(path(forTestPage: page))
+            waitUntilPageLoad()
+            waitForTabsButton()
+        }
+        navigator.goto(TabTray)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306884
@@ -312,7 +365,7 @@ class TabsTests: BaseTestCase {
 
         toolBarScreen.assertTabsButtonExists()
         toolBarScreen.pressTabsButton(duration: 1)
-        mozWaitForElementToExist(app.tables.cells.buttons[StandardImageIdentifiers.Large.plus])
+        mozWaitForElementToExist(app.collectionViews.cells.buttons[StandardImageIdentifiers.Large.plus])
         newTabsScreen.tapCrossIconInTableCells()
         navigator.nowAt(NewTabScreen)
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
@@ -332,6 +385,7 @@ class TabsTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307047
+    // Regression
     func testOpenTabsViewCurrentTabThumbnail() {
         // Open ten or more tabs
         navigator.nowAt(NewTabScreen)
@@ -485,7 +539,7 @@ class TabsTests: BaseTestCase {
 
         // Verify the URL was copied by pasting it into the URL bar of a new tab
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.goto(URLBarOpen)
+        // navigator.goto(URLBarOpen)
         browserScreen.pasteAndAssertAddressBarContains(urlValueLongExample)
 
         // Long press the tab again and tap "Close Tab", then verify the tab is closed
@@ -752,38 +806,71 @@ class TabsTestsIphone: BaseTestCase {
     }
 }
 
-// Tests to check if Tab Counter is updating correctly after opening three tabs by tapping on '+' button
-// and closing the tabs by tapping 'x' button
+// Top Tabs bar checks, iPad only
 class TabsTestsIpad: IpadOnlyTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307023
+    // Regression
     func testUpdateTabCounter() {
         if skipPlatform { return }
-        // Open three tabs by tapping on '+' button
-        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
-        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
-        let numTab = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value as? String
-        XCTAssertEqual("3", numTab)
-        // Remove one tab by tapping on 'x' button
-        app.collectionViews["Top Tabs View"]
-            .children(matching: .cell)
-            .matching(identifier: "Homepage")
-            .element(boundBy: 1).buttons["Remove page — Homepage"]
-            .waitAndTap()
-        waitForTabsButton()
-        mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["3"])
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["2"])
-        let numTabAfterRemovingThirdTab = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value as? String
-        XCTAssertEqual("2", numTabAfterRemovingThirdTab)
-        app.collectionViews["Top Tabs View"]
-            .children(matching: .cell)
-            .element(boundBy: 1)
-            .buttons["Remove page — Homepage"]
-            .waitAndTap()
-        waitForTabsButton()
-        mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["2"])
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["1"])
-        let numTabAfterRemovingSecondTab = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value as? String
-        XCTAssertEqual("1", numTabAfterRemovingSecondTab)
+        let browserScreen = BrowserScreen(app: app)
+        let toolbarScreen = ToolbarScreen(app: app)
+        let topTabsScreen = TopTabsIpadScreen(app: app)
+        let tabTrayScreen = TabTrayScreen(app: app)
+        // The first tab gets a page with its own title, so it can be told apart from the new tabs
+        navigator.nowAt(NewTabScreen)
+        navigator.openURL(path(forTestPage: TestPages.mozillaBook))
+        waitUntilPageLoad()
+
+        // Step 1: '+' opens tabs until the first one scrolls out of the bar, as its width varies by iPad
+        let maxTabs = 20
+        var tabCount = 1
+        while topTabsScreen.isTabShown(titled: TestLabels.mozillaBook), tabCount < maxTabs {
+            toolbarScreen.tapOnNewTabButton()
+            tabCount += 1
+            toolbarScreen.assertTabsButtonValue(expectedCount: "\(tabCount)")
+        }
+        XCTAssertFalse(topTabsScreen.isTabShown(titled: TestLabels.mozillaBook),
+                       "The Top Tabs bar did not overflow after opening \(tabCount) tabs")
+        topTabsScreen.assertPrivateModeButtonExists()
+        toolbarScreen.assertNewTabButtonExists()
+        topTabsScreen.assertSelectedTabIsShown(titled: homeTabName)
+
+        // Step 2: the bar scrolls horizontally both ways
+        topTabsScreen.scrollToFirstTabs()
+        topTabsScreen.assertSelectedTabIsScrolledOut(titled: homeTabName)
+        topTabsScreen.scrollToLastTabs()
+        topTabsScreen.assertSelectedTabIsScrolledIn(titled: homeTabName)
+
+        // Step 3: a tab picked in the tab tray is selected and scrolled to in the bar
+        navigator.nowAt(BrowserTab)
+        navigator.goto(TabTray)
+        tabTrayScreen.tapOnCell(named: TestLabels.mozillaBook)
+        topTabsScreen.assertSelectedTabIsShown(titled: TestLabels.mozillaBook)
+
+        // Step 4: the first tab is closed with its 'x' and the other tabs stay aligned
+        topTabsScreen.closeSelectedTab(titled: TestLabels.mozillaBook)
+        toolbarScreen.assertTabsButtonValue(expectedCount: "\(tabCount - 1)")
+        topTabsScreen.assertTabDoesNotExist(titled: TestLabels.mozillaBook)
+        topTabsScreen.assertTabsAreAligned()
+
+        // Step 5: the Private Browsing button opens a private tab
+        topTabsScreen.tapPrivateModeButton()
+        browserScreen.assertPrivateModeMessageCardExists()
+        toolbarScreen.assertTabsButtonValue(expectedCount: "1")
+        userState.isPrivate = true
+
+        // Step 6: a page loads in the private tab
+        navigator.nowAt(NewTabScreen)
+        navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
+        waitUntilPageLoad()
+        browserScreen.assertAddressBarContains(value: "localhost")
+
+        // Step 7: scrolling the page hides the Top Tabs bar
+        browserScreen.scrollPageDown()
+        topTabsScreen.assertBarIsHidden()
+
+        // Step 8: tapping the top of the screen reveals it
+        topTabsScreen.tapStatusBar()
+        topTabsScreen.assertBarIsShown()
     }
 }

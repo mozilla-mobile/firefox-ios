@@ -1,0 +1,12 @@
+/* Accessibility label describing the Google Lens button on the address toolbar that prompts a menu to allow the user to take a new photo or select an existing photo from their photo library to search with Google Lens. */
+"AddressToolbar.GoogleLens.A11yLabel.v153.v2" = "Meklēt attēlu ar Google Lens";
+
+/* Accessibility label for the address field in the address toolbar. */
+"AddressToolbar.Location.A11y.Label.v128" = "Meklē vai ievadi adresi";
+
+/* Placeholder for the address field in the address toolbar. */
+"AddressToolbar.Location.Placeholder.v128" = "Meklē vai ievadi adresi";
+
+/* Accessibility label for the search engine icon in the address bar. %@ is the name of the search engine (e.g. Google). */
+"AddressToolbar.SearchEngine.A11y.Label.v128" = "Meklētājs: %@";
+

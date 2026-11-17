@@ -17,7 +17,7 @@ class CreditCardInputFieldTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        profile = MockProfile()
+        profile = makeProfile()
         viewModel = CreditCardInputViewModel(profile: profile, creditCardProvider: MockCreditCardProvider())
     }
 

@@ -15,7 +15,7 @@ final class RatingPromptManager {
     private let userDefaults: UserDefaultsInterface
     private let crashTracker: CrashTracker
 
-    struct Constants {
+    enum Constants {
         static let minDaysBetweenReviewRequest = 60
         static let firstThreshold = 15
         static let secondThreshold = 40

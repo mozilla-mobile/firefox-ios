@@ -9,6 +9,10 @@ class SecurityTests: BaseTestCase {
     private var browserScreen: BrowserScreen!
 
     override func setUp() async throws {
+        // Checked here because the test itself has to stay synchronous for RunLoop.run(until:)
+        if name.contains("testXssAccountTakeover") {
+            try await skipIfSiteIsDown(WebStrings.uxssPocURL)
+        }
         try await super.setUp()
         browserScreen = BrowserScreen(app: app)
     }
@@ -52,6 +56,7 @@ class SecurityTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3395565
+    // Regression
     func testLoadSpoofingHtmlReturnURL() {
         navigator.openURL(WebStrings.pocHtml)
         waitUntilPageLoad()
@@ -80,6 +85,7 @@ class SecurityTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3395566
+    // Regression
     func testNetlify90() {
         navigator.openURL(WebStrings.netlify90URL)
         waitUntilPageLoad()
@@ -91,6 +97,7 @@ class SecurityTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3395567
+    // Regression
     func testNetlify204() {
         navigator.openURL(WebStrings.netifly204URL)
         waitUntilPageLoad()
@@ -108,6 +115,7 @@ class SecurityTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3395568
+    // Regression
     func testNetlify204Alt() {
         navigator.openURL(WebStrings.netifly204AltURL)
         waitUntilPageLoad()
@@ -132,6 +140,7 @@ class SecurityTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3395569
+    // Regression
     func testNetlify204Alt2() {
         navigator.openURL(WebStrings.netifly204Alt2URL)
         waitUntilPageLoad()
@@ -155,6 +164,7 @@ class SecurityTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3395570
+    // Regression
     func testNetlify800() {
         navigator.openURL(WebStrings.netifly800URL)
         waitUntilPageLoad()
@@ -167,6 +177,7 @@ class SecurityTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3395571
+    // Regression
     func testNetlify1121rReloaded() {
         let progressIndicator = app.progressIndicators.element(boundBy: 0)
         let endTime = Date().addingTimeInterval(TIMEOUT)
@@ -191,6 +202,7 @@ class SecurityTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3395576
+    // Regression
     func testW3schoolsURL() {
         navigator.openURL(WebStrings.w3schoolURL)
         waitUntilPageLoad()
@@ -202,6 +214,7 @@ class SecurityTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/4104979
+    // Regression
     func testXssAccountTakeover() {
         let progressIndicator = app.progressIndicators.element(boundBy: 0)
         let endTime = Date().addingTimeInterval(TIMEOUT)
@@ -237,6 +250,7 @@ class SecurityTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/4141080
+    // Regression
     func testSpoofClickHereLoadsRealAppleSite() {
         navigator.openURL(WebStrings.spoofClickMeURL)
         waitUntilPageLoad()

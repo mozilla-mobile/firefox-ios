@@ -7,7 +7,7 @@ import Shared
 import Common
 
 class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
-    public struct UX {
+    public enum UX {
         public static let stackViewSpacing: CGFloat = 8
         public static let brightnessSize: CGFloat = 20
         public static let brightnessMaxSize: CGFloat = 35
@@ -98,6 +98,11 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
         applyTheme()
 
         adjustLayoutForA11ySizeCategory()
+    }
+
+    override func viewIsAppearing(_ animated: Bool) {
+        super.viewIsAppearing(animated)
+        slider.value = Float(view.window?.windowScene?.screen.brightness ?? 0.5)
     }
 
     override func viewDidLayoutSubviews() {
@@ -217,7 +222,7 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
     @objc
     nonisolated func changeBrightness(_ slider: UISlider) {
         ensureMainThread {
-            self.viewModel.sliderDidChange(value: CGFloat(slider.value))
+            self.viewModel.sliderDidChange(value: CGFloat(slider.value), screen: self.view.window?.windowScene?.screen)
         }
     }
 
@@ -360,8 +365,6 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
                 brightnessMaxImageView.widthAnchor.constraint(equalTo: brightnessMaxImageView.heightAnchor)
             ]
         )
-
-        slider.value = Float(UIScreen.main.brightness)
     }
 
     private func adjustLayoutForA11ySizeCategory() {

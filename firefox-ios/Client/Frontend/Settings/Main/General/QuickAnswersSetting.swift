@@ -36,7 +36,7 @@ final class QuickAnswersSetting: Setting, UserFeaturePreferenceProvider {
         self.profile = settings.profile
         self.settingsDelegate = settingsDelegate
         self.userPreferences = userPreferences
-        let theme = settings.themeManager.getCurrentTheme(for: settings.windowUUID)
+        let theme = settings.currentTheme()
         super.init(
             title: NSAttributedString(
                 string: .QuickAnswers.Settings.Title,

@@ -9,7 +9,7 @@ import UIKit
 // FXIOS-10189 This class will be refactored into a generic UITableView solution later. For now, it is largely a clone of
 // MenuKit's work. Eventually both this target and the MenuKit target will leverage a common reusable tableView component.
 final class SearchEngineCell: UITableViewCell, ReusableCell, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let contentMargin: CGFloat = 11
         static let iconSize: CGFloat = 24
         static let largeIconSize: CGFloat = 48

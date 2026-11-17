@@ -10,10 +10,12 @@ import UIKit
 protocol NavigationToolbarContainerDelegate: AnyObject {
     @MainActor
     func configureContextualHint(for: UIButton, with contextualHintType: String)
+    @MainActor
+    func contextMenu(for actionType: ToolbarActionConfiguration.ActionType) -> UIMenu?
 }
 
 final class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber {
-    typealias SubscriberStateType = ToolbarState
+    typealias SubscriberStateType = AddressToolbarContainerLens
 
     private enum UX {
         static let toolbarHeight: CGFloat = 48
@@ -75,7 +77,7 @@ final class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber
 
         store.subscribe(self, transform: {
             $0.select({ appState in
-                return ToolbarState(appState: appState, uuid: windowUUID)
+                return AddressToolbarContainerLens(appState: appState, uuid: windowUUID)
             })
         })
     }
@@ -84,13 +86,19 @@ final class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber
         store.unsubscribe(self)
     }
 
-    func newState(state: ToolbarState) {
-        updateModel(toolbarState: state)
+    func newState(state: AddressToolbarContainerLens) {
+        updateModel(lens: state)
     }
 
-    private func updateModel(toolbarState: ToolbarState) {
+    private func updateModel(lens: AddressToolbarContainerLens) {
         guard let windowUUID else { return }
-        let model = NavigationToolbarContainerModel(state: toolbarState, windowUUID: windowUUID)
+        let model = NavigationToolbarContainerModel(
+            lens: lens,
+            longPressMenuProvider: { [weak self] actionType in
+                self?.toolbarDelegate?.contextMenu(for: actionType)
+            },
+            windowUUID: windowUUID
+        )
 
         if self.model != model {
             self.model = model

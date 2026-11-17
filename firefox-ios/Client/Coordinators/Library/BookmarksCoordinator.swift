@@ -60,6 +60,7 @@ class BookmarksCoordinator: BaseCoordinator,
     private weak var libraryNavigationHandler: LibraryNavigationHandler?
     private var fxAccountViewController: FirefoxAccountSignInViewController?
     private let windowUUID: WindowUUID
+    private let shouldUsePrivateOverride: Bool
 
     // MARK: - Initializers
 
@@ -68,10 +69,12 @@ class BookmarksCoordinator: BaseCoordinator,
         profile: Profile,
         windowUUID: WindowUUID,
         libraryCoordinator: LibraryCoordinatorDelegate?,
-        libraryNavigationHandler: LibraryNavigationHandler?
+        libraryNavigationHandler: LibraryNavigationHandler?,
+        shouldUsePrivateOverride: Bool = true
     ) {
         self.profile = profile
         self.windowUUID = windowUUID
+        self.shouldUsePrivateOverride = shouldUsePrivateOverride
         self.libraryCoordinator = libraryCoordinator
         self.libraryNavigationHandler = libraryNavigationHandler
         super.init(router: router)
@@ -96,7 +99,8 @@ class BookmarksCoordinator: BaseCoordinator,
                                                          profile: profile)
             viewModel.bookmarkCoordinatorDelegate = self
             let controller = GroupedEditBookmarkViewController(viewModel: viewModel,
-                                                               windowUUID: windowUUID)
+                                                               windowUUID: windowUUID,
+                                                               shouldUsePrivateOverride: shouldUsePrivateOverride)
             router.setRootViewController(controller)
         } else {
             let viewModel = EditBookmarkViewModel(parentFolder: parentFolder,
@@ -104,7 +108,8 @@ class BookmarksCoordinator: BaseCoordinator,
                                                   profile: profile)
             viewModel.bookmarkCoordinatorDelegate = self
             let controller = EditBookmarkViewController(viewModel: viewModel,
-                                                        windowUUID: windowUUID)
+                                                        windowUUID: windowUUID,
+                                                        shouldUsePrivateOverride: shouldUsePrivateOverride)
             router.setRootViewController(controller)
         }
     }
@@ -217,7 +222,8 @@ class BookmarksCoordinator: BaseCoordinator,
         viewModel.bookmarkCoordinatorDelegate = self
         setBackBarButtonItemTitle(viewModel.getBackNavigationButtonTitle)
         let controller = EditBookmarkViewController(viewModel: viewModel,
-                                                    windowUUID: windowUUID)
+                                                    windowUUID: windowUUID,
+                                                    shouldUsePrivateOverride: shouldUsePrivateOverride)
         controller.onViewWillAppear = { [weak self] in
             self?.libraryNavigationHandler?.setNavigationBarHidden(true)
         }
@@ -236,7 +242,8 @@ class BookmarksCoordinator: BaseCoordinator,
         viewModel.bookmarkCoordinatorDelegate = self
         setBackBarButtonItemTitle(viewModel.getBackNavigationButtonTitle)
         let controller = GroupedEditBookmarkViewController(viewModel: viewModel,
-                                                           windowUUID: windowUUID)
+                                                           windowUUID: windowUUID,
+                                                           shouldUsePrivateOverride: shouldUsePrivateOverride)
         controller.onViewWillAppear = { [weak self] in
             self?.libraryNavigationHandler?.setNavigationBarHidden(true)
         }
@@ -259,7 +266,8 @@ class BookmarksCoordinator: BaseCoordinator,
         viewModel.parentFolderSelector = parentFolderSelector
         setBackBarButtonItemTitle("")
         let controller = EditFolderViewController(viewModel: viewModel,
-                                                  windowUUID: windowUUID)
+                                                  windowUUID: windowUUID,
+                                                  shouldUsePrivateOverride: shouldUsePrivateOverride)
         controller.onViewWillAppear = { [weak self] in
             self?.libraryNavigationHandler?.setNavigationBarHidden(true)
         }
@@ -282,7 +290,8 @@ class BookmarksCoordinator: BaseCoordinator,
         viewModel.parentFolderSelector = parentFolderSelector
         setBackBarButtonItemTitle("")
         let controller = GroupedEditFolderViewController(viewModel: viewModel,
-                                                         windowUUID: windowUUID)
+                                                         windowUUID: windowUUID,
+                                                         shouldUsePrivateOverride: shouldUsePrivateOverride)
         controller.onViewWillAppear = { [weak self] in
             self?.libraryNavigationHandler?.setNavigationBarHidden(true)
         }
@@ -307,7 +316,7 @@ class BookmarksCoordinator: BaseCoordinator,
             action: #selector(dismissFxAViewController)
         )
         viewController.navigationItem.leftBarButtonItem = buttonItem
-        let navController = ThemedNavigationController(rootViewController: viewController, windowUUID: windowUUID)
+        let navController = LibraryNavigationController(rootViewController: viewController, windowUUID: windowUUID)
         fxAccountViewController = viewController
         return navController
     }

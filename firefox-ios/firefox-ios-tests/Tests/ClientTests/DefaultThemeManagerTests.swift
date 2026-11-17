@@ -12,6 +12,9 @@ final class DefaultThemeManagerTests: XCTestCase {
     // MARK: - Variables
 
     private var userDefaults: MockUserDefaults!
+    private var windowScene: UIWindowScene? {
+        return UIApplication.shared.connectedScenes.first as? UIWindowScene
+    }
 
     // MARK: - Test lifecycle
     override func setUp() async throws {
@@ -262,6 +265,17 @@ final class DefaultThemeManagerTests: XCTestCase {
         XCTAssertEqual(sut.getCurrentTheme(for: windowUUID).type, expectedThemeInSystemMode)
     }
 
+    func testDTM_autoBrightnessOn_withoutWindow_returnsManualTheme() {
+        let sut = DefaultThemeManager(userDefaults: userDefaults, sharedContainerIdentifier: "")
+        trackForMemoryLeaks(sut)
+
+        sut.setSystemTheme(isOn: false)
+        sut.setAutomaticBrightness(isOn: true)
+        sut.setManualTheme(to: .dark)
+
+        XCTAssertEqual(sut.resolvedTheme(with: false).type, .dark)
+    }
+
     func testDTM_novaDesignOn_returnsNovaLightThemeForLightMode() {
         let sut = createSubject(with: userDefaults, isNovaDesignOn: true)
 
@@ -293,18 +307,40 @@ final class DefaultThemeManagerTests: XCTestCase {
         XCTAssertEqual(sut.getCurrentTheme(for: windowUUID).colors.layer1, LightTheme().colors.layer1)
     }
 
+    // MARK: - Private theme override
+
+    func testDTM_privateThemeOverrideOff_legacyInPrivateMode_keepsPrivateTheme() {
+        let sut = createSubject(with: userDefaults)
+        sut.setSystemTheme(isOn: false)
+        sut.setManualTheme(to: .light)
+        sut.setPrivateTheme(isOn: true, for: windowUUID)
+
+        XCTAssertTrue(sut.resolveTheme(for: windowUUID, privateOverride: false) is PrivateModeTheme)
+    }
+
+    func testDTM_privateThemeOverrideOn_inPrivateMode_forcingRegularTheme_returnsRegularTheme() {
+        let sut = createSubject(with: userDefaults, isNovaDesignOn: true, isPrivateThemeOverrideOn: true)
+        sut.setSystemTheme(isOn: false)
+        sut.setManualTheme(to: .light)
+        sut.setPrivateTheme(isOn: true, for: windowUUID)
+
+        XCTAssertTrue(sut.resolveTheme(for: windowUUID, privateOverride: false) is NovaLightTheme)
+    }
+
     // MARK: - Helper methods
 
     private func createSubject(with userDefaults: UserDefaultsInterface,
                                isNovaDesignOn: Bool = false,
+                               isPrivateThemeOverrideOn: Bool = false,
                                file: StaticString = #filePath,
                                line: UInt = #line) -> DefaultThemeManager {
         let subject = DefaultThemeManager(
             userDefaults: userDefaults,
             sharedContainerIdentifier: "",
-            isNovaDesignOnClosure: { isNovaDesignOn }
+            isNovaDesignOnClosure: { isNovaDesignOn },
+            isPrivateThemeOverrideEnabledClosure: { isPrivateThemeOverrideOn }
         )
-        subject.setWindow(UIWindow(frame: .zero), for: windowUUID)
+        subject.setWindow(UIWindow(windowScene: windowScene!), for: windowUUID)
         trackForMemoryLeaks(subject, file: file, line: line)
 
         return subject
@@ -316,7 +352,7 @@ final class DefaultThemeManagerTests: XCTestCase {
     ) {
         sut.setSystemTheme(isOn: false)
         sut.setAutomaticBrightness(isOn: true)
-        UIScreen.main.brightness = 0.5
+        windowScene?.screen.brightness = 0.5
         sut.setAutomaticBrightnessValue(Float(threshold))
     }
 }

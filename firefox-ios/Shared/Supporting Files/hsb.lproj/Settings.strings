@@ -173,13 +173,13 @@
 "Settings.AutofillCreditCard.Title.v122" = "Płaćenske metody";
 
 /* In the settings menu, in the Autoplay customization section, this label indicates that selecting this will allow audio and video content to autoplay. */
-"Settings.Autoplay.AllowAudioAndVideo.v137" = "Awdio a widejo dowolić";
+"Settings.Autoplay.AllowAudioAndVideo.v137" = "Awdijo a widejo dowolić";
 
 /* In the settings menu, in the Autoplay customization section, this label indicates that selecting this will block audio from autoplaying. */
-"Settings.Autoplay.BlockAudio.v137" = "Awdio blokować";
+"Settings.Autoplay.BlockAudio.v137" = "Awdijo blokować";
 
 /* In the settings menu, in the Autoplay customization section, this label indicates that selecting this will block audio and video content from autoplaying. */
-"Settings.Autoplay.BlockAudioAndVideo.v137" = "Awdio a widejo blokować";
+"Settings.Autoplay.BlockAudioAndVideo.v137" = "Awdijo a widejo blokować";
 
 /* In the settings menu, in the Autoplay customization section, this label indicates that selecting this will block audio and video content from autoplaying. */
 "Settings.Autoplay.Footer.v137" = "Nastajenja awtomatiskeho wothraća so jenož na nowo wočinjene rajtarki nałožuja. Změny njedadźa so na eksistowace rajtarki nałožić, chibazo nałoženje so znowa startuje.";
@@ -200,7 +200,7 @@
 "Settings.Browsing.AdBlocker.Title.v155" = "Blokowak wabjenja";
 
 /* Title for the Background Audio toggle in the Browsing settings page. When enabled, audio from web pages continues playing after the app is backgrounded. */
-"Settings.Browsing.BackgroundAudio.Title.v156" = "Pozadkowe awdio";
+"Settings.Browsing.BackgroundAudio.Title.v156" = "Pozadkowe awdijo";
 
 /* Title for the Block Ads toggle in the Browsing settings page. When enabled, the app blocks advertisements. */
 "Settings.Browsing.BlockAds.Title.v153" = "Wabjenje blokować";
@@ -453,4 +453,61 @@
 
 /* This is the title for the setting that toggles the Translation feature that allows users to translate web pages under the Translation settings section. */
 "Settings.Translation.ToggleTitle.v145" = "Přełožki zmóžnić";
+
+/* Text displayed on the locations screen when the app loads a list of locations for the user to pick from. “Locations” here means the locations of VPN servers the user can connect to. */
+"VPN.LocationPicker.FindingLocationsText.v160" = "Stejnišća so pytaja…";
+
+/* Option in the VPN server location list. Choosing it lets the app pick the server with the fastest connection. */
+"VPN.LocationPicker.RecommendedMainText.v160" = "Doporučeny";
+
+/* Description below the Recommended option in the VPN server location list. %1$@ is the app name (for example, Firefox). */
+"VPN.LocationPicker.RecommendedSubText.v160" = "%1$@ najspěšniše stejnišćo namaka.";
+
+/* Announced by VoiceOver on the VPN settings screen when the VPN finishes connecting after the user turns on the VPN switch. */
+"VPN.Settings.Connected.v161" = "VPN je zwjazany";
+
+/* Shown next to the VPN switch on the VPN settings screen while the VPN is connecting, right after the user turns it on. */
+"VPN.Settings.Connecting.v160" = "Zwjazuje so…";
+
+/* Read aloud by VoiceOver for the Data Limit section on the VPN settings screen. %1$@ is the amount of VPN data used this month and %2$@ is the monthly limit, both in gigabytes (for example, “1.0 of 5.0 gigabytes used”). The second sentence explains that the user’s free monthly VPN data resets on the first day of each month. */
+"VPN.Settings.DataLimit.AccessibilityValue.v161" = "Wužite gigabajty: %1$@ z %2$@. Staja so prěnjeho kóždeho měsaca wróćo.";
+
+/* Footer below the Data Limit section on the VPN settings screen. Explains when the user's free VPN data resets. %1$@ is the monthly limit in gigabytes (for example, 5.0). “GB” stands for gigabytes. */
+"VPN.Settings.DataLimitResetFooter.v160" = "Staja na %1$@ GB prěnjeho kóždeho měsaca wróćo";
+
+/* Title of the section on the VPN settings screen that shows how much of the user's free monthly VPN data they have used. */
+"VPN.Settings.DataLimitTitle.v160" = "Datowy limit";
+
+/* Read aloud by VoiceOver for the data usage on the VPN settings screen. Same as the visible text, but with “gigabytes” written out instead of “GB”. %1$@ is the amount of VPN data used this month and %2$@ is the monthly limit (for example, “1.0 of 5.0 gigabytes used”). */
+"VPN.Settings.DataUsage.AccessibilityLabel.v160" = "%1$@ z %2$@ gigabajtow wužite";
+
+/* Shown next to the Data Limit title on the VPN settings screen. %1$@ is the amount of VPN data used this month and %2$@ is the monthly limit, both in gigabytes (for example, “1.0 of 5.0 GB used”). “GB” stands for gigabytes. */
+"VPN.Settings.DataUsage.v160" = "%1$@ z %2$@ GB wužite";
+
+/* Short description below the title at the top of the VPN settings screen. Explains what the VPN does. */
+"VPN.Settings.Description.v160" = "Schowajće swoje stejnišćo, zo byšće z přidatnym škit přehladował, samo w zjawnym WLAN.";
+
+/* Link below the description at the top of the VPN settings screen. Tapping it opens a support article about the VPN. */
+"VPN.Settings.LearnMore.v160" = "Dalše informacije…";
+
+/* Shown on the right side of the Location row on the VPN settings screen when the user lets Firefox select the location in their stead. The recommended location is the one with the fastest connection. */
+"VPN.Settings.LocationRecommended.v160" = "Doporučeny";
+
+/* Used in two places: as the name of a row on the VPN settings screen, and as the title of the screen that row opens. On that screen, the user picks which VPN server location (country or region) to connect through. “Location” means the VPN server’s location, not the user’s own location. */
+"VPN.Settings.LocationTitle.v160" = "Stejnišćo";
+
+/* VPN status shown when the VPN is not connected. Used in two places: on the right side of the VPN row in the Privacy section of Settings, and on the small capsule-shaped VPN status indicator. */
+"VPN.Settings.StatusOff.v160" = "Wupinjeny";
+
+/* VPN status shown when the VPN is connected. Used in two places: on the right side of the VPN row in the Privacy section of Settings, and on the small capsule-shaped VPN status indicator. */
+"VPN.Settings.StatusOn.v160" = "Zapinjeny";
+
+/* VPN status shown when the VPN is temporarily paused. Used in two places: on the right side of the VPN row in the Privacy section of Settings, and on the small capsule-shaped VPN status indicator. */
+"VPN.Settings.StatusPaused.v160" = "Přestawka";
+
+/* Name of the VPN row in the Privacy section of Settings. Also used as the title of the VPN settings screen. */
+"VPN.Settings.Title.v160" = "Zatwarjeny VPN";
+
+/* Used in two places: as the label for the toggle switch on the VPN settings screen that turns the VPN on or off, and as the label on the small capsule-shaped VPN status indicator, where it appears together with the current status (On, Off or Paused). */
+"VPN.Settings.ToggleTitle.v160" = "VPN";
 

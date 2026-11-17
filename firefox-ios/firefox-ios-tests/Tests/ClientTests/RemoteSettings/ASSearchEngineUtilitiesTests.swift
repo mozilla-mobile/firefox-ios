@@ -282,3 +282,99 @@ class ASSearchEngineUtilitiesTests: XCTestCase {
         XCTAssertEqual(result, expected)
     }
 }
+
+// MARK: - search-config-v3
+
+extension ASSearchEngineUtilitiesTests {
+    func testConvertV3_keepsPartnerCodePlaceholderInSearchTemplate() {
+        let result = ASSearchEngineUtilities.convertASToOpenSearch(makeV3GoogleEngine(), image: UIImage())
+
+        XCTAssertEqual(result.searchTemplate, "https://www.google.com/search?client={partnerCode}&q={searchTerms}")
+    }
+
+    func testConvertV3_suggestionsUseDefaultPartnerCode() {
+        let result = ASSearchEngineUtilities.convertASToOpenSearch(makeV3GoogleEngine(), image: UIImage())
+
+        XCTAssertEqual(result.suggestURLForQuery("kitten")?.absoluteString,
+                       "https://www.google.com/complete/search?client=ios-firefox-o-re&q=kitten")
+    }
+
+    func testConvertV3_withoutDefaultPartnerCode_omitsSuggestionsPartnerCodeParameter() {
+        let partner = ["default": SearchEnginePartnerDetails(code: nil, telemetrySuffix: "com-nocodes")]
+        let result = ASSearchEngineUtilities.convertASToOpenSearch(makeV3GoogleEngine(partner: partner), image: UIImage())
+
+        XCTAssertEqual(result.suggestURLForQuery("kitten")?.absoluteString,
+                       "https://www.google.com/complete/search?q=kitten")
+    }
+
+    func testConvertV3_setsDefaultTelemetrySuffixAndPartners() {
+        let result = ASSearchEngineUtilities.convertASToOpenSearch(makeV3GoogleEngine(), image: UIImage())
+
+        XCTAssertEqual(result.telemetrySuffix, "ios-main")
+        XCTAssertEqual(result.telemetryID, "google-ios-main")
+        let expectedWidgetPartner = SearchEnginePartner(code: "ios-firefox-msw-re", telemetrySuffix: "ios-widget")
+        XCTAssertEqual(result.partners?["widget"], expectedWidgetPartner)
+        XCTAssertFalse(result.isCustomEngine)
+    }
+
+    func testConvertV2_withEmptyPartnerCode_keepsEmptyParameter() {
+        let engine = makeV2GoogleEngine(partnerCode: "")
+
+        let result = ASSearchEngineUtilities.convertASSearchURLToOpenSearchURL(engine.urls.search, for: engine)
+
+        XCTAssertEqual(result, "https://www.google.com/search?client=&q={searchTerms}")
+    }
+
+    private func makeGoogleURLs() -> SearchEngineUrls {
+        let clientParam = SearchUrlParam(name: "client", value: "{partnerCode}", enterpriseValue: nil, experimentConfig: nil)
+        return SearchEngineUrls(
+            search: SearchEngineUrl(base: "https://www.google.com/search",
+                                    method: "GET",
+                                    params: [clientParam],
+                                    searchTermParamName: "q",
+                                    displayName: nil),
+            suggestions: SearchEngineUrl(base: "https://www.google.com/complete/search",
+                                         method: "GET",
+                                         params: [clientParam],
+                                         searchTermParamName: "q",
+                                         displayName: nil),
+            trending: nil,
+            searchForm: nil,
+            visualSearch: nil
+        )
+    }
+
+    private func makeV3GoogleEngine(
+        partner: [String: SearchEnginePartnerDetails]? = [
+            "default": SearchEnginePartnerDetails(code: "ios-firefox-o-re", telemetrySuffix: "ios-main"),
+            "widget": SearchEnginePartnerDetails(code: "ios-firefox-msw-re", telemetrySuffix: "ios-widget")
+        ]
+    ) -> SearchEngineDefinitionV3 {
+        return SearchEngineDefinitionV3(aliases: [],
+                                        charset: "UTF-8",
+                                        classification: .general,
+                                        identifier: "google",
+                                        isNewUntil: nil,
+                                        name: "Google",
+                                        optional: false,
+                                        partner: partner,
+                                        urls: makeGoogleURLs(),
+                                        orderHint: nil,
+                                        deprecated: false)
+    }
+
+    private func makeV2GoogleEngine(partnerCode: String) -> SearchEngineDefinition {
+        return SearchEngineDefinition(aliases: [],
+                                      charset: "UTF-8",
+                                      classification: .general,
+                                      identifier: "google",
+                                      isNewUntil: nil,
+                                      name: "Google",
+                                      optional: false,
+                                      partnerCode: partnerCode,
+                                      telemetrySuffix: "",
+                                      urls: makeGoogleURLs(),
+                                      orderHint: nil,
+                                      clickUrl: nil)
+    }
+}

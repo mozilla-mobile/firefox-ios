@@ -6,7 +6,7 @@ import UIKit
 import Common
 
 final class ReaderPanelEmptyStateView: UIView, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let WelcomeScreenPadding: CGFloat = 15
         static let WelcomeScreenHorizontalMinPadding: CGFloat = 40
 
@@ -126,6 +126,7 @@ final class ReaderPanelEmptyStateView: UIView, ThemeApplicable {
                 readingListLabel.bottomAnchor.constraint(
                     equalTo: emptyStateViewWrapper.bottomAnchor
                 ).priority(.defaultLow),
+                readingListLabel.bottomAnchor.constraint(lessThanOrEqualTo: emptyStateViewWrapper.bottomAnchor),
 
                 // overall positioning of emptyStateViewWrapper
                 emptyStateViewWrapper.leadingAnchor.constraint(

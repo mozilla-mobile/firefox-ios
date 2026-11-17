@@ -22,7 +22,7 @@ final class MainMenuViewControllerTests: XCTestCase {
     }
 
     func testMainMenuViewController_simpleCreation_hasNoLeaks() {
-        let controller = MainMenuViewController(windowUUID: windowUUID, profile: MockProfile())
+        let controller = MainMenuViewController(windowUUID: windowUUID, profile: makeProfile())
         trackForMemoryLeaks(controller)
     }
 }

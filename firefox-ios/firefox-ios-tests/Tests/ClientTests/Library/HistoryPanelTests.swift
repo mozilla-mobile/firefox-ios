@@ -100,7 +100,7 @@ class HistoryPanelTests: XCTestCase {
     }
 
     private func createSubject() -> HistoryPanel {
-        let profile = MockProfile()
+        let profile = makeProfile()
         let subject = HistoryPanel(profile: profile, windowUUID: windowUUID)
         trackForMemoryLeaks(subject)
         return subject

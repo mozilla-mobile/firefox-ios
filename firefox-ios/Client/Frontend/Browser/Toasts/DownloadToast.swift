@@ -6,8 +6,8 @@ import Common
 import Shared
 import UIKit
 
-class DownloadToast: Toast, DownloadProgressDelegate {
-    struct UX {
+final class DownloadToast: Toast, DownloadProgressDelegate {
+    enum UX {
         static let buttonSize: CGFloat = 40
     }
 
@@ -66,9 +66,12 @@ class DownloadToast: Toast, DownloadProgressDelegate {
             UIView.animate(withDuration: 0.05) {
                 self.descriptionLabel.text = self.descriptionText
 
-                if let percent = self.percent {
+                // Auto Layout rejects a non-finite constant (NaN or infinity) and crashes,
+                // so only apply a valid finite value.
+                if let percent = self.percent, percent.isFinite {
                     self.progressView.isHidden = false
-                    self.progressWidthConstraint?.constant = self.toastView.frame.width * percent
+                    let width = self.toastView.frame.width * percent
+                    self.progressWidthConstraint?.constant = width
                 } else {
                     self.progressView.isHidden = true
                 }
@@ -155,13 +158,19 @@ class DownloadToast: Toast, DownloadProgressDelegate {
                 return
             }
 
-            guard let combinedTotalBytesExpected = self.downloadProgressManager.combinedTotalBytesExpected else {
+            // A zero (or negative) expected size can come from an empty blob download or a server that
+            // reports an unknown length. Dividing by it yields NaN or infinity, which crashes when
+            // assigned to the progress constraint, so treat it as "no progress to show".
+            guard let combinedTotalBytesExpected = self.downloadProgressManager.combinedTotalBytesExpected,
+                  combinedTotalBytesExpected > 0 else {
                 self.percent = 0.0
                 return
             }
             let combinedBytesDownloaded = self.downloadProgressManager.combinedBytesDownloaded
+            let ratio = CGFloat(combinedBytesDownloaded) / CGFloat(combinedTotalBytesExpected)
 
-            self.percent = CGFloat(combinedBytesDownloaded) / CGFloat(combinedTotalBytesExpected)
+            // Bytes downloaded can exceed the preflight estimate, so clamp to keep the bar within the toast.
+            self.percent = min(max(ratio, 0), 1)
         }
     }
 

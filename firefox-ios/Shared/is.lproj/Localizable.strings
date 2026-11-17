@@ -848,7 +848,7 @@
 "Menu.TrackingProtectionFingerprintersBlocked.Title" = "Fingrafarasöfnun";
 
 /* The title for the option to view the What's new page. */
-"Menu.WhatsNew.Title" = "Hvað er nýtt";
+"Menu.WhatsNew.Title" = "Nýtt á döfinni";
 
 /* Label for the zoom page button in the menu, used to show the Zoom Page bar. %@ shows the current zoom level in percent. */
 "Menu.ZoomPage.Title.v113" = "Aðdráttur (%@)";

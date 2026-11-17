@@ -13,7 +13,7 @@ final class DownloadsCoordinatorTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        profile = MockProfile()
+        profile = makeProfile()
         router = MockRouter(navigationController: UINavigationController())
         parentCoordinator = MockLibraryCoordinatorDelegate()
         DependencyHelperMock().bootstrapDependencies()

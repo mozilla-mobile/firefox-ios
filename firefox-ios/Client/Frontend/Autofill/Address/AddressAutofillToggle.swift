@@ -9,7 +9,7 @@ import SwiftUI
 
 /// A SwiftUI view representing a toggle with theming for address autofill functionality.
 struct AddressAutofillToggle: View {
-    private struct UX {
+    private enum UX {
         static let viewPadding: CGFloat = 16
         static let viewCornerRadius: CGFloat = 24
         static let dividerHeight: CGFloat = 0.7
@@ -68,11 +68,11 @@ struct AddressAutofillToggle: View {
                               cornerRadius: UX.viewCornerRadius,
                               backgroundColor: backgroundColor))
         .onAppear {
-            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            applyTheme(theme: themeManager.resolveTheme(for: windowUUID, privateOverride: false))
         }
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
             guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
-            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            applyTheme(theme: themeManager.resolveTheme(for: windowUUID, privateOverride: false))
         }
     }
 

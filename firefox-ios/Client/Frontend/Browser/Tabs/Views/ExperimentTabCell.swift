@@ -10,7 +10,7 @@ import SiteImageView
 
 /// Tab cell used in the tab tray under the .tabTrayUIExperiments Nimbus experiment
 final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
-    struct UX {
+    enum UX {
         static let selectedBorderWidth: CGFloat = 3.0
         static let unselectedBorderWidth: CGFloat = 1
         static let zeroBorderWidth: CGFloat = 0
@@ -48,23 +48,10 @@ final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCe
         view.clipsToBounds = false
     }
 
-    private lazy var screenshotViewPhone: UIImageView = .build { view in
-        view.contentMode = .scaleAspectFill
-        view.layer.cornerRadius = UX.cornerRadius
-        view.clipsToBounds = true
-        view.isAccessibilityElement = false
-        view.accessibilityElementsHidden = true
-    }
-
-    private lazy var screenshotViewPad: TabCellCustomImage = .build { view in
+    private lazy var screenshotView: TabCellCustomImage = .build { view in
         view.layer.cornerRadius = UX.cornerRadius
         view.isAccessibilityElement = false
         view.accessibilityElementsHidden = true
-    }
-
-    private var screenshotView: UIImageView {
-        let isPad = UIDevice.current.userInterfaceIdiom == .pad
-        return isPad ? screenshotViewPad : screenshotViewPhone
     }
 
     /// Syncs the screenshot between the tab preview and the tab cell when opening the tab tray

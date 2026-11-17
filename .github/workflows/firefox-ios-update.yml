@@ -3,6 +3,7 @@ name: Bitrise Xcode Check and Update
 on:
   schedule:
     - cron: '0 */6 * * *'
+  workflow_dispatch:
 
 jobs:
   build:
@@ -10,7 +11,7 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [3.10.16]
+        python-version: ["3.12"]
     steps:
     - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
     - name: Set up Python ${{ matrix.python-version }}
@@ -29,7 +30,7 @@ jobs:
         git diff
         git config --global user.email "firefox-test-engineering@mozilla.com"
         git config --global user.name "Firefox Test Engineering"
-        git diff --quiet || (git add bitrise.yml)
+        git diff --quiet || (git add bitrise/new-xcode-versions.yml)
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c # v6
       with:

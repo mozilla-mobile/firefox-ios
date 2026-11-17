@@ -74,10 +74,10 @@ class LibraryCoordinator: BaseCoordinator,
         let downloadsPanel = DownloadsPanel(windowUUID: windowUUID)
         let readingListPanel = ReadingListPanel(profile: profile, windowUUID: windowUUID)
         return [
-            ThemedNavigationController(rootViewController: bookmarksPanel, windowUUID: windowUUID),
-            ThemedNavigationController(rootViewController: historyPanel, windowUUID: windowUUID),
-            ThemedNavigationController(rootViewController: downloadsPanel, windowUUID: windowUUID),
-            ThemedNavigationController(rootViewController: readingListPanel, windowUUID: windowUUID)
+            LibraryNavigationController(rootViewController: bookmarksPanel, windowUUID: windowUUID),
+            LibraryNavigationController(rootViewController: historyPanel, windowUUID: windowUUID),
+            LibraryNavigationController(rootViewController: downloadsPanel, windowUUID: windowUUID),
+            LibraryNavigationController(rootViewController: readingListPanel, windowUUID: windowUUID)
         ]
     }
 
@@ -114,7 +114,8 @@ class LibraryCoordinator: BaseCoordinator,
             profile: profile,
             tabManager: tabManager,
             parentCoordinator: self,
-            delegate: self
+            delegate: self,
+            shouldUsePrivateOverride: true
         )
         add(child: coordinator)
 
@@ -209,8 +210,8 @@ class LibraryCoordinator: BaseCoordinator,
 
         let themeManager: ThemeManager = AppContainer.shared.resolve()
         let viewModel = PlainToastViewModel(labelText: message)
-        let toast = PlainToast(viewModel: viewModel,
-                               theme: themeManager.getCurrentTheme(for: windowUUID))
+        let theme = themeManager.resolveTheme(for: windowUUID, privateOverride: false)
+        let toast = PlainToast(viewModel: viewModel, theme: theme)
         toast.showToast(viewController: viewController,
                         delay: Toast.UX.toastDelayBefore,
                         duration: Toast.UX.toastDismissAfter) { toast in

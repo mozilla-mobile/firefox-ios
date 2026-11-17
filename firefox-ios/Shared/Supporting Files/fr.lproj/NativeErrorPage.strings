@@ -14,7 +14,7 @@
 "NativeErrorPage.BadCertDomain.AdvancedWarning2.v149" = "Si vous utilisez un réseau d’entreprise, votre équipe d’assistance pourrait avoir plus d’informations.";
 
 /* On certificate error page, this is the description explaining the security risk. */
-"NativeErrorPage.BadCertDomain.Description.v149" = "Quelqu’un se faisant passer pour le site pourrait tenter de dérober vos informations personnelles. Vos paramètres de connexion peuvent également être mal configurés.";
+"NativeErrorPage.BadCertDomain.Description.v149" = "Quelqu’un se faisant passer pour le site pourrait tenter de dérober vos informations personnelles. Vos paramètres de connexion pourraient également être mal configurés.";
 
 /* On certificate error page, this is the label prefix for the error code. %@ is the error code (e.g. SSL_ERROR_BAD_CERT_DOMAIN). */
 "NativeErrorPage.BadCertDomain.ErrorCodeLabel.v149" = "Code d’erreur : %@";
@@ -49,8 +49,20 @@
 /* On error page, this is the description for a generic error. %@ is the site url. */
 "NativeErrorPage.GenericError.Description.v134" = "Le propriétaire de %@ ne l’a pas configuré correctement et une connexion sécurisée n’a pas pu être établie.";
 
+/* Additional explanation displayed on the native error page for the generic error. Lists possible causes and advises the user to check their connection settings and try again. */
+"NativeErrorPage.GenericError.Description.v158" = "Le site est peut-être temporairement inaccessible, a changé d’adresse, ou la connexion est bloquée par votre pare-feu ou votre proxy.\n\nVérifiez vos paramètres de connexion et réessayez.";
+
+/* First sentence of the generic error description when the requested URL is not available. %1$@ is the app name. */
+"NativeErrorPage.GenericError.Description.v158.withoutURL" = "%1$@ n’a pas pu atteindre l’URL demandée.";
+
+/* First sentence of the generic error description when the requested URL is known. %1$@ is the app name and %2$@ is the requested URL. */
+"NativeErrorPage.GenericError.Description.v158.withURL" = "%1$@ n’a pas pu se connecter à %2$@.";
+
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Faites preuve de prudence, il semble y avoir un problème.";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v158" = "Il semble y avoir un problème avec ce site";
 
 /* On error page, this is the text on a button that will go back to the previous page. Recommended action. */
 "NativeErrorPage.GoBackButton.v149" = "Retour (recommandé)";
@@ -93,4 +105,10 @@
 
 /* Accessibility hint read by VoiceOver describing what happens when the 'Check for earlier version' button is clicked. */
 "NativeErrorPage.Wayback.Error.WaybackButtonA11yHint.v154" = "Recherche d’une version archivée de cette page sur la Wayback Machine.";
+
+/* Body text of the error page shown when a website fails to load while the VPN is on. Suggests turning off the VPN first, then refreshing the page or checking the internet connection if that doesn't help. */
+"VPN.ErrorPage.Body.v160" = "Essayez de désactiver le VPN. Si le site ne se charge toujours pas, actualisez la page ou vérifiez votre connexion Internet.";
+
+/* Title of an error page shown when a website fails to load while the VPN is on and the exact cause is unknown. “Can't be reached” means the website couldn't be loaded. */
+"VPN.ErrorPage.Title.v160" = "Impossible d’accéder à ce site web.";
 

@@ -81,6 +81,17 @@ class ContentContainer: UIView {
         saveContentType(content: content)
     }
 
+    /// Removes the current content view controller (including the webview) and drops the reference to it.
+    /// Used when an iPad window is closing so the container doesn't keep its content, and everything the
+    /// content references, alive after the BrowserViewController is gone.
+    func removeContent() {
+        contentController?.willMove(toParent: nil)
+        contentController?.view.removeFromSuperview()
+        contentController?.removeFromParent()
+        contentController = nil
+        type = nil
+    }
+
     // MARK: - Private
 
     private func removePreviousContent() {

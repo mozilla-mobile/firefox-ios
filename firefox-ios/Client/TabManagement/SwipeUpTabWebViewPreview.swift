@@ -7,7 +7,7 @@ import Common
 import SiteImageView
 
 class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let triggerBoundsHeightPercentage: CGFloat = 0.25
         static let fingerCardPositionRatio: CGFloat = 1 // 0 = top of card, 1 = bottom of card
         static let closeReleaseThreshold: CGFloat = 1.0 / 3.0

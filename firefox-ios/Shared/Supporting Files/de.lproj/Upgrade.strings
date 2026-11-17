@@ -11,7 +11,7 @@
 "Upgrade.Welcome.Action.v114" = "Als Standardbrowser festlegen";
 
 /* Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
-"Upgrade.Welcome.Description.v114" = "Neue Farben. Neuer Komfort. Gleiches Engagement für Menschen über Gewinne.";
+"Upgrade.Welcome.Description.v114" = "Neue Farben. Neuer Komfort. Gleiches Engagement: Menschen vor Profit.";
 
 /* Title string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
 "Upgrade.Welcome.Title.v114" = "Willkommen in einem persönlicheren Internet";

@@ -44,7 +44,7 @@ class TelemetryContextualIdentifierTests: XCTestCase {
 
     @MainActor
     func testTelemetryWrapper_setsContextId() {
-        TelemetryWrapper.shared.setup(profile: MockProfile())
+        TelemetryWrapper.shared.setup(profile: makeProfile())
         XCTAssertNotNil(TelemetryContextualIdentifier.contextId)
     }
 

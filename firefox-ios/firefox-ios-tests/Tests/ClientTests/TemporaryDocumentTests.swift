@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import XCTest
 @testable import Client
 
@@ -149,6 +150,22 @@ final class TemporaryDocumentTests: XCTestCase, @unchecked Sendable {
         subject = await createSubject(response: response, request: request, session: mockURLSession)
 
         XCTAssertEqual(subject.filename, filename)
+        subject = nil
+    }
+
+    // MARK: - Filename Sanitization Tests
+
+    func testDownload_withTraversalFilename_writesInsideTemporaryDirectory() async throws {
+        mockURLProtocol.data = Data()
+        subject = await createSubject(filename: "../../escaped.plist", request: request, session: mockURLSession)
+
+        let url = try await unwrapAsync { return await subject.download() }
+        defer { try? FileManager.default.removeItem(at: url) }
+
+        let tempRoot = URL(fileURLWithPath: NSTemporaryDirectory())
+        XCTAssertEqual(url.lastPathComponent, "escaped.plist")
+        XCTAssertTrue(FilenameSanitizer.isContained(url, in: tempRoot), "Download landed at \(url), outside \(tempRoot).")
+        XCTAssertEqual(try url.checkResourceIsReachable(), true)
         subject = nil
     }
 

@@ -210,7 +210,7 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
     /// keeping the name the reader calls. Flags reading `false` mean the script ran and found
     /// none, where nil would mean it never ran.
     func test_read_fromLoadedTab_fillsLanguagesAndClearsTheFrameworkFlags() async throws {
-        let tab = Tab(profile: MockProfile(), windowUUID: windowUUID)
+        let tab = Tab(profile: makeProfile(), windowUUID: windowUUID)
         tab.createWebview(configuration: WKWebViewConfiguration())
         let webView = try XCTUnwrap(tab.webView)
         UserScriptManager.shared.injectUserScriptsIntoWebView(webView,
@@ -230,7 +230,7 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
 
     /// Nothing to read from is not an error; the fields stay nil and the report still goes out.
     func test_read_fromTabWithoutWebView_returnsAnEmptyContext() async {
-        let tab = Tab(profile: MockProfile(), windowUUID: windowUUID)
+        let tab = Tab(profile: makeProfile(), windowUUID: windowUUID)
 
         let context = await WebCompatPageContextReader().read(from: tab)
 
@@ -346,7 +346,7 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
     // A tab with no web view still has to produce a payload, falling back to the
     // device for anything the page would have supplied.
     func test_enrich_fromTabWithoutWebView_usesTabPrivacyAndDeviceScale() {
-        let tab = Tab(profile: MockProfile(), isPrivate: true, windowUUID: windowUUID)
+        let tab = Tab(profile: makeProfile(), isPrivate: true, windowUUID: windowUUID)
 
         let payload = WebCompatReportDataCollector.enrich(
             WebCompatReportPayload(),
@@ -378,7 +378,7 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
     }
 
     func test_captureFullPage_withoutWebView_returnsNil() async {
-        let tab = Tab(profile: MockProfile(), windowUUID: windowUUID)
+        let tab = Tab(profile: makeProfile(), windowUUID: windowUUID)
 
         let image = await WebCompatReportDataCollector.captureFullPage(from: tab)
 
@@ -437,7 +437,7 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
     ) -> WebCompatReportPayload {
         return WebCompatReportDataCollector.enrich(
             WebCompatReportPayload(),
-            tab: Tab(profile: MockProfile(), windowUUID: windowUUID),
+            tab: Tab(profile: makeProfile(), windowUUID: windowUUID),
             includeBlockedList: false,
             includeTabSpecificInfo: includeTabSpecificInfo,
             device: FakeDeviceInfoProvider(),

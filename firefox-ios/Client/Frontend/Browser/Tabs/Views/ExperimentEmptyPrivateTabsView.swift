@@ -17,7 +17,7 @@ protocol EmptyPrivateTabView: UIView, ThemeApplicable, InsetUpdatable {
 // View we display when there are no private tabs created
 class ExperimentEmptyPrivateTabsView: UIView,
                                       EmptyPrivateTabView {
-    struct UX {
+    enum UX {
         static let paddingInBetweenItems: CGFloat = 15
         static let buttonTopPadding: CGFloat = 24
         static let topPadding: CGFloat = 55
@@ -90,9 +90,9 @@ class ExperimentEmptyPrivateTabsView: UIView,
         addSubview(scrollView)
 
         NSLayoutConstraint.activate([
-            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
             scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
             containerView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),

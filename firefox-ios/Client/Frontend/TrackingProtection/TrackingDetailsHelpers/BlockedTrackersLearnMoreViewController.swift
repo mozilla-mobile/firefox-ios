@@ -70,10 +70,10 @@ final class BlockedTrackersLearnMoreViewController: UIViewController, Themeable 
                 constant: TPMenuUX.UX.popoverTopDistance
             ),
             navigationView.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor
+                equalTo: view.safeAreaLayoutGuide.trailingAnchor
             ),
             navigationView.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor
+                equalTo: view.safeAreaLayoutGuide.leadingAnchor
             )
         ])
     }
@@ -91,10 +91,10 @@ final class BlockedTrackersLearnMoreViewController: UIViewController, Themeable 
                 equalTo: navigationView.bottomAnchor
             ),
             containerView.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor
+                equalTo: view.safeAreaLayoutGuide.trailingAnchor
             ),
             containerView.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor
+                equalTo: view.safeAreaLayoutGuide.leadingAnchor
             ),
             containerView.bottomAnchor.constraint(
                 equalTo: view.bottomAnchor

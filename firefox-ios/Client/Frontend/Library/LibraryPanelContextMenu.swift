@@ -37,7 +37,10 @@ extension LibraryPanelContextMenu {
 
         let viewModel = PhotonActionSheetViewModel(actions: [actions], site: site, modalStyle: .overFullScreen)
 
-        let contextMenu = PhotonActionSheet(viewModel: viewModel, windowUUID: windowUUID)
+        let shouldUsePrivateOverride = (self as? Themeable)?.shouldUsePrivateOverride ?? false
+        let contextMenu = PhotonActionSheet(viewModel: viewModel,
+                                            windowUUID: windowUUID,
+                                            shouldUsePrivateOverride: shouldUsePrivateOverride)
         contextMenu.modalTransitionStyle = .crossDissolve
 
         let generator = UIImpactFeedbackGenerator(style: .heavy)

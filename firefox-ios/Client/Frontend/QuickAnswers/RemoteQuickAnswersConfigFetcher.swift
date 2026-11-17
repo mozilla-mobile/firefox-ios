@@ -8,22 +8,22 @@ import QuickAnswersKit
 /// A `QuickAnswersConfigFetcher` implementation that loads the model prompt from Remote Settings,
 /// falling back to `defaultFetcher` when Remote Settings has no instructions for the model.
 struct RemoteQuickAnswersConfigFetcher: QuickAnswersConfigFetcher {
-    let model: QuickAnswersKit.QuickAnswersModel
+    let feature: QuickAnswersKit.QuickAnswersFeature
     private let remoteConfig: ASAIRemoteConfig
     private let defaultFetcher: QuickAnswersConfigFetcher
 
-    init(model: QuickAnswersKit.QuickAnswersModel,
+    init(feature: QuickAnswersKit.QuickAnswersFeature,
          remoteConfig: ASAIRemoteConfig = ASAIRemoteConfig(),
          defaultFetcher: QuickAnswersConfigFetcher? = nil) {
-        self.model = model
+        self.feature = feature
         self.remoteConfig = remoteConfig
-        self.defaultFetcher = defaultFetcher ?? DefaultQuickAnswersConfigFetcher(model: model)
+        self.defaultFetcher = defaultFetcher ?? DefaultQuickAnswersConfigFetcher(feature: feature)
     }
 
     func fetch() async throws -> QuickAnswersConfig {
-        guard let instructions = remoteConfig.fetchQuickAnswersInstruction(model) else {
+        guard let instructions = remoteConfig.fetchQuickAnswersInstruction(feature.model) else {
             return try await defaultFetcher.fetch()
         }
-        return QuickAnswersConfig(model: model, instructions: instructions)
+        return QuickAnswersConfig(model: feature.model, instructions: instructions)
     }
 }

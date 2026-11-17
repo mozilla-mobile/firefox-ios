@@ -10,7 +10,7 @@ struct GenericButtonCellView: View {
     private let title: String
     private let onTap: () -> Void
 
-    private struct UX {
+    private enum UX {
         static let dividerHeight: CGFloat = 0.5
         static let buttonPadding: CGFloat = 4
     }

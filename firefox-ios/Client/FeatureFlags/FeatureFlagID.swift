@@ -18,13 +18,18 @@ enum FeatureFlagID: String, CaseIterable {
     case aiKillSwitch
     case backgroundAudio
     case bookmarksSearchFeature
+    case browserDataExport
+    case browserDataImport
     case cellularDataRestrictedErrorPage
+    case checkForReinstalls
+    case configurationProfile
     case customReaderModeScheme
     case deeplinkOptimizationRefactor
     case downloadLiveActivities
     case firefoxJpGuideDefaultSite
     case firefoxSuggestFeature
     case googleLens
+    case googleLensSearchInterstitial
     case hntSponsoredShortcuts
     case homepageAddShortcutTile
     case homepageBookmarksSectionDefault
@@ -38,6 +43,7 @@ enum FeatureFlagID: String, CaseIterable {
     case hostedSummarizerToolbarEntrypoint
     case httpsUpgrade
     case improvedAppStoreReviewTriggerFeature
+    case mergeWindows
     case microsurvey
     case modernOnboardingUI
     case multiDayOnboarding
@@ -47,9 +53,13 @@ enum FeatureFlagID: String, CaseIterable {
     case novaPrivateThemeOverride
     case privacyDashboard
     case quickAnswers
+    case quickAnswersOptInRedesign
+    case quickAnswersFollowUp
     case recentSearches
     case relayIntegration
     case reportBrokenSite
+    case searchConfigV3
+    case searchTermInAddressBar
     case sentFromFirefox
     case sentFromFirefoxTreatmentA
     case shouldUseBrandRefreshConfiguration
@@ -58,6 +68,7 @@ enum FeatureFlagID: String, CaseIterable {
     case summarizerAppAttestAuth
     case summarizerLanguageExpansion
     case summarizerPermissiveGuardrails
+    case tabGroups
     case tabScrollRefactorFeature
     case tabTrayiPadUIExperiments
     case tabTrayScreenshotButtonStyle
@@ -71,6 +82,7 @@ enum FeatureFlagID: String, CaseIterable {
     case unifiedSearch
     case videoIntroOnboarding
     case vpnFeature
+    case wallpaperEngagementSheet
     case waybackMachine
     case webViewDocumentFetchRefactor
 
@@ -91,6 +103,7 @@ enum FeatureFlagID: String, CaseIterable {
         case .sentFromFirefox: return FlagKeys.SentFromFirefox
         case .startAtHome: return FlagKeys.StartAtHome
         case .quickAnswers: return PrefsKeys.Settings.quickAnswersFeature
+        case .vpnFeature: return PrefsKeys.Settings.vpnFeature
         default: return nil
         }
     }
@@ -109,10 +122,15 @@ enum FeatureFlagID: String, CaseIterable {
                 .aiKillSwitch,
                 .backgroundAudio,
                 .bookmarksSearchFeature,
+                .browserDataExport,
+                .browserDataImport,
+                .checkForReinstalls,
+                .configurationProfile,
                 .customReaderModeScheme,
                 .deeplinkOptimizationRefactor,
                 .downloadLiveActivities,
                 .googleLens,
+                .googleLensSearchInterstitial,
                 .homepageAddShortcutTile,
                 .homepagePinnedHeader,
                 .homepageAnimatedCenterSearchBar,
@@ -121,21 +139,26 @@ enum FeatureFlagID: String, CaseIterable {
                 .hostedSummarizer,
                 .httpsUpgrade,
                 .improvedAppStoreReviewTriggerFeature,
+                .mergeWindows,
                 .microsurvey,
                 .multiDayOnboarding,
                 .nativeErrorPage,
                 .newBookmarkFolderTree,
-                .novaDesign,
                 .novaPrivateThemeOverride,
                 .privacyDashboard,
                 .quickAnswers,
+                .quickAnswersOptInRedesign,
+                .quickAnswersFollowUp,
                 .recentSearches,
                 .relayIntegration,
                 .reportBrokenSite,
+                .searchConfigV3,
+                .searchTermInAddressBar,
                 .sentFromFirefox,
                 .summarizerAppAttestAuth,
                 .summarizerLanguageExpansion,
                 .summarizerPermissiveGuardrails,
+                .tabGroups,
                 .tabScrollRefactorFeature,
                 .tabTrayScreenshotButtonStyle,
                 .tabTrayUIExperiments,

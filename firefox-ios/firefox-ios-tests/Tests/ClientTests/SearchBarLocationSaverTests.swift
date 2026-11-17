@@ -13,12 +13,11 @@ class SearchBarLocationSaverTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        profile = MockProfile()
+        profile = makeProfile()
         await DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
     }
 
     override func tearDown() async throws {
-        profile.shutdown()
         profile = nil
 
         DependencyHelperMock().reset()
@@ -99,7 +98,7 @@ class SearchBarLocationSaverTests: XCTestCase {
     }
 
     private func setupNimbusToolbarLayoutTesting(isEnabled: Bool, layout: ToolbarLayoutType?) {
-        FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
+        FxNimbus.shared.features.toolbarRefactorFeature.with { _ in
             return ToolbarRefactorFeature(
                 layout: layout,
                 unifiedSearch: false)
@@ -107,7 +106,7 @@ class SearchBarLocationSaverTests: XCTestCase {
     }
 
     private func resetNimbusToolbarLayoutTesting() {
-        FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
+        FxNimbus.shared.features.toolbarRefactorFeature.with { _ in
             return ToolbarRefactorFeature(
                 layout: .version1,
                 unifiedSearch: false)

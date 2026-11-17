@@ -25,28 +25,30 @@ final class MockQuickAnswersTelemetry: QuickAnswersTelemetry, @unchecked Sendabl
     var lastRequestedModel: QuickAnswersModel?
     var lastConsentAgreed: Bool?
     var lastPermissionDenied: QuickAnswersPermission?
+    var lastResultsIsFollowUp: Bool?
 
     func quickAnswersRequested(model: QuickAnswersModel) {
         quickAnswersRequestedCalledCount += 1
         lastRequestedModel = model
     }
 
-    func recordingStarted() {
+    func recordingStarted(isFollowUp: Bool) {
         recordingStartedCalledCount += 1
     }
 
-    func recordingCompleted(outcome: Bool, errorType: String?) {
+    func recordingCompleted(outcome: Bool, errorType: String?, isFollowUp: Bool) {
         recordingCompletedCalledCount += 1
         lastRecordingOutcome = outcome
         lastRecordingErrorType = errorType
     }
 
-    func resultsStarted() {
+    func resultsStarted(isFollowUp: Bool) {
         resultsStartedCalledCount += 1
     }
 
-    func resultsCompleted(outcome: Bool, errorType: String?, model: QuickAnswersModel) {
+    func resultsCompleted(outcome: Bool, errorType: String?, model: QuickAnswersModel, isFollowUp: Bool) {
         resultsCompletedCalledCount += 1
+        lastResultsIsFollowUp = isFollowUp
         lastResultsOutcome = outcome
         lastResultsErrorType = errorType
         lastResultsModel = model

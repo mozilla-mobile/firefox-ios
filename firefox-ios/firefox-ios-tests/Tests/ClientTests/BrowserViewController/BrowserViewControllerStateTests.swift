@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Redux
 import XCTest
 import SummarizeKit
@@ -11,7 +12,6 @@ import QuickAnswersKit
 
 final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
     var mockStore: MockStoreForMiddleware<AppState>!
-    let storeUtilityHelper = StoreTestUtilityHelper()
 
     override func setUp() async throws {
         try await super.setUp()
@@ -37,18 +37,6 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.navigateTo, .newTab)
     }
 
-    func testShowNewTabLongpPressActions() {
-        let initialState = createSubject()
-        let reducer = browserViewControllerReducer()
-
-        XCTAssertNil(initialState.displayView)
-
-        let action = getAction(for: .showNewTabLongPressActions)
-        let newState = reducer.legacyReducer(initialState, action)
-
-        XCTAssertEqual(newState.displayView, .newTabLongPressActions)
-    }
-
     func testShowGoogleLensPhotoPickerAction() {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()
@@ -71,6 +59,37 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.displayView, .googleLensCamera)
+    }
+
+    func testShowVPNFailureAlertAction() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        let newState = reducer.modernReducer(initialState, VPNAlertModernAction.showFailureAlert, .XCTestDefaultUUID)
+
+        XCTAssertEqual(newState.displayView, .vpnFailureAlert)
+    }
+
+    func testShowVPNDataLimitAlertAction_setsDisplayViewWithDataLimit() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        let newState = reducer.modernReducer(
+            initialState,
+            VPNAlertModernAction.showDataLimitAlert(dataLimitBytes: 5_000_000_000),
+            .XCTestDefaultUUID
+        )
+
+        XCTAssertEqual(newState.displayView, .vpnDataLimitAlert(dataLimitBytes: 5_000_000_000))
+    }
+
+    func testShowVPNFailureAlertAction_forAnotherWindow_doesNotSetDisplayView() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        let newState = reducer.modernReducer(initialState, VPNAlertModernAction.showFailureAlert, WindowUUID())
+
+        XCTAssertNil(newState.displayView)
     }
 
     func testShowPasswordGeneratorAction() {

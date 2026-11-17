@@ -21,7 +21,7 @@ class ClearPrivateDataSetting: Setting {
         self.settingsDelegate = settingsDelegate
 
         let clearTitle: String = .SettingsDataManagementSectionName
-        let theme = settings.themeManager.getCurrentTheme(for: settings.windowUUID)
+        let theme = settings.currentTheme()
         super.init(
             title: NSAttributedString(
                 string: clearTitle,

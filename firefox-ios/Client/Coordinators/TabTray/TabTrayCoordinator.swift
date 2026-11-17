@@ -55,6 +55,8 @@ final class TabTrayCoordinator: BaseCoordinator,
 
     func start(with tabTraySection: TabTrayPanelType) {
         tabTrayViewController?.setupOpenPanel(panelType: tabTraySection)
+        // Build the tray and populate the selected panel now, before `present` kicks off the transition.
+        tabTrayViewController?.preloadSelectedPanelForPresentation()
     }
 
     private func makeChildPanels(dragAndDropDelegate: TabDisplayViewDragAndDropInteraction) -> [UINavigationController] {

@@ -10,14 +10,26 @@
 /* Loading label shown in the Quick Answers view while an answer is being fetched. */
 "QuickAnswers.ContentView.Answering.v158" = "Načítava sa odpoveď…";
 
+/* Button shown below a Quick Answers result that the user taps to ask a follow-up question about the answer. */
+"QuickAnswers.ContentView.FollowUpButton.v160" = "Položiť doplňujúcu otázku";
+
 /* Footer text displayed below the Quick Answers result. %@ is the name of the AI model providing the answer, for example Liner or Exa. */
 "QuickAnswers.ContentView.Footer.v158" = "Odpovede poskytuje %@ · Môžu obsahovať chyby.";
 
 /* Placeholder text shown in the Quick Answers view while the microphone is active and waiting for the user to speak. */
 "QuickAnswers.ContentView.Listening.v158" = "Počúvam, opýtajte sa na čokoľvek…";
 
+/* Placeholder text shown in the Quick Answers view while the microphone is active and waiting for the user to ask a follow-up question about the previous answer. */
+"QuickAnswers.ContentView.ListeningFollowUp.v160" = "Počúvam, položte doplňujúcu otázku…";
+
+/* Button shown below a Quick Answers result that the user taps to ask a new, unrelated question. */
+"QuickAnswers.ContentView.NewQuestionButton.v161" = "Položiť novú otázku";
+
 /* Placeholder text shown in the Quick Answers view before the user starts speaking. */
 "QuickAnswers.ContentView.Placeholder.v158" = "Opýtajte sa čokoľvek…";
+
+/* Header label shown above the body of a Quick Answers result, labeling the text below it as a short answer to the user's question. */
+"QuickAnswers.ContentView.ResultHeader.v160" = "RÝCHLA ODPOVEĎ";
 
 /* Loading label shown in the Quick Answers view while the feature searches for sources to construct an answer. */
 "QuickAnswers.ContentView.SearchingSources.v158" = "Vyhľadávajú sa zdroje…";
@@ -86,7 +98,7 @@
 "QuickAnswers.OptInRedesign.NoTrainingDescription.v158" = "Vaše údaje nepoužívame na trénovanie našich systémov.";
 
 /* Title of the third privacy row on the Quick Answers opt-in screen, explaining that the user's data is not used to train AI systems. */
-"QuickAnswers.OptInRedesign.NoTrainingTitle.v158" = "Vaše údaje sa nepoužívajú na trénovanie AI";
+"QuickAnswers.OptInRedesign.NoTrainingTitle.v158" = "Vaše údaje sa nepoužívajú na trénovanie umelej inteligencie";
 
 /* Description of the second privacy row on the Quick Answers opt-in screen, explaining that the user's voice is not used to identify them. */
 "QuickAnswers.OptInRedesign.PrivateByDesignDescription.v158" = "Nepoužívame váš hlas na vašu identifikáciu.";

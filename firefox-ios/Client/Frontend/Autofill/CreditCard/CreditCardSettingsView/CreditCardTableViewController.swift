@@ -12,7 +12,7 @@ class CreditCardTableViewController: UIViewController,
                                      Themeable,
                                      Notifiable {
     // MARK: UX constants
-    struct UX {
+    enum UX {
         static let toggleSwitchContainerHeight: CGFloat = 40
         static let toggleSwitchAnchor: CGFloat = -16
         static let toggleSwitchLabelHeight: CGFloat = 18
@@ -33,6 +33,15 @@ class CreditCardTableViewController: UIViewController,
     var lastSelectedIndex: IndexPath?
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
+
+    var shouldUsePrivateOverride: Bool { return true }
+    var shouldBeInPrivateTheme: Bool { return false }
+
+    private func currentTheme() -> Theme {
+        return themeManager.resolveTheme(for: windowUUID,
+                                         shouldUsePrivateOverride: shouldUsePrivateOverride,
+                                         shouldBeInPrivateTheme: shouldBeInPrivateTheme)
+    }
 
     // MARK: View
 
@@ -112,7 +121,7 @@ class CreditCardTableViewController: UIViewController,
     }
 
     func applyTheme() {
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        let theme = currentTheme()
         view.backgroundColor = theme.colors.layer1
         tableView.backgroundColor = theme.colors.layer1
     }
@@ -163,7 +172,7 @@ extension CreditCardTableViewController: UITableViewDelegate,
                 ) as? HostingTableViewSectionHeader<CreditCardSectionHeader>
         else { return nil }
 
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        let theme = currentTheme()
         let headerView = CreditCardSectionHeader(windowUUID: windowUUID, textColor: theme.colors.textSecondary.color)
         hostingCell.host(headerView, parentController: self)
         return hostingCell
@@ -187,7 +196,7 @@ extension CreditCardTableViewController: UITableViewDelegate,
             return UITableViewCell()
         }
 
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        let theme = currentTheme()
         let row = CreditCardAutofillToggle(windowUUID: windowUUID,
                                            textColor: theme.colors.textPrimary.color,
                                            model: model)
@@ -211,7 +220,10 @@ extension CreditCardTableViewController: UITableViewDelegate,
             didSelectAction: { [weak self] in
                 self?.didSelectCardAtIndex?(creditCard)
                 self?.lastSelectedIndex = indexPath
-            }, windowUUID: windowUUID)
+            },
+            windowUUID: windowUUID,
+            shouldUsePrivateOverride: shouldUsePrivateOverride,
+            shouldBeInPrivateTheme: shouldBeInPrivateTheme)
         hostingCell.host(creditCardRow, parentController: self)
         hostingCell.accessibilityAttributedLabel = viewModel.a11yLabel(for: indexPath)
         hostingCell.backgroundColor = .clear

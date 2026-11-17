@@ -14,22 +14,42 @@ protocol StateLens: Equatable {
     init(appState: AppState, uuid: WindowUUID)
 }
 
-/// Feeds `AddressToolbarContainer`/`AddressToolbarContainerModel` derived values that today are
-/// computed and persisted on `AddressBarState` by the reducer. `leadingPageActions` is the first
-/// one moved here; the rest (`trailingPageActions`, `browserActions`, `navigationActions`) follow
-/// once this is proven out.
+///  Computes the toolbar derived action lists (`leadingPageActions`, `trailingPageActions`,
+///  `navigationActions`, `browserActions`, `navigationToolbarActions`) from `ToolbarState`
 struct AddressToolbarContainerLens: StateLens {
     let toolbarState: ToolbarState
     let leadingPageActions: [ToolbarActionConfiguration]
+    let trailingPageActions: [ToolbarActionConfiguration]
+    let navigationActions: [ToolbarActionConfiguration]
+    let browserActions: [ToolbarActionConfiguration]
+    let navigationToolbarActions: [ToolbarActionConfiguration]
+    let lockIconState: LockIconState
 
     // MARK: - Private initializers
-    private init(toolbarState: ToolbarState, leadingPageActions: [ToolbarActionConfiguration]) {
+    private init(toolbarState: ToolbarState,
+                 leadingPageActions: [ToolbarActionConfiguration],
+                 trailingPageActions: [ToolbarActionConfiguration],
+                 navigationActions: [ToolbarActionConfiguration],
+                 browserActions: [ToolbarActionConfiguration],
+                 navigationToolbarActions: [ToolbarActionConfiguration],
+                 lockIconState: LockIconState) {
         self.toolbarState = toolbarState
         self.leadingPageActions = leadingPageActions
+        self.trailingPageActions = trailingPageActions
+        self.navigationActions = navigationActions
+        self.browserActions = browserActions
+        self.navigationToolbarActions = navigationToolbarActions
+        self.lockIconState = lockIconState
     }
 
     private init(windowUUID: WindowUUID) {
-        self.init(toolbarState: ToolbarState(windowUUID: windowUUID), leadingPageActions: [])
+        self.init(toolbarState: ToolbarState(windowUUID: windowUUID),
+                  leadingPageActions: [],
+                  trailingPageActions: [],
+                  navigationActions: [],
+                  browserActions: [],
+                  navigationToolbarActions: [],
+                  lockIconState: .none)
     }
 
     // MARK: - Lens initialization
@@ -51,7 +71,58 @@ struct AddressToolbarContainerLens: StateLens {
             isNovaDesignEnabled: addressToolbar.isNovaDesignEnabled
         )
 
-        self.init(toolbarState: toolbarState, leadingPageActions: leadingPageActions)
+        let trailingPageActions = TrailingPageActionsBuilder.getActions(
+            isEditing: addressToolbar.isEditing,
+            isEmptySearch: addressToolbar.isEmptySearch,
+            readerModeState: addressToolbar.readerModeState,
+            canSummarize: addressToolbar.canSummarize,
+            isLoading: addressToolbar.isLoading,
+            hasAlternativeLocationColor: hasAlternativeLocationColor)
+
+        let navigationActions = NavigationActionsBuilder.getActions(
+            isShowingNavigationToolbar: toolbarState.isShowingNavigationToolbar,
+            canGoBack: toolbarState.canGoBack,
+            canGoForward: toolbarState.canGoForward)
+
+        let browserActions = BrowserActionsBuilder.getActions(
+            isEditing: addressToolbar.isEditing,
+            isShowingNavigationToolbar: toolbarState.isShowingNavigationToolbar,
+            isShowingTopTabs: toolbarState.isShowingTopTabs,
+            isHomepage: addressToolbar.url == nil,
+            toolbarLayout: toolbarState.toolbarLayout,
+            tabTrayButtonStyle: toolbarState.tabTrayButtonStyle,
+            numberOfTabs: toolbarState.numberOfTabs,
+            showWarningBadge: toolbarState.showMenuWarningBadge,
+            previousTabScreenshot: toolbarState.previousTabScreenshot,
+            nextTabScreenshot: toolbarState.nextTabScreenshot,
+            isPrivateMode: toolbarState.isPrivateMode,
+            isNovaDesignEnabled: addressToolbar.isNovaDesignEnabled)
+
+        let navigationToolbarActions = NavigationActionsBuilder.getNavigationToolbarActions(
+            isHomepage: addressToolbar.url == nil,
+            canGoBack: toolbarState.canGoBack,
+            canGoForward: toolbarState.canGoForward,
+            middleButton: toolbarState.navigationToolbar.middleButton,
+            toolbarLayout: toolbarState.toolbarLayout,
+            tabTrayButtonStyle: toolbarState.tabTrayButtonStyle,
+            numberOfTabs: toolbarState.numberOfTabs,
+            showWarningBadge: toolbarState.showMenuWarningBadge,
+            previousTabScreenshot: toolbarState.previousTabScreenshot,
+            nextTabScreenshot: toolbarState.nextTabScreenshot,
+            isPrivateMode: toolbarState.isPrivateMode,
+            isNovaDesignEnabled: toolbarState.navigationToolbar.isNovaDesignEnabled)
+
+        let lockIconState = LockIconState(
+            hasOnlySecureContent: addressToolbar.hasOnlySecureContent,
+            isWebsiteMode: addressToolbar.isWebsiteMode && addressToolbar.readerModeState != .active)
+
+        self.init(toolbarState: toolbarState,
+                  leadingPageActions: leadingPageActions,
+                  trailingPageActions: trailingPageActions,
+                  navigationActions: navigationActions,
+                  browserActions: browserActions,
+                  navigationToolbarActions: navigationToolbarActions,
+                  lockIconState: lockIconState)
     }
 
     private static func shouldHaveAlternativeLocationColor(toolbarState: ToolbarState) -> Bool {

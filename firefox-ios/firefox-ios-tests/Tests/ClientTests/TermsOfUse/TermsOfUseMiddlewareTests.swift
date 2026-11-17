@@ -15,7 +15,7 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        profile = MockProfile()
+        profile = makeProfile()
         mockGleanWrapper = MockGleanWrapper()
         middleware = TermsOfUseMiddleware(profile: profile, telemetry: TermsOfUseTelemetry(gleanWrapper: mockGleanWrapper))
     }

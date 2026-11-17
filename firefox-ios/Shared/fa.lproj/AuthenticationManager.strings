@@ -1,6 +1,6 @@
 /* Text displayed above the input field when changing the existing passcode */
-"Enter passcode" = "وارد کردن کد عبور";
+"Enter passcode" = "گذرواژه را وارد کنید";
 
 /* Touch ID prompt subtitle when accessing logins */
-"Use your fingerprint to access Logins now." = "استفاده از اثرانگشت برای دسترسی به ورود.";
+"Use your fingerprint to access Logins now." = "اکنون از اثر انگشت خود برای دسترسی به اطلاعات ورود استفاده کنید.";
 

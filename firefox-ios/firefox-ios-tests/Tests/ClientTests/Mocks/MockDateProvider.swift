@@ -7,7 +7,7 @@ import Shared
 
 /// A mock used to test logic that use the current date.
 class MockDateProvider: DateProvider {
-    private let fixedDate: Date
+    var fixedDate: Date
     init(fixedDate: Date) {
         self.fixedDate = fixedDate
     }

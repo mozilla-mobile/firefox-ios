@@ -21,6 +21,9 @@ public protocol ThemeManager {
     /// - Returns: The resolved theme—either the private or default user theme depending on context.
     func resolvedTheme(with shouldShowPrivateTheme: Bool) -> Theme
 
+    /// Whether `resolveTheme`'s private theme override is allowed to take effect, gated on a feature flag.
+    var isPrivateThemeOverrideEnabled: Bool { get }
+
     // System theme and brightness settings
     var systemThemeIsOn: Bool { get }
     var automaticBrightnessIsOn: Bool { get }

@@ -7,6 +7,34 @@ import UIKit
 
 class BrowserWindow: UIWindow {
     let uuid: WindowUUID
+    private var safeAreaDebugGuides: SafeAreaDebugGuides?
+
+    var showsSafeAreaDebugGuides: Bool {
+        get { safeAreaDebugGuides != nil }
+        set {
+            guard newValue != showsSafeAreaDebugGuides else { return }
+            if newValue {
+                let guides = SafeAreaDebugGuides()
+                safeAreaDebugGuides = guides
+                layer.addSublayer(guides.layer)
+                setNeedsLayout()
+            } else {
+                safeAreaDebugGuides?.layer.removeFromSuperlayer()
+                safeAreaDebugGuides = nil
+            }
+        }
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        safeAreaDebugGuides?.update(in: self)
+    }
+
+    override func safeAreaInsetsDidChange() {
+        super.safeAreaInsetsDidChange()
+        guard safeAreaDebugGuides != nil else { return }
+        setNeedsLayout()
+    }
 
     init(frame: CGRect, uuid: WindowUUID) {
         self.uuid = uuid
@@ -31,7 +59,7 @@ struct SceneSetupHelper {
                             windowUUID: WindowUUID,
                             screenshotServiceDelegate: UIScreenshotServiceDelegate) -> UIWindow {
         guard let windowScene = (scene as? UIWindowScene) else {
-            return BrowserWindow(frame: UIScreen.main.bounds, uuid: windowUUID)
+            return BrowserWindow(frame: .zero, uuid: windowUUID)
         }
 
         windowScene.screenshotService?.delegate = screenshotServiceDelegate

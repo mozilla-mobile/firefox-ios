@@ -108,7 +108,7 @@ final class MainMenuCoordinatorTests: XCTestCase, StoreTestUtility {
         file: StaticString = #filePath,
         line: UInt = #line
     ) -> MainMenuCoordinator {
-        let subject = MainMenuCoordinator(router: mockRouter, windowUUID: .XCTestDefaultUUID, profile: MockProfile())
+        let subject = MainMenuCoordinator(router: mockRouter, windowUUID: .XCTestDefaultUUID, profile: makeProfile())
 
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject

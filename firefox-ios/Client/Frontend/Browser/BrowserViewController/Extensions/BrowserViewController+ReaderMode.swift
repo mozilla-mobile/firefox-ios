@@ -58,6 +58,12 @@ extension BrowserViewController: ReaderModeStyleViewModelDelegate {
 }
 
 extension BrowserViewController {
+    /// Uses the tab's committed URL instead of `ReaderMode.state`, since that state is updated
+    /// asynchronously by the page script and can still describe the previous page while navigating.
+    func isShowingReaderMode(tab: Tab) -> Bool {
+        return tab.url?.isReaderModeURL ?? false
+    }
+
     func updateReaderModeBar() {
         guard let readerModeBar = readerModeBar else { return }
         readerModeBar.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))

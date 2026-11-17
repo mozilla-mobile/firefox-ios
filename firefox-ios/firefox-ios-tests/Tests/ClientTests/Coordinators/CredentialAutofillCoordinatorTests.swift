@@ -20,7 +20,7 @@ final class CredentialAutofillCoordinatorTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        profile = MockProfile()
+        profile = makeProfile()
         tabManager = MockTabManager()
         router = MockRouter(navigationController: MockNavigationController())
         parentCoordinator = MockBrowserCoordinator()
@@ -36,7 +36,6 @@ final class CredentialAutofillCoordinatorTests: XCTestCase {
         // dependency gets cleared for other test suites any time we bootstrapDependencies.
         AppContainer.shared.register(service: MockThemeManager() as ThemeManager)
         AppContainer.shared.bootstrap()
-        profile.shutdown()
         profile = nil
         router = nil
         parentCoordinator = nil

@@ -55,3 +55,9 @@
 /* This is the title informing the user that they need to turn on notifications in iOS Settings. */
 "Settings.Notifications.TurnOnNotificationsTitle.v112" = "تفعيل الإشعارات";
 
+/* Show Firefox Browser Privacy Notice page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Settings.PrivacyNotice.Title.v137" = "تنويه الخصوصية";
+
+/* Terms of Use settings section title */
+"Settings.TermsOfUse.Title.v137" = "شروط الاستخدام";
+

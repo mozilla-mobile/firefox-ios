@@ -6,7 +6,7 @@ import SwiftUI
 import Common
 
 struct HelpView: View {
-    private struct UX {
+    private enum UX {
         static let padding: CGFloat = 20
         static let textFont = Font.body
         static let imageSize = CGSize(width: 96, height: 96)

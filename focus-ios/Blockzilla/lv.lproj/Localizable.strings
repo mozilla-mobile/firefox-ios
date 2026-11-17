@@ -55,6 +55,9 @@
 /* Label for enabling or disabling autocomplete */
 "Autocomplete.mySites" = "Manas vietnes";
 
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "Apmeklētākās vietnes";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Atpakaļ";
 
@@ -89,7 +92,7 @@
 "ExternalLink.cancelButton" = "Atcelt";
 
 /* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.emailButton" = "Epasts";
+"ExternalLink.emailButton" = "E-pasta adrese";
 
 /* Label on button to dismiss first run UI */
 "FirstRun.lastSlide.buttonLabel" = "Labi, sapratu.";
@@ -103,14 +106,26 @@
 /* Button text for retrying network connection */
 "Network.Offline.RetryButton" = "Mēģināt vēlreiz";
 
+/* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "Izlaist";
+
 /* Text for a label that indicates the title of the top button from the default browser onboarding screen version 2. */
 "Onboarding.DefaultBrowser.TopButtonTitle.V2" = "Iestatīt kā noklusējuma pārlūku";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+"Onboarding.Incognito.Description" = "%@ ir īpašs privātuma pārlūks ar aizsardzību pret izsekošanu un satura liegšanu.";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Pielāgo iestatījumus, lai vari izvēlēties, cik daudz vai maz kopīgo!";
 
 /* Label for the agreement button in the Terms of Use screen. */
 "Onboarding.TermsOfUse.ButtonText" = "Piekrist un turpināt";
 
 /* Label for the agreement button in the Terms of Use screen. */
 "Onboarding.TermsOfUse.ButtonTextV2" = "Turpināt";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+"Safari.instructionsEnable" = "Iespējot %@";
 
 /* Save button label */
 "Save" = "Saglabāt";
@@ -148,6 +163,9 @@
 /* Label for button to bring deleted default engines back */
 "Settings.Search.RestoreEngine" = "Atjaunot noklusējuma meklētājus";
 
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "Meklētājs";
+
 /* Label title for set as default browser row */
 "Settings.setAsDefaultBrowser" = "Iestatīt kā noklusējuma pārlūku";
 
@@ -184,6 +202,15 @@
 /* Text for a label that indicates the description for request desktop tip. */
 "Tip.RequestDesktop.Description" = "Lapas darbības > Pieprasīt vietni darbvirsmai";
 
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Jādodas uz iestatījumiem, lai pārvaldītu noteiktas privātuma un drošības iespējas.";
+
 /* Text for tracking protection screen showing the connection is not secure */
 "trackingProtection.connectionNotSecureLabel" = "Savienojums nav drošs";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Meklē vai ievadi adresi";
+
+/* Label displayed for search button when typing in the URL bar. %@ is the text type by the user. */
+"URL.searchLabel" = "Meklēt %@";
 

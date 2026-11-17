@@ -18,7 +18,7 @@ final class BrowsingSettingsViewControllerTests: XCTestCase {
         try await super.setUp()
         self.featureFlags = MockNimbusFeatureFlags()
         DependencyHelperMock().bootstrapDependencies(injectedFeatureFlagProvider: featureFlags)
-        self.profile = MockProfile()
+        self.profile = makeProfile()
         self.delegate = MockSettingsDelegate()
     }
 

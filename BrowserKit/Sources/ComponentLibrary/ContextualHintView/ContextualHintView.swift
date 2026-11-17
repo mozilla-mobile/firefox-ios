@@ -13,7 +13,7 @@ public final class ContextualHintView: UIView, ThemeApplicable, Notifiable {
     private var stackViewTopConstraint: NSLayoutConstraint?
     private var closeButtonTopConstraint: NSLayoutConstraint?
 
-    struct UX {
+    enum UX {
         static let closeButtonSize = CGSize(width: 35, height: 35)
         static let maxCloseButtonSize = CGSize(width: closeButtonSize.width * 2.0, height: closeButtonSize.height * 2.0)
         static let closeButtonTrailing: CGFloat = 5

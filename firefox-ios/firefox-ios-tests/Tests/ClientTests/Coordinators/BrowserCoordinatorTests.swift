@@ -23,6 +23,7 @@ final class BrowserCoordinatorTests: XCTestCase,
                                      StoreTestUtility {
     private var mockRouter: MockRouter!
     private var profile: MockProfile!
+    private var featureFlags: MockNimbusFeatureFlags!
     private var overlayModeManager: MockOverlayModeManager!
     private var screenshotService: ScreenshotService!
     private var tabManager: MockTabManager!
@@ -38,8 +39,10 @@ final class BrowserCoordinatorTests: XCTestCase,
         try await super.setUp()
         let mockTabManager = MockTabManager()
         self.tabManager = mockTabManager
-        profile = MockProfile()
-        DependencyHelperMock().bootstrapDependencies(injectedTabManager: mockTabManager)
+        profile = makeProfile()
+        featureFlags = MockNimbusFeatureFlags()
+        DependencyHelperMock().bootstrapDependencies(injectedTabManager: mockTabManager,
+                                                     injectedFeatureFlagProvider: featureFlags)
         setIsAppleSummarizerEnabled(false)
         setIsDeeplinkOptimizationRefactorEnabled(false)
         mockRouter = MockRouter(navigationController: MockNavigationController())
@@ -54,9 +57,9 @@ final class BrowserCoordinatorTests: XCTestCase,
     }
 
     override func tearDown() async throws {
-        profile.shutdown()
         mockRouter = nil
         profile = nil
+        featureFlags = nil
         overlayModeManager = nil
         screenshotService = nil
         tabManager = nil
@@ -403,6 +406,32 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertEqual(mockTemporaryDocument.downloadAsyncCalled, 1)
     }
 
+    // MARK: - shareableFilename
+
+    func testShareableFilename_urlWithExtension_usesLastPathComponent() {
+        let url = URL(string: "https://example.com/docs/report.pdf")!
+
+        XCTAssertEqual(BrowserCoordinator.shareableFilename(for: url, mimeType: nil), "report.pdf")
+    }
+
+    func testShareableFilename_percentEncodedTraversal_keepsOnlyLastComponent() {
+        let url = URL(string: "https://example.com/docs/..%2F..%2Fescaped.pdf")!
+
+        XCTAssertEqual(BrowserCoordinator.shareableFilename(for: url, mimeType: nil), "escaped.pdf")
+    }
+
+    func testShareableFilename_traversalWithoutExtension_fallsBackToMimeType() {
+        let url = URL(string: "https://example.com/docs/..%2F..")!
+
+        XCTAssertEqual(BrowserCoordinator.shareableFilename(for: url, mimeType: "application/pdf"), "document.pdf")
+    }
+
+    func testShareableFilename_noExtensionAndNoMimeType_fallsBackToDocument() {
+        let url = URL(string: "https://example.com/docs/view")!
+
+        XCTAssertEqual(BrowserCoordinator.shareableFilename(for: url, mimeType: nil), "document")
+    }
+
     func testShowCreditCardAutofill_addsCredentialAutofillCoordinator() {
         let subject = createSubject()
 
@@ -442,7 +471,8 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertTrue(subject.childCoordinators.first is CredentialAutofillCoordinator)
         XCTAssertEqual(mockRouter.presentCalled, 1)
-        XCTAssertTrue(mockRouter.presentedViewController is DevicePasscodeRequiredViewController)
+        let passcodeViewController = mockRouter.presentedViewController as? DevicePasscodeRequiredViewController
+        XCTAssertEqual(passcodeViewController?.shouldUsePrivateOverride, false)
     }
 
     func testShowQRCode_addsQRCodeCoordinator() {
@@ -502,6 +532,73 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertTrue(subject.childCoordinators.first is CameraCoordinator)
     }
 
+    // MARK: - VPN alerts
+
+    func testShowVPNFailureAlert_presentsAlertWithActions() throws {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+
+        subject.showVPNFailureAlert()
+
+        let alert = try XCTUnwrap(browserViewController.viewControllerToPresent as? UIAlertController)
+        XCTAssertEqual(alert.title, .VPN.ErrorBrowsingPopup.Title)
+        XCTAssertEqual(alert.message, .VPN.ErrorBrowsingPopup.Body)
+        XCTAssertEqual(alert.actions.map(\.title), [
+            .VPN.ErrorBrowsingPopup.Continue,
+            .VPN.ErrorBrowsingPopup.CloseAllTabs,
+            .VPN.ErrorBrowsingPopup.CloseThisTab
+        ])
+        XCTAssertEqual(alert.actions.first?.style, .destructive)
+    }
+
+    func testShowVPNDataLimitAlert_presentsAlertWithDataLimitAndActions() throws {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+
+        subject.showVPNDataLimitAlert(dataLimitBytes: 50_000_000_000)
+
+        let alert = try XCTUnwrap(browserViewController.viewControllerToPresent as? UIAlertController)
+        XCTAssertEqual(alert.title, .VPN.ReachedDataLimitPopup.Title)
+        XCTAssertEqual(alert.message, String(format: .VPN.ReachedDataLimitPopup.Body, "50"))
+        XCTAssertEqual(alert.actions.map(\.title), [
+            .VPN.ErrorBrowsingPopup.Continue,
+            .VPN.ReachedDataLimitPopup.CloseAllTabs,
+            .VPN.ReachedDataLimitPopup.CloseThisTab
+        ])
+        XCTAssertEqual(alert.actions.first?.style, .destructive)
+    }
+
+    func testShowVPNAlert_whileVPNAlertStillAlive_doesNotPresentAnother() throws {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+        subject.showVPNFailureAlert()
+        let firstAlert = try XCTUnwrap(browserViewController.viewControllerToPresent as? UIAlertController)
+        // Clear the mock so a second alert would be presented on it rather than on `firstAlert`.
+        browserViewController.viewControllerToPresent = nil
+
+        withExtendedLifetime(firstAlert) {
+            subject.showVPNFailureAlert()
+            subject.showVPNDataLimitAlert(dataLimitBytes: 50_000_000_000)
+        }
+
+        XCTAssertNil(browserViewController.viewControllerToPresent)
+    }
+
+    func testShowVPNAlert_afterPreviousVPNAlertReleased_presentsNewAlert() {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+        // The alert is autoreleased, so drain the pool to release it with the mock's reference.
+        autoreleasepool {
+            subject.showVPNFailureAlert()
+            browserViewController.viewControllerToPresent = nil
+        }
+
+        subject.showVPNDataLimitAlert(dataLimitBytes: 50_000_000_000)
+
+        let alert = browserViewController.viewControllerToPresent as? UIAlertController
+        XCTAssertEqual(alert?.title, .VPN.ReachedDataLimitPopup.Title)
+    }
+
     func testSearchGoogleLens_fromToolbarButton_startsSearchTimer() throws {
         let tab = MockTab(profile: profile, windowUUID: windowUUID)
         tab.webView = MockTabWebView(tab: tab)
@@ -530,6 +627,32 @@ final class BrowserCoordinatorTests: XCTestCase,
         let search = try XCTUnwrap(subject.browserViewController.googleLensSearches[tab.tabUUID])
         XCTAssertEqual(glean.startTimingCalled, 0)
         XCTAssertNotNil(search.searchTimerId)
+    }
+
+    func testSearchGoogleLens_interstitialDisabled_doesNotAddInterstitialCoordinator() {
+        featureFlags.enabledFlags = []
+        let tab = MockTab(profile: profile, windowUUID: windowUUID)
+        tab.webView = MockTabWebView(tab: tab)
+        tabManager.tabs = [tab]
+        tabManager.selectedTab = tab
+        let subject = createSubject(googleLensService: MockGoogleLensService())
+
+        subject.searchGoogleLens(with: UIImage(), source: .camera)
+
+        XCTAssertFalse(subject.childCoordinators.contains { $0 is GoogleLensInterstitialCoordinator })
+    }
+
+    func testSearchGoogleLens_interstitialEnabled_addsInterstitialCoordinator() {
+        featureFlags.enabledFlags = [.googleLensSearchInterstitial]
+        let tab = MockTab(profile: profile, windowUUID: windowUUID)
+        tab.webView = MockTabWebView(tab: tab)
+        tabManager.tabs = [tab]
+        tabManager.selectedTab = tab
+        let subject = createSubject(googleLensService: MockGoogleLensService())
+
+        subject.searchGoogleLens(with: UIImage(), source: .photoPicker)
+
+        XCTAssertTrue(subject.childCoordinators.contains { $0 is GoogleLensInterstitialCoordinator })
     }
 
     func testShowQRCode_presentsQRCodeNavigationController() {
@@ -570,13 +693,55 @@ final class BrowserCoordinatorTests: XCTestCase,
         setupNimbusTabTrayUIExperimentTesting(isEnabled: true)
         let subject = createSubject()
         subject.browserViewController = browserViewController
+        let exp = expectation(description: "present called")
+        mockRouter.onPresent = { exp.fulfill() }
+
         subject.showTabTray(selectedPanel: .tabs)
+        wait(for: [exp], timeout: 5)
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertNotNil(subject.childCoordinators[0] as? TabTrayCoordinator)
         let presentedVC = try XCTUnwrap(mockRouter.presentedViewController as? DismissableNavigationViewController)
         XCTAssertEqual(mockRouter.presentCalledWithAnimation, 1)
         XCTAssertTrue(presentedVC.topViewController is TabTrayViewController)
+    }
+
+    func testShowTabTray_withExperiment_presentsOnNextRunLoopTurn() throws {
+        setupNimbusTabTrayUIExperimentTesting(isEnabled: true)
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+        let exp = expectation(description: "present called")
+        mockRouter.onPresent = { exp.fulfill() }
+
+        subject.showTabTray(selectedPanel: .tabs)
+
+        // The coordinator and the preloaded tray exist right away, but the presentation is deferred one turn
+        // so the heavy UIKit window attach doesn't extend the tap's main-thread turn.
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertEqual(mockRouter.presentCalledWithAnimation, 0)
+        let tray = try XCTUnwrap((subject.childCoordinators[0] as? TabTrayCoordinator)?.tabTrayViewController)
+        XCTAssertTrue(tray.isViewLoaded)
+
+        wait(for: [exp], timeout: 5)
+        XCTAssertEqual(mockRouter.presentCalledWithAnimation, 1)
+    }
+
+    func testShowTabTray_withExperiment_whenSomethingElseGotPresented_removesTabTrayCoordinator() {
+        setupNimbusTabTrayUIExperimentTesting(isEnabled: true)
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+
+        subject.showTabTray(selectedPanel: .tabs)
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        // Simulate another modal being presented before the deferred tab tray presentation runs
+        mockRouter.presentCalled = 1
+
+        let exp = expectation(description: "deferred presentation ran")
+        DispatchQueue.main.async { exp.fulfill() }
+        wait(for: [exp], timeout: 5)
+
+        XCTAssertEqual(mockRouter.presentCalledWithAnimation, 0)
+        XCTAssertTrue(subject.childCoordinators.isEmpty)
     }
 
     func testShowTabTray_withPrivateTabs_withoutExperiment_showDefaultPresentation() throws {
@@ -595,7 +760,11 @@ final class BrowserCoordinatorTests: XCTestCase,
         setupNimbusTabTrayUIExperimentTesting(isEnabled: true)
         let subject = createSubject()
         subject.browserViewController = browserViewController
+        let exp = expectation(description: "present called")
+        mockRouter.onPresent = { exp.fulfill() }
+
         subject.showTabTray(selectedPanel: .privateTabs)
+        wait(for: [exp], timeout: 5)
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertNotNil(subject.childCoordinators[0] as? TabTrayCoordinator)
@@ -840,6 +1009,7 @@ final class BrowserCoordinatorTests: XCTestCase,
         )
         XCTAssertEqual(contentViewController.url, url)
         XCTAssertEqual(contentViewController.settingsTitle, title)
+        XCTAssertFalse(contentViewController.shouldUsePrivateOverride)
     }
 
     func testPopToBVC_popsViewControllers() {
@@ -934,6 +1104,20 @@ final class BrowserCoordinatorTests: XCTestCase,
     }
 
     // MARK: - Search route
+
+    func testHandleSearchQuery_withWidgetSearchOption_passesOptionToBrowser() {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+        subject.browserHasLoaded()
+
+        let result = testCanHandleAndHandle(
+            subject,
+            route: .searchQuery(query: "test query", isPrivate: false, options: [.widgetSearch])
+        )
+
+        XCTAssertTrue(result)
+        XCTAssertEqual(browserViewController.handleQueryOptions, [.widgetSearch])
+    }
 
     func testHandleSearchQuery_returnsTrue() {
         let query = "test query"
@@ -1294,6 +1478,25 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertTrue(subject.childCoordinators.isEmpty)
     }
 
+    // MARK: - WallpaperEngagementCoordinatorDelegate
+
+    func testWallpaperEngagementDidTapCTA_removesChildAndShowsWallpaperSettings() {
+        let subject = createSubject()
+        let wallpaperCoordinator = WallpaperEngagementCoordinator(
+            router: mockRouter,
+            windowUUID: windowUUID,
+            tabManager: tabManager,
+            prefs: profile.prefs
+        )
+        subject.add(child: wallpaperCoordinator)
+
+        subject.wallpaperEngagementDidTapCTA(from: wallpaperCoordinator)
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertTrue(subject.childCoordinators.first is SettingsCoordinator)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+    }
+
     // MARK: - Report broken site
 
     func testPresentReportBrokenSite_startsTheReportCoordinator() {
@@ -1610,6 +1813,8 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertTrue(mockRouter.presentedViewController is DismissableNavigationViewController)
         XCTAssertTrue(mockRouter.presentedViewController?.children.first is EditBookmarkViewController)
+        let editBookmarkViewController = mockRouter.presentedViewController?.children.first as? EditBookmarkViewController
+        XCTAssertEqual(editBookmarkViewController?.shouldUsePrivateOverride, false)
     }
 
     func testShowEditBookmarks_didDidDismiss_removesChild() {
@@ -1635,6 +1840,89 @@ final class BrowserCoordinatorTests: XCTestCase,
         subject.didFinish(from: bookmarksCoordinator)
 
         XCTAssertTrue(subject.childCoordinators.isEmpty)
+    }
+
+    // MARK: - WindowEventCoordinator
+    func testWindowWillClose_matchingUUID_removesContentAndDetachesBrowserViewController() {
+        let subject = createSubject()
+        let bvc = subject.browserViewController
+        let parent = UIViewController()
+        parent.addChild(bvc)
+        bvc.didMove(toParent: parent)
+
+        let homepage = HomepageViewController(windowUUID: windowUUID,
+                                              tabManager: tabManager,
+                                              overlayManager: overlayModeManager,
+                                              toastContainer: UIView())
+        bvc.contentContainer.add(content: homepage)
+        bvc.header.addArrangedSubview(UIView())
+        bvc.overKeyboardContainer.addArrangedSubview(UIView())
+        bvc.bottomContainer.addArrangedSubview(UIView())
+
+        subject.coordinatorHandleWindowEvent(event: .windowWillClose, uuid: windowUUID)
+
+        XCTAssertNil(bvc.contentContainer.contentController)
+        XCTAssertNil(homepage.view.superview)
+        XCTAssertFalse(bvc.contentContainer.hasAnyHomepage)
+        XCTAssertTrue(bvc.header.arrangedSubviews.isEmpty)
+        XCTAssertTrue(bvc.overKeyboardContainer.arrangedSubviews.isEmpty)
+        XCTAssertTrue(bvc.bottomContainer.arrangedSubviews.isEmpty)
+        XCTAssertNil(bvc.parent)
+        XCTAssertTrue(parent.children.isEmpty)
+    }
+
+    func testWindowWillClose_matchingUUID_removesWebViewContent() {
+        let subject = createSubject()
+        let bvc = subject.browserViewController
+        let webview = WebviewViewController(webView: WKWebView())
+        bvc.contentContainer.add(content: webview)
+        XCTAssertTrue(bvc.contentContainer.hasWebView)
+
+        subject.coordinatorHandleWindowEvent(event: .windowWillClose, uuid: windowUUID)
+
+        XCTAssertNil(bvc.contentContainer.contentController)
+        XCTAssertNil(webview.view.superview)
+        XCTAssertFalse(bvc.contentContainer.hasWebView)
+    }
+
+    func testWindowWillClose_matchingUUID_releasesEmbeddedContent() {
+        let subject = createSubject()
+        let bvc = subject.browserViewController
+        weak var weakWebview: WebviewViewController?
+
+        autoreleasepool {
+            let webview = WebviewViewController(webView: WKWebView())
+            weakWebview = webview
+            bvc.contentContainer.add(content: webview)
+
+            subject.coordinatorHandleWindowEvent(event: .windowWillClose, uuid: windowUUID)
+        }
+
+        XCTAssertNil(weakWebview, "Embedded content should be freed once the window closes.")
+    }
+
+    func testWindowWillClose_differentUUID_doesNotReleaseBrowserViewController() {
+        let subject = createSubject()
+        let bvc = subject.browserViewController
+        let parent = UIViewController()
+        parent.addChild(bvc)
+        bvc.didMove(toParent: parent)
+
+        let webview = WebviewViewController(webView: WKWebView())
+        bvc.contentContainer.add(content: webview)
+        bvc.header.addArrangedSubview(UIView())
+        bvc.overKeyboardContainer.addArrangedSubview(UIView())
+        bvc.bottomContainer.addArrangedSubview(UIView())
+
+        subject.coordinatorHandleWindowEvent(event: .windowWillClose, uuid: UUID())
+
+        XCTAssertTrue(bvc.contentContainer.contentController === webview)
+        XCTAssertNotNil(webview.view.superview)
+        XCTAssertTrue(bvc.contentContainer.hasWebView)
+        XCTAssertEqual(bvc.header.arrangedSubviews.count, 1)
+        XCTAssertEqual(bvc.overKeyboardContainer.arrangedSubviews.count, 1)
+        XCTAssertEqual(bvc.bottomContainer.arrangedSubviews.count, 1)
+        XCTAssertTrue(bvc.parent === parent)
     }
 
     // MARK: - Child coordinator lifetime
@@ -1754,24 +2042,6 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertEqual(browserViewController.handleQuery, "firefox")
     }
 
-    func testHandle_completesPendingDeeplinkTabActivity() {
-        let subject = createSubject()
-        subject.browserViewController = browserViewController
-        subject.browserHasLoaded()
-        AppEventQueue.started(.pendingDeeplinkTab(windowUUID))
-        defer {
-            if AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(windowUUID)) {
-                AppEventQueue.completed(.pendingDeeplinkTab(windowUUID))
-            }
-        }
-        XCTAssertTrue(AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(windowUUID)))
-
-        let route = Route.search(url: URL(string: "https://example.com")!, isPrivate: false)
-        subject.handle(route: route)
-
-        XCTAssertFalse(AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(windowUUID)))
-    }
-
     // MARK: - StoreTestUtility
     func setupAppState() -> AppState {
         return AppState()
@@ -1819,7 +2089,7 @@ final class BrowserCoordinatorTests: XCTestCase,
     }
 
     private func setIsDeeplinkOptimizationRefactorEnabled(_ enabled: Bool) {
-        FxNimbus.shared.features.deeplinkOptimizationRefactorFeature.with { _, _ in
+        FxNimbus.shared.features.deeplinkOptimizationRefactorFeature.with { _ in
             return DeeplinkOptimizationRefactorFeature(enabled: enabled)
         }
     }
@@ -1831,13 +2101,18 @@ final class BrowserCoordinatorTests: XCTestCase,
     }
 
     private func setIsAppAttestEnabled(_ isEnabled: Bool) {
-        FxNimbus.shared.features.summarizerAppAttestAuthFeature.with { _, _ in
+        FxNimbus.shared.features.summarizerAppAttestAuthFeature.with { _ in
             return SummarizerAppAttestAuthFeature(enabled: true)
         }
     }
 
     private func setupNimbusTabTrayUIExperimentTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.tabTrayUiExperiments.with { _, _ in
+        if isEnabled {
+            featureFlags.enabledFlags.insert(.tabTrayUIExperiments)
+        } else {
+            featureFlags.enabledFlags.remove(.tabTrayUIExperiments)
+        }
+        FxNimbus.shared.features.tabTrayUiExperiments.with { _ in
             return TabTrayUiExperiments(
                 enabled: isEnabled
             )

@@ -27,7 +27,7 @@ final class VPNAppAttestServerTests: XCTestCase {
         _ = try await subject.fetchChallenge(for: AppAttestTestData.keyID)
 
         let req = try XCTUnwrap(session.lastURLRequest, "Expected a request to be made")
-        XCTAssertEqual(req.url?.path, "/api/v1/ipn/attest/challenge")
+        XCTAssertEqual(req.url?.path, "/api/v1/ipn/challenge")
         XCTAssertEqual(req.httpMethod, "POST")
         XCTAssertEqual(req.value(forHTTPHeaderField: "Content-Type"), "application/json")
 
@@ -84,6 +84,7 @@ final class VPNAppAttestServerTests: XCTestCase {
         XCTAssertEqual(body["keyId"] as? String, AppAttestTestData.keyID)
         XCTAssertEqual(body["challenge"] as? String, AppAttestTestData.challenge)
         XCTAssertEqual(body["attestationObject"] as? String, AppAttestTestData.attestationBlob.base64EncodedString())
+        XCTAssertEqual(body["bundleId"] as? String, "org.mozilla.ios.Test")
     }
 
     func test_sendAttestation_throwsOnServerError_andDoesNotSave() async {
@@ -117,7 +118,7 @@ final class VPNAppAttestServerTests: XCTestCase {
             keyId: AppAttestTestData.keyID,
             assertion: AppAttestTestData.assertionBlob,
             challenge: AppAttestTestData.assertionChallenge,
-            payload: Data(#"{"challenge":"\#(AppAttestTestData.assertionChallenge)"}"#.utf8)
+            payload: Data(AppAttestTestData.assertionChallenge.utf8)
         ))
 
         let req = try XCTUnwrap(session.lastURLRequest, "Expected a request to be made")
@@ -159,7 +160,12 @@ final class VPNAppAttestServerTests: XCTestCase {
         urlSession: MockURLSession = MockURLSession(),
         tokenStore: VPNTokenStore = MockVPNTokenStore()
     ) -> VPNAppAttestServer {
-        return VPNAppAttestServer(with: .dev, urlSession: urlSession, tokenStore: tokenStore)
+        return VPNAppAttestServer(
+            with: .dev,
+            urlSession: urlSession,
+            tokenStore: tokenStore,
+            bundleIdentifier: "org.mozilla.ios.Test"
+        )
     }
 
     private func enrollmentJSON() -> Data {

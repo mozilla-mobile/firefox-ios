@@ -44,11 +44,17 @@ protocol BrowserSelectorsSet {
     var CONTEXT_MENU_PASTE_AND_GO: Selector { get }
     var CONTEXT_MENU_PASTE: Selector { get }
     var CONTEXT_MENU_COPY_ADDRESS: Selector { get }
-    var CONTEXT_MENU_CLOSE_BUTTON: Selector { get }
+    var TEXT_SELECTION_MENU_COPY: Selector { get }
+    var TEXT_SELECTION_MENU_SHARE: Selector { get }
+    var TEXT_SELECTION_MENU_MORE: Selector { get }
+    var ADDRESS_BAR_LEADING_SKELETON: Selector { get }
+    var ADDRESS_BAR_TRAILING_SKELETON: Selector { get }
+    var WEB_VIEW: Selector { get }
     func linkElement(named name: String) -> Selector
     func linkPreview(named preview: String) -> Selector
     func webPageElement(with text: String) -> Selector
     func suggestionRow(titled title: String) -> Selector
+    func webViewText(_ text: String) -> Selector
     var all: [Selector] { get }
 }
 
@@ -85,11 +91,9 @@ struct BrowserSelectors: BrowserSelectorsSet {
         static let firefoxSuggestHeader = "Firefox Suggest"
         // In-page button of the test-window-open-on-tap fixture
         static let openDesignatedURLButton = "Open designated URL"
-        static let addressBarContextMenu = AccessibilityIdentifiers.Photon.tableView
         static let contextMenuPasteAndGo = AccessibilityIdentifiers.Photon.pasteAndGoAction
         static let contextMenuPaste = AccessibilityIdentifiers.Photon.pasteAction
         static let contextMenuCopyAddress = AccessibilityIdentifiers.Photon.copyAddressAction
-        static let contextMenuCloseButton = AccessibilityIdentifiers.Photon.closeButton
     }
 
     let ADDRESS_BAR = Selector.textFieldId(
@@ -280,34 +284,73 @@ struct BrowserSelectors: BrowserSelectorsSet {
 
     // MARK: - Address bar long press menu
 
-    let ADDRESS_BAR_CONTEXT_MENU = Selector.tableIdOrLabel(
-        IDs.addressBarContextMenu,
+    // The UIMenu has no identifier of its own, so it counts as open once any of its options is shown.
+    let ADDRESS_BAR_CONTEXT_MENU = Selector(
+        strategy: .predicate(NSPredicate(
+            format: "elementType == %d AND identifier IN %@",
+            XCUIElement.ElementType.button.rawValue,
+            [IDs.contextMenuPasteAndGo, IDs.contextMenuPaste, IDs.contextMenuCopyAddress]
+        )),
+        value: IDs.contextMenuPaste,
         description: "Context menu presented by long pressing the address bar",
         groups: ["browser", "addressBarContextMenu"]
     )
 
-    let CONTEXT_MENU_PASTE_AND_GO = Selector.tableCellButtonById(
+    let CONTEXT_MENU_PASTE_AND_GO = Selector.cellButtonById(
         IDs.contextMenuPasteAndGo,
         description: "'Paste & Go' option in the address bar long press menu",
         groups: ["browser", "addressBarContextMenu"]
     )
 
-    let CONTEXT_MENU_PASTE = Selector.tableCellButtonById(
+    let CONTEXT_MENU_PASTE = Selector.cellButtonById(
         IDs.contextMenuPaste,
         description: "'Paste' option in the address bar long press menu",
         groups: ["browser", "addressBarContextMenu"]
     )
 
-    let CONTEXT_MENU_COPY_ADDRESS = Selector.tableCellButtonById(
+    let CONTEXT_MENU_COPY_ADDRESS = Selector.cellButtonById(
         IDs.contextMenuCopyAddress,
         description: "'Copy Address' option in the address bar long press menu",
         groups: ["browser", "addressBarContextMenu"]
     )
 
-    let CONTEXT_MENU_CLOSE_BUTTON = Selector.buttonId(
-        IDs.contextMenuCloseButton,
-        description: "Close button of the address bar long press menu",
-        groups: ["browser", "addressBarContextMenu"]
+    let TEXT_SELECTION_MENU_COPY = Selector.menuItemOrButtonByLabel(
+        "Copy",
+        description: "'Copy' option in the web page text selection menu",
+        groups: ["browser", "textSelectionMenu"]
+    )
+
+    let TEXT_SELECTION_MENU_SHARE = Selector.menuItemOrButtonByLabel(
+        "Share…",
+        description: "'Share…' option in the web page text selection menu",
+        groups: ["browser", "textSelectionMenu"]
+    )
+
+    // iOS 15 pages the menu with a menu item; later versions use a "Forward" arrow button.
+    // The toolbar's Forward button shares that label, so it is excluded by identifier.
+    let TEXT_SELECTION_MENU_MORE = Selector.buttonByLabelOrMenuItemId(
+        "Forward",
+        excludingButtonId: AccessibilityIdentifiers.Toolbar.forwardButton,
+        menuItemId: "show.next.items.menu.button",
+        description: "Arrow showing the next page of the web page text selection menu",
+        groups: ["browser", "textSelectionMenu"]
+    )
+
+    let ADDRESS_BAR_LEADING_SKELETON = Selector.anyElementById(
+        AccessibilityIdentifiers.Browser.AddressToolbar.leadingSkeleton,
+        description: "Previous tab's address bar peeking beside the bottom address bar",
+        groups: ["browser", "swipingTabs"]
+    )
+
+    let ADDRESS_BAR_TRAILING_SKELETON = Selector.anyElementById(
+        AccessibilityIdentifiers.Browser.AddressToolbar.trailingSkeleton,
+        description: "Next tab's address bar peeking beside the bottom address bar",
+        groups: ["browser", "swipingTabs"]
+    )
+
+    let WEB_VIEW = Selector.webView(
+        description: "Web view showing the current page",
+        groups: ["browser"]
     )
 
     func linkElement(named name: String) -> Selector {
@@ -334,6 +377,16 @@ struct BrowserSelectors: BrowserSelectorsSet {
         )
     }
 
+    /// Unlike `webPageElement(with:)`, only matches inside the web view, as iPad tab titles can repeat page text.
+    func webViewText(_ text: String) -> Selector {
+        Selector.staticTextByExactLabel(
+            text,
+            in: WEB_VIEW,
+            description: "Text '\(text)' in the web view",
+            groups: ["browser", "webview"]
+        )
+    }
+
     func suggestionRow(titled title: String) -> Selector {
         Selector.staticTextInTablesByLabel(
             title,
@@ -353,6 +406,8 @@ struct BrowserSelectors: BrowserSelectorsSet {
                            PASTE_BUTTON, SEARCH_SETTINGS_BUTTON, SPONSORED_LABEL, FIREFOX_SUGGEST_HEADER,
                            OPEN_DESIGNATED_URL_BUTTON, ADDRESS_BAR_CONTEXT_MENU,
                            CONTEXT_MENU_PASTE_AND_GO, CONTEXT_MENU_PASTE,
-                           CONTEXT_MENU_COPY_ADDRESS, CONTEXT_MENU_CLOSE_BUTTON]
+                           CONTEXT_MENU_COPY_ADDRESS, TEXT_SELECTION_MENU_COPY, TEXT_SELECTION_MENU_SHARE,
+                           TEXT_SELECTION_MENU_MORE, ADDRESS_BAR_LEADING_SKELETON,
+                           ADDRESS_BAR_TRAILING_SKELETON, WEB_VIEW]
     }
 }

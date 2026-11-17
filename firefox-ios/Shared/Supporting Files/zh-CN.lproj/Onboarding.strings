@@ -355,6 +355,28 @@
 /* Title for the welcome card in the v2 onboarding flow. */
 "Onboarding.Modern.Welcome.Title.v145" = "甩掉鬼祟跟踪器";
 
+/* Body of the home screen popup requesting permission to send notifications. It emphasizes how notifications keep you updated on news. %@ is a placeholder for the app name (e.g., Firefox). */
+"Onboarding.MultiDay.HomeScreenNotificationsPopup.BodyText.v159" = "掌握 %@ 最新动态。";
+
+/* Button on the home screen popup requesting notification permissions. Tapping this button accepts the permission request. */
+"Onboarding.MultiDay.HomeScreenNotificationsPopup.EnableButtonText.v158" = "启用通知";
+
+/* Voiceover text for the close button on the home screen popup requesting notification permissions. Tapping this button dismisses the popup. */
+"Onboarding.MultiDay.HomeScreenNotificationsPopup.EnableCloseButtonText.v159" = "关闭";
+
+/* Primary button on the onboarding card requesting permission to send notifications. Tapping this button accepts the permission request. */
+"Onboarding.MultiDay.NotificationCard.AcceptButtonText.v159" = "启用通知";
+
+/* Secondary button on the onboarding card requesting permission to send notifications. Tapping this button declines the permission request.
+Secondary button on the onboarding card that prompts users to enable syncing for their account data. Tapping this button dismisses the prompt and closes the card. */
+"Onboarding.MultiDay.NotificationCard.DeclineButtonText.v159" = "暂时不要";
+
+/* Title for the onboarding card requesting permissions to send notifications.  “Stay in the loop” means “Remain informed”. */
+"Onboarding.MultiDay.NotificationCard.Title.v159" = "掌握最新动态";
+
+/* Primary button on the onboarding card that prompts users to enable syncing for their account data. Tapping it directs the user sign into to their Mozilla account to access the feature. */
+"Onboarding.MultiDay.SyncCard.AcceptButtonText.v159" = "登录以同步";
+
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Continue.Action.v114" = "继续";
 

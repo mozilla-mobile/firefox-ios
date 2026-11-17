@@ -25,4 +25,47 @@ final class SyncScreen {
     func tapSyncAndSaveData() {
         sel.SYNC_AND_SAVE_DATA_BUTTON.element(in: app).waitAndTap()
     }
+
+    func openSyncAndSaveDataFromSettings() {
+        sel.SETTINGS_SYNC_AND_SAVE_DATA_ROW.element(in: app).waitAndTap()
+        BaseTestCase().mozWaitForElementToExist(
+            sel.SYNC_AND_SAVE_DATA_NAVIGATION_BAR.element(in: app),
+            timeout: TIMEOUT_LONG
+        )
+    }
+
+    /// Taps "Use email instead" and waits for the Firefox Account web view email field.
+    func tapUseEmailInstead() {
+        sel.EMAIL_SIGN_IN_BUTTON.element(in: app).waitAndTap()
+        BaseTestCase().mozWaitForElementToExist(sel.FXA_EMAIL_FIELD.element(in: app), timeout: TIMEOUT_LONG)
+    }
+
+    func assertEmailFieldPlaceholder(_ expected: String = "Enter your email") {
+        if #available(iOS 17, *) {
+            XCTAssertEqual(sel.FXA_EMAIL_FIELD.element(in: app).label,
+                           expected,
+                           "The mail placeholder does not show the correct value")
+        } else {
+            let placeholder = sel.EMAIL_PLACEHOLDER_TEXT.element(in: app)
+            BaseTestCase().mozWaitForElementToExist(placeholder)
+            if #available(iOS 16, *) {
+                XCTAssertEqual(placeholder.value as? String,
+                               expected,
+                               "The mail placeholder does not show the correct value")
+            }
+        }
+    }
+
+    /// Taps "Close" in the Firefox Account web view, which dismisses the whole presented sheet.
+    func closeFxAWebView() {
+        sel.FXA_WEBVIEW_CLOSE_BUTTON.element(in: app).waitAndTap()
+    }
+
+    func assertFxASheetDismissed(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToNotExist(sel.FXA_WEBVIEW_NAVIGATION_BAR.element(in: app), timeout: timeout)
+        BaseTestCase().mozWaitForElementToNotExist(
+            sel.SYNC_AND_SAVE_DATA_NAVIGATION_BAR.element(in: app),
+            timeout: timeout
+        )
+    }
 }

@@ -93,8 +93,10 @@ struct WallpaperState: ScreenState, Equatable {
 
 struct WallpaperConfiguration: Equatable {
     var id: String?
-    var landscapeImage: UIImage?
-    var portraitImage: UIImage?
+    var iPhonePortraitImage: UIImage?
+    var iPhoneLandscapeImage: UIImage?
+    var iPadPortraitImage: UIImage?
+    var iPadLandscapeImage: UIImage?
     var textColor: UIColor?
     var cardColor: UIColor?
     var logoTextColor: UIColor?
@@ -102,16 +104,20 @@ struct WallpaperConfiguration: Equatable {
 
     init(
         id: String? = nil,
-        landscapeImage: UIImage? = nil,
-        portraitImage: UIImage? = nil,
+        iPhonePortraitImage: UIImage? = nil,
+        iPhoneLandscapeImage: UIImage? = nil,
+        iPadPortraitImage: UIImage? = nil,
+        iPadLandscapeImage: UIImage? = nil,
         textColor: UIColor? = nil,
         cardColor: UIColor? = nil,
         logoTextColor: UIColor? = nil,
         hasImage: Bool = false
     ) {
         self.id = id
-        self.landscapeImage = landscapeImage
-        self.portraitImage = portraitImage
+        self.iPhonePortraitImage = iPhonePortraitImage
+        self.iPhoneLandscapeImage = iPhoneLandscapeImage
+        self.iPadPortraitImage = iPadPortraitImage
+        self.iPadLandscapeImage = iPadLandscapeImage
         self.textColor = textColor
         self.cardColor = cardColor
         self.logoTextColor = logoTextColor
@@ -121,12 +127,14 @@ struct WallpaperConfiguration: Equatable {
     init(wallpaper: Wallpaper) {
         self.init(
             id: wallpaper.id,
-            landscapeImage: wallpaper.landscape,
-            portraitImage: wallpaper.portrait,
+            iPhonePortraitImage: wallpaper.iPhonePortrait,
+            iPhoneLandscapeImage: wallpaper.iPhoneLandscape,
+            iPadPortraitImage: wallpaper.iPadPortrait,
+            iPadLandscapeImage: wallpaper.iPadLandscape,
             textColor: wallpaper.textColor,
             cardColor: wallpaper.cardColor,
             logoTextColor: wallpaper.logoTextColor,
             hasImage: wallpaper.hasImage
         )
     }
- }
+}

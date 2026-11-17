@@ -5,7 +5,7 @@
 "ContextMenu.OpenInNewPrivateTabButtonTitle" = "بازکردن در یک زبانه خصوصی جدید";
 
 /* Description text displayed when there are no open tabs while in private mode */
-"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "فایرفاکس هیچ‌گونه تاریخچه یا کوکی از شما به خاطر نمی‌سپارد، ولی نشانک‌های جدید ذخیره خواهد شد.";
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox هیچ‌گونه تاریخچه یا کوکی از شما به خاطر نمی‌سپارد، ولی نشانک‌های جدید ذخیره خواهد شد.";
 
 /* Text button displayed when there are no tabs open while in private mode */
 "Learn More" = "بیشتر بدانید";
@@ -21,6 +21,9 @@
 
 /* Accessibility label for toggling on/off private mode */
 "Private Mode" = "حالت خصوصی";
+
+/* Accessibility label for toggling on/off private mode */
+"PrivateBrowsing.Toggle.A11y.Label.v132" = "مرور خصوصی";
 
 /* Accessiblity hint for toggling on/off private mode */
 "Turns private mode on or off" = "خاموش یا روشن کردن حالت خصوصی";

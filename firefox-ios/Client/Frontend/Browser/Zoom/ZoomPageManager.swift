@@ -5,7 +5,7 @@
 import Common
 import Storage
 
-struct ZoomConstants {
+enum ZoomConstants {
     static let defaultZoomLimit: CGFloat = ZoomLevel.oneHundredPercent.rawValue
     static let lowerZoomLimit: CGFloat = ZoomLevel.fiftyPercent.rawValue
     static let upperZoomLimit: CGFloat = ZoomLevel.threeHundredPercent.rawValue

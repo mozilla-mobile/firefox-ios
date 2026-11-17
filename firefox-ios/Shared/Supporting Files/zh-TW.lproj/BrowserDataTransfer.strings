@@ -1,0 +1,33 @@
+/* Name of the bookmarks folder that holds bookmarks imported from another browser. %@ is the date when the import happens, formatted for the user’s locale without the time. */
+"BrowserDataTransfer.ImportedBookmarksFolder.Title.v160" = "於 %@ 匯入";
+
+/* Button that dismisses the alert shown when Firefox could not finish importing data from another browser. */
+"BrowserDataTransfer.ImportFailure.DismissButton.v160" = "知道了！";
+
+/* Message of the alert shown when Firefox could not finish importing data from another browser. */
+"BrowserDataTransfer.ImportFailure.Message.v160" = "請稍後再試。";
+
+/* Title of the alert shown when Firefox could not finish importing data from another browser. %@ is the name of the other browser, for example Safari. Data imported before the error is kept. */
+"BrowserDataTransfer.ImportFailure.Title.v160" = "無法從 %@ 匯入";
+
+/* Button that dismisses the alert shown after Firefox finishes importing data from another browser. */
+"BrowserDataTransfer.ImportSuccess.GotItButton.v160" = "知道了！";
+
+/* Message of the alert shown after Firefox finishes importing data from another browser. %@ is the app name (e.g. Firefox). */
+"BrowserDataTransfer.ImportSuccess.Message.v160" = "您匯入的資料已可在 %@ 使用。";
+
+/* Title of the alert shown after Firefox finishes importing data from another browser. %@ is the name of the other browser, for example Safari. */
+"BrowserDataTransfer.ImportSuccess.Title.v160" = "%@ 匯入完成";
+
+/* On the Data Management screen in Settings, the button that starts sending Firefox bookmarks, history, and reading lists to another browser installed on the device. */
+"BrowserDataTransfer.Settings.ExportButton.v160" = "匯出至其他瀏覽器";
+
+/* On the Data Management screen in Settings, the button that starts importing bookmarks, history, and reading lists from another browser installed on the device into Firefox. */
+"BrowserDataTransfer.Settings.ImportButton.v160" = "從另一套瀏覽器匯入";
+
+/* On the Data Management screen in Settings, the header of the section that contains the actions to import data from, or export data to, another browser installed on the device. */
+"BrowserDataTransfer.Settings.SectionTitle.v160" = "資料匯入與匯出";
+
+/* On the Data Management screen in Settings, the footer below the import and export buttons explaining which kinds of data can be moved between the app and another browser. %1$@ is the app name (e.g. Firefox), used in both places. */
+"BrowserDataTransfer.Settings.SupportedDataFooter.v160" = "將書籤、瀏覽紀錄和閱讀清單匯入 %1$@，或將 %1$@ 的資料匯出至其他瀏覽器。";
+

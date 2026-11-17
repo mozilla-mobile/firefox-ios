@@ -4,7 +4,7 @@
 
 import UIKit
 
-public struct UIConstants {
+public enum UIConstants {
     static let TopToolbarHeight: CGFloat = 56
     static let TopToolbarHeightMax: CGFloat = 75
     static let ToolbarHeight: CGFloat = 46

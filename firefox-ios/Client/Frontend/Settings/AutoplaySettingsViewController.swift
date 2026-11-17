@@ -10,8 +10,14 @@ final class AutoplaySettingsViewController: SettingsTableViewController {
     private let prefs: Prefs
     private var currentChoice: AutoplayAction?
 
-    init(prefs: Prefs, windowUUID: WindowUUID) {
+    /// Keep the private theme override just for Settings, since this is also presented from the Site Menu.
+    private let _shouldUsePrivateOverride: Bool
+    override var shouldUsePrivateOverride: Bool { return _shouldUsePrivateOverride }
+    override var shouldBeInPrivateTheme: Bool { return false }
+
+    init(prefs: Prefs, windowUUID: WindowUUID, shouldUsePrivateOverride: Bool = true) {
         self.prefs = prefs
+        self._shouldUsePrivateOverride = shouldUsePrivateOverride
         super.init(style: .grouped, windowUUID: windowUUID)
 
         self.title = .Settings.Autoplay.Autoplay

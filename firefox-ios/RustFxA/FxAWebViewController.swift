@@ -24,6 +24,13 @@ class FxAWebViewController: UIViewController {
     fileprivate let viewModel: FxAWebViewModel
     private let logger: Logger
 
+    #if compiler(>=6.4)
+    @available(iOS 27.1, *)
+    override var preferredVerticalBarBehavior: UIVerticalBarBehavior {
+        return .disabled
+    }
+    #endif
+
     /**
      init() FxAWebView.
 
@@ -75,7 +82,24 @@ class FxAWebViewController: UIViewController {
         setup()
     }
 
+    private func setupNavigationButton() {
+        navigationItem.hidesBackButton = true
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            title: .CloseButtonTitle,
+            style: .plain,
+            target: self,
+            action: #selector(closeSheet)
+        )
+    }
+
+    @objc
+    private func closeSheet() {
+        endPairingConnectionBackgroundTask()
+        navigationController?.dismiss(animated: true)
+    }
+
     private func setup() {
+        setupNavigationButton()
         webView.navigationDelegate = self
         view = webView
         webView.addObserver(self, forKeyPath: KVOConstants.URL.rawValue, options: .new, context: nil)
@@ -234,8 +258,7 @@ extension FxAWebViewController: WKUIDelegate {
             })
 
         navigationItem.title = nil
-        self.navigationItem.leftBarButtonItem = nil
-        self.navigationItem.hidesBackButton = false
+        setupNavigationButton()
     }
 }
 

@@ -115,6 +115,22 @@ final class DownloadsPanelViewModelTests: XCTestCase {
         XCTAssertTrue(downloadFile.lastModified.isWithinLastTwentyFourHours())
     }
 
+    func testGetDownloadFile_ForInvalidIndexReturnsNil() {
+        let viewModel = createSubject(resultsPerSection: [Date(timeIntervalSince1970: 0): 1])
+        viewModel.reloadData()
+        let invalidIndexPaths = [
+            IndexPath(row: 0, section: -1),
+            IndexPath(row: 0, section: 4),
+            IndexPath(row: -1, section: 3),
+            IndexPath(row: 1, section: 3),
+            IndexPath(row: 0, section: 0)
+        ]
+
+        for indexPath in invalidIndexPaths {
+            XCTAssertNil(viewModel.downloadedFileForIndexPath(indexPath), "Expected nil at \(indexPath)")
+        }
+    }
+
     func testGetNumberOfItems_ForLastTwentyFourHours() {
         let twelveHoursAgo = Calendar.current.date(byAdding: .hour, value: -12, to: Date()) ?? Date()
         let twelveHoursAgoResults: [Date: Int] = [twelveHoursAgo: 3]

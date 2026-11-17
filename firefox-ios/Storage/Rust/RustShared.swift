@@ -5,7 +5,7 @@
 import Foundation
 import Common
 
-public class RustShared {
+public enum RustShared {
     static func moveDatabaseFileToBackupLocation(databasePath: String,
                                                  logger: Logger = DefaultLogger.shared) {
         let databaseURL = URL(fileURLWithPath: databasePath)

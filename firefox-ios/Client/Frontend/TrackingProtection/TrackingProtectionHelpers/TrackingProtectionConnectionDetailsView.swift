@@ -6,7 +6,7 @@ import Foundation
 import Common
 
 final class TrackingProtectionConnectionDetailsView: UIView {
-    private struct UX {
+    private enum UX {
         static let foxImageSize: CGFloat = 100
         static let connectionDetailsLabelsVerticalSpacing: CGFloat = 12
         static let labelsCenteringDelta: CGFloat = 8

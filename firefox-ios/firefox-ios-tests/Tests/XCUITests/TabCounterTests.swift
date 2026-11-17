@@ -15,6 +15,7 @@ class TabCounterTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2359077
+    // Regression
     func testTabIncrement() {
         toolbarScreen.assertTabsButtonExists()
         toolbarScreen.assertTabsButtonValue(expectedCount: "1")
@@ -25,6 +26,7 @@ class TabCounterTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2359078
+    // Regression
     func testTabDecrement() {
         toolbarScreen.assertTabsButtonExists()
         toolbarScreen.assertTabsButtonValue(expectedCount: "1")

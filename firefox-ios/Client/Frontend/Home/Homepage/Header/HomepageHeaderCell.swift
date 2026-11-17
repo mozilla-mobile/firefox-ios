@@ -27,6 +27,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons
 
     private var headerState: HeaderState?
+    private var theme: Theme?
     private var logoTextColor: UIColor?
     private var showiPadSetup = false
     private weak var tipPresenter: UIViewController?
@@ -54,18 +55,17 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         imageView.contentMode = .scaleAspectFit
     }
 
-    private lazy var quickAnswersButton: UIButton = .build { [weak self] button in
-        button.configuration = .filled()
-        button.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.audioWave)?
-            .withRenderingMode(.alwaysTemplate)
-        button.configuration?.cornerStyle = .capsule
-        button.accessibilityLabel = .QuickAnswers.AccessibilityLabels.OpenQuickAnswers
-        button.accessibilityIdentifier = a11y.quickAnswersButton
-        button.adjustsImageSizeForAccessibilityContentSizeCategory = false
-        button.addAction(UIAction(handler: { _ in
+    private lazy var quickAnswersButton: QuickAnswersEntryPointButton = {
+        let button = QuickAnswersEntryPointButton { [weak self] in
             self?.quickAnswerButtonTapped()
-        }), for: .touchUpInside)
-    }
+        }
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.accessibilityLabel = .QuickAnswers.AccessibilityLabels.OpenQuickAnswers
+        button.largeContentTitle = .QuickAnswers.AccessibilityLabels.OpenQuickAnswers
+        button.accessibilityIdentifier = a11y.quickAnswersButton
+        button.addInteraction(UILargeContentViewerInteraction())
+        return button
+    }()
     private lazy var logoCenterConstraint = logoContainerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
     private lazy var logoLeadingConstraint = logoContainerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
     private lazy var logoImageWidthConstraint = logoImage.widthAnchor.constraint(
@@ -154,6 +154,25 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         } else {
             cancelQuickAnswersTipObservation()
         }
+
+        updateQuickAnswersButton()
+    }
+
+    /// Waits for both state and theme, so cells built only for sizing never start a glow.
+    private func updateQuickAnswersButton() {
+        guard let headerState, let theme else { return }
+
+        let didStartGlow = quickAnswersButton.configure(
+            theme: theme,
+            shouldStartGlowing: headerState.shouldStartQuickAnswersButtonGlow
+        )
+        guard didStartGlow else { return }
+        store.dispatch(
+            QuickAnswersAction(
+                windowUUID: headerState.windowUUID,
+                actionType: QuickAnswersActionType.didStartEntryPointButtonGlow
+            )
+        )
     }
 
     private func observeQuickAnswersTip() {
@@ -207,13 +226,10 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
 
     private func quickAnswerButtonTapped() {
         guard let headerState else { return }
-        UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
-        let transitionType: QuickAnswersTransitionType = if showiPadSetup {
-            .formSheet
-        } else {
-            // convert the button frame to the parent window frame to have correct transition.
-            .sourceReveal(sourceRect: quickAnswersButton.convert(quickAnswersButton.bounds, to: nil))
-        }
+        // convert the button frame to the parent window frame to have correct transition.
+        let transitionType: QuickAnswersTransitionType = .sourceReveal(
+            sourceRect: quickAnswersButton.convert(quickAnswersButton.bounds, to: nil)
+        )
         store.dispatch(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(.quickAnswers(transitionType: transitionType)),
@@ -225,9 +241,9 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
 
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
+        self.theme = theme
         logoTextImage.tintColor = logoTextColor ?? theme.colors.textPrimary
 
-        quickAnswersButton.configuration?.baseBackgroundColor = theme.colors.layer4
-        quickAnswersButton.configuration?.baseForegroundColor = theme.colors.actionPrimary
+        updateQuickAnswersButton()
     }
 }

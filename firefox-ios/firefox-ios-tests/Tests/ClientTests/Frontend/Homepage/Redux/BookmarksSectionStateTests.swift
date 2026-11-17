@@ -14,7 +14,7 @@ final class BookmarksSectionStateTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
         await DependencyHelperMock().bootstrapDependencies(injectedProfile: mockProfile)
         setupNimbusHomepageBookmarksSectionDefaultTesting(isEnabled: false)
     }
@@ -189,7 +189,7 @@ final class BookmarksSectionStateTests: XCTestCase {
     }
 
     private func setupNimbusHomepageBookmarksSectionDefaultTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
+        FxNimbus.shared.features.homepageRedesignFeature.with { _ in
             return HomepageRedesignFeature(bookmarksSectionDefault: isEnabled)
         }
     }

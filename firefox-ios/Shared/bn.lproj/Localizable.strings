@@ -14,7 +14,7 @@
 "Aa" = "Aa";
 
 /* About settings section title */
-"About" = "সম্পর্কে";
+"About" = "পরিচিতি";
 
 /* The title for the pinning a shortcut action */
 "ActivityStream.ContextMenu.AddToShortcuts" = "শর্টকাটে যুক্ত করুন";
@@ -71,7 +71,7 @@
 "Always Send" = "সর্বদা পাঠানো হবে";
 
 /* Tile title for Amazon */
-"Amazon" = "Amazon";
+"Amazon" = "অ্যামাজন";
 
 /* Authentication prompt title */
 "Authentication required" = "অনুমোদন প্রয়োজন";
@@ -86,7 +86,7 @@
 "Bookmark.DetailFieldTitle.Label" = "শিরোনাম";
 
 /* The label for the URL field when editing a bookmark */
-"Bookmark.DetailFieldURL.Label" = "URL";
+"Bookmark.DetailFieldURL.Label" = "ইউআরএল";
 
 /* Toggle bookmarks syncing setting */
 "Bookmarks" = "বুকমার্কসমূহ";
@@ -172,6 +172,9 @@
 /* The label text in the Button Toast for switching to a fresh New Tab. */
 "ContextMenu.ButtonToast.NewTabOpened.LabelText" = "নতুন ট্যাব খোলা হয়েছে";
 
+/* The label text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.LabelText.v114" = "নতুন ট্যাব খোলা হয়েছে";
+
 /* Context menu item for copying an image to the clipboard */
 "ContextMenu.CopyImageButtonTitle" = "ছবি কপি করুন";
 
@@ -202,11 +205,14 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
 "ContextualHints.TabTray.InactiveTabs.CallToAction" = "সেটিংসে বন্ধ করুন";
 
+/* Accessibility label for action denoting closing contextual hint. */
+"ContextualHintsCloseButtonAccessibility.v105" = "বন্ধ";
+
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "পেজটি রিডিং তালিকায় যোগ্ করা যায়নি";
 
 /* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
-"Could not add page to Reading List. Maybe it’s already there?" = "রিডিং তালিকা যোগ্ করা যাচ্ছে। সম্ভবতঃ এটি ইতিমধ্যেই আছে?";
+"Could not add page to Reading List. Maybe it’s already there?" = "রিডিং লিস্টে অ্যাড করা সম্ভব হয়নি। হয়তো সেটা ইতিমধ্যেই আছে?";
 
 /* Error message that is shown in settings when there was a problem loading */
 "Could not load page." = "পেজ লোড করা যাচ্ছে না";
@@ -231,6 +237,9 @@
 
 /* Title for default search engine picker. */
 "Default Search Engine" = "ডিফল্ট অনুসন্ধান ইঞ্জিন";
+
+/* Accessibility label for action denoting closing default browser home tab banner. */
+"DefaultBrowserCloseButtonAccessibility.v102" = "বন্ধ";
 
 /* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
 "Display Settings" = "সেটিংস প্রদর্শন করুন";
@@ -320,10 +329,40 @@
 "Facebook" = "ফেইসবুক";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Firefox Home Page";
+"Firefox.HomePage.Title" = "ফায়ারফক্স হোম পেজ";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "হোমপেজ কাস্টমাইজ করুন";
+
+/* At the end of the Pocket section on the Firefox Homepage, this button appears and indicates tapping it will navigate the user to more Pocket Stories. */
+"FirefoxHome.Pocket.DiscoverMore" = "আরও দেখুন";
+
+/* This is the title of the Pocket section on Firefox Homepage. */
+"FirefoxHome.Pocket.SectionTitle" = "ভাবনা উদ্রেককারী গল্প";
+
+/* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
+"FirefoxHome.RecentHistory.Remove" = "অপসারণ";
+
+/* On each Story on the Firefox Homepage, this label appears and indicates the number of minutes to read an article. Minutes should be abbreviated due to space constraints. %d represents the number of minutes */
+"FirefoxHome.Stories.Minutes.v140" = "সর্বনিম্ন: %d";
+
+/* Label showing how many pages there is in a search group. %d represents a number */
+"FirefoxHomepage.Common.PagesCount.v112" = "পাতাগুলো: %d";
+
+/* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
+"FirefoxHomepage.ContextualMenu.Settings.v101" = "সেটিংস";
+
+/* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
+"FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "আমাদের পৃষ্ঠপোষকগণ এবং আপনার গোপনীয়তা";
+
+/* Accessibility action title to open the synced tab for tab pickup on the Firefox homepage in the Jump Back In section. */
+"FirefoxHomepage.JumpBackIn.TabPickup.OpenTab.A11y.v106" = "সিঙ্ককৃত ট্যাব খুলুন";
+
+/* Button title shown for tab pickup on the Firefox homepage in the Jump Back In section. */
+"FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104" = "সকল সিঙ্ক করা ট্যাব দেখুন";
+
+/* If a user is signed in, and a sync has been performed to collect their recent tabs from other signed in devices, their most recent tab from another device can now appear in the Jump Back In section. This label specifically points out which cell inside the Jump Back In section shows that synced tab. */
+"FirefoxHomepage.JumpBackIn.TabPickup.v104" = "ট্যাব পিকআপ";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "পরবর্তী";
@@ -373,6 +412,9 @@
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "একটি ডিভাইস Firefox সিঙ্ক থেকে সংযোগ বিচ্ছিন্ন হয়েছে";
 
+/* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "ফায়ারফক্স লোগো, ওয়ালপেপার পরিবর্তন করুন।";
+
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "সাহায্য";
 
@@ -420,6 +462,9 @@
 
 /* The title for the Delete from History context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.DeleteFromHistory" = "ইতিহাস থেকে মুছে ফেলুন";
+
+/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewPrivateTab.v101" = "প্রাইভেট ট্যাবে খুলুন";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewTab" = "নতুন ট্যাবে খুলুন";
@@ -532,6 +577,42 @@
 /* This label is meant to signify the section containing a group of items from the past seven days. */
 "Last week" = "গত সপ্তাহ";
 
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.Bookmarks.v106" = "বুকমার্কগুলো";
+
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.History.v106" = "ইতিহাস";
+
+/* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
+"LibraryPanel.History.ClearGroupedTabsCancel.v100" = "বাতিল করুন";
+
+/* Within the History Panel, users can delete search group sites history. They need to confirm the action by pressing the delete button. */
+"LibraryPanel.History.ClearGroupedTabsDelete.v100" = "মুছুন";
+
+/* Within the History Panel, users can delete search group sites history. %@ represents the search group name. */
+"LibraryPanel.History.ClearGroupedTabsTitle.v100" = "%@ এর সব সাইট মুছে ফেলবেন?";
+
+/* Within the History Panel, users can open an action menu to clear recent history. */
+"LibraryPanel.History.ClearHistoryMenuTitle.v100" = "ব্রাউজিং ইতিহাস (অন্যান্য ডিভাইস থেকে সিঙ্ক করা ইতিহাসসহ), কুকিজ এবং অন্যান্য ব্রাউজিং ডেটা মুছে ফেলে।";
+
+/* Within the history panel, a user can navigate into a screen with only grouped history items. Within that screen, a user can now swipe to delete a single item in the list. This label informs the user of a deletion action on the item. */
+"LibraryPanel.History.DeleteGroupedItem.v104" = "মুছুন";
+
+/* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
+"LibraryPanel.History.NoHistoryFound.v99" = "ইতিহাস পাওয়া যায়নি";
+
+/* In the history panel, this is the title on the button that navigates the user to a screen showing their recently closed tabs. */
+"LibraryPanel.History.RecentlyClosedTabs.v99" = "সম্প্রতি বন্ধ করা ট্যাবসমূহ";
+
+/* In the history panel, users will be able to search terms in their browsing history. This placeholder text inside the search component will indicate that a user can search through their browsing history. */
+"LibraryPanel.History.SearchHistoryPlaceholder.v99" = "সার্চের বিষয় লিখুন";
+
+/* Within the History Panel, users can see the option of viewing their history from synced tabs. */
+"LibraryPanel.History.SyncedHistory.v100" = "সিঙ্ককৃত ইতিহাস";
+
+/* This label is meant to signify the section containing a group of items that are older than thirty days. */
+"LibraryPanel.Section.Older" = "পুরাতন";
+
 /* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
 "Licenses" = "অনুজ্ঞাপত্রগুলি";
 
@@ -558,6 +639,9 @@
 
 /* Title of the Learn More button that links to a support page about device passcode requirements. */
 "Logins.Onboarding.LearnMoreButtonTitle" = "আরও জানুন";
+
+/* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
+"Logins.PasscodeRequirement.Warning" = "ফায়ারফক্সের অটোফিল ফিচারটি ব্যবহার করতে হলে, আপনার ডিভাইসে পাসকোড চালু থাকতে হবে।";
 
 /* Label displaying welcome view tagline under the title */
 "Logins.WelcomeView.Tagline" = "আপনার পাসওয়ার্ড সর্বত্র নিন";
@@ -607,11 +691,20 @@
 /* Toast displayed to the user after a bookmark has been added. */
 "Menu.AddBookmark.Confirm" = "বুকমার্ক করা হয়েছে";
 
+/* Label for the add bookmark button in the menu. Pressing this button bookmarks the current page. Please keep the text as short as possible for this label. */
+"Menu.AddBookmark.Label.v99" = "যোগ করুন";
+
 /* Toast displayed to the user after adding the item to the Shortcuts. */
 "Menu.AddPin.Confirm2" = "শর্টকাট যুক্ত হয়েছে";
 
+/* Label for the add to reading list button in the menu. Pressing this button adds the current page to the reading list. Please keep the text as short as possible for this label. */
+"Menu.AddReadingList.Label.v99" = "যোগ করুন";
+
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "পঠন তালিকায় যোগ করা হয়েছে";
+
+/* Label for the add to shortcuts button in the menu. Pressing this button pins the current website as a shortcut on the home page. */
+"Menu.AddToShortcuts.v99" = "শর্টকার্টে যোগ করুন";
 
 /* Label for the button, displayed in the menu, takes you to bookmarks screen when pressed. */
 "Menu.Bookmarks.Label" = "বুকমার্ক";
@@ -622,11 +715,29 @@
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "URL ক্লিপবোর্ডে কপি করা হয়েছে";
 
+/* Label for the customize homepage button in the menu page. Pressing this button takes users to the settings options, where they can customize the Firefox Home page */
+"Menu.CustomizeHomePage.v99" = "হোমপেজ কাস্টমাইজ করুন";
+
 /* Label for the button, displayed in the menu, takes you to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "ডাউনলোড";
 
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "এ সাইটের জন্য সুরক্ষা বন্ধ আছে";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "এ সাইটের জন্য সুরক্ষা চালু আছে";
+
+/* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
+"Menu.Help.v99" = "সহায়তা";
+
 /* Label for the button, displayed in the menu, takes you to History screen when pressed. */
 "Menu.History.Label" = "ইতিহাস";
+
+/* Label for the new private tab button in the menu page. Pressing this button opens a new private tab. */
+"Menu.NewPrivateTab.Label" = "নতুন প্রাইভেট ট্যাব";
+
+/* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
+"Menu.NewTab.v99" = "নতুন ট্যাব";
 
 /* Label for the button, displayed in the menu, turns off night mode. */
 "Menu.NightModeTurnOff.Label2" = "নাইট মোড বন্ধ করুন";
@@ -655,8 +766,35 @@
 /* Toast displayed to the user after a bookmark has been removed. */
 "Menu.RemoveBookmark.Confirm" = "বুকমার্ক অপসারণ";
 
+/* Label for the remove bookmark button in the menu. Pressing this button remove the current page from the bookmarks. Please keep the text as short as possible for this label. */
+"Menu.RemoveBookmark.Label.v99" = "অপসারণ";
+
+/* Label for the remove from shortcuts button in the menu. Pressing this button removes the current website from the shortcut pins on the home page. */
+"Menu.RemovedFromShortcuts.v99" = "শর্টকার্ট থেকে মুছুন";
+
+/* Toast displayed to the user after removing the item to the Shortcuts. */
+"Menu.RemovePin.Confirm2.v99" = "শর্টকার্টগুলো থেকে সরানো হয়েছে";
+
+/* Toast displayed to confirm to the user that his reading list item was correctly removed. */
+"Menu.RemoveReadingList.Confirm.v99" = "রিডিং লিস্ট থেকে মুছে ফেলা হয়েছে";
+
+/* Label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list. Please keep the text as short as possible for this label. */
+"Menu.RemoveReadingList.Label.v99" = "অপসারণ";
+
+/* Label for the share button in the menu page. Pressing this button open the share menu to share the current website. */
+"Menu.Share.v99" = "শেয়ার";
+
+/* Label for the Firefox Sync button in the menu page. Pressing this button open the sign in to Firefox page service to sync and save data. */
+"Menu.SyncAndSaveData.v103" = "তথ্য সিঙ্ক এবং সংরক্ষণ করুন";
+
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "ট্যাব প্রেরিত";
+
+/* Accessibility label for the Bookmark button on the toolbar. Pressing this button opens the bookmarks menu */
+"Menu.Toolbar.Bookmarks.AccessibilityLabel.v99" = "বুকমার্কস";
+
+/* Accessibility label for the Home button on the toolbar. Pressing this button brings the user to the home page. */
+"Menu.Toolbar.Home.AccessibilityLabel.v99" = "হোম";
 
 /* String to let users know the site verifier, where %@ represents the SSL certificate signer. */
 "Menu.TrackingProtection.Details.Verifier" = "%@ যাচাই করেছে";
@@ -696,6 +834,9 @@
 
 /* The title for the option to view the What's new page. */
 "Menu.WhatsNew.Title" = "নতুন কি আছে";
+
+/* Label for the zoom page button in the menu, used to show the Zoom Page bar. %@ shows the current zoom level in percent. */
+"Menu.ZoomPage.Title.v113" = "জুম (%@)";
 
 /* Accessibility label for Mobile Device image in remote tabs list */
 "mobile device" = "মোবাইল ডিভাইস";
@@ -784,6 +925,12 @@
 /* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
 "ReaderMode.Available.VoiceOverAnnouncement" = "পাঠক মোড আছে";
 
+/* Name for Mark as read button in reader mode */
+"ReaderModeBar.MarkAsRead.v106" = "পড়া হয়েছে হিসাবে চিহ্নিত করুন";
+
+/* Name for Mark as unread button in reader mode */
+"ReaderModeBar.MarkAsUnread.v106" = "পড়া হয়নি হিসাবে চিহ্নিত করা হবে";
+
 /* Panel accessibility label */
 "Reading list" = "পঠন তালিকা";
 
@@ -844,6 +991,9 @@
 /* Search suggestion cell label that allows user to switch to tab which they searched for in url bar */
 "Search.Awesomebar.SwitchToTab" = "ট্যাবে সুইচ করুন";
 
+/* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
+"Search.SuggestSectionTitle.v102" = "ফায়ারফক্স সাজেস্ট";
+
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "নতুন অনুসন্ধানের ইঞ্জিন কুইক সার্চ বারে থাকবে।";
 
@@ -888,6 +1038,9 @@
 
 /* Button title for cancelling share screen */
 "SendTo.Cancel.Button" = "বাতিল করুন";
+
+/* Close button in top navigation bar */
+"SendTo.Close.Button" = "বন্ধ";
 
 /* Header for the list of devices table */
 "SendTo.DeviceList.Text" = "ব্যবহারযোগ্য ডিভাইস:";
@@ -967,14 +1120,47 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (%s এর সাথে ক্যোয়ারী প্রতিস্থাপন করুন)";
 
+/* In the settings menu, in the Address Bar customization section, this label indicates that selecting this will make the address bar appear at the bottom of the screen. */
+"Settings.AddressBar.Bottom.v138" = "নিচে";
+
+/* In the settings menu, in the Address Bar customization menu, this is the title of the section where the user can toggle the address bar position. */
+"Settings.AddressBar.SectionTitle.v138" = "অ্যাড্রেস বারের অবস্থান";
+
+/* In the settings menu, this label indicates that there is an option of customizing the Address Bar position. */
+"Settings.AddressBar.SettingsTitle.v138" = "অ্যাড্রেস বার";
+
+/* In the settings menu, in the Address Bar customization section, this label indicates that selecting this will make the address bar appear at the top of the screen. */
+"Settings.AddressBar.Top.v138" = "উপরে";
+
+/* Browser theme settings section title in Appearance settings */
+"Settings.Appearance.BrowserTheme.SectionHeader.v137" = "ব্রাউজার থিম";
+
+/* Title in main app settings for Appearance settings */
+"Settings.Appearance.Title.v137" = "অবয়ব";
+
+/* Website Appearance settings section title in Appearance settings */
+"Settings.Appearance.WebsiteAppearance.SectionHeader.v137" = "ওয়েবসাইটের অবয়ব";
+
+/* Under Website Appearance section in Appearance menu, this is the text under the toggle describing the dark mode feature. */
+"Settings.Appearance.WebsiteDarkMode.Description.v137" = "ওয়েবসাইটগুলোকে একটি ডার্ক অবয়ব দেয়। কিছু সাইট দেখতে ঠিক নাও লাগতে পারে।";
+
+/* Under Website Appearance section in Appearance menu, this is the title of the toggle to switch dark theme on/off. */
+"Settings.Appearance.WebsiteDarkModeToggle.Title.v137" = "ওয়েবসাইট ডার্ক মোড";
+
+/* Title of setting to block opening external apps when pressing links. */
+"Settings.BlockOpeningExternalApps.Title" = "অন্য অ্যাপ খোলা ব্লক করুন";
+
 /* Button in Data Management that clears all items. */
-"Settings.ClearAllWebsiteData.Clear.Button" = "সমস্ত ওয়েবসাইট তথ্য মুছে ফেলুন";
+"Settings.ClearAllWebsiteData.Clear.Button" = "সমস্ত ওয়েবসাইটের ডেটা মুছুন";
 
 /* Button in settings that clears private data for the selected items. */
 "Settings.ClearPrivateData.Clear.Button" = "ব্যক্তিগত ডাটা মুছে দিন";
 
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
 "Settings.ClearPrivateData.SectionName" = "ব্যাক্তিগত ডাটা মুছে দিন";
+
+/* Button in Data Management that clears private data for the selected items. %1$@ is the number of items to be cleared. */
+"Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "আইটেমগুলি পরিষ্কার করুন: %1$@";
 
 /* Copy app version alert shown in settings. */
 "Settings.CopyAppVersion.Title" = "ক্লিপবোর্ডে অনুলিপি করা হয়েছে";
@@ -1024,6 +1210,9 @@
 /* Display (theme) settings footer describing how the brightness slider works. */
 "Settings.DisplayTheme.SectionFooter" = "থিমটি স্বয়ংক্রিয়ভাবে আপনার ডিসপ্লের উজ্জ্বলতায় নির্ভর করে পরিবর্তন হবে। থিম কোথায় পরিবর্তন হবে আপনি সেই পরিসীমা নির্ধারণ করতে পারেন। বৃত্তটি আপনার ডিসপ্লের বর্তমান উজ্জ্বলতা নির্দেশ করে।";
 
+/* Display (theme) settings label to show if automatically switch theme is enabled. */
+"Settings.DisplayTheme.StatusTitle" = "স্বয়ংক্রিয়";
+
 /* Switch mode settings section title */
 "Settings.DisplayTheme.SwitchMode.SectionHeader" = "মোড পরিবর্তন করুন";
 
@@ -1057,6 +1246,15 @@
 /* General settings section title */
 "Settings.General.SectionName" = "সাধারণ";
 
+/* This is the description below the settings section located in the menu under customize current homepage. It describes what the options in the section are for. */
+"Settings.Home.Current.Description.v101" = "হোমপেজ হিসেবে কী প্রদর্শিত হবে তা বেছে নিন।";
+
+/* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
+"Settings.Home.Option.Description.v101" = "ফায়ারফক্স হোমপেজে কী কী অন্তর্ভুক্ত থাকবে তা বেছে নিন।";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
+"Settings.Home.Option.JumpBackIn" = "পূর্বাবস্থায় ফিরে যান";
+
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off */
 "Settings.Home.Option.Pocket" = "Pocket সুপারিশ করেছে";
 
@@ -1069,8 +1267,14 @@
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
 "Settings.Home.Option.Shortcuts" = "শর্টকাট";
 
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage after four hours of inactivity. */
+"Settings.Home.Option.StartAtHome.AfterFourHours" = "চার ঘন্টা নিষ্ক্রিয়তার পরে হোমপেজ";
+
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Always" = "হোমপেজ";
+
+/* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
+"Settings.Home.Option.StartAtHome.Description" = "ফায়ারফক্সে ফিরে এলে আপনি কী দেখতে চান তা বেছে নিন।";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Never" = "শেষ ট্যাব";
@@ -1078,8 +1282,80 @@
 /* Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage. */
 "Settings.Home.Option.StartAtHome.Title" = "খোলা পর্দা";
 
+/* In the settings menu, this is the title of the Firefox Homepage customization settings section */
+"Settings.Home.Option.Title.v101" = "হোমপেজে অন্তর্ভুক্ত করুন";
+
+/* In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper" = "ওয়ালপেপার";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "ফায়ারফক্স ওয়ালপেপার, অ্যামেথিস্ট প্যাটার্ন।";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "ফায়ারফক্স ওয়ালপেপার, সৈকত ও টিলার প্যাটার্ন।";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "ফায়ারফক্স ওয়ালপেপার, আকাশী নীল নকশা।";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "ডিফল্ট স্বচ্ছ ওয়ালপেপার।";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "ফায়ারফক্স ওয়ালপেপার, সূর্যোদয়ের প্যাটার্ন।";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
+"Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "হোমপেজ ওয়ালপেপার সাইকেল টগল";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "ফায়ারফক্স ওয়ালপেপার, গোধূলি ও পাহাড়ের প্যাটার্ন।";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
+"Settings.Home.Option.Wallpaper.Classic.Title.v106" = "ক্লাসিক %@";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the button title of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LearnMore.v106" = "আরও জানুন";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the default description of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.Default.Description.v106" = "নতুন সংগ্রহটি ব্যবহার করে দেখুন।";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "সীমিত সংস্করণ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "ফায়ারফক্স হোমপেজের লোগোতে ট্যাপ করে ওয়ালপেপার পরিবর্তন করুন";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper.Title" = "ওয়ালপেপার";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of toast that comes up when the user changes wallpaper, which lets them know that the wallpaper has been updated. */
+"Settings.Home.Option.Wallpaper.UpdatedToast" = "ওয়ালপেপার আপডেট করা হয়েছে!";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the button found on the toast that comes up once the user changes wallpaper, and allows users to dismiss the settings page. In this case, consider View as a verb - the action of dismissing settings and seeing the wallpaper. */
+"Settings.Home.Option.Wallpaper.UpdatedToastButton" = "দেখুন";
+
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "হোমপেজ";
+
+/* This string is the title of the setting button which can be clicked to open a page to customize the number of rows in the shortcuts section */
+"Settings.Homepage.Shortcuts.Rows.v100" = "সারিগুলো";
+
+/* This string is the title of the page to customize the number of rows in the shortcuts section */
+"Settings.Homepage.Shortcuts.RowsPageTitle.v100" = "সারিগুলো";
+
+/* Users can disable or enable shortcuts related settings. This string is the title of the page to change your shortcuts settings. */
+"Settings.Homepage.Shortcuts.ShortcutsPageTitle.v100" = "শর্টকাটগুলি";
+
+/* This string is the title of the toggle to disable the shortcuts section in the settings page. */
+"Settings.Homepage.Shortcuts.ShortcutsToggle.v100" = "শর্টকাটগুলো";
+
+/* This string is the title of the toggle to disable the sponsored shortcuts functionnality which can be enabled in the shortcut sections. This toggle is in the settings page. */
+"Settings.Homepage.Shortcuts.SponsoredShortcutsToggle.v100" = "স্পনসরকৃত শর্টকাটগুলো";
+
+/* Toggled OFF to hide the shortcuts section */
+"Settings.Homepage.Shortcuts.ToggleOff.v100" = "বন্ধ";
+
+/* Toggled ON to show the shortcuts section */
+"Settings.Homepage.Shortcuts.ToggleOn.v100" = "চালু";
 
 /* Title of the setting section containing the URL of the current home page. */
 "Settings.HomePage.URL.Title" = "বর্তমান হোমপেজ";
@@ -1095,6 +1371,9 @@
 
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "ফাঁকা পেজ";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.Custom" = "স্বনির্ধারিত";
 
 /* Option in settings to show Firefox Home when you open a new tab */
 "Settings.NewTab.Option.FirefoxHome" = "Firefox Home";
@@ -1114,6 +1393,9 @@
 /* Footer at the bottom of the New Tab screen after entering New Tab in settings */
 "Settings.NewTab.TopSectionNameFooter" = "নতুন ট্যাব খোলার পর কি দেখতে চান পছন্দ করুন";
 
+/* Label for the block images toggle displayed in the settings menu. Enabling this toggle will hide images on any webpage the user visits. */
+"Settings.NoImageModeBlockImages.Label.v99" = "ছবি ব্লক করুন";
+
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Status" = "Firefox চালু হওয়ার সময়";
 
@@ -1125,6 +1407,18 @@
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
 "Settings.OpenWith.SectionName" = "মেইল অ্যাপ";
+
+/* Touch ID prompt subtitle when accessing logins and passwords */
+"Settings.Passwords.FingerPrintReason.v103" = "এখন পাসওয়ার্ডস এক্সেস করতে আপনার আঙ্গুলের ছাপ ব্যবহার করুন।";
+
+/* Message shown when you enter Passwords screen for the first time. It explains how password are protected in the Firefox for iOS application. */
+"Settings.Passwords.OnboardingMessage.v103" = "আপনার পাসওয়ার্ডগুলো এখন ফেস আইডি, টাচ আইডি বা ডিভাইস পাসকোড দ্বারা সুরক্ষিত।";
+
+/* Setting that appears in the Passwords screen to enable the built-in password manager so users can save their passwords. */
+"Settings.Passwords.SavePasswords.v103" = "পাসওয়ার্ড সংরক্ষণ করুন";
+
+/* Title for the passwords screen. */
+"Settings.Passwords.Title.v103" = "পাসওয়ার্ডসমূহ";
 
 /* Setting to enable the built-in password manager */
 "Settings.SaveLogins.Title" = "লগইন সংরক্ষন করুন";
@@ -1174,8 +1468,23 @@
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "অধ্যয়ন";
 
+/* Ddescription that appears in the settings screen to explain what Firefox Sync is useful for. */
+"Settings.Sync.ButtonDescription.v103" = "ট্যাব, বুকমার্ক, পাসওয়ার্ডসহ আরও অনেক কিছু সিঙ্ক করতে সাইন ইন করুন।";
+
+/* Button label that appears in the settings to prompt the user to sign in to Firefox for iOS sync service to sync and save data. */
+"Settings.Sync.ButtonTitle.v103" = "তথ্য সিঙ্ক এবং সংরক্ষণ করুন";
+
+/* In the settings account row, shown transiently while the user is being signed out of their account. */
+"Settings.Sync.SigningOut.Title.v154" = "সাইন আউট হচ্ছে…";
+
+/* Title for the page where the user sign in to their Firefox Sync account. */
+"Settings.Sync.SignInView.Title.v103" = "তথ্য সিঙ্ক এবং সংরক্ষণ করুন";
+
 /* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
 "Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "নিষ্ক্রিয় ট্যাব";
+
+/* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
+"Settings.Tabs.CustomizeTabsSection.InactiveTabsDescription.v101" = "আপনি যেসকল ট্যাব গত দুই সপ্তাহে দেখেননি, সেগুলো নিষ্ক্রিয় সেকশনে সরিয়ে আনা হয়েছে।";
 
 /* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
 "Settings.Tabs.CustomizeTabsSection.TabGroups" = "ট্যাব গ্রুপ";
@@ -1186,8 +1495,20 @@
 /* In the settings menu, this is the title for the Tabs customization section option */
 "Settings.Tabs.Title" = "ট্যাব";
 
+/* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the bottom of the screen. */
+"Settings.Toolbar.Bottom" = "নিচে";
+
+/* In the settings menu, this label indicates that there is an option of customizing the Toolbar appearance. */
+"Settings.Toolbar.SettingsTitle" = "টুলবার";
+
+/* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the top of the screen. */
+"Settings.Toolbar.Top" = "উপরে";
+
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "ঠিক আছে, বুঝেছি";
+
+/* Decription for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Description" = "যদি কোন সাইট প্রত্যাশিতভাবে কাজ না করে, তবে অ্যাড্রেস বারের তালাটিতে ট্যাপ করুন এবং সেই পৃষ্ঠার জন্য বর্ধিত ট্র্যাকিং সুরক্ষা বন্ধ করুন।";
 
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "প্রস্তুত হোন!";
@@ -1200,6 +1521,12 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "লক্ষ্যযুক্ত বিজ্ঞাপনগুলি হ্রাস করে এবং বিজ্ঞাপনদাতাদেরকে আপনার ব্রাউজিং ট্র্যাক করা থেকে বিরত রাখতে সহায়তা করে।";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "যদি কোন সাইট প্রত্যাশিতভাবে কাজ না করে, তবে অ্যাড্রেস বারের তালাটিতে ট্যাপ করুন এবং সেই পৃষ্ঠার জন্য বর্ধিত ট্র্যাকিং সুরক্ষা বন্ধ করুন।";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "যদি কোন সাইট প্রত্যাশিতভাবে কাজ না করে, তবে অ্যাড্রেস বারের তালাটিতে ট্যাপ করুন এবং সেই পৃষ্ঠার জন্য বর্ধিত ট্র্যাকিং সুরক্ষা বন্ধ করুন।";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "কিছু অ্যাড ট্র্যাকিং অনুমোদন করুন যেন ওয়েবসাইট সঠিকভাবে চলতে পারে।";
@@ -1216,6 +1543,9 @@
 /* Tracking protection settings option for using the basic blocklist. */
 "Settings.TrackingProtectionOption.BasicBlockList" = "আদর্শ (ডিফল্ট)";
 
+/* Tracking protection settings status showing the current option selected. */
+"Settings.TrackingProtectionOption.BasicBlockList.Status" = "আদর্শ";
+
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "কঠোর";
 
@@ -1230,6 +1560,9 @@
 
 /* Description of the confirmation dialog shown when a user tries to clear their private data. */
 "Settings.WebsiteData.ConfirmPrompt" = "এই কাজ আপনার সব ওয়েসাইট তথ্য মুছে দেবে। এটি আর পূর্বের অবস্থায় ফেরানো যাবে না।";
+
+/* Description of the confirmation dialog shown when a user tries to clear some of their private data. */
+"Settings.WebsiteData.SelectedConfirmPrompt" = "এই কাজটি নির্বাচিত আইটেমগুলো মুছে দেবে। এটি পূর্বাবস্থায় ফেরানো যাবে না।";
 
 /* Title displayed in header of the Data Management panel. */
 "Settings.WebsiteData.Title" = "ওয়েবসাইট ডাটা";
@@ -1253,10 +1586,16 @@
 "ShareExtension.LoadInBackgroundActionDone.Title" = "Firefox এ লোড হচ্ছে";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Firefox এ খুলুন";
+"ShareExtension.OpenInFirefoxAction.Title" = "ফায়ারফক্সে খুলুন";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Firefox এ অনুসন্ধান করুন";
+"ShareExtension.SeachInFirefoxAction.Title" = "ফায়ারফক্সে সার্চ করুন";
+
+/* Button in share sheet to copy the url of the current tab. */
+"ShareSheet.Copy.Title.v108" = "কপি";
+
+/* Button in the share sheet to send the current link to another device. */
+"ShareSheet.SendToDevice.Title.v108" = "ডিভাইসে লিঙ্ক পাঠান";
 
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "সার্চইঞ্জিন সাজেশন দেখাও";
@@ -1297,6 +1636,12 @@
 /* The button to undo the delete all tabs */
 "Tabs.DeleteAllUndo.Button" = "পূর্বাবস্থায় ফিরে যান";
 
+/* Accessibility title for the inactive tabs section button when section is closed. This section groups all tabs that haven't been used in a while. */
+"TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103" = "নিষ্ক্রিয় ট্যাবগুলো দেখুন";
+
+/* Accessibility Label for the tab toolbar Search button */
+"TabToolbar.Accessibility.Search.v106" = "অনুসন্ধান করুন";
+
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "ট্যাব যোগ করুন";
 
@@ -1327,6 +1672,9 @@
 /* The title for the tab tray */
 "TabTray.Title" = "ট্যাব খুলুন";
 
+/* Accessibility Label for the tabs button in the tab toolbar */
+"TabTrayButtons.Accessibility.ShowTabs.v106" = "ট্যাবগুলো দেখান";
+
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "পেজটি রিডার ভিউতে দেখানো যাচ্ছে না।";
 
@@ -1338,6 +1686,9 @@
 
 /* Relative date for date in past week. */
 "this week" = "এই সপ্তাহে";
+
+/* Relative date for yesterday. */
+"TimeConstants.Yesterday.v106" = "গতকাল";
 
 /* label for Not Now button */
 "Toasts.NotNow" = "এখন নয়";
@@ -1389,6 +1740,21 @@
 
 /* Username textbox in Authentication prompt */
 "Username" = "ব্যবহারকারীর নাম";
+
+/* The title of the error displayed when changing wallpaper fails. */
+"Wallpaper.Change.Error.Title.v106" = "ওয়ালপেপার পরিবর্তন করা যায়নি";
+
+/* The message of the error displayed to a user when they try change a wallpaper that failed downloading. */
+"Wallpaper.Download.Error.Body.v106" = "আপনার ডাউনলোডে কিছু সমস্যা হয়েছে।";
+
+/* The title of the error displayed if download fails when changing a wallpaper. */
+"Wallpaper.Download.Error.Title.v106" = "ওয়ালপেপার ডাউনলোড করা যায়নি";
+
+/* An action for the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Error.Dismiss.v106" = "বাতিল";
+
+/* Action displayed when changing wallpaper fails. */
+"Wallpaper.Error.TryAgain.v106" = "আবার চেষ্টা করুন";
 
 /* Accessibility label for the main web content view */
 "Web content" = "ওয়েব সম্পর্কিত বিষয়বস্তু";

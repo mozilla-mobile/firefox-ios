@@ -18,7 +18,7 @@ final class SearchSettingsTableViewControllerTests: XCTestCase, StoreTestUtility
 
     override func setUp() async throws {
         try await super.setUp()
-        profile = MockProfile()
+        profile = makeProfile()
         featureFlags = MockNimbusFeatureFlags()
         userPreferences = MockUserFeaturePreferences()
         DependencyHelperMock().bootstrapDependencies(

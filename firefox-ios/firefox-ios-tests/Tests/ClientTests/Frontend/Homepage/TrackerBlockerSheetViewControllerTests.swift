@@ -270,7 +270,7 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
         subject.loadViewIfNeeded()
 
         let shield = try XCTUnwrap(view(subject, withID: A11y.shieldIcon) as? UIImageView)
-        XCTAssertNotNil(shield.image, "Expected \(ImageIdentifiers.shieldCheckmarkColored) to resolve to an asset")
+        XCTAssertNotNil(shield.image, "Expected \(StandardIllustrationIdentifiers.Exports.picShieldCheckmark) to resolve to an asset")
         XCTAssertEqual(shield.image?.renderingMode, .automatic)
     }
 

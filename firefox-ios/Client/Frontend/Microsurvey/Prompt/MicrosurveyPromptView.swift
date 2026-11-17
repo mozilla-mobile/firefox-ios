@@ -17,7 +17,7 @@ import Shared
  */
 
 final class MicrosurveyPromptView: UIView, ThemeApplicable, Notifiable {
-    private struct UX {
+    private enum UX {
         static let headerStackSpacing: CGFloat = 8
         static let stackSpacing: CGFloat = 17
         static let borderThickness = 1.0
@@ -158,8 +158,8 @@ final class MicrosurveyPromptView: UIView, ThemeApplicable, Notifiable {
 
         addSubview(topBorderView)
         addSubview(toastView)
-        leadingConstraint = toastView.leadingAnchor.constraint(equalTo: leadingAnchor)
-        trailingConstraint = toastView.trailingAnchor.constraint(equalTo: trailingAnchor)
+        leadingConstraint = toastView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor)
+        trailingConstraint = toastView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor)
         logoWidthConstraint = logoImage.widthAnchor.constraint(equalToConstant: logoSizeScaled)
         logoHeightConstraint = logoImage.heightAnchor.constraint(equalToConstant: logoSizeScaled)
 
@@ -186,15 +186,17 @@ final class MicrosurveyPromptView: UIView, ThemeApplicable, Notifiable {
 
     override func layoutSubviews() {
         super.layoutSubviews()
+        updatePadding()
         titleLabel.preferredMaxLayoutWidth = titleLabel.bounds.width
     }
 
     private func updatePadding() {
         var paddingConstant: NSDirectionalEdgeInsets = UX.padding
 
-        if UIDevice.current.userInterfaceIdiom == .pad && traitCollection.horizontalSizeClass == .regular {
-            paddingConstant = UIWindow.isLandscape ? UX.largePadding : UX.mediumPadding
-        } else if UIDevice.current.userInterfaceIdiom == .phone && UIWindow.isLandscape {
+        if traitCollection.horizontalSizeClass == .regular {
+            let availableBounds = window?.bounds ?? bounds
+            paddingConstant = availableBounds.width > availableBounds.height ? UX.largePadding : UX.mediumPadding
+        } else if traitCollection.verticalSizeClass == .compact {
             paddingConstant = UX.mediumPadding
         }
 

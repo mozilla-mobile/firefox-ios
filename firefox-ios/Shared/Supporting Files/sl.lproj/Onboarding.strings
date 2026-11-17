@@ -107,7 +107,7 @@
 "Onboarding.Modern.BrandRefresh.Customization.Toolbar.Title.v148" = "Izberite, kje želite imeti naslovno vrstico";
 
 /* Description for the marketing data sharing card in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla). */
-"Onboarding.Modern.BrandRefresh.Marketing.Description.v148" = "Sporočite tehnološkim partnerjem organizacije %2$@ za trženje, kako ste odkrili %1$@ in da ga uporabljate. Ti podatki se nikoli ne bodo prodali.";
+"Onboarding.Modern.BrandRefresh.Marketing.Description.v148" = "Sporočite partnerjem organizacije %2$@ za trženje, kako ste odkrili %1$@ in da ga uporabljate. Ti podatki se nikoli ne bodo prodali.";
 
 /* Link text for learning more about how marketing data is used in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Marketing.LearnMoreLink.v148" = "Kako uporabljamo te podatke";
@@ -272,7 +272,7 @@
 "Onboarding.Modern.TermsOfService.ManageLink.v140" = "Upravljaj";
 
 /* The text for the Manage settings link button. */
-"Onboarding.Modern.TermsOfService.ManageLink.v145" = "Nastavitve";
+"Onboarding.Modern.TermsOfService.ManageLink.v145" = "Upravljanje nastavitev";
 
 /* Agreement text for sending diagnostic and interaction data to Mozilla in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is company name (e.g. Mozilla), %3$@ is a Manage link button which redirect the user to another screen in order to manage the data collection preferences. */
 "Onboarding.Modern.TermsOfService.ManagePreferenceAgreement.v140" = "Za pomoč pri izboljšavah brskalnika %1$@ organizaciji %2$@ pošilja diagnostične podatke in podatke o uporabi. %3$@";
@@ -302,7 +302,7 @@
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v140" = "Samodejno pošiljaj poročila o sesutjih";
 
 /* Description for the technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %1$@ is the app name (e.g. Firefox), %2$@ is for the Learn more button link, to open a link where user can find more information about this send technical and interaction data option. */
-"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v140" = "Podatki o vaši napravi, nastavitvi strojne opreme in načinu uporabe brskalnika %1$@ pomagajo izboljšati funkcionalnost, zmogljivost in zanesljivost za uporabnike po vsem svetu. %2$@";
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v140" = "Podatki o vaši napravi, nastavitvi strojne opreme in načinu uporabe brskalnika %1$@ pomagajo izboljšati funkcionalnost, zmogljivost in zanesljivost za vse. %2$@";
 
 /* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is the company name (e.g. Mozilla). */
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v140" = "Pošiljaj tehnične podatke in podatke o uporabi organizaciji %@";
@@ -354,6 +354,40 @@
 
 /* Title for the welcome card in the v2 onboarding flow. */
 "Onboarding.Modern.Welcome.Title.v145" = "Poslovite se od vsiljivih sledilcev";
+
+/* Body of the home screen popup requesting permission to send notifications. It emphasizes how notifications keep you updated on news. %@ is a placeholder for the app name (e.g., Firefox). */
+"Onboarding.MultiDay.HomeScreenNotificationsPopup.BodyText.v159" = "Bodite na tekočem s %@ovimi novicami.";
+
+/* Button on the home screen popup requesting notification permissions. Tapping this button accepts the permission request. */
+"Onboarding.MultiDay.HomeScreenNotificationsPopup.EnableButtonText.v158" = "Omogoči obvestila";
+
+/* Voiceover text for the close button on the home screen popup requesting notification permissions. Tapping this button dismisses the popup. */
+"Onboarding.MultiDay.HomeScreenNotificationsPopup.EnableCloseButtonText.v159" = "Zapri";
+
+/* Title of the home screen popup requesting permission to send notifications. It emphasizes how notifications keep you updated on privacy features. */
+"Onboarding.MultiDay.HomeScreenNotificationsPopup.Title.v159" = "Opremite se z najnovejšimi orodji za zasebnost";
+
+/* Primary button on the onboarding card requesting permission to send notifications. Tapping this button accepts the permission request. */
+"Onboarding.MultiDay.NotificationCard.AcceptButtonText.v159" = "Omogoči obvestila";
+
+/* Body of the onboarding card requesting permissions to send notifications, with examples of notifications the user will receive. %@ is the name of the app (e.g., Firefox). */
+"Onboarding.MultiDay.NotificationCard.BodyText.v159" = "Prejemajte %@ova obvestila o zaščiti, nasvete in poročila o zasebnosti.";
+
+/* Secondary button on the onboarding card requesting permission to send notifications. Tapping this button declines the permission request.
+Secondary button on the onboarding card that prompts users to enable syncing for their account data. Tapping this button dismisses the prompt and closes the card. */
+"Onboarding.MultiDay.NotificationCard.DeclineButtonText.v159" = "Ne zdaj";
+
+/* Title for the onboarding card requesting permissions to send notifications.  “Stay in the loop” means “Remain informed”. */
+"Onboarding.MultiDay.NotificationCard.Title.v159" = "Ostanite na tekočem";
+
+/* Primary button on the onboarding card that prompts users to enable syncing for their account data. Tapping it directs the user sign into to their Mozilla account to access the feature. */
+"Onboarding.MultiDay.SyncCard.AcceptButtonText.v159" = "Prijavite se za sinhronizacijo";
+
+/* Body of the onboarding card that prompts users to enable syncing for their account data so they can access it across devices (e.g., history, passwords, payment information). */
+"Onboarding.MultiDay.SyncCard.BodyText.v159" = "Uredite si takojšen dostop do gesel, zgodovine in drugih podatkov v katerikoli napravi.";
+
+/* Title of the onboarding card that prompts users to enable syncing for their account data so they can access it across devices (e.g., history, passwords, payment information). */
+"Onboarding.MultiDay.SyncCard.Title.v159" = "Sinhronizirajte svoje podatke";
 
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Continue.Action.v114" = "Nadaljuj";
@@ -407,7 +441,7 @@
 "Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v135" = "Samodejno pošlji poročila o sesutjih";
 
 /* Description for the technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %1$@ is the app name (e.g. Firefox), %2$@ is for the Learn more button link, to open a link where user can find more information about this send technical and interaction data option. */
-"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v135" = "Podatki o vaši napravi, nastavitvi strojne opreme in načinu uporabe brskalnika %1$@ pomagajo izboljšati funkcionalnost, zmogljivost in zanesljivost za uporabnike po vsem svetu. %2$@";
+"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v135" = "Podatki o vaši napravi, nastavitvi strojne opreme in načinu uporabe brskalnika %1$@ pomagajo izboljšati funkcionalnost, zmogljivost in zanesljivost za vse. %2$@";
 
 /* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is the company name (e.g. Mozilla). */
 "Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v135" = "Pošiljaj tehnične podatke in podatke o uporabi organizaciji %@";
@@ -431,7 +465,7 @@
 "Onboarding.Wallpaper.Accessibility.Classic.v114" = "Klasično ozadje";
 
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
-"Onboarding.Wallpaper.Accessibility.LimitedEdition.v114" = "Omejena izdaja";
+"Onboarding.Wallpaper.Accessibility.LimitedEdition.v114" = "Ozadje omejene izdaje";
 
 /* Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper. */
 "Onboarding.Wallpaper.Action.v114" = "Nastavi ozadje";
@@ -471,4 +505,7 @@
 
 /* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Title.v114" = "Dobrodošli na neodvisnem internetu";
+
+/* Title of an onboarding card that introduces the built-in VPN. %1$@ is the app name (for example, Firefox). */
+"VPN.Onboarding.Title.v160" = "Preizkusite %1$@ov vgrajeni VPN";
 

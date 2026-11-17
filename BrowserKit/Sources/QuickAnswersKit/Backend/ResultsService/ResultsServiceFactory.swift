@@ -25,7 +25,7 @@ public struct DefaultResultsServiceFactory: ResultsServiceFactory {
         prefs: Prefs,
         configFetcher: QuickAnswersConfigFetcher
     ) throws -> ResultsService {
-        guard let client = makeLiteLLMClient(prefs: prefs, model: configFetcher.model) else {
+        guard let client = makeLiteLLMClient(prefs: prefs, model: configFetcher.feature.model) else {
             throw ResultsServiceError.unableToCreateService
         }
 

@@ -47,4 +47,5 @@ protocol LocationViewDelegate: AnyObject {
 
     /// Called when the editing accessory button becomes visible in the location view.
     func locationViewDidDisplayEditingAccessoryButton(_ button: UIButton, contextualHintType: String)
+    func locationViewDidHideEditingAccessoryButton()
 }

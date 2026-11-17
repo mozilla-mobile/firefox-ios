@@ -10,6 +10,13 @@ transforms = TransformSequence()
 @transforms.add
 def add_release_type_attribute(config, tasks):
     for task in tasks:
+        for field in ("routes", "scopes"):
+            resolve_keyed_by(
+                task,
+                field,
+                item_name=task["name"],
+                level=config.params["level"],
+            )
         task.setdefault("attributes", {})["release-type"] = config.params.get("release_type")
         resolve_keyed_by(task, 'treeherder.symbol', task["name"], **{'build-type': task['attributes']['build-type']})
 

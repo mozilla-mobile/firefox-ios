@@ -10,10 +10,16 @@ public final class MockLogger: Logger, @unchecked Sendable {
     public var savedLevel: LoggerLevel?
     public var savedCategory: LoggerCategory?
     public var savedExtra: [String: String]?
+    public var savedFeatureFlags: [String: String]?
+    public var setFeatureFlagsCalled = 0
 
     public init() { }
 
     public func setup(sendCrashReports: Bool) {}
+    public func setFeatureFlags(_ featureBranches: [String: String]) {
+        setFeatureFlagsCalled += 1
+        savedFeatureFlags = featureBranches
+    }
     public func copyLogsToDocuments() {}
     public func logCustomError(error: Error) {}
     public func deleteCachedLogFiles() {}

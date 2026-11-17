@@ -69,12 +69,12 @@ final class PhotonActionSheetScreen {
         XCTAssertEqual(documentName(in: caption), name, "The share sheet should name the document currently displayed")
     }
 
-    func assertShareSheetDocumentNameIsNot(_ name: String, timeout: TimeInterval = TIMEOUT) {
-        let caption = waitForHeaderCaption(sel.SHARE_SHEET_TOP_CAPTION, index: 0, timeout: timeout) ?? ""
-        XCTAssertNotEqual(
-            documentName(in: caption),
-            name,
-            "The share sheet should not still name a previously shared document"
+    func assertSingleShareSheetPresented(timeout: TimeInterval = TIMEOUT) {
+        assertShareSheetExists(timeout: timeout)
+        XCTAssertEqual(
+            sel.ACTIVITY_LIST_VIEW.query(in: app).count,
+            1,
+            "Exactly one share sheet should be presented"
         )
     }
 

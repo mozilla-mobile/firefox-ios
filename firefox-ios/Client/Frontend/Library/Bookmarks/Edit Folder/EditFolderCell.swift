@@ -9,7 +9,7 @@ import ComponentLibrary
 class EditFolderCell: UITableViewCell,
                       ReusableCell,
                       ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let textFieldVerticalPadding: CGFloat = if #available(iOS 26.0, *) {
             14
         } else {

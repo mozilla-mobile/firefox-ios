@@ -6,7 +6,7 @@ import Common
 import Shared
 import UIKit
 
-struct SettingsUX {
+enum SettingsUX {
     static let TableViewHeaderFooterHeight = CGFloat(44)
 }
 
@@ -28,7 +28,7 @@ extension UILabel {
 // A base setting class that shows a title. You probably want to subclass this, not use it directly.
 @MainActor
 class Setting: NSObject {
-    struct UX {
+    enum UX {
         static let horizontalMargin: CGFloat = 15
         static var cellLayoutMarginsForCurrentOS: UIEdgeInsets {
             guard #available(iOS 26.0, *) else { return .zero }
@@ -183,7 +183,7 @@ class SettingSection: Setting {
 }
 
 class PaddedSwitch: UIView {
-    private struct UX {
+    private enum UX {
         static let padding: CGFloat = 8
     }
 
@@ -330,14 +330,7 @@ class BoolSetting: Setting, UserFeaturePreferenceProvider {
         )
 
         displayBool(control.switchView)
-        if let title = title {
-            if let status = status {
-                control.switchView.accessibilityLabel = "\(title.string), \(status.string)"
-            } else {
-                control.switchView.accessibilityLabel = title.string
-            }
-            cell.accessibilityLabel = nil
-        }
+        configureSwitchAccessibility(for: cell)
 
         cell.accessoryView = control
         cell.selectionStyle = .none
@@ -388,6 +381,36 @@ class BoolSetting: Setting, UserFeaturePreferenceProvider {
             guard let key = prefKey else { return }
             prefs?.setBool(control.isOn, forKey: key)
         }
+    }
+
+    func configureSwitchAccessibility(for cell: UITableViewCell) {
+        if let title = title {
+            if let status {
+                control.switchView.accessibilityLabel = "\(title.string), \(status.string)"
+            } else {
+                control.switchView.accessibilityLabel = title.string
+            }
+        }
+
+        if let learnMoreCell = cell as? ThemedLearnMoreTableViewCell {
+            configureLearnMoreAccessibilityAction(title: title?.string ?? "") { [weak learnMoreCell] in
+                learnMoreCell?.learnMoreDidTap?()
+            }
+        } else {
+            control.switchView.accessibilityCustomActions = nil
+        }
+
+        cell.accessibilityElements = [control.switchView]
+    }
+
+    func configureLearnMoreAccessibilityAction(title: String, onActivate: @escaping () -> Void) {
+        let actionName = String(format: .Settings.General.AccessibilityLabels.LearnMoreAction, title)
+        control.switchView.accessibilityCustomActions = [
+            UIAccessibilityCustomAction(name: actionName) { _ in
+                onActivate()
+                return true
+            }
+        ]
     }
 }
 
@@ -530,7 +553,7 @@ protocol SettingValuePersister {
 /// This takes an optional settingIsValid and settingDidChange callback
 /// If settingIsValid returns false, the Setting will not change and the text remains red.
 class StringSetting: Setting, UITextFieldDelegate {
-    private struct UX {
+    private enum UX {
         static let padding: CGFloat = 15
         static let textFieldHeight: CGFloat = 44
         static let textFieldIdentifierSuffix = "TextField"
@@ -668,7 +691,7 @@ enum CheckmarkSettingStyle {
 }
 
 final class CheckmarkSetting: Setting {
-    private struct UX {
+    private enum UX {
         static let defaultInset: CGFloat = 0
         static let cellIndentationWidth: CGFloat = 42
         static let cellIndentationLevel = 1
@@ -939,7 +962,7 @@ protocol SettingsDelegate: AnyObject {
 
 // The base settings view controller.
 class SettingsTableViewController: ThemedTableViewController, Notifiable {
-    private struct UX {
+    private enum UX {
         static let tableViewFooterHeight: CGFloat = 30
         static let estimatedRowHeight: CGFloat = 44
         static let estimatedSectionHeaderHeight: CGFloat = 44
@@ -957,6 +980,7 @@ class SettingsTableViewController: ThemedTableViewController, Notifiable {
 
         tableView.register(cellType: ThemedLeftAlignedTableViewCell.self)
         tableView.register(cellType: ThemedSubtitleTableViewCell.self)
+        tableView.register(cellType: ThemedSwitchTableViewCell.self)
         tableView.register(
             ThemedTableSectionHeaderFooterView.self,
             forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier
@@ -992,8 +1016,12 @@ class SettingsTableViewController: ThemedTableViewController, Notifiable {
         applyTheme()
     }
 
-    func currentTheme() -> Theme {
-        return themeManager.getCurrentTheme(for: windowUUID)
+    override var shouldUsePrivateOverride: Bool {
+        return true
+    }
+
+    override var shouldBeInPrivateTheme: Bool {
+        return false
     }
 
     override func applyTheme() {
@@ -1042,7 +1070,7 @@ class SettingsTableViewController: ThemedTableViewController, Notifiable {
         let section = settings[indexPath.section]
         if let setting = section[indexPath.row] {
             let cell = dequeueCellFor(indexPath: indexPath, setting: setting)
-            setting.onConfigureCell(cell, theme: themeManager.getCurrentTheme(for: windowUUID))
+            setting.onConfigureCell(cell, theme: currentTheme())
             return cell
         }
         return super.tableView(tableView, cellForRowAt: indexPath)
@@ -1055,8 +1083,8 @@ class SettingsTableViewController: ThemedTableViewController, Notifiable {
     ) {
         let section = settings[indexPath.section]
         if let setting = section[indexPath.row], let themedCell = cell as? ThemedTableViewCell {
-            setting.onConfigureCell(themedCell, theme: themeManager.getCurrentTheme(for: windowUUID))
-            themedCell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            setting.onConfigureCell(themedCell, theme: currentTheme())
+            themedCell.applyTheme(theme: currentTheme())
         }
     }
 
@@ -1075,6 +1103,14 @@ class SettingsTableViewController: ThemedTableViewController, Notifiable {
                 for: indexPath
             ) as? ThemedLearnMoreTableViewCell else {
                 return ThemedLearnMoreTableViewCell()
+            }
+            return cell
+        } else if setting is BoolSetting {
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: ThemedSwitchTableViewCell.cellIdentifier,
+                for: indexPath
+            ) as? ThemedSwitchTableViewCell else {
+                return ThemedSwitchTableViewCell()
             }
             return cell
         } else if setting.style == .subtitle {
@@ -1116,7 +1152,7 @@ class SettingsTableViewController: ThemedTableViewController, Notifiable {
         if let sectionTitle = sectionSetting.title?.string {
             headerView.titleLabel.text = sectionTitle.uppercased()
         }
-        headerView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        headerView.applyTheme(theme: currentTheme())
         return headerView
     }
 
@@ -1130,7 +1166,7 @@ class SettingsTableViewController: ThemedTableViewController, Notifiable {
 
         footerView.titleLabel.text = sectionFooter
         footerView.titleAlignment = .top
-        footerView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        footerView.applyTheme(theme: currentTheme())
         return footerView
     }
 

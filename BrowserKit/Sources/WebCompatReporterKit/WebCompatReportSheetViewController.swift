@@ -23,6 +23,7 @@ public protocol WebCompatReportSheetDelegate: AnyObject {
 public final class WebCompatReportSheetViewController: UIViewController,
                                                        ThemeApplicable,
                                                        UICollectionViewDelegate,
+                                                       UIGestureRecognizerDelegate,
                                                        Notifiable {
     public weak var delegate: WebCompatReportSheetDelegate?
 
@@ -126,7 +127,21 @@ public final class WebCompatReportSheetViewController: UIViewController,
     private func setupDismissKeyboardGesture() {
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
+        tap.delegate = self
         view.addGestureRecognizer(tap)
+    }
+
+    // MARK: - UIGestureRecognizerDelegate
+
+    /// Taps inside an editable field (e.g. the URL field's clear button) must reach the
+    /// field itself; only taps on empty space dismiss the keyboard.
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        var hitView = touch.view
+        while let current = hitView {
+            if current is UITextField || current is UITextView { return false }
+            hitView = current.superview
+        }
+        return true
     }
 
     // MARK: - Keyboard

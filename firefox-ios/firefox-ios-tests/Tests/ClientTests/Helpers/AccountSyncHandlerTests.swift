@@ -17,7 +17,7 @@ class AccountSyncHandlerTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        self.profile = MockProfile()
+        self.profile = makeProfile()
         self.syncManager = profile.syncManager as? ClientSyncManagerSpy
         let mockTabManager =  MockTabManager()
         DependencyHelperMock().bootstrapDependencies(

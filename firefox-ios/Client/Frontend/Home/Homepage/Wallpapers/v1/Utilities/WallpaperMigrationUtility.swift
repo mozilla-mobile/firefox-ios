@@ -28,11 +28,15 @@ struct WallpaperMigrationUtility {
         guard shouldPerformMetadataMigration else { return }
         let storageUtility = WallpaperStorageUtility()
 
+        let isPad = UIDeviceDetails.userInterfaceIdiom == .pad
+        let portraitType: WallpaperImageType = isPad ? .iPadPortrait : .iPhonePortrait
+        let landscapeType: WallpaperImageType = isPad ? .iPadLandscape : .iPhoneLandscape
+
         do {
             let currentWallpaper = storageUtility.fetchCurrentWallpaper()
             guard currentWallpaper.type != .none,
-                  let landscape = currentWallpaper.landscape,
-                  let portrait = currentWallpaper.portrait,
+                  let landscape = currentWallpaper.image(for: landscapeType),
+                  let portrait = currentWallpaper.image(for: portraitType),
                   let matchingID = getMatchingIdBasedOn(legacyId: currentWallpaper.id),
                   let matchingWallpaper = try getMatchingWallpaperUsing(matchingID, from: storageUtility)
             else {
@@ -42,6 +46,8 @@ struct WallpaperMigrationUtility {
 
             try store(portrait: portrait,
                       landscape: landscape,
+                      portraitType: portraitType,
+                      landscapeType: landscapeType,
                       for: matchingWallpaper,
                       with: storageUtility)
 
@@ -57,13 +63,15 @@ struct WallpaperMigrationUtility {
     private func store(
         portrait: UIImage,
         landscape: UIImage,
+        portraitType: WallpaperImageType,
+        landscapeType: WallpaperImageType,
         for wallpaper: Wallpaper,
         with storageUtility: WallpaperStorageUtility
     ) throws {
         try storageUtility.store(portrait,
-                                 withName: wallpaper.portraitID)
+                                 withName: wallpaper.fileName(for: portraitType))
         try storageUtility.store(landscape,
-                                 withName: wallpaper.landscapeID)
+                                 withName: wallpaper.fileName(for: landscapeType))
         try storageUtility.store(wallpaper)
     }
 

@@ -11,6 +11,7 @@ class MockThemeManager: ThemeManager {
     private var currentThemeStorage: Theme = LightTheme()
 
     var resolvedThemeCalledCount = 0
+    var isPrivateThemeOverrideEnabled = true
 
     /// - Parameter currentTheme: the theme every lookup returns. Pass a Nova theme (e.g. `NovaLightTheme()`) to
     ///   exercise code paths gated on `Theme.isNova`.
@@ -62,14 +63,17 @@ class MockThemeManager: ThemeManager {
         systemThemeIsOn = isOn
     }
 
-    func setPrivateTheme(isOn: Bool, for window: UUID) {}
+    var setPrivateThemeCalls = [Bool]()
+    func setPrivateTheme(isOn: Bool, for window: UUID) {
+        setPrivateThemeCalls.append(isOn)
+    }
 
     func getPrivateThemeIsOn(for window: UUID) -> Bool { return false }
 
     func setAutomaticBrightness(isOn: Bool) {}
 
     func setAutomaticBrightnessValue(_ value: Float) {
-        let screenLessThanPref = Float(UIScreen.main.brightness) < value
+        let screenLessThanPref = Float(window?.windowScene?.screen.brightness ?? 0) < value
 
         if screenLessThanPref, getCurrentTheme(for: windowUUID).type == .light {
             setManualTheme(to: .dark)

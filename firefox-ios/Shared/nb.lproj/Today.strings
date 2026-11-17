@@ -53,7 +53,7 @@
 "TodayWidget.TopSitesGalleryDescription" = "Legg til snarveier til ofte og nylige besøkte nettsteder.";
 
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
-"TodayWidget.TopSitesGalleryTitle" = "Mest besøkte";
+"TodayWidget.TopSitesGalleryTitle" = "Mest besøkte nettsteder";
 
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitleV2" = "Snarveier til nettsteder";

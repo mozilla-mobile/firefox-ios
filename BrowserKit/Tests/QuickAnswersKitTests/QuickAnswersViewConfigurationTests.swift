@@ -24,18 +24,66 @@ struct QuickAnswersViewConfigurationTests {
     }
 
     @Test
+    func testOptInRedesignStrings_storesValues() {
+        let subject = QuickAnswersViewConfiguration.OptInRedesignStrings(
+            title: "title",
+            description: "desc",
+            nothingGetsSavedTitle: "savedTitle",
+            nothingGetsSavedDescription: "savedDesc",
+            privateByDesignTitle: "privateTitle",
+            privateByDesignDescription: "privateDesc",
+            noTrainingTitle: "trainingTitle",
+            noTrainingDescription: "trainingDesc",
+            learnMore: "learn",
+            continueButton: "go"
+        )
+
+        #expect(subject.title == "title")
+        #expect(subject.description == "desc")
+        #expect(subject.nothingGetsSavedTitle == "savedTitle")
+        #expect(subject.nothingGetsSavedDescription == "savedDesc")
+        #expect(subject.privateByDesignTitle == "privateTitle")
+        #expect(subject.privateByDesignDescription == "privateDesc")
+        #expect(subject.noTrainingTitle == "trainingTitle")
+        #expect(subject.noTrainingDescription == "trainingDesc")
+        #expect(subject.learnMore == "learn")
+        #expect(subject.continueButton == "go")
+    }
+
+    @Test
     func testContentViewStrings_storesValues() {
         let subject = QuickAnswersViewConfiguration.ContentViewStrings(
             placeholder: "ask",
+            followUpPlaceholder: "follow up",
+            followUpButton: "ask follow up",
+            newQuestionButton: "ask new question",
             answering: "loading",
             footerFormat: "Powered by %@",
-            sources: "Sources"
+            sources: "Sources",
+            aboutYourPrivacy: "About Your Privacy",
+            answerHeader: "Quick Answer"
         )
 
         #expect(subject.placeholder == "ask")
+        #expect(subject.followUpPlaceholder == "follow up")
+        #expect(subject.followUpButton == "ask follow up")
+        #expect(subject.newQuestionButton == "ask new question")
         #expect(subject.answering == "loading")
         #expect(subject.footerFormat == "Powered by %@")
         #expect(subject.sources == "Sources")
+        #expect(subject.aboutYourPrivacy == "About Your Privacy")
+        #expect(subject.answerHeader == "Quick Answer")
+    }
+
+    @Test
+    func testPrivacyBannerStrings_storesValues() {
+        let subject = QuickAnswersViewConfiguration.PrivacyBannerStrings(
+            title: "Private by Design",
+            description: "Firefox doesn’t store your audio"
+        )
+
+        #expect(subject.title == "Private by Design")
+        #expect(subject.description == "Firefox doesn’t store your audio")
     }
 
     @Test
@@ -69,7 +117,30 @@ struct QuickAnswersViewConfigurationTests {
     func testConfiguration_storesAllSections() {
         let subject = QuickAnswersViewConfiguration(
             optIn: .init(title: "t", description: "d", learnMore: "l", continueButton: "c"),
-            contentView: .init(placeholder: "p", answering: "a", footerFormat: "f", sources: "s"),
+            optInRedesign: .init(
+                title: "rt",
+                description: "rd",
+                nothingGetsSavedTitle: "",
+                nothingGetsSavedDescription: "",
+                privateByDesignTitle: "",
+                privateByDesignDescription: "",
+                noTrainingTitle: "",
+                noTrainingDescription: "",
+                learnMore: "",
+                continueButton: ""
+            ),
+            contentView: .init(
+                placeholder: "p",
+                followUpPlaceholder: "fp",
+                followUpButton: "fb",
+                newQuestionButton: "nb",
+                answering: "a",
+                footerFormat: "f",
+                sources: "s",
+                aboutYourPrivacy: "ap",
+                answerHeader: "ah"
+            ),
+            privacyBanner: .init(title: "pt", description: "pd"),
             errors: .init(
                 permissionAlertTitle: "",
                 microphonePermissionMessage: "",
@@ -87,7 +158,9 @@ struct QuickAnswersViewConfigurationTests {
         )
 
         #expect(subject.optIn.title == "t")
+        #expect(subject.optInRedesign.title == "rt")
         #expect(subject.contentView.placeholder == "p")
+        #expect(subject.privacyBanner.title == "pt")
         #expect(subject.closeAccessibilityLabel == "close")
         #expect(subject.appName == "Firefox")
     }

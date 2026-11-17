@@ -5,17 +5,28 @@ import SwiftUI
 import Common
 import Shared
 
-struct AIControlsSettingsView: View, ThemeApplicable {
+struct AIControlsSettingsView: ThemeableView {
     @ObservedObject var aiControlsModel: AIControlsModel
 
     // MARK: - Theming
-    // FIXME FXIOS-11472 Improve our SwiftUI theming
-    @Environment(\.themeManager)
-    var themeManager
-    @State private var themeColors: ThemeColourPalette = LightTheme().colors
-    @State private var isNova = false
+    let themeManager: ThemeManager
+    @State var theme: Theme
 
-    private struct UX {
+    var windowUUID: WindowUUID { return aiControlsModel.windowUUID }
+
+    var shouldUsePrivateOverride: Bool { return true }
+    var shouldBeInPrivateTheme: Bool { return false }
+
+    private var themeColors: ThemeColourPalette { return theme.colors }
+    private var isNova: Bool { return theme.isNova }
+
+    init(aiControlsModel: AIControlsModel, themeManager: ThemeManager = AppContainer.shared.resolve()) {
+        self.aiControlsModel = aiControlsModel
+        self.themeManager = themeManager
+        self.theme = themeManager.resolveTheme(for: aiControlsModel.windowUUID, privateOverride: false)
+    }
+
+    private enum UX {
         static let cornerRadius: CGFloat = 32
         static let cardSpacing: CGFloat = 24
         static let rowSpacing: CGFloat = 8
@@ -58,13 +69,7 @@ struct AIControlsSettingsView: View, ThemeApplicable {
             }.padding(.horizontal, UX.padding)
         }
         .background(themeColors.layer1.color)
-        .onAppear {
-            applyTheme(theme: themeManager.getCurrentTheme(for: aiControlsModel.windowUUID))
-        }
-        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
-            guard let uuid = notification.windowUUID, uuid == aiControlsModel.windowUUID else { return }
-            applyTheme(theme: themeManager.getCurrentTheme(for: aiControlsModel.windowUUID))
-        }
+        .listenToThemeChanges(in: self, theme: $theme)
     }
 
     var informationCard: some View {
@@ -125,11 +130,11 @@ struct AIControlsSettingsView: View, ThemeApplicable {
         ) {
             HStack(alignment: .top) {
                 if isNova {
-                    Image(StandardImageIdentifiers.Large.information)
+                    Image(decorative: StandardImageIdentifiers.Large.information)
                         .renderingMode(.template)
                         .foregroundStyle(themeColors.iconPrimary.color)
                 } else {
-                    Image(StandardImageIdentifiers.Large.information)
+                    Image(decorative: StandardImageIdentifiers.Large.information)
                 }
                 Text(verbatim: .Settings.AIControls.BlockedInformation)
                     .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
@@ -253,11 +258,6 @@ struct AIControlsSettingsView: View, ThemeApplicable {
                 .foregroundStyle(themeColors.textCritical.color)
                 .font(FXFontStyles.Regular.footnote.scaledSwiftUIFont())
         }
-    }
-
-    func applyTheme(theme: any Common.Theme) {
-        self.themeColors = theme.colors
-        self.isNova = theme.isNova
     }
 }
 

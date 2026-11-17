@@ -6,7 +6,7 @@ import SwiftUI
 import Common
 
 struct RotatingBlendGradient: View {
-    private struct UX {
+    private enum UX {
         static let speeds: [CGFloat] = [0.8, 0.6, 1.5, 1.1]
         static let centerPoints = [CGPoint(x: 0.1, y: 0.3),
                                    CGPoint(x: 0.80, y: 0.9),

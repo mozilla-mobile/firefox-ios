@@ -51,7 +51,7 @@ public enum ReaderModeFontType: String, Sendable {
     }
 }
 
-private struct FontFamily {
+private enum FontFamily {
     static let serifFamily = [ReaderModeFontType.serif, ReaderModeFontType.serifBold]
     static let sansFamily = [ReaderModeFontType.sansSerif, ReaderModeFontType.sansSerifBold]
     static let families = [serifFamily, sansFamily]

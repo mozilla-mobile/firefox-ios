@@ -6,7 +6,7 @@ import Common
 import UIKit
 
 class SearchBarCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
-    struct UX {
+    enum UX {
         static let shadowRadius: CGFloat = 14
         static let shadowOffset = CGSize(width: 0, height: 2)
         static let shadowOpacity: Float = 1
@@ -93,6 +93,7 @@ class SearchBarCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
 
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
+        contentView.backgroundColor = theme.colors.actionPrimary
         placeholderLabel.textColor = theme.colors.textSecondary
         container.backgroundColor = theme.colors.layer2
         container.layer.borderColor = theme.colors.borderPrimary.cgColor

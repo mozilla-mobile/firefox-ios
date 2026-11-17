@@ -5,7 +5,7 @@
 import Foundation
 
 /// The constants related to the Web Engine
-struct EngineConstants {
+enum EngineConstants {
     static let aboutBlank = "about:blank"
     // FXIOS-13519 - EngineConstants.webserverPort is not thread safe
     nonisolated(unsafe) static var webserverPort = 6571

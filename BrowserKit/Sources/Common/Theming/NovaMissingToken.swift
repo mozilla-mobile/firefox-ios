@@ -6,7 +6,7 @@ import UIKit
 
 /// Flags a Nova only token used in a classic theme; `reportMisuse`
 /// defaults to `assertionFailure` and is overridden in tests.
-public struct NovaMissingToken {
+public enum NovaMissingToken {
     nonisolated(unsafe) static var reportMisuse: (String) -> Void = { assertionFailure($0) }
 
     public static func color(_ colorName: String) -> UIColor {

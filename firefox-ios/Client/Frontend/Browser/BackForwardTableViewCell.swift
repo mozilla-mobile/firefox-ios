@@ -21,7 +21,7 @@ struct BackForwardCellViewModel {
 }
 
 class BackForwardTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let faviconWidth: CGFloat = 29
         static let faviconPadding: CGFloat = 20
         static let faviconCornerRadius: CGFloat = 6

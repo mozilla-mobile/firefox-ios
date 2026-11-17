@@ -20,7 +20,8 @@ This log lists the architectural decisions for MADR.
 - [ADR-0011](0011-redux-state-reducer-initializer-cleanup-with-copy-macro.md) - Redux State Reducer Initializer Cleanup with Copy Macro
 - [ADR-0012](0012-redux-action-guidelines.md) - Redux Action Guidelines
 - [ADR-0013](0013-redux-state-reducers-best-practices-initialization-and-transient-state) - Redux State Best Practices: Initialization and Transient State
-- [ADR-0014](0014-redux-passthrough-reducers-for-composite-state.md) - Redux Passthrough Reducers for Composite State
+- [ADR-0014](0014-hackbot-review-context.md) - Repository-Managed Hackbot Review Context
+- [ADR-0015](0015-redux-passthrough-reducers-for-composite-state.md) - Redux Passthrough Reducers for Composite State
 <!-- adrlogstop -->
 
 For new ADRs, please use [template.md](template.md) as basis.

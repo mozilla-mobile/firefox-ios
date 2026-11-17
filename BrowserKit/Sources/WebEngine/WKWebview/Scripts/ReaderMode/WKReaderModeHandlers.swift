@@ -49,8 +49,7 @@ final class WKReaderModeHandlers: WKReaderModeHandlersProtocol, Notifiable {
 
     @MainActor
     func register(_ webServer: WKEngineWebServerProtocol, readerModeConfiguration: ReaderModeConfiguration) {
-        // Register our fonts and css, which we want to expose to web content that we present in the WebView
-        webServer.registerMainBundleResourcesOfType("otf", module: "reader-mode/fonts")
+        // Register our css to expose to web content that we present in the WebView
         webServer.registerMainBundleResource("Reader.css", module: "reader-mode/styles")
 
         // Initialize ReaderModeStyle here to ensure it is initialized on the main thread.
@@ -167,17 +166,7 @@ final class WKReaderModeHandlers: WKReaderModeHandlersProtocol, Notifiable {
 
         guard let html = ReaderModeUtils.generateReaderContent(readabilityResult, initialStyle: readerModeStyle),
               let response = GCDWebServerDataResponse(html: html) else { return nil }
-        // Apply a Content Security Policy that disallows everything except:
-        // - images from anywhere
-        // - styles including inline styles from our internal server
-        // - scripts including inline scripts from our internal server
-        // - fonts our internal server
-        let csp = """
-            default-src 'none';
-            img-src *;
-            style-src 'unsafe-inline' http://localhost:*;
-            font-src http://localhost:*;
-        """
+        let csp = ReaderModeUtils.contentSecurityPolicy(origin: "http://localhost:*")
         response.setValue(csp, forAdditionalHeader: "Content-Security-Policy")
         return response
     }

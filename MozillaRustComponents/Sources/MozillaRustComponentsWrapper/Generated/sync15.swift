@@ -465,6 +465,30 @@ fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterBool : FfiConverter {
+    typealias FfiType = Int8
+    typealias SwiftType = Bool
+
+    public static func lift(_ value: Int8) throws -> Bool {
+        return value != 0
+    }
+
+    public static func lower(_ value: Bool) -> Int8 {
+        return value ? 1 : 0
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Bool {
+        return try lift(readInt(&buf))
+    }
+
+    public static func write(_ value: Bool, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(value))
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterString: FfiConverter {
     typealias SwiftType = String
     typealias FfiType = RustBuffer
@@ -627,6 +651,118 @@ public func FfiConverterTypeDeviceType_lower(_ value: DeviceType) -> RustBuffer 
     return FfiConverterTypeDeviceType.lower(value)
 }
 
+
+
+/**
+ * How the user's choice of engines to sync is modelled.
+ */
+
+public enum EngineChoicesModel: Equatable, Hashable {
+    
+    /**
+     * The legacy model: engine choices are shared by every device on the
+     * account, via meta/global's declined engines.
+     */
+    case account(
+        /**
+         * Which engine states should be *changed* in the "account global" list (for
+         * example, if the UI was used to change an engine's state since the last
+         * sync).
+         * Normally empty - only used for selection changes, does not reflect current actual choices.
+         */enabledChanges: [String: Bool]
+    )
+    /**
+     * Engine choices are specific to each device. Not yet ready for use
+     * outside of testing.
+     */
+    case device
+
+
+
+
+
+}
+
+#if compiler(>=6)
+extension EngineChoicesModel: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeEngineChoicesModel: FfiConverterRustBuffer {
+    typealias SwiftType = EngineChoicesModel
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> EngineChoicesModel {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .account(enabledChanges: try FfiConverterDictionaryStringBool.read(from: &buf)
+        )
+        
+        case 2: return .device
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: EngineChoicesModel, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case let .account(enabledChanges):
+            writeInt(&buf, Int32(1))
+            FfiConverterDictionaryStringBool.write(enabledChanges, into: &buf)
+            
+        
+        case .device:
+            writeInt(&buf, Int32(2))
+        
+        }
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeEngineChoicesModel_lift(_ buf: RustBuffer) throws -> EngineChoicesModel {
+    return try FfiConverterTypeEngineChoicesModel.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeEngineChoicesModel_lower(_ value: EngineChoicesModel) -> RustBuffer {
+    return FfiConverterTypeEngineChoicesModel.lower(value)
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterDictionaryStringBool: FfiConverterRustBuffer {
+    public static func write(_ value: [String: Bool], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for (key, value) in value {
+            FfiConverterString.write(key, into: &buf)
+            FfiConverterBool.write(value, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [String: Bool] {
+        let len: Int32 = try readInt(&buf)
+        var dict = [String: Bool]()
+        dict.reserveCapacity(Int(len))
+        for _ in 0..<len {
+            let key = try FfiConverterString.read(from: &buf)
+            let value = try FfiConverterBool.read(from: &buf)
+            dict[key] = value
+        }
+        return dict
+    }
+}
 
 private enum InitializationResult {
     case ok

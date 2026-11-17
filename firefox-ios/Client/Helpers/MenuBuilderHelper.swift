@@ -6,7 +6,7 @@ import UIKit
 
 @MainActor
 class MenuBuilderHelper {
-    struct MenuIdentifiers {
+    enum MenuIdentifiers {
         static let history = UIMenu.Identifier("com.mozilla.firefox.menus.history")
         static let bookmarks = UIMenu.Identifier("com.mozilla.firefox.menus.bookmarks")
         static let tools = UIMenu.Identifier("com.mozilla.firefox.menus.tools")
@@ -146,13 +146,12 @@ class MenuBuilderHelper {
             )
         ]
 
-        // UIKeyCommand.f5 is only available since iOS 13.4 - Shortcut will only work from this version
         viewMenuChildren.append(
             UIKeyCommand(
                 title: .KeyboardShortcuts.ReloadWithoutCache,
                 action: #selector(BrowserViewController.reloadTabIgnoringCacheKeyCommand),
-                input: UIKeyCommand.f5,
-                modifierFlags: [.control],
+                input: "r",
+                modifierFlags: [.command, .shift],
                 discoverabilityTitle: .KeyboardShortcuts.ReloadWithoutCache
             )
         )

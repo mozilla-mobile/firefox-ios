@@ -8,6 +8,7 @@ import Storage
 import XCTest
 import Glean
 import Common
+import Redux
 import Shared
 
 @testable import Client
@@ -649,26 +650,111 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(dispatchActionType, GeneralBrowserActionType.didTapReaderModeBarSummarizerButton)
     }
 
+    func testNewState_whenSelectedTabIsNotReaderModePage_andReaderModeStateIsStillActive_hidesReaderModeBar() {
+        let subject = createSubject()
+        setupSelectedTabWithReaderMode(url: URL(string: "https://example.com/article"), readerModeState: .active)
+        subject.readerModeBar = ReaderModeBarView(frame: .zero)
+
+        subject.newState(state: BrowserViewControllerState(windowUUID: .XCTestDefaultUUID))
+
+        XCTAssertNil(subject.readerModeBar)
+    }
+
+    func testNewState_whenSelectedTabIsReaderModePage_andReaderModeStateIsNotActiveYet_showsReaderModeBar() {
+        let subject = createSubject()
+        let readerModeURL = URL(string: "https://example.com/article")?
+            .encodeReaderModeURL(ReaderModeSchemeHandler.baseURL)
+        setupSelectedTabWithReaderMode(url: readerModeURL, readerModeState: .available)
+
+        subject.newState(state: BrowserViewControllerState(windowUUID: .XCTestDefaultUUID))
+
+        XCTAssertNotNil(subject.readerModeBar)
+    }
+
     // MARK: - Toolbar
 
-    func testToolbarLongPressMenu_rowsTitlesAndIcons() {
+    @MainActor
+    func testAddressToolbarDidHideEditingAccessoryButton_dismissesGoogleLensTipAndCancelsObservation() {
+        let subject = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        let tipViewController = UIViewController()
+        let observationTask = Task<Void, Never> { }
+        subject.googleLensTipViewController = tipViewController
+        subject.viewControllerToPresent = tipViewController
+        subject.googleLensTipObservationTask = observationTask
+
+        subject.addressToolbarDidHideEditingAccessoryButton()
+
+        XCTAssertEqual(subject.dismissCalled, 1)
+        XCTAssertNil(subject.googleLensTipViewController)
+        XCTAssertTrue(observationTask.isCancelled)
+        XCTAssertNil(subject.googleLensTipObservationTask)
+    }
+
+    @MainActor
+    func testAddressToolbarDidHideEditingAccessoryButton_cancelsPendingTipWithoutDismissingAnotherModal() {
+        let subject = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        let otherViewController = UIViewController()
+        let observationTask = Task<Void, Never> { }
+        subject.viewControllerToPresent = otherViewController
+        subject.googleLensTipObservationTask = observationTask
+
+        subject.addressToolbarDidHideEditingAccessoryButton()
+
+        XCTAssertEqual(subject.dismissCalled, 0)
+        XCTAssertTrue(subject.presentedViewController === otherViewController)
+        XCTAssertTrue(observationTask.isCancelled)
+        XCTAssertNil(subject.googleLensTipObservationTask)
+    }
+
+    func testToolbarLongPressMenu_hasExpectedSectionsAndActions() throws {
+        let gleanWrapper = MockGleanWrapper()
+        let subject = createSubject(gleanWrapper: gleanWrapper)
+        let menu = try XCTUnwrap(subject.contextMenu(for: .tabs))
+        let sections = try menu.children.map { try XCTUnwrap($0 as? UIMenu) }
+        let tabActions = try sections[0].children.map { try XCTUnwrap($0 as? UIAction) }
+        let closeAction = try XCTUnwrap(sections[1].children.first as? UIAction)
+        let savedMetric = try XCTUnwrap(
+            gleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.TabTrayLongPressExtra>
+        )
+
+        XCTAssertEqual(sections.map(\.children.count), [2, 1])
+        XCTAssertEqual(
+            tabActions.map(\.title),
+            [String.KeyboardShortcuts.NewTab, String.KeyboardShortcuts.NewPrivateTab]
+        )
+        XCTAssertEqual(closeAction.title, String.Toolbars.TabToolbarLongPressActionsMenu.CloseThisTabButton)
+        XCTAssertEqual(closeAction.attributes, .destructive)
+        XCTAssert(savedMetric === GleanMetrics.Toolbar.tabTrayLongPress)
+    }
+
+    func testLocationBarContextMenu_copyAddressActionHasExpectedIdentifier() throws {
+        let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        tab.url = URL(string: "https://mozilla.org")
+        tabManager.selectedTab = tab
         let subject = createSubject()
-        let nav = subject.getNavigationToolbarLongPressActions()
-        XCTAssertEqual([nav.count, nav[0].count, nav[1].count], [2, 2, 1])
 
-        let newTabOnly = subject.getNewTabLongPressActions()
-        XCTAssertEqual([newTabOnly.count, newTabOnly[0].count], [1, 2])
+        let menu = try XCTUnwrap(subject.contextMenu(for: .locationView))
+        let section = try XCTUnwrap(menu.children.first as? UIMenu)
+        let copyAddressAction = try XCTUnwrap(
+            section.children
+                .compactMap { $0 as? UIAction }
+                .first { $0.title == String.CopyAddressTitle }
+        )
 
-        for index in 0..<2 {
-            let navigationItem = nav[0][index].items[0]
-            let newTabItem = newTabOnly[0][index].items[0]
-            XCTAssertEqual(navigationItem.title, newTabItem.title)
-            XCTAssertEqual(navigationItem.iconString, newTabItem.iconString)
-        }
+        XCTAssertEqual(
+            copyAddressAction.accessibilityIdentifier,
+            AccessibilityIdentifiers.Photon.copyAddressAction
+        )
+    }
 
-        let close = nav[1][0].items[0]
-        XCTAssertEqual(close.title, String.Toolbars.TabToolbarLongPressActionsMenu.CloseThisTabButton)
-        XCTAssertEqual(close.iconString, StandardImageIdentifiers.Large.cross)
+    func testLocationBarContextMenu_withoutAvailableActions_returnsNil() {
+        let pasteboardItems = UIPasteboard.general.items
+        UIPasteboard.general.items = []
+        defer { UIPasteboard.general.items = pasteboardItems }
+
+        let subject = createSubject()
+
+        XCTAssertNil(subject.contextMenu(for: .locationView))
     }
 
     @MainActor
@@ -678,24 +764,36 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
         subject.startNavigationButtonDoubleTapTimer()
 
-        XCTAssertNil(
-            mockStore.dispatchedActions.compactMap { $0 as? ToolbarAction }.first {
-                ($0.actionType as? ToolbarActionType) == .navigationButtonDoubleTapped
-            }
-        )
+        XCTAssertFalse(mockStore.dispatchedModernActions.contains(where: isNavigationButtonDoubleTapped))
     }
 
     @MainActor
-    func testStartNavigationButtonDoubleTapTimer_doubleTap_dispatchesDoubleTap() throws {
+    func testStartNavigationButtonDoubleTapTimer_doubleTap_dispatchesDoubleTap() {
         let subject = createSubject()
         subject.startNavigationButtonDoubleTapTimer()
         let firstScheduledTimer = subject.navigationHintDoubleTapTimer
         subject.startNavigationButtonDoubleTapTimer()
         firstScheduledTimer?.invalidate()
 
-        let action = try XCTUnwrap(mockStore.dispatchedActions.compactMap { $0 as? ToolbarAction }.last)
-        let actionType = try XCTUnwrap(action.actionType as? ToolbarActionType)
-        XCTAssertEqual(actionType, .navigationButtonDoubleTapped)
+        XCTAssertTrue(mockStore.dispatchedModernActions.contains(where: isNavigationButtonDoubleTapped))
+    }
+
+    private func isNavigationButtonDoubleTapped(_ action: ModernAction) -> Bool {
+        guard case .navigationHintAvailabilityChanged(let canShow) = action as? ToolbarModernAction else { return false }
+        return canShow
+    }
+
+    // MARK: - Key commands
+
+    @MainActor
+    func testKeyCommands_includesControlF5ForReloadIgnoringCache() throws {
+        let subject = createSubject()
+
+        let command = try XCTUnwrap(subject.keyCommands?.first {
+            $0.input == UIKeyCommand.f5 && $0.modifierFlags == .control
+        })
+
+        XCTAssertEqual(command.action, #selector(BrowserViewController.reloadTabIgnoringCacheKeyCommand))
     }
 
     // MARK: - Tab manager restore
@@ -716,10 +814,12 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
     // MARK: - Private
 
-    private func createSubject(file: StaticString = #filePath,
+    private func createSubject(gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
+                               file: StaticString = #filePath,
                                line: UInt = #line) -> BrowserViewController {
         let subject = BrowserViewController(profile: profile,
                                             tabManager: tabManager,
+                                            gleanWrapper: gleanWrapper,
                                             appStartupTelemetry: appStartupTelemetry,
                                             recordVisitManager: recordVisitManager)
         screenshotHelper = MockScreenshotHelper(controller: subject)
@@ -731,38 +831,47 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         return subject
     }
 
+    private func setupSelectedTabWithReaderMode(url: URL?, readerModeState: ReaderModeState) {
+        let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        let readerMode = ReaderMode(tab: tab)
+        readerMode.state = readerModeState
+        tab.addContentScript(readerMode, name: ReaderMode.name())
+        tab.url = url
+        tabManager.selectedTab = tab
+    }
+
     private func setupNimbusToolbarRefactorTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
+        FxNimbus.shared.features.toolbarRefactorFeature.with { _ in
             return ToolbarRefactorFeature()
         }
     }
 
     private func setIsSwipingTabsEnabled(_ isEnabled: Bool) {
-        FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
+        FxNimbus.shared.features.toolbarRefactorFeature.with { _ in
             return ToolbarRefactorFeature()
         }
     }
 
     private func setIsHostedSummarizerEnabled(_ isEnabled: Bool) {
-        FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
+        FxNimbus.shared.features.hostedSummarizerFeature.with { _ in
             return HostedSummarizerFeature()
         }
     }
 
     private func setIsDeeplinkOptimizationRefactorEnabled(_ isEnabled: Bool) {
-        FxNimbus.shared.features.deeplinkOptimizationRefactorFeature.with { _, _ in
+        FxNimbus.shared.features.deeplinkOptimizationRefactorFeature.with { _ in
             return DeeplinkOptimizationRefactorFeature(enabled: isEnabled)
         }
     }
 
     private func setupSummarizedShakeGestureForTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
+        FxNimbus.shared.features.hostedSummarizerFeature.with { _ in
             return HostedSummarizerFeature(enabled: isEnabled, shakeGesture: isEnabled)
         }
     }
 
     private func setupNimbusNativeErrorPageTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.nativeErrorPageFeature.with { _, _ in
+        FxNimbus.shared.features.nativeErrorPageFeature.with { _ in
             return NativeErrorPageFeature(enabled: isEnabled)
         }
     }

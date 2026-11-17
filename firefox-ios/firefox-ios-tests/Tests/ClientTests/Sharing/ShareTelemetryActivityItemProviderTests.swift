@@ -20,7 +20,7 @@ final class ShareTelemetryActivityItemProviderTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        profile = MockProfile()
+        profile = makeProfile()
         DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
     }
 
@@ -209,7 +209,7 @@ final class ShareTelemetryActivityItemProviderTests: XCTestCase {
     }
 
     private func setupNimbusSentFromFirefoxTesting(isEnabled: Bool, isTreatmentA: Bool) {
-        FxNimbus.shared.features.sentFromFirefoxFeature.with { _, _ in
+        FxNimbus.shared.features.sentFromFirefoxFeature.with { _ in
             return SentFromFirefoxFeature(
                 enabled: isEnabled,
                 isTreatmentA: isTreatmentA

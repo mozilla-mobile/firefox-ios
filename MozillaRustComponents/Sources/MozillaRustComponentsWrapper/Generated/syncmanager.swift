@@ -465,30 +465,6 @@ fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-fileprivate struct FfiConverterBool : FfiConverter {
-    typealias FfiType = Int8
-    typealias SwiftType = Bool
-
-    public static func lift(_ value: Int8) throws -> Bool {
-        return value != 0
-    }
-
-    public static func lower(_ value: Bool) -> Int8 {
-        return value ? 1 : 0
-    }
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Bool {
-        return try lift(readInt(&buf))
-    }
-
-    public static func write(_ value: Bool, into buf: inout [UInt8]) {
-        writeInt(&buf, lower(value))
-    }
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
 fileprivate struct FfiConverterString: FfiConverter {
     typealias SwiftType = String
     typealias FfiType = RustBuffer
@@ -592,6 +568,8 @@ public protocol SyncManagerProtocol: AnyObject, Sendable {
     
     /**
      * Perform a sync.  See [SyncParams] and [SyncResult] for details on how this works
+     *
+     * Fails with [SyncManagerError::Busy] if a sync is already in progress.
      */
     func sync(params: SyncParams) throws  -> SyncResult
     
@@ -682,6 +660,8 @@ open func getAvailableEngines() -> [String]  {
     
     /**
      * Perform a sync.  See [SyncParams] and [SyncResult] for details on how this works
+     *
+     * Fails with [SyncManagerError::Busy] if a sync is already in progress.
      */
 open func sync(params: SyncParams)throws  -> SyncResult  {
     return try  FfiConverterTypeSyncResult_lift(try rustCallWithError(FfiConverterTypeSyncManagerError_lift) {
@@ -745,13 +725,23 @@ public struct DeviceSettings: Equatable, Hashable {
     public var fxaDeviceId: String
     public var name: String
     public var kind: DeviceType
+    /**
+     * The engines this device syncs, to be published for other devices on the
+     * account to see. Not yet published.
+     */
+    public var enabledEngines: [String]
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(fxaDeviceId: String, name: String, kind: DeviceType) {
+    public init(fxaDeviceId: String, name: String, kind: DeviceType, 
+        /**
+         * The engines this device syncs, to be published for other devices on the
+         * account to see. Not yet published.
+         */enabledEngines: [String] = []) {
         self.fxaDeviceId = fxaDeviceId
         self.name = name
         self.kind = kind
+        self.enabledEngines = enabledEngines
     }
 
     
@@ -772,7 +762,8 @@ public struct FfiConverterTypeDeviceSettings: FfiConverterRustBuffer {
             try DeviceSettings(
                 fxaDeviceId: FfiConverterString.read(from: &buf), 
                 name: FfiConverterString.read(from: &buf), 
-                kind: FfiConverterTypeDeviceType.read(from: &buf)
+                kind: FfiConverterTypeDeviceType.read(from: &buf), 
+                enabledEngines: FfiConverterSequenceString.read(from: &buf)
         )
     }
 
@@ -780,6 +771,7 @@ public struct FfiConverterTypeDeviceSettings: FfiConverterRustBuffer {
         FfiConverterString.write(value.fxaDeviceId, into: &buf)
         FfiConverterString.write(value.name, into: &buf)
         FfiConverterTypeDeviceType.write(value.kind, into: &buf)
+        FfiConverterSequenceString.write(value.enabledEngines, into: &buf)
     }
 }
 
@@ -871,11 +863,9 @@ public struct SyncParams: Equatable, Hashable {
      */
     public var engines: SyncEngineSelection
     /**
-     * Which engines should be enabled in the "account global" list (for
-     * example, if the UI was used to change an engine's state since the last
-     * sync).
+     * How the user's choice of engines to sync is modelled.
      */
-    public var enabledChanges: [String: Bool]
+    public var engineChoicesModel: EngineChoicesModel
     /**
      * Keys to encrypt/decrypt data from local database files.  These are
      * separate from the key we use to encrypt the sync payload as a whole.
@@ -909,10 +899,8 @@ public struct SyncParams: Equatable, Hashable {
          * Which engines should we sync?
          */engines: SyncEngineSelection, 
         /**
-         * Which engines should be enabled in the "account global" list (for
-         * example, if the UI was used to change an engine's state since the last
-         * sync).
-         */enabledChanges: [String: Bool], 
+         * How the user's choice of engines to sync is modelled.
+         */engineChoicesModel: EngineChoicesModel, 
         /**
          * Keys to encrypt/decrypt data from local database files.  These are
          * separate from the key we use to encrypt the sync payload as a whole.
@@ -933,7 +921,7 @@ public struct SyncParams: Equatable, Hashable {
          */deviceSettings: DeviceSettings) {
         self.reason = reason
         self.engines = engines
-        self.enabledChanges = enabledChanges
+        self.engineChoicesModel = engineChoicesModel
         self.localEncryptionKeys = localEncryptionKeys
         self.authInfo = authInfo
         self.persistedState = persistedState
@@ -958,7 +946,7 @@ public struct FfiConverterTypeSyncParams: FfiConverterRustBuffer {
             try SyncParams(
                 reason: FfiConverterTypeSyncReason.read(from: &buf), 
                 engines: FfiConverterTypeSyncEngineSelection.read(from: &buf), 
-                enabledChanges: FfiConverterDictionaryStringBool.read(from: &buf), 
+                engineChoicesModel: FfiConverterTypeEngineChoicesModel.read(from: &buf), 
                 localEncryptionKeys: FfiConverterDictionaryStringString.read(from: &buf), 
                 authInfo: FfiConverterTypeSyncAuthInfo.read(from: &buf), 
                 persistedState: FfiConverterOptionString.read(from: &buf), 
@@ -969,7 +957,7 @@ public struct FfiConverterTypeSyncParams: FfiConverterRustBuffer {
     public static func write(_ value: SyncParams, into buf: inout [UInt8]) {
         FfiConverterTypeSyncReason.write(value.reason, into: &buf)
         FfiConverterTypeSyncEngineSelection.write(value.engines, into: &buf)
-        FfiConverterDictionaryStringBool.write(value.enabledChanges, into: &buf)
+        FfiConverterTypeEngineChoicesModel.write(value.engineChoicesModel, into: &buf)
         FfiConverterDictionaryStringString.write(value.localEncryptionKeys, into: &buf)
         FfiConverterTypeSyncAuthInfo.write(value.authInfo, into: &buf)
         FfiConverterOptionString.write(value.persistedState, into: &buf)
@@ -1624,32 +1612,6 @@ fileprivate struct FfiConverterSequenceString: FfiConverterRustBuffer {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-fileprivate struct FfiConverterDictionaryStringBool: FfiConverterRustBuffer {
-    public static func write(_ value: [String: Bool], into buf: inout [UInt8]) {
-        let len = Int32(value.count)
-        writeInt(&buf, len)
-        for (key, value) in value {
-            FfiConverterString.write(key, into: &buf)
-            FfiConverterBool.write(value, into: &buf)
-        }
-    }
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [String: Bool] {
-        let len: Int32 = try readInt(&buf)
-        var dict = [String: Bool]()
-        dict.reserveCapacity(Int(len))
-        for _ in 0..<len {
-            let key = try FfiConverterString.read(from: &buf)
-            let value = try FfiConverterBool.read(from: &buf)
-            dict[key] = value
-        }
-        return dict
-    }
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
 fileprivate struct FfiConverterDictionaryStringString: FfiConverterRustBuffer {
     public static func write(_ value: [String: String], into buf: inout [UInt8]) {
         let len = Int32(value.count)
@@ -1688,16 +1650,16 @@ private let initializationResult: InitializationResult = {
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_sync_manager_checksum_method_syncmanager_disconnect() != 33773) {
+    if (uniffi_sync_manager_checksum_method_syncmanager_disconnect() != 53220) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_sync_manager_checksum_method_syncmanager_get_available_engines() != 20365) {
+    if (uniffi_sync_manager_checksum_method_syncmanager_get_available_engines() != 47967) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_sync_manager_checksum_method_syncmanager_sync() != 25870) {
+    if (uniffi_sync_manager_checksum_method_syncmanager_sync() != 38154) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_sync_manager_checksum_constructor_syncmanager_new() != 14797) {
+    if (uniffi_sync_manager_checksum_constructor_syncmanager_new() != 9801) {
         return InitializationResult.apiChecksumMismatch
     }
 

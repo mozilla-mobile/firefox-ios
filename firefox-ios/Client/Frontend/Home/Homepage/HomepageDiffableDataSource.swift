@@ -26,6 +26,7 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         case header
         case messageCard
         case topSites(TextColor?, NumberOfTilesPerRow, ShouldShowSectionHeader)
+        case notificationCard
         case searchBar
         case jumpBackIn(TextColor?, JumpBackInSectionLayoutConfiguration)
         case trackerBlockerModule
@@ -46,10 +47,11 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
     enum HomeItem: Hashable, Sendable {
         case header(HeaderState, TextColor?, ShowiPadSetup)
         case privacyNotice
+        case notificationCard
         case messageCard(MessageCardConfiguration)
         case topSite(TopSiteConfiguration, TextColor?)
         case addShortcutTile(TextColor?)
-        case topSiteEmpty
+        case topSiteEmpty(Int)
         case searchBar
         case jumpBackIn(JumpBackInTabConfiguration)
         case jumpBackInSyncedTab(JumpBackInSyncedTabConfiguration)
@@ -66,6 +68,7 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
             return [
                 HomepageHeaderCell.self,
                 PrivacyNoticeCell.self,
+                NotificationCardCell.self,
                 HomepageMessageCardCell.self,
                 TopSiteCell.self,
                 EmptyTopSiteCell.self,
@@ -100,7 +103,7 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
 
         var canHandleLongPress: Bool {
             switch self {
-            case .addShortcutTile:
+            case .addShortcutTile, .topSiteEmpty:
                 return false
             default:
                 return true
@@ -151,7 +154,11 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
             snapshot.appendItems(topSitesSnapshotData.items, toSection: topSitesSection)
         }
 
-        if state.trackerBlockerModuleState.shouldShowSection {
+        // While the onboarding notification card is shown we hide the tracker blocker
+        if state.notificationCardState.shouldShowCard {
+            snapshot.appendSections([.notificationCard])
+            snapshot.appendItems([.notificationCard], toSection: .notificationCard)
+        } else if state.trackerBlockerModuleState.shouldShowSection {
             snapshot.appendSections([.trackerBlockerModule])
             snapshot.appendItems(
                 [.trackerBlockerModule(state.trackerBlockerModuleState.blockedTrackerCount)],
@@ -193,6 +200,16 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         guard topSitesState.shouldShowSection else { return nil }
         let maxVisibleItemCount = topSitesState.numberOfRows * topSitesState.numberOfTilesPerRow
         guard maxVisibleItemCount > 0 else { return nil }
+
+        // Keep the section at its full size until the first fetch comes back, otherwise everything
+        // below it jumps down when the tiles are inserted on launch.
+        guard topSitesState.hasRetrievedTopSites else {
+            return TopSitesSnapshotData(
+                items: (0..<maxVisibleItemCount).map { .topSiteEmpty($0) },
+                numberOfTilesPerRow: topSitesState.numberOfTilesPerRow,
+                shouldShowSectionHeader: false
+            )
+        }
 
         let topSitesItems: [HomeItem] = topSitesState.topSitesData.prefix(
             maxVisibleItemCount

@@ -16,6 +16,7 @@ protocol LocationTextFieldDelegate: AnyObject {
     func locationTextFieldDidEndEditing()
     func locationTextFieldNeedsSearchReset()
     func locationTextFieldDidDisplayEditingAccessoryButton(_ button: UIButton, contextualHintType: String)
+    func locationTextFieldDidHideEditingAccessoryButton()
 }
 
 final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable, Notifiable {
@@ -273,6 +274,9 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
             rightView = nil
             rightViewMode = .never
             clearButtonMode = .whileEditing
+            if wasShowingEditingAccessory {
+                autocompleteDelegate?.locationTextFieldDidHideEditingAccessoryButton()
+            }
         }
     }
 

@@ -14,13 +14,13 @@ final class TabDisplayDiffableDataSource: UICollectionViewDiffableDataSource<Tab
         case tab(TabModel)
     }
 
-    func updateSnapshot(state: TabsPanelState) {
+    func updateSnapshot(state: TabsPanelState, animatingDifferences: Bool = true) {
         var snapshot = NSDiffableDataSourceSnapshot<TabDisplayViewSection, TabDisplayViewItem>()
         snapshot.appendSections([.tabs])
 
         let tabs = state.tabs.map { TabDisplayViewItem.tab($0) }
         snapshot.appendItems(tabs, toSection: .tabs)
 
-        apply(snapshot, animatingDifferences: true)
+        apply(snapshot, animatingDifferences: animatingDifferences)
     }
 }

@@ -14,8 +14,10 @@ final class WallpaperStateTests: XCTestCase {
         let initialState = createSubject()
 
         XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertNil(initialState.wallpaperConfiguration.landscapeImage)
-        XCTAssertNil(initialState.wallpaperConfiguration.portraitImage)
+        XCTAssertNil(initialState.wallpaperConfiguration.iPhoneLandscapeImage)
+        XCTAssertNil(initialState.wallpaperConfiguration.iPhonePortraitImage)
+        XCTAssertNil(initialState.wallpaperConfiguration.iPadLandscapeImage)
+        XCTAssertNil(initialState.wallpaperConfiguration.iPadPortraitImage)
         XCTAssertNil(initialState.wallpaperConfiguration.textColor)
         XCTAssertNil(initialState.wallpaperConfiguration.cardColor)
         XCTAssertNil(initialState.wallpaperConfiguration.logoTextColor)
@@ -29,8 +31,10 @@ final class WallpaperStateTests: XCTestCase {
         let reducer = headerReducer()
 
         let testWallpaper = WallpaperConfiguration(
-            landscapeImage: image,
-            portraitImage: image,
+            iPhonePortraitImage: image,
+            iPhoneLandscapeImage: image,
+            iPadPortraitImage: image,
+            iPadLandscapeImage: image,
             textColor: .black,
             cardColor: .black,
             logoTextColor: .black
@@ -46,8 +50,10 @@ final class WallpaperStateTests: XCTestCase {
         )
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertEqual(newState.wallpaperConfiguration.landscapeImage, image)
-        XCTAssertEqual(newState.wallpaperConfiguration.portraitImage, image)
+        XCTAssertEqual(newState.wallpaperConfiguration.iPhoneLandscapeImage, image)
+        XCTAssertEqual(newState.wallpaperConfiguration.iPhonePortraitImage, image)
+        XCTAssertEqual(newState.wallpaperConfiguration.iPadLandscapeImage, image)
+        XCTAssertEqual(newState.wallpaperConfiguration.iPadPortraitImage, image)
         XCTAssertEqual(newState.wallpaperConfiguration.textColor, .black)
         XCTAssertEqual(newState.wallpaperConfiguration.cardColor, .black)
         XCTAssertEqual(newState.wallpaperConfiguration.logoTextColor, .black)
@@ -59,8 +65,10 @@ final class WallpaperStateTests: XCTestCase {
         let reducer = headerReducer()
 
         let testWallpaper = WallpaperConfiguration(
-            landscapeImage: image,
-            portraitImage: image,
+            iPhonePortraitImage: image,
+            iPhoneLandscapeImage: image,
+            iPadPortraitImage: image,
+            iPadLandscapeImage: image,
             textColor: .black,
             cardColor: .black,
             logoTextColor: .black
@@ -76,8 +84,10 @@ final class WallpaperStateTests: XCTestCase {
         )
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertEqual(newState.wallpaperConfiguration.landscapeImage, image)
-        XCTAssertEqual(newState.wallpaperConfiguration.portraitImage, image)
+        XCTAssertEqual(newState.wallpaperConfiguration.iPhoneLandscapeImage, image)
+        XCTAssertEqual(newState.wallpaperConfiguration.iPhonePortraitImage, image)
+        XCTAssertEqual(newState.wallpaperConfiguration.iPadLandscapeImage, image)
+        XCTAssertEqual(newState.wallpaperConfiguration.iPadPortraitImage, image)
         XCTAssertEqual(newState.wallpaperConfiguration.textColor, .black)
         XCTAssertEqual(newState.wallpaperConfiguration.cardColor, .black)
         XCTAssertEqual(newState.wallpaperConfiguration.logoTextColor, .black)
@@ -147,13 +157,13 @@ final class WallpaperStateTests: XCTestCase {
         let newState = reducer.legacyReducer(
             initialState,
             WallpaperAction(
-                wallpaperConfiguration: WallpaperConfiguration(portraitImage: image),
+                wallpaperConfiguration: WallpaperConfiguration(iPhonePortraitImage: image),
                 windowUUID: .XCTestDefaultUUID,
                 actionType: WallpaperMiddlewareActionType.wallpaperDidChange
             )
         )
 
-        XCTAssertEqual(newState.wallpaperConfiguration.portraitImage, image)
+        XCTAssertEqual(newState.wallpaperConfiguration.iPhonePortraitImage, image)
         XCTAssertEqual(newState.availableContentHeight, 500)
         XCTAssertEqual(newState.availableWallpaperHeight, 525)
     }

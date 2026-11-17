@@ -76,6 +76,21 @@ public struct DateGroupedTableData<T: Equatable> {
         return timestampData[section].map({ $0.item })
     }
 
+    public func itemForIndexPath(_ indexPath: IndexPath) -> T? {
+        guard indexPath.section >= 0,
+              indexPath.section < timestampDataNumSections else {
+            return nil
+        }
+
+        let section = timestampData[indexPath.section]
+        guard indexPath.row >= 0,
+              indexPath.row < section.count else {
+            return nil
+        }
+
+        return section[indexPath.row].item
+    }
+
     /// Returns all currently fetched items in a single array: `[T.item]`.
     public func allItems() -> [T] {
         return timestampData.flatMap({ $0 }).map { $0.item }

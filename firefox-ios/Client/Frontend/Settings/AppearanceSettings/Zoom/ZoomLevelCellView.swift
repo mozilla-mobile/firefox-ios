@@ -10,7 +10,7 @@ struct ZoomLevelCellView: View {
     private let domainZoomLevel: DomainZoomLevel
     private let textColor: Color
 
-    private struct UX {
+    private enum UX {
         static let textPadding: CGFloat = 16
     }
 

@@ -5,7 +5,14 @@
 import Common
 import Foundation
 
-public struct ReaderModeUtils {
+public enum ReaderModeUtils {
+    // Content Security Policy for readerized pages. Disallows everything except images from anywhere,
+    // and styles (including inline styles) and fonts from origin.
+    // Must stay on a single line: CFNetwork and HTTPURLResponse drop multi-line header values.
+    public static func contentSecurityPolicy(origin: String) -> String {
+        return "default-src 'none'; img-src *; style-src 'unsafe-inline' \(origin); font-src \(origin)"
+    }
+
     @MainActor
     public static func generateReaderContent(
         _ readabilityResult: ReadabilityResult,

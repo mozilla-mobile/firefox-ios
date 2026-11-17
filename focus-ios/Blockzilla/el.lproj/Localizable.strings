@@ -302,7 +302,7 @@
 "Settings.autocompleteSection" = "Αυτόματη συμπλήρωση URL";
 
 /* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Η φραγή ιχνηλατών άλλου περιεχομένου ενδέχεται να χαλάσει μερικά βίντεο και ιστοσελίδες.";
+"Settings.blockOtherMessage" = "Ο αποκλεισμός ιχνηλατών άλλου περιεχομένου ενδέχεται να προκαλέσει δυσλειτουργία σε ορισμένα βίντεο και ιστοσελίδες.";
 
 /* Button label for declining Content blocker alert */
 "Settings.blockOtherNo2" = "Ακύρωση";

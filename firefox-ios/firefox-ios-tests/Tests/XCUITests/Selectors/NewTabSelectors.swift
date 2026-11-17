@@ -60,7 +60,7 @@ struct NewTabSelectors: NewTabSelectorSet {
         groups: ["NewTabSelector"]
     )
 
-    let ICON_CROSS_IN_TABLE_CELLS = Selector.tableCellButtonById(
+    let ICON_CROSS_IN_TABLE_CELLS = Selector.collectionViewButtonByLabel(
         IDs.iconCross,
         description: "Icon Cross in table cells context",
         groups: ["NewTabSelector"]
@@ -72,7 +72,7 @@ struct NewTabSelectors: NewTabSelectorSet {
         groups: ["NewTabSelector"]
     )
 
-    let NEW_PRIVATE_TAB_IN_TABLE_CELLS = Selector.tableCellButtonById(
+    let NEW_PRIVATE_TAB_IN_TABLE_CELLS = Selector.collectionViewButtonByLabel(
         IDs.newPrivateTab,
         description: "New Private Tab in table cells context",
         groups: ["NewTabSelector"]

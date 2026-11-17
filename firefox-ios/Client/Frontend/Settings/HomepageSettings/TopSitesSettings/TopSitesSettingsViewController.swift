@@ -7,8 +7,11 @@ import Common
 import Shared
 
 final class TopSitesSettingsViewController: SettingsTableViewController, UserFeaturePreferenceProvider {
+    private let logger: Logger
+
     // MARK: - Initializers
-    init(windowUUID: WindowUUID) {
+    init(windowUUID: WindowUUID, logger: Logger = DefaultLogger.shared) {
+        self.logger = logger
         super.init(style: .grouped, windowUUID: windowUUID)
 
         self.title = .Settings.Homepage.Shortcuts.ShortcutsPageTitle
@@ -34,7 +37,7 @@ final class TopSitesSettingsViewController: SettingsTableViewController, UserFea
             let toggleSettings = [
                 BoolSetting(
                     prefs: profile.prefs,
-                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                    theme: currentTheme(),
                     prefKey: PrefsKeys.UserFeatureFlagPrefs.TopSiteSection,
                     defaultValue: true,
                     titleText: .Settings.Homepage.Shortcuts.ShortcutsToggle
@@ -49,7 +52,7 @@ final class TopSitesSettingsViewController: SettingsTableViewController, UserFea
                 },
                 BoolSetting(
                     prefs: profile.prefs,
-                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                    theme: currentTheme(),
                     prefKey: PrefsKeys.FeatureFlags.SponsoredShortcuts,
                     defaultValue: userPreferences.getPreferenceFor(.hntSponsoredShortcuts),
                     titleText: .Settings.Homepage.Shortcuts.SponsoredShortcutsToggle
@@ -85,7 +88,11 @@ final class TopSitesSettingsViewController: SettingsTableViewController, UserFea
     private func deleteUserRequest(contextId: String) {
         Task {
             let remover = UnifiedAdsUserDataRemover()
-            try await remover.deleteUserData(contextID: contextId)
+            do {
+                try await remover.deleteUserData(contextID: contextId)
+            } catch {
+                logger.log("Failed to delete unified ads user data: \(error)", level: .fatal, category: .homepage)
+            }
         }
     }
 }
@@ -118,7 +125,7 @@ extension TopSitesSettingsViewController {
         init(settings: SettingsTableViewController) {
             self.profile = settings.profile
             self.windowUUID = settings.windowUUID
-            let theme = settings.themeManager.getCurrentTheme(for: windowUUID)
+            let theme = settings.currentTheme()
             super.init(
                 title: NSAttributedString(
                     string: .Settings.Homepage.Shortcuts.Rows,

@@ -16,7 +16,7 @@ protocol TabCellDelegate: AnyObject {
 final class TabCell: UICollectionViewCell,
                      ThemeApplicable,
                      ReusableCell {
-    struct UX {
+    enum UX {
         static let borderWidth: CGFloat = 3.0
         static let cornerRadius: CGFloat = 16
         static let subviewDefaultPadding: CGFloat = 6.0
@@ -57,17 +57,7 @@ final class TabCell: UICollectionViewCell,
         view.isHidden = true
     }
 
-    private lazy var screenshotViewPhone: UIImageView = .build { view in
-        view.contentMode = .scaleAspectFill
-        view.clipsToBounds = true
-    }
-
-    private lazy var screenshotViewPad: TabCellCustomImage = .build()
-
-    private var screenshotView: UIImageView {
-        let isPad = UIDevice.current.userInterfaceIdiom == .pad
-        return isPad ? screenshotViewPad : screenshotViewPhone
-    }
+    private lazy var screenshotView: TabCellCustomImage = .build()
 
     private lazy var titleText: UILabel = .build { label in
         label.numberOfLines = 1

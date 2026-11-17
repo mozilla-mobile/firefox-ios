@@ -61,6 +61,12 @@ ai.quick_answers:
     type: event
     description: |
       Recorded when the Quick Answers service starts attempting to capture user audio.
+    extra_keys:
+      is_follow_up:
+        type: boolean
+        description: |
+          True when the event belongs to a question asked after a previous answer in the same
+          Quick Answers session, false for the first question.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
@@ -73,6 +79,11 @@ ai.quick_answers:
     description: |
       Recorded when the transcription completes.
     extra_keys:
+      is_follow_up:
+        type: boolean
+        description: |
+          True when the event belongs to a question asked after a previous answer in the same
+          Quick Answers session, false for the first question.
       outcome:
         type: boolean
         description: |
@@ -92,6 +103,12 @@ ai.quick_answers:
     type: event
     description: |
       Recorded when the Quick Answers results service starts to fetch the results from the backend.
+    extra_keys:
+      is_follow_up:
+        type: boolean
+        description: |
+          True when the event belongs to a question asked after a previous answer in the same
+          Quick Answers session, false for the first question.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
@@ -106,6 +123,11 @@ ai.quick_answers:
       In the success case (when outcome is true), the response is displayed to the user.
       In the failure case (when the search service errors out), an error message is displayed instead.
     extra_keys:
+      is_follow_up:
+        type: boolean
+        description: |
+          True when the event belongs to a question asked after a previous answer in the same
+          Quick Answers session, false for the first question.
       outcome:
         type: boolean
         description: |

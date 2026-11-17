@@ -6,16 +6,14 @@ import Common
 import UIKit
 
 class ReaderModeSettingsButton: UIButton {
-    public struct UX {
+    public enum UX {
         public static let verticalInset: CGFloat = 16
         public static let horizontalInset: CGFloat = 16
-        public static let serifFontName = "NewYorkMedium-Regular"
     }
 
     var fontType: ReaderModeFontType = .sansSerif
-    var sansSerifFont: UIFont? = FXFontStyles.Regular.body.scaledFont()
-    var serifFont: UIFont? = UIFont(name: UX.serifFontName,
-                                    size: FXFontStyles.Regular.body.systemFont().pointSize)
+    var sansSerifFont: UIFont = FXFontStyles.Regular.body.scaledFont()
+    var serifFont: UIFont?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -29,6 +27,9 @@ class ReaderModeSettingsButton: UIButton {
         configuration?.contentInsets = contentInsets
         contentHorizontalAlignment = .center
         titleLabel?.adjustsFontForContentSizeCategory = true
+
+        let descriptor = sansSerifFont.fontDescriptor.withDesign(.serif) ?? sansSerifFont.fontDescriptor
+        serifFont = UIFont(descriptor: descriptor, size: sansSerifFont.pointSize)
     }
 
     public required init?(coder aDecoder: NSCoder) {

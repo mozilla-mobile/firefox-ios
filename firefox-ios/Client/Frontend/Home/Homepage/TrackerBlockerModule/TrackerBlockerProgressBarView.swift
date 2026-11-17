@@ -11,7 +11,7 @@ import UIKit
 /// The fill ratio is computed by the caller (see `TrackerBlockerSheetState.fillRatio(for:)`) — this view only
 /// clamps it to `0...1` and sizes the fill accordingly.
 final class TrackerBlockerProgressBarView: UIView, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let height: CGFloat = 6
     }
 

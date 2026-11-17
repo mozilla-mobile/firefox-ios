@@ -112,6 +112,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     func test3ReloadButtonContextMenu() {
         navigator.openURL(loremIpsumURL)
         waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
         mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
 
         navigator.toggleOff(userState.requestDesktopSite, withAction: Action.ToggleRequestDesktopSite)
@@ -211,8 +212,11 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         app.cells["Settings.TrackingProtectionOption.BlockListBasic"].buttons.firstMatch.waitAndTap()
         snapshot("TrackingProtectionBasicMoreInfo-01")
 
-        // Go back to TP settings
-        app.navigationBars["Client.TPAccessoryInfo"].buttons.firstMatch.waitAndTap()
+        // Go back to TP settings. On iPhone Duo the back button lives in a toolbar, not the navigation bar.
+        let backButton = isIPhoneDuo()
+            ? app.buttons["BackButton"].firstMatch
+            : app.navigationBars["Client.TPAccessoryInfo"].buttons.firstMatch
+        backButton.waitAndTap()
 
         // See Strict mode info
         app.cells["Settings.TrackingProtectionOption.BlockListStrict"].buttons.firstMatch.waitAndTap()
@@ -359,10 +363,25 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         navigator.goto(TabTray)
         snapshot("02TabTray")
 
+        // article for the summarize screenshot
+        navigator.goto(NewTabScreen)
+        navigator.openURL("https://blog.mozilla.org/en/firefox/shake-to-summarize-time-best-inventions/")
+        waitUntilPageLoad()
+        snapshot("04SummarizeArticle")
+
+        // article in reader mode
+        navigator.goto(TabTray)
+        navigator.goto(NewTabScreen)
+        navigator.openURL("https://blog.mozilla.org/en/firefox/fast-company-recognition/")
+        waitUntilPageLoad()
+        app.buttons[AccessibilityIdentifiers.Toolbar.readerModeWithSummarizerButton].waitAndTap()
+        waitUntilPageLoad()
+        snapshot("05ReaderMode")
+
         // perform a search but don't complete (we're testing autocomplete here)
         navigator.createNewTab()
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
-        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].typeText("firef")
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].typeText("how to set boundaries")
         sleep(2)
         snapshot("01SearchResults")
     }

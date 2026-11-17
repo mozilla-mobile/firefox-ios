@@ -11,6 +11,10 @@ public enum VPNAuthError: Error, Equatable {
     case noStoredSession
     case notEnrolled
     case sessionNotPersisted
+    /// The proxy token isn't a JWT with readable `exp` / `nbf` claims
+    case invalidToken
+    /// The device has used its monthly bandwidth quota; the token endpoint returned 429
+    case quotaExceeded
 }
 
 extension VPNAuthError {
@@ -20,7 +24,7 @@ extension VPNAuthError {
         switch error {
         case VPNAuthError.notEnrolled:
             return true
-        case AppAttestServiceError.missingKeyID, AppAttestServiceError.invalidKeyID:
+        case AppAttestServiceError.missingKeyID:
             return true
         case AppAttestServiceError.serverError(let statusCode, _):
             return statusCode == 401

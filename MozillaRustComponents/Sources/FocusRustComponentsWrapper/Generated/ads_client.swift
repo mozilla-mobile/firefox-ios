@@ -589,25 +589,70 @@ fileprivate struct FfiConverterString: FfiConverter {
 
 
 
+/**
+ * Requests ads from MARS and records their clicks, impressions and reports.
+ * Build it with [`MozAdsClientBuilder`], ideally once per app.
+ */
 public protocol MozAdsClientProtocol: AnyObject, Sendable {
     
+    /**
+     * Deletes everything in the HTTP cache.
+     */
     func clearCache() throws 
     
+    /**
+     * Records a click on an ad, from its `callbacks.click` URL.
+     */
     func recordClick(clickUrl: String, options: MozAdsCallbackOptions?) throws 
     
+    /**
+     * Records an impression of an ad, from its `callbacks.impression` URL.
+     */
     func recordImpression(impressionUrl: String, options: MozAdsCallbackOptions?) throws 
     
+    /**
+     * Reports an ad, from its `callbacks.report` URL.
+     */
     func reportAd(reportUrl: String, reason: MozAdsReportReason, options: MozAdsCallbackOptions?) throws 
     
+    /**
+     * Requests one image ad per placement. The result is keyed by
+     * `placement_id` and leaves out placements with no ad.
+     */
     func requestImageAds(mozAdRequests: [MozAdsPlacementRequest], options: MozAdsRequestOptions?) throws  -> [String: MozAdsImage]
     
+    /**
+     * Requests `count` spocs per placement. The result is keyed by
+     * `placement_id` and leaves out placements with no ad.
+     */
     func requestSpocAds(mozAdRequests: [MozAdsPlacementRequestWithCount], options: MozAdsRequestOptions?) throws  -> [String: [MozAdsSpoc]]
     
+    /**
+     * Requests `count` ads per placement, for placements that can return
+     * either spocs or image ads. The result is keyed by `placement_id` and
+     * leaves out placements with no ad.
+     */
+    func requestSpocOrImageAds(mozAdRequests: [MozAdsPlacementRequestWithCount], options: MozAdsRequestOptions?) throws  -> [String: [MozAdsImageOrSpoc]]
+    
+    /**
+     * Requests one tile ad per placement. The result is keyed by
+     * `placement_id` and leaves out placements with no ad.
+     */
     func requestTileAds(mozAdRequests: [MozAdsPlacementRequest], options: MozAdsRequestOptions?) throws  -> [String: MozAdsTile]
     
+    /**
+     * Allows the ads-client to unload some references and prepare for a safe shutdown.
+     * Other methods should not be called after this one.
+     * Currently, we shutdown (with no expected errors).
+     * However, future shutdowns may require an error to be logged, so we keep the Result.
+     */
     func shutdown() throws 
     
 }
+/**
+ * Requests ads from MARS and records their clicks, impressions and reports.
+ * Build it with [`MozAdsClientBuilder`], ideally once per app.
+ */
 open class MozAdsClient: MozAdsClientProtocol, @unchecked Sendable {
     fileprivate let handle: UInt64
 
@@ -661,6 +706,9 @@ open class MozAdsClient: MozAdsClientProtocol, @unchecked Sendable {
     
 
     
+    /**
+     * Deletes everything in the HTTP cache.
+     */
 open func clearCache()throws   {try rustCallWithError(FfiConverterTypeMozAdsClientApiError_lift) {
         uniffiCallStatus in
     uniffi_ads_client_fn_method_mozadsclient_clear_cache(
@@ -669,6 +717,9 @@ open func clearCache()throws   {try rustCallWithError(FfiConverterTypeMozAdsClie
 }
 }
     
+    /**
+     * Records a click on an ad, from its `callbacks.click` URL.
+     */
 open func recordClick(clickUrl: String, options: MozAdsCallbackOptions? = nil)throws   {try rustCallWithError(FfiConverterTypeMozAdsClientApiError_lift) {
         uniffiCallStatus in
     uniffi_ads_client_fn_method_mozadsclient_record_click(
@@ -679,6 +730,9 @@ open func recordClick(clickUrl: String, options: MozAdsCallbackOptions? = nil)th
 }
 }
     
+    /**
+     * Records an impression of an ad, from its `callbacks.impression` URL.
+     */
 open func recordImpression(impressionUrl: String, options: MozAdsCallbackOptions? = nil)throws   {try rustCallWithError(FfiConverterTypeMozAdsClientApiError_lift) {
         uniffiCallStatus in
     uniffi_ads_client_fn_method_mozadsclient_record_impression(
@@ -689,6 +743,9 @@ open func recordImpression(impressionUrl: String, options: MozAdsCallbackOptions
 }
 }
     
+    /**
+     * Reports an ad, from its `callbacks.report` URL.
+     */
 open func reportAd(reportUrl: String, reason: MozAdsReportReason, options: MozAdsCallbackOptions? = nil)throws   {try rustCallWithError(FfiConverterTypeMozAdsClientApiError_lift) {
         uniffiCallStatus in
     uniffi_ads_client_fn_method_mozadsclient_report_ad(
@@ -700,6 +757,10 @@ open func reportAd(reportUrl: String, reason: MozAdsReportReason, options: MozAd
 }
 }
     
+    /**
+     * Requests one image ad per placement. The result is keyed by
+     * `placement_id` and leaves out placements with no ad.
+     */
 open func requestImageAds(mozAdRequests: [MozAdsPlacementRequest], options: MozAdsRequestOptions? = nil)throws  -> [String: MozAdsImage]  {
     return try  FfiConverterDictionaryStringTypeMozAdsImage.lift(try rustCallWithError(FfiConverterTypeMozAdsClientApiError_lift) {
         uniffiCallStatus in
@@ -711,6 +772,10 @@ open func requestImageAds(mozAdRequests: [MozAdsPlacementRequest], options: MozA
 })
 }
     
+    /**
+     * Requests `count` spocs per placement. The result is keyed by
+     * `placement_id` and leaves out placements with no ad.
+     */
 open func requestSpocAds(mozAdRequests: [MozAdsPlacementRequestWithCount], options: MozAdsRequestOptions? = nil)throws  -> [String: [MozAdsSpoc]]  {
     return try  FfiConverterDictionaryStringSequenceTypeMozAdsSpoc.lift(try rustCallWithError(FfiConverterTypeMozAdsClientApiError_lift) {
         uniffiCallStatus in
@@ -722,6 +787,26 @@ open func requestSpocAds(mozAdRequests: [MozAdsPlacementRequestWithCount], optio
 })
 }
     
+    /**
+     * Requests `count` ads per placement, for placements that can return
+     * either spocs or image ads. The result is keyed by `placement_id` and
+     * leaves out placements with no ad.
+     */
+open func requestSpocOrImageAds(mozAdRequests: [MozAdsPlacementRequestWithCount], options: MozAdsRequestOptions? = nil)throws  -> [String: [MozAdsImageOrSpoc]]  {
+    return try  FfiConverterDictionaryStringSequenceTypeMozAdsImageOrSpoc.lift(try rustCallWithError(FfiConverterTypeMozAdsClientApiError_lift) {
+        uniffiCallStatus in
+    uniffi_ads_client_fn_method_mozadsclient_request_spoc_or_image_ads(
+            self.uniffiCloneHandle(),
+        FfiConverterSequenceTypeMozAdsPlacementRequestWithCount.lower(mozAdRequests),
+        FfiConverterOptionTypeMozAdsRequestOptions.lower(options),uniffiCallStatus
+    )
+})
+}
+    
+    /**
+     * Requests one tile ad per placement. The result is keyed by
+     * `placement_id` and leaves out placements with no ad.
+     */
 open func requestTileAds(mozAdRequests: [MozAdsPlacementRequest], options: MozAdsRequestOptions? = nil)throws  -> [String: MozAdsTile]  {
     return try  FfiConverterDictionaryStringTypeMozAdsTile.lift(try rustCallWithError(FfiConverterTypeMozAdsClientApiError_lift) {
         uniffiCallStatus in
@@ -733,6 +818,12 @@ open func requestTileAds(mozAdRequests: [MozAdsPlacementRequest], options: MozAd
 })
 }
     
+    /**
+     * Allows the ads-client to unload some references and prepare for a safe shutdown.
+     * Other methods should not be called after this one.
+     * Currently, we shutdown (with no expected errors).
+     * However, future shutdowns may require an error to be logged, so we keep the Result.
+     */
 open func shutdown()throws   {try rustCallWithError(FfiConverterTypeMozAdsClientApiError_lift) {
         uniffiCallStatus in
     uniffi_ads_client_fn_method_mozadsclient_shutdown(
@@ -791,19 +882,44 @@ public func FfiConverterTypeMozAdsClient_lower(_ value: MozAdsClient) -> UInt64 
 
 
 
+/**
+ * Configures and builds a [`MozAdsClient`].
+ */
 public protocol MozAdsClientBuilderProtocol: AnyObject, Sendable {
     
+    /**
+     * Builds the client. A telemetry instance set on the builder becomes the
+     * destination of every client's metrics in the process.
+     */
     func build()  -> MozAdsClient
     
+    /**
+     * Enables the HTTP cache with this configuration. Without it, nothing is
+     * cached.
+     */
     func cacheConfig(cacheConfig: MozAdsCacheConfig)  -> MozAdsClientBuilder
     
+    /**
+     * The MARS environment to send requests to. Defaults to production.
+     */
     func environment(environment: MozAdsEnvironment)  -> MozAdsClientBuilder
     
-    func storeConfig(storeConfig: MozAdsStoreConfig)  -> MozAdsClientBuilder
-    
+    /**
+     * Where the client records its metrics. Telemetry is process-wide: see
+     * [`MozAdsTelemetry`].
+     */
     func telemetry(telemetry: MozAdsTelemetry)  -> MozAdsClientBuilder
     
+    /**
+     * The browser's user agent, sent to MARS on OHTTP requests when the
+     * preflight returns none. Defaults to viaduct's global default user agent.
+     */
+    func userAgent(userAgent: String)  -> MozAdsClientBuilder
+    
 }
+/**
+ * Configures and builds a [`MozAdsClient`].
+ */
 open class MozAdsClientBuilder: MozAdsClientBuilderProtocol, @unchecked Sendable {
     fileprivate let handle: UInt64
 
@@ -843,6 +959,10 @@ open class MozAdsClientBuilder: MozAdsClientBuilderProtocol, @unchecked Sendable
     public func uniffiCloneHandle() -> UInt64 {
         return try! rustCall { uniffi_ads_client_fn_clone_mozadsclientbuilder(self.handle, $0) }
     }
+    /**
+     * A builder with the defaults: the production environment, no cache and
+     * no telemetry.
+     */
 public convenience init() {
     let handle =
         try! rustCall() {
@@ -865,6 +985,10 @@ public convenience init() {
     
 
     
+    /**
+     * Builds the client. A telemetry instance set on the builder becomes the
+     * destination of every client's metrics in the process.
+     */
 open func build() -> MozAdsClient  {
     return try!  FfiConverterTypeMozAdsClient_lift(try! rustCall() {
         uniffiCallStatus in
@@ -874,6 +998,10 @@ open func build() -> MozAdsClient  {
 })
 }
     
+    /**
+     * Enables the HTTP cache with this configuration. Without it, nothing is
+     * cached.
+     */
 open func cacheConfig(cacheConfig: MozAdsCacheConfig) -> MozAdsClientBuilder  {
     return try!  FfiConverterTypeMozAdsClientBuilder_lift(try! rustCall() {
         uniffiCallStatus in
@@ -884,6 +1012,9 @@ open func cacheConfig(cacheConfig: MozAdsCacheConfig) -> MozAdsClientBuilder  {
 })
 }
     
+    /**
+     * The MARS environment to send requests to. Defaults to production.
+     */
 open func environment(environment: MozAdsEnvironment) -> MozAdsClientBuilder  {
     return try!  FfiConverterTypeMozAdsClientBuilder_lift(try! rustCall() {
         uniffiCallStatus in
@@ -894,22 +1025,30 @@ open func environment(environment: MozAdsEnvironment) -> MozAdsClientBuilder  {
 })
 }
     
-open func storeConfig(storeConfig: MozAdsStoreConfig) -> MozAdsClientBuilder  {
-    return try!  FfiConverterTypeMozAdsClientBuilder_lift(try! rustCall() {
-        uniffiCallStatus in
-    uniffi_ads_client_fn_method_mozadsclientbuilder_store_config(
-            self.uniffiCloneHandle(),
-        FfiConverterTypeMozAdsStoreConfig_lower(storeConfig),uniffiCallStatus
-    )
-})
-}
-    
+    /**
+     * Where the client records its metrics. Telemetry is process-wide: see
+     * [`MozAdsTelemetry`].
+     */
 open func telemetry(telemetry: MozAdsTelemetry) -> MozAdsClientBuilder  {
     return try!  FfiConverterTypeMozAdsClientBuilder_lift(try! rustCall() {
         uniffiCallStatus in
     uniffi_ads_client_fn_method_mozadsclientbuilder_telemetry(
             self.uniffiCloneHandle(),
         FfiConverterCallbackInterfaceMozAdsTelemetry_lower(telemetry),uniffiCallStatus
+    )
+})
+}
+    
+    /**
+     * The browser's user agent, sent to MARS on OHTTP requests when the
+     * preflight returns none. Defaults to viaduct's global default user agent.
+     */
+open func userAgent(userAgent: String) -> MozAdsClientBuilder  {
+    return try!  FfiConverterTypeMozAdsClientBuilder_lift(try! rustCall() {
+        uniffiCallStatus in
+    uniffi_ads_client_fn_method_mozadsclientbuilder_user_agent(
+            self.uniffiCloneHandle(),
+        FfiConverterString.lower(userAgent),uniffiCallStatus
     )
 })
 }
@@ -962,6 +1101,10 @@ public func FfiConverterTypeMozAdsClientBuilder_lower(_ value: MozAdsClientBuild
 
 
 
+/**
+ * The on-disk HTTP cache. `default_cache_ttl_seconds` defaults to 300 and
+ * `max_size_mib` to 10.
+ */
 public struct MozAdsCacheConfig: Equatable, Hashable {
     public var dbPath: String
     public var defaultCacheTtlSeconds: UInt64?
@@ -1020,6 +1163,10 @@ public func FfiConverterTypeMozAdsCacheConfig_lower(_ value: MozAdsCacheConfig) 
 }
 
 
+/**
+ * How one request uses the cache. `ttl_seconds` overrides the client's
+ * default TTL; `0` does not cache the response.
+ */
 public struct MozAdsCachePolicy: Equatable, Hashable {
     public var mode: MozAdsCacheMode
     public var ttlSeconds: UInt64?
@@ -1074,6 +1221,9 @@ public func FfiConverterTypeMozAdsCachePolicy_lower(_ value: MozAdsCachePolicy) 
 }
 
 
+/**
+ * Options for a callback request (click, impression or report).
+ */
 public struct MozAdsCallbackOptions: Equatable, Hashable {
     public var ohttp: Bool
 
@@ -1124,6 +1274,10 @@ public func FfiConverterTypeMozAdsCallbackOptions_lower(_ value: MozAdsCallbackO
 }
 
 
+/**
+ * The callback URLs of an ad: pass them to `record_click`,
+ * `record_impression` and `report_ad`.
+ */
 public struct MozAdsCallbacks: Equatable, Hashable {
     public var click: AdsClientUrl
     public var impression: AdsClientUrl
@@ -1182,6 +1336,9 @@ public func FfiConverterTypeMozAdsCallbacks_lower(_ value: MozAdsCallbacks) -> R
 }
 
 
+/**
+ * IAB content categories, in one taxonomy version.
+ */
 public struct MozAdsContentCategory: Equatable, Hashable {
     public var categories: [String]
     public var taxonomy: MozAdsIabContentTaxonomy
@@ -1236,6 +1393,9 @@ public func FfiConverterTypeMozAdsContentCategory_lower(_ value: MozAdsContentCa
 }
 
 
+/**
+ * The IAB content classification of a placement, for targeting.
+ */
 public struct MozAdsIabContent: Equatable, Hashable {
     public var categoryIds: [String]
     public var taxonomy: MozAdsIabContentTaxonomy
@@ -1290,6 +1450,9 @@ public func FfiConverterTypeMozAdsIABContent_lower(_ value: MozAdsIabContent) ->
 }
 
 
+/**
+ * An image ad returned by MARS.
+ */
 public struct MozAdsImage: Equatable, Hashable {
     public var altText: String?
     public var blockKey: String
@@ -1360,6 +1523,10 @@ public func FfiConverterTypeMozAdsImage_lower(_ value: MozAdsImage) -> RustBuffe
 }
 
 
+/**
+ * One placement to request a single ad for. `placement_id` must be unique
+ * within one request.
+ */
 public struct MozAdsPlacementRequest: Equatable, Hashable {
     public var iabContent: MozAdsIabContent?
     public var placementId: String
@@ -1414,6 +1581,10 @@ public func FfiConverterTypeMozAdsPlacementRequest_lower(_ value: MozAdsPlacemen
 }
 
 
+/**
+ * One placement to request `count` ads for. `placement_id` must be unique
+ * within one request.
+ */
 public struct MozAdsPlacementRequestWithCount: Equatable, Hashable {
     public var count: UInt32
     public var iabContent: MozAdsIabContent?
@@ -1472,19 +1643,24 @@ public func FfiConverterTypeMozAdsPlacementRequestWithCount_lower(_ value: MozAd
 }
 
 
+/**
+ * Options for one ad request. Every field has a default.
+ */
 public struct MozAdsRequestOptions: Equatable, Hashable {
     public var blocks: [String]
     public var cachePolicy: MozAdsCachePolicy?
     public var flags: [String: Bool]
     public var ohttp: Bool
+    public var relevance: [String: Double]
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(blocks: [String] = [], cachePolicy: MozAdsCachePolicy?, flags: [String: Bool] = [:], ohttp: Bool = false) {
+    public init(blocks: [String] = [], cachePolicy: MozAdsCachePolicy? = nil, flags: [String: Bool] = [:], ohttp: Bool = false, relevance: [String: Double] = [:]) {
         self.blocks = blocks
         self.cachePolicy = cachePolicy
         self.flags = flags
         self.ohttp = ohttp
+        self.relevance = relevance
     }
 
     
@@ -1506,7 +1682,8 @@ public struct FfiConverterTypeMozAdsRequestOptions: FfiConverterRustBuffer {
                 blocks: FfiConverterSequenceString.read(from: &buf), 
                 cachePolicy: FfiConverterOptionTypeMozAdsCachePolicy.read(from: &buf), 
                 flags: FfiConverterDictionaryStringBool.read(from: &buf), 
-                ohttp: FfiConverterBool.read(from: &buf)
+                ohttp: FfiConverterBool.read(from: &buf), 
+                relevance: FfiConverterDictionaryStringDouble.read(from: &buf)
         )
     }
 
@@ -1515,6 +1692,7 @@ public struct FfiConverterTypeMozAdsRequestOptions: FfiConverterRustBuffer {
         FfiConverterOptionTypeMozAdsCachePolicy.write(value.cachePolicy, into: &buf)
         FfiConverterDictionaryStringBool.write(value.flags, into: &buf)
         FfiConverterBool.write(value.ohttp, into: &buf)
+        FfiConverterDictionaryStringDouble.write(value.relevance, into: &buf)
     }
 }
 
@@ -1534,6 +1712,9 @@ public func FfiConverterTypeMozAdsRequestOptions_lower(_ value: MozAdsRequestOpt
 }
 
 
+/**
+ * A sponsored content (spoc) ad returned by MARS.
+ */
 public struct MozAdsSpoc: Equatable, Hashable {
     public var blockKey: String
     public var callbacks: MozAdsCallbacks
@@ -1628,6 +1809,9 @@ public func FfiConverterTypeMozAdsSpoc_lower(_ value: MozAdsSpoc) -> RustBuffer 
 }
 
 
+/**
+ * Frequency capping information for a spoc.
+ */
 public struct MozAdsSpocFrequencyCaps: Equatable, Hashable {
     public var capKey: String
     public var day: UInt32
@@ -1682,6 +1866,9 @@ public func FfiConverterTypeMozAdsSpocFrequencyCaps_lower(_ value: MozAdsSpocFre
 }
 
 
+/**
+ * Ranking and personalization information for a spoc.
+ */
 public struct MozAdsSpocRanking: Equatable, Hashable {
     public var itemScore: Double
     public var personalizationModels: [String: UInt32]
@@ -1740,6 +1927,9 @@ public func FfiConverterTypeMozAdsSpocRanking_lower(_ value: MozAdsSpocRanking) 
 }
 
 
+/**
+ * The SQLite database the stateful client keeps its ads in.
+ */
 public struct MozAdsStoreConfig: Equatable, Hashable {
     public var dbPath: String
 
@@ -1790,6 +1980,9 @@ public func FfiConverterTypeMozAdsStoreConfig_lower(_ value: MozAdsStoreConfig) 
 }
 
 
+/**
+ * A tile ad returned by MARS.
+ */
 public struct MozAdsTile: Equatable, Hashable {
     public var blockKey: String
     public var callbacks: MozAdsCallbacks
@@ -1860,6 +2053,9 @@ public func FfiConverterTypeMozAdsTile_lower(_ value: MozAdsTile) -> RustBuffer 
 }
 
 
+/**
+ * Whether a request reads the cache before the network.
+ */
 
 public enum MozAdsCacheMode: Equatable, Hashable {
     
@@ -1926,6 +2122,9 @@ public func FfiConverterTypeMozAdsCacheMode_lower(_ value: MozAdsCacheMode) -> R
 
 
 
+/**
+ * The error every ads client method can throw.
+ */
 public 
 enum MozAdsClientApiError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
 
@@ -2001,6 +2200,12 @@ public func FfiConverterTypeMozAdsClientApiError_lower(_ value: MozAdsClientApiE
 }
 
 
+/**
+ * The MARS environment the client sends requests to. Defaults to `Prod`.
+ *
+ * Variants are deliberately unsorted: UniFFI encodes them by index, and
+ * this mirrors `Environment`.
+ */
 
 public enum MozAdsEnvironment: Equatable, Hashable {
     
@@ -2077,6 +2282,9 @@ public func FfiConverterTypeMozAdsEnvironment_lower(_ value: MozAdsEnvironment) 
 
 
 
+/**
+ * The version of the IAB Content Taxonomy that category ids refer to.
+ */
 
 public enum MozAdsIabContentTaxonomy: Equatable, Hashable {
     
@@ -2164,12 +2372,93 @@ public func FfiConverterTypeMozAdsIABContentTaxonomy_lower(_ value: MozAdsIabCon
 
 
 
+/**
+ * An ad from a placement that can return either an image or a spoc.
+ */
+
+public enum MozAdsImageOrSpoc: Equatable, Hashable {
+    
+    case image(MozAdsImage
+    )
+    case spoc(MozAdsSpoc
+    )
+
+
+
+
+
+}
+
+#if compiler(>=6)
+extension MozAdsImageOrSpoc: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeMozAdsImageOrSpoc: FfiConverterRustBuffer {
+    typealias SwiftType = MozAdsImageOrSpoc
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> MozAdsImageOrSpoc {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .image(try FfiConverterTypeMozAdsImage.read(from: &buf)
+        )
+        
+        case 2: return .spoc(try FfiConverterTypeMozAdsSpoc.read(from: &buf)
+        )
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: MozAdsImageOrSpoc, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case let .image(v1):
+            writeInt(&buf, Int32(1))
+            FfiConverterTypeMozAdsImage.write(v1, into: &buf)
+            
+        
+        case let .spoc(v1):
+            writeInt(&buf, Int32(2))
+            FfiConverterTypeMozAdsSpoc.write(v1, into: &buf)
+            
+        }
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeMozAdsImageOrSpoc_lift(_ buf: RustBuffer) throws -> MozAdsImageOrSpoc {
+    return try FfiConverterTypeMozAdsImageOrSpoc.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeMozAdsImageOrSpoc_lower(_ value: MozAdsImageOrSpoc) -> RustBuffer {
+    return FfiConverterTypeMozAdsImageOrSpoc.lower(value)
+}
+
+
+
+/**
+ * Why the user reported an ad.
+ */
 
 public enum MozAdsReportReason: Equatable, Hashable {
     
     case inappropriate
     case notInterested
     case seenTooManyTimes
+    case scam
+    case misleading
+    case offensive
 
 
 
@@ -2197,6 +2486,12 @@ public struct FfiConverterTypeMozAdsReportReason: FfiConverterRustBuffer {
         
         case 3: return .seenTooManyTimes
         
+        case 4: return .scam
+        
+        case 5: return .misleading
+        
+        case 6: return .offensive
+        
         default: throw UniffiInternalError.unexpectedEnumCase
         }
     }
@@ -2215,6 +2510,18 @@ public struct FfiConverterTypeMozAdsReportReason: FfiConverterRustBuffer {
         
         case .seenTooManyTimes:
             writeInt(&buf, Int32(3))
+        
+        
+        case .scam:
+            writeInt(&buf, Int32(4))
+        
+        
+        case .misleading:
+            writeInt(&buf, Int32(5))
+        
+        
+        case .offensive:
+            writeInt(&buf, Int32(6))
         
         }
     }
@@ -2239,16 +2546,35 @@ public func FfiConverterTypeMozAdsReportReason_lower(_ value: MozAdsReportReason
 
 
 
+/**
+ * Receives the ads client's metrics, for the app to record in Glean.
+ */
 public protocol MozAdsTelemetry: AnyObject, Sendable {
     
+    /**
+     * The HTTP cache could not be built (`ads_client.build_cache_error`).
+     */
     func recordBuildCacheError(label: String, value: String) 
     
+    /**
+     * A client operation failed (`ads_client.client_error`).
+     */
     func recordClientError(label: String, value: String) 
     
+    /**
+     * A client operation was attempted (`ads_client.client_operation_total`).
+     */
     func recordClientOperationTotal(label: String) 
     
+    /**
+     * An ad in a MARS response could not be parsed and was skipped
+     * (`ads_client.deserialization_error`).
+     */
     func recordDeserializationError(label: String, value: String) 
     
+    /**
+     * The outcome of a read from the HTTP cache (`ads_client.http_cache_outcome`).
+     */
     func recordHttpCacheOutcome(label: String, value: String) 
     
 }
@@ -2754,6 +3080,31 @@ fileprivate struct FfiConverterSequenceTypeMozAdsSpoc: FfiConverterRustBuffer {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterSequenceTypeMozAdsImageOrSpoc: FfiConverterRustBuffer {
+    typealias SwiftType = [MozAdsImageOrSpoc]
+
+    public static func write(_ value: [MozAdsImageOrSpoc], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeMozAdsImageOrSpoc.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [MozAdsImageOrSpoc] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [MozAdsImageOrSpoc]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterTypeMozAdsImageOrSpoc.read(from: &buf))
+        }
+        return seq
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterDictionaryStringUInt32: FfiConverterRustBuffer {
     public static func write(_ value: [String: UInt32], into buf: inout [UInt8]) {
         let len = Int32(value.count)
@@ -2771,6 +3122,32 @@ fileprivate struct FfiConverterDictionaryStringUInt32: FfiConverterRustBuffer {
         for _ in 0..<len {
             let key = try FfiConverterString.read(from: &buf)
             let value = try FfiConverterUInt32.read(from: &buf)
+            dict[key] = value
+        }
+        return dict
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterDictionaryStringDouble: FfiConverterRustBuffer {
+    public static func write(_ value: [String: Double], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for (key, value) in value {
+            FfiConverterString.write(key, into: &buf)
+            FfiConverterDouble.write(value, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [String: Double] {
+        let len: Int32 = try readInt(&buf)
+        var dict = [String: Double]()
+        dict.reserveCapacity(Int(len))
+        for _ in 0..<len {
+            let key = try FfiConverterString.read(from: &buf)
+            let value = try FfiConverterDouble.read(from: &buf)
             dict[key] = value
         }
         return dict
@@ -2881,6 +3258,32 @@ fileprivate struct FfiConverterDictionaryStringSequenceTypeMozAdsSpoc: FfiConver
     }
 }
 
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterDictionaryStringSequenceTypeMozAdsImageOrSpoc: FfiConverterRustBuffer {
+    public static func write(_ value: [String: [MozAdsImageOrSpoc]], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for (key, value) in value {
+            FfiConverterString.write(key, into: &buf)
+            FfiConverterSequenceTypeMozAdsImageOrSpoc.write(value, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [String: [MozAdsImageOrSpoc]] {
+        let len: Int32 = try readInt(&buf)
+        var dict = [String: [MozAdsImageOrSpoc]]()
+        dict.reserveCapacity(Int(len))
+        for _ in 0..<len {
+            let key = try FfiConverterString.read(from: &buf)
+            let value = try FfiConverterSequenceTypeMozAdsImageOrSpoc.read(from: &buf)
+            dict[key] = value
+        }
+        return dict
+    }
+}
+
 
 public typealias AdsClientUrl = String
 
@@ -2936,61 +3339,64 @@ private let initializationResult: InitializationResult = {
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_ads_client_checksum_method_mozadsclient_clear_cache() != 16403) {
+    if (uniffi_ads_client_checksum_method_mozadsclient_clear_cache() != 55903) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_ads_client_checksum_method_mozadsclient_record_click() != 19327) {
+    if (uniffi_ads_client_checksum_method_mozadsclient_record_click() != 60350) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_ads_client_checksum_method_mozadsclient_record_impression() != 3930) {
+    if (uniffi_ads_client_checksum_method_mozadsclient_record_impression() != 7925) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_ads_client_checksum_method_mozadsclient_report_ad() != 53479) {
+    if (uniffi_ads_client_checksum_method_mozadsclient_report_ad() != 26035) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_ads_client_checksum_method_mozadsclient_request_image_ads() != 13005) {
+    if (uniffi_ads_client_checksum_method_mozadsclient_request_image_ads() != 15065) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_ads_client_checksum_method_mozadsclient_request_spoc_ads() != 17011) {
+    if (uniffi_ads_client_checksum_method_mozadsclient_request_spoc_ads() != 47117) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_ads_client_checksum_method_mozadsclient_request_tile_ads() != 25898) {
+    if (uniffi_ads_client_checksum_method_mozadsclient_request_spoc_or_image_ads() != 40144) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_ads_client_checksum_method_mozadsclient_shutdown() != 52616) {
+    if (uniffi_ads_client_checksum_method_mozadsclient_request_tile_ads() != 64774) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_ads_client_checksum_method_mozadsclientbuilder_build() != 59832) {
+    if (uniffi_ads_client_checksum_method_mozadsclient_shutdown() != 44373) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_ads_client_checksum_method_mozadsclientbuilder_cache_config() != 51559) {
+    if (uniffi_ads_client_checksum_method_mozadsclientbuilder_build() != 21245) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_ads_client_checksum_method_mozadsclientbuilder_environment() != 58574) {
+    if (uniffi_ads_client_checksum_method_mozadsclientbuilder_cache_config() != 64624) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_ads_client_checksum_method_mozadsclientbuilder_store_config() != 64545) {
+    if (uniffi_ads_client_checksum_method_mozadsclientbuilder_environment() != 57301) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_ads_client_checksum_method_mozadsclientbuilder_telemetry() != 24985) {
+    if (uniffi_ads_client_checksum_method_mozadsclientbuilder_telemetry() != 29539) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_ads_client_checksum_constructor_mozadsclientbuilder_new() != 36926) {
+    if (uniffi_ads_client_checksum_method_mozadsclientbuilder_user_agent() != 51123) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_ads_client_checksum_method_mozadstelemetry_record_build_cache_error() != 43330) {
+    if (uniffi_ads_client_checksum_constructor_mozadsclientbuilder_new() != 48831) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_ads_client_checksum_method_mozadstelemetry_record_client_error() != 49687) {
+    if (uniffi_ads_client_checksum_method_mozadstelemetry_record_build_cache_error() != 25943) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_ads_client_checksum_method_mozadstelemetry_record_client_operation_total() != 62809) {
+    if (uniffi_ads_client_checksum_method_mozadstelemetry_record_client_error() != 61352) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_ads_client_checksum_method_mozadstelemetry_record_deserialization_error() != 57507) {
+    if (uniffi_ads_client_checksum_method_mozadstelemetry_record_client_operation_total() != 59338) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_ads_client_checksum_method_mozadstelemetry_record_http_cache_outcome() != 17419) {
+    if (uniffi_ads_client_checksum_method_mozadstelemetry_record_deserialization_error() != 64876) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_ads_client_checksum_method_mozadstelemetry_record_http_cache_outcome() != 42241) {
         return InitializationResult.apiChecksumMismatch
     }
 

@@ -41,14 +41,14 @@ class SettingTest: BaseTestCase {
         // Check Help page, wait until the webpage is shown
         waitForHittable(tablesQuery.staticTexts["Help"])
         tablesQuery.staticTexts["Help"].tap()
-        app.navigationBars.buttons.element(boundBy: 0).tap()
+        tapBackButton()
 
         // Check Your Rights page, until the text is displayed
         tablesQuery.staticTexts["Terms of Use"].tap()
-        app.navigationBars.buttons.element(boundBy: 0).tap()
+        tapBackButton()
 
         // Go back to Settings
-        app.navigationBars.buttons.element(boundBy: 0).tap()
+        tapBackButton()
 
         if #unavailable(iOS 17) {
             throw XCTSkip("Not supported in iOS 15 and 16")
@@ -67,11 +67,11 @@ class SettingTest: BaseTestCase {
         if app.label == "Firefox Focus" {
             waitForExistence(app.staticTexts["Firefox Focus is not enabled."])
             waitForExistence(app.staticTexts["Enable Firefox Focus"])
-            app.navigationBars.buttons.element(boundBy: 0).tap()
+            tapBackButton()
         } else {
             waitForExistence(app.staticTexts["Firefox Klar is not enabled."])
             waitForExistence(app.staticTexts["Enable Firefox Klar"])
-            app.navigationBars.buttons.element(boundBy: 0).tap()
+            tapBackButton()
         }
 
         XCTAssertEqual(app.tables.switches["BlockerToggle.BlockFonts"].value as! String, "0")
@@ -109,7 +109,7 @@ class SettingTest: BaseTestCase {
         XCTAssertEqual(otherContentSwitch.value as! String, "0")
 
         // Go back to settings
-        app.navigationBars.buttons.element(boundBy: 0).tap()
+        tapBackButton()
 
         // Check navigate to app store review and back
         let reviewCell = app.cells["settingsViewController.rateFocus"]

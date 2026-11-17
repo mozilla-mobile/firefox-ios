@@ -5,7 +5,7 @@
 import Foundation
 
 // New keys should follow the name: "[nameOfTheFeature]Key" written with camel case
-public struct PrefsKeys {
+public enum PrefsKeys {
     // When this pref is set (by the user) it overrides default behaviour which is just based on app locale.
     public static let KeyEnableChinaSyncService = "useChinaSyncService"
     public static let KeyLastRemoteTabSyncTime = "lastRemoteTabSyncTime"
@@ -31,6 +31,7 @@ public struct PrefsKeys {
     public static let KeyNoImageModeStatus = "NoImageModeStatus"
     public static let KeyMailToOption = "MailToOption"
     public static let IntroSeen = "IntroViewControllerSeen"
+    public static let installationProcessedKey = "installationProcessed"
     public static let OnboardingLastCardSeen = "OnboardingLastCardSeen"
     public static let TermsOfServiceAccepted = "TermsOfServiceAccepted"
     public static let TermsOfServiceAcceptedDate = "TermsOfServiceAcceptedDate"
@@ -77,7 +78,7 @@ public struct PrefsKeys {
     // Only set if we get an actual response, no assumptions, nil otherwise
     public static let AppleConfirmedUserIsDefaultBrowser = "AppleConfirmedUserIsDefaultBrowser"
 
-    public struct Session {
+    public enum Session {
         public static let FirstAppUse = "firstAppUse"
         public static let Last = "lastSession"
         public static let Count = "sessionCount"
@@ -87,7 +88,7 @@ public struct PrefsKeys {
         public static let InternalURLUUID = "InternalURLUUID"
     }
 
-    public struct Summarizer {
+    public enum Summarizer {
         public static let didAgreeTermsOfService = "didAgreeTermOfService"
         public static let summarizeContentFeature = "summarizeContentFeature"
         public static let shakeGestureEnabled = "shakeGestureEnabledKey"
@@ -97,26 +98,27 @@ public struct PrefsKeys {
         public static let legacySelectedLanguage = "selectedLanguage"
     }
 
-    public struct AppVersion {
+    public enum AppVersion {
         public static let Latest = "latestAppVersion"
     }
 
-    public struct Wallpapers {
+    public enum Wallpapers {
         public static let MetadataLastCheckedDate = "WallpaperMetadataLastCheckedUserPrefsKey"
         public static let CurrentWallpaper = "CurrentWallpaperUserPrefsKey"
         public static let ThumbnailsAvailable = "ThumbnailsAvailableUserPrefsKey"
+        public static let EngagementSheetShownMarketingSlug = "WallpaperEngagementSheetShownMarketingSlugUserPrefsKey"
 
         public static let legacyAssetMigrationCheck = "legacyAssetMigrationCheckUserPrefsKey"
         public static let v1MigrationCheck = "v1MigrationCheckUserPrefsKey"
     }
 
-    public struct Notifications {
+    public enum Notifications {
         public static let SyncNotifications = "SyncNotificationsUserPrefsKey"
         public static let TipsAndFeaturesNotifications = "TipsAndFeaturesNotificationsUserPrefsKey"
     }
 
     // For ease of use, please list keys alphabetically.
-    public struct FeatureFlags {
+    public enum FeatureFlags {
         public static let DebugSuffixKey = "DebugKey"
         public static let FirefoxSuggest = "FirefoxSuggest"
         public static let GoogleLens = "GoogleLensUserPrefsKey"
@@ -126,22 +128,23 @@ public struct PrefsKeys {
         public static let StartAtHome = "StartAtHomeUserPrefsKey"
     }
 
-    public struct HomepageSettings {
+    public enum HomepageSettings {
         public static let BookmarksSection = "BookmarksSectionUserPrefsKey"
         public static let JumpBackInSection = "JumpBackInSectionUserPrefsKey"
         public static let TrackerBlockerSection = "TrackerBlockerSectionUserPrefsKey"
     }
 
-    public struct QuickAnswers {
+    public enum QuickAnswers {
         public static let optInCompleted = "quickAnswers.optInCompleted"
+        public static let entryPointButtonGlowCount = "quickAnswers.entryPointButtonGlowCount"
         public static let modelOverride = "quickAnswers.modelOverride"
     }
 
-    public struct Tips {
+    public enum Tips {
         public static let shouldResetDatastore = "tips.shouldResetDatastore"
     }
 
-    public struct SearchSettings {
+    public enum SearchSettings {
         public static let showFirefoxBrowsingHistorySuggestions = "FirefoxSuggestBrowsingHistorySuggestions"
         public static let showFirefoxBookmarksSuggestions = "FirefoxSuggestBookmarksSuggestions"
         public static let showFirefoxSyncedTabsSuggestions = "FirefoxSuggestSyncedTabsSuggestions"
@@ -154,29 +157,30 @@ public struct PrefsKeys {
         public static let showRecentSearches = "recentSearchesFeatureKey"
     }
 
-    public struct RemoteSettings {
+    public enum RemoteSettings {
         public static let lastRemoteSettingsServiceSyncTimestamp =
         "LastRemoteSettingsServiceSyncTimestamp"
         public static let remoteSettingsEnvironment =
         "remoteSettingsEnvironment"
     }
 
-    public struct Sync {
+    public enum Sync {
         public static let numberOfSyncedDevices = "numberOfSyncedDevicesKey"
         public static let signedInFxaAccount = "signedInFxaAccountKey"
     }
 
-    public struct MLPASettings {
+    public enum MLPASettings {
         public static let mlpaEndpointEnvironment = "mlpaEndpointEnvironment"
         public static let lastUsedEnvironment = "mlpaLastUsedEnvironment"
     }
 
-    public struct VPNSettings {
+    public enum VPNSettings {
         public static let endpointEnvironment = "vpnEndpointEnvironment"
         public static let lastUsedEnvironment = "vpnLastUsedEnvironment"
+        public static let selectedCountryCode = "vpnSelectedCountryCode"
     }
 
-    public struct UserFeatureFlagPrefs {
+    public enum UserFeatureFlagPrefs {
         public static let ASPocketStories = "ASPocketStoriesUserPrefsKey"
         public static let StartAtHome = "StartAtHomeUserPrefsKey"
         public static let TopSiteSection = "TopSitesUserPrefsKey"
@@ -196,7 +200,7 @@ public struct PrefsKeys {
     }
 
     // Firefox settings
-    public struct Settings {
+    public enum Settings {
         public static let closePrivateTabs = "ClosePrivateTabs"
         public static let sentFromFirefoxWhatsApp = "SentFromFirefoxWhatsApp"
         public static let navigationToolbarMiddleButton = "settings.navigationToolbarMiddleButton"
@@ -206,6 +210,7 @@ public struct PrefsKeys {
         public static let translationAutoTranslatePromptShown = "settings.translationAutoTranslatePromptShown"
         public static let aiKillSwitchFeature = "settings.aiKillSwitchFeature"
         public static let quickAnswersFeature = "settings.quickAnswersFeature"
+        public static let vpnFeature = "settings.vpnFeature"
     }
 
     // Activity Stream
@@ -282,6 +287,10 @@ public struct PrefsKeys {
     // The day whose card was last shown.
     public static let onboardingLastCardActiveDay = "onboardingLastCardActiveDay"
 
+    // Set when the user declines the notifications card and dismisses the homescreen notification card respectively
+    public static let onboardingNotificationsDeclined = "onboardingNotificationsDeclined"
+    public static let onboardingNotificationCardDismissed = "onboardingNotificationCardDismissed"
+
     // MARK: - Apple Intelligence
     // Used to determine if Apple Intelligence is available
     public static let appleIntelligenceAvailable = "appleIntelligenceAvailableKey"
@@ -291,11 +300,14 @@ public struct PrefsKeys {
     // Used for enabling test data for merino stories on non-dev builds
     public static let useMerinoTestData = "useMerinoTestData"
 
-    public struct Usage {
+    // Used for showing mock breach alerts on saved logins, for testing the breach alerts UI
+    public static let useMockBreachAlerts = "useMockBreachAlerts"
+
+    public enum Usage {
         public static let profileId = "profileId"
     }
 
-    public struct PrivacyNotice {
+    public enum PrivacyNotice {
         // Timestamp in milliseconds for when the privacy notice homepage card was last shown
         public static let notifiedDate = "PrivacyNotice.NotifiedDate"
 

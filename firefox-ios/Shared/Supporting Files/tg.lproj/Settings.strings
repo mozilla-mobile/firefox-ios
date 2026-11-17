@@ -454,3 +454,36 @@
 /* This is the title for the setting that toggles the Translation feature that allows users to translate web pages under the Translation settings section. */
 "Settings.Translation.ToggleTitle.v145" = "Фаъол кардани тарҷумаҳо";
 
+/* Option in the VPN server location list. Choosing it lets the app pick the server with the fastest connection. */
+"VPN.LocationPicker.RecommendedMainText.v160" = "Тавсияшуда";
+
+/* Shown next to the VPN switch on the VPN settings screen while the VPN is connecting, right after the user turns it on. */
+"VPN.Settings.Connecting.v160" = "Пайваст мешавад…";
+
+/* Title of the section on the VPN settings screen that shows how much of the user's free monthly VPN data they have used. */
+"VPN.Settings.DataLimitTitle.v160" = "Маҳдудияти маълумот";
+
+/* Read aloud by VoiceOver for the data usage on the VPN settings screen. Same as the visible text, but with “gigabytes” written out instead of “GB”. %1$@ is the amount of VPN data used this month and %2$@ is the monthly limit (for example, “1.0 of 5.0 gigabytes used”). */
+"VPN.Settings.DataUsage.AccessibilityLabel.v160" = "%1$@ аз %2$@ гигабайт истифода шудааст";
+
+/* Shown next to the Data Limit title on the VPN settings screen. %1$@ is the amount of VPN data used this month and %2$@ is the monthly limit, both in gigabytes (for example, “1.0 of 5.0 GB used”). “GB” stands for gigabytes. */
+"VPN.Settings.DataUsage.v160" = "%1$@ аз %2$@ ГБ истифода шудааст";
+
+/* Used in two places: as the name of a row on the VPN settings screen, and as the title of the screen that row opens. On that screen, the user picks which VPN server location (country or region) to connect through. “Location” means the VPN server’s location, not the user’s own location. */
+"VPN.Settings.LocationTitle.v160" = "Ҷойгиршавӣ";
+
+/* VPN status shown when the VPN is not connected. Used in two places: on the right side of the VPN row in the Privacy section of Settings, and on the small capsule-shaped VPN status indicator. */
+"VPN.Settings.StatusOff.v160" = "Ғайрифаъол";
+
+/* VPN status shown when the VPN is connected. Used in two places: on the right side of the VPN row in the Privacy section of Settings, and on the small capsule-shaped VPN status indicator. */
+"VPN.Settings.StatusOn.v160" = "Фаъол";
+
+/* VPN status shown when the VPN is temporarily paused. Used in two places: on the right side of the VPN row in the Privacy section of Settings, and on the small capsule-shaped VPN status indicator. */
+"VPN.Settings.StatusPaused.v160" = "Таваққуф карда шуд";
+
+/* Name of the VPN row in the Privacy section of Settings. Also used as the title of the VPN settings screen. */
+"VPN.Settings.Title.v160" = "«VPN»-и дарунсохт";
+
+/* Used in two places: as the label for the toggle switch on the VPN settings screen that turns the VPN on or off, and as the label on the small capsule-shaped VPN status indicator, where it appears together with the current status (On, Off or Paused). */
+"VPN.Settings.ToggleTitle.v160" = "VPN";
+

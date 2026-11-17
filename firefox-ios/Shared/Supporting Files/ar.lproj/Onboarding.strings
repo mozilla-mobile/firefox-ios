@@ -49,6 +49,108 @@
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v115" = "تخطي";
 
+/* Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148" = "موافقة ومتابعة";
+
+/* Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148.v2" = "متابعة";
+
+/* Description for the Terms of Use card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.Description.v148" = "سريع وآمن ولن يخذلك أبدًا. تجربة تصفح أفضل.";
+
+/* The text for the manage settings link button in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.ManageLink.v148" = "إدارة الإعدادات";
+
+/* Agreement text for sending diagnostic and interaction data in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla), %3$@ is the manage settings link button that redirects the user to manage data collection preferences. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.ManagePreferenceAgreement.v148" = "للمساعدة في تحسين المتصفح، يرسل %1$@ بيانات التشخيص والتفاعل إلى %2$@. %3$@";
+
+/* Agreement text for Privacy Notice in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the Privacy Notice link button that redirects the user to the Privacy Notice page. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.PrivacyNoticeAgreement.v148" = "يهتم %1$@ بخصوصيتك. اقرأ المزيد في %2$@";
+
+/* The text for the Privacy Notice link button in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.PrivacyNoticeLink.v148" = "تنويه الخصوصية";
+
+/* Agreement text for Terms of Use in the v148 brand refresh onboarding flow. %@ is the Terms of Use link button that redirects the user to the Terms of Use page. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseAgreement.v148" = "بمتابعتك، فإنك توافق على %@";
+
+/* The text for the Terms of Use link button in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseLink.v148" = "شروط استخدام %@";
+
+/* Title for the Terms of Use card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.Title.v148" = "استعد للانطلاق بحرية";
+
+/* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
+"Onboarding.Modern.TermsOfService.AgreementButtonTitle.v140" = "متابعة";
+
+/* Title for the confirmation button on the Terms of Service screen. */
+"Onboarding.Modern.TermsOfService.AgreementButtonTitle.v145" = "متابعة";
+
+/* Description for the Terms of Service screen in the v2 onboarding flow. The '\n' symbols denote line breaks. %@ is the company name (e.g. Mozilla) */
+"Onboarding.Modern.TermsOfService.Description.v145" = "حماية تلقائية لمعلوماتك الشخصية\nتحميل المواقع بسرعة والبحث بذكاء أكبر\nمقدَّم من مؤسسة %@ غير الربحية، الموثوق بها منذ أكثر من 20 عامًا";
+
+/* Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen. */
+"Onboarding.Modern.TermsOfService.ManageLink.v140" = "إدارة";
+
+/* The text for the Manage settings link button. */
+"Onboarding.Modern.TermsOfService.ManageLink.v145" = "إدارة الإعدادات";
+
+/* Agreement text for sending diagnostic and interaction data to Mozilla in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is company name (e.g. Mozilla), %3$@ is a Manage link button which redirect the user to another screen in order to manage the data collection preferences. */
+"Onboarding.Modern.TermsOfService.ManagePreferenceAgreement.v140" = "للمساعدة في تحسين المتصفح، يرسل %1$@ بيانات التشخيص والتفاعل إلى %2$@. %3$@";
+
+/* Agreement text for sending data. %1$@ is the app name, %2$@ is the company name, %3$@ is the placeholder for the Manage settings link. */
+"Onboarding.Modern.TermsOfService.ManagePreferenceAgreement.v145" = "للمساعدة في تحسين المتصفح، يرسل %1$@ بيانات التشخيص والتفاعل إلى %2$@. %3$@";
+
+/* Agreement text for Privacy Notice in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is for the Privacy Notice link button that redirect the user to the Privacy Notice page. */
+"Onboarding.Modern.TermsOfService.PrivacyNoticeAgreement.v140" = "يهتم %1$@ بخصوصيتك. اقرأ المزيد في %2$@";
+
+/* Agreement text for Privacy Notice. %1$@ is the app name (e.g. Firefox), %2$@ is the placeholder for the Privacy Notice link. */
+"Onboarding.Modern.TermsOfService.PrivacyNoticeAgreement.v145" = "يهتم %1$@ بخصوصيتك. اقرأ المزيد في %2$@";
+
+/* Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page. */
+"Onboarding.Modern.TermsOfService.PrivacyNoticeLink.v140" = "تنويه الخصوصية.";
+
+/* The text for the Privacy Notice link button. */
+"Onboarding.Modern.TermsOfService.PrivacyNoticeLink.v145" = "تنويه الخصوصية.";
+
+/* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.LearnMore.v140" = "اطّلع على المزيد";
+
+/* Description for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is for the Learn more button link, to open a link where user can find more information about this send crash reports option. */
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendCrashReportsDescription.v140" = "تتيح لنا تقارير الأعطال تشخيص مشكلات المتصفح وإصلاحها. %@";
+
+/* Title for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v140" = "إرسال تقارير الأعطال تلقائيًا";
+
+/* Description for the technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %1$@ is the app name (e.g. Firefox), %2$@ is for the Learn more button link, to open a link where user can find more information about this send technical and interaction data option. */
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v140" = "تساعد البيانات المتعلقة بجهازك وتكوين العتاد وكيفية استخدامك لـ %1$@ في تحسين الميزات والأداء والاستقرار للجميع. %2$@";
+
+/* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is the company name (e.g. Mozilla). */
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v140" = "إرسال البيانات التقنية والتفاعلية إلى %@";
+
+/* Title for the Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Data like crash reports or technical and interaction data. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.Title.v140" = "ساعدنا في جعل %@ أفضل";
+
+/* Subtitle for the Terms of Service screen in the onboarding process. The '\n' symbols denote empty lines separating the first link parameter from the rest of the text. */
+"Onboarding.Modern.TermsOfService.Subtitle.v140" = "تحميل المواقع بسرعة فائقة\nحماية تلقائية من التتبع\nمزامنة على جميع أجهزتك";
+
+/* Agreement text for Terms of Service in the Terms of Service screen. %@ is the Terms of Service link button that redirect the user to the Terms of Service page. */
+"Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v140" = "بمتابعتك، فإنك توافق على %@";
+
+/* Agreement text for Terms of Service. %@ is the placeholder for the Terms of Use link. */
+"Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v145" = "بمتابعتك، فإنك توافق على %@";
+
+/* The text for the Terms of Use link button. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.TermsOfService.TermsOfUseLink.v145" = "شروط استخدام %@.";
+
+/* Title for the Terms of Service screen in the onboarding process. */
+"Onboarding.Modern.TermsOfService.Title.v140" = "ارتقِ بتجربة التصفح";
+
+/* Title for the Terms of Service screen in the v2 onboarding flow. */
+"Onboarding.Modern.TermsOfService.Title.v145" = "تولَّ زمام الأمور على الإنترنت";
+
+/* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.TermsOfUse.TermsOfUseLink.v140" = "شروط استخدام %@.";
+
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Continue.Action.v114" = "متابعة";
 
@@ -60,6 +162,51 @@
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Sync.Skip.Action.v114" = "تخطي";
+
+/* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
+"Onboarding.TermsOfService.AgreementButtonTitle.v140" = "متابعة";
+
+/* Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen. */
+"Onboarding.TermsOfService.ManageLink.v135" = "إدارة";
+
+/* Agreement text for sending diagnostic and interaction data to Mozilla in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is company name (e.g. Mozilla), %3$@ is a Manage link button which redirect the user to another screen in order to manage the data collection preferences. */
+"Onboarding.TermsOfService.ManagePreferenceAgreement.v135" = "للمساعدة في تحسين المتصفح، يرسل %1$@ بيانات التشخيص والتفاعل إلى %2$@. %3$@";
+
+/* Agreement text for Privacy Notice in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is for the Privacy Notice link button that redirect the user to the Privacy Notice page. */
+"Onboarding.TermsOfService.PrivacyNoticeAgreement.v135" = "يهتم %1$@ بخصوصيتك. اقرأ المزيد في %2$@";
+
+/* Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page. */
+"Onboarding.TermsOfService.PrivacyNoticeLink.v135" = "تنويه الخصوصية.";
+
+/* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
+"Onboarding.TermsOfService.PrivacyPreferences.LearnMore.v136" = "اطّلع على المزيد";
+
+/* Description for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is for the Learn more button link, to open a link where user can find more information about this send crash reports option. */
+"Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsDescription.v135" = "تتيح لنا تقارير الأعطال تشخيص مشكلات المتصفح وإصلاحها. %@";
+
+/* Title for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
+"Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v135" = "إرسال تقارير الأعطال تلقائيًا";
+
+/* Description for the technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %1$@ is the app name (e.g. Firefox), %2$@ is for the Learn more button link, to open a link where user can find more information about this send technical and interaction data option. */
+"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v135" = "تساعد البيانات المتعلقة بجهازك وتكوين العتاد وكيفية استخدامك لـ %1$@ في تحسين الميزات والأداء والاستقرار للجميع. %2$@";
+
+/* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is the company name (e.g. Mozilla). */
+"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v135" = "إرسال البيانات التقنية والتفاعلية إلى %@";
+
+/* Title for the Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Data like crash reports or technical and interaction data. %@ is the app name (e.g. Firefox). */
+"Onboarding.TermsOfService.PrivacyPreferences.Title.v135" = "ساعدنا في جعل %@ أفضل";
+
+/* Subtitle for the Terms of Service screen in the onboarding process. */
+"Onboarding.TermsOfService.Subtitle.v136" = "تصفح الويب بسرعة وأمان";
+
+/* Agreement text for Terms of Service in the Terms of Service screen. %@ is the Terms of Service link button that redirect the user to the Terms of Service page. */
+"Onboarding.TermsOfService.TermsOfServiceAgreement.v135" = "بمتابعتك، فإنك توافق على %@";
+
+/* Title for the Terms of Service screen in the onboarding process. %@ is the app name (e.g. Firefox). */
+"Onboarding.TermsOfService.Title.v135" = "مرحبًا بك في %@";
+
+/* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. %@ is the app name (e.g. Firefox). */
+"Onboarding.TermsOfUse.TermsOfUseLink.v136" = "شروط استخدام %@.";
 
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.Classic.v114" = "خلفية كلاسيكية";
@@ -78,6 +225,9 @@
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
 "Onboarding.Welcome.ActionTreatementA.v114" = "تعيين كمتصفح افتراضي";
+
+/* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */
+"Onboarding.Welcome.Link.Action.v114" = "اطّلع على المزيد في تنويه الخصوصية";
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card. */
 "Onboarding.Welcome.Skip.v114" = "تخطي";

@@ -1,0 +1,132 @@
+/* Accessibility label for the close button on the Quick Answers screen. */
+"QuickAnswers.AccessibilityLabels.Close.v158" = "Chjode";
+
+/* Accessibility label for the button on the homepage that opens the Quick Answers feature. */
+"QuickAnswers.AccessibilityLabels.OpenQuickAnswers.v158" = "Apre e risposte preste";
+
+/* Link shown in the footer of the Quick Answers view - when tapped, it opens a privacy banner explaining how the feature handles user data. */
+"QuickAnswers.ContentView.AboutYourPrivacy.v158" = "Apprupositu di u rispettu di a vostra vita privata";
+
+/* Loading label shown in the Quick Answers view while an answer is being fetched. */
+"QuickAnswers.ContentView.Answering.v158" = "Risposta…";
+
+/* Button shown below a Quick Answers result that the user taps to ask a follow-up question about the answer. */
+"QuickAnswers.ContentView.FollowUpButton.v160" = "Fà una dumanda cumplementaria";
+
+/* Footer text displayed below the Quick Answers result. %@ is the name of the AI model providing the answer, for example Liner or Exa. */
+"QuickAnswers.ContentView.Footer.v158" = "Funziuneghja grazia à %@ · E risposte ponu cuntene sbaglii.";
+
+/* Placeholder text shown in the Quick Answers view while the microphone is active and waiting for the user to speak. */
+"QuickAnswers.ContentView.Listening.v158" = "Vi stò à sente, fate una dumanda…";
+
+/* Placeholder text shown in the Quick Answers view while the microphone is active and waiting for the user to ask a follow-up question about the previous answer. */
+"QuickAnswers.ContentView.ListeningFollowUp.v160" = "Vi stò à sente, fate una dumanda cumplementaria…";
+
+/* Button shown below a Quick Answers result that the user taps to ask a new, unrelated question. */
+"QuickAnswers.ContentView.NewQuestionButton.v161" = "Fà un’altra dumanda";
+
+/* Placeholder text shown in the Quick Answers view before the user starts speaking. */
+"QuickAnswers.ContentView.Placeholder.v158" = "Dumandate qualcosa…";
+
+/* Header label shown above the body of a Quick Answers result, labeling the text below it as a short answer to the user's question. */
+"QuickAnswers.ContentView.ResultHeader.v160" = "RISPOSTE PRESTE";
+
+/* Loading label shown in the Quick Answers view while the feature searches for sources to construct an answer. */
+"QuickAnswers.ContentView.SearchingSources.v158" = "Ricerca di fonti…";
+
+/* Header label for the sources section shown below a Quick Answers result. */
+"QuickAnswers.ContentView.Sources.v158" = "Fonti";
+
+/* Loading label shown in the Quick Answers view while the question is being processed. */
+"QuickAnswers.ContentView.Thinking.v158" = "Riflessione…";
+
+/* Button label on the Quick Answers permission alert to dismiss the alert without taking action. */
+"QuickAnswers.Errors.Cancel.v158" = "Abbandunà";
+
+/* Message shown in the alert when the user has exceeded the daily usage limit for Quick Answers. */
+"QuickAnswers.Errors.DailyLimitMessage.v158" = "Pruvate e risposte preste torna dumane.";
+
+/* Title of the alert shown when the user has exceeded the daily usage limit for Quick Answers. */
+"QuickAnswers.Errors.DailyLimitTitle.v158" = "U limitu oghjincu hè statu toccu";
+
+/* Message shown in the alert when Quick Answers encounters an unexpected error. */
+"QuickAnswers.Errors.GenericErrorMessage.v158" = "Pruvate torna un’altra volta.";
+
+/* Title of the alert shown when Quick Answers encounters an unexpected error. */
+"QuickAnswers.Errors.GenericErrorTitle.v158" = "Ùn si pò ottene una risposta";
+
+/* Message shown in the permission alert when microphone access has been denied for the Quick Answers feature. %@ is the name of the app (e.g. Firefox). */
+"QuickAnswers.Errors.MicrophonePermissionMessage.v158" = "Permette à %@ d’accede à u microfonu.";
+
+/* Button label to dismiss the Quick Answers error alert. */
+"QuickAnswers.Errors.OK.v158" = "Vai";
+
+/* Button label on the permission alert that opens the iOS Settings app so the user can grant permissions. */
+"QuickAnswers.Errors.OpenSettings.v158" = "Apre e preferenze";
+
+/* Title of the alert shown when the user has denied microphone or speech recognition permissions needed for Quick Answers. */
+"QuickAnswers.Errors.PermissionAlertTitle.v158" = "Cambià i parametri per impiegà e risposte preste";
+
+/* Message shown in the permission alert when speech recognition access has been denied for the Quick Answers feature. %@ is the name of the app (e.g. Firefox). */
+"QuickAnswers.Errors.SpeechRecognitionPermissionMessage.v158" = "Permette à %@ d’accede à a ricunniscenza vucale.";
+
+/* Link text that opens more information about how Quick Answers works and how it uses your data. */
+"QuickAnswers.LearnMore.v158" = "Sapene di più…";
+
+/* Button on the Quick Answers opt-in screen that the user taps to accept and start using the feature. */
+"QuickAnswers.OptIn.ContinueButton.v158" = "Cuntinuà";
+
+/* Description displayed on the Quick Answers opt-in screen explaining how the feature works and its privacy policy. */
+"QuickAnswers.OptIn.Description.v158" = "Fate una dumanda ad alta voce è ottinite una risposta corta. Ùn cunservemu micca, nè a vostra voce, nè e vostre dumande.";
+
+/* Link text on the Quick Answers opt-in screen that opens more information about the feature. */
+"QuickAnswers.OptIn.LearnMore.v158" = "Sapene di più";
+
+/* Title displayed on the Quick Answers opt-in screen that introduces the voice feature. */
+"QuickAnswers.OptIn.Title.v158" = "Dumandate cù a vostra voce";
+
+/* Description displayed on the Quick Answers opt-in screen explaining how the feature works. */
+"QuickAnswers.OptInRedesign.Description.v158" = "Fate una dumanda cù a vostra voce. Ottinite in poche seconde una risposta corta cù e so fonti.";
+
+/* Description of the first privacy row on the Quick Answers opt-in screen, explaining that nothing the user says is stored. */
+"QuickAnswers.OptInRedesign.NothingGetsSavedDescription.v158" = "Ùn cunservemu micca a vostra voce, e vostre dumande è e risposte.";
+
+/* Title of the first privacy row on the Quick Answers opt-in screen, explaining that nothing the user says is stored. */
+"QuickAnswers.OptInRedesign.NothingGetsSavedTitle.v158" = "Alcunu datu ùn hè cunservatu";
+
+/* Description of the third privacy row on the Quick Answers opt-in screen, explaining that the user's data is not used to train AI systems. */
+"QuickAnswers.OptInRedesign.NoTrainingDescription.v158" = "Ùn impieghemu micca i vostri dati per addestrà i nostri sistemi.";
+
+/* Title of the third privacy row on the Quick Answers opt-in screen, explaining that the user's data is not used to train AI systems. */
+"QuickAnswers.OptInRedesign.NoTrainingTitle.v158" = "Nisunu addestramentu cù i vostri dati";
+
+/* Description of the second privacy row on the Quick Answers opt-in screen, explaining that the user's voice is not used to identify them. */
+"QuickAnswers.OptInRedesign.PrivateByDesignDescription.v158" = "Ùn impieghemu micca a vostra voce per identificavvi.";
+
+/* Title of the second privacy row on the Quick Answers opt-in screen, explaining that the user's voice is not used to identify them. */
+"QuickAnswers.OptInRedesign.PrivateByDesignTitle.v158" = "Cuncepitu per prutege a vostra vita privata";
+
+/* Title displayed on the Quick Answers opt-in screen that introduces the voice feature. */
+"QuickAnswers.OptInRedesign.Title.v158" = "Pruvate e risposte preste";
+
+/* Body text of the privacy banner shown on the Quick Answers screen, explaining how the feature handles user data. %@ is the name of the app (e.g. Firefox). */
+"QuickAnswers.PrivacyBanner.Description.v158" = "%@ ùn cunserveghja micca i vostri arregistramenti audio o e vostre dumande, ùn impiegheghja micca i vostri dati per addestrà i mudelli d’intelligenza artificiale o a vostra voce per identificavvi.";
+
+/* Title of the privacy banner shown on the Quick Answers screen. */
+"QuickAnswers.PrivacyBanner.Title.v158" = "Cuncepitu per prutege a vostra vita privata";
+
+/* Feature name as displayed in the iOS Quick Action menu (contextual menu displayed when long-pressing the browser app icon) */
+"QuickAnswers.QuickActions.Title.v158" = "Risposte preste";
+
+/* Accessibility label for the pill shown over web pages opened from within a Quick Answer result — tapping on the pill takes the user back to the answer. */
+"QuickAnswers.ReturnPill.ReturnToQuickAnswerAccessibilityLabel.v158" = "Ritornu à e risposte preste";
+
+/* Helper text for the pill shown over web pages opened from within a Quick Answer result — tapping on the pill takes the user back to the answer. */
+"QuickAnswers.ReturnPill.Subtitle.v158" = "Picchichjà per riturnacci";
+
+/* Message of the tooltip that introduces the Quick Answers feature on the homepage. */
+"QuickAnswers.Tip.Message.v158" = "Picchichjà quì per principià.";
+
+/* Title of the tooltip that introduces the Quick Answers feature on the homepage. */
+"QuickAnswers.Tip.Title.v158" = "Fate e vostre dumande ad alta voce per ottene risposte preste";
+

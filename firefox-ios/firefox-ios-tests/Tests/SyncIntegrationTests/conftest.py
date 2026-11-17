@@ -63,6 +63,8 @@ def tps_config(fxa_account):
             'password': fxa_account.password,
         },
         'fxaStaging': True,
+        # Matches the Fennec display name built with $(USER), e.g. "Fennec (vagrant) on iOS"
+        'ios_device_name': f"Fennec ({os.environ['USER']}) on iOS",
     }
 
 

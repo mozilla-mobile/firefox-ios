@@ -8,7 +8,7 @@ import Shared
 import ComponentLibrary
 
 class PasswordManagerOnboardingViewController: SettingsViewController {
-    private struct UX {
+    private enum UX {
         static let maxLabelLines = 0
         static let standardSpacing: CGFloat = 20
         static let buttonHorizontalPadding: CGFloat = 35
@@ -69,7 +69,11 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
 
     @objc
     func learnMoreButtonTapped(_ sender: UIButton) {
-        let viewController = SettingsContentViewController(windowUUID: windowUUID)
+        let viewController = SettingsContentViewController(
+            windowUUID: windowUUID,
+            shouldUsePrivateOverride: true,
+            shouldBeInPrivateTheme: false
+        )
         viewController.url = SupportUtils.URLForTopic("set-passcode-and-touch-id-firefox")
         navigationController?.pushViewController(viewController, animated: true)
     }
@@ -180,8 +184,10 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
     override func applyTheme() {
         super.applyTheme()
 
-        let currentTheme = themeManager.getCurrentTheme(for: windowUUID)
-        learnMoreButton.applyTheme(theme: currentTheme)
-        continueButton.applyTheme(theme: currentTheme)
+        let theme = themeManager.resolveTheme(for: windowUUID,
+                                              shouldUsePrivateOverride: shouldUsePrivateOverride,
+                                              shouldBeInPrivateTheme: shouldBeInPrivateTheme)
+        learnMoreButton.applyTheme(theme: theme)
+        continueButton.applyTheme(theme: theme)
     }
 }
