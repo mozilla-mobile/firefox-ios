@@ -353,10 +353,6 @@ enum AccessibilityIdentifiers {
         }
     }
 
-    enum FoxDash {
-        static let closeButton = "FoxDash.closeButton"
-    }
-
     enum GeneralizedIdentifiers {
         public static let back = "Back"
     }

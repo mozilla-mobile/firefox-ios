@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import ComponentLibrary
 import Shared
 import UIKit
 import WebKit
@@ -40,6 +39,7 @@ final class FoxDashViewController: UIViewController, Themeable {
             )
         )
         let webView = WKWebView(frame: .zero, configuration: configuration)
+        webView.translatesAutoresizingMaskIntoConstraints = false
         webView.scrollView.isScrollEnabled = false
         webView.scrollView.bounces = false
         webView.scrollView.contentInsetAdjustmentBehavior = .never
@@ -53,15 +53,25 @@ final class FoxDashViewController: UIViewController, Themeable {
         return webView
     }()
 
-    private lazy var closeButton: GlassCloseButton = .build { [weak self] in
+    private lazy var closeButton: UIButton = .build { [weak self] in
         $0.addAction(UIAction(handler: { _ in
             self?.onClose()
         }), for: .touchUpInside)
-        $0.configure(viewModel: CloseButtonViewModel(
-            a11yLabel: .CloseButtonTitle,
-            a11yIdentifier: AccessibilityIdentifiers.FoxDash.closeButton
-        ))
+        if #available(iOS 26, *) {
+            $0.configuration = .prominentClearGlass()
+        } else {
+            $0.configuration = .filled()
+            $0.configuration?.cornerStyle = .capsule
+        }
+        $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.cross)?
+            .withRenderingMode(.alwaysTemplate)
+        $0.accessibilityLabel = .CloseButtonTitle
+        $0.scalesLargeContentImage = true
     }
+
+    private lazy var closeButtonTopConstraint = closeButton.topAnchor.constraint(
+        equalTo: view.safeAreaLayoutGuide.topAnchor
+    )
 
     override var prefersStatusBarHidden: Bool { true }
     override var prefersHomeIndicatorAutoHidden: Bool { true }
@@ -91,18 +101,22 @@ final class FoxDashViewController: UIViewController, Themeable {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubviews(webView, closeButton)
-        webView.pinToSuperview()
+        view.addSubview(webView)
+        view.addSubview(closeButton)
+
         NSLayoutConstraint.activate([
+            webView.topAnchor.constraint(equalTo: view.topAnchor),
+            webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+
             closeButton.leadingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.leadingAnchor,
                 constant: UX.closeButtonPadding
             ),
-            closeButton.topAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.topAnchor,
-                constant: UX.closeButtonPadding
-            )
+            closeButtonTopConstraint
         ])
+        updateCloseButtonTopPadding()
 
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
@@ -114,10 +128,24 @@ final class FoxDashViewController: UIViewController, Themeable {
         webView.loadFileURL(indexURL, allowingReadAccessTo: indexURL.deletingLastPathComponent())
     }
 
+    override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        updateCloseButtonTopPadding()
+    }
+
+    private func updateCloseButtonTopPadding() {
+        closeButtonTopConstraint.constant = view.safeAreaInsets.top > 0 ? 0 : UX.closeButtonPadding
+    }
+
     // MARK: - Themeable
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
         view.backgroundColor = theme.colors.layer1
-        closeButton.applyTheme(theme: theme)
+        if #unavailable(iOS 26.0) {
+            closeButton.configuration?.baseBackgroundColor = theme.colors.layer2
+            closeButton.configuration?.baseForegroundColor = theme.colors.iconPrimary
+        } else {
+            closeButton.tintColor = theme.colors.iconPrimary
+        }
     }
 }
