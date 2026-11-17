@@ -452,6 +452,10 @@ final class ToolbarMiddleware {
                                                       for: .toolbar,
                                                       window: windowUUID) else { return }
 
+        // Border updates trigger a full address toolbar reconfigure which would overwrite
+        // in-progress user input, so skip them while the address bar is being edited.
+        guard !toolbarState.addressToolbar.isEditing else { return }
+
         if toolbarState.toolbarPosition == .top {
             let toolbarAction = ToolbarAction(displayNavBorder: !isMicrosurveyShown,
                                               windowUUID: windowUUID,
