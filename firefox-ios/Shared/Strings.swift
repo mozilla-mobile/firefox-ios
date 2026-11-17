@@ -7363,6 +7363,11 @@ extension String {
                 tableName: "MainMenu",
                 value: "Ad Blocker",
                 comment: "On the main menu, at the top, title for a badge next to Protections that opens the ad blocker setting.")
+            public static let VPN = MZLocalizedString(
+                key: "MainMenu.SiteProtection.VPN.Title.v162",
+                tableName: "MainMenu",
+                value: "VPN",
+                comment: "On the main menu, at the top, title for a badge next to Protections that opens the VPN settings.")
             public static let ProtectionsOn = MZLocalizedString(
                 key: "MainMenu.SiteProtection.ProtectionsOn.Title.v141",
                 tableName: "MainMenu",

@@ -14,6 +14,7 @@ final class MainMenuMiddleware {
         static let addToShortcuts = "add_to_shortcuts"
         static let bookmarks = "bookmarks"
         static let adBlocker = "ad_blocker"
+        static let vpn = "vpn"
         static let bookmarkThisPage = "bookmark_this_page"
         static let defaultBrowserSettings = "default_browser_settings"
         static let downloads = "downloads"
@@ -224,6 +225,9 @@ final class MainMenuMiddleware {
 
         case .adBlocker:
             self.telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.adBlocker)
+
+        case .vpn:
+            self.telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.vpn)
 
         case .defaultBrowser:
             self.telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.defaultBrowserSettings)

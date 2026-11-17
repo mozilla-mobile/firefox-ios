@@ -7,7 +7,7 @@ import Common
 import SiteImageView
 import ComponentLibrary
 
-public struct MenuSiteAdBlockerBadgeData {
+public struct MenuSiteBadgeData {
     public let title: String
     public let image: String
     public let shouldUseRenderMode: Bool
@@ -35,6 +35,7 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
     public var closeButtonCallback: (() -> Void)?
     public var siteProtectionsButtonCallback: (() -> Void)?
     public var adBlockerButtonCallback: (() -> Void)?
+    public var vpnButtonCallback: (() -> Void)?
     public var mainMenuHelper: MainMenuInterface = MainMenuHelper()
 
     private var trailingContentConstraints: [NSLayoutConstraint] = []
@@ -46,15 +47,12 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         if hidden {
             trailingContentConstraints = [
                 contentLabels.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor,
-                                                        constant: -UX.horizontalContentMargin),
-                badgesStack.trailingAnchor.constraint(lessThanOrEqualTo: safeAreaLayoutGuide.trailingAnchor,
-                                                      constant: -UX.horizontalContentMargin)
+                                                        constant: -UX.horizontalContentMargin)
             ]
         } else {
             trailingContentConstraints = [
                 contentLabels.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor,
-                                                        constant: -UX.horizontalContentMargin),
-                badgesStack.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor)
+                                                        constant: -UX.horizontalContentMargin)
             ]
         }
         NSLayoutConstraint.activate(trailingContentConstraints)
@@ -92,6 +90,19 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         button.setImage(UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate) ?? UIImage(), for: .normal)
     }
 
+    private lazy var badgesScrollView: UIScrollView = .build { scrollView in
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.showsVerticalScrollIndicator = false
+    }
+
+    // Keeps badges within the visible width when stacked vertically for accessibility sizes
+    private lazy var badgesMaxWidthConstraint = badgesStack.widthAnchor.constraint(
+        lessThanOrEqualTo: badgesScrollView.frameLayoutGuide.widthAnchor,
+        constant: -2 * UX.horizontalContentMargin
+    )
+
+    private var needsInitialBadgesOffset = true
+
     private lazy var badgesStack: UIStackView = .build { stack in
         stack.axis = .horizontal
         stack.alignment = .center
@@ -110,6 +121,13 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         let badge = MenuSiteBadge(mainMenuHelper: mainMenuHelper)
         badge.translatesAutoresizingMaskIntoConstraints = false
         badge.tapHandler = { [weak self] in self?.adBlockerButtonCallback?() }
+        return badge
+    }()
+
+    private lazy var vpnBadge: MenuSiteBadge = {
+        let badge = MenuSiteBadge(mainMenuHelper: mainMenuHelper)
+        badge.translatesAutoresizingMaskIntoConstraints = false
+        badge.tapHandler = { [weak self] in self?.vpnButtonCallback?() }
         return badge
     }()
 
@@ -134,28 +152,47 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         let isLarge = traitCollection.preferredContentSizeCategory.isAccessibilityCategory
         badgesStack.axis = isLarge ? .vertical : .horizontal
         badgesStack.alignment = isLarge ? .leading : .center
+        badgesMaxWidthConstraint.isActive = isLarge
+        needsInitialBadgesOffset = true
+        setNeedsLayout()
+    }
+
+    override public func layoutSubviews() {
+        super.layoutSubviews()
+        guard needsInitialBadgesOffset else { return }
+        badgesScrollView.layoutIfNeeded()
+        guard badgesScrollView.contentSize.width > 0 else { return }
+        needsInitialBadgesOffset = false
+        scrollBadgesToLeadingEdge()
+    }
+
+    // UIScrollView doesn't mirror for RTL, so start from the trailing end of the content
+    private func scrollBadgesToLeadingEdge() {
+        let isRTL = effectiveUserInterfaceLayoutDirection == .rightToLeft
+        let maxOffsetX = max(0, badgesScrollView.contentSize.width - badgesScrollView.bounds.width)
+        badgesScrollView.contentOffset = CGPoint(x: isRTL ? maxOffsetX : 0, y: 0)
     }
 
     private func setupViews() {
         contentLabels.addArrangedSubview(titleLabel)
         contentLabels.addArrangedSubview(subtitleLabel)
-        addSubviews(contentLabels, favicon, closeButton, badgesStack)
+        addSubviews(contentLabels, favicon, closeButton, badgesScrollView)
+        badgesScrollView.addSubview(badgesStack)
         badgesStack.addArrangedSubview(siteProtectionsBadge)
 
-        let badgesTopFromFavicon = badgesStack.topAnchor.constraint(
+        let badgesTopFromFavicon = badgesScrollView.topAnchor.constraint(
             greaterThanOrEqualTo: favicon.bottomAnchor,
             constant: UX.badgesTopMargin
         )
 
-        let badgesTopFromLabels = badgesStack.topAnchor.constraint(
+        let badgesTopFromLabels = badgesScrollView.topAnchor.constraint(
             equalTo: contentLabels.bottomAnchor,
             constant: UX.badgesTopMargin
         )
         badgesTopFromLabels.priority = .defaultHigh
         trailingContentConstraints = [
             contentLabels.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor,
-                                                    constant: -UX.horizontalContentMargin),
-            badgesStack.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor)
+                                                    constant: -UX.horizontalContentMargin)
         ]
         NSLayoutConstraint.activate(trailingContentConstraints)
         NSLayoutConstraint.activate([
@@ -173,8 +210,19 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
 
             badgesTopFromLabels,
             badgesTopFromFavicon,
-            badgesStack.leadingAnchor.constraint(equalTo: favicon.leadingAnchor),
-            badgesStack.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+            badgesScrollView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+            badgesScrollView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
+            badgesScrollView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            badgesScrollView.frameLayoutGuide.heightAnchor.constraint(
+                equalTo: badgesScrollView.contentLayoutGuide.heightAnchor
+            ),
+
+            badgesStack.topAnchor.constraint(equalTo: badgesScrollView.contentLayoutGuide.topAnchor),
+            badgesStack.leadingAnchor.constraint(equalTo: badgesScrollView.contentLayoutGuide.leadingAnchor,
+                                                 constant: UX.horizontalContentMargin),
+            badgesStack.trailingAnchor.constraint(equalTo: badgesScrollView.contentLayoutGuide.trailingAnchor,
+                                                  constant: -UX.horizontalContentMargin),
+            badgesStack.bottomAnchor.constraint(equalTo: badgesScrollView.contentLayoutGuide.bottomAnchor)
         ])
 
         closeButton.layer.cornerRadius = 0.5 * UX.closeButtonSize
@@ -190,7 +238,8 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         stateIconTintColor: UIColor? = nil,
         stateTextColor: UIColor? = nil,
         stateChevronTintColor: UIColor? = nil,
-        adBlocker: MenuSiteAdBlockerBadgeData? = nil
+        adBlocker: MenuSiteBadgeData? = nil,
+        vpn: MenuSiteBadgeData? = nil
     ) {
         titleLabel.text = title
         subtitleLabel.text = subtitle
@@ -203,14 +252,30 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         if let adBlocker {
             if adBlockerBadge.superview == nil {
                 badgesStack.addArrangedSubview(adBlockerBadge)
+                needsInitialBadgesOffset = true
             }
             adBlockerBadge.configure(text: adBlocker.title,
                                      iconName: adBlocker.image,
                                      useTemplate: adBlocker.shouldUseRenderMode,
                                      iconTintColor: adBlocker.iconTintColor)
-        } else {
+        } else if adBlockerBadge.superview != nil {
             adBlockerBadge.removeFromSuperview()
+            needsInitialBadgesOffset = true
         }
+        if let vpn {
+            if vpnBadge.superview == nil {
+                badgesStack.addArrangedSubview(vpnBadge)
+                needsInitialBadgesOffset = true
+            }
+            vpnBadge.configure(text: vpn.title,
+                               iconName: vpn.image,
+                               useTemplate: vpn.shouldUseRenderMode,
+                               iconTintColor: vpn.iconTintColor)
+        } else if vpnBadge.superview != nil {
+            vpnBadge.removeFromSuperview()
+            needsInitialBadgesOffset = true
+        }
+        if needsInitialBadgesOffset { setNeedsLayout() }
         let image = FaviconImageViewModel(siteURLString: image,
                                           faviconCornerRadius: UX.favIconSize / 2)
         favicon.setFavicon(image)
@@ -248,5 +313,6 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         }
         siteProtectionsBadge.applyTheme(theme: theme)
         adBlockerBadge.applyTheme(theme: theme)
+        vpnBadge.applyTheme(theme: theme)
     }
 }

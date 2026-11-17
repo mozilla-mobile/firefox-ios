@@ -22,6 +22,7 @@ enum MainMenuNavigationDestination: Equatable {
     case reportBrokenSite
     case shareSheet
     case saveAsPDF
+    case vpn
     case webpageSummary(config: SummarizerConfig?)
     case zoom
     case translatePage
@@ -49,6 +50,7 @@ enum MainMenuNavigationDestination: Equatable {
             .reportBrokenSite,
             .shareSheet,
             .saveAsPDF,
+            .vpn,
             .webpageSummary(config: SummarizerConfig(instructions: "", options: [:])),
             .zoom,
             .translatePage

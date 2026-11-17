@@ -762,12 +762,21 @@ final class BrowserCoordinator: BaseCoordinator,
                                                               shouldUsePrivateOverride: false)
         browsingSettings.parentCoordinator = self
         let navigationController = DismissableNavigationViewController(rootViewController: browsingSettings)
-        setupAdBlockerSettingsDetents(for: navigationController)
+        setupSettingsSheetDetents(for: navigationController)
         navigationController.sheetPresentationController?.prefersGrabberVisible = true
         router.present(navigationController, animated: true)
     }
 
-    private func setupAdBlockerSettingsDetents(for controller: UIViewController) {
+    func presentVPNSettings() {
+        guard #available(iOS 17.0, *) else { return }
+        let vpnSettings = VPNSettingsViewController(windowUUID: windowUUID, prefs: profile.prefs)
+        let navigationController = DismissableNavigationViewController(rootViewController: vpnSettings)
+        setupSettingsSheetDetents(for: navigationController)
+        navigationController.sheetPresentationController?.prefersGrabberVisible = true
+        router.present(navigationController, animated: true)
+    }
+
+    private func setupSettingsSheetDetents(for controller: UIViewController) {
         if #available(iOS 16.0, *) {
             let customDetent = UISheetPresentationController.Detent.custom(
                 identifier: .init("threeQuarter")
