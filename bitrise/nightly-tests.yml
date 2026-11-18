@@ -150,6 +150,14 @@ workflows:
         - xcodebuild_options: $XCODEBUILD_OPTIONS
     - deploy-to-bitrise-io@2:
         is_always_run: true
+    - script@1:
+        title: Determine device type
+        is_always_run: true
+        inputs:
+        - content: |-
+            NAME=$(sed -E 's/.*name=([^,]+).*/\1/' <<< "$DESTINATION")
+            OS=$(sed -E 's/.*OS=([^,]+).*/\1/' <<< "$DESTINATION")
+            envman add --key DESTINATION_LABEL --value "$NAME (iOS $OS)"
     - slack@4:
         is_always_run: true
         inputs:
@@ -169,6 +177,7 @@ workflows:
         - fields: |
             Branch | ${BITRISE_GIT_BRANCH}
             Scheme | ${SCHEME}
+            Device | ${DESTINATION_LABEL}
         - buttons: |
             Build Log|${BITRISE_BUILD_URL}
             Test Report|${BITRISE_BUILD_URL}?tab=tests
@@ -403,6 +412,14 @@ workflows:
   firefox_fullfunctional_report:
     description: Report the full functional test result to Slack
     steps:
+    - script@1:
+        title: Determine device type
+        is_always_run: true
+        inputs:
+        - content: |-
+            NAME=$(sed -E 's/.*name=([^,]+).*/\1/' <<< "$DESTINATION")
+            OS=$(sed -E 's/.*OS=([^,]+).*/\1/' <<< "$DESTINATION")
+            envman add --key DESTINATION_LABEL --value "$NAME (iOS $OS)"
     - slack@4:
         is_always_run: true
         inputs:
@@ -422,6 +439,7 @@ workflows:
         - fields: |
             Branch | ${BITRISE_GIT_BRANCH}
             Scheme | ${SCHEME}
+            Device | ${DESTINATION_LABEL}
         - buttons: |
             Build Log|https://app.bitrise.io/app/${BITRISE_APP_SLUG}/pipelines/${BITRISEIO_PIPELINE_ID}
             Test Report|https://app.bitrise.io/app/${BITRISE_APP_SLUG}/pipelines/${BITRISEIO_PIPELINE_ID}?tab=tests
