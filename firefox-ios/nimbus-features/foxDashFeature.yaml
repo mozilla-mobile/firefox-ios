@@ -24,7 +24,7 @@ features:
       - channel: developer
         value:
           enabled: true
-          theme: christmas
+          theme: normal
 
 enums:
   FoxDashTheme:
