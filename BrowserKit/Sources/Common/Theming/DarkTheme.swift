@@ -142,6 +142,7 @@ private struct DarkColourPalette: ThemeColourPalette {
     var layerAccentSubtle: UIColor { NovaMissingToken.color("layerAccentSubtle") }
     var layerInverse: UIColor { NovaMissingToken.color("layerInverse") }
     var layerGlassTintNova: UIColor { NovaMissingToken.color("layerGlassTintNova") }
+    var layerTabGroupGlassTint: UIColor { NovaMissingToken.color("layerTabGroupGlassTint") }
     var layerGlassSelectedFill: UIColor { NovaMissingToken.color("layerGlassSelectedFill") }
     var textToast: UIColor { NovaMissingToken.color("textToast") }
     var iconInverted: UIColor { NovaMissingToken.color("iconInverted") }
@@ -155,9 +156,29 @@ private struct DarkColourPalette: ThemeColourPalette {
     var gradientAccentSubtle: Gradient { NovaMissingToken.gradient("gradientAccentSubtle") }
     var gradientAIStrong: Gradient { NovaMissingToken.gradient("gradientAIStrong") }
     var gradientBorder: Gradient { NovaMissingToken.gradient("gradientBorder") }
+    var gradientTabBorderYellow: Gradient { NovaMissingToken.gradient("gradientTabBorderYellow") }
+    var gradientTabBorderOrange: Gradient { NovaMissingToken.gradient("gradientTabBorderOrange") }
+    var gradientTabBorderRed: Gradient { NovaMissingToken.gradient("gradientTabBorderRed") }
+    var gradientTabBorderPink: Gradient { NovaMissingToken.gradient("gradientTabBorderPink") }
+    var gradientTabBorderPurple: Gradient { NovaMissingToken.gradient("gradientTabBorderPurple") }
+    var gradientTabBorderBlue: Gradient { NovaMissingToken.gradient("gradientTabBorderBlue") }
+    var gradientTabBorderCyan: Gradient { NovaMissingToken.gradient("gradientTabBorderCyan") }
+    var gradientTabBorderGreen: Gradient { NovaMissingToken.gradient("gradientTabBorderGreen") }
+    var gradientTabBorderGrey: Gradient { NovaMissingToken.gradient("gradientTabBorderGrey") }
     var gradientPrivacy: Gradient { NovaMissingToken.gradient("gradientPrivacy") }
     var gradientPrivacyMask: Gradient { NovaMissingToken.gradient("gradientPrivacyMask") }
     var gradientWidgetSurface: Gradient { NovaMissingToken.gradient("gradientWidgetSurface") }
     var gradientWidgetSurfaceStandard: Gradient { NovaMissingToken.gradient("gradientWidgetSurfaceStandard") }
     var gradientWidgetSurfacePrivate: Gradient { NovaMissingToken.gradient("gradientWidgetSurfacePrivate") }
+
+    // MARK: - Tab Group
+    var tabGroupYellow: UIColor { NovaMissingToken.color("tabGroupYellow") }
+    var tabGroupOrange: UIColor { NovaMissingToken.color("tabGroupOrange") }
+    var tabGroupRed: UIColor { NovaMissingToken.color("tabGroupRed") }
+    var tabGroupPink: UIColor { NovaMissingToken.color("tabGroupPink") }
+    var tabGroupPurple: UIColor { NovaMissingToken.color("tabGroupPurple") }
+    var tabGroupBlue: UIColor { NovaMissingToken.color("tabGroupBlue") }
+    var tabGroupCyan: UIColor { NovaMissingToken.color("tabGroupCyan") }
+    var tabGroupGreen: UIColor { NovaMissingToken.color("tabGroupGreen") }
+    var tabGroupGrey: UIColor { NovaMissingToken.color("tabGroupGrey") }
 }

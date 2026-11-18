@@ -38,6 +38,7 @@ private struct NovaPrivateColourPalette: ThemeColourPalette {
     var layerAutofillText: UIColor = NovaColors.VioletDesaturated30.withAlphaComponent(0.55)
     var layerSelectedText: UIColor = NovaColors.VioletDesaturated30.withAlphaComponent(0.55)
     var layerGlassTintNova: UIColor = .clear
+    let layerTabGroupGlassTint: UIColor = .clear
     var layerGlassSelectedFill: UIColor = NovaColors.VioletDesaturated90
     var layerAccentPrivateNonOpaque: UIColor { layerAccentSubtle }
     var layerToolbarGlass: UIColor = NovaColors.VioletDesaturated60
@@ -102,6 +103,18 @@ private struct NovaPrivateColourPalette: ThemeColourPalette {
     var shadowStrong: UIColor = NovaColors.Gray80.withAlphaComponent(0.16)
     var shadowBorder: UIColor = NovaColors.Gray65.withAlphaComponent(0.50)
 
+    // MARK: - Tab Group
+
+    let tabGroupYellow = NovaColors.Yellow30
+    let tabGroupOrange = NovaColors.Orange30
+    let tabGroupRed = NovaColors.Red30
+    let tabGroupPink = NovaColors.Pink30
+    let tabGroupPurple = NovaColors.Violet30
+    let tabGroupBlue = NovaColors.Blue30
+    let tabGroupCyan = NovaColors.Cyan30
+    let tabGroupGreen = NovaColors.Green30
+    let tabGroupGrey = NovaColors.Gray40
+
     // MARK: - Gradients
 
     var gradient = Gradient(colors: [NovaColors.Violet60, NovaColors.Violet50])
@@ -116,6 +129,15 @@ private struct NovaPrivateColourPalette: ThemeColourPalette {
         NovaColors.Orange30
     ])
     var gradientBorder = Gradient(colors: [NovaColors.Violet30, NovaColors.Violet50])
+    var gradientTabBorderYellow: Gradient { NovaTabGroupGradients.yellow }
+    var gradientTabBorderOrange: Gradient { NovaTabGroupGradients.orange }
+    var gradientTabBorderRed: Gradient { NovaTabGroupGradients.red }
+    var gradientTabBorderPink: Gradient { NovaTabGroupGradients.pink }
+    var gradientTabBorderPurple: Gradient { NovaTabGroupGradients.purple }
+    var gradientTabBorderBlue: Gradient { NovaTabGroupGradients.blue }
+    var gradientTabBorderCyan: Gradient { NovaTabGroupGradients.cyan }
+    var gradientTabBorderGreen: Gradient { NovaTabGroupGradients.green }
+    var gradientTabBorderGrey: Gradient { NovaTabGroupGradients.grey }
     var gradientPrivacy = Gradient(colors: [
         NovaColors.Purple40,
         NovaColors.Purple20

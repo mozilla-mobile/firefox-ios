@@ -115,6 +115,7 @@ public protocol ThemeColourPalette {
     var layerAccentSubtle: UIColor { get }
     var layerInverse: UIColor { get }
     var layerGlassTintNova: UIColor { get }
+    var layerTabGroupGlassTint: UIColor { get }
     var layerGlassSelectedFill: UIColor { get }
     var textToast: UIColor { get }
     var iconInverted: UIColor { get }
@@ -128,9 +129,29 @@ public protocol ThemeColourPalette {
     var gradientAccentSubtle: Gradient { get }
     var gradientAIStrong: Gradient { get }
     var gradientBorder: Gradient { get }
+    var gradientTabBorderYellow: Gradient { get }
+    var gradientTabBorderOrange: Gradient { get }
+    var gradientTabBorderRed: Gradient { get }
+    var gradientTabBorderPink: Gradient { get }
+    var gradientTabBorderPurple: Gradient { get }
+    var gradientTabBorderBlue: Gradient { get }
+    var gradientTabBorderCyan: Gradient { get }
+    var gradientTabBorderGreen: Gradient { get }
+    var gradientTabBorderGrey: Gradient { get }
     var gradientPrivacy: Gradient { get }
     var gradientPrivacyMask: Gradient { get }
     var gradientWidgetSurface: Gradient { get }
     var gradientWidgetSurfaceStandard: Gradient { get }
     var gradientWidgetSurfacePrivate: Gradient { get }
+
+    // MARK: - Tab Group
+    var tabGroupYellow: UIColor { get }
+    var tabGroupOrange: UIColor { get }
+    var tabGroupRed: UIColor { get }
+    var tabGroupPink: UIColor { get }
+    var tabGroupPurple: UIColor { get }
+    var tabGroupBlue: UIColor { get }
+    var tabGroupCyan: UIColor { get }
+    var tabGroupGreen: UIColor { get }
+    var tabGroupGrey: UIColor { get }
 }

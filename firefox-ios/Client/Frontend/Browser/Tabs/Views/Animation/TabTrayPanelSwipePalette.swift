@@ -187,6 +187,7 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var layerAccentSubtle: UIColor { base.layerAccentSubtle }
     var layerInverse: UIColor { base.layerInverse }
     var layerGlassSelectedFill: UIColor { base.layerGlassSelectedFill }
+    var layerTabGroupGlassTint: UIColor { base.layerTabGroupGlassTint }
     var textToast: UIColor { base.textToast }
     var iconOnColorDisabled: UIColor { base.iconOnColorDisabled }
     var iconPrivate: UIColor { base.iconPrivate }
@@ -198,11 +199,31 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var gradientAccentSubtle: Gradient { base.gradientAccentSubtle }
     var gradientAIStrong: Gradient { base.gradientAIStrong }
     var gradientBorder: Gradient { base.gradientBorder }
+    var gradientTabBorderYellow: Gradient { base.gradientTabBorderYellow }
+    var gradientTabBorderOrange: Gradient { base.gradientTabBorderOrange }
+    var gradientTabBorderRed: Gradient { base.gradientTabBorderRed }
+    var gradientTabBorderPink: Gradient { base.gradientTabBorderPink }
+    var gradientTabBorderPurple: Gradient { base.gradientTabBorderPurple }
+    var gradientTabBorderBlue: Gradient { base.gradientTabBorderBlue }
+    var gradientTabBorderCyan: Gradient { base.gradientTabBorderCyan }
+    var gradientTabBorderGreen: Gradient { base.gradientTabBorderGreen }
+    var gradientTabBorderGrey: Gradient { base.gradientTabBorderGrey }
     var gradientPrivacy: Gradient { base.gradientPrivacy }
     var gradientPrivacyMask: Gradient { base.gradientPrivacyMask }
     var gradientWidgetSurface: Gradient { base.gradientWidgetSurface }
     var gradientWidgetSurfaceStandard: Gradient { base.gradientWidgetSurfaceStandard }
     var gradientWidgetSurfacePrivate: Gradient { base.gradientWidgetSurfacePrivate }
+
+    // MARK: - Tab Group
+    var tabGroupYellow: UIColor { base.tabGroupYellow }
+    var tabGroupOrange: UIColor { base.tabGroupOrange }
+    var tabGroupRed: UIColor { base.tabGroupRed }
+    var tabGroupPink: UIColor { base.tabGroupPink }
+    var tabGroupPurple: UIColor { base.tabGroupPurple }
+    var tabGroupBlue: UIColor { base.tabGroupBlue }
+    var tabGroupCyan: UIColor { base.tabGroupCyan }
+    var tabGroupGreen: UIColor { base.tabGroupGreen }
+    var tabGroupGrey: UIColor { base.tabGroupGrey }
 
     init(base: ThemeColourPalette, overrides: PartialOverrides) {
         self.base = base
