@@ -1391,6 +1391,7 @@ final class BrowserCoordinator: BaseCoordinator,
             self?.router.dismiss(animated: true, completion: nil)
         }
         router.present(foxDash, animated: true, completion: nil)
+        HomepageTelemetry(gleanWrapper: glean).sendItemTappedTelemetryEvent(for: .foxDash)
     }
 
     func showGoogleLensPhotoPicker() {
