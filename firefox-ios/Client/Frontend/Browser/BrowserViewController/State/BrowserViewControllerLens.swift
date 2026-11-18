@@ -42,8 +42,8 @@ struct BrowserViewControllerLens: StateLens {
         )
     }
 
-    private init(browserViewControllerState: BrowserViewControllerState,
-                 homepageSearchBarState: SearchBarState) {
+    init(browserViewControllerState: BrowserViewControllerState,
+         homepageSearchBarState: SearchBarState) {
         self.browserViewControllerState = browserViewControllerState
         self.homepageSearchBarState = homepageSearchBarState
     }
