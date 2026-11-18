@@ -76,7 +76,8 @@ In the future `State` structs with one or more sub-reducer will have the followi
 
 - `State` struct file size will be shorter with less responsibility.
 - There will be a clear top level division of responsibilities to the sub-reducers.
-- `@Copyable` macro will no longer be needed and reduce repetition and mental overhead when reading `State` files.
+- `@Copyable` macro will now never be used with passthrough reducers.
+- Reduced repetition and mental overhead when reading `State` files.
 
 ### Neutral Consequences
 - N/A
