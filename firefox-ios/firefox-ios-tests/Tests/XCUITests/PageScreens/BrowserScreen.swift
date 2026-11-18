@@ -268,6 +268,27 @@ final class BrowserScreen {
         XCTAssertTrue(webViewShowsText(containing: text, timeout: timeout), "The web page should show '\(text)'")
     }
 
+    /// Waits for the ad test page's article text with its ad placements `hidden` or shown, then checks the
+    /// state holds for a second, since turning on Block Ads reloads open tabs once its list is compiled.
+    func assertAdPlacementsAre(hidden: Bool, timeout: TimeInterval = TIMEOUT_LONG) {
+        let content = sel.webViewText(TestLabels.adPlacementsContent).element(in: app)
+        let placements = TestLabels.adPlacements.map { sel.webViewText($0).element(in: app) }
+        let pageInExpectedState = { content.exists && placements.allSatisfy { $0.exists != hidden } }
+
+        let reachesState = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in pageInExpectedState() },
+                                                     object: nil)
+        let leavesState = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in !pageInExpectedState() },
+                                                    object: nil)
+        leavesState.isInverted = true
+        let settled = XCTWaiter().wait(for: [reachesState], timeout: timeout) == .completed
+            && XCTWaiter().wait(for: [leavesState], timeout: 1) == .completed
+
+        let visible = TestLabels.adPlacements.filter { sel.webViewText($0).element(in: app).exists }
+        XCTAssertTrue(settled,
+                      "Expected the ad placements to be \(hidden ? "hidden" : "shown"), page content shown: " +
+                      "\(content.exists), visible placements: \(visible)")
+    }
+
     /// The previous/next tab address bars only exist with a bottom toolbar. They sit off-screen
     /// and are never hittable, so only their existence can be checked.
     func assertTabSwipeIndicators(previous: Bool, next: Bool, timeout: TimeInterval = TIMEOUT) {
@@ -516,6 +537,12 @@ final class BrowserScreen {
 
     func assertCancelButtonOnUrlBarExists() {
         BaseTestCase().mozWaitForElementToExist(cancelButton)
+    }
+
+    func assertCancelButtonIsRightOfAddressBar() {
+        BaseTestCase().waitForElementsToExist([addressBar, cancelButton])
+        XCTAssertTrue(cancelButton.isRightOf(rightElement: addressBar),
+                      "The Cancel button should be on the right side of the address bar")
     }
 
     func scrollPageDown() {
@@ -843,6 +870,14 @@ final class BrowserScreen {
             let expectation = XCTNSPredicateExpectation(predicate: hasTerm, object: addressBar)
             if XCTWaiter().wait(for: [expectation], timeout: TIMEOUT_PICKER_PROBE) == .completed { return }
         }
+    }
+
+    /// Like `openURL`, but retypes the URL until the field holds all of it, since a new tab can drop the
+    /// first keystroke and turn "http://host" into a lookup of the host "ttp".
+    func openTypedURL(_ url: String) {
+        searchFromAddressBar(term: url)
+        assertAddressBarValueEquals(url, timeout: TIMEOUT_PICKER_PROBE)
+        typeOnSearchBar(text: "\r")
     }
 
     /// Fails rather than returning with text still in the field, so a retry cannot append to the

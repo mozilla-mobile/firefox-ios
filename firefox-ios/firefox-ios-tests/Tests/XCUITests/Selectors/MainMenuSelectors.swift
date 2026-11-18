@@ -16,6 +16,7 @@ protocol MainMenuSelectorSet {
     var ADD_TO_SHORTCUTS: Selector { get }
     var REMOVE_FROM_SHORTCUTS: Selector { get }
     var SITE_PROTECTIONS: Selector { get }
+    var AD_BLOCKER_BADGE: Selector { get }
     var PAGE_ZOOM: Selector { get }
     var READER_VIEW: Selector { get }
     var MENU_ITEM_STATUS_ON: Selector { get }
@@ -41,6 +42,7 @@ struct MainMenuSelectors: MainMenuSelectorSet {
         static let addToShortcuts = AccessibilityIdentifiers.MainMenu.addToShortcuts
         static let removeFromShortcuts = String.MainMenu.Submenus.Save.AccessibilityLabels.RemoveFromShortcuts
         static let siteProtections = "Protections"
+        static let adBlockerBadge = String.MainMenu.SiteProtection.AdBlocker
         static let pageZoom = AccessibilityIdentifiers.MainMenu.zoom
         static let readerView = AccessibilityIdentifiers.MainMenu.readerView
         // Info-cell statuses (Reader View, Desktop Site, Website Dark Mode) have no identifier, match on label
@@ -97,6 +99,12 @@ struct MainMenuSelectors: MainMenuSelectorSet {
     let SITE_PROTECTIONS = Selector.buttonByLabel(
         IDs.siteProtections,
         description: "Protections button in the main menu header, opens the tracking protection panel",
+        groups: ["menu", "privacy"]
+    )
+
+    let AD_BLOCKER_BADGE = Selector.buttonByLabel(
+        IDs.adBlockerBadge,
+        description: "Ad Blocker badge in the main menu header, its icon is green when Block Ads is on",
         groups: ["menu", "privacy"]
     )
 
@@ -175,7 +183,7 @@ struct MainMenuSelectors: MainMenuSelectorSet {
 
     var all: [Selector] { [DESKTOP_SITE, BOOKMARKS_BUTTON, HISTORY_BUTTON, DOWNLOADS_BUTTON,
                            PASSWORDS_BUTTON, SIGN_IN_CELL, SETTINGS_CELL, BOOKMARK_PAGE,
-                           ADD_TO_SHORTCUTS, REMOVE_FROM_SHORTCUTS, SITE_PROTECTIONS, PAGE_ZOOM,
+                           ADD_TO_SHORTCUTS, REMOVE_FROM_SHORTCUTS, SITE_PROTECTIONS, AD_BLOCKER_BADGE, PAGE_ZOOM,
                            READER_VIEW, MENU_ITEM_STATUS_ON, MENU_ITEM_STATUS_OFF, WEBSITE_DARK_MODE,
                            FIND_IN_PAGE, SUMMARIZE_PAGE, REPORT_BROKEN_SITE, CLOSE_BUTTON] }
 }
