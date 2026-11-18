@@ -1384,7 +1384,10 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     func showFoxDash() {
-        let foxDash = FoxDashViewController(windowUUID: windowUUID) { [weak self] in
+        let foxDash = FoxDashViewController(
+            windowUUID: windowUUID,
+            bestScoreStore: FoxDashBestScoreStore(prefs: profile.prefs)
+        ) { [weak self] in
             self?.router.dismiss(animated: true, completion: nil)
         }
         router.present(foxDash, animated: true, completion: nil)
