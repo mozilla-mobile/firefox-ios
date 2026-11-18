@@ -195,8 +195,7 @@ class ReadingListTests: FeatureFlaggedTestBase {
         savedToReadingList.press(forDuration: 1)
 
         // Select to open in New Tab
-        mozWaitForElementToExist(app.tables["Context Menu"])
-        app.tables.buttons[StandardImageIdentifiers.Large.plus].waitAndTap()
+        app.buttons["Open in New Tab"].waitAndTap()
         updateScreenGraph()
         // Now there should be two tabs open
         navigator.goto(HomePanelsScreen)
@@ -218,8 +217,7 @@ class ReadingListTests: FeatureFlaggedTestBase {
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
         mozWaitForElementToExist(savedToReadingList)
         savedToReadingList.press(forDuration: 1)
-        mozWaitForElementToExist(app.tables["Context Menu"])
-        app.tables.buttons[StandardImageIdentifiers.Large.cross].waitAndTap()
+        app.buttons["Remove"].waitAndTap()
 
         // Verify the item has been removed
         mozWaitForElementToNotExist(app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"])

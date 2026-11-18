@@ -7,7 +7,7 @@ import Shared
 import Storage
 
 @MainActor
-final class NativeMenuHelper {
+final class HomeNativeMenuHelper {
     private let windowUUID: WindowUUID
     private let toastContainer: UIView
 
