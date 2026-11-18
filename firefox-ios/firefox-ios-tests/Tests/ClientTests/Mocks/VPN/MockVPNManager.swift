@@ -19,6 +19,7 @@ final class MockVPNManager: VPNRunnable {
     var onStart: (() -> Void)?
     var startError: Error?
     var startCountryCodes: [String?] = []
+    var countryCodeChangeCalledWith: [String] = []
     let eventsStream = AsyncStream<VPNEvent>.makeStream()
 
     var events: AsyncStream<VPNEvent> {
@@ -43,5 +44,7 @@ final class MockVPNManager: VPNRunnable {
         return []
     }
 
-    func selectedCountryCodeDidChange(countryCode: String) {}
+    func selectedCountryCodeDidChange(countryCode: String) {
+        countryCodeChangeCalledWith.append(countryCode)
+    }
 }

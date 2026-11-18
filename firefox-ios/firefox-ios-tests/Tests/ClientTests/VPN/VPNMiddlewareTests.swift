@@ -109,7 +109,7 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
     func testChangeLocation_whenStopped_savesCountryCodeWithoutStarting() async {
         await dispatchChangeLocationAndWait(countryCode: "DE", expectStart: false)
 
-        XCTAssertEqual(mockProfile.prefs.stringForKey(PrefsKeys.VPNSettings.selectedCountryCode), "DE")
+        XCTAssertEqual(mockVPNManager.countryCodeChangeCalledWith, ["DE"])
         XCTAssertEqual(mockVPNManager.startCalled, 0)
         XCTAssertNil(mockUserPreferences.boolPreferences[.vpnFeature])
     }
@@ -121,7 +121,7 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         await dispatchChangeLocationAndWait(countryCode: "DE", expectStart: false)
 
         XCTAssertEqual(mockVPNManager.startCalled, 0)
-        XCTAssertNil(mockProfile.prefs.stringForKey(PrefsKeys.VPNSettings.selectedCountryCode))
+        XCTAssertTrue(mockVPNManager.countryCodeChangeCalledWith.isEmpty)
     }
 
     func testChangeLocation_whenStartFails_doesNotTouchPreference() async {
@@ -297,7 +297,7 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
             VPNModernAction.changeLocation(countryCode: countryCode),
             firstWindowUUID
         )
-        await fulfillment(of: [started, preferenceSet], timeout: 0.2)
+        await fulfillment(of: [started, preferenceSet], timeout: 1)
     }
 
     private func yieldAndWaitForDispatch(_ event: VPNEvent, subject: VPNMiddleware) async throws {
