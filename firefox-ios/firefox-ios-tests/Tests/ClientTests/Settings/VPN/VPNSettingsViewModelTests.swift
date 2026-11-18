@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Redux
 import Shared
 import XCTest
 
@@ -9,56 +10,57 @@ import XCTest
 
 @available(iOS 17.0, *)
 @MainActor
-final class VPNSettingsViewModelTests: XCTestCase {
-    private var prefs: MockProfilePrefs!
-    private var userPreferences: MockUserFeaturePreferences!
+final class VPNSettingsViewModelTests: XCTestCase, StoreTestUtility {
+    var mockStore: MockStoreForMiddleware<AppState>!
+    private var vpnManager: MockVPNManager!
 
     override func setUp() async throws {
         try await super.setUp()
-        prefs = MockProfilePrefs()
-        userPreferences = MockUserFeaturePreferences()
+        DependencyHelperMock().bootstrapDependencies()
+        setupStore()
+        vpnManager = MockVPNManager()
     }
 
     override func tearDown() async throws {
-        prefs = nil
-        userPreferences = nil
+        vpnManager = nil
+        resetStore()
+        DependencyHelperMock().reset()
         try await super.tearDown()
     }
 
-    func test_init_readsVPNFeaturePreference() {
-        userPreferences.setPreferenceFor(.vpnFeature, to: true)
+    func test_isVPNEnabled_reflectsVPNRunningState() {
+        vpnManager.isRunning = true
 
         let subject = createSubject()
 
         XCTAssertTrue(subject.isVPNEnabled)
     }
 
-    func test_toggleVPN_off_disablesAndSavesPreference() {
-        userPreferences.setPreferenceFor(.vpnFeature, to: true)
+    func test_toggleVPN_off_dispatchesStop() throws {
         let subject = createSubject()
 
         subject.toggleVPN(false)
 
-        XCTAssertFalse(subject.isVPNEnabled)
-        XCTAssertFalse(userPreferences.getPreferenceFor(.vpnFeature))
+        let action = try XCTUnwrap(mockStore.dispatchedModernActions.last as? VPNModernAction)
+        XCTAssertEqual(action, .stop)
     }
 
-    func test_toggleVPN_on_startsConnecting() {
+    func test_toggleVPN_on_dispatchesStart() throws {
         let subject = createSubject()
 
         subject.toggleVPN(true)
 
-        XCTAssertTrue(subject.isVPNConnecting)
-        XCTAssertFalse(subject.isVPNEnabled)
+        let action = try XCTUnwrap(mockStore.dispatchedModernActions.last as? VPNModernAction)
+        XCTAssertEqual(action, .start)
     }
 
-    func test_selectLocation_updatesAndSavesSelection() {
+    func test_selectLocation_dispatchesChangeLocation() throws {
         let subject = createSubject()
 
         subject.selectLocation("DE")
 
-        XCTAssertEqual(subject.selectedCountryCode, "DE")
-        XCTAssertEqual(prefs.stringForKey(PrefsKeys.VPNSettings.selectedCountryCode), "DE")
+        let action = try XCTUnwrap(mockStore.dispatchedModernActions.last as? VPNModernAction)
+        XCTAssertEqual(action, .changeLocation(countryCode: "DE"))
     }
 
     func test_sortedByName_sortsByLocalizedCountryName() {
@@ -70,10 +72,14 @@ final class VPNSettingsViewModelTests: XCTestCase {
     }
 
     // MARK: - Helpers
+    func setupAppState() -> AppState {
+        return AppState()
+    }
+
     private func createSubject() -> VPNSettingsViewModel {
         let subject = VPNSettingsViewModel(
-            prefs: prefs,
-            userPreferences: userPreferences,
+            vpnManager: vpnManager,
+            windowUUID: .XCTestDefaultUUID,
             localeProvider: MockLocaleProvider()
         )
         trackForMemoryLeaks(subject)

@@ -96,32 +96,52 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(firstTabManager.removeAllTabsCalledWith.isEmpty)
     }
 
-    func testChangeLocation_whenRunning_startsWithSavedCountryCodeWithoutTouchingPreference() async {
+    func testChangeLocation_whenRunning_restartsWithNewCountryCodeWithoutTouchingPreference() async {
         mockVPNManager.isRunning = true
-        mockProfile.prefs.setString("DE", forKey: PrefsKeys.VPNSettings.selectedCountryCode)
 
-        await dispatchChangeLocationAndWait(expectStart: true)
+        await dispatchChangeLocationAndWait(countryCode: "DE", expectStart: true)
 
         XCTAssertEqual(mockVPNManager.startCountryCodes, ["DE"])
         XCTAssertEqual(mockVPNManager.stopCalled, 0)
         XCTAssertNil(mockUserPreferences.boolPreferences[.vpnFeature])
     }
 
-    func testChangeLocation_whenStopped_doesNotStart() async {
-        await dispatchChangeLocationAndWait(expectStart: false)
+    func testChangeLocation_whenStopped_savesCountryCodeWithoutStarting() async {
+        await dispatchChangeLocationAndWait(countryCode: "DE", expectStart: false)
 
+        XCTAssertEqual(mockVPNManager.countryCodeChangeCalledWith, ["DE"])
         XCTAssertEqual(mockVPNManager.startCalled, 0)
         XCTAssertNil(mockUserPreferences.boolPreferences[.vpnFeature])
+    }
+
+    func testChangeLocation_whenCountryCodeUnchanged_doesNotRestartOrSave() async {
+        mockVPNManager.isRunning = true
+        mockVPNManager.selectedCountryCode = "DE"
+
+        await dispatchChangeLocationAndWait(countryCode: "DE", expectStart: false)
+
+        XCTAssertEqual(mockVPNManager.startCalled, 0)
+        XCTAssertTrue(mockVPNManager.countryCodeChangeCalledWith.isEmpty)
     }
 
     func testChangeLocation_whenStartFails_doesNotTouchPreference() async {
         mockVPNManager.isRunning = true
         mockVPNManager.startError = URLError(.notConnectedToInternet)
 
-        await dispatchChangeLocationAndWait(expectStart: true)
+        await dispatchChangeLocationAndWait(countryCode: "DE", expectStart: true)
 
         XCTAssertEqual(mockVPNManager.startCalled, 1)
         XCTAssertNil(mockUserPreferences.boolPreferences[.vpnFeature])
+    }
+
+    func testResetVPNAtLaunch_clearsPreferenceWithoutStartingVPN() async {
+        mockUserPreferences.boolPreferences[.vpnFeature] = true
+        let subject = createSubject()
+
+        await dispatchAndWaitForPreference(.resetVPNAtLaunch, to: subject)
+
+        XCTAssertEqual(mockUserPreferences.boolPreferences[.vpnFeature], false)
+        XCTAssertEqual(mockVPNManager.startCalled, 0)
     }
 
     // MARK: - Alert choices
@@ -263,7 +283,7 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         return subject
     }
 
-    private func dispatchChangeLocationAndWait(expectStart: Bool) async {
+    private func dispatchChangeLocationAndWait(countryCode: String, expectStart: Bool) async {
         let started = expectation(description: "VPN start attempted")
         started.isInverted = !expectStart
         mockVPNManager.onStart = { started.fulfill() }
@@ -272,8 +292,12 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         mockUserPreferences.onSetPreference = { preferenceSet.fulfill() }
         let subject = createSubject()
 
-        subject.vpnProvider.modernMiddleware(AppState(), VPNModernAction.changeLocation, firstWindowUUID)
-        await fulfillment(of: [started, preferenceSet], timeout: 0.2)
+        subject.vpnProvider.modernMiddleware(
+            AppState(),
+            VPNModernAction.changeLocation(countryCode: countryCode),
+            firstWindowUUID
+        )
+        await fulfillment(of: [started, preferenceSet], timeout: 1)
     }
 
     private func yieldAndWaitForDispatch(_ event: VPNEvent, subject: VPNMiddleware) async throws {

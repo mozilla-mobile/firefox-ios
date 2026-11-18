@@ -769,7 +769,7 @@ final class BrowserCoordinator: BaseCoordinator,
 
     func presentVPNSettings() {
         guard #available(iOS 17.0, *) else { return }
-        let vpnSettings = VPNSettingsViewController(windowUUID: windowUUID, prefs: profile.prefs)
+        let vpnSettings = VPNSettingsViewController(windowUUID: windowUUID)
         let navigationController = DismissableNavigationViewController(rootViewController: vpnSettings)
         setupSettingsSheetDetents(for: navigationController)
         navigationController.sheetPresentationController?.prefersGrabberVisible = true
