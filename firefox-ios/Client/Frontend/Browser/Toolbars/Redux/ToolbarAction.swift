@@ -17,7 +17,6 @@ struct ToolbarAction: Action {
     let searchTerm: String?
     let isPrivate: Bool?
     let isShowingNavigationToolbar: Bool?
-    let isShowingTopTabs: Bool?
     let canGoBack: Bool?
     let canGoForward: Bool?
     let canSummarize: Bool
@@ -38,7 +37,6 @@ struct ToolbarAction: Action {
          searchTerm: String? = nil,
          isPrivate: Bool? = nil,
          isShowingNavigationToolbar: Bool? = nil,
-         isShowingTopTabs: Bool? = nil,
          canGoBack: Bool? = nil,
          canGoForward: Bool? = nil,
          canSummarize: Bool = false,
@@ -63,7 +61,6 @@ struct ToolbarAction: Action {
         self.searchTerm = searchTerm
         self.isPrivate = isPrivate
         self.isShowingNavigationToolbar = isShowingNavigationToolbar
-        self.isShowingTopTabs = isShowingTopTabs
         self.canGoBack = canGoBack
         self.canGoForward = canGoForward
         self.readerModeState = readerModeState
@@ -126,6 +123,12 @@ enum ToolbarModernAction: ModernAction {
     /// always update the web view's own loading state.
     case websiteLoadingStateDidChange(isLoading: Bool)
 
+    /// The address bar was moved to the top or bottom of the screen.
+    case toolbarPositionChanged(position: SearchBarPosition)
+
+    /// The trait collection changed, which can change whether the navigation toolbar and the top tabs are shown.
+    case traitCollectionDidChange(isShowingNavigationToolbar: Bool, isShowingTopTabs: Bool)
+
     /// The menu button's warning badge changed, for example when the account needs the user's attention.
     case showMenuWarningBadge(isShown: Bool)
 
@@ -148,12 +151,10 @@ enum ToolbarModernAction: ModernAction {
 enum ToolbarActionType: ActionType {
     case didLoadToolbars
     case urlDidChange
-    case toolbarPositionChanged
     case didStartEditingUrl
     case cancelEdit
     case readerModeStateChanged
     case backForwardButtonStateChanged
-    case traitCollectionDidChange
     case searchEngineDidChange
     case googleLensSettingDidChange
     case didSummarizeSettingsChange

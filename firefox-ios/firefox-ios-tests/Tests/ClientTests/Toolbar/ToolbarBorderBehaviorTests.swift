@@ -133,7 +133,7 @@ final class ToolbarBorderBehaviorTests: XCTestCase {
     func testPositionChange_topToBottom_showsTopAddressBorderAndNoNavBorder() {
         loadBrowser(at: .top)
 
-        changePosition(to: .bottom, scrollY: 0)
+        changePosition(to: .bottom)
 
         assertBorders(position: .bottom, address: .top, nav: false)
     }
@@ -142,7 +142,7 @@ final class ToolbarBorderBehaviorTests: XCTestCase {
         loadBrowser(at: .bottom)
         scroll(toY: 100)
 
-        changePosition(to: .top, scrollY: 100)
+        changePosition(to: .top)
 
         assertBorders(position: .top, address: .bottom, nav: true)
     }
@@ -150,7 +150,7 @@ final class ToolbarBorderBehaviorTests: XCTestCase {
     func testPositionChange_bottomToTop_atTopOfPage_showsNoAddressBorderAndNavBorder() {
         loadBrowser(at: .bottom)
 
-        changePosition(to: .top, scrollY: 0)
+        changePosition(to: .top)
 
         assertBorders(position: .top, address: AddressToolbarBorderPosition.none, nav: true)
     }
@@ -159,7 +159,7 @@ final class ToolbarBorderBehaviorTests: XCTestCase {
         loadBrowser(at: .top)
         urlDidChange(isPrivate: true, scrollY: 0)
 
-        changePosition(to: .top, scrollY: 0)
+        changePosition(to: .top)
 
         assertBorders(position: .top, address: .bottom, nav: true)
     }
@@ -187,7 +187,7 @@ final class ToolbarBorderBehaviorTests: XCTestCase {
         loadBrowser(at: .top)
         showMicrosurvey()
 
-        changePosition(to: .bottom, scrollY: 0)
+        changePosition(to: .bottom)
 
         assertBorders(position: .bottom, address: AddressToolbarBorderPosition.none, nav: false)
     }
@@ -216,7 +216,7 @@ final class ToolbarBorderBehaviorTests: XCTestCase {
         scroll(toY: 100)
         showMicrosurvey()
 
-        changePosition(to: .top, scrollY: 100)
+        changePosition(to: .top)
 
         assertBorders(position: .top, address: .bottom, nav: false)
     }
@@ -291,12 +291,8 @@ final class ToolbarBorderBehaviorTests: XCTestCase {
                                                actionType: ToolbarMiddlewareActionType.urlDidChange))
     }
 
-    private func changePosition(to position: SearchBarPosition, scrollY: CGFloat) {
-        store.dispatch(GeneralBrowserMiddlewareAction(
-            scrollOffset: CGPoint(x: 0, y: scrollY),
-            toolbarPosition: position,
-            windowUUID: windowUUID,
-            actionType: GeneralBrowserMiddlewareActionType.toolbarPositionChanged))
+    private func changePosition(to position: SearchBarPosition) {
+        store.dispatch(ToolbarModernAction.toolbarPositionChanged(position: position), forWindowUUID: windowUUID)
     }
 
     private func showMicrosurvey() {
