@@ -55,22 +55,26 @@
 
   // Facing right with the feet on (x, y), roughly 140 × 65 units at s = 1
   // including the tail. `phase` drives the gallop, pose is 'run', 'jump' or
-  // 'hurt', and `tilt` leans the body nose-up by that many radians.
-  function fox(ctx, x, y, s, phase, pose, tilt = 0) {
+  // 'hurt', and `tilt` leans the body nose-up by that many radians. `air`
+  // blends a run or jump pose from the gallop (0) to the jump (1), so take-off
+  // and landing ease instead of snapping.
+  function fox(ctx, x, y, s, phase, pose, tilt = 0, air = pose === 'jump' ? 1 : 0) {
     ctx.save();
     ctx.translate(x, y);
     ctx.scale(s * KIT_SCALE, s * KIT_SCALE);
     ctx.translate(-KIT_X, -KIT_Y);
 
-    const running = pose === 'run';
-    const spread = running ? Math.cos(phase) : 1;
+    const hurt = pose === 'hurt';
+    const k = hurt ? 1 : air;
+    const gallop = Math.cos(phase);
+    const spread = hurt ? 1 : gallop + (1 - gallop) * k;
     const gather = (1 - spread) / 2;
-    const bob = running ? -Math.max(0, spread) * 18 : 0;
+    const bob = hurt ? 0 : -Math.max(0, gallop) * 18 * (1 - k);
     ctx.translate(1280, 735 + bob);
     ctx.rotate(-tilt);
     ctx.translate(-1280, -735);
 
-    const legs = kitLegs(phase, pose);
+    const legs = hurt ? kitLegs(phase, 'hurt') : blendLegs(kitLegs(phase, 'run'), kitLegs(phase, 'jump'), k);
     const hind = [1080 + 25 * gather, 800];
     const front = [1400 - 12 * gather, 815];
 
@@ -78,9 +82,13 @@
     kitLeg(ctx, [hind[0] + 20, hind[1] + 4], legs.farHind, true, KIT.farLeg, KIT.farLeg[0]);
 
     const tailBase = { x: 1100 + 25 * gather, y: 760 };
-    if (running) kitTail(ctx, tailBase, 0.06 * Math.cos(phase - 0.6), phase, 0.12);
-    else if (pose === 'jump') kitTail(ctx, tailBase, -0.08 - 0.5 * tilt, 1.2, 0.06);
-    else kitTail(ctx, tailBase, -0.25, 0.4, 0.08);
+    if (hurt) {
+      kitTail(ctx, tailBase, tailBend(-0.25, 0.4, 0.08));
+    } else {
+      const run = tailBend(0.06 * Math.cos(phase - 0.6), phase, 0.12);
+      const jump = tailBend(-0.08 - 0.5 * tilt, 1.2, 0.06);
+      kitTail(ctx, tailBase, (u) => run(u) + (jump(u) - run(u)) * k);
+    }
 
     kitEar(ctx, [1428, 690], [1433, 646], [1490, 696], KIT.ear);
     kitEar(ctx, [1398, 708], [1406, 648], [1448, 688], KIT.nearEar);
@@ -110,6 +118,16 @@
       return [0.2 + 0.8 * Math.cos(p), 0.15 + 1.1 * Math.max(0, -Math.sin(p))];
     };
     return { hind: hind(0), farHind: hind(0.5), front: front(0.2), farFront: front(0.7) };
+  }
+
+  function blendLegs(from, to, k) {
+    const mix = (a, b) => [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k];
+    return {
+      hind: mix(from.hind, to.hind),
+      farHind: mix(from.farHind, to.farHind),
+      front: mix(from.front, to.front),
+      farFront: mix(from.farFront, to.farFront),
+    };
   }
 
   function kitLeg(ctx, hip, [a, bend], isHind, colors, top) {
@@ -157,16 +175,21 @@
   ];
   const TAIL_LENGTH = 830;
 
-  // The tail grows from `base` backwards and up. It bends up by `lift`
-  // radians at the tip, and a ripple of strength `ripple` runs down it as
-  // `wave` advances.
-  function kitTail(ctx, base, lift, wave, ripple) {
+  // How far the tail bends at `u` (0 at the base, 1 at the tip): up by
+  // `lift` radians at the tip, with a ripple of strength `ripple` running
+  // down it as `wave` advances.
+  function tailBend(lift, wave, ripple) {
+    return (u) => lift * u + ripple * u * Math.sin(wave - 2.6 * u);
+  }
+
+  // The tail grows from `base` backwards and up, bent by `bendAt(u)`.
+  function kitTail(ctx, base, bendAt) {
     const shift = base.x - 1100;
     const bend = ([px, py, sharp]) => {
       const dx = px + shift - base.x;
       const dy = py - base.y;
       const u = Math.min(1, Math.hypot(dx, dy) / TAIL_LENGTH);
-      const a = lift * u + ripple * u * Math.sin(wave - 2.6 * u);
+      const a = bendAt(u);
       const cos = Math.cos(a);
       const sin = Math.sin(a);
       return { x: base.x + dx * cos - dy * sin, y: base.y + dx * sin + dy * cos, sharp };

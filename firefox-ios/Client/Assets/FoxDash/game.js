@@ -26,6 +26,7 @@
   const BOB_LOW = 19;
   const BOB_HIGH = 42;
   const HINT_TIME = 2.5;
+  const POSE_BLEND = 0.1;     // seconds to ease between the run and jump poses
 
   // Hitboxes as [x, y, radius] relative to the fox's feet. They skip the
   // tail and legs so near misses feel fair.
@@ -120,7 +121,7 @@
   const srand = (min, max) => min + rng() * (max - min);
 
   function reset(runSeed) {
-    fox = { h: 0, vy: 0, jumps: 0, buffer: 0, phase: 0 };
+    fox = { h: 0, vy: 0, jumps: 0, buffer: 0, phase: 0, air: 0, tilt: 0 };
     obstacles = [];
     shields = [];
     speed = START_SPEED;
@@ -426,6 +427,9 @@
     }
     fox.buffer = Math.max(0, fox.buffer - dt);
     if (fox.h === 0) fox.phase += dt * speed * 0.045;
+    // The tilt holds its landing value while `air` eases it back to level.
+    if (fox.h > 0) fox.tilt = clamp(fox.vy / JUMP_V, -1, 1) * 0.2;
+    fox.air = clamp(fox.air + (fox.h > 0 ? dt : -dt) / POSE_BLEND, 0, 1);
   }
 
   // How far apart a circle and the fox's hitbox are (negative = touching).
@@ -594,8 +598,7 @@
     }
 
     const pose = state === 'dying' || state === 'over' ? 'hurt' : fox.h > 0 ? 'jump' : 'run';
-    const tilt = fox.h > 0 ? clamp(fox.vy / JUMP_V, -1, 1) * 0.2 : 0;
-    Sprites.fox(ctx, foxX, groundY - fox.h, 1, fox.phase, pose, tilt);
+    Sprites.fox(ctx, foxX, groundY - fox.h, 1, fox.phase, pose, fox.tilt * fox.air, fox.air);
     if (ambient) ambient.draw(ctx, { width: viewW, height: viewH, scroll, clock });
     fx.draw(ctx);
 
