@@ -16,6 +16,8 @@ enum VPNEvent: Equatable {
     /// A pass was applied, either on start or rotation.
     case passUpdated(VPNProxyPass)
     case rotationFailed
+    /// Guardian refused a pass because the monthly bandwidth quota is used up.
+    case quotaExceeded(VPNProxyUsage?)
     /// The selected location had no usable server, so a fallback server was used instead.
     case selectedLocationUnavailable
 }
@@ -145,7 +147,13 @@ final class VPNManager: VPNRunnable {
             throw VPNError.tokenProviderUnavailable
         }
 
-        let pass = try await guardian.getPass()
+        let pass: VPNProxyPass
+        do {
+            pass = try await guardian.getPass()
+        } catch VPNAuthError.quotaExceeded(let usage) {
+            eventsContinuation.yield(.quotaExceeded(usage))
+            throw VPNAuthError.quotaExceeded(usage)
+        }
 
         guard let selection = await serverManager.selectServer(countryCode: countryCode, environment: environment) else {
             throw VPNError.noServerFound
@@ -210,6 +218,9 @@ final class VPNManager: VPNRunnable {
                         category: .vpn
                     )
                 }
+            } catch VPNAuthError.quotaExceeded(let usage) {
+                self?.logger.log("Pass rotation stopped: quota exceeded", level: .warning, category: .vpn)
+                self?.eventsContinuation.yield(.quotaExceeded(usage))
             } catch {
                 self?.logger.log(
                     "Pass rotation failed terminally, stopping rotation: \(error)",

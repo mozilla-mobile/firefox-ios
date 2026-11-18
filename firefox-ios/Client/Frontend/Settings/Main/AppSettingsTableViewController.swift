@@ -568,6 +568,8 @@ class AppSettingsTableViewController: SettingsTableViewController,
         hiddenDebugOptions.append(ClearVPNSessionSetting(settings: self))
         hiddenDebugOptions.append(ShowVPNFailureAlertSetting(settings: self))
         hiddenDebugOptions.append(ShowVPNDataLimitAlertSetting(settings: self))
+        // TODO: FXIOS-17399 Remove simulateQuotaExceeded debug hook after testing
+        hiddenDebugOptions.append(SimulateVPNQuotaExceededSetting(settings: self))
         hiddenDebugOptions.append(DeleteAppAttestKeySetting(settings: self))
         hiddenDebugOptions.append(InstallationDetailsSetting(settings: self))
         hiddenDebugOptions.append(ResetInstallationHistorySetting(settings: self))

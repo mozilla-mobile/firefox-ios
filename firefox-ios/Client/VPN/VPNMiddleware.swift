@@ -62,11 +62,16 @@ final class VPNMiddleware {
 
     private func handleVPNEvent(_ event: VPNEvent) {
         switch event {
-        case .passUpdated(let pass):
-            guard let usage = pass.usage, !usage.unlimited, usage.remaining <= 0 else { return }
-            dispatchAlert(.showDataLimitAlert(dataLimitBytes: usage.max))
+        case .passUpdated:
+            break
         case .rotationFailed:
             dispatchAlert(.showFailureAlert)
+        case .quotaExceeded(let usage):
+            guard let usage else {
+                dispatchAlert(.showFailureAlert)
+                return
+            }
+            dispatchAlert(.showDataLimitAlert(dataLimitBytes: usage.max))
         case .selectedLocationUnavailable:
             // TODO: FXIOS-17347 wire up location selection errors
             break

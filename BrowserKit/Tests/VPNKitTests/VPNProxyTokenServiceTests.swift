@@ -168,7 +168,12 @@ final class VPNProxyTokenServiceTests: XCTestCase {
             _ = try await subject.fetchProxyPass()
             XCTFail("Expected fetchProxyPass to throw when over quota.")
         } catch let error as VPNAuthError {
-            XCTAssertEqual(error, .quotaExceeded)
+            XCTAssertEqual(error, .quotaExceeded(VPNProxyUsage(
+                max: 5_368_709_120,
+                remaining: 0,
+                reset: resetDate,
+                unlimited: false
+            )))
             XCTAssertEqual(auth.refreshCallCount, 0, "Refreshing the session can't fix an exhausted quota")
         } catch {
             XCTFail("Unexpected error type: \(error)")

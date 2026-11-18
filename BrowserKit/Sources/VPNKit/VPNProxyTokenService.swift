@@ -76,7 +76,7 @@ public struct VPNProxyTokenService: VPNProxyTokenFetching {
         case 401:
             throw VPNAuthError.sessionRejected
         case 429:
-            throw VPNAuthError.quotaExceeded
+            throw VPNAuthError.quotaExceeded(VPNProxyUsage(response: response))
         default:
             try AppAttestServiceError.validate(response: response, data: data)
             return (data, response)

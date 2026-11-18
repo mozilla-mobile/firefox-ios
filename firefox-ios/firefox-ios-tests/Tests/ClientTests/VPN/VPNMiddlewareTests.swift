@@ -224,16 +224,10 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
 
     // MARK: - VPN events
 
-    func testPassUpdated_withNoDataRemaining_dispatchesDataLimitAlert() async throws {
+    func testPassUpdated_withNoDataRemaining_doesNotDispatch() async {
         let subject = createSubject()
 
-        try await yieldAndWaitForDispatch(.passUpdated(makePass(remaining: 0, unlimited: false)), subject: subject)
-
-        let action = try XCTUnwrap(mockStore.dispatchedModernActions.first as? VPNAlertModernAction)
-        guard case .showDataLimitAlert(let dataLimitBytes) = action else {
-            return XCTFail("Expected showDataLimitAlert, got \(action)")
-        }
-        XCTAssertEqual(dataLimitBytes, 1_000)
+        await yieldAndWaitForNoDispatch(.passUpdated(makePass(remaining: 0, unlimited: false)), subject: subject)
     }
 
     func testPassUpdated_withDataRemaining_doesNotDispatch() async {
