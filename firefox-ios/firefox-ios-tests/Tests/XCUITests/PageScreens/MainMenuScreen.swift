@@ -62,9 +62,17 @@ final class MainMenuScreen {
         BaseTestCase().mozWaitForElementToExist(settings)
     }
 
-    /// Only the badge icon changes with the state: green when Block Ads is on, yellow to orange when off.
+    /// The badge icon is a green checkmark when Block Ads is on, a yellow to orange cross when off.
     /// Green and yellow pixels are compared since the background can be saturated (purple in private mode).
     func assertAdBlockerBadgeIsOn(timeout: TimeInterval = TIMEOUT) {
+        assertAdBlockerBadge(isOn: true, timeout: timeout)
+    }
+
+    func assertAdBlockerBadgeIsOff(timeout: TimeInterval = TIMEOUT) {
+        assertAdBlockerBadge(isOn: false, timeout: timeout)
+    }
+
+    private func assertAdBlockerBadge(isOn: Bool, timeout: TimeInterval) {
         let badge = sel.AD_BLOCKER_BADGE.element(in: app)
         BaseTestCase().mozWaitForElementToExist(badge, timeout: timeout)
         let greenHues = 100.0...200.0
@@ -72,13 +80,16 @@ final class MainMenuScreen {
         let minimumIconShare = 0.005
         let predicate = NSPredicate { _, _ in
             let green = badge.shareOfPixels(inHueRange: greenHues)
-            return green > minimumIconShare && green > badge.shareOfPixels(inHueRange: yellowHues)
+            let yellow = badge.shareOfPixels(inHueRange: yellowHues)
+            let (expected, other) = isOn ? (green, yellow) : (yellow, green)
+            return expected > minimumIconShare && expected > other
         }
         let expectation = XCTNSPredicateExpectation(predicate: predicate, object: nil)
         guard XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed else {
             let green = String(format: "%.3f", badge.shareOfPixels(inHueRange: greenHues))
             let yellow = String(format: "%.3f", badge.shareOfPixels(inHueRange: yellowHues))
-            XCTFail("Expected the Ad Blocker badge icon to be green (ON), green share \(green), yellow share \(yellow)")
+            let state = isOn ? "green (ON)" : "yellow (OFF)"
+            XCTFail("Expected the Ad Blocker badge icon to be \(state), green share \(green), yellow share \(yellow)")
             return
         }
     }

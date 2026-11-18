@@ -620,17 +620,20 @@ class TrackingProtectionTests: BaseTestCase {
         app.launch()
         toolbarScreen.assertTabsButtonExists()
 
+        // Control: with Block Ads off, the badge in a private tab shows the OFF state
+        toolbarScreen.tapOnTabsButton()
+        tabTrayScreen.switchToPrivateMode()
+        openAdPublisherPageInNewPrivateTab()
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenuScreen.assertAdBlockerBadgeIsOff()
+        mainMenuScreen.closeMenu()
+
         // Precondition: Block Ads is ON
         enableBlockAdsFromMenu()
 
         // Step 1: a private tab loads the publisher page
         toolbarScreen.tapOnTabsButton()
-        tabTrayScreen.switchToPrivateMode()
-        tabTrayScreen.tapOnNewTabButton()
-        browserScreen.assertPrivateModeMessageCardExists()
-        browserScreen.openTypedURL(firstAdPublisherPage)
-        waitUntilPageLoad()
-        browserScreen.assertWebViewShowsText(containing: TestLabels.adPlacementsContent)
+        openAdPublisherPageInNewPrivateTab()
 
         // Step 2: the menu's Ad Blocker badge shows the ON state
         toolbarScreen.tapSettingsMenuButton()
@@ -639,6 +642,14 @@ class TrackingProtectionTests: BaseTestCase {
 
         // Step 3: the ad placements are removed
         browserScreen.assertAdPlacementsAre(hidden: true)
+    }
+
+    private func openAdPublisherPageInNewPrivateTab() {
+        tabTrayScreen.tapOnNewTabButton()
+        browserScreen.assertPrivateModeMessageCardExists()
+        browserScreen.openTypedURL(firstAdPublisherPage)
+        waitUntilPageLoad()
+        browserScreen.assertWebViewShowsText(containing: TestLabels.adPlacementsContent)
     }
 
     private func enableBlockAdsFromMenu() {
