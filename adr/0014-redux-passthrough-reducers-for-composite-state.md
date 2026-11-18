@@ -1,6 +1,6 @@
-# 14. Structure Redux to use Passthrough Reducers to Delegate Actions to Subcomponents
+# 15. Structure Redux to use Passthrough Reducers to Delegate Actions to Sub-reducers
 
-Date: 2026-10-06
+Date: 2026-11-17
 
 ## Status
 
