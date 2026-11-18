@@ -27,7 +27,7 @@
   const BOB_HIGH = 42;
   const HINT_TIME = 2.5;
   const POSE_BLEND = 0.1;     // seconds to ease between the run and jump poses
-  const TILT_EASE = 0.06;     // seconds for the lean to catch up with the climb
+  const TILT_SMOOTH = 0.1;    // seconds for the lean to settle on the climb angle
 
   // Hitboxes as [x, y, radius] relative to the fox's feet. They skip the
   // tail and legs so near misses feel fair.
@@ -122,7 +122,7 @@
   const srand = (min, max) => min + rng() * (max - min);
 
   function reset(runSeed) {
-    fox = { h: 0, vy: 0, jumps: 0, buffer: 0, phase: 0, air: 0, tilt: 0 };
+    fox = { h: 0, vy: 0, jumps: 0, buffer: 0, phase: 0, air: 0, tilt: 0, tiltV: 0 };
     obstacles = [];
     shields = [];
     speed = START_SPEED;
@@ -428,10 +428,23 @@
     }
     fox.buffer = Math.max(0, fox.buffer - dt);
     if (fox.h === 0) fox.phase += dt * speed * 0.045;
-    // The tilt eases toward the climb angle, so a double jump's sudden kick
-    // doesn't flip the nose, and holds its landing value while `air` levels it.
-    if (fox.h > 0) fox.tilt += (clamp(fox.vy / JUMP_V, -1, 1) * 0.2 - fox.tilt) * Math.min(1, dt / TILT_EASE);
+    // The lean follows the climb, and levels out on the ground, through a
+    // spring, so a double jump's kick or a landing never whips the tail.
+    const lean = fox.h > 0 ? clamp(fox.vy / JUMP_V, -1, 1) * 0.2 : 0;
+    [fox.tilt, fox.tiltV] = smoothDamp(fox.tilt, lean, fox.tiltV, TILT_SMOOTH, dt);
     fox.air = clamp(fox.air + (fox.h > 0 ? dt : -dt) / POSE_BLEND, 0, 1);
+  }
+
+  // Moves `value` toward `target` like a critically damped spring that
+  // settles in about `smoothTime` seconds. The velocity stays continuous, so
+  // a sudden jump in the target eases in instead of snapping, at any dt.
+  function smoothDamp(value, target, velocity, smoothTime, dt) {
+    const omega = 2 / smoothTime;
+    const x = omega * dt;
+    const decay = 1 / (1 + x + 0.48 * x * x + 0.235 * x * x * x);
+    const change = value - target;
+    const pull = (velocity + omega * change) * dt;
+    return [target + (change + pull) * decay, (velocity - omega * pull) * decay];
   }
 
   // How far apart a circle and the fox's hitbox are (negative = touching).
@@ -600,7 +613,7 @@
     }
 
     const pose = state === 'dying' || state === 'over' ? 'hurt' : fox.h > 0 ? 'jump' : 'run';
-    Sprites.fox(ctx, foxX, groundY - fox.h, 1, fox.phase, pose, fox.tilt * fox.air, fox.air);
+    Sprites.fox(ctx, foxX, groundY - fox.h, 1, fox.phase, pose, fox.tilt, fox.air);
     if (ambient) ambient.draw(ctx, { width: viewW, height: viewH, scroll, clock });
     fx.draw(ctx);
 
