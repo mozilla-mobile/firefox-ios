@@ -18,6 +18,7 @@ enum VPNEvent: Equatable {
     case rotationFailed
     /// Guardian refused a pass because the monthly bandwidth quota is used up.
     case quotaExceeded(VPNProxyUsage)
+    case connectionFailed
     /// The selected location had no usable server, so a fallback server was used instead.
     case selectedLocationUnavailable
 }
@@ -161,6 +162,17 @@ final class VPNManager: VPNRunnable {
     func start(countryCode: String?) async throws {
         isConnecting = true
         defer { isConnecting = false }
+        do {
+            try await connect(countryCode: countryCode)
+        } catch VPNAuthError.quotaExceeded(let usage) {
+            throw VPNAuthError.quotaExceeded(usage)
+        } catch {
+            eventsContinuation.yield(.connectionFailed)
+            throw error
+        }
+    }
+
+    private func connect(countryCode: String?) async throws {
         guard let guardian = self.guardian else {
             throw VPNError.tokenProviderUnavailable
         }

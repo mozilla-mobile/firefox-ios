@@ -262,3 +262,33 @@ final class SimulateVPNQuotaExceededSetting: HiddenSetting {
         settings.present(alert, animated: true)
     }
 }
+
+/// Shows the VPN location unavailable alert through the same Redux path `VPNMiddleware` uses.
+final class ShowVPNLocationUnavailableAlertSetting: HiddenSetting {
+    override var title: NSAttributedString? {
+        guard let theme else { return nil }
+        return NSAttributedString(
+            string: "VPN: Show Location Unavailable Alert",
+            attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]
+        )
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        store.dispatch(VPNAlertModernAction.showLocationUnavailableAlert, forWindowUUID: settings.windowUUID)
+    }
+}
+
+/// Shows the VPN connection failed alert through the same Redux path `VPNMiddleware` uses.
+final class ShowVPNConnectionFailedAlertSetting: HiddenSetting {
+    override var title: NSAttributedString? {
+        guard let theme else { return nil }
+        return NSAttributedString(
+            string: "VPN: Show Connection Failed Alert",
+            attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]
+        )
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        store.dispatch(VPNAlertModernAction.showConnectionFailedAlert, forWindowUUID: settings.windowUUID)
+    }
+}

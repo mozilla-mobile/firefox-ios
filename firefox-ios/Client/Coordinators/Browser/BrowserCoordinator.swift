@@ -1458,6 +1458,32 @@ final class BrowserCoordinator: BaseCoordinator,
         presentVPNAlert(alert)
     }
 
+    func showVPNLocationUnavailableAlert() {
+        guard vpnAlert == nil else { return }
+        let alert = UIAlertController(
+            title: .VPN.LocationPicker.LocationUnavailableTitle,
+            message: .VPN.LocationPicker.LocationUnavailableBody,
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: .VPN.LocationPicker.LocationUnavailableButtonText, style: .default))
+        presentVPNAlert(alert)
+    }
+
+    func showVPNConnectionFailedAlert() {
+        guard vpnAlert == nil else { return }
+        let alert = UIAlertController(
+            title: .VPN.ErrorConnectingPopup.Title,
+            message: .VPN.ErrorConnectingPopup.Body,
+            preferredStyle: .alert
+        )
+        let closeAction = UIAlertAction(title: .VPN.ErrorConnectingPopup.CloseButtonText, style: .default)
+        alert.addAction(closeAction)
+        alert.preferredAction = closeAction
+        addVPNAlertAction(to: alert, title: .VPN.ErrorConnectingPopup.RetryButtonText, action: .start)
+        alert.view.tintColor = themeManager.getCurrentTheme(for: windowUUID).colors.actionPrimary
+        presentVPNAlert(alert)
+    }
+
     private func addVPNAlertAction(
         to alert: UIAlertController,
         title: String,

@@ -71,9 +71,11 @@ final class VPNMiddleware {
             dispatchAlert(.showFailureAlert)
         case .quotaExceeded(let usage):
             dispatchAlert(.showDataLimitAlert(dataLimitBytes: usage.max))
+        case .connectionFailed:
+            userPreferences.setPreferenceFor(.vpnFeature, to: vpnManager?.isRunning ?? false)
+            dispatchAlert(.showConnectionFailedAlert)
         case .selectedLocationUnavailable:
-            // TODO: FXIOS-17347 wire up location selection errors
-            break
+            dispatchAlert(.showLocationUnavailableAlert)
         }
     }
 

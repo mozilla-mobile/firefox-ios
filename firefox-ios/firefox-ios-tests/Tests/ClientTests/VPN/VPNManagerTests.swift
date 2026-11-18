@@ -232,6 +232,16 @@ final class VPNManagerTests: XCTestCase {
         XCTAssertEqual(subject.selectedCountryCode, "DE")
     }
 
+    func testStart_whenSelectionFallsBack_savesFallbackCountry() async throws {
+        mockServerManager.didFallBack = true
+        let subject = createSubject()
+
+        try await subject.start(countryCode: "DE")
+
+        XCTAssertEqual(subject.selectedCountryCode, "US")
+        XCTAssertEqual(mockProfile.prefs.stringForKey(PrefsKeys.VPNSettings.selectedCountryCode), "US")
+    }
+
     // MARK: - events
 
     func testStart_emitsPassUpdated() async throws {
@@ -245,6 +255,17 @@ final class VPNManagerTests: XCTestCase {
             return XCTFail("Expected passUpdated, got \(String(describing: event))")
         }
         XCTAssertEqual(pass.bearerToken, "initial-token")
+    }
+
+    func testStart_whenStartFails_emitsConnectionFailed() async {
+        mockGuardian.passResult = .failure(URLError(.notConnectedToInternet))
+        let subject = createSubject()
+        var iterator = subject.events.makeAsyncIterator()
+
+        await assertStartThrows(subject)
+
+        let event = await iterator.next()
+        XCTAssertEqual(event, .connectionFailed)
     }
 
     func testPassRotation_emitsPassUpdated() async throws {
