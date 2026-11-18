@@ -7,6 +7,11 @@ import XCTest
 @testable import Client
 
 final class FoxDashThemeProviderTests: XCTestCase {
+    override func setUp() async throws {
+        try await super.setUp()
+        FxNimbus.shared.features.foxDashFeature.with { _ in FoxDashFeature() }
+    }
+
     override func tearDown() async throws {
         FxNimbus.shared.features.foxDashFeature.with { _ in FoxDashFeature() }
         try await super.tearDown()
