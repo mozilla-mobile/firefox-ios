@@ -128,8 +128,10 @@ struct AddressBarState: StateType, Sendable, Equatable {
         switch action {
         case .didKeyboardRequestChange(let shouldShow):
             return state.copy(shouldShowKeyboard: shouldShow)
+        case .cancelEdit(let url):
+            return handleCancelEditAction(state: state, url: url)
         case .cancelEditOnHomepage:
-            return handleCancelEditOnHomepageAction(state: state, windowUUID: actionWindowUUID)
+            return handleCancelEditOnHomepageAction(state: state)
         case .searchTermDidSet(let searchTerm):
             return handleSearchTermDidSetAction(state: state, searchTerm: searchTerm)
         case .lockIconChanged(let hasOnlySecureContent, let isWebsiteMode):
@@ -180,9 +182,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         case ToolbarActionType.didStartEditingUrl:
             return handleDidStartEditingUrlAction(state: state, action: action)
-
-        case ToolbarActionType.cancelEdit:
-            return handleCancelEditAction(state: state, action: action)
 
         case ToolbarActionType.didStartTyping:
             return handleDidStartTypingAction(state: state, action: action)
@@ -328,7 +327,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
     }
 
     @MainActor
-    private static func handleCancelEditOnHomepageAction(state: Self, windowUUID: WindowUUID) -> Self {
+    private static func handleCancelEditOnHomepageAction(state: Self) -> Self {
         guard state.url == nil else {
             // This case can occur when scrolling on homepage or in search view
             // and the user is still in isEditing mode (aka Cancel button is shown)
@@ -336,15 +335,12 @@ struct AddressBarState: StateType, Sendable, Equatable {
             return state.copy(shouldShowKeyboard: false)
         }
 
-        let cancelEditAction = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
-        return handleCancelEditAction(state: state, action: cancelEditAction)
+        return handleCancelEditAction(state: state, url: nil)
     }
 
     @MainActor
-    private static func handleCancelEditAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-
-        let url = toolbarAction.url ?? state.url
+    private static func handleCancelEditAction(state: Self, url: URL?) -> Self {
+        let url = url ?? state.url
         let isEmptySearch = url == nil
         // This action always leaves editing mode. Declared once and reused so the actions computed here
         // can never drift out of sync
