@@ -45,7 +45,6 @@ enum VPNConnectionFailureReason: String {
 
 enum VPNConnectionStartSource: String {
     case settings
-    case launchDefault = "launch_default"
 }
 
 enum VPNConnectionStopSource: String {

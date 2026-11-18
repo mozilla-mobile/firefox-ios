@@ -71,12 +71,12 @@ final class DefaultVPNTelemetryTests: XCTestCase {
         let event = GleanMetrics.Vpn.connectionStarted
         typealias EventExtrasType = GleanMetrics.Vpn.ConnectionStartedExtra
 
-        subject.recordConnectionFailed(source: .launchDefault, countryCode: "REC", error: .noServerFound)
+        subject.recordConnectionFailed(source: .settings, countryCode: "REC", error: .noServerFound)
 
         let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
         let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
         XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
-        XCTAssertEqual(savedExtras.source, "launch_default")
+        XCTAssertEqual(savedExtras.source, "settings")
         XCTAssertEqual(savedExtras.countryCode, "REC")
         XCTAssertEqual(savedExtras.error, "no_server_found")
         XCTAssertNil(savedExtras.isUsingFallback)

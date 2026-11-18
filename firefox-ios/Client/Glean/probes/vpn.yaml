@@ -24,9 +24,8 @@ vpn:
   connection_started:
     type: event
     description: |
-      Recorded when the VPN tries to connect, either because the user turned it
-      on or because the app reconnected it at launch. If `error` is set, the
-      connection failed. Changing location while the VPN is already connected
+      Recorded when the VPN tries to connect after the user turns it on. If
+      `error` is set, the connection failed. Changing location while the VPN is already connected
       is not recorded.
     extra_keys:
       country_code:
@@ -49,10 +48,8 @@ vpn:
       source:
         type: string
         description: |
-          What started the connection. One of `settings`, when the user turns
-          the VPN on in settings, or `launch_default`, when the app reconnects
-          at launch because the VPN was on before
-          (see `VPNConnectionStartSource`).
+          What started the connection. Currently always `settings`, when the
+          user turns the VPN on in settings (see `VPNConnectionStartSource`).
     bugs:
       - https://mozilla-hub.atlassian.net/browse/VPN-7852
     data_reviews:
