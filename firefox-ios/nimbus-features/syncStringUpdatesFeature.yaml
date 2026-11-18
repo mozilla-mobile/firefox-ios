@@ -8,3 +8,10 @@ features:
           Whether the updated sync strings are enabled
         type: Boolean
         default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: false
