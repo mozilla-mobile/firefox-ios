@@ -10,12 +10,7 @@ import WebKit
 /// Full screen host for the bundled Fox Dash game, with a single native close button.
 final class FoxDashViewController: UIViewController, Themeable {
     private enum UX {
-        static var closeButtonPadding: CGFloat {
-            if #available(iOS 26, *) {
-                return 18.0
-            }
-            return 12.0
-        }
+        static let closeButtonPadding: CGFloat = 18.0
     }
 
     // MARK: - Themeable
@@ -39,17 +34,9 @@ final class FoxDashViewController: UIViewController, Themeable {
             )
         )
         let webView = WKWebView(frame: .zero, configuration: configuration)
-        webView.translatesAutoresizingMaskIntoConstraints = false
         webView.scrollView.isScrollEnabled = false
         webView.scrollView.bounces = false
         webView.scrollView.contentInsetAdjustmentBehavior = .never
-
-        #if targetEnvironment(simulator)
-        // Allow Safari Web Inspector only when running in simulator.
-        if #available(iOS 16.4, *) {
-            webView.isInspectable = true
-        }
-        #endif
         return webView
     }()
 
@@ -66,7 +53,7 @@ final class FoxDashViewController: UIViewController, Themeable {
         $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.cross)?
             .withRenderingMode(.alwaysTemplate)
         $0.accessibilityLabel = .CloseButtonTitle
-        $0.scalesLargeContentImage = true
+        $0.largeContentTitle = .CloseButtonTitle
     }
 
     private lazy var closeButtonTopConstraint = closeButton.topAnchor.constraint(
@@ -103,13 +90,9 @@ final class FoxDashViewController: UIViewController, Themeable {
         super.viewDidLoad()
         view.addSubview(webView)
         view.addSubview(closeButton)
+        webView.pinToSuperview()
 
         NSLayoutConstraint.activate([
-            webView.topAnchor.constraint(equalTo: view.topAnchor),
-            webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-
             closeButton.leadingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.leadingAnchor,
                 constant: UX.closeButtonPadding
