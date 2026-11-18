@@ -4,7 +4,7 @@
 
 @testable import Client
 
-class MockFolderHierarchyFetcher: FolderHierarchyFetcher {
+class MockFolderHierarchyFetcher: FolderHierarchyFetcher, @unchecked Sendable {
     var fetchFoldersCalled = 0
     var mockFolderStructures = [Folder(title: "Example", guid: "123456", indentation: 0)]
 

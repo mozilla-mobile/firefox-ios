@@ -26,6 +26,11 @@ final class SearchScreen {
         BaseTestCase().mozWaitForElementToExist(text)
     }
 
+    func assertSearchSuggestionExists(containing text: String, timeout: TimeInterval = TIMEOUT) {
+        let suggestion = sel.suggestion(containing: text).element(in: app)
+        BaseTestCase().mozWaitForElementToExist(suggestion, timeout: timeout)
+    }
+
     func tapOnFirstCell() {
         searchTable.cells.firstMatch.waitAndTap()
     }

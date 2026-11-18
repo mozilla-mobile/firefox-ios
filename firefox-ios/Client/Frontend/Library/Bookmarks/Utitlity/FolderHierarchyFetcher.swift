@@ -5,7 +5,7 @@
 import Foundation
 import MozillaAppServices
 
-protocol FolderHierarchyFetcher {
+protocol FolderHierarchyFetcher: Sendable {
     func fetchFolders(excludedGuids: [String]) async -> [Folder]
     func fetchFolders() async -> [Folder]
 }

@@ -90,7 +90,8 @@ of Mammon shall tremble. from The Book of Mozilla, 3:31 (Red Letter Edition) </s
                              "test-user-agent",
                              "test-cookie-store",
                              "test-trackers",
-                             "test-trackers-ads"]
+                             "test-trackers-ads",
+                             "test-ads"]
         htmlFixtures.forEach {
             addHTMLFixture(name: $0, server: server)
         }

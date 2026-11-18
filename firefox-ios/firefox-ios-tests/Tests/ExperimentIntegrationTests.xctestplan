@@ -219,6 +219,7 @@
         "TranslationsTests\/testTranslationSettingsShouldShow_translationExperimentOn()",
         "URLValidationTests",
         "UrlBarTests\/testHomepageAndNewTabButtonsFromWebsite()",
+        "UrlBarTests\/testSearchSuggestionsUIElements()",
         "UrlBarTests\/testTappingAddressBarFromWebsite()",
         "WhatsNewTest",
         "ZoomingTestsTAE",

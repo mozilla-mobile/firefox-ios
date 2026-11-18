@@ -11,6 +11,7 @@ protocol TopSitesSelectorsSet {
     var TOPSITE_YOUTUBE: Selector { get }
     var PIN: Selector { get }
     var UNPIN: Selector { get }
+    var SHARE: Selector { get }
     var all: [Selector] { get }
 }
 
@@ -21,6 +22,7 @@ struct TopSitesSelectors: TopSitesSelectorsSet {
         static let youtube = "YouTube"
         static let pin = StandardImageIdentifiers.ExtraSmall.pin
         static let unpin = "Unpin"
+        static let share = "Share"
     }
 
     let TOP_SITE_ITEM_CELL = Selector.linkById(
@@ -53,12 +55,18 @@ struct TopSitesSelectors: TopSitesSelectorsSet {
         groups: ["homepage", "topsites"]
     )
 
+    let SHARE = Selector.buttonByLabel(
+        IDs.share,
+        description: "Share option in the top site context menu",
+        groups: ["homepage", "topsites"]
+    )
+
     var all: [Selector] {
         [
             TOP_SITE_ITEM_CELL,
             COLLECTION_VIEW,
             TOPSITE_YOUTUBE,
-            PIN, UNPIN
+            PIN, UNPIN, SHARE
         ]
     }
 }

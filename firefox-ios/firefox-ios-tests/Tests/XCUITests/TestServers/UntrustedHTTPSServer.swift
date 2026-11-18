@@ -14,24 +14,23 @@ final class UntrustedHTTPSServer: @unchecked Sendable {
 
     private static let identityPassword = "xcuitest"
     // Test-only P-256 key and self-signed certificate for 127.0.0.1 and localhost, valid until 2126.
-    // Never trusted anywhere, which is the point; regenerate with the commands in PR #36550.
+    // Never trusted anywhere, which is the point. Export with `openssl pkcs12 -export -legacy`:
+    // iOS 17 SecPKCS12Import rejects OpenSSL 3's default AES/SHA-256 encryption.
     private static let identityPKCS12 = """
-        MIIEdAIBAzCCBCIGCSqGSIb3DQEHAaCCBBMEggQPMIIECzCCAroGCSqGSIb3DQEHBqCCAqswggKnAgEAMIICoAYJKoZIhvcNAQcB
-        MF8GCSqGSIb3DQEFDTBSMDEGCSqGSIb3DQEFDDAkBBDuSuEvSrAeaUVWR/ZxXxndAgIIADAMBggqhkiG9w0CCQUAMB0GCWCGSAFl
-        AwQBKgQQZ0GNOJFV31bV1+HUseQSPYCCAjAcoJKdyH+nRJAkTzHNDuQAYC+0jwBJI4O8GPprm0UTSj7XCmqknkhPBY+TkNTAM9DC
-        HZLdCTR2e+XgoOSQBu8oZaPWkfhDAvB39Fx9gPjdFkxuWLT/AiVJbzwU3h/gKrLocxbJKZ4gHKIGMQjNlJVE8GpPALBww2fPBHdq
-        oga8oezJUCIgO2gGP9HVRfXNEQ89H13r4JjAgHx7ypZPUGqQ5VIxTXp8fxspfjdrCeLhl8pjQSqaF6WS27LB17vUgifo5Fd4C1YL
-        UIp26yOvCnvO+Iq5hRlsKiQIZ0sngnicXuUx4D12PjmO7RdwzftMULcVeGHfkeSjcffVR2pzZh+e5OG16Wz1BMQffat2H+ryCml2
-        g7CU7HPY37QJikrv/+deDQBylMGMoyYJ+bvTi8wzKNJWus8nvsc/Fr3rfLNxxMYqlLrAU0WwdKhlN3hkZfkBpaK8lCknO4nbtSy8
-        tLEliL10kRuNMaNThEeXc16/mNZZVnsVWMy7Oxra0dk/SEltzs1WRX+ZanrsoHQ46lqgrdsRh2uH56B3c00lQFubjM1VFUNKFRQm
-        hPG9DjJZJ8goCuK7vVu/4+nKKSMdDiLMVvNByn2e+F/1INEV95ST0MvrdrgwyxStJ44mHpP/NmHr/opDhjRTA2Fdi4/ZddbKYyHq
-        9zUaZUhaGpV8Pu0sDoqDXts8XovPxaFJoGFWYJ9iOZjDqZdxP01UttkUyw5Y2iqi5XZy7Q/0p7bipDI+VjCCAUkGCSqGSIb3DQEH
-        AaCCAToEggE2MIIBMjCCAS4GCyqGSIb3DQEMCgECoIH3MIH0MF8GCSqGSIb3DQEFDTBSMDEGCSqGSIb3DQEFDDAkBBD1ukwFxCI/
-        fOKxcq85quKAAgIIADAMBggqhkiG9w0CCQUAMB0GCWCGSAFlAwQBKgQQQ73W+N8JFAhSbDA/WtPdTgSBkNqHEjZ3WUnZ24pjvkb6
-        U+jnJqGpv4FX+C3SBg4g9Wy7hejXV8DVM/lIjQSsw53vxr6tf6jWHuL23lXU0TRw/VCbm3V7aHRKf4PC7NhAsYT/3FOyMofMpfBE
-        +LaahDcjMx2rJbG1fG65nK30fD3fIxtrfft7hAvaIgylbpGsbe5kQp6uY9aX8+ZaN2Jwdy8mLTElMCMGCSqGSIb3DQEJFTEWBBRi
-        VqVYCMdxQI9TnxRo5FTy4PpbujBJMDEwDQYJYIZIAWUDBAIBBQAEIC6N97/MLc9Pd6afgBf0TL7+gt1+Wsk1FMQqdNAYI+8HBBDP
-        37RG1U9fjLOKdP2aYAZTAgIIAA==
+        MIID0gIBAzCCA5AGCSqGSIb3DQEHAaCCA4EEggN9MIIDeTCCAm8GCSqGSIb3DQEHBqCCAmAwggJcAgEAMIICVQYJKoZIhvcNAQcB
+        MBwGCiqGSIb3DQEMAQMwDgQIWWaUNGuLSXwCAggAgIICKHBpjoHqMt0pbZI5gxXHIlZpPdijcxknbNqG3e5nZY5CzXV4Gmz4pNRP
+        Ukyp6eGSS6hJYebMmRFYkR2TE2pPkUBzoT1Z9UYldIlDMsARpHSC9vMJoAjAD9INznLZvDPzT5aOeIDobOung06dDJg3JFkzqFPE
+        62rFoRlvuTZ1wVAtTcSOWbEwHofpG68Yzf42Fx+R702XsEtst0okMF3dkOHIT67M7JR8nvI0aoJqFW2bpiF2rHYDCSeMCbQnIh95
+        Cvb7XUiXCCPSs4gEekrpEhXNv0IPBI5aOJpweVLR+GRfYO7SpCxCda3mgwVZ5IAPsiUyBz3KsTqkz3v0XHOUJrOCGzcMUiAE938t
+        IoGKFxy5/0DWdOhvg7Nu+TBhB8GrQ43bkLy1P7guGrwJJQqTx5IdtdVfD1c1ZQDv1aY6fo7MwSKyUu7g8pKO+Bgc0cRf2kryBhYv
+        gEhmebf/6JvzBWgGsxVfkoSecoqgk1VjxaRg0iCy8MP2q1BtV/NlIHkB2MvvIaNK5wdDIDynvLYUWCziK+4i0DCzl/3HytireWVS
+        qN31ARHmt9hVZnw1AmclHgycQhqPlYdx91gV2ODMf4BXTVhIzdhWSHbsFkN+dV3bImFamN4CWys3JdHAAd/a7M8c6sqMNHk89zHK
+        0TZUTzBfsxMnkoJfmmdjQ3d9/DC6vEmxs/Q0FUJ4ZuhNYaB2b5iVTgTlb3cUBmbdUo848Ze7EDIftg7t/zCCAQIGCSqGSIb3DQEH
+        AaCB9ASB8TCB7jCB6wYLKoZIhvcNAQwKAQKggbQwgbEwHAYKKoZIhvcNAQwBAzAOBAhcQJE7Laq9tAICCAAEgZCZgSRerxPyF2A7
+        2IBwPdjE8PmZ6aEME1T0OrV2z/AZ6rlob62i0gCWUtSuYMrSBskzb+JS+/mzCt9mutdGiXrHtWL7lYwty4NNAsWCghurSV0yQ6hc
+        9gekmFN+dhckQ49xQI2+eRQO2KXXp3VYkhZUyBiq5jsrxKF663T2k6CCUWb7Ey5AezdYEeaHphLUJWgxJTAjBgkqhkiG9w0BCRUx
+        FgQUYlalWAjHcUCPU58UaORU8uD6W7owOTAhMAkGBSsOAwIaBQAEFLmegFo9wf1C7h0oIIVX5k2xyZUgBBD1usmygnvmdygBjejb
+        BywJAgIIAA==
         """
 
     private let listener: NWListener

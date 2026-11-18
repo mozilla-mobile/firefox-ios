@@ -9,6 +9,12 @@ import XCTest
 let websiteWithBlockedElements = "twitter.com"
 let differentWebsite = path(forTestPage: TestPages.exampleHTML)
 let trackingProtectionTestUrl = "https://senglehardt.com/test/trackingprotection/test_pages/"
+// The Block Ads list exempts localhost, so the ad page is served through wildcard loopback hosts,
+// which need public DNS. They stand in for the cnn.com and espn.com pages of the TestRail cases
+private let firstAdPublisherHost = "lvh.me"
+private let secondAdPublisherHost = "localtest.me"
+private let firstAdPublisherPage = "http://\(firstAdPublisherHost):\(serverPort)/test-fixture/\(TestPages.adPlacements)"
+private let secondAdPublisherPage = "http://\(secondAdPublisherHost):\(serverPort)/test-fixture/\(TestPages.adPlacements)"
 
 // Selectors
 let buttonSettings = "Settings"
@@ -23,6 +29,7 @@ class TrackingProtectionTests: BaseTestCase {
     var toolbarScreen: ToolbarScreen!
     var mainMenuScreen: MainMenuScreen!
     var websiteDataScreen: WebsiteDataScreen!
+    var tabTrayScreen: TabTrayScreen!
 
     override func setUp() async throws {
         try await super.setUp()
@@ -32,6 +39,7 @@ class TrackingProtectionTests: BaseTestCase {
         toolbarScreen = ToolbarScreen(app: app)
         mainMenuScreen = MainMenuScreen(app: app)
         websiteDataScreen = WebsiteDataScreen(app: app)
+        tabTrayScreen = TabTrayScreen(app: app)
     }
 
     override func tearDown() async throws {
@@ -575,5 +583,81 @@ class TrackingProtectionTests: BaseTestCase {
                 secureTrackingProtectionOnLabel
             )
         }
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/4162777
+    // Regression
+    func testBlockAdsAppliesToNewlyOpenedPublisherTabs() {
+        // Control: with Block Ads off, the ad placements of the local publisher page are shown
+        launchOpening(firstAdPublisherPage)
+        browserScreen.assertAdPlacementsAre(hidden: false)
+
+        // Precondition: Block Ads is ON
+        enableBlockAdsFromMenu()
+
+        // Step 1: a new tab with the first publisher page loads with its ad placements removed
+        toolbarScreen.tapOnNewTabButton()
+        browserScreen.dismissMicrosurveyIfExists()
+        browserScreen.openTypedURL(firstAdPublisherPage)
+        waitUntilPageLoad()
+        browserScreen.assertAdPlacementsAre(hidden: true)
+
+        // Step 2: the second publisher page loads with its ad placements removed
+        browserScreen.openTypedURL(secondAdPublisherPage)
+        waitUntilPageLoad()
+        browserScreen.assertAddressBarContains(value: secondAdPublisherHost)
+        browserScreen.assertAdPlacementsAre(hidden: true)
+
+        // The ad placements stay removed on the first page
+        browserScreen.tapBackButton()
+        browserScreen.assertAddressBarContains(value: firstAdPublisherHost)
+        browserScreen.assertAdPlacementsAre(hidden: true)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/4162784
+    // Regression
+    func testAdBlockerBadgeAndBlockingInPrivateBrowsing() {
+        app.launch()
+        toolbarScreen.assertTabsButtonExists()
+
+        // Control: with Block Ads off, the badge in a private tab shows the OFF state
+        toolbarScreen.tapOnTabsButton()
+        tabTrayScreen.switchToPrivateMode()
+        openAdPublisherPageInNewPrivateTab()
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenuScreen.assertAdBlockerBadgeIsOff()
+        mainMenuScreen.closeMenu()
+
+        // Precondition: Block Ads is ON
+        enableBlockAdsFromMenu()
+
+        // Step 1: a private tab loads the publisher page
+        toolbarScreen.tapOnTabsButton()
+        openAdPublisherPageInNewPrivateTab()
+
+        // Step 2: the menu's Ad Blocker badge shows the ON state
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenuScreen.assertAdBlockerBadgeIsOn()
+        mainMenuScreen.closeMenu()
+
+        // Step 3: the ad placements are removed
+        browserScreen.assertAdPlacementsAre(hidden: true)
+    }
+
+    private func openAdPublisherPageInNewPrivateTab() {
+        tabTrayScreen.tapOnNewTabButton()
+        browserScreen.assertPrivateModeMessageCardExists()
+        browserScreen.openTypedURL(firstAdPublisherPage)
+        waitUntilPageLoad()
+        browserScreen.assertWebViewShowsText(containing: TestLabels.adPlacementsContent)
+    }
+
+    private func enableBlockAdsFromMenu() {
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenuScreen.tapSettings()
+        settingsScreen.openBrowsingSettings()
+        settingsScreen.enableAdBlocker()
+        settingsScreen.tapBackToSettings()
+        settingsScreen.closeSettingsWithDoneButton()
     }
 }

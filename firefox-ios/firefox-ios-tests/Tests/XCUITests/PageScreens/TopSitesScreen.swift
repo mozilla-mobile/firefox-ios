@@ -131,6 +131,16 @@ final class TopSitesScreen {
         sel.UNPIN.element(in: app).waitAndTap()
     }
 
+    func longPressOnFirstSite(duration: TimeInterval = 1.5) {
+        let firstSite = collectionView.links.element(boundBy: 0)
+        BaseTestCase().mozWaitForElementToExist(firstSite)
+        firstSite.press(forDuration: duration)
+    }
+
+    func tapShare() {
+        sel.SHARE.element(in: app).waitAndTap()
+    }
+
     func assertYoutubeTopSitesNotExist() {
         BaseTestCase().mozWaitForElementToNotExist(sel.TOP_SITE_ITEM_CELL.element(in: app))
         BaseTestCase().mozWaitForElementToNotExist(sel.TOPSITE_YOUTUBE.element(in: app))

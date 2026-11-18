@@ -397,23 +397,6 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionCalled.middleButton, .home)
     }
 
-    func testToolbarPositionChanged_dispatchesToolbarPositionChanged() throws {
-        let subject = createSubject()
-        let action = GeneralBrowserMiddlewareAction(
-            toolbarPosition: .bottom,
-            windowUUID: windowUUID,
-            actionType: GeneralBrowserMiddlewareActionType.toolbarPositionChanged)
-
-        subject.toolbarProvider.legacyMiddleware(mockStore.state, action)
-
-        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
-        let actionType = try XCTUnwrap(actionCalled.actionType as? ToolbarActionType)
-
-        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
-        XCTAssertEqual(actionType, ToolbarActionType.toolbarPositionChanged)
-        XCTAssertEqual(actionCalled.toolbarPosition, action.toolbarPosition)
-    }
-
     func testLoadSummary_whenWebViewIsNil_doesntDispatchToolbarAction() {
         setIsHostedSummaryEnabled(true)
         let subject = createSubject()

@@ -664,12 +664,8 @@ class BrowserViewController: UIViewController,
         updateToolbarDisplay()
         addOrUpdateMaskViewIfNeeded()
 
-        let action = GeneralBrowserMiddlewareAction(
-            scrollOffset: scrollController.contentOffset,
-            toolbarPosition: effectiveSearchBarPosition,
-            windowUUID: windowUUID,
-            actionType: GeneralBrowserMiddlewareActionType.toolbarPositionChanged)
-        store.dispatch(action)
+        store.dispatch(ToolbarModernAction.toolbarPositionChanged(position: effectiveSearchBarPosition),
+                       forWindowUUID: windowUUID)
         updateSwipingTabs()
 
         searchController?.viewModel.updateBottomSearchBarState(isBottomSearchBar: isBottomSearchBar)
@@ -3171,13 +3167,11 @@ class BrowserViewController: UIViewController,
               toolbarState.isShowingTopTabs != showTopTabs || toolbarState.isShowingNavigationToolbar != showNavToolbar
         else { return }
 
-        let action = ToolbarAction(
-            isShowingNavigationToolbar: showNavToolbar,
-            isShowingTopTabs: showTopTabs,
-            windowUUID: windowUUID,
-            actionType: ToolbarActionType.traitCollectionDidChange
+        store.dispatch(
+            ToolbarModernAction.traitCollectionDidChange(isShowingNavigationToolbar: showNavToolbar,
+                                                         isShowingTopTabs: showTopTabs),
+            forWindowUUID: windowUUID
         )
-        store.dispatch(action)
     }
 
     func dispatchAvailableContentHeightChangedAction() {

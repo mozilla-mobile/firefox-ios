@@ -527,17 +527,27 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             initialState,
-            ToolbarAction(
-                toolbarPosition: .bottom,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.toolbarPositionChanged
-            )
+            ToolbarModernAction.toolbarPositionChanged(position: .bottom),
+            windowUUID
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.toolbarPosition, .bottom)
+    }
+
+    func test_toolbarPositionChangedAction_fromAnotherWindow_doesNotChangeState() {
+        let initialState = createSubject()
+        let reducer = toolbarReducer()
+
+        let newState = reducer.modernReducer(
+            initialState,
+            ToolbarModernAction.toolbarPositionChanged(position: .bottom),
+            WindowUUID()
+        )
+
+        XCTAssertEqual(newState.toolbarPosition, initialState.toolbarPosition)
     }
 
     func test_readerModeStateChangedAction_onHomepage_returnsExpectedState() {
@@ -598,19 +608,29 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             initialState,
-            ToolbarAction(
-                isShowingNavigationToolbar: false,
-                isShowingTopTabs: true,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.traitCollectionDidChange
-            )
+            ToolbarModernAction.traitCollectionDidChange(isShowingNavigationToolbar: false, isShowingTopTabs: true),
+            windowUUID
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertFalse(newState.isShowingNavigationToolbar)
         XCTAssertTrue(newState.isShowingTopTabs)
+    }
+
+    func test_traitCollectionDidChangeAction_fromAnotherWindow_doesNotChangeState() {
+        let initialState = createSubject()
+        let reducer = toolbarReducer()
+
+        let newState = reducer.modernReducer(
+            initialState,
+            ToolbarModernAction.traitCollectionDidChange(isShowingNavigationToolbar: false, isShowingTopTabs: true),
+            WindowUUID()
+        )
+
+        XCTAssertEqual(newState.isShowingNavigationToolbar, initialState.isShowingNavigationToolbar)
+        XCTAssertEqual(newState.isShowingTopTabs, initialState.isShowingTopTabs)
     }
 
     func test_navigationHintAvailabilityChangedAction_canShow_returnsExpectedState() {

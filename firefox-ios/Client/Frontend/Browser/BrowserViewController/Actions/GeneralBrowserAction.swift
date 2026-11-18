@@ -107,6 +107,5 @@ struct GeneralBrowserMiddlewareAction: Action {
 
 enum GeneralBrowserMiddlewareActionType: ActionType {
     case browserDidLoad
-    case toolbarPositionChanged
     case websiteDidScroll
 }

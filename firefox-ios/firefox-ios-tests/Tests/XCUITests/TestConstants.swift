@@ -14,6 +14,7 @@ enum TestPages {
     static let windowOpenOnTap = "test-window-open-on-tap.html"
     static let trackers = "test-trackers.html"
     static let advertisingTrackerOnly = "test-trackers-ads.html"
+    static let adPlacements = "test-ads.html"
 }
 
 enum TestLabels {
@@ -21,4 +22,6 @@ enum TestLabels {
     static let exampleDomains = "Example Domains"
     static let mozillaBook = "The Book of Mozilla"
     static let trackers = "Tracker test page"
+    static let adPlacementsContent = "Ad test article content"
+    static let adPlacements = ["Ad top placement", "Ad skyscraper placement"]
 }

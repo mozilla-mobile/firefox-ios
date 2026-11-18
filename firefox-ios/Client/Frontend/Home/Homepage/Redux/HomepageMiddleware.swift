@@ -46,7 +46,7 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
 
         switch action {
         // FIXME: FXIOS-17387 cancelEdit doesn't fire when scrolling mid edit (cancelEditOnHomepage)
-        case .cancelEdit:
+        case .cancelEdit, .toolbarPositionChanged:
             dispatchSearchBarConfigurationAction(state: state, windowUUID: windowUUID)
         default:
             break
@@ -92,7 +92,6 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
             self.handleNotificationCardDismissed(action: action)
 
         case HomepageActionType.viewWillTransition, HomepageActionType.viewWillAppear,
-            ToolbarActionType.toolbarPositionChanged,
             GeneralBrowserActionType.navigateBack,
             GeneralBrowserActionType.didCloseTabFromToolbar:
             self.dispatchSearchBarConfigurationAction(state: state, windowUUID: action.windowUUID)

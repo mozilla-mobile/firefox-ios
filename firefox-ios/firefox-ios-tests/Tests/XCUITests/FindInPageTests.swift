@@ -200,8 +200,7 @@ class FindInPageTests: BaseTestCase {
         if !iPad() {
             app.webViews.element(boundBy: 0).waitAndTap()
         }
-        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
-        urlBarAddress.typeText("\n")
+        browserScreen.submitAddressBar()
 
         // Once the page is reloaded the search bar should not appear
         if #available(iOS 16, *) {
