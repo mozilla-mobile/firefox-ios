@@ -118,6 +118,14 @@ final class FoxDashViewController: UIViewController, Themeable {
         webView.loadFileURL(indexURL, allowingReadAccessTo: indexURL.deletingLastPathComponent())
     }
 
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        guard isBeingDismissed || isMovingFromParent else { return }
+        webView.configuration.userContentController.removeScriptMessageHandler(
+            forName: FoxDashBestScoreStore.messageHandlerName
+        )
+    }
+
     override func viewSafeAreaInsetsDidChange() {
         super.viewSafeAreaInsetsDidChange()
         updateCloseButtonTopPadding()
