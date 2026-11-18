@@ -18,8 +18,7 @@ struct PrivacyNoticeHelper: PrivacyNoticeHelperProtocol {
         let isDebugOverride = prefs.boolForKey(PrefsKeys.PrivacyNotice.privacyNoticeUpdateDebugOverride) ?? false
         if isDebugOverride { return UInt64(Date().timeIntervalSince1970 * 1000) }
 
-        let timestamp = nimbus.features.touFeature.value().notificationTimestamp
-        return UInt64(timestamp)
+        return UInt64(nimbus.features.touFeature.value().notificationTimestamp)
     }
 
     private let prefs: Prefs
