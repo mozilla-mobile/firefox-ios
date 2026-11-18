@@ -145,7 +145,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
             topSitesCells.staticTexts["Mozilla — Internet for people, not profit"].press(forDuration: 1)
         }
 
-        selectOptionFromUIMenu(option: "Pin")
+        selectOptionFromUIMenu(identifier: AccessibilityIdentifiers.FirefoxHomepage.TopSites.ContextMenu.pin)
         if #available(iOS 15, *) {
             mozWaitForElementToExist(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
         } else {
@@ -183,7 +183,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         // Remove facebook top sites, first cell
         mozWaitForElementToExist(allTopSites.element(boundBy: 0))
         allTopSites.element(boundBy: 0).press(forDuration: 1)
-        selectOptionFromUIMenu(option: "Remove")
+        selectOptionFromUIMenu(identifier: AccessibilityIdentifiers.FirefoxHomepage.TopSites.ContextMenu.remove)
         if #unavailable(iOS 16) {
             mozWaitForElementToNotExist(app.staticTexts[topSiteFirstCell])
         }
@@ -216,7 +216,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         // Long press on the Wikipedia top site using the screen object
         topSites.longPressOnSite(named: "Wikipedia")
         // Open the private tab using the context menu screen object
-        selectOptionFromUIMenu(option: "Open in a Private Tab")
+        selectOptionFromUIMenu(identifier: AccessibilityIdentifiers.FirefoxHomepage.TopSites.ContextMenu.openInPrivateTab)
         // Assert the homepage is visible again after the context menu action
         topSites.assertVisible()
         // Toggle private mode and navigate to the Tab Tray
@@ -244,7 +244,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         // Long tap on the default Top Site
         let siteName = defaultTopSite["bookmarkLabel"]!
         topSites.longPressOnSite(named: siteName)
-        selectOptionFromUIMenu(option: "Open in a Private Tab")
+        selectOptionFromUIMenu(identifier: AccessibilityIdentifiers.FirefoxHomepage.TopSites.ContextMenu.openInPrivateTab)
         navigator.nowAt(HomePanelsScreen)
         BaseTestCase().waitForTabsButton()
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
@@ -271,8 +271,8 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
             app.collectionViews.links.staticTexts["Wikipedia"].press(forDuration: 1)
             waitForElementsToExist(
                 [
-                    app.buttons["Open in New Tab"],
-                    app.buttons["Open in a Private Tab"]
+                    app.buttons[AccessibilityIdentifiers.FirefoxHomepage.TopSites.ContextMenu.openInNewTab],
+                    app.buttons[AccessibilityIdentifiers.FirefoxHomepage.TopSites.ContextMenu.openInPrivateTab]
                 ]
             )
             // Go back to portrait mode
@@ -288,10 +288,10 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         // Verify options given
         waitForElementsToExist(
             [
-                app.buttons["Pin"],
-                app.buttons["Open in New Tab"],
-                app.buttons["Open in a Private Tab"],
-                app.buttons["Remove"]
+                app.buttons[AccessibilityIdentifiers.FirefoxHomepage.TopSites.ContextMenu.pin],
+                app.buttons[AccessibilityIdentifiers.FirefoxHomepage.TopSites.ContextMenu.openInNewTab],
+                app.buttons[AccessibilityIdentifiers.FirefoxHomepage.TopSites.ContextMenu.openInPrivateTab],
+                app.buttons[AccessibilityIdentifiers.FirefoxHomepage.TopSites.ContextMenu.remove]
             ]
         )
     }

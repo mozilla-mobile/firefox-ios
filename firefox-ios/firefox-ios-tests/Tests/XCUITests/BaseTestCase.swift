@@ -517,8 +517,8 @@ class BaseTestCase: XCTestCase {
         mozWaitForElementToNotExist(app.tables["Context Menu"])
     }
 
-    func selectOptionFromUIMenu(option: String) {
-        let button = app.buttons[option]
+    func selectOptionFromUIMenu(identifier: String) {
+        let button = app.buttons[identifier]
         button.waitAndTap()
         mozWaitForElementToNotExist(button)
     }

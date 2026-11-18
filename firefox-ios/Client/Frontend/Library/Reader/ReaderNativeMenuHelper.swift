@@ -8,6 +8,8 @@ import Storage
 
 @MainActor
 final class ReaderNativeMenuHelper {
+    private typealias A11y = AccessibilityIdentifiers.LibraryPanels.ReadingListPanel.ContextMenu
+
     private weak var libraryPanelDelegate: LibraryPanelDelegate?
     private weak var navigationHandler: ReadingListNavigationHandler?
 
@@ -29,40 +31,48 @@ final class ReaderNativeMenuHelper {
     }
 
     private func getOpenInNewTabAction(url: URL) -> UIAction {
-        UIAction(
+        let action = UIAction(
             title: .OpenInNewTabContextMenuTitle,
             image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus)
         ) { [weak libraryPanelDelegate] _ in
             libraryPanelDelegate?.libraryPanelDidRequestToOpenInNewTab(url, isPrivate: false)
         }
+        action.accessibilityIdentifier = A11y.openInNewTab
+        return action
     }
 
     private func getOpenInPrivateTabAction(url: URL) -> UIAction {
-        UIAction(
+        let action = UIAction(
             title: .OpenInNewPrivateTabContextMenuTitle,
             image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.privateMode)
         ) { [weak libraryPanelDelegate] _ in
             libraryPanelDelegate?.libraryPanelDidRequestToOpenInNewTab(url, isPrivate: true)
         }
+        action.accessibilityIdentifier = A11y.openInPrivateTab
+        return action
     }
 
     private func getRemoveAction(onRemove: @escaping () -> Void) -> UIAction {
-        UIAction(
+        let action = UIAction(
             title: .RemoveContextMenuTitle,
             image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross),
             attributes: .destructive
         ) { _ in
             onRemove()
         }
+        action.accessibilityIdentifier = A11y.remove
+        return action
     }
 
     private func getShareAction(url: URL, sourceView: UIView) -> UIAction {
-        UIAction(
+        let action = UIAction(
             title: .ShareContextMenuTitle,
             image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.shareApple)
         ) { [weak navigationHandler, weak sourceView] _ in
             guard let sourceView else { return }
             navigationHandler?.shareLibraryItem(url: url, sourceView: sourceView)
         }
+        action.accessibilityIdentifier = A11y.share
+        return action
     }
 }

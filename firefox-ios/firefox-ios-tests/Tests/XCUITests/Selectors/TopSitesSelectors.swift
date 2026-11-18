@@ -21,8 +21,8 @@ struct TopSitesSelectors: TopSitesSelectorsSet {
         static let itemCell = AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell
         static let youtube = "YouTube"
         static let pin = StandardImageIdentifiers.ExtraSmall.pin
-        static let unpin = "Unpin"
-        static let share = "Share"
+        static let unpin = AccessibilityIdentifiers.FirefoxHomepage.TopSites.ContextMenu.unpin
+        static let share = AccessibilityIdentifiers.FirefoxHomepage.TopSites.ContextMenu.share
     }
 
     let TOP_SITE_ITEM_CELL = Selector.linkById(
@@ -49,13 +49,13 @@ struct TopSitesSelectors: TopSitesSelectorsSet {
         groups: ["homepage", "topsites"]
     )
 
-    let UNPIN = Selector.buttonByLabel(
+    let UNPIN = Selector.buttonId(
         IDs.unpin,
         description: "Unpin option in the top site context menu",
         groups: ["homepage", "topsites"]
     )
 
-    let SHARE = Selector.buttonByLabel(
+    let SHARE = Selector.buttonId(
         IDs.share,
         description: "Share option in the top site context menu",
         groups: ["homepage", "topsites"]
