@@ -1119,6 +1119,19 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertEqual(mockRouter.dismissCalled, 1)
     }
 
+    func test_showFoxDash_recordsHomepageItemTapped() throws {
+        typealias ExtraType = GleanMetrics.Homepage.ItemTappedExtra
+        let subject = createSubject()
+
+        subject.showFoxDash()
+
+        let recorded = glean.savedExtras.compactMap { $0 as? ExtraType }
+        let savedExtras = try XCTUnwrap(recorded.first)
+        XCTAssertEqual(recorded.count, 1)
+        XCTAssertEqual(savedExtras.section, "header")
+        XCTAssertEqual(savedExtras.type, "fox_dash")
+    }
+
     // MARK: - Shortcuts Library
 
     func testShowShortcutsLibrary_showsShortcutsLibrary() throws {
