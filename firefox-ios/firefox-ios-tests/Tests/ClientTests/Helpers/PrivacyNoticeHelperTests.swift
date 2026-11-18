@@ -27,11 +27,24 @@ final class PrivacyNoticeHelperTests: XCTestCase {
 
         XCTAssertFalse(result)
     }
+
     // Use TermsOfUseAcceptedDate (migrated from TermsOfServiceAcceptedDate)
     func test_shouldShowPrivacyNotice_whenAcceptanceAfterUpdate_returnsFalse() {
         let subject = createSubject()
         let now = subject.privacyNoticeUpdateInMilliseconds + 1000
         prefs.setTimestamp(now, forKey: PrefsKeys.TermsOfUseAcceptedDate)
+
+        let result = subject.shouldShowPrivacyNotice()
+
+        XCTAssertFalse(result)
+    }
+
+    func test_shouldShowPrivacyNotice_whenAcceptedBeforeUpdate_andUpdateAfterNow_returnsFalse() {
+        let subject = createSubject(notificationTimestamp: Date().addingTimeInterval(3600).toTimestamp())
+
+        // Acceptance was before the update
+        let acceptance = subject.privacyNoticeUpdateInMilliseconds - 10000
+        prefs.setTimestamp(acceptance, forKey: PrefsKeys.TermsOfUseAcceptedDate)
 
         let result = subject.shouldShowPrivacyNotice()
 
@@ -93,7 +106,19 @@ final class PrivacyNoticeHelperTests: XCTestCase {
 
     // MARK: - Helper Methods
 
-    private func createSubject() -> PrivacyNoticeHelper {
+    private func createSubject(
+        notificationTimestamp: Timestamp = Date().addingTimeInterval(-3600).toTimestamp()
+    ) -> PrivacyNoticeHelper {
+        FxNimbus.shared.features.touFeature.with { _ in
+            return TouFeature(
+                contentOption: .value0,
+                enableDragToDismiss: true,
+                maxRemindersCount: 2,
+                notificationTimestamp: Int(notificationTimestamp),
+                status: false
+            )
+        }
+
         return PrivacyNoticeHelper(prefs: prefs)
     }
 }
