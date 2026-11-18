@@ -674,8 +674,14 @@ final class HomepageViewController: UIViewController,
                 cell.applyTheme(theme: currentTheme)
             }
         case .privacyNotice:
-            return configuredCell(cellType: PrivacyNoticeCell.self, at: indexPath) { cell in
-                configurePrivacyNoticeCell(cell: cell)
+            if featureFlagsProvider.isEnabled(.touNotificationRedesign) {
+                return configuredCell(cellType: PrivacyNoticeCell.self, at: indexPath) { cell in
+                    configurePrivacyNoticeCell(cell: cell)
+                }
+            } else {
+                return configuredCell(cellType: LegacyPrivacyNoticeCell.self, at: indexPath) { cell in
+                    configureLegacyPrivacyNoticeCell(cell: cell)
+                }
             }
         case .notificationCard:
             return configuredCell(cellType: NotificationCardCell.self, at: indexPath) { cell in
@@ -745,6 +751,17 @@ final class HomepageViewController: UIViewController,
     }
 
     private func configurePrivacyNoticeCell(cell: PrivacyNoticeCell) {
+        cell.configure(theme: currentTheme,
+                       closeButtonAction: { [weak self] in
+                           self?.dispatchPrivacyNoticeCloseButtonTapped()
+                       },
+                       linkAction: { [weak self] url in
+                           self?.dispatchPrivacyNoticeLinkTapped(url: url)
+                       }
+        )
+    }
+
+    private func configureLegacyPrivacyNoticeCell(cell: LegacyPrivacyNoticeCell) {
         cell.configure(theme: currentTheme,
                        closeButtonAction: { [weak self] in
                            self?.dispatchPrivacyNoticeCloseButtonTapped()

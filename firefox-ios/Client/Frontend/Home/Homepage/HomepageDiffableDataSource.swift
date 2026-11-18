@@ -67,6 +67,7 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         static var cellTypes: [ReusableCell.Type] {
             return [
                 HomepageHeaderCell.self,
+                LegacyPrivacyNoticeCell.self,
                 PrivacyNoticeCell.self,
                 NotificationCardCell.self,
                 HomepageMessageCardCell.self,
