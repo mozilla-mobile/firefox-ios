@@ -14,7 +14,7 @@ struct PrivacyNoticeHelper: PrivacyNoticeHelperProtocol {
     // Date of the last privacy notice update in milliseconds since epoch
     // Update this value to the latest privacy notice release date when you want to show users the
     // homepage privacy notice card
-    var privacyNoticeUpdateInMilliseconds: UInt64? {
+    var privacyNoticeUpdateInMilliseconds: UInt64 {
         let isDebugOverride = prefs.boolForKey(PrefsKeys.PrivacyNotice.privacyNoticeUpdateDebugOverride) ?? false
         if isDebugOverride { return UInt64(Date().timeIntervalSince1970 * 1000) }
 
@@ -31,16 +31,13 @@ struct PrivacyNoticeHelper: PrivacyNoticeHelperProtocol {
 
     func shouldShowPrivacyNotice() -> Bool {
         // 1. User has already accepted ToU (via onboarding or bottom sheet)
-        //    AND we have an notice update timestamp
         // Use TermsOfUseAcceptedDate (migrated from TermsOfServiceAcceptedDate)
-        guard let acceptedDate = prefs.timestampForKey(PrefsKeys.TermsOfUseAcceptedDate),
-              let privacyNoticeUpdateInMilliseconds
-        else { return false }
+        guard let acceptedDate = prefs.timestampForKey(PrefsKeys.TermsOfUseAcceptedDate) else { return false }
 
         // 2. User has accepted ToS (via onboarding or bottom sheet) before the last privacy notice update
         //    AND has not since seen the homepage privacy notice card since the privacy notice was updated
         //    AND the privacy notice date is in the past
-        let hasPrivacyNoticeUpdateTimePassed = UInt64(Date().timeIntervalSince1970 * 1000) > privacyNoticeUpdateInMilliseconds
+        let hasPrivacyNoticeUpdateTimePassed = UInt64(Date().toTimestamp()) >= privacyNoticeUpdateInMilliseconds
         let isAcceptanceOutdated = acceptedDate < privacyNoticeUpdateInMilliseconds
         let privacyNoticeNotifiedDate = prefs.timestampForKey(PrefsKeys.PrivacyNotice.notifiedDate)
         let isPrivacyNoticeOutdated = privacyNoticeNotifiedDate.map { $0 < privacyNoticeUpdateInMilliseconds } ?? true
