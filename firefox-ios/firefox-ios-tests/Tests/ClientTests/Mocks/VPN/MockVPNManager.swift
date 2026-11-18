@@ -14,6 +14,7 @@ final class MockVPNManager: VPNRunnable {
     var isLimitReached = false
     var isUsageResetDue = false
     var selectedCountryCode = VPNServerManager.recommendedCountryCode
+    var isUsingFallback = false
     var startCalled = 0
     var stopCalled = 0
     var onStop: (() -> Void)?

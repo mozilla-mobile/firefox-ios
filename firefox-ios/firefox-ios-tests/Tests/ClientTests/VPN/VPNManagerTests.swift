@@ -276,6 +276,25 @@ final class VPNManagerTests: XCTestCase {
 
     // MARK: - stop
 
+    func testStart_whenServerSelectionFellBack_setsIsUsingFallback() async throws {
+        mockServerManager.didFallBack = true
+        let subject = createSubject()
+
+        try await subject.start(countryCode: "DE")
+
+        XCTAssertTrue(subject.isUsingFallback)
+    }
+
+    func testStop_clearsIsUsingFallback() async throws {
+        mockServerManager.didFallBack = true
+        let subject = createSubject()
+        try await subject.start(countryCode: "DE")
+
+        await subject.stop()
+
+        XCTAssertFalse(subject.isUsingFallback)
+    }
+
     func testStop_clearsProxyAndStopsRunning() async throws {
         let subject = createSubject()
         try await subject.start(countryCode: nil)

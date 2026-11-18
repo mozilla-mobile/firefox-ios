@@ -7,7 +7,7 @@ import Foundation
 import Glean
 import VPNKit
 
-enum VPNStartFailureReason: String {
+enum VPNConnectionFailureReason: String {
     case notSignedIn = "not_signed_in"
     case noServerFound = "no_server_found"
     case proxyURLCannotBeGenerated = "proxy_url_cannot_be_generated"
@@ -43,13 +43,13 @@ enum VPNStartFailureReason: String {
     }
 }
 
-enum VPNStartTrigger: String {
-    case user
-    case reconnectAtLaunch = "reconnect_at_launch"
+enum VPNConnectionStartSource: String {
+    case settings
+    case launchDefault = "launch_default"
 }
 
-enum VPNStopTrigger: String {
-    case user
+enum VPNConnectionStopSource: String {
+    case settings
     case continueWithoutVPN = "continue_without_vpn"
     case closeThisTab = "close_this_tab"
     case closeAllTabs = "close_all_tabs"
@@ -58,9 +58,9 @@ enum VPNStopTrigger: String {
 /// Records VPN events that originate in the client rather than in VPNKit.
 protocol VPNClientTelemetry {
     /// `countryCode` is the selected location, or `VPNServerManager.recommendedCountryCode`.
-    func recordStartSucceeded(countryCode: String, trigger: VPNStartTrigger)
-    func recordStartFailed(reason: VPNStartFailureReason, countryCode: String, trigger: VPNStartTrigger)
-    func recordStopCompleted(trigger: VPNStopTrigger)
+    func recordConnectionSucceeded(source: VPNConnectionStartSource, countryCode: String, isUsingFallback: Bool)
+    func recordConnectionFailed(source: VPNConnectionStartSource, countryCode: String, error: VPNConnectionFailureReason)
+    func recordConnectionStopped(source: VPNConnectionStopSource)
 }
 
 struct DefaultVPNTelemetry: VPNTelemetry, VPNClientTelemetry {
@@ -80,22 +80,26 @@ struct DefaultVPNTelemetry: VPNTelemetry, VPNClientTelemetry {
         }
     }
 
-    func recordStartSucceeded(countryCode: String, trigger: VPNStartTrigger) {
-        let extras = GleanMetrics.VpnStart.SucceededExtra(countryCode: countryCode, trigger: trigger.rawValue)
-        gleanWrapper.recordEvent(for: GleanMetrics.VpnStart.succeeded, extras: extras)
-    }
-
-    func recordStartFailed(reason: VPNStartFailureReason, countryCode: String, trigger: VPNStartTrigger) {
-        let extras = GleanMetrics.VpnStart.FailedExtra(
+    func recordConnectionSucceeded(source: VPNConnectionStartSource, countryCode: String, isUsingFallback: Bool) {
+        let extras = GleanMetrics.Vpn.ConnectionStartedExtra(
             countryCode: countryCode,
-            failureReason: reason.rawValue,
-            trigger: trigger.rawValue
+            isUsingFallback: isUsingFallback,
+            source: source.rawValue
         )
-        gleanWrapper.recordEvent(for: GleanMetrics.VpnStart.failed, extras: extras)
+        gleanWrapper.recordEvent(for: GleanMetrics.Vpn.connectionStarted, extras: extras)
     }
 
-    func recordStopCompleted(trigger: VPNStopTrigger) {
-        let extras = GleanMetrics.VpnStop.CompletedExtra(trigger: trigger.rawValue)
-        gleanWrapper.recordEvent(for: GleanMetrics.VpnStop.completed, extras: extras)
+    func recordConnectionFailed(source: VPNConnectionStartSource, countryCode: String, error: VPNConnectionFailureReason) {
+        let extras = GleanMetrics.Vpn.ConnectionStartedExtra(
+            countryCode: countryCode,
+            error: error.rawValue,
+            source: source.rawValue
+        )
+        gleanWrapper.recordEvent(for: GleanMetrics.Vpn.connectionStarted, extras: extras)
+    }
+
+    func recordConnectionStopped(source: VPNConnectionStopSource) {
+        let extras = GleanMetrics.Vpn.ConnectionStoppedExtra(source: source.rawValue)
+        gleanWrapper.recordEvent(for: GleanMetrics.Vpn.connectionStopped, extras: extras)
     }
 }

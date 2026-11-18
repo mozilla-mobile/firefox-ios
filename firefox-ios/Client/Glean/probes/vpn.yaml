@@ -20,32 +20,39 @@ $tags:
 ###############################################################################
 
 # Add your new metrics and/or events here.
-vpn.start:
-  failed:
+vpn:
+  connection_started:
     type: event
     description: |
-      Recorded when the VPN fails to start, either because the user turned it
-      on or because the app reconnected it at launch.
-      Changing location while the VPN is already running is not recorded.
+      Recorded when the VPN tries to connect, either because the user turned it
+      on or because the app reconnected it at launch. If `error` is set, the
+      connection failed. Changing location while the VPN is already connected
+      is not recorded.
     extra_keys:
       country_code:
         type: string
         description: |
           The location the user selected, as an ISO 3166-1 alpha-2 country
           code, or `REC` when the recommended location is selected.
-      failure_reason:
+      error:
         type: string
         description: |
-          Why the VPN failed to start. One of `not_signed_in`,
-          `no_server_found`, `proxy_url_cannot_be_generated`,
+          Set only when the connection failed, to why it failed. One of
+          `not_signed_in`, `no_server_found`, `proxy_url_cannot_be_generated`,
           `token_provider_unavailable`, `network`, `server_error`, `auth`,
-          `attestation` or `unknown` (see `VPNStartFailureReason`).
-      trigger:
+          `attestation` or `unknown` (see `VPNConnectionFailureReason`).
+      is_using_fallback:
+        type: boolean
+        description: |
+          Set only when the connection succeeded. True when the selected
+          location had no usable server, so a different location is used.
+      source:
         type: string
         description: |
-          What started the VPN. One of `user`, when the user turns it on, or
-          `reconnect_at_launch`, when the app turns it back on at launch
-          because it was on before (see `VPNStartTrigger`).
+          What started the connection. One of `settings`, when the user turns
+          the VPN on in settings, or `launch_default`, when the app reconnects
+          at launch because the VPN was on before
+          (see `VPNConnectionStartSource`).
     bugs:
       - https://mozilla-hub.atlassian.net/browse/VPN-7852
     data_reviews:
@@ -53,25 +60,20 @@ vpn.start:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
-  succeeded:
+  connection_stopped:
     type: event
     description: |
-      Recorded when the VPN starts and the proxy is applied, either because
-      the user turned it on or because the app reconnected it at launch.
-      Changing location while the VPN is already running is not recorded.
+      Recorded when the VPN was connected and gets turned off, either by the
+      user or through one of the choices in a VPN alert. Not recorded when the
+      VPN was not connected, or when the app is terminated with the VPN on.
     extra_keys:
-      country_code:
+      source:
         type: string
         description: |
-          The location the user selected, as an ISO 3166-1 alpha-2 country
-          code, or `REC` when the recommended location is selected. A
-          different location may be used if the selected one has no server.
-      trigger:
-        type: string
-        description: |
-          What started the VPN. One of `user`, when the user turns it on, or
-          `reconnect_at_launch`, when the app turns it back on at launch
-          because it was on before (see `VPNStartTrigger`).
+          What turned the VPN off. One of `settings`, when the user turns it
+          off in settings, or the alert choice the user picked:
+          `continue_without_vpn`, `close_this_tab` or `close_all_tabs`
+          (see `VPNConnectionStopSource`).
     bugs:
       - https://mozilla-hub.atlassian.net/browse/VPN-7852
     data_reviews:

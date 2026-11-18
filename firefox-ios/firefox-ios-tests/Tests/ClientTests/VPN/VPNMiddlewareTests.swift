@@ -87,7 +87,7 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertNil(mockUserPreferences.boolPreferences[.vpnFeature])
     }
 
-    func testStart_whenStartSucceeds_recordsSavedCountryCode() async {
+    func testStart_whenStartSucceeds_recordsConnectionStarted() async {
         mockProfile.prefs.setString("DE", forKey: PrefsKeys.VPNSettings.selectedCountryCode)
         let subject = createSubject()
 
@@ -95,7 +95,8 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(mockTelemetry.successes.count, 1)
         XCTAssertEqual(mockTelemetry.successes.first?.countryCode, "DE")
-        XCTAssertEqual(mockTelemetry.successes.first?.trigger, .user)
+        XCTAssertEqual(mockTelemetry.successes.first?.source, .settings)
+        XCTAssertEqual(mockTelemetry.successes.first?.isUsingFallback, false)
         XCTAssertTrue(mockTelemetry.failures.isEmpty)
     }
 
@@ -108,7 +109,16 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockVPNManager.startCountryCodes, [nil])
     }
 
-    func testStart_whenStartFails_recordsFailureReasonAndCountryCode() async {
+    func testStart_whenUsingFallbackLocation_recordsFallback() async {
+        mockVPNManager.isUsingFallback = true
+        let subject = createSubject()
+
+        await dispatchStart(to: subject)
+
+        XCTAssertEqual(mockTelemetry.successes.first?.isUsingFallback, true)
+    }
+
+    func testStart_whenStartFails_recordsConnectionStartedWithError() async {
         mockProfile.prefs.setString("DE", forKey: PrefsKeys.VPNSettings.selectedCountryCode)
         mockVPNManager.startError = VPNError.noServerFound
         let subject = createSubject()
@@ -117,9 +127,9 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertTrue(mockTelemetry.successes.isEmpty)
         XCTAssertEqual(mockTelemetry.failures.count, 1)
-        XCTAssertEqual(mockTelemetry.failures.first?.reason, .noServerFound)
+        XCTAssertEqual(mockTelemetry.failures.first?.error, .noServerFound)
         XCTAssertEqual(mockTelemetry.failures.first?.countryCode, "DE")
-        XCTAssertEqual(mockTelemetry.failures.first?.trigger, .user)
+        XCTAssertEqual(mockTelemetry.failures.first?.source, .settings)
     }
 
     func testStop_stopsVPNAndClearsPreference() async {
@@ -134,13 +144,13 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(firstTabManager.removeAllTabsCalledWith.isEmpty)
     }
 
-    func testStop_whenRunning_recordsUserTrigger() async {
+    func testStop_whenRunning_recordsSettingsSource() async {
         mockVPNManager.isRunning = true
         let subject = createSubject()
 
         await dispatchAndWaitForPreference(.stop, to: subject)
 
-        XCTAssertEqual(mockTelemetry.stops, [.user])
+        XCTAssertEqual(mockTelemetry.stops, [.settings])
     }
 
     func testStop_whenNotRunning_doesNotRecordTelemetry() async {
@@ -152,8 +162,8 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(mockTelemetry.stops.isEmpty)
     }
 
-    func testAlertChoices_whenRunning_recordMatchingTrigger() async {
-        let cases: [(VPNModernAction, VPNStopTrigger)] = [
+    func testAlertChoices_whenRunning_recordMatchingSource() async {
+        let cases: [(VPNModernAction, VPNConnectionStopSource)] = [
             (.continueWithoutVPN, .continueWithoutVPN),
             (.closeThisTab, .closeThisTab),
             (.closeAllTabs, .closeAllTabs)
@@ -483,29 +493,35 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
 }
 
 private final class MockVPNClientTelemetry: VPNClientTelemetry {
-    struct Failure {
-        let reason: VPNStartFailureReason
+    struct Success {
+        let source: VPNConnectionStartSource
         let countryCode: String
-        let trigger: VPNStartTrigger
+        let isUsingFallback: Bool
     }
 
-    var successes: [(countryCode: String, trigger: VPNStartTrigger)] = []
+    struct Failure {
+        let source: VPNConnectionStartSource
+        let countryCode: String
+        let error: VPNConnectionFailureReason
+    }
+
+    var successes: [Success] = []
     var failures: [Failure] = []
-    var stops: [VPNStopTrigger] = []
+    var stops: [VPNConnectionStopSource] = []
     var onRecord: (() -> Void)?
 
-    func recordStartSucceeded(countryCode: String, trigger: VPNStartTrigger) {
-        successes.append((countryCode, trigger))
+    func recordConnectionSucceeded(source: VPNConnectionStartSource, countryCode: String, isUsingFallback: Bool) {
+        successes.append(Success(source: source, countryCode: countryCode, isUsingFallback: isUsingFallback))
         onRecord?()
     }
 
-    func recordStartFailed(reason: VPNStartFailureReason, countryCode: String, trigger: VPNStartTrigger) {
-        failures.append(Failure(reason: reason, countryCode: countryCode, trigger: trigger))
+    func recordConnectionFailed(source: VPNConnectionStartSource, countryCode: String, error: VPNConnectionFailureReason) {
+        failures.append(Failure(source: source, countryCode: countryCode, error: error))
         onRecord?()
     }
 
-    func recordStopCompleted(trigger: VPNStopTrigger) {
-        stops.append(trigger)
+    func recordConnectionStopped(source: VPNConnectionStopSource) {
+        stops.append(source)
         onRecord?()
     }
 }

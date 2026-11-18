@@ -49,52 +49,55 @@ final class DefaultVPNTelemetryTests: XCTestCase {
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
-    func test_recordStartSucceeded_recordsEventWithCountryCode() throws {
+    func test_recordConnectionSucceeded_recordsStartedEventWithoutError() throws {
         let subject = createSubject()
-        let event = GleanMetrics.VpnStart.succeeded
-        typealias EventExtrasType = GleanMetrics.VpnStart.SucceededExtra
+        let event = GleanMetrics.Vpn.connectionStarted
+        typealias EventExtrasType = GleanMetrics.Vpn.ConnectionStartedExtra
 
-        subject.recordStartSucceeded(countryCode: "DE", trigger: .user)
+        subject.recordConnectionSucceeded(source: .settings, countryCode: "DE", isUsingFallback: true)
 
         let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
         let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
         XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.source, "settings")
         XCTAssertEqual(savedExtras.countryCode, "DE")
-        XCTAssertEqual(savedExtras.trigger, "user")
+        XCTAssertEqual(savedExtras.isUsingFallback, true)
+        XCTAssertNil(savedExtras.error)
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
-    func test_recordStartFailed_recordsEventWithReasonAndCountryCode() throws {
+    func test_recordConnectionFailed_recordsStartedEventWithError() throws {
         let subject = createSubject()
-        let event = GleanMetrics.VpnStart.failed
-        typealias EventExtrasType = GleanMetrics.VpnStart.FailedExtra
+        let event = GleanMetrics.Vpn.connectionStarted
+        typealias EventExtrasType = GleanMetrics.Vpn.ConnectionStartedExtra
 
-        subject.recordStartFailed(reason: .noServerFound, countryCode: "REC", trigger: .reconnectAtLaunch)
+        subject.recordConnectionFailed(source: .launchDefault, countryCode: "REC", error: .noServerFound)
 
         let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
         let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
         XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.source, "launch_default")
         XCTAssertEqual(savedExtras.countryCode, "REC")
-        XCTAssertEqual(savedExtras.failureReason, "no_server_found")
-        XCTAssertEqual(savedExtras.trigger, "reconnect_at_launch")
+        XCTAssertEqual(savedExtras.error, "no_server_found")
+        XCTAssertNil(savedExtras.isUsingFallback)
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
-    func test_recordStopCompleted_recordsEventWithTrigger() throws {
+    func test_recordConnectionStopped_recordsEventWithSource() throws {
         let subject = createSubject()
-        let event = GleanMetrics.VpnStop.completed
-        typealias EventExtrasType = GleanMetrics.VpnStop.CompletedExtra
+        let event = GleanMetrics.Vpn.connectionStopped
+        typealias EventExtrasType = GleanMetrics.Vpn.ConnectionStoppedExtra
 
-        subject.recordStopCompleted(trigger: .closeAllTabs)
+        subject.recordConnectionStopped(source: .closeAllTabs)
 
         let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
         let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
         XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
-        XCTAssertEqual(savedExtras.trigger, "close_all_tabs")
+        XCTAssertEqual(savedExtras.source, "close_all_tabs")
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
-    func test_startFailureReason_mapsErrors() {
+    func test_connectionFailureReason_mapsErrors() {
         let cases: [(Error, String)] = [
             (VPNError.notSignedIn, "not_signed_in"),
             (VPNError.noServerFound, "no_server_found"),
@@ -108,7 +111,7 @@ final class DefaultVPNTelemetryTests: XCTestCase {
         ]
 
         for (error, expected) in cases {
-            XCTAssertEqual(VPNStartFailureReason(error).rawValue, expected, "Wrong reason for \(error)")
+            XCTAssertEqual(VPNConnectionFailureReason(error).rawValue, expected, "Wrong reason for \(error)")
         }
     }
 

@@ -96,11 +96,11 @@ final class VPNMiddleware {
     private func handleVPNAction(_ action: VPNModernAction, windowUUID: WindowUUID) async {
         switch action {
         case .start:
-            await startVPN(trigger: .user)
+            await startVPN(source: .settings)
         case .stop:
-            await stopVPN(trigger: .user)
+            await stopVPN(source: .settings)
         case .continueWithoutVPN:
-            await stopVPN(trigger: .continueWithoutVPN)
+            await stopVPN(source: .continueWithoutVPN)
         case .changeLocation(let countryCode):
             await changeVPNLocation(countryCode)
         case .resetVPNAtLaunch:
@@ -114,13 +114,13 @@ final class VPNMiddleware {
             if let selectedTab = tabManager?.selectedTab {
                 tabManager?.removeTab(selectedTab.tabUUID)
             }
-            await stopVPN(trigger: .closeThisTab)
+            await stopVPN(source: .closeThisTab)
         case .closeAllTabs:
             for tabManager in windowManager.allWindowTabManagers() {
                 tabManager.removeAllTabs(isPrivateMode: true)
                 tabManager.removeAllTabs(isPrivateMode: false)
             }
-            await stopVPN(trigger: .closeAllTabs)
+            await stopVPN(source: .closeAllTabs)
         }
     }
 
@@ -128,7 +128,7 @@ final class VPNMiddleware {
         userPreferences.setPreferenceFor(.vpnFeature, to: false)
     }
 
-    private func startVPN(trigger: VPNStartTrigger) async {
+    private func startVPN(source: VPNConnectionStartSource) async {
         guard let vpnManager else {
             logger.log("VPN start with no VPNManager registered", level: .warning, category: .vpn)
             return
@@ -137,15 +137,19 @@ final class VPNMiddleware {
         let telemetryCountryCode = countryCode ?? VPNServerManager.recommendedCountryCode
         do {
             try await vpnManager.start(countryCode: countryCode)
-            telemetry.recordStartSucceeded(countryCode: telemetryCountryCode, trigger: trigger)
+            telemetry.recordConnectionSucceeded(
+                source: source,
+                countryCode: telemetryCountryCode,
+                isUsingFallback: vpnManager.isUsingFallback
+            )
             userPreferences.setPreferenceFor(.vpnFeature, to: vpnManager.isRunning)
             UIAccessibility.post(notification: .announcement, argument: String.VPN.Settings.Connected)
         } catch {
             logger.log("VPN start failed: \(error)", level: .warning, category: .vpn)
-            telemetry.recordStartFailed(
-                reason: VPNStartFailureReason(error),
+            telemetry.recordConnectionFailed(
+                source: source,
                 countryCode: telemetryCountryCode,
-                trigger: trigger
+                error: VPNConnectionFailureReason(error)
             )
         }
     }
@@ -185,7 +189,7 @@ final class VPNMiddleware {
         }
     }
 
-    private func stopVPN(trigger: VPNStopTrigger) async {
+    private func stopVPN(source: VPNConnectionStopSource) async {
         guard let vpnManager else {
             logger.log("VPN stop with no VPNManager registered", level: .warning, category: .vpn)
             return
@@ -193,7 +197,7 @@ final class VPNMiddleware {
         let wasRunning = vpnManager.isRunning
         await vpnManager.stop()
         if wasRunning {
-            telemetry.recordStopCompleted(trigger: trigger)
+            telemetry.recordConnectionStopped(source: source)
         }
         userPreferences.setPreferenceFor(.vpnFeature, to: false)
     }

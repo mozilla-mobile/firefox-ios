@@ -33,6 +33,8 @@ protocol VPNRunnable {
     /// True once the stored usage's reset date has passed; false if no usage has been fetched.
     var isUsageResetDue: Bool { get }
     var selectedCountryCode: String { get }
+    /// Whether the running connection uses a fallback server because the requested location had none.
+    var isUsingFallback: Bool { get }
     /// Single-consumer stream of `VPNEvent`s, observed by `VPNMiddleware`.
     var events: AsyncStream<VPNEvent> { get }
     /// Also switches a running VPN to a new server and pass without stopping it first.
@@ -79,6 +81,7 @@ final class VPNManager: VPNRunnable {
     let events: AsyncStream<VPNEvent>
 
     private var activeServer: VPNGuardian.Server?
+    private(set) var isUsingFallback = false
 
     var isRunning: Bool {
         activeServer != nil
@@ -177,6 +180,7 @@ final class VPNManager: VPNRunnable {
         let config = try self.buildProxyConfig(server: server, pass: pass)
         await self.applyProxyAndRebuildWebViews(configs: [config])
         self.activeServer = server
+        self.isUsingFallback = selection.didFallBack
         self.currentUsage = pass.usage
         self.startPassRotation(after: pass)
         self.eventsContinuation.yield(.passUpdated(pass))
@@ -191,6 +195,7 @@ final class VPNManager: VPNRunnable {
         self.rotationTask = nil
         await self.applyProxyAndRebuildWebViews(configs: [])
         self.activeServer = nil
+        self.isUsingFallback = false
     }
 
     func listCountries() async -> [VPNServerManager.Country] {
