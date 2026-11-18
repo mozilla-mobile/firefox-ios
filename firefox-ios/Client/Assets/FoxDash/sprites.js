@@ -188,6 +188,24 @@
     ctx.restore();
   }
 
+  // The body and cheek gradients never move in Kit's own coordinates, so
+  // each canvas builds them once.
+  const kitGradientCache = new WeakMap();
+
+  function kitGradients(ctx) {
+    let cached = kitGradientCache.get(ctx);
+    if (!cached) {
+      const body = ctx.createLinearGradient(1090, 0, 1520, 0);
+      KIT.body.forEach((color, i) => body.addColorStop([0, 0.6, 1][i], color));
+      const cheek = ctx.createLinearGradient(1400, 0, 1550, 0);
+      cheek.addColorStop(0, KIT.cheek[0]);
+      cheek.addColorStop(1, KIT.cheek[1]);
+      cached = { body, cheek };
+      kitGradientCache.set(ctx, cached);
+    }
+    return cached;
+  }
+
   // The body, neck and head as one shape, with the rump pulled forward by
   // `gather` as the legs bunch up.
   function kitBody(ctx, gather) {
@@ -208,9 +226,8 @@
     body.bezierCurveTo(1122 + rx, 832, 1102 + rx, 820, 1092 + rx, 800);
     body.closePath();
 
-    const fill = ctx.createLinearGradient(1090, 0, 1520, 0);
-    KIT.body.forEach((color, i) => fill.addColorStop([0, 0.6, 1][i], color));
-    ctx.fillStyle = fill;
+    const { body: bodyFill, cheek } = kitGradients(ctx);
+    ctx.fillStyle = bodyFill;
     ctx.fill(body);
 
     ctx.save();
@@ -220,9 +237,6 @@
     ctx.ellipse(1255, 828, 125, 11, 0.03, 0, TAU);
     ctx.fill();
 
-    const cheek = ctx.createLinearGradient(1400, 0, 1550, 0);
-    cheek.addColorStop(0, KIT.cheek[0]);
-    cheek.addColorStop(1, KIT.cheek[1]);
     ctx.fillStyle = cheek;
     ctx.beginPath();
     ctx.moveTo(1560, 731);
