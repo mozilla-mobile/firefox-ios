@@ -65,7 +65,7 @@
     ctx.translate(-KIT_X, -KIT_Y);
 
     const hurt = pose === 'hurt';
-    const k = hurt ? 1 : air;
+    const k = hurt ? 1 : air * air * (3 - 2 * air);
     const gallop = Math.cos(phase);
     const spread = hurt ? 1 : gallop + (1 - gallop) * k;
     const gather = (1 - spread) / 2;
