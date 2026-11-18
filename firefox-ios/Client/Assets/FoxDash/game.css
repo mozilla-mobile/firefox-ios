@@ -166,10 +166,6 @@ body.game {
   line-height: 1;
   letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
-  /* Repainted on every score change, so one stroke replaces the sticker's ring of shadows. */
-  -webkit-text-stroke: calc(var(--o) * 2) var(--ink);
-  paint-order: stroke fill;
-  text-shadow: calc(var(--o) + 2px) calc(var(--o) + 4px) 0 var(--accent);
 }
 
 .hud-best,

@@ -27,6 +27,7 @@
   const BOB_HIGH = 42;
   const HINT_TIME = 2.5;
   const POSE_BLEND = 0.1;     // seconds to ease between the run and jump poses
+  const TILT_EASE = 0.06;     // seconds for the lean to catch up with the climb
 
   // Hitboxes as [x, y, radius] relative to the fox's feet. They skip the
   // tail and legs so near misses feel fair.
@@ -427,8 +428,9 @@
     }
     fox.buffer = Math.max(0, fox.buffer - dt);
     if (fox.h === 0) fox.phase += dt * speed * 0.045;
-    // The tilt holds its landing value while `air` eases it back to level.
-    if (fox.h > 0) fox.tilt = clamp(fox.vy / JUMP_V, -1, 1) * 0.2;
+    // The tilt eases toward the climb angle, so a double jump's sudden kick
+    // doesn't flip the nose, and holds its landing value while `air` levels it.
+    if (fox.h > 0) fox.tilt += (clamp(fox.vy / JUMP_V, -1, 1) * 0.2 - fox.tilt) * Math.min(1, dt / TILT_EASE);
     fox.air = clamp(fox.air + (fox.h > 0 ? dt : -dt) / POSE_BLEND, 0, 1);
   }
 
@@ -725,8 +727,10 @@
     ctx.beginPath();
     ctx.ellipse(o.x, groundY + 3, o.r * (1 - 0.4 * lift), 4 * (1 - 0.4 * lift), 0, 0, TAU);
     ctx.fill();
-    const rising = Math.sin(o.t * o.bob) > 0;
-    Sprites.tracker(ctx, o.x, y, o.r, o.t, { lookX: -0.8, lookY: rising ? -0.7 : 0.7, sx: rising ? 0.94 : 1.04, sy: rising ? 1.06 : 0.96 });
+    // -1 sinking to 1 rising, eased through the turn so the squash and the
+    // eye don't flip at the top and bottom of the bob.
+    const rise = clamp(Math.sin(o.t * o.bob) * 3, -1, 1);
+    Sprites.tracker(ctx, o.x, y, o.r, o.t, { lookX: -0.8, lookY: -0.7 * rise, sx: 0.99 - 0.05 * rise, sy: 1.01 + 0.05 * rise });
   }
 
   function drawHint() {
