@@ -20,15 +20,20 @@ final class FoxDashViewController: UIViewController, Themeable {
     private let notificationCenter: NotificationProtocol
 
     private let themeProvider: FoxDashThemeProviding
+    private let bestScoreStore: FoxDashBestScoreStore
     private let bundle: Bundle
     private let onClose: () -> Void
 
     private lazy var webView: WKWebView = {
         let configuration = WKWebViewConfiguration()
         configuration.websiteDataStore = .nonPersistent()
+        configuration.userContentController.add(bestScoreStore, name: FoxDashBestScoreStore.messageHandlerName)
         configuration.userContentController.addUserScript(
             WKUserScript(
-                source: "window.__FOX_DASH_THEME__ = \"\(themeProvider.themeID)\";",
+                source: """
+                window.__FOX_DASH_THEME__ = "\(themeProvider.themeID)";
+                window.__FOX_DASH_BEST_SCORE__ = \(bestScoreStore.bestScore);
+                """,
                 injectionTime: .atDocumentStart,
                 forMainFrameOnly: true
             )
@@ -65,6 +70,7 @@ final class FoxDashViewController: UIViewController, Themeable {
 
     init(
         windowUUID: WindowUUID,
+        bestScoreStore: FoxDashBestScoreStore,
         themeProvider: FoxDashThemeProviding = FoxDashThemeProvider(),
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         notificationCenter: NotificationProtocol = NotificationCenter.default,
@@ -75,6 +81,7 @@ final class FoxDashViewController: UIViewController, Themeable {
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.themeProvider = themeProvider
+        self.bestScoreStore = bestScoreStore
         self.bundle = bundle
         self.onClose = onClose
         super.init(nibName: nil, bundle: nil)
