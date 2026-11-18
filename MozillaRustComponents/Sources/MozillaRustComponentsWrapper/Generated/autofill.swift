@@ -1119,6 +1119,13 @@ public protocol StoreProtocol: AnyObject, Sendable {
     
     func getCreditCard(guid: String) throws  -> CreditCard
     
+    /**
+     * A single stored credit card without its encrypted fields. Like
+     * `list_credit_card_candidates` this never touches the key; use
+     * `get_credit_card` when the number or CVV is needed.
+     */
+    func getCreditCardCandidate(guid: String) throws  -> CreditCardCandidate
+    
     func getPassport(guid: String) throws  -> Passport
     
     /**
@@ -1481,6 +1488,21 @@ open func getCreditCard(guid: String)throws  -> CreditCard  {
     return try  FfiConverterTypeCreditCard_lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
         uniffiCallStatus in
     uniffi_autofill_fn_method_store_get_credit_card(
+            self.uniffiCloneHandle(),
+        FfiConverterString.lower(guid),uniffiCallStatus
+    )
+})
+}
+    
+    /**
+     * A single stored credit card without its encrypted fields. Like
+     * `list_credit_card_candidates` this never touches the key; use
+     * `get_credit_card` when the number or CVV is needed.
+     */
+open func getCreditCardCandidate(guid: String)throws  -> CreditCardCandidate  {
+    return try  FfiConverterTypeCreditCardCandidate_lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
+    uniffi_autofill_fn_method_store_get_credit_card_candidate(
             self.uniffiCloneHandle(),
         FfiConverterString.lower(guid),uniffiCallStatus
     )
@@ -3752,6 +3774,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_store_get_credit_card() != 31148) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_store_get_credit_card_candidate() != 53000) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_store_get_passport() != 57057) {
