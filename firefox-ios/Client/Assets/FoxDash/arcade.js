@@ -43,7 +43,7 @@
   // Sizes a canvas to its parent at device resolution and calls onResize with
   // the size in CSS pixels whenever the parent changes size.
   function fitCanvas(canvas, onResize) {
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: false });
     const view = { ctx, width: 0, height: 0, dpr: 1 };
     const host = canvas.parentElement;
 
@@ -171,14 +171,16 @@
         items.push({ text, x, y, vx: 0, vy: -size * 3, g: 0, size, color, life: 0.8, age: 0 });
       },
       update(dt) {
-        for (let i = items.length - 1; i >= 0; i--) {
-          const p = items[i];
+        let kept = 0;
+        for (const p of items) {
           p.age += dt;
-          if (p.age >= p.life) { items.splice(i, 1); continue; }
+          if (p.age >= p.life) continue;
           p.vy += p.g * dt;
           p.x += p.vx * dt;
           p.y += p.vy * dt;
+          items[kept++] = p;
         }
+        items.length = kept;
       },
       draw(ctx) {
         for (const p of items) {

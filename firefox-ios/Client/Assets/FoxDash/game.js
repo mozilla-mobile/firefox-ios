@@ -74,6 +74,7 @@
   let foxX = 112;
   let sky = null;
   let skyKey = '';
+  let needsRender = true;
 
   const view = Arcade.fitCanvas(canvas, (v) => {
     scale = Math.min(v.width / VIEW_W, v.height / MIN_VIEW_H);
@@ -82,6 +83,7 @@
     groundY = Math.round(viewH * 0.7);
     foxX = Math.max(112, viewW * 0.2);
     sky = null;
+    needsRender = true;
   });
   const ctx = view.ctx;
   const fx = Arcade.particles();
@@ -379,7 +381,7 @@
       if (o.kind === 'cookie') o.spin -= move / o.r;
       if (o.bob) o.h = BOB_LOW + (BOB_HIGH - BOB_LOW) * (0.5 - 0.5 * Math.cos(o.t * o.bob));
     }
-    obstacles = obstacles.filter((o) => o.x > -80);
+    removeWhere(obstacles, (o) => o.x <= -80);
 
     for (const sh of shields) {
       sh.t += dt;
@@ -387,7 +389,7 @@
       if (!sh.taken && touchesFox(sh.x, groundY - sh.h, 13)) collect(sh);
       if (!sh.taken && !sh.missed && sh.x < foxX - 30) missShield(sh);
     }
-    shields = shields.filter((sh) => !sh.taken && sh.x > -40);
+    removeWhere(shields, (sh) => sh.taken || sh.x <= -40);
 
     for (const s of streaks) {
       s.x -= dx * s.k;
@@ -400,6 +402,14 @@
       return;
     }
     judgeNearMisses();
+  }
+
+  function removeWhere(items, shouldRemove) {
+    let kept = 0;
+    for (const item of items) {
+      if (!shouldRemove(item)) items[kept++] = item;
+    }
+    items.length = kept;
   }
 
   function updateFox(dt) {
@@ -803,7 +813,11 @@
       shake = Math.max(0, shake - dt * 30);
       if (ambient) ambient.update(dt);
     }
-    render();
+    // The pause and game over overlays hide the canvas, so draw one last
+    // frame under them and then stop until something changes.
+    const covered = state === 'paused' || state === 'over';
+    if (!covered || needsRender) render();
+    needsRender = !covered;
     syncHud();
   });
 })();
