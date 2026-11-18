@@ -394,7 +394,7 @@ final class BrowserCoordinator: BaseCoordinator,
     // MARK: - Route handling
 
     override func canHandle(route: Route) -> Bool {
-        guard hasBrowserLoaded else { return false }
+        guard isReadyToHandle(route) else { return false }
 
         switch route {
         case .searchQuery, .search, .searchURL, .glean, .homepanel, .action, .fxaSignIn, .fxaPairing,
@@ -406,7 +406,7 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     override func handle(route: Route) {
-        guard hasBrowserLoaded else { return }
+        guard isReadyToHandle(route) else { return }
 
         logger.log("Handling a route", level: .info, category: .coordinator)
         switch route {
@@ -460,9 +460,11 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     /// Ensures we're properly setup before we handle routes / deeplinks.
-    private var hasBrowserLoaded: Bool {
+    private func isReadyToHandle(_ route: Route) -> Bool {
         // The restoring tabs check is necessary for FXIOS-13351.
-        let isReady = browserIsReady && !tabManager.isRestoringTabs
+        // Tab routes must wait for restore to have *finished*: a tab added before restore starts makes it skip.
+        let canSkipBrowserReady = route.opensTabOnHandling && tabManager.tabRestoreHasFinished
+        let isReady = (browserIsReady || canSkipBrowserReady) && !tabManager.isRestoringTabs
 
         guard isReady else {
             logger.log(

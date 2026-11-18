@@ -820,6 +820,29 @@ class RouteTests: XCTestCase {
         }
     }
 
+    // MARK: - opensTabOnHandling
+
+    func testOpensTabOnHandling_forRoutesThatOpenOrSelectATab_isTrue() {
+        let url = URL(string: "https://example.com")!
+
+        XCTAssertTrue(Route.search(url: url, isPrivate: false).opensTabOnHandling)
+        XCTAssertTrue(Route.search(url: url, isPrivate: true, options: [.focusLocationField]).opensTabOnHandling)
+        XCTAssertTrue(Route.searchQuery(query: "firefox", isPrivate: false).opensTabOnHandling)
+        XCTAssertTrue(Route.searchURL(url: url, tabId: "tab-id").opensTabOnHandling)
+    }
+
+    func testOpensTabOnHandling_forSearchWithoutURL_isFalse() {
+        XCTAssertFalse(Route.search(url: nil, isPrivate: false).opensTabOnHandling)
+        XCTAssertFalse(Route.search(url: nil, isPrivate: false, options: [.forceNewTab]).opensTabOnHandling)
+    }
+
+    func testOpensTabOnHandling_forOtherRoutes_isFalse() {
+        XCTAssertFalse(Route.homepanel(section: .bookmarks).opensTabOnHandling)
+        XCTAssertFalse(Route.settings(section: .general).opensTabOnHandling)
+        XCTAssertFalse(Route.action(action: .closePrivateTabs).opensTabOnHandling)
+        XCTAssertFalse(Route.defaultBrowser(section: .tutorial).opensTabOnHandling)
+    }
+
     // MARK: - Helper
 
     func createSubject() -> RouteBuilder {

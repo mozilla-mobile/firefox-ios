@@ -1987,6 +1987,36 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertFalse(result)
     }
 
+    func testCanHandle_routeThatOpensTab_returnsTrue_beforeBrowserLoaded() {
+        tabManager.isRestoringTabs = false
+        tabManager.tabRestoreHasFinished = true
+        let subject = createSubject()
+
+        let result = subject.canHandle(route: .search(url: URL(string: "https://example.com")!, isPrivate: false))
+
+        XCTAssertTrue(result, "Routes that open a tab only need tabs restored.")
+    }
+
+    func testCanHandle_routeThatOpensTab_returnsFalse_whenTabsAreRestoring() {
+        tabManager.isRestoringTabs = true
+        let subject = createSubject()
+
+        let result = subject.canHandle(route: .search(url: URL(string: "https://example.com")!, isPrivate: false))
+
+        XCTAssertFalse(result, "isRestoringTabs should block route handling.")
+    }
+
+    func testCanHandle_routeThatOpensTab_returnsFalse_beforeRestoreHasRun() {
+        // e.g. a reconnected scene: restore hasn't started yet, so adding a tab now would make it skip.
+        tabManager.isRestoringTabs = false
+        tabManager.tabRestoreHasFinished = false
+        let subject = createSubject()
+
+        let result = subject.canHandle(route: .search(url: URL(string: "https://example.com")!, isPrivate: false))
+
+        XCTAssertFalse(result)
+    }
+
     func testCanHandle_returnsFalse_whenTabsAreRestoring() {
         tabManager.isRestoringTabs = true
         let subject = createSubject()
@@ -2011,11 +2041,22 @@ final class BrowserCoordinatorTests: XCTestCase,
 
     func testHandle_doesNotExecuteRoute_beforeBrowserLoaded() {
         let subject = createSubject()
+
+        subject.handle(route: .glean(url: URL(string: "www.example.com")!))
+
+        XCTAssertEqual(glean.handleDeeplinkUrlCalled, 0)
+    }
+
+    func testHandle_routeThatOpensTab_executesBeforeBrowserLoaded() {
+        tabManager.isRestoringTabs = false
+        tabManager.tabRestoreHasFinished = true
+        let subject = createSubject()
         subject.browserViewController = browserViewController
 
         subject.handle(route: .searchQuery(query: "firefox", isPrivate: false))
 
-        XCTAssertFalse(browserViewController.handleQueryCalled)
+        XCTAssertTrue(browserViewController.handleQueryCalled)
+        XCTAssertEqual(browserViewController.handleQuery, "firefox")
     }
 
     func testHandle_doesNotExecuteRoute_whenTabsAreRestoring() {
