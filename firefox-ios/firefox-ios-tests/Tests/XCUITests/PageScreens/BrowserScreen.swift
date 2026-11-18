@@ -474,6 +474,12 @@ final class BrowserScreen {
         addressBar.typeText(text)
     }
 
+    /// Re-submits the address bar's current URL, which reloads the page.
+    func submitAddressBar() {
+        XCTAssertTrue(addressBar.tapUntilKeyboardFocused(), "The address bar never got keyboard focus")
+        addressBar.typeText("\n")
+    }
+
     func navigateToURL(_ url: String) {
         tapOnAddressBar()
         addressBar.typeText(url)

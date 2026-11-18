@@ -6,6 +6,13 @@ import Foundation
 import Common
 
 class ShareLongPressTests: FeatureFlaggedTestBase {
+    private var topSitesScreen: TopSitesScreen!
+
+    override func setUp() async throws {
+        try await super.setUp()
+        topSitesScreen = TopSitesScreen(app: app)
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2864317
     func testShareNormalWebsiteTabReminders() {
         app.launch()
@@ -285,9 +292,8 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
 
     private func reachShareSheetFromTopSitesLongPress() {
         navigator.goto(NewTabScreen)
-        // Long tap on the first homepage element
-        app.collectionViews["FxCollectionView"].links.element(boundBy: 0).press(forDuration: 1.5)
-        app.tables["Context Menu"].buttons["shareAppleLarge"].waitAndTap()
+        topSitesScreen.longPressOnFirstSite()
+        topSitesScreen.tapShare()
     }
 
     private func longPressTopSitesAndReachShareOptions(option: String) {
