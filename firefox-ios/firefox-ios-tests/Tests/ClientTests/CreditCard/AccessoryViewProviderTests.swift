@@ -85,6 +85,57 @@ class AccessoryViewProviderTests: XCTestCase {
         XCTAssertFalse(containsAutofillButton(subject))
     }
 
+    func testHasContent_onPhone_isTrueWithoutAutofillItem() {
+        let subject = createSubject(userInterfaceIdiom: .phone)
+        subject.reloadViewFor(.standard)
+
+        XCTAssertTrue(subject.hasContent)
+    }
+
+    func testHasContent_onPad_dependsOnAutofillItem() {
+        let subject = createSubject(userInterfaceIdiom: .pad)
+
+        subject.reloadViewFor(.standard)
+        if #available(iOS 26.0, *) {
+            XCTAssertFalse(subject.hasContent)
+        } else {
+            XCTAssertTrue(subject.hasContent)
+        }
+
+        subject.reloadViewFor(.login)
+        XCTAssertTrue(subject.hasContent)
+    }
+
+    func testReloadViewFor_onPad_callsContentAvailabilityChangedOnlyOnChange() throws {
+        guard #available(iOS 26.0, *) else { throw XCTSkip("Only iOS 26+ drops the iPad navigation buttons") }
+        let subject = createSubject(userInterfaceIdiom: .pad)
+        var callCount = 0
+        subject.contentAvailabilityChanged = { callCount += 1 }
+
+        subject.reloadViewFor(.standard)
+        XCTAssertEqual(callCount, 0)
+
+        subject.reloadViewFor(.relayEmailMask)
+        XCTAssertEqual(callCount, 1)
+
+        subject.reloadViewFor(.passwordGenerator)
+        XCTAssertEqual(callCount, 1)
+
+        subject.reloadViewFor(.standard)
+        XCTAssertEqual(callCount, 2)
+    }
+
+    func testReloadViewFor_onPhone_neverCallsContentAvailabilityChanged() {
+        let subject = createSubject(userInterfaceIdiom: .phone)
+        var callCount = 0
+        subject.contentAvailabilityChanged = { callCount += 1 }
+
+        subject.reloadViewFor(.login)
+        subject.reloadViewFor(.standard)
+
+        XCTAssertEqual(callCount, 0)
+    }
+
     // MARK: - Helpers
 
     private let autofillIdentifiers = [
@@ -95,8 +146,10 @@ class AccessoryViewProviderTests: XCTestCase {
         AccessibilityIdentifiers.PasswordGenerator.keyboardButton
     ]
 
-    private func createSubject() -> AccessoryViewProvider {
-        let subject = AccessoryViewProvider(windowUUID: .XCTestDefaultUUID)
+    private func createSubject(
+        userInterfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom
+    ) -> AccessoryViewProvider {
+        let subject = AccessoryViewProvider(windowUUID: .XCTestDefaultUUID, userInterfaceIdiom: userInterfaceIdiom)
         trackForMemoryLeaks(subject)
         return subject
     }

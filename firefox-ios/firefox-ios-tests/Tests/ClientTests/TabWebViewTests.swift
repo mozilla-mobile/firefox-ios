@@ -102,14 +102,44 @@ class TabWebViewTests: XCTestCaseRootViewController, UIGestureRecognizerDelegate
         XCTAssertTrue(tabWebView.hasOnlySecureContent)
     }
 
+    func testInputAccessoryView_onPadWithoutAutofillItem_isNil() async throws {
+        guard #available(iOS 26.0, *) else { throw XCTSkip("Only iOS 26+ drops the iPad navigation buttons") }
+        let accessoryView = AccessoryViewProvider(windowUUID: windowUUID, userInterfaceIdiom: .pad)
+        let subject = try await createSubject(accessoryView: accessoryView)
+
+        subject.accessoryView.reloadViewFor(.standard)
+
+        XCTAssertNil(subject.inputAccessoryView)
+    }
+
+    func testInputAccessoryView_onPadWithAutofillItem_isAccessoryView() async throws {
+        let accessoryView = AccessoryViewProvider(windowUUID: windowUUID, userInterfaceIdiom: .pad)
+        let subject = try await createSubject(accessoryView: accessoryView)
+
+        subject.accessoryView.reloadViewFor(.login)
+
+        XCTAssertIdentical(subject.inputAccessoryView, accessoryView)
+    }
+
+    func testInputAccessoryView_onPhoneWithoutAutofillItem_isAccessoryView() async throws {
+        let accessoryView = AccessoryViewProvider(windowUUID: windowUUID, userInterfaceIdiom: .phone)
+        let subject = try await createSubject(accessoryView: accessoryView)
+
+        subject.accessoryView.reloadViewFor(.standard)
+
+        XCTAssertIdentical(subject.inputAccessoryView, accessoryView)
+    }
+
     // MARK: - Helper methods
 
-    func createSubject(file: StaticString = #filePath,
+    func createSubject(accessoryView: AccessoryViewProvider? = nil,
+                       file: StaticString = #filePath,
                        line: UInt = #line) async throws -> TabWebView {
         let subject = TabWebView(frame: CGRect(origin: .zero, size: CGSize(width: 100, height: 100)),
                                  configuration: .init(),
                                  windowUUID: windowUUID,
                                  certStore: makeProfile().certStore)
+        if let accessoryView { subject.accessoryView = accessoryView }
         try await Task.sleep(nanoseconds: sleepTime)
         subject.configure(delegate: tabWebViewDelegate, navigationDelegate: navigationDelegate)
         trackForMemoryLeaks(subject)
