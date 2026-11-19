@@ -144,7 +144,7 @@ private struct NovaDarkColourPalette: ThemeColourPalette {
     var gradientBorder = Gradient(colors: [NovaColors.Violet30, NovaColors.Violet50])
     var gradientTabBorderYellow: Gradient { NovaTabGroupGradients.yellow }
     var gradientTabBorderOrange: Gradient { NovaTabGroupGradients.orange }
-    var gradientTabBorderRed: Gradient { NovaTabGroupGradients.darkRed }
+    var gradientTabBorderRed: Gradient { NovaTabGroupGradients.red }
     var gradientTabBorderPink: Gradient { NovaTabGroupGradients.pink }
     var gradientTabBorderPurple: Gradient { NovaTabGroupGradients.purple }
     var gradientTabBorderBlue: Gradient { NovaTabGroupGradients.blue }

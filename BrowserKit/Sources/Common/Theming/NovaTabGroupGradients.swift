@@ -16,12 +16,8 @@ enum NovaTabGroupGradients {
         Gradient(colors: [NovaColors.Orange40, NovaColors.Orange50])
     }
 
-    static var lightRed: Gradient {
-        Gradient(colors: [NovaColors.Red40, NovaColors.Red40])
-    }
-
-    static var darkRed: Gradient {
-        Gradient(colors: [NovaColors.Red50, NovaColors.Red50])
+    static var red: Gradient {
+        Gradient(colors: [NovaColors.Red40, NovaColors.Red50])
     }
 
     static var pink: Gradient {
