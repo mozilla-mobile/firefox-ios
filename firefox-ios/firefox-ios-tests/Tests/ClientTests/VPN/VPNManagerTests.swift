@@ -320,7 +320,7 @@ final class VPNManagerTests: XCTestCase {
             bearerToken: token,
             notBefore: Date(),
             expiresAt: Date().addingTimeInterval(3600),
-            usage: nil
+            usage: VPNProxyUsage(max: 1_000, remaining: 1_000, reset: .distantFuture, unlimited: false)
         )
     }
 }

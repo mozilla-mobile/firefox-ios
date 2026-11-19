@@ -242,12 +242,6 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         await yieldAndWaitForNoDispatch(.passUpdated(makePass(remaining: 0, unlimited: true)), subject: subject)
     }
 
-    func testPassUpdated_withNoUsage_doesNotDispatch() async {
-        let subject = createSubject()
-
-        await yieldAndWaitForNoDispatch(.passUpdated(makePass(usage: nil)), subject: subject)
-    }
-
     func testRotationFailed_dispatchesFailureAlert() async throws {
         let subject = createSubject()
 
@@ -315,7 +309,7 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         return makePass(usage: VPNProxyUsage(max: 1_000, remaining: remaining, reset: Date(), unlimited: unlimited))
     }
 
-    private func makePass(usage: VPNProxyUsage?) -> VPNProxyPass {
+    private func makePass(usage: VPNProxyUsage) -> VPNProxyPass {
         return VPNProxyPass(
             bearerToken: "token",
             notBefore: Date(),

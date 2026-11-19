@@ -107,7 +107,8 @@ final class VPNGuardianTests: XCTestCase {
     }
 
     private func makePass(token: String = "initial", expiresAt: Date) -> VPNProxyPass {
-        return VPNProxyPass(bearerToken: token, notBefore: Date(), expiresAt: expiresAt, usage: nil)
+        return VPNProxyPass(bearerToken: token, notBefore: Date(), expiresAt: expiresAt,
+                            usage: VPNProxyUsage(max: 1_000, remaining: 1_000, reset: .distantFuture, unlimited: false))
     }
 }
 

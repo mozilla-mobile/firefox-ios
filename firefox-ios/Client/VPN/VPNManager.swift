@@ -17,7 +17,7 @@ enum VPNEvent: Equatable {
     case passUpdated(VPNProxyPass)
     case rotationFailed
     /// Guardian refused a pass because the monthly bandwidth quota is used up.
-    case quotaExceeded(VPNProxyUsage?)
+    case quotaExceeded(VPNProxyUsage)
     /// The selected location had no usable server, so a fallback server was used instead.
     case selectedLocationUnavailable
 }
@@ -111,7 +111,7 @@ final class VPNManager: VPNRunnable {
     }
 
     var isLimitReached: Bool {
-        guard let usage = currentUsage else { return false }
+        guard let usage = currentUsage, !isUsageResetDue else { return false }
         return !usage.unlimited && usage.remaining <= 0
     }
 

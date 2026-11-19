@@ -67,10 +67,6 @@ final class VPNMiddleware {
         case .rotationFailed:
             dispatchAlert(.showFailureAlert)
         case .quotaExceeded(let usage):
-            guard let usage else {
-                dispatchAlert(.showFailureAlert)
-                return
-            }
             dispatchAlert(.showDataLimitAlert(dataLimitBytes: usage.max))
         case .selectedLocationUnavailable:
             // TODO: FXIOS-17347 wire up location selection errors
