@@ -56,7 +56,7 @@ final class InstallationTelemetryService {
     }
 
     func update() {
-        guard !AppConstants.isRunningUnitTest else { return }
+        guard !AppConstants.isRunningUnitTest, !AppConstants.isRunningUITests else { return }
         do {
             try updateInstallationHistory()
         } catch {
