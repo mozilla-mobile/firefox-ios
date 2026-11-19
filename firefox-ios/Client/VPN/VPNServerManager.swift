@@ -16,7 +16,8 @@ protocol VPNServerManaging: Sendable {
 }
 
 struct VPNServerSelection {
-    let server: VPNGuardian.Server
+    // TODO: FXIOS-17399 Remove var declaration on server once production endpoint works
+    var server: VPNGuardian.Server
     /// The requested country had no usable server.
     let didFallBack: Bool
 }

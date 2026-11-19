@@ -572,6 +572,9 @@ class AppSettingsTableViewController: SettingsTableViewController,
         hiddenDebugOptions.append(SimulateVPNQuotaExceededSetting(settings: self))
         hiddenDebugOptions.append(ShowVPNLocationUnavailableAlertSetting(settings: self))
         hiddenDebugOptions.append(ShowVPNConnectionFailedAlertSetting(settings: self))
+        // TODO: FXIOS-17399 Remove simulated VPN failure debug hooks after testing
+        hiddenDebugOptions.append(SimulateVPNConnectionFailureSetting(settings: self))
+        hiddenDebugOptions.append(SimulateVPNLocationFallbackSetting(settings: self))
         hiddenDebugOptions.append(DeleteAppAttestKeySetting(settings: self))
         hiddenDebugOptions.append(InstallationDetailsSetting(settings: self))
         hiddenDebugOptions.append(ResetInstallationHistorySetting(settings: self))

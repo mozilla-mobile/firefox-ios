@@ -292,3 +292,55 @@ final class ShowVPNConnectionFailedAlertSetting: HiddenSetting {
         store.dispatch(VPNAlertModernAction.showConnectionFailedAlert, forWindowUUID: settings.windowUUID)
     }
 }
+
+// TODO: FXIOS-17399 Remove simulated VPN failure debug hooks after testing
+/// Makes the next VPN connection, while the VPN is off, fail before requesting a pass.
+final class SimulateVPNConnectionFailureSetting: HiddenSetting {
+    private let prefs: Prefs = { return (AppContainer.shared.resolve() as Profile).prefs }()
+
+    override var title: NSAttributedString? {
+        guard let theme else { return nil }
+        return NSAttributedString(
+            string: "VPN: Fail Next Connection",
+            attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]
+        )
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        prefs.setBool(true, forKey: PrefsKeys.VPNSettings.simulateConnectionFailure)
+
+        let alert = UIAlertController(
+            title: "VPN Connection Failure Armed",
+            message: "The next VPN connection will fail.",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        settings.present(alert, animated: true)
+    }
+}
+
+// TODO: FXIOS-17399 Remove simulated VPN failure debug hooks after testing
+/// Makes the next VPN location switch, while the VPN is on, fall back to the recommended server.
+final class SimulateVPNLocationFallbackSetting: HiddenSetting {
+    private let prefs: Prefs = { return (AppContainer.shared.resolve() as Profile).prefs }()
+
+    override var title: NSAttributedString? {
+        guard let theme else { return nil }
+        return NSAttributedString(
+            string: "VPN: Fall Back on Next Location Switch",
+            attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]
+        )
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        prefs.setBool(true, forKey: PrefsKeys.VPNSettings.simulateLocationFallback)
+
+        let alert = UIAlertController(
+            title: "VPN Location Fallback Armed",
+            message: "The next VPN location switch will fall back to the recommended server.",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        settings.present(alert, animated: true)
+    }
+}

@@ -173,6 +173,9 @@ final class VPNManager: VPNRunnable {
     }
 
     private func connect(countryCode: String?) async throws {
+        // TODO: FXIOS-17399 Remove simulated VPN failure debug hooks after testing
+        try throwIfSimulatingFailure()
+
         guard let guardian = self.guardian else {
             throw VPNError.tokenProviderUnavailable
         }
@@ -186,8 +189,15 @@ final class VPNManager: VPNRunnable {
             throw VPNAuthError.quotaExceeded(usage)
         }
 
-        guard let selection = await serverManager.selectServer(countryCode: countryCode, environment: environment) else {
+        guard var selection = await serverManager.selectServer(countryCode: countryCode, environment: environment) else {
             throw VPNError.noServerFound
+        }
+        // TODO: FXIOS-17399 Remove simulated VPN failure hooks after testing
+        if consumeSimulatedLocationFallback(),
+           let fallback = await serverManager.selectServer(countryCode: nil, environment: environment) {
+            selection = VPNServerSelection(server: fallback.server, didFallBack: true)
+            // TODO: FXIOS-17399 (?) Remove this when the production endpoint is working
+            selection.server.countryCode = VPNServerManager.recommendedCountryCode
         }
         let server = selection.server
 
@@ -249,6 +259,23 @@ final class VPNManager: VPNRunnable {
         isRotationPaused = false
         guard rotationTask == nil, isRunning, let latestPass else { return }
         startPassRotation(after: latestPass)
+
+    // TODO: FXIOS-17399 Remove simulated VPN failure debug hooks after testing
+    /// One-shot debug hook: fails the next connection while the VPN is off.
+    private func throwIfSimulatingFailure() throws {
+        let key = PrefsKeys.VPNSettings.simulateConnectionFailure
+        guard !isRunning, prefs.boolForKey(key) == true else { return }
+        prefs.removeObjectForKey(key)
+        throw VPNError.noServerFound
+    }
+
+    // TODO: FXIOS-17399 Remove simulated VPN failure debug hooks after testing
+    /// One-shot debug hook: returns true once if the next location switch should fall back.
+    private func consumeSimulatedLocationFallback() -> Bool {
+        let key = PrefsKeys.VPNSettings.simulateLocationFallback
+        guard isRunning, prefs.boolForKey(key) == true else { return false }
+        prefs.removeObjectForKey(key)
+        return true
     }
 
     /// Consumes `VPNGuardian.passRotation` and reapplies the proxy configuration with the new
