@@ -13,6 +13,7 @@ import TipKit
 // Contains the firefox logo, and optionally the Quick Answers button
 class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, FeatureFlaggable {
     enum UX {
+        static let logoLongPressAllowableMovement: CGFloat = 30
         static let firefoxLogoImageSize = CGSize(width: 40, height: 40)
         static let privateNovaLogoImageSize = CGSize(width: 72, height: 72)
         static let firefoxTextImageSize = CGSize(width: 90, height: 40)
@@ -46,10 +47,13 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         view.isUserInteractionEnabled = true
     }
 
-    private lazy var logoLongPressRecognizer = UILongPressGestureRecognizer(
-        target: self,
-        action: #selector(handleLogoLongPress)
-    )
+    private lazy var logoLongPressRecognizer: UILongPressGestureRecognizer = {
+        let recognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleLogoLongPress))
+        recognizer.allowableMovement = UX.logoLongPressAllowableMovement
+        recognizer.cancelsTouchesInView = false
+        recognizer.delegate = self
+        return recognizer
+    }()
 
     private lazy var logoImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
@@ -104,7 +108,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         contentView.addSubview(quickAnswersButton)
 
         logoStackView.pinToSuperview()
-        logoStackView.addGestureRecognizer(logoLongPressRecognizer)
+        logoContainerView.addGestureRecognizer(logoLongPressRecognizer)
 
         setupConstraints()
     }
@@ -267,5 +271,14 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         logoTextImage.tintColor = logoTextColor ?? theme.colors.textPrimary
 
         updateQuickAnswersButton()
+    }
+}
+
+extension HomepageHeaderCell: UIGestureRecognizerDelegate {
+    func gestureRecognizer(
+        _ gestureRecognizer: UIGestureRecognizer,
+        shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
+    ) -> Bool {
+        return gestureRecognizer === logoLongPressRecognizer
     }
 }
