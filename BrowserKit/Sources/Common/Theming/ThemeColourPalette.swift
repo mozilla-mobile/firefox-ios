@@ -128,6 +128,7 @@ public protocol ThemeColourPalette {
     var gradientAccent: Gradient { get }
     var gradientAccentSubtle: Gradient { get }
     var gradientAIStrong: Gradient { get }
+    @available(*, deprecated, renamed: "gradientAccent")
     var gradientBorder: Gradient { get }
     var gradientTabBorderYellow: Gradient { get }
     var gradientTabBorderOrange: Gradient { get }
@@ -138,6 +139,7 @@ public protocol ThemeColourPalette {
     var gradientTabBorderCyan: Gradient { get }
     var gradientTabBorderGreen: Gradient { get }
     var gradientTabBorderGrey: Gradient { get }
+    var gradientTabBorderNoColor: Gradient { get }
     var gradientPrivacy: Gradient { get }
     var gradientPrivacyMask: Gradient { get }
     var gradientWidgetSurface: Gradient { get }
@@ -154,4 +156,5 @@ public protocol ThemeColourPalette {
     var tabGroupCyan: UIColor { get }
     var tabGroupGreen: UIColor { get }
     var tabGroupGrey: UIColor { get }
+    var tabGroupNoColor: UIColor { get }
 }

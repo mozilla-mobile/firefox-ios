@@ -104,15 +104,16 @@ private struct NovaLightColourPalette: ThemeColourPalette {
 
     // MARK: - Tab Group
 
-    let tabGroupYellow = NovaColors.Yellow50
-    let tabGroupOrange = NovaColors.Orange50
-    let tabGroupRed = NovaColors.Red50
-    let tabGroupPink = NovaColors.Pink50
-    let tabGroupPurple = NovaColors.Violet50
-    let tabGroupBlue = NovaColors.Blue50
-    let tabGroupCyan = NovaColors.Cyan50
-    let tabGroupGreen = NovaColors.Green50
+    let tabGroupYellow = NovaColors.Yellow40
+    let tabGroupOrange = NovaColors.Orange40
+    let tabGroupRed = NovaColors.Red40
+    let tabGroupPink = NovaColors.Pink40
+    let tabGroupPurple = NovaColors.Violet40
+    let tabGroupBlue = NovaColors.Blue40
+    let tabGroupCyan = NovaColors.Cyan40
+    let tabGroupGreen = NovaColors.Green40
     let tabGroupGrey = NovaColors.Gray50
+    let tabGroupNoColor = NovaColors.Gray5
 
     // MARK: - Gradients
 
@@ -130,13 +131,14 @@ private struct NovaLightColourPalette: ThemeColourPalette {
     var gradientBorder = Gradient(colors: [NovaColors.Violet30, NovaColors.Violet50])
     var gradientTabBorderYellow: Gradient { NovaTabGroupGradients.yellow }
     var gradientTabBorderOrange: Gradient { NovaTabGroupGradients.orange }
-    var gradientTabBorderRed: Gradient { NovaTabGroupGradients.red }
+    var gradientTabBorderRed: Gradient { NovaTabGroupGradients.lightRed }
     var gradientTabBorderPink: Gradient { NovaTabGroupGradients.pink }
     var gradientTabBorderPurple: Gradient { NovaTabGroupGradients.purple }
     var gradientTabBorderBlue: Gradient { NovaTabGroupGradients.blue }
     var gradientTabBorderCyan: Gradient { NovaTabGroupGradients.cyan }
     var gradientTabBorderGreen: Gradient { NovaTabGroupGradients.green }
-    var gradientTabBorderGrey: Gradient { NovaTabGroupGradients.grey }
+    var gradientTabBorderGrey: Gradient { NovaTabGroupGradients.lightGrey }
+    var gradientTabBorderNoColor: Gradient { NovaTabGroupGradients.lightNoColor }
     var gradientPrivacy = Gradient(colors: [
         NovaColors.Purple40,
         NovaColors.VioletDesaturated90

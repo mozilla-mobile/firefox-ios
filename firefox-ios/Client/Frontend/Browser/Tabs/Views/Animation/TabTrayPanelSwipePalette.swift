@@ -198,6 +198,7 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var gradientAccent: Gradient { base.gradientAccent }
     var gradientAccentSubtle: Gradient { base.gradientAccentSubtle }
     var gradientAIStrong: Gradient { base.gradientAIStrong }
+    @available(*, deprecated, renamed: "gradientAccent")
     var gradientBorder: Gradient { base.gradientBorder }
     var gradientTabBorderYellow: Gradient { base.gradientTabBorderYellow }
     var gradientTabBorderOrange: Gradient { base.gradientTabBorderOrange }
@@ -208,6 +209,7 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var gradientTabBorderCyan: Gradient { base.gradientTabBorderCyan }
     var gradientTabBorderGreen: Gradient { base.gradientTabBorderGreen }
     var gradientTabBorderGrey: Gradient { base.gradientTabBorderGrey }
+    var gradientTabBorderNoColor: Gradient { base.gradientTabBorderNoColor }
     var gradientPrivacy: Gradient { base.gradientPrivacy }
     var gradientPrivacyMask: Gradient { base.gradientPrivacyMask }
     var gradientWidgetSurface: Gradient { base.gradientWidgetSurface }
@@ -224,6 +226,7 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var tabGroupCyan: UIColor { base.tabGroupCyan }
     var tabGroupGreen: UIColor { base.tabGroupGreen }
     var tabGroupGrey: UIColor { base.tabGroupGrey }
+    var tabGroupNoColor: UIColor { base.tabGroupNoColor }
 
     init(base: ThemeColourPalette, overrides: PartialOverrides) {
         self.base = base

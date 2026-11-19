@@ -73,7 +73,6 @@ class NovaMissingTokenTests: XCTestCase {
             ("gradientAccent", { _ = $0.gradientAccent }),
             ("gradientAccentSubtle", { _ = $0.gradientAccentSubtle }),
             ("gradientAIStrong", { _ = $0.gradientAIStrong }),
-            ("gradientBorder", { _ = $0.gradientBorder }),
             ("gradientTabBorderYellow", { _ = $0.gradientTabBorderYellow }),
             ("gradientTabBorderOrange", { _ = $0.gradientTabBorderOrange }),
             ("gradientTabBorderRed", { _ = $0.gradientTabBorderRed }),
@@ -83,6 +82,7 @@ class NovaMissingTokenTests: XCTestCase {
             ("gradientTabBorderCyan", { _ = $0.gradientTabBorderCyan }),
             ("gradientTabBorderGreen", { _ = $0.gradientTabBorderGreen }),
             ("gradientTabBorderGrey", { _ = $0.gradientTabBorderGrey }),
+            ("gradientTabBorderNoColor", { _ = $0.gradientTabBorderNoColor }),
             ("gradientPrivacy", { _ = $0.gradientPrivacy }),
             ("tabGroupYellow", { _ = $0.tabGroupYellow }),
             ("tabGroupOrange", { _ = $0.tabGroupOrange }),
@@ -93,6 +93,7 @@ class NovaMissingTokenTests: XCTestCase {
             ("tabGroupCyan", { _ = $0.tabGroupCyan }),
             ("tabGroupGreen", { _ = $0.tabGroupGreen }),
             ("tabGroupGrey", { _ = $0.tabGroupGrey }),
+            ("tabGroupNoColor", { _ = $0.tabGroupNoColor }),
             ("gradientPrivacyMask", { _ = $0.gradientPrivacyMask })
         ]
 

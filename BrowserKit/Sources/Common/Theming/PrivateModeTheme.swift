@@ -156,6 +156,7 @@ private struct PrivateModeColorPalette: ThemeColourPalette {
     var gradientTabBorderCyan: Gradient { NovaMissingToken.gradient("gradientTabBorderCyan") }
     var gradientTabBorderGreen: Gradient { NovaMissingToken.gradient("gradientTabBorderGreen") }
     var gradientTabBorderGrey: Gradient { NovaMissingToken.gradient("gradientTabBorderGrey") }
+    var gradientTabBorderNoColor: Gradient { NovaMissingToken.gradient("gradientTabBorderNoColor") }
     var gradientPrivacy: Gradient { NovaMissingToken.gradient("gradientPrivacy") }
     var gradientPrivacyMask: Gradient { NovaMissingToken.gradient("gradientPrivacyMask") }
     var gradientWidgetSurface: Gradient { NovaMissingToken.gradient("gradientWidgetSurface") }
@@ -172,4 +173,5 @@ private struct PrivateModeColorPalette: ThemeColourPalette {
     var tabGroupCyan: UIColor { NovaMissingToken.color("tabGroupCyan") }
     var tabGroupGreen: UIColor { NovaMissingToken.color("tabGroupGreen") }
     var tabGroupGrey: UIColor { NovaMissingToken.color("tabGroupGrey") }
+    var tabGroupNoColor: UIColor { NovaMissingToken.color("tabGroupNoColor") }
 }

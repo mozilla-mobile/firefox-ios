@@ -114,6 +114,7 @@ private struct NovaPrivateColourPalette: ThemeColourPalette {
     let tabGroupCyan = NovaColors.Cyan30
     let tabGroupGreen = NovaColors.Green30
     let tabGroupGrey = NovaColors.Gray40
+    let tabGroupNoColor = NovaColors.Gray75
 
     // MARK: - Gradients
 
@@ -131,13 +132,14 @@ private struct NovaPrivateColourPalette: ThemeColourPalette {
     var gradientBorder = Gradient(colors: [NovaColors.Violet30, NovaColors.Violet50])
     var gradientTabBorderYellow: Gradient { NovaTabGroupGradients.yellow }
     var gradientTabBorderOrange: Gradient { NovaTabGroupGradients.orange }
-    var gradientTabBorderRed: Gradient { NovaTabGroupGradients.red }
+    var gradientTabBorderRed: Gradient { NovaTabGroupGradients.darkRed }
     var gradientTabBorderPink: Gradient { NovaTabGroupGradients.pink }
     var gradientTabBorderPurple: Gradient { NovaTabGroupGradients.purple }
     var gradientTabBorderBlue: Gradient { NovaTabGroupGradients.blue }
     var gradientTabBorderCyan: Gradient { NovaTabGroupGradients.cyan }
     var gradientTabBorderGreen: Gradient { NovaTabGroupGradients.green }
-    var gradientTabBorderGrey: Gradient { NovaTabGroupGradients.grey }
+    var gradientTabBorderGrey: Gradient { NovaTabGroupGradients.darkGrey }
+    var gradientTabBorderNoColor: Gradient { NovaTabGroupGradients.darkNoColor }
     var gradientPrivacy = Gradient(colors: [
         NovaColors.Purple40,
         NovaColors.Purple20

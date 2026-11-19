@@ -13,6 +13,12 @@ class NovaTabGroupTokenTests: XCTestCase {
         let dark: UIColor
     }
 
+    private struct GradientMapping {
+        let key: KeyPath<ThemeColourPalette, Gradient>
+        let light: [UIColor]
+        let dark: [UIColor]
+    }
+
     private let light = NovaLightTheme().colors
     private let dark = NovaDarkTheme().colors
     private let privateMode = NovaPrivateTheme().colors
@@ -20,15 +26,16 @@ class NovaTabGroupTokenTests: XCTestCase {
 
     func testPrimaryColorsMatchTheTheme() {
         let colors = [
-            ColorMapping(key: \.tabGroupYellow, light: NovaColors.Yellow50, dark: NovaColors.Yellow30),
-            ColorMapping(key: \.tabGroupOrange, light: NovaColors.Orange50, dark: NovaColors.Orange30),
-            ColorMapping(key: \.tabGroupRed, light: NovaColors.Red50, dark: NovaColors.Red30),
-            ColorMapping(key: \.tabGroupPink, light: NovaColors.Pink50, dark: NovaColors.Pink30),
-            ColorMapping(key: \.tabGroupPurple, light: NovaColors.Violet50, dark: NovaColors.Violet30),
-            ColorMapping(key: \.tabGroupBlue, light: NovaColors.Blue50, dark: NovaColors.Blue30),
-            ColorMapping(key: \.tabGroupCyan, light: NovaColors.Cyan50, dark: NovaColors.Cyan30),
-            ColorMapping(key: \.tabGroupGreen, light: NovaColors.Green50, dark: NovaColors.Green30),
-            ColorMapping(key: \.tabGroupGrey, light: NovaColors.Gray50, dark: NovaColors.Gray40)
+            ColorMapping(key: \.tabGroupYellow, light: NovaColors.Yellow40, dark: NovaColors.Yellow30),
+            ColorMapping(key: \.tabGroupOrange, light: NovaColors.Orange40, dark: NovaColors.Orange30),
+            ColorMapping(key: \.tabGroupRed, light: NovaColors.Red40, dark: NovaColors.Red30),
+            ColorMapping(key: \.tabGroupPink, light: NovaColors.Pink40, dark: NovaColors.Pink30),
+            ColorMapping(key: \.tabGroupPurple, light: NovaColors.Violet40, dark: NovaColors.Violet30),
+            ColorMapping(key: \.tabGroupBlue, light: NovaColors.Blue40, dark: NovaColors.Blue30),
+            ColorMapping(key: \.tabGroupCyan, light: NovaColors.Cyan40, dark: NovaColors.Cyan30),
+            ColorMapping(key: \.tabGroupGreen, light: NovaColors.Green40, dark: NovaColors.Green30),
+            ColorMapping(key: \.tabGroupGrey, light: NovaColors.Gray50, dark: NovaColors.Gray40),
+            ColorMapping(key: \.tabGroupNoColor, light: NovaColors.Gray5, dark: NovaColors.Gray75)
         ]
 
         for color in colors {
@@ -39,25 +46,45 @@ class NovaTabGroupTokenTests: XCTestCase {
         }
     }
 
-    func testTabBorderGradientsUseTheSameStopsInEachTheme() {
-        let gradients: [(key: KeyPath<ThemeColourPalette, Gradient>, stops: [UIColor])] = [
-            (\.gradientTabBorderYellow, [NovaColors.Yellow30, NovaColors.Yellow70]),
-            (\.gradientTabBorderOrange, [NovaColors.Orange30, NovaColors.Orange70]),
-            (\.gradientTabBorderRed, [NovaColors.Red30, NovaColors.Red70]),
-            (\.gradientTabBorderPink, [NovaColors.Pink30, NovaColors.Pink70]),
-            (\.gradientTabBorderPurple, [NovaColors.Violet30, NovaColors.Violet70]),
-            (\.gradientTabBorderBlue, [NovaColors.Blue30, NovaColors.Blue70]),
-            (\.gradientTabBorderCyan, [NovaColors.Cyan30, NovaColors.Cyan70]),
-            (\.gradientTabBorderGreen, [NovaColors.Green30, NovaColors.Green70]),
-            (\.gradientTabBorderGrey, [NovaColors.Gray40, NovaColors.Gray60])
+    func testTabBorderGradientStopsMatchTheTheme() {
+        let shared: [(key: KeyPath<ThemeColourPalette, Gradient>, stops: [UIColor])] = [
+            (\.gradientTabBorderYellow, [NovaColors.Yellow40, NovaColors.Yellow50]),
+            (\.gradientTabBorderOrange, [NovaColors.Orange40, NovaColors.Orange50]),
+            (\.gradientTabBorderPink, [NovaColors.Pink40, NovaColors.Pink50]),
+            (\.gradientTabBorderPurple, [NovaColors.Violet40, NovaColors.Violet50]),
+            (\.gradientTabBorderBlue, [NovaColors.Blue40, NovaColors.Blue50]),
+            (\.gradientTabBorderCyan, [NovaColors.Cyan40, NovaColors.Cyan50]),
+            (\.gradientTabBorderGreen, [NovaColors.Green40, NovaColors.Green50])
         ]
+        let lightNeutralStop = UIColor(rgb: 0x14092b).withAlphaComponent(0.7)
+        let darkNeutralStop = NovaColors.VioletDesaturated0.withAlphaComponent(0.7)
+        let themeSpecific = [
+            GradientMapping(key: \.gradientTabBorderRed,
+                            light: [NovaColors.Red40, NovaColors.Red40],
+                            dark: [NovaColors.Red50, NovaColors.Red50]),
+            GradientMapping(key: \.gradientTabBorderGrey,
+                            light: [lightNeutralStop, NovaColors.Gray50],
+                            dark: [darkNeutralStop, NovaColors.Gray40]),
+            GradientMapping(key: \.gradientTabBorderNoColor,
+                            light: [lightNeutralStop, NovaColors.VioletDesaturated90],
+                            dark: [darkNeutralStop, NovaColors.VioletDesaturated0])
+        ]
+        let gradients = shared.map { GradientMapping(key: $0.key, light: $0.stops, dark: $0.stops) } + themeSpecific
 
         for gradient in gradients {
-            XCTAssertEqual(light[keyPath: gradient.key].colors, gradient.stops, "\(gradient.key) in Light")
-            XCTAssertEqual(dark[keyPath: gradient.key].colors, gradient.stops, "\(gradient.key) in Dark")
-            XCTAssertEqual(privateMode[keyPath: gradient.key].colors, gradient.stops, "\(gradient.key) in Private")
-            XCTAssertEqual(night[keyPath: gradient.key].colors, gradient.stops, "\(gradient.key) in Night")
+            XCTAssertEqual(light[keyPath: gradient.key].colors, gradient.light, "\(gradient.key) in Light")
+            XCTAssertEqual(dark[keyPath: gradient.key].colors, gradient.dark, "\(gradient.key) in Dark")
+            XCTAssertEqual(privateMode[keyPath: gradient.key].colors, gradient.dark, "\(gradient.key) in Private")
+            XCTAssertEqual(night[keyPath: gradient.key].colors, gradient.dark, "\(gradient.key) in Night")
         }
+    }
+
+    func testAccentGradientStopsMatchTheTheme() {
+        let accentStops = [NovaColors.Violet30, NovaColors.Orange30]
+        XCTAssertEqual(light.gradientAccent.colors, accentStops)
+        XCTAssertEqual(dark.gradientAccent.colors, accentStops)
+        XCTAssertEqual(privateMode.gradientAccent.colors, [NovaColors.Violet30, NovaColors.Violet50])
+        XCTAssertEqual(night.gradientAccent.colors, accentStops)
     }
 
     func testGlassTintMatchesTheTheme() {
