@@ -55,7 +55,12 @@ final class QuickAnswersViewModel {
         }
     ) {
         let configFetcher = configFetcher ?? DefaultQuickAnswersConfigFetcher(
-            feature: QuickAnswersFeature(model: .exa, isOptInRedesignEnabled: false)
+            feature: QuickAnswersFeature(
+                model: .exa,
+                isOptInRedesignEnabled: false,
+                isFollowUpEnabled: false,
+                isReturnToAnswerEnabled: false
+            )
         )
         self.telemetry = telemetry
         self.store = Store(prefs: prefs)

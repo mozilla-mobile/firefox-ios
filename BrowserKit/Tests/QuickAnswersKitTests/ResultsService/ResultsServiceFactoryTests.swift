@@ -50,7 +50,12 @@ struct ResultsServiceFactoryTests {
         let mockLLMCreator = MockLLMClientCreator()
         mockLLMCreator.clientToReturn = MockLiteLLMClient()
         let configFetcher = MockQuickAnswersConfigFetcher()
-        configFetcher.feature = QuickAnswersFeature(model: model, isOptInRedesignEnabled: false)
+        configFetcher.feature = QuickAnswersFeature(
+            model: model,
+            isOptInRedesignEnabled: false,
+            isFollowUpEnabled: false,
+            isReturnToAnswerEnabled: false
+        )
         let subject = createSubject(liteLLMCreator: mockLLMCreator)
 
         _ = try subject.make(prefs: MockProfilePrefs(), configFetcher: configFetcher)

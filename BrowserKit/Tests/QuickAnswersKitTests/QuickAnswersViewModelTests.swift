@@ -390,7 +390,8 @@ final class QuickAnswersViewModelTests: XCTestCase {
                 feature: QuickAnswersFeature(
                     model: model,
                     isOptInRedesignEnabled: isOptInRedesignEnabled,
-                    isFollowUpEnabled: isFollowUpEnabled
+                    isFollowUpEnabled: isFollowUpEnabled,
+                    isReturnToAnswerEnabled: false
                 )
             ),
             makeService: { _, _ in

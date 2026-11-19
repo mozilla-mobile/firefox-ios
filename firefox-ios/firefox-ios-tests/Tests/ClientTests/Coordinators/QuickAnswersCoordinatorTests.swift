@@ -127,7 +127,12 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
 
         XCTAssertEqual(
             subject.resolvedFeature(),
-            QuickAnswersKit.QuickAnswersFeature(model: .liner, isOptInRedesignEnabled: true)
+            QuickAnswersKit.QuickAnswersFeature(
+                model: .liner,
+                isOptInRedesignEnabled: true,
+                isFollowUpEnabled: false,
+                isReturnToAnswerEnabled: false
+            )
         )
     }
 
@@ -137,7 +142,12 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
 
         XCTAssertEqual(
             subject.resolvedFeature(),
-            QuickAnswersKit.QuickAnswersFeature(model: .exa, isOptInRedesignEnabled: false)
+            QuickAnswersKit.QuickAnswersFeature(
+                model: .exa,
+                isOptInRedesignEnabled: false,
+                isFollowUpEnabled: false,
+                isReturnToAnswerEnabled: false
+            )
         )
     }
 
@@ -148,8 +158,36 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
 
         XCTAssertEqual(
             subject.resolvedFeature(),
-            QuickAnswersKit.QuickAnswersFeature(model: .exa, isOptInRedesignEnabled: false, isFollowUpEnabled: true)
+            QuickAnswersKit.QuickAnswersFeature(
+                model: .exa,
+                isOptInRedesignEnabled: false,
+                isFollowUpEnabled: true,
+                isReturnToAnswerEnabled: false
+            )
         )
+    }
+
+    func test_resolvedFeature_withReturnToAnswerEnabled_setsFlag() {
+        setupNimbus(model: .exa)
+        featureFlagsProvider.enabledFlags = [.quickAnswersReturnToAnswer]
+        let subject = createSubject()
+
+        XCTAssertEqual(
+            subject.resolvedFeature(),
+            QuickAnswersKit.QuickAnswersFeature(
+                model: .exa,
+                isOptInRedesignEnabled: false,
+                isFollowUpEnabled: false,
+                isReturnToAnswerEnabled: true
+            )
+        )
+    }
+
+    func test_resolvedFeature_withReturnToAnswerDisabled_doesNotSetFlag() {
+        setupNimbus(model: .exa)
+        let subject = createSubject()
+
+        XCTAssertFalse(subject.resolvedFeature().isReturnToAnswerEnabled)
     }
 
     // MARK: - Helper Methods
