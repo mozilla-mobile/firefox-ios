@@ -15,6 +15,7 @@
 /// that are added to the global scope by bergamot-translator.js.
 /// Without this, the `loadBergamot` function would not be defined.
 import "script-loader!Assets/CC_Script/bergamot-translator.js";
+import "Assets/CC_Script/TranslationsPolyfills.js";
 
 const ChromeUtils = { 
   addProfilerMarker: () => {},
