@@ -142,6 +142,11 @@ workflows:
         - test_plan: Smoketest
         - xcodebuild_options: $XCODEBUILD_OPTIONS
         - destination: $DESTINATION
+    - script@1:
+        title: Determine device type
+        is_always_run: true
+        inputs:
+        - content: bitrise/scripts/set-destination-label.sh "$DESTINATION"
     - xcode-test-without-building@0:
         title: Run all smoke tests
         timeout: 3000
@@ -150,14 +155,6 @@ workflows:
         - xcodebuild_options: $XCODEBUILD_OPTIONS
     - deploy-to-bitrise-io@2:
         is_always_run: true
-    - script@1:
-        title: Determine device type
-        is_always_run: true
-        inputs:
-        - content: |-
-            NAME=$(sed -E 's/.*name=([^,]+).*/\1/' <<< "$DESTINATION")
-            OS=$(sed -E 's/.*OS=([^,]+).*/\1/' <<< "$DESTINATION")
-            envman add --key DESTINATION_LABEL --value "$NAME (iOS $OS)"
     - slack@4:
         is_always_run: true
         inputs:
@@ -222,6 +219,11 @@ workflows:
         - project_path: focus-ios/Blockzilla.xcodeproj
         - xcodebuild_options: '"ONLY_ACTIVE_ARCH=YES" "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -collect-test-diagnostics never -skipMacroValidation'
         - destination: $IPHONE_DESTINATION
+    - script@1:
+        title: Determine device type
+        is_always_run: true
+        inputs:
+        - content: bitrise/scripts/set-destination-label.sh "$IPHONE_DESTINATION" "$IPAD_DESTINATION" "$DUO_DESTINATION"
     - xcode-test-without-building@0:
         title: Focus Smoketest - iPhone
         is_always_run: true
@@ -290,6 +292,7 @@ workflows:
         - timestamp: 'no'
         - fields: |
             Branch | ${BITRISE_GIT_BRANCH}
+            Devices | ${DESTINATION_LABEL}
         - buttons: |
             Build Log|${BITRISE_BUILD_URL}
             Test Report|${BITRISE_BUILD_URL}?tab=tests
@@ -361,6 +364,11 @@ workflows:
         - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
         - xcodebuild_options: $XCODEBUILD_OPTIONS
         - destination: $DESTINATION
+    - script@1:
+        title: Determine device type
+        is_always_run: true
+        inputs:
+        - content: bitrise/scripts/set-destination-label.sh "$DESTINATION"
     - xcode-test-shard-calculation@0:
         inputs:
         - product_path: $BITRISE_TEST_BUNDLE_PATH/${SCHEME}_FullFunctionalTestPlan_iphonesimulator27.1-arm64.xctestrun
@@ -377,6 +385,7 @@ workflows:
             SCHEME
             DESTINATION
             SLACK_TITLE
+            DESTINATION_LABEL
 
   firefox_smoketest_run:
     description: Run the Firefox smoke tests
@@ -412,14 +421,6 @@ workflows:
   firefox_fullfunctional_report:
     description: Report the full functional test result to Slack
     steps:
-    - script@1:
-        title: Determine device type
-        is_always_run: true
-        inputs:
-        - content: |-
-            NAME=$(sed -E 's/.*name=([^,]+).*/\1/' <<< "$DESTINATION")
-            OS=$(sed -E 's/.*OS=([^,]+).*/\1/' <<< "$DESTINATION")
-            envman add --key DESTINATION_LABEL --value "$NAME (iOS $OS)"
     - slack@4:
         is_always_run: true
         inputs:
