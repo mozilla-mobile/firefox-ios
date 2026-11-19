@@ -294,7 +294,7 @@ final class ShowVPNConnectionFailedAlertSetting: HiddenSetting {
 }
 
 // TODO: FXIOS-17399 Remove simulated VPN failure debug hooks after testing
-/// Makes the next VPN connection, while the VPN is off, fail before requesting a pass.
+/// Makes the next VPN connection or location switch fail before requesting a pass.
 final class SimulateVPNConnectionFailureSetting: HiddenSetting {
     private let prefs: Prefs = { return (AppContainer.shared.resolve() as Profile).prefs }()
 
@@ -311,7 +311,7 @@ final class SimulateVPNConnectionFailureSetting: HiddenSetting {
 
         let alert = UIAlertController(
             title: "VPN Connection Failure Armed",
-            message: "The next VPN connection will fail.",
+            message: "The next VPN connection or location switch will fail.",
             preferredStyle: .alert
         )
         alert.addAction(UIAlertAction(title: "OK", style: .default))

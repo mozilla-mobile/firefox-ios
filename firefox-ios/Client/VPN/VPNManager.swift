@@ -261,10 +261,10 @@ final class VPNManager: VPNRunnable {
         startPassRotation(after: latestPass)
 
     // TODO: FXIOS-17399 Remove simulated VPN failure debug hooks after testing
-    /// One-shot debug hook: fails the next connection while the VPN is off.
+    /// One-shot debug hook: fails the next connection or location switch.
     private func throwIfSimulatingFailure() throws {
         let key = PrefsKeys.VPNSettings.simulateConnectionFailure
-        guard !isRunning, prefs.boolForKey(key) == true else { return }
+        guard prefs.boolForKey(key) == true else { return }
         prefs.removeObjectForKey(key)
         throw VPNError.noServerFound
     }
