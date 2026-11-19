@@ -7,6 +7,7 @@ import XCTest
 
 @testable import Client
 
+@MainActor
 final class FoxDashBestScoreStoreTests: XCTestCase {
     private var prefs: MockProfilePrefs!
 
