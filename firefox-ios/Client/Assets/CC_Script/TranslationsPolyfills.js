@@ -5,19 +5,14 @@
 // Provides builtins missing on iOS < 17.4. Remove once the minimum supported iOS is 17.4+.
 
 if (typeof Promise.withResolvers !== "function") {
-  Object.defineProperty(Promise, "withResolvers", {
-    configurable: true,
-    writable: true,
-    enumerable: false,
-    value: function withResolvers() {
+  Promise.withResolvers = function () {
       let resolve, reject;
-      const promise = new this((res, rej) => {
+      const promise = new Promise((res, rej) => {
         resolve = res;
         reject = rej;
       });
       return { promise, resolve, reject };
-    },
-  });
+  };
 }
 
 if (typeof ArrayBuffer.prototype.transfer !== "function") {
