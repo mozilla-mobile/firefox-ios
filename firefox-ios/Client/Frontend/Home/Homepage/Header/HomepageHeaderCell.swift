@@ -45,7 +45,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         view.accessibilityLabel = AppName.shortName.rawValue
         view.isAccessibilityElement = true
         view.accessibilityTraits = .image
-        view.isUserInteractionEnabled = true
     }
 
     private lazy var logoLongPressRecognizer: UILongPressGestureRecognizer = {
