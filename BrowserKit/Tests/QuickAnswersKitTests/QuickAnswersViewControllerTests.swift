@@ -32,9 +32,11 @@ final class QuickAnswersViewControllerTests: XCTestCase {
     ) -> QuickAnswersViewController {
         let viewModel = QuickAnswersViewModel(
             prefs: MockProfilePrefs(),
+            sessionStorage: QuickAnswersSessionStorage(),
+            isReturningToAnswer: false,
             telemetry: MockQuickAnswersTelemetry(),
             configFetcher: nil,
-            makeService: { _, _ in
+            makeService: { _, _, _ in
                 MockTestQuickAnswersService()
             }
         )

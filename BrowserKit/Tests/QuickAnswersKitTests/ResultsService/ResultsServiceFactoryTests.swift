@@ -11,6 +11,8 @@ import TestKit
 @testable import QuickAnswersKit
 
 struct ResultsServiceFactoryTests {
+    private let conversation = MockQuickAnswersConversation()
+
     @Test
     func test_make_withValidClient_returnsConfiguredService() throws {
         let mockLLMCreator = MockLLMClientCreator()
@@ -19,7 +21,7 @@ struct ResultsServiceFactoryTests {
         let configFetcher = MockQuickAnswersConfigFetcher()
         let subject = createSubject(liteLLMCreator: mockLLMCreator)
 
-        let result = try subject.make(prefs: prefs, configFetcher: configFetcher)
+        let result = try subject.make(prefs: prefs, configFetcher: configFetcher, conversation: conversation)
 
         #expect(result is DefaultResultsService, "Factory should return configured service when LLM client is available")
         #expect(mockLLMCreator.createAppAttestLiteLLMCallCount == 1, "Should call createAppAttestLiteLLM once")
@@ -34,7 +36,7 @@ struct ResultsServiceFactoryTests {
         let subject = createSubject(liteLLMCreator: mockLLMCreator)
 
         #expect(throws: ResultsServiceError.unableToCreateService) {
-            try subject.make(prefs: prefs, configFetcher: configFetcher)
+            try subject.make(prefs: prefs, configFetcher: configFetcher, conversation: conversation)
         }
         #expect(mockLLMCreator.createAppAttestLiteLLMCallCount == 1, "Should attempt to create LLM client")
     }
@@ -58,7 +60,7 @@ struct ResultsServiceFactoryTests {
         )
         let subject = createSubject(liteLLMCreator: mockLLMCreator)
 
-        _ = try subject.make(prefs: MockProfilePrefs(), configFetcher: configFetcher)
+        _ = try subject.make(prefs: MockProfilePrefs(), configFetcher: configFetcher, conversation: conversation)
 
         #expect(mockLLMCreator.lastServiceType == expectedServiceType)
     }

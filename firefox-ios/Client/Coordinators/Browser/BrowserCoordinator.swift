@@ -72,6 +72,7 @@ final class BrowserCoordinator: BaseCoordinator,
         return summarizerNimbusUtils.isSummarizeFeatureToggledOn
     }
     private var pendingOnboardingCardAction: OnboardingCardButtonAction = .none
+    private let quickAnswersSessionStorage = QuickAnswersSessionStorage()
 
     override var isDismissible: Bool { false }
 
@@ -1324,6 +1325,7 @@ final class BrowserCoordinator: BaseCoordinator,
         let coordinator = QuickAnswersCoordinator(
             parentCoordinatorDelegate: self,
             prefs: profile.prefs,
+            sessionStorage: quickAnswersSessionStorage,
             windowUUID: windowUUID,
             themeManager: themeManager,
             router: router,

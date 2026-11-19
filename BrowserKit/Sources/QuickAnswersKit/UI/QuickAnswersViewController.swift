@@ -77,6 +77,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         navigationHandler: QuickAnswersNavigationHandler?,
         transitionType: QuickAnswersTransitionType,
         prefs: Prefs,
+        sessionStorage: QuickAnswersSessionStorage,
         windowUUID: WindowUUID,
         themeManager: any ThemeManager,
         telemetry: QuickAnswersTelemetry,
@@ -87,7 +88,13 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
     ) {
         self.init(
             navigationHandler: navigationHandler,
-            viewModel: QuickAnswersViewModel(prefs: prefs, telemetry: telemetry, configFetcher: configFetcher),
+            viewModel: QuickAnswersViewModel(
+                prefs: prefs,
+                sessionStorage: sessionStorage,
+                isReturningToAnswer: false,
+                telemetry: telemetry,
+                configFetcher: configFetcher
+            ),
             transitionType: transitionType,
             windowUUID: windowUUID,
             themeManager: themeManager,
@@ -141,10 +148,14 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         applyTheme()
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         registerCallbacks()
+        if let session = viewModel.restoredSession {
+            showRestoredSession(session)
+        }
     }
 
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        guard viewModel.restoredSession == nil else { return }
         viewModel.startFlow()
     }
 
@@ -222,16 +233,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
                     self?.errorHandler.handleSearchError(error)
                 } else {
                     self?.triggerHaptic()
-                    self?.backgroundEffectView.showResult(blobsRevealDelay: UX.resultBlobsFadeDelay)
-                    self?.showFollowUpButton()
-                    self?.contentView.configureResult(
-                        result.resultText,
-                        modelName: self?.viewModel.modelDisplayName ?? "",
-                        sources: result.sources
-                    ) { [weak self] url in
-                        self?.viewModel.recordCitationTapped()
-                        self?.dismiss(with: url)
-                    }
+                    self?.showResult(result)
                 }
             }
         }
@@ -247,6 +249,32 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
                 self?.dismiss(with: url)
             }
         )
+    }
+
+    private func showResult(_ result: SearchResult) {
+        backgroundEffectView.showResult(blobsRevealDelay: UX.resultBlobsFadeDelay)
+        showFollowUpButton()
+        contentView.configureResult(
+            result.resultText,
+            modelName: viewModel.modelDisplayName,
+            sources: result.sources
+        ) { [weak self] url in
+            self?.openCitation(url)
+        }
+    }
+
+    private func showRestoredSession(_ session: QuickAnswersSessionSnapshot) {
+        contentView.configureTranscript(session.question)
+        showResult(session.result)
+    }
+
+    private func openCitation(_ url: URL) {
+        triggerHaptic()
+        if viewModel.handleCitationTap() {
+            navigationHandler?.parkQuickAnswers(with: .url(url))
+        } else {
+            navigationHandler?.dismissQuickAnswers(with: .url(url))
+        }
     }
 
     @available(iOS 17.0, *)

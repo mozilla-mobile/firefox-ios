@@ -5,12 +5,24 @@
 import Foundation
 import Shared
 
-/// Persists user preferences related to the Quick Answers feature.
+/// Persists the opt-in of the Quick Answers feature, and keeps the latest answered session in memory.
+@MainActor
 struct Store {
     private let prefs: Prefs
+    private let sessionStorage: QuickAnswersSessionStorage
+    private let feature: QuickAnswersFeature
+    private let isReturningToAnswer: Bool
 
-    init(prefs: Prefs) {
+    init(
+        prefs: Prefs,
+        sessionStorage: QuickAnswersSessionStorage,
+        feature: QuickAnswersFeature,
+        isReturningToAnswer: Bool
+    ) {
         self.prefs = prefs
+        self.sessionStorage = sessionStorage
+        self.feature = feature
+        self.isReturningToAnswer = isReturningToAnswer
     }
 
     /// Whether the user has accepted the Quick Answers opt-in.
@@ -18,8 +30,28 @@ struct Store {
         return prefs.boolForKey(PrefsKeys.QuickAnswers.optInCompleted) ?? false
     }
 
+    /// The session the user is returning to, if any. Always nil when not returning or when return to answer is disabled.
+    var restoredSession: QuickAnswersSessionSnapshot? {
+        return isReturningToAnswer ? latestSession : nil
+    }
+
+    /// The latest answered session the user can return to, if any. Always nil when return to answer is disabled.
+    var latestSession: QuickAnswersSessionSnapshot? {
+        guard feature.isReturnToAnswerEnabled else { return nil }
+        return sessionStorage.latestSession
+    }
+
     /// Marks the Quick Answers opt-in as completed.
     func setOptInCompleted() {
         prefs.setBool(true, forKey: PrefsKeys.QuickAnswers.optInCompleted)
+    }
+
+    func saveSession(_ session: QuickAnswersSessionSnapshot) {
+        guard feature.isReturnToAnswerEnabled else { return }
+        sessionStorage.latestSession = session
+    }
+
+    func removeAllSessions() {
+        sessionStorage.removeAll()
     }
 }
