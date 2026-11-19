@@ -10,6 +10,7 @@ import VPNKit
 
 protocol VPNGuardianProviding: Sendable {
     func getPass() async throws -> VPNProxyPass
+    func getUsage() async throws -> VPNProxyUsage
     func passRotation(after initial: VPNProxyPass) -> AsyncThrowingStream<VPNProxyPass, Error>
 }
 
@@ -84,6 +85,10 @@ final class VPNGuardian: VPNGuardianProviding {
         // TODO: FXIOS-17399 Remove simulateQuotaExceeded debug hook after testing
         try throwIfSimulatingQuotaExceeded()
         return try await tokenProvider.proxyToken()
+    }
+
+    func getUsage() async throws -> VPNProxyUsage {
+        return try await tokenProvider.proxyUsage()
     }
 
     // TODO: FXIOS-17399 Remove simulateQuotaExceeded debug hook after testing

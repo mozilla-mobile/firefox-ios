@@ -76,7 +76,8 @@ public struct VPNProxyTokenService: VPNProxyTokenFetching {
         case 401:
             throw VPNAuthError.sessionRejected
         case 429:
-            throw VPNAuthError.quotaExceeded(VPNProxyUsage(response: response))
+            let usage = try VPNProxyUsage(response: response)
+            throw VPNAuthError.quotaExceeded(usage)
         default:
             try AppAttestServiceError.validate(response: response, data: data)
             return (data, response)
@@ -86,11 +87,12 @@ public struct VPNProxyTokenService: VPNProxyTokenFetching {
     private static func makePass(from data: Data, response: URLResponse) throws -> VPNProxyPass {
         let token = try JSONDecoder().decode(TokenResponse.self, from: data).token
         let claims = try decodeJWTClaims(token)
+        let usage = try VPNProxyUsage(response: response)
         return VPNProxyPass(
             bearerToken: token,
             notBefore: claims.nbf.map { Date(timeIntervalSince1970: $0) } ?? Date(),
             expiresAt: Date(timeIntervalSince1970: claims.exp),
-            usage: VPNProxyUsage(response: response)
+            usage: usage
         )
     }
 

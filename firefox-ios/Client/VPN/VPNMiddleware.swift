@@ -104,6 +104,8 @@ final class VPNMiddleware {
             await changeVPNLocation(countryCode)
         case .resetVPNAtLaunch:
             resetVPNAtLaunch()
+        case .refreshUsage:
+            await refreshVPNUsage()
         case .closeThisTab:
             let tabManager = windowManager.tabManager(for: windowUUID)
             if let selectedTab = tabManager?.selectedTab {
@@ -151,6 +153,18 @@ final class VPNMiddleware {
             try await vpnManager.start(countryCode: countryCode)
         } catch {
             logger.log("VPN location change failed: \(error)", level: .warning, category: .vpn)
+        }
+    }
+
+    private func refreshVPNUsage() async {
+        guard let vpnManager else {
+            logger.log("VPN usage refresh with no VPNManager registered", level: .warning, category: .vpn)
+            return
+        }
+        do {
+            try await vpnManager.refreshUsage()
+        } catch {
+            logger.log("VPN usage refresh failed: \(error)", level: .warning, category: .vpn)
         }
     }
 

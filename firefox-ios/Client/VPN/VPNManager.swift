@@ -37,6 +37,8 @@ protocol VPNRunnable {
     func start(countryCode: String?) async throws
     func stop() async
     func listCountries() async -> [VPNServerManager.Country]
+    /// Fetches the current bandwidth usage, whether or not the VPN is running.
+    func refreshUsage() async throws
     /// Redraws views reading `selectedCountryCode` after its pref changes.
     func selectedCountryCodeDidChange(countryCode: String)
 }
@@ -88,7 +90,6 @@ final class VPNManager: VPNRunnable {
         return prefs.stringForKey(PrefsKeys.VPNSettings.selectedCountryCode) ?? VPNServerManager.recommendedCountryCode
     }
 
-    // TODO: FXIOS-17238 guardian doesn't return usage yet, so the pass's usage stays nil
     private var currentUsage: VPNProxyUsage?
     private static let bytesPerGB: UInt64 = 0x1 << 30
 
@@ -187,6 +188,13 @@ final class VPNManager: VPNRunnable {
 
     func listCountries() async -> [VPNServerManager.Country] {
         return await serverManager.listCountries()
+    }
+
+    func refreshUsage() async throws {
+        guard let guardian else {
+            throw VPNError.tokenProviderUnavailable
+        }
+        currentUsage = try await guardian.getUsage()
     }
 
     func selectedCountryCodeDidChange(countryCode: String) {

@@ -63,6 +63,10 @@ final class VPNSettingsViewModel {
         store.dispatch(VPNModernAction.changeLocation(countryCode: countryCode), forWindowUUID: windowUUID)
     }
 
+    func refreshUsage() {
+        store.dispatch(VPNModernAction.refreshUsage, forWindowUUID: windowUUID)
+    }
+
     func toggleVPN(_ isOn: Bool) {
         guard !isVPNConnecting else { return }
         store.dispatch(isOn ? VPNModernAction.start : VPNModernAction.stop, forWindowUUID: windowUUID)
