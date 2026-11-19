@@ -1039,6 +1039,7 @@ final class BrowserCoordinatorTests: XCTestCase,
         subject.browserViewController = browserViewController
         subject.showQuickAnswers(transitionType: .sourceReveal(sourceRect: .zero))
         let coordinator = try XCTUnwrap(subject.childCoordinators.first as? QuickAnswersCoordinator)
+        saveQuickAnswersSession()
         XCTAssertEqual(quickAnswersPillTelemetry.shownCount, 0)
 
         coordinator.parkQuickAnswers(with: .url(URL(string: "https://example.com")!))
@@ -1051,6 +1052,7 @@ final class BrowserCoordinatorTests: XCTestCase,
         subject.browserViewController = browserViewController
         subject.showQuickAnswers(transitionType: .sourceReveal(sourceRect: .zero))
         let coordinator = try XCTUnwrap(subject.childCoordinators.first as? QuickAnswersCoordinator)
+        saveQuickAnswersSession()
         coordinator.parkQuickAnswers(with: .url(URL(string: "https://example.com")!))
 
         browserViewController.lastReturnPillOnTap?(true)
@@ -1063,6 +1065,7 @@ final class BrowserCoordinatorTests: XCTestCase,
         subject.browserViewController = browserViewController
         subject.showQuickAnswers(transitionType: .sourceReveal(sourceRect: .zero))
         let coordinator = try XCTUnwrap(subject.childCoordinators.first as? QuickAnswersCoordinator)
+        saveQuickAnswersSession()
         coordinator.parkQuickAnswers(with: .url(URL(string: "https://example.com")!))
 
         browserViewController.lastReturnPillOnTap?(false)
