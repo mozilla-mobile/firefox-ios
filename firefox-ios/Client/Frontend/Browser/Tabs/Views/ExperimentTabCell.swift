@@ -325,7 +325,7 @@ final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCe
 
         if theme.isNova {
             let gradientColor = UIColor(patternImage: gradientBorderImage(size: backgroundHolder.bounds.size,
-                                                                          colors: theme.colors.gradientBorder.cgColors))
+                                                                          colors: theme.colors.gradientAccent.cgColors))
             addExternalBorder(to: backgroundHolder, color: gradientColor, width: UX.selectedBorderWidth)
             return
         }
