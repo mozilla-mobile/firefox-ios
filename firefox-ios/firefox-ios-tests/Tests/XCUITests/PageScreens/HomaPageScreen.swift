@@ -106,9 +106,10 @@ final class HomePageScreen {
         return count
     }
 
-    func assertTrackerBlockerCount(equals expected: Int, timeout: TimeInterval = TIMEOUT) {
+    /// `breakdown` explains how `expected` was computed, and is added to the failure message.
+    func assertTrackerBlockerCount(equals expected: Int, breakdown: String = "", timeout: TimeInterval = TIMEOUT) {
         let count = trackerBlockerCount(timeout: timeout)
-        XCTAssertEqual(count, expected, "The Tracker Blocker pill count is not the expected total")
+        XCTAssertEqual(count, expected, "The Tracker Blocker pill count is not the expected total. \(breakdown)")
     }
 
     /// Reads the pill and the weekly panel, then asserts the pill shows the footer's lifetime total, which the
