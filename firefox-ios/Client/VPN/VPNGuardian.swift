@@ -19,8 +19,7 @@ final class VPNGuardian: VPNGuardianProviding {
         let hostname: String
         let port: UInt16
         let city: String
-        // TODO: FXIOS-17399 Remove var declaration on countryCode once production endpoint works
-        var countryCode: String
+        let countryCode: String
     }
 
     enum GuardianError: Error {

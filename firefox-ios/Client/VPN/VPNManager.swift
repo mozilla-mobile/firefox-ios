@@ -196,8 +196,6 @@ final class VPNManager: VPNRunnable {
         if consumeSimulatedLocationFallback(),
            let fallback = await serverManager.selectServer(countryCode: nil, environment: environment) {
             selection = VPNServerSelection(server: fallback.server, didFallBack: true)
-            // TODO: FXIOS-17399 (?) Remove this when the production endpoint is working
-            selection.server.countryCode = VPNServerManager.recommendedCountryCode
         }
         let server = selection.server
 
