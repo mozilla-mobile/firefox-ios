@@ -22,6 +22,7 @@ final class VPNSettingsViewModel {
     var dataLimitInGB: Double { vpnManager.dataLimitInGB }
     var usageFraction: Double { vpnManager.usageFraction }
     var isLimitReached: Bool { vpnManager.isLimitReached }
+    var isToggleDisabled: Bool { isVPNConnecting || isLimitReached }
     var selectedCountryCode: String { vpnManager.selectedCountryCode }
     var accessibilityValue: String {
         if isVPNConnecting { return .VPN.Settings.Connecting }

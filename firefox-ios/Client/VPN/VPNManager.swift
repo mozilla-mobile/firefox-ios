@@ -30,6 +30,8 @@ protocol VPNRunnable {
     var dataLimitInGB: Double { get }
     var usageFraction: Double { get }
     var isLimitReached: Bool { get }
+    /// True once the stored usage's reset date has passed; false if no usage has been fetched.
+    var isUsageResetDue: Bool { get }
     var selectedCountryCode: String { get }
     /// Single-consumer stream of `VPNEvent`s, observed by `VPNMiddleware`.
     var events: AsyncStream<VPNEvent> { get }
@@ -111,6 +113,11 @@ final class VPNManager: VPNRunnable {
     var isLimitReached: Bool {
         guard let usage = currentUsage else { return false }
         return !usage.unlimited && usage.remaining <= 0
+    }
+
+    var isUsageResetDue: Bool {
+        guard let usage = currentUsage else { return false }
+        return usage.reset <= Date()
     }
 
     private var rotationTask: Task<Void, Never>?
