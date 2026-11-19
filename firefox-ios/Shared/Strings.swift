@@ -3790,6 +3790,19 @@ extension String {
                 comment: "A label indicating the action that a user can rate the Firefox app in the App store.")
         }
 
+        public enum DataManagement {
+            public static let SyncedHistoryDeletionMessage = MZLocalizedString(
+                key: "Settings.DataManagement.SyncedHistoryDeletion.Message.v162",
+                tableName: "ClearHistoryConfirm",
+                value: "This deletes the selected data from this device, including browsing history synced from other devices. It won’t delete data on those devices.",
+                comment: "Message of confirmation dialogue in Data Management. Displayed when browsing history is selected for deletion and the user has a sync account. Explains that selected data is deleted only from the current device and does not impact any other devices connected to the same account.")
+            public static let DeleteButtonTitle = MZLocalizedString(
+                key: "Settings.DataManagement.SyncedHistoryDeletion.Button.Title.v162",
+                tableName: "ClearHistoryConfirm",
+                value: "Delete",
+                comment: "Primary button in the Data Management confirmation dialog. Tapping it deletes the selected browsing data.")
+        }
+
         public enum Disconnect {
             public static let AlertTitle = MZLocalizedString(
                 key: "Settings.Disconnect.Alert.Title.v162",
