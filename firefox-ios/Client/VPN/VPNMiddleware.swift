@@ -133,10 +133,9 @@ final class VPNMiddleware {
             logger.log("VPN start with no VPNManager registered", level: .warning, category: .vpn)
             return
         }
-        let countryCode = selectedCountryCode
-        let telemetryCountryCode = countryCode ?? VPNServerManager.recommendedCountryCode
+        let telemetryCountryCode = selectedCountryCode ?? VPNServerManager.recommendedCountryCode
         do {
-            try await vpnManager.start(countryCode: countryCode)
+            try await vpnManager.start(countryCode: selectedCountryCode)
             telemetry.recordConnectionSucceeded(
                 source: source,
                 countryCode: telemetryCountryCode,
