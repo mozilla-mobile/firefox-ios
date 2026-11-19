@@ -45,6 +45,8 @@ final class VPNGuardian: VPNGuardianProviding {
 
     private let tokenProvider: VPNTokenProviding
     private let logger: Logger
+    // TODO: FXIOS-17399 Remove simulateQuotaExceeded debug hook after testing
+    private let prefs: Prefs?
 
     private static let retryableURLErrorCodes: Set<URLError.Code> = [
         .timedOut,
@@ -57,10 +59,12 @@ final class VPNGuardian: VPNGuardianProviding {
 
     init(
         tokenProvider: VPNTokenProviding,
-        logger: Logger
+        logger: Logger,
+        prefs: Prefs? = nil
     ) {
         self.tokenProvider = tokenProvider
         self.logger = logger
+        self.prefs = prefs
     }
 
     convenience init?(authCreator: VPNAuthCreating, prefs: Prefs, logger: Logger) {
@@ -73,11 +77,29 @@ final class VPNGuardian: VPNGuardianProviding {
             return nil
         }
 
-        self.init(tokenProvider: tokenProvider, logger: logger)
+        self.init(tokenProvider: tokenProvider, logger: logger, prefs: prefs)
     }
 
     func getPass() async throws -> VPNProxyPass {
+        // TODO: FXIOS-17399 Remove simulateQuotaExceeded debug hook after testing
+        try throwIfSimulatingQuotaExceeded()
         return try await tokenProvider.proxyToken()
+    }
+
+    // TODO: FXIOS-17399 Remove simulateQuotaExceeded debug hook after testing
+    /// One-shot debug hook: clears the flag and throws as if Guardian returned 429.
+    private func throwIfSimulatingQuotaExceeded() throws {
+        let key = PrefsKeys.VPNSettings.simulateQuotaExceeded
+        guard let prefs, prefs.boolForKey(key) == true else { return }
+        prefs.removeObjectForKey(key)
+
+        let fiveGiB: Int64 = 5 * 1024 * 1024 * 1024
+        let calendar = Calendar(identifier: .gregorian)
+        let startOfMonth = calendar.dateInterval(of: .month, for: Date())?.start ?? Date()
+        let reset = calendar.date(byAdding: .month, value: 1, to: startOfMonth) ?? Date()
+        throw VPNAuthError.quotaExceeded(
+            VPNProxyUsage(max: fiveGiB, remaining: 0, reset: reset, unlimited: false)
+        )
     }
 
     /// Emits a fresh `VPNProxyPass` shortly before the previous one expires. Cancel the consuming
