@@ -3,12 +3,31 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import QuickAnswersKit
+import Shared
 import XCTest
 
 @testable import Client
 
 @MainActor
 final class BrowserViewControllerDynamicViewConstraintsTests: BrowserViewControllerConstraintTestsBase {
+    private var featureFlagsProvider: MockNimbusFeatureFlags!
+
+    override func setUp() async throws {
+        try await super.setUp()
+        featureFlagsProvider = MockNimbusFeatureFlags()
+        featureFlagsProvider.enabledFlags = [.quickAnswers, .quickAnswersReturnToAnswer]
+        DependencyHelperMock().bootstrapDependencies(
+            injectedTabManager: tabManager,
+            injectedFeatureFlagProvider: featureFlagsProvider
+        )
+    }
+
+    override func tearDown() async throws {
+        featureFlagsProvider = nil
+        try await super.tearDown()
+    }
+
     // MARK: - Reader Mode Bar Tests
 
     func test_readerModeBar_bottomToolbar() {
@@ -78,7 +97,80 @@ final class BrowserViewControllerDynamicViewConstraintsTests: BrowserViewControl
         XCTAssertEqual(initialFrame, finalFrame)
     }
 
+    // MARK: - Quick Answers Return Pill Tests
+
+    func test_showQuickAnswersReturnPill_addsPillToViewHierarchy() {
+        let subject = createSubject()
+
+        subject.showQuickAnswersReturnPill(question: "Question", onTap: { _ in }, onSwipeAway: {})
+
+        XCTAssertEqual(returnPills(in: subject).count, 1)
+    }
+
+    func test_showQuickAnswersReturnPill_featureDisabled_doesNotAddPill() {
+        featureFlagsProvider.enabledFlags = []
+        let subject = createSubject()
+
+        subject.showQuickAnswersReturnPill(question: "Question", onTap: { _ in }, onSwipeAway: {})
+
+        XCTAssertTrue(returnPills(in: subject).isEmpty)
+    }
+
+    func test_showQuickAnswersReturnPill_calledTwice_keepsOnePill() {
+        let subject = createSubject()
+
+        subject.showQuickAnswersReturnPill(question: "Question", onTap: { _ in }, onSwipeAway: {})
+        subject.showQuickAnswersReturnPill(question: "Other question", onTap: { _ in }, onSwipeAway: {})
+
+        XCTAssertEqual(returnPills(in: subject).count, 1)
+    }
+
+    func test_hideQuickAnswersReturnPill_removesPill() {
+        let subject = createSubject()
+        subject.showQuickAnswersReturnPill(question: "Question", onTap: { _ in }, onSwipeAway: {})
+
+        subject.hideQuickAnswersReturnPill()
+
+        XCTAssertTrue(returnPills(in: subject).isEmpty)
+    }
+
+    func test_hideQuickAnswersReturnPill_withoutPill_doesNothing() {
+        let subject = createSubject()
+
+        subject.hideQuickAnswersReturnPill()
+
+        XCTAssertTrue(returnPills(in: subject).isEmpty)
+    }
+
+    func test_showQuickAnswersReturnPill_afterHide_addsNewPill() {
+        let subject = createSubject()
+        subject.showQuickAnswersReturnPill(question: "Question", onTap: { _ in }, onSwipeAway: {})
+        subject.hideQuickAnswersReturnPill()
+
+        subject.showQuickAnswersReturnPill(question: "Question", onTap: { _ in }, onSwipeAway: {})
+
+        XCTAssertEqual(returnPills(in: subject).count, 1)
+    }
+
+    // MARK: - Location View Frame Tests
+
+    func test_locationCapsuleFrame_inBrowserView_returnsFrame() {
+        let subject = createSubject()
+
+        XCTAssertNotNil(subject.addressToolbarContainer.locationCapsuleFrame(in: subject.view))
+    }
+
+    func test_locationCapsuleFrame_inUnrelatedView_returnsNil() {
+        let subject = createSubject()
+
+        XCTAssertNil(subject.addressToolbarContainer.locationCapsuleFrame(in: UIView()))
+    }
+
     // MARK: - Private
+
+    private func returnPills(in subject: BrowserViewController) -> [QuickAnswersReturnPillView] {
+        subject.view.subviews.compactMap { $0 as? QuickAnswersReturnPillView }
+    }
 
     private func checkReaderModeHeightConstraint() {
         let subject = createSubject()
