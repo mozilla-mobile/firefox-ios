@@ -15,8 +15,13 @@ enum VPNConnectionFailureReason: String {
     case network
     case serverError = "server_error"
     case auth
-    /// Details are recorded separately by `vpn.attestation.failed`.
+    /// The device can't do App Attest, so the VPN can never connect on it.
+    case attestationUnsupported = "attestation_unsupported"
+    /// For first-time enrollment, `vpn.attestation.failed` also records the details.
     case attestation
+    case keychain
+    case invalidResponse = "invalid_response"
+    case invalidURL = "invalid_url"
     case unknown
 
     init(_ error: Error) {
@@ -33,8 +38,18 @@ enum VPNConnectionFailureReason: String {
             self = .network
         case AppAttestServiceError.serverError:
             self = .serverError
-        case is AppAttestServiceError:
+        case AppAttestServiceError.appAttestNotSupported:
+            self = .attestationUnsupported
+        case AppAttestServiceError.invalidKeyID,
+             AppAttestServiceError.missingKeyID,
+             AppAttestServiceError.invalidChallenge:
             self = .attestation
+        case AppAttestServiceError.keychain:
+            self = .keychain
+        case AppAttestServiceError.invalidPayload:
+            self = .invalidResponse
+        case AppAttestServiceError.invalidURL:
+            self = .invalidURL
         case is VPNAuthError:
             self = .auth
         default:

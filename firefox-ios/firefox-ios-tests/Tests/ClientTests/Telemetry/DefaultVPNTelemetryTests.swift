@@ -105,7 +105,13 @@ final class DefaultVPNTelemetryTests: XCTestCase {
             (VPNError.tokenProviderUnavailable, "token_provider_unavailable"),
             (URLError(.notConnectedToInternet), "network"),
             (AppAttestServiceError.serverError(statusCode: 503, description: ""), "server_error"),
-            (AppAttestServiceError.appAttestNotSupported, "attestation"),
+            (AppAttestServiceError.appAttestNotSupported, "attestation_unsupported"),
+            (AppAttestServiceError.invalidKeyID, "attestation"),
+            (AppAttestServiceError.missingKeyID, "attestation"),
+            (AppAttestServiceError.invalidChallenge, "attestation"),
+            (AppAttestServiceError.keychain(description: ""), "keychain"),
+            (AppAttestServiceError.invalidPayload, "invalid_response"),
+            (AppAttestServiceError.invalidURL(description: ""), "invalid_url"),
             (VPNAuthError.sessionRejected, "auth"),
             (CancellationError(), "unknown")
         ]

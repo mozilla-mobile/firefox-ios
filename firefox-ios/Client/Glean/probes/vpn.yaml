@@ -39,7 +39,9 @@ vpn:
           Set only when the connection failed, to why it failed. One of
           `not_signed_in`, `no_server_found`, `proxy_url_cannot_be_generated`,
           `token_provider_unavailable`, `network`, `server_error`, `auth`,
-          `attestation` or `unknown` (see `VPNConnectionFailureReason`).
+          `attestation_unsupported`, `attestation`, `keychain`,
+          `invalid_response`, `invalid_url` or `unknown`
+          (see `VPNConnectionFailureReason`).
       is_using_fallback:
         type: boolean
         description: |
