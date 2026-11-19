@@ -8675,6 +8675,24 @@ extension String {
 
 // MARK: - DeleteLoginAlert
 extension String {
+    public enum DeleteLoginAlert {
+        public static let Title = MZLocalizedString(
+            key: "DeleteLoginAlert.Title.v162",
+            tableName: "LoginManager",
+            value: "Delete Password?",
+            comment: "Title of the confirmation dialog shown when the user deletes a saved password.")
+        public static let SyncedMessage = MZLocalizedString(
+            key: "DeleteLoginAlert.Message.Synced.v162",
+            tableName: "LoginManager",
+            value: "This will delete the password from %@ on all of your synced devices.",
+            comment: "Message in the password deletion confirmation dialog when the user has a sync account. %@ is the app name (e.g. Firefox). Deleting the password also deletes it from the user's synced devices.")
+        public static let DeleteButtonTitle = MZLocalizedString(
+            key: "DeleteLoginAlert.DeleteButton.Title.v162",
+            tableName: "LoginManager",
+            value: "Delete",
+            comment: "Destructive button in the password deletion confirmation dialog. Tapping it deletes the saved password.")
+    }
+
     public static let DeleteLoginAlertTitle = MZLocalizedString(
         key: "DeleteLoginsAlert.Title.v122",
         tableName: "LoginManager",

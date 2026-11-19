@@ -9,6 +9,7 @@ import Common
 import struct MozillaAppServices.LoginEntry
 
 class PasswordDetailViewController: SensitiveViewController,
+                                    FeatureFlaggable,
                                     Themeable {
     private enum UX {
         static let horizontalMargin: CGFloat = 14
@@ -33,6 +34,10 @@ class PasswordDetailViewController: SensitiveViewController,
 
     var shouldUsePrivateOverride: Bool { return true }
     var shouldBeInPrivateTheme: Bool { return false }
+
+    private var usesUpdatedSyncStrings: Bool {
+        featureFlagsProvider.isEnabled(.syncStringUpdates)
+    }
 
     private var isEditingFieldData = false {
         didSet {
@@ -413,7 +418,8 @@ extension PasswordDetailViewController {
                                 _ = self?.navigationController?.popViewController(animated: true)
                             }
                         }
-                    }, hasSyncedLogins: yes.successValue ?? true)
+                    }, hasSyncedLogins: yes.successValue ?? true,
+                       usesUpdatedSyncStrings: self.usesUpdatedSyncStrings)
 
                     self.present(self.deleteAlert!, animated: true, completion: nil)
                 }
