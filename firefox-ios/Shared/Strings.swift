@@ -518,6 +518,24 @@ extension String {
                 value: "Address for %@",
                 comment: "Accessibility label for an address list item in autofill settings screen. The %@ parameter is the address of the user that will read the name, street, city, state, postal code if available.")
             public enum Edit {
+                public static let DeleteAddressTitle = MZLocalizedString(
+                    key: "Addresses.EditAddress.Alert.DeleteTitle.v162",
+                    tableName: "EditAddress",
+                    value: "Delete Address?",
+                    comment: "Title of the confirmation dialog shown when the user deletes a saved address."
+                )
+                public static let DeleteAddressMessage = MZLocalizedString(
+                    key: "Addresses.EditAddress.Alert.DeleteMessage.v162",
+                    tableName: "EditAddress",
+                    value: "This will delete the address from %@ on all of your synced devices.",
+                    comment: "Message in the address deletion confirmation dialog when the user has a sync account. %@ is the app name (e.g. Firefox). Deleting the address also deletes it from the user's synced devices."
+                )
+                public static let DeleteButtonTitle = MZLocalizedString(
+                    key: "Addresses.EditAddress.Alert.DeleteButton.v162",
+                    tableName: "EditAddress",
+                    value: "Delete",
+                    comment: "Primary button in the address deletion confirmation dialog. Tapping it deletes the saved address."
+                )
                 public static let AddressRemoveError = MZLocalizedString(
                     key: "Addresses.Toast.AddressSaveError.v130",
                     tableName: "EditAddress",
