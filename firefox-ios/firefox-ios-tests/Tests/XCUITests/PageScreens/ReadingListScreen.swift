@@ -71,6 +71,18 @@ final class ReadingListScreen {
         removeButton.tap(force: true)
     }
 
+    func tapOpenInNewTabOption() {
+        selectContextMenuOption(sel.OPEN_IN_NEW_TAB_OPTION)
+    }
+
+    func tapRemoveOption() {
+        selectContextMenuOption(sel.REMOVE_OPTION)
+    }
+
+    func tapShareOption() {
+        selectContextMenuOption(sel.SHARE_OPTION)
+    }
+
     // WAITS
     func waitForSavedBook() {
         let bookElement = getSavedBookElement()
@@ -134,5 +146,11 @@ final class ReadingListScreen {
             sel.MARK_AS_UNREAD_BUTTON.element(in: app),
             sel.REMOVE_BUTTON.element(in: app)
         ])
+    }
+
+    private func selectContextMenuOption(_ selector: Selector) {
+        let button = selector.element(in: app)
+        button.waitAndTap()
+        BaseTestCase().mozWaitForElementToNotExist(button)
     }
 }

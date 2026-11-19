@@ -195,7 +195,7 @@ class ReadingListTests: FeatureFlaggedTestBase {
         savedToReadingList.press(forDuration: 1)
 
         // Select to open in New Tab
-        selectOptionFromUIMenu(identifier: AccessibilityIdentifiers.LibraryPanels.ReadingListPanel.ContextMenu.openInNewTab)
+        readingListScreen.tapOpenInNewTabOption()
         updateScreenGraph()
         // Now there should be two tabs open
         navigator.goto(HomePanelsScreen)
@@ -217,7 +217,7 @@ class ReadingListTests: FeatureFlaggedTestBase {
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
         mozWaitForElementToExist(savedToReadingList)
         savedToReadingList.press(forDuration: 1)
-        selectOptionFromUIMenu(identifier: AccessibilityIdentifiers.LibraryPanels.ReadingListPanel.ContextMenu.remove)
+        readingListScreen.tapRemoveOption()
 
         // Verify the item has been removed
         mozWaitForElementToNotExist(app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"])

@@ -512,17 +512,6 @@ class BaseTestCase: XCTestCase {
         app.buttons["Remove"].waitAndTap()
     }
 
-     func selectOptionFromContextMenu(option: String) {
-       app.tables["Context Menu"].cells.buttons[option].waitAndTap()
-        mozWaitForElementToNotExist(app.tables["Context Menu"])
-    }
-
-    func selectOptionFromUIMenu(identifier: String) {
-        let button = app.buttons[identifier]
-        button.waitAndTap()
-        mozWaitForElementToNotExist(button)
-    }
-
     func loadWebPage(_ url: String, waitForLoadToFinish: Bool = true) {
         let app = XCUIApplication()
         UIPasteboard.general.string = url
