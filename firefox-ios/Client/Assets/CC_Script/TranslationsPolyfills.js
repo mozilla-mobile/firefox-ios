@@ -16,15 +16,7 @@ if (typeof Promise.withResolvers !== "function") {
 }
 
 if (typeof ArrayBuffer.prototype.transfer !== "function") {
-  Object.defineProperty(ArrayBuffer.prototype, "transfer", {
-    configurable: true,
-    writable: true,
-    enumerable: false,
-    value: function transfer() {
-      if (typeof structuredClone === "function") {
-        return structuredClone(this, { transfer: [this] });
-      }
-      return this;
-    },
-  });
+  ArrayBuffer.prototype.transfer = function () {
+    return structuredClone(this, { transfer: [this] });
+  };
 }
