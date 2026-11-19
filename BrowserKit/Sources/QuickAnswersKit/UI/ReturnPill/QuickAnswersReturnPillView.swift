@@ -103,7 +103,7 @@ public final class QuickAnswersReturnPillView: UIView, ThemeApplicable {
     }
 
     /// Doesn't animate or lay out, so the host can run it inside its own animation.
-    /// The pill can't be dragged while minimized.
+    /// The pill can't be dragged while minimized, and the transform isn't applied while it's being dragged.
     public func setMinimized(_ isMinimized: Bool, transform: CGAffineTransform = .identity) {
         if isMinimized != self.isMinimized {
             self.isMinimized = isMinimized
@@ -116,6 +116,7 @@ public final class QuickAnswersReturnPillView: UIView, ThemeApplicable {
         let contentAlpha: CGFloat = isMinimized ? 0.0 : 1.0
         labelStack.alpha = contentAlpha
         iconBackgroundView.alpha = contentAlpha
+        guard isMinimized || ![.began, .changed].contains(panGesture.state) else { return }
         self.transform = transform
     }
 
@@ -210,7 +211,7 @@ public final class QuickAnswersReturnPillView: UIView, ThemeApplicable {
             let draggedDistance = hypot(translation.x, translation.y)
             alpha = 1.0 - min(draggedDistance / UX.fadeDistance, 1.0) * UX.maxFade
             updateRemoveDistanceFeedback(translation: translation)
-        case .ended, .cancelled:
+        case .ended:
             isPastRemoveDistance = false
             let velocity = gesture.velocity(in: superview)
             if QuickAnswersReturnPillDragEvaluator.shouldRemove(translation: translation, velocity: velocity) {
@@ -218,6 +219,9 @@ public final class QuickAnswersReturnPillView: UIView, ThemeApplicable {
             } else {
                 springBack()
             }
+        case .cancelled, .failed:
+            isPastRemoveDistance = false
+            springBack()
         default:
             break
         }
@@ -259,7 +263,9 @@ public final class QuickAnswersReturnPillView: UIView, ThemeApplicable {
             usingSpringWithDamping: damping,
             initialSpringVelocity: 0
         ) {
-            self.transform = .identity
+            if !self.isMinimized {
+                self.transform = .identity
+            }
             self.alpha = 1.0
         }
     }
