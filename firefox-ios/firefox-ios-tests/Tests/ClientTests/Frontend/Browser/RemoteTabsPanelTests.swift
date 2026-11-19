@@ -4,6 +4,7 @@
 
 import XCTest
 import Common
+import Shared
 import TestKit
 
 @testable import Client
@@ -15,16 +16,19 @@ final class RemoteTabsPanelTests: XCTestCase, StoreTestUtility {
     }
 
     private let windowUUID: WindowUUID = .XCTestDefaultUUID
+    private var featureFlags: MockNimbusFeatureFlags!
     var mockStore: MockStoreForMiddleware<AppState>!
 
     override func setUp() async throws {
         try await super.setUp()
-        DependencyHelperMock().bootstrapDependencies()
+        featureFlags = MockNimbusFeatureFlags()
+        DependencyHelperMock().bootstrapDependencies(injectedFeatureFlagProvider: featureFlags)
         setupStore()
     }
 
     override func tearDown() async throws {
         DependencyHelperMock().reset()
+        featureFlags = nil
         resetStore()
         try await  super.tearDown()
     }
@@ -41,6 +45,19 @@ final class RemoteTabsPanelTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(action1Type, ComponentActionType.addComponent)
         XCTAssertEqual(action2Type, RemoteTabsPanelActionType.panelDidAppear)
         XCTAssertEqual(mockStore.subscribeCallCount, 1)
+    }
+
+    func testSignedOutDescription_withUpdatedStringsEnabled_usesNewCopy() {
+        featureFlags.enabledFlags = [.syncStringUpdates]
+        let subject = RemoteTabsPanelEmptyStateReason.notLoggedIn
+
+        XCTAssertEqual(subject.localizedString(), String.TabsTray.Sync.SignInDescription)
+    }
+
+    func testSignedOutDescription_withUpdatedStringsDisabled_usesExistingCopy() {
+        let subject = RemoteTabsPanelEmptyStateReason.notLoggedIn
+
+        XCTAssertEqual(subject.localizedString(), String.EmptySyncedTabsPanelNotSignedInStateDescription)
     }
 
     func testUnsubscribeFromRedux_dispatchesCloseScreenActionToStore() throws {

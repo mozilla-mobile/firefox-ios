@@ -26,6 +26,7 @@ protocol TabTrayViewControllerDelegate: AnyObject {
 
 final class TabTrayViewController: UIViewController,
                                    TabTrayController,
+                                   FeatureFlaggable,
                                    UIToolbarDelegate,
                                    UIPageViewControllerDataSource,
                                    UIPageViewControllerDelegate,
@@ -198,6 +199,10 @@ final class TabTrayViewController: UIViewController,
         (AppContainer.shared.resolve() as FeatureFlagProviding).isEnabled(.novaDesign)
     }
 
+    private var usesUpdatedSyncStrings: Bool {
+        featureFlagsProvider.isEnabled(.syncStringUpdates)
+    }
+
     private var usesNovaGlassToolbarButtons: Bool {
         guard #available(iOS 26.0, *) else { return false }
         return isNovaDesignEnabled
@@ -267,7 +272,10 @@ final class TabTrayViewController: UIViewController,
     }()
 
     private lazy var syncTabButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(title: .TabsTray.Sync.SyncTabs,
+        let title: String = usesUpdatedSyncStrings
+            ? .TabsTray.Sync.Refresh
+            : .TabsTray.Sync.SyncTabs
+        let button = UIBarButtonItem(title: title,
                                      style: .plain,
                                      target: self,
                                      action: #selector(syncTabsTapped))
