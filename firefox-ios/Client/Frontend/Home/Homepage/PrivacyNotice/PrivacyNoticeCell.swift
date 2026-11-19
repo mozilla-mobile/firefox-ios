@@ -32,6 +32,7 @@ final class PrivacyNoticeCell: UICollectionViewCell,
         label.font = FXFontStyles.Bold.body.scaledFont()
         label.numberOfLines = 0
         label.text = .FirefoxHomepage.PrivacyNotice.Headline
+        label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.PrivacyNotice.title
     }
 
     private lazy var bodyTextView: UITextView = .build { textView in
@@ -45,6 +46,7 @@ final class PrivacyNoticeCell: UICollectionViewCell,
         textView.textContainerInset = .zero
         textView.textContainer.lineFragmentPadding = 0
         textView.delegate = self
+        textView.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.PrivacyNotice.description
     }
 
     private lazy var closeButton: UIButton = .build { button in
@@ -56,13 +58,14 @@ final class PrivacyNoticeCell: UICollectionViewCell,
         config.image = scaledAndTemplatedImage
         button.configuration = config
 
+        button.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.PrivacyNotice.close
         button.addTarget(self, action: #selector(self.closeButtonTapped), for: .touchUpInside)
     }
 
     private lazy var learnMoreButton: PrimaryRoundedButton = .build { button in
         let viewModel = PrimaryRoundedButtonViewModel(
             title: .FirefoxHomepage.PrivacyNotice.LearnMoreLink,
-            a11yIdentifier: AccessibilityIdentifiers.TabTray.syncDataButton // todo
+            a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.PrivacyNotice.learnMore
         )
         button.configure(viewModel: viewModel)
         button.addTarget(self, action: #selector(self.learnMoreButtonTapped), for: .touchUpInside)
