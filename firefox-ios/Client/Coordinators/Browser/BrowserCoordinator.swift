@@ -72,7 +72,7 @@ final class BrowserCoordinator: BaseCoordinator,
         return summarizerNimbusUtils.isSummarizeFeatureToggledOn
     }
     private var pendingOnboardingCardAction: OnboardingCardButtonAction = .none
-    private let quickAnswersSessionStorage = QuickAnswersSessionStorage()
+    private let quickAnswersSessionStorage: QuickAnswersSessionStorage
 
     override var isDismissible: Bool { false }
 
@@ -88,6 +88,7 @@ final class BrowserCoordinator: BaseCoordinator,
          applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
          windowMerger: WindowMerging = MergeWindowsManager(),
          googleLensService: GoogleLensServicing = GoogleLensService(),
+         quickAnswersSessionStorage: QuickAnswersSessionStorage = QuickAnswersSessionStorage(),
          isCameraAvailable: @escaping @MainActor () -> Bool = {
              UIImagePickerController.isSourceTypeAvailable(.camera)
          }) {
@@ -106,6 +107,7 @@ final class BrowserCoordinator: BaseCoordinator,
         self.applicationHelper = applicationHelper
         self.glean = glean
         self.googleLensService = googleLensService
+        self.quickAnswersSessionStorage = quickAnswersSessionStorage
         self.isCameraAvailable = isCameraAvailable
         super.init(router: router)
 

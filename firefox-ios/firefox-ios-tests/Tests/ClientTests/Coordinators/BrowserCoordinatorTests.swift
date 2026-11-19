@@ -13,9 +13,9 @@ import XCTest
 import GCDWebServers
 import SummarizeKit
 import Shared
-import QuickAnswersKit
 
 @testable import Client
+@testable import QuickAnswersKit
 
 @MainActor
 final class BrowserCoordinatorTests: XCTestCase,
@@ -33,6 +33,7 @@ final class BrowserCoordinatorTests: XCTestCase,
     private var browserViewController: MockBrowserViewController!
     var mockStore: MockStoreForMiddleware<AppState>!
     private var homepageTabStateStore: HomepageTabStateStore!
+    private var quickAnswersSessionStorage: QuickAnswersSessionStorage!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() async throws {
@@ -50,6 +51,7 @@ final class BrowserCoordinatorTests: XCTestCase,
         screenshotService = ScreenshotService()
         applicationHelper = MockApplicationHelper()
         glean = MockGleanWrapper()
+        quickAnswersSessionStorage = QuickAnswersSessionStorage()
         scrollDelegate = MockStatusBarScrollDelegate()
         browserViewController = MockBrowserViewController(profile: profile, tabManager: tabManager)
         homepageTabStateStore = HomepageTabStateStore()
@@ -68,6 +70,7 @@ final class BrowserCoordinatorTests: XCTestCase,
         scrollDelegate = nil
         browserViewController = nil
         homepageTabStateStore = nil
+        quickAnswersSessionStorage = nil
         resetStore()
         DependencyHelperMock().reset()
         try await super.tearDown()
@@ -992,6 +995,7 @@ final class BrowserCoordinatorTests: XCTestCase,
         subject.browserViewController = browserViewController
         subject.showQuickAnswers(transitionType: .sourceReveal(sourceRect: .zero))
         let coordinator = try XCTUnwrap(subject.childCoordinators.first as? QuickAnswersCoordinator)
+        saveQuickAnswersSession()
 
         coordinator.parkQuickAnswers(with: .url(URL(string: "https://example.com")!))
 
@@ -2135,9 +2139,18 @@ final class BrowserCoordinatorTests: XCTestCase,
                                          glean: glean,
                                          applicationHelper: applicationHelper,
                                          googleLensService: googleLensService,
+                                         quickAnswersSessionStorage: quickAnswersSessionStorage,
                                          isCameraAvailable: isCameraAvailable)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
+    }
+
+    private func saveQuickAnswersSession() {
+        quickAnswersSessionStorage.latestSession = QuickAnswersSessionSnapshot(
+            question: "Question",
+            result: .empty(),
+            conversation: DefaultQuickAnswersConversation()
+        )
     }
 
     private func testCanHandleAndHandle(_ subject: Coordinator, route: Route) -> Bool {
