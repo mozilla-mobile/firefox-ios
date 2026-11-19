@@ -88,23 +88,42 @@ final class VPNGuardian: VPNGuardianProviding {
     }
 
     func getUsage() async throws -> VPNProxyUsage {
+        // TODO: FXIOS-17399 Remove simulateQuotaExceeded debug hook after testing
+        if let simulatedUsage = simulatedQuotaExceededUsage() {
+            return simulatedUsage
+        }
         return try await tokenProvider.proxyUsage()
     }
 
     // TODO: FXIOS-17399 Remove simulateQuotaExceeded debug hook after testing
-    /// One-shot debug hook: clears the flag and throws as if Guardian returned 429.
-    private func throwIfSimulatingQuotaExceeded() throws {
-        let key = PrefsKeys.VPNSettings.simulateQuotaExceeded
-        guard let prefs, prefs.boolForKey(key) == true else { return }
-        prefs.removeObjectForKey(key)
+    /// How long a triggered simulated quota stays exhausted before its reset date.
+    private static let simulatedQuotaPeriod: TimeInterval = 2 * 60
 
+    // TODO: FXIOS-17399 Remove simulateQuotaExceeded debug hook after testing
+    /// Throws as if Guardian returned 429. An armed flag starts a simulated quota period on the next pass
+    /// request, which then keeps throwing until the period's reset date.
+    private func throwIfSimulatingQuotaExceeded() throws {
+        if let prefs, prefs.boolForKey(PrefsKeys.VPNSettings.simulateQuotaExceeded) == true {
+            prefs.removeObjectForKey(PrefsKeys.VPNSettings.simulateQuotaExceeded)
+            let reset = Date().addingTimeInterval(Self.simulatedQuotaPeriod)
+            prefs.setTimestamp(reset.toTimestamp(), forKey: PrefsKeys.VPNSettings.simulatedQuotaResetDate)
+        }
+        guard let simulatedUsage = simulatedQuotaExceededUsage() else { return }
+        throw VPNAuthError.quotaExceeded(simulatedUsage)
+    }
+
+    // TODO: FXIOS-17399 Remove simulateQuotaExceeded debug hook after testing
+    /// Exhausted usage until the simulated reset date, then nil and the pref is cleared.
+    private func simulatedQuotaExceededUsage() -> VPNProxyUsage? {
+        let key = PrefsKeys.VPNSettings.simulatedQuotaResetDate
+        guard let prefs, let resetTimestamp = prefs.timestampForKey(key) else { return nil }
+        let reset = Date.fromTimestamp(resetTimestamp)
+        guard reset > Date() else {
+            prefs.removeObjectForKey(key)
+            return nil
+        }
         let fiveGiB: Int64 = 5 * 1024 * 1024 * 1024
-        let calendar = Calendar(identifier: .gregorian)
-        let startOfMonth = calendar.dateInterval(of: .month, for: Date())?.start ?? Date()
-        let reset = calendar.date(byAdding: .month, value: 1, to: startOfMonth) ?? Date()
-        throw VPNAuthError.quotaExceeded(
-            VPNProxyUsage(max: fiveGiB, remaining: 0, reset: reset, unlimited: false)
-        )
+        return VPNProxyUsage(max: fiveGiB, remaining: 0, reset: reset, unlimited: false)
     }
 
     /// Emits a fresh `VPNProxyPass` shortly before the previous one expires. Cancel the consuming

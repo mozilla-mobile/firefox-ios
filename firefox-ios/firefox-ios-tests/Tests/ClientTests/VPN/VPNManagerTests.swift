@@ -290,6 +290,85 @@ final class VPNManagerTests: XCTestCase {
         XCTAssertTrue(stopCall.forcingSessionReset)
     }
 
+    // MARK: - refreshUsage
+
+    func testRefreshUsage_updatesUsageValues() async throws {
+        mockGuardian.usageResult = .success(makeUsage(maxGB: 2, remainingGB: 1, reset: .distantFuture))
+        let subject = createSubject()
+
+        try await subject.refreshUsage()
+
+        XCTAssertEqual(subject.dataLimitInGB, 2)
+        XCTAssertEqual(subject.usedDataInGB, 1)
+        XCTAssertEqual(subject.usageFraction, 0.5)
+        XCTAssertFalse(subject.isLimitReached)
+        XCTAssertFalse(subject.isRunning)
+    }
+
+    func testRefreshUsage_withNoDataRemaining_setsLimitReached() async throws {
+        mockGuardian.usageResult = .success(makeUsage(maxGB: 2, remainingGB: 0, reset: .distantFuture))
+        let subject = createSubject()
+
+        try await subject.refreshUsage()
+
+        XCTAssertTrue(subject.isLimitReached)
+    }
+
+    func testRefreshUsage_whenGuardianFails_throwsAndKeepsPreviousUsage() async throws {
+        mockGuardian.usageResult = .success(makeUsage(maxGB: 2, remainingGB: 1, reset: .distantFuture))
+        let subject = createSubject()
+        try await subject.refreshUsage()
+        mockGuardian.usageResult = .failure(URLError(.notConnectedToInternet))
+
+        do {
+            try await subject.refreshUsage()
+            XCTFail("Expected refreshUsage to throw")
+        } catch {}
+
+        XCTAssertEqual(subject.dataLimitInGB, 2)
+        XCTAssertEqual(subject.usedDataInGB, 1)
+    }
+
+    func testRefreshUsage_whenTokenProviderUnavailable_throws() async {
+        let subject = createSubject(injectGuardian: false)
+
+        do {
+            try await subject.refreshUsage()
+            XCTFail("Expected refreshUsage to throw")
+        } catch VPNError.tokenProviderUnavailable {
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+    }
+
+    // MARK: - isUsageResetDue
+
+    func testIsUsageResetDue_withNoUsage_isFalse() {
+        let subject = createSubject()
+
+        XCTAssertFalse(subject.isUsageResetDue)
+        XCTAssertFalse(subject.isLimitReached)
+    }
+
+    func testIsUsageResetDue_withFutureReset_isFalse() async throws {
+        mockGuardian.usageResult = .success(makeUsage(maxGB: 2, remainingGB: 0, reset: .distantFuture))
+        let subject = createSubject()
+
+        try await subject.refreshUsage()
+
+        XCTAssertFalse(subject.isUsageResetDue)
+    }
+
+    func testIsUsageResetDue_withPastReset_isTrueAndClearsLimitReached() async throws {
+        mockGuardian.usageResult = .success(makeUsage(maxGB: 2, remainingGB: 0, reset: .distantPast))
+        let subject = createSubject()
+
+        try await subject.refreshUsage()
+
+        XCTAssertTrue(subject.isUsageResetDue)
+        XCTAssertFalse(subject.isLimitReached)
+    }
+
     // MARK: - Helpers
 
     private func createSubject(injectGuardian: Bool = true) -> VPNManager {
@@ -313,6 +392,11 @@ final class VPNManagerTests: XCTestCase {
             try await subject.start(countryCode: nil)
             XCTFail("Expected start to throw", file: file, line: line)
         } catch {}
+    }
+
+    private func makeUsage(maxGB: Int64, remainingGB: Int64, reset: Date) -> VPNProxyUsage {
+        let bytesPerGB: Int64 = 1 << 30
+        return VPNProxyUsage(max: maxGB * bytesPerGB, remaining: remainingGB * bytesPerGB, reset: reset, unlimited: false)
     }
 
     private func makePass(token: String) -> VPNProxyPass {

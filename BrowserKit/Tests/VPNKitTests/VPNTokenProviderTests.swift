@@ -164,8 +164,12 @@ final class VPNTokenProviderTests: XCTestCase {
     }
 
     private func pass(token: String = "proxy-token") -> VPNProxyPass {
-        return VPNProxyPass(bearerToken: token, notBefore: Date(), expiresAt: Date().addingTimeInterval(3600),
-                     usage: VPNProxyUsage(max: 100, remaining: 100, reset: .distantFuture, unlimited: false))
+        return VPNProxyPass(
+            bearerToken: token,
+            notBefore: Date(),
+            expiresAt: Date().addingTimeInterval(3600),
+            usage: VPNProxyUsage(max: 100, remaining: 100, reset: .distantFuture, unlimited: false)
+        )
     }
 }
 

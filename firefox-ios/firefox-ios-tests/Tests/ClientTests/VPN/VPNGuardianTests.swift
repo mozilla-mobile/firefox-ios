@@ -48,6 +48,33 @@ final class VPNGuardianTests: XCTestCase {
         }
     }
 
+    // MARK: - getUsage
+
+    func testGetUsage_returnsProviderUsage() async throws {
+        let expected = VPNProxyUsage(max: 1_000, remaining: 400, reset: .distantFuture, unlimited: false)
+        mockTokenProvider.usageResult = .success(expected)
+        let subject = createSubject()
+
+        let usage = try await subject.getUsage()
+
+        XCTAssertEqual(usage, expected)
+        XCTAssertEqual(mockTokenProvider.proxyUsageCalled, 1)
+        XCTAssertEqual(mockTokenProvider.proxyTokenCalled, 0)
+    }
+
+    func testGetUsage_whenTokenProviderFails_throwsProviderError() async {
+        mockTokenProvider.usageResult = .failure(VPNAuthError.sessionRejected)
+        let subject = createSubject()
+
+        do {
+            _ = try await subject.getUsage()
+            XCTFail("Expected getUsage to throw")
+        } catch VPNAuthError.sessionRejected {
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+    }
+
     // MARK: - passRotation
 
     func testPassRotation_nearExpiry_emitsRotatedPass() async throws {
@@ -107,8 +134,12 @@ final class VPNGuardianTests: XCTestCase {
     }
 
     private func makePass(token: String = "initial", expiresAt: Date) -> VPNProxyPass {
-        return VPNProxyPass(bearerToken: token, notBefore: Date(), expiresAt: expiresAt,
-                            usage: VPNProxyUsage(max: 1_000, remaining: 1_000, reset: .distantFuture, unlimited: false))
+        return VPNProxyPass(
+            bearerToken: token,
+            notBefore: Date(),
+            expiresAt: expiresAt,
+            usage: VPNProxyUsage(max: 1_000, remaining: 1_000, reset: .distantFuture, unlimited: false)
+        )
     }
 }
 
@@ -116,6 +147,10 @@ final class VPNGuardianTests: XCTestCase {
 private final class MockVPNTokenProvider: VPNTokenProviding, @unchecked Sendable {
     var results: [Result<VPNProxyPass, Error>] = []
     var proxyTokenCalled = 0
+    var usageResult: Result<VPNProxyUsage, Error> = .success(
+        VPNProxyUsage(max: 0, remaining: 0, reset: Date(), unlimited: false)
+    )
+    var proxyUsageCalled = 0
 
     func proxyToken() async throws -> VPNProxyPass {
         proxyTokenCalled += 1
@@ -125,6 +160,7 @@ private final class MockVPNTokenProvider: VPNTokenProviding, @unchecked Sendable
     }
 
     func proxyUsage() async throws -> VPNProxyUsage {
-        VPNProxyUsage(max: 0, remaining: 0, reset: Date(), unlimited: false)
+        proxyUsageCalled += 1
+        return try usageResult.get()
     }
 }
