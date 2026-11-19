@@ -437,14 +437,14 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
         XCTAssertLessThan(alpha, 1, "Expected the card to let the sheet background through")
     }
 
-    func test_progressBar_withNovaTheme_usesGradientFill() throws {
+    func test_progressBar_withNovaTheme_usesAccentGradientFill() throws {
         let theme = NovaLightTheme()
         let subject = TrackerBlockerProgressBarView()
 
         subject.applyTheme(theme: theme)
 
         let fill = try XCTUnwrap(allSubviews(in: subject).compactMap { $0 as? GradientView }.first)
-        XCTAssertEqual((fill.layer as? CAGradientLayer)?.colors as? [CGColor], theme.colors.gradientBorder.cgColors)
+        XCTAssertEqual((fill.layer as? CAGradientLayer)?.colors as? [CGColor], theme.colors.gradientAccent.cgColors)
         XCTAssertEqual(fill.backgroundColor, .clear)
     }
 

@@ -77,7 +77,7 @@ final class TrackerBlockerProgressBarView: UIView, ThemeApplicable {
         trackView.backgroundColor = theme.colors.layer3
         // The gradient tokens are Nova-only, so classic themes fall back to a solid accent fill.
         fillView.backgroundColor = theme.isNova ? .clear : theme.colors.actionPrimary
-        fillView.configure(gradient: theme.isNova ? theme.colors.gradientBorder : nil,
+        fillView.configure(gradient: theme.isNova ? theme.colors.gradientAccent : nil,
                            startPoint: CGPoint(x: 1, y: 0.5),
                            endPoint: CGPoint(x: 0, y: 0.5))
     }
