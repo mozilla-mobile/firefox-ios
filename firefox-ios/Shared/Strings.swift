@@ -4910,6 +4910,24 @@ extension String {
                     value: "Sync and Save Data",
                     comment: "Title for the page where the user sign in to their Firefox Sync account.")
             }
+
+            public enum UpdateBanner {
+                public static let Title = MZLocalizedString(
+                    key: "Settings.Sync.UpdateBanner.Title.v162",
+                    tableName: "Settings",
+                    value: "Sync Update",
+                    comment: "Title of the dismissible banner above Manage Account & Devices in account settings, announcing that sync choices now apply only to this device.")
+                public static let Body = MZLocalizedString(
+                    key: "Settings.Sync.UpdateBanner.Body.v162",
+                    tableName: "Settings",
+                    value: "Your sync choices now apply only to this device.",
+                    comment: "Body of the sync update banner in account settings. Explains that the user's sync preferences affect only the current device.")
+                public static let LearnMore = MZLocalizedString(
+                    key: "Settings.Sync.UpdateBanner.LearnMore.v162",
+                    tableName: "Settings",
+                    value: "Learn more…",
+                    comment: "Link in the sync update banner in account settings that opens more information about sync choices applying only to the current device.")
+            }
         }
 
         public enum Search {
