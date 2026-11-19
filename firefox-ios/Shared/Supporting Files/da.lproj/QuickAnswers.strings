@@ -1,6 +1,9 @@
 /* Accessibility label for the close button on the Quick Answers screen. */
 "QuickAnswers.AccessibilityLabels.Close.v158" = "Luk";
 
+/* Button shown below a Quick Answers result that the user taps to ask a new, unrelated question. */
+"QuickAnswers.ContentView.NewQuestionButton.v161" = "Stil et nyt spørgsmål";
+
 /* Header label for the sources section shown below a Quick Answers result. */
 "QuickAnswers.ContentView.Sources.v158" = "Kilder";
 

@@ -1,0 +1,6 @@
+/* New wallpapers bottom banner: Primary button - tapping it opens the wallpaper settings screen. */
+"Wallpapers.EngagementSheet.Button.v161" = "배경 화면 살펴보기";
+
+/* New wallpapers bottom banner: Title of the banner announcing new designs so users can personalize their experience. %@ is the app name (e.g. Firefox). */
+"Wallpapers.EngagementSheet.Title.v161" = "새 배경화면을 사용해서 나만의 %@를 만드세요";
+

@@ -28,6 +28,7 @@ class Toast: UIView, ThemeApplicable, Notifiable {
     public var notificationCenter: NotificationProtocol = NotificationCenter.default
     var animationConstraint: NSLayoutConstraint?
     var completionHandler: (@MainActor (Bool) -> Void)?
+    final var onPresentationChange: (@MainActor () -> Void)?
 
     weak var viewController: UIViewController?
 
@@ -89,6 +90,7 @@ class Toast: UIView, ThemeApplicable, Notifiable {
                 guard viewController != nil else { return }
                 NSLayoutConstraint.activate(updateConstraintsOn(self))
                 self.layoutIfNeeded()
+                self.onPresentationChange?()
             }
 
             UIView.animate(
@@ -121,6 +123,7 @@ class Toast: UIView, ThemeApplicable, Notifiable {
             }
         ) { finished in
             self.removeFromSuperview()
+            self.onPresentationChange?()
             if !buttonPressed {
                 self.completionHandler?(false)
             }

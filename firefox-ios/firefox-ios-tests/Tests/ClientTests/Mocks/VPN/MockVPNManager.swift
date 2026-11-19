@@ -7,12 +7,19 @@
 @MainActor
 final class MockVPNManager: VPNRunnable {
     var isRunning = false
+    var isConnecting = false
+    var usedDataInGB: Double = 0
+    var dataLimitInGB: Double = 0
+    var usageFraction: Double = 0
+    var isLimitReached = false
+    var selectedCountryCode = VPNServerManager.recommendedCountryCode
     var startCalled = 0
     var stopCalled = 0
     var onStop: (() -> Void)?
     var onStart: (() -> Void)?
     var startError: Error?
     var startCountryCodes: [String?] = []
+    var countryCodeChangeCalledWith: [String] = []
     let eventsStream = AsyncStream<VPNEvent>.makeStream()
 
     var events: AsyncStream<VPNEvent> {
@@ -31,5 +38,13 @@ final class MockVPNManager: VPNRunnable {
         stopCalled += 1
         isRunning = false
         onStop?()
+    }
+
+    func listCountries() async -> [VPNServerManager.Country] {
+        return []
+    }
+
+    func selectedCountryCodeDidChange(countryCode: String) {
+        countryCodeChangeCalledWith.append(countryCode)
     }
 }

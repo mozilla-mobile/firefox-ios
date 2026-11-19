@@ -33,7 +33,7 @@ webview.error_page.wayback_machine:
       - https://github.com/mozilla-mobile/firefox-ios/pull/35045
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-12-01"
+    expires: never
   archive_found:
     type: event
     description: |
@@ -44,7 +44,7 @@ webview.error_page.wayback_machine:
       - https://github.com/mozilla-mobile/firefox-ios/pull/35045
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-12-01"
+    expires: never
   search_the_web_button_tapped:
     type: event
     description: |
@@ -55,4 +55,4 @@ webview.error_page.wayback_machine:
       - https://github.com/mozilla-mobile/firefox-ios/pull/35045
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-12-01"
+    expires: never

@@ -87,6 +87,8 @@ final class DependencyHelperMock {
         )
         AppContainer.shared.register(service: userFeatureProvider as UserFeaturePreferring)
 
+        AppContainer.shared.register(service: MockVPNManager() as VPNRunnable)
+
         // Tell the container we are done registering
         AppContainer.shared.bootstrap()
     }

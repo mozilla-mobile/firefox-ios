@@ -661,6 +661,9 @@
 /* A switch to enable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtectionOn.Title" = "Aizsardzība ir IESLĒGTA šai vietnei";
 
+/* Label for the button, displayed in the menu, takes you to passwords screen when pressed. */
+"Menu.Passwords.Label" = "Paroles";
+
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "Ielīmēt";
 
@@ -731,7 +734,7 @@
 "Privacy" = "Privātums";
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
-"Privacy Policy" = "Privātuma politika";
+"Privacy Policy" = "Privātuma pamatnostādnes";
 
 /* This is the value for a label that indicates if a user is on an unencrypted website. */
 "ProtectionStatus.NotSecure" = "Savienojums nav drošs";
@@ -997,6 +1000,9 @@
 /* Button in settings to use the current page as home page. */
 "Settings.HomePage.UseCurrent.Button" = "Lietot pašreizējo lapu";
 
+/* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
+"Settings.LoginsAndPasswordsTitle" = "Pieteikšanās vienumi un paroles";
+
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "Tukša lapa";
 
@@ -1024,6 +1030,9 @@
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Status" = "Atverot Firefox";
 
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. %@ is for the app name. */
+"Settings.OfferClipboardBar.Status.v128" = "Kad atver %@";
+
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Piedāvāt atvērt starpliktuvē ievietotās saites";
 
@@ -1032,6 +1041,12 @@
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
 "Settings.OpenWith.SectionName" = "Pasta aplikācija";
+
+/* Setting that appears in the Passwords screen to enable the built-in password manager so users can save their passwords. */
+"Settings.Passwords.SavePasswords.v103" = "Saglabāt paroles";
+
+/* Title for the passwords screen. */
+"Settings.Passwords.Title.v103" = "Paroles";
 
 /* Button displayed at the top of the search settings. */
 "Settings.Search.Done.Button" = "Gatavs";
@@ -1072,6 +1087,9 @@
 /* 'Learn more' info link on the Tracking Protection settings screen. */
 "Settings.TrackingProtection.LearnMore" = "Uzzināt vairāk";
 
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Strict.v161" = "Ja vietne nedarbojas, jāatver izvēlne un jāmēģina izslēgt uzlaboto aizsardzību pret izsekošanu.";
+
 /* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
 "Settings.TrackingProtection.SectionName" = "Izsekošanas aizsardzība";
 
@@ -1083,6 +1101,9 @@
 
 /* Button shows all websites on website data tableview */
 "Settings.WebsiteData.ButtonShowMore" = "Rādīt vairāk";
+
+/* Description of the confirmation dialog shown when a user tries to clear some of their private data. */
+"Settings.WebsiteData.SelectedConfirmPrompt" = "Šī darbība notīrīs atlasītos vienumus. Tas ir neatgriezeniski.";
 
 /* Action label on share extension to add page to the Firefox reading list. */
 "ShareExtension.AddToReadingListAction.Title" = "Pievienot lasīšanas sarakstam";
@@ -1155,6 +1176,9 @@
 
 /* A label indicating the keyboard shortcut of closing all tabs from the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "TabTray.CloseAllTabs.KeyCodeTitle" = "Aizvērt visas cilnes";
+
+/* Accessibility label for the currently selected tab. */
+"TabTray.CurrentSelectedTab.A11Y" = "Pašreiz atlasītā cilne.";
 
 /* A label indicating the keyboard shortcut of opening a new tab in the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "TabTray.OpenNewTab.KeyCodeTitle" = "Atvērt jaunu cilni";

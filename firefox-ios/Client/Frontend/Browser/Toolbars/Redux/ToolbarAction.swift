@@ -96,6 +96,10 @@ enum ToolbarModernAction: ModernAction {
     /// homepage mid-edit via `cancelEditOnHomepage`)
     case didKeyboardRequestChange(shouldShow: Bool)
 
+    /// The user left address bar editing. `url` is the committed website to restore,
+    /// or `nil` to keep the address bar's current URL.
+    case cancelEdit(url: URL?)
+
     /// The user scrolled while editing. Cancels editing only if there's no committed website (Homepage),
     /// otherwise just hides the keyboard (visually still looks like homepage but is zero search state)
     case cancelEditOnHomepage
@@ -152,7 +156,6 @@ enum ToolbarActionType: ActionType {
     case didLoadToolbars
     case urlDidChange
     case didStartEditingUrl
-    case cancelEdit
     case readerModeStateChanged
     case backForwardButtonStateChanged
     case searchEngineDidChange

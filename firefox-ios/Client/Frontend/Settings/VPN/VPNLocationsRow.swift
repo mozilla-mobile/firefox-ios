@@ -36,6 +36,7 @@ struct VPNLocationsRow: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .disabled(viewModel.isVPNConnecting)
         .accessibilityLabel(String.VPN.Settings.LocationTitle)
         .accessibilityValue(viewModel.locationName)
         .accessibilityIdentifier(AccessibilityIdentifiers.Settings.VPN.locationSetting)

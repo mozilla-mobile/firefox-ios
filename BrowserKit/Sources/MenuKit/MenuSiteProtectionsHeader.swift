@@ -28,7 +28,7 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         static let contentLabelsSpacing: CGFloat = 1
         static let horizontalContentMargin: CGFloat = 16
         static let favIconSize: CGFloat = 40
-        static let badgesTopMargin: CGFloat = 4
+        static let badgesTopMargin: CGFloat = 16
         static let badgesSpacing: CGFloat = 8
     }
 

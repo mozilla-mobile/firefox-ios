@@ -161,6 +161,8 @@ class AppDelegate: UIResponder,
             }
         }
 
+        resetVPNAtLaunch()
+
         if #available(iOS 17.0, *) {
             ResetTipsSetting.resetDatastoreIfNeeded(prefs: profile.prefs)
             do {
@@ -388,6 +390,13 @@ class AppDelegate: UIResponder,
             let wallpaperManager = WallpaperManager()
             wallpaperManager.checkForUpdates()
         }
+    }
+
+    // makes sure VPN doesn't connect at launch
+    private func resetVPNAtLaunch() {
+        guard #available(iOS 17.0, *),
+              featureFlagsProvider.isEnabled(.vpnFeature) else { return }
+        store.dispatch(VPNModernAction.resetVPNAtLaunch, forWindowUUID: .unavailable)
     }
 
     private func fixSimulatorDevBuild(_ application: UIApplication) {

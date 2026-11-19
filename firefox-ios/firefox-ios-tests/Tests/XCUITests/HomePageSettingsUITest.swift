@@ -322,25 +322,30 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
 
         // Precondition: the Privacy Report toggle is turned off once there is a lifetime count
         browserScreen.openURLAndAssertPageText(trackerPage, text: TestLabels.trackers)
+        let blockedBeforeHiding = assertBlockedTrackersInPanel().total
         openNewTab()
-        let countBeforeHiding = homePageScreen.assertTrackerBlockerCount(atLeast: 1)
+        homePageScreen.assertTrackerBlockerCount(atLeast: 1)
         setHomepageSections(privacyReportIsOn: false)
         homePageScreen.assertTrackerBlockerPillDoesNotExist()
 
         // Step 1
-        var blockedWhileHidden = 0
+        var blockedWhileHidden: [Int] = []
         for page in [trackerPage, otherTrackerPage] {
             browserScreen.openURLAndAssertPageText(page, text: TestLabels.trackers)
-            blockedWhileHidden += assertBlockedTrackersInPanel().total
+            blockedWhileHidden.append(assertBlockedTrackersInPanel().total)
         }
 
         // Step 2
         setHomepageSections(privacyReportIsOn: true)
 
-        // Step 3
+        // Step 3: ClearProfile resets the lifetime count, so it is the sum of the panel counts. The pill
+        // read in the precondition isn't used, it can be shown before the last page's trackers are stored
         openNewTab()
         homePageScreen.assertTrackerBlockerPillIsBetweenShortcutsAndJumpBackIn()
-        homePageScreen.assertTrackerBlockerCount(equals: countBeforeHiding + blockedWhileHidden)
+        homePageScreen.assertTrackerBlockerCount(
+            equals: blockedBeforeHiding + blockedWhileHidden.reduce(0, +),
+            breakdown: "panel counts: \(blockedBeforeHiding) before hiding, \(blockedWhileHidden) while hidden"
+        )
 
         // Step 4
         homePageScreen.tapTrackerBlockerPill()

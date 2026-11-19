@@ -234,4 +234,4 @@ user.ai.summarize:
       - https://github.com/mozilla-mobile/firefox-ios/pull/35361
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-12-01"
+    expires: never

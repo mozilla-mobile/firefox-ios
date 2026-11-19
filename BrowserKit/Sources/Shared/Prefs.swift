@@ -178,6 +178,8 @@ public enum PrefsKeys {
         public static let endpointEnvironment = "vpnEndpointEnvironment"
         public static let lastUsedEnvironment = "vpnLastUsedEnvironment"
         public static let selectedCountryCode = "vpnSelectedCountryCode"
+        // TODO: FXIOS-17399 Remove simulateQuotaExceeded debug hook after testing
+        public static let simulateQuotaExceeded = "vpnSimulateQuotaExceeded"
     }
 
     public enum UserFeatureFlagPrefs {

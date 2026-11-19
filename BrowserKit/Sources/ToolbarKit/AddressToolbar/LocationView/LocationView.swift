@@ -121,6 +121,13 @@ final class LocationView: UIView,
         $0.layer.cornerRadius = UX.effectViewCornerRadius
     }
 
+    var capsuleView: UIView {
+        if #available(iOS 26.0, *) {
+            return effectView
+        }
+        return containerView
+    }
+
     // MARK: - URL Text Field
     private(set) lazy var urlTextField: LocationTextField = .build { [self] urlTextField in
         urlTextField.backgroundColor = .clear

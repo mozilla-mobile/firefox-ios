@@ -283,6 +283,9 @@
 /* Title for firefox about:home page in tab history list */
 "Firefox.HomePage.Title" = "Firefox Ana Səhifə";
 
+/* Button title shown for tab pickup on the Firefox homepage in the Jump Back In section. */
+"FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104" = "Bütün sinxron vərəqlərə bax";
+
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "İrəli";
 

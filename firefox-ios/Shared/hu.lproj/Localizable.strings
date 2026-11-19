@@ -1555,6 +1555,9 @@
 /* Footer information for tracker protection level. */
 "Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Ha egy webhely nem a várt módon működik, akkor koppintson a lakatra a címsorban, és kapcsolja ki a fokozott követés elleni védelmet azon az oldalon.";
 
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Strict.v161" = "Ha egy webhely nem működik, nyissa meg a menüt, és próbálja meg kikapcsolni a fokozott követés elleni védelmet.";
+
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Néhány hirdetéskövető engedélyezése, hogy a weboldalak megfelelően működjenek.";
 

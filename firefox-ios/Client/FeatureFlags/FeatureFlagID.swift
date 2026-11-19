@@ -55,6 +55,7 @@ enum FeatureFlagID: String, CaseIterable {
     case quickAnswers
     case quickAnswersOptInRedesign
     case quickAnswersFollowUp
+    case quickAnswersReturnToAnswer
     case recentSearches
     case relayIntegration
     case reportBrokenSite
@@ -68,6 +69,7 @@ enum FeatureFlagID: String, CaseIterable {
     case summarizerAppAttestAuth
     case summarizerLanguageExpansion
     case summarizerPermissiveGuardrails
+    case syncStringUpdates
     case tabGroups
     case tabScrollRefactorFeature
     case tabTrayiPadUIExperiments
@@ -149,6 +151,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .quickAnswers,
                 .quickAnswersOptInRedesign,
                 .quickAnswersFollowUp,
+                .quickAnswersReturnToAnswer,
                 .recentSearches,
                 .relayIntegration,
                 .reportBrokenSite,
@@ -158,6 +161,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .summarizerAppAttestAuth,
                 .summarizerLanguageExpansion,
                 .summarizerPermissiveGuardrails,
+                .syncStringUpdates,
                 .tabGroups,
                 .tabScrollRefactorFeature,
                 .tabTrayScreenshotButtonStyle,
