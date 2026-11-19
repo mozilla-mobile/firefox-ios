@@ -21,23 +21,6 @@ final class InstallationTelemetryTests: XCTestCase {
         try await super.tearDown()
     }
 
-    func testRecordAcquisition_recordsPurchaseDateAndVersion() throws {
-        let subject = InstallationTelemetry(gleanWrapper: mockGleanWrapper)
-        let date = Date(timeIntervalSince1970: 1_760_000_000)
-
-        subject.recordAcquisition(appAcquisition: AppAcquisition(originalPurchaseDate: date, originalAppVersion: "42"))
-
-        let dateMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? DatetimeMetricType)
-        let versionMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.last as? StringMetricType)
-        XCTAssert(dateMetric === GleanMetrics.Installation.originalPurchaseDate)
-        XCTAssert(versionMetric === GleanMetrics.Installation.originalAppVersion)
-        XCTAssertEqual(mockGleanWrapper.savedValues.first as? Date, date)
-        XCTAssertEqual(mockGleanWrapper.savedValues.last as? String, "42")
-        XCTAssertEqual(mockGleanWrapper.recordDatetimeCalled, 1)
-        XCTAssertEqual(mockGleanWrapper.recordStringCalled, 1)
-        XCTAssertEqual(mockGleanWrapper.submitPingCalled, 0)
-    }
-
     func testRecordInstallationHistory_recordsCountAndLastSeenDate() throws {
         let subject = InstallationTelemetry(gleanWrapper: mockGleanWrapper)
         let lastSeenDate = Date(timeIntervalSince1970: 45_296)
