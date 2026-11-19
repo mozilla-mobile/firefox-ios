@@ -6,7 +6,7 @@ import UIKit
 import XCTest
 @testable import Common
 
-class NovaTabGroupTokenTests: XCTestCase {
+final class NovaTabGroupTokenTests: XCTestCase {
     private struct ColorMapping {
         let key: KeyPath<ThemeColourPalette, UIColor>
         let light: UIColor
