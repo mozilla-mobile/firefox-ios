@@ -127,6 +127,7 @@ class SwipingTabsTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/4136035
+    // [Config] nav:bottombar
     // Regression
     func testSwipeUpOnAddressBarOpensTabTray() throws {
         guard !iPad() else {

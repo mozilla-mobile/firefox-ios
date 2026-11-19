@@ -173,10 +173,23 @@ class TrackingProtectionTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3167401
+    // [Config] nav:topbar
     // Regression
     func testSecureSiteConnectionElements() {
+        verifySecureSiteConnectionElements(addressBarAtTop: true)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3167401
+    // [Config] nav:bottombar
+    // Regression
+    func testSecureSiteConnectionElements_bottomToolbar() throws {
+        try XCTSkipIf(iPad(), "The address bar cannot be placed at the bottom on iPad")
+        verifySecureSiteConnectionElements(addressBarAtTop: false)
+    }
+
+    private func verifySecureSiteConnectionElements(addressBarAtTop: Bool) {
         // Step 1: the secure page is opened
-        openPageForConnectionPanel("https://www.mozilla.org/")
+        openPageForConnectionPanel("https://www.mozilla.org/", addressBarAtTop: addressBarAtTop)
         browserScreen.assertAddressBar_LockIconExist()
 
         // Step 2: the panel shows the site, the secure connection, the ETP switch and Privacy settings
@@ -184,21 +197,71 @@ class TrackingProtectionTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3167402
+    // [Config] nav:topbar
     // Regression
     func testInsecureSiteConnectionElements() {
+        verifyInsecureSiteConnectionElements(addressBarAtTop: true)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3167402
+    // [Config] nav:bottombar
+    // Regression
+    func testInsecureSiteConnectionElements_bottomToolbar() throws {
+        try XCTSkipIf(iPad(), "The address bar cannot be placed at the bottom on iPad")
+        verifyInsecureSiteConnectionElements(addressBarAtTop: false)
+    }
+
+    private func verifyInsecureSiteConnectionElements(addressBarAtTop: Bool) {
         // Step 1: the insecure (plain HTTP) page is opened
-        openPageForConnectionPanel(path(forTestPage: TestPages.mozillaBook))
+        openPageForConnectionPanel(path(forTestPage: TestPages.mozillaBook), addressBarAtTop: addressBarAtTop)
         XCTAssertTrue(browserScreen.bookOfMozillaPageContentExists(), "The website did not load")
 
         // Step 2: the panel shows the site, the insecure connection, the ETP switch and Privacy settings
         assertConnectionPanelAndProtectionSettings(domain: "localhost", secure: false)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3167404
+    // [Config] nav:topbar
+    // Regression
+    func testConnectionDisplayedAsInsecure() {
+        verifyConnectionDisplayedAsInsecure(addressBarAtTop: true)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3167404
+    // [Config] nav:bottombar
+    // Regression
+    func testConnectionDisplayedAsInsecure_bottomToolbar() throws {
+        try XCTSkipIf(iPad(), "The address bar cannot be placed at the bottom on iPad")
+        verifyConnectionDisplayedAsInsecure(addressBarAtTop: false)
+    }
+
+    /// A local plain HTTP page stands in for http.badssl.com.
+    private func verifyConnectionDisplayedAsInsecure(addressBarAtTop: Bool) {
+        // Step 1: the insecure page loads with the insecure connection icon, also shown in the panel
+        openPageForConnectionPanel(path(forTestPage: TestPages.mozillaBook), addressBarAtTop: addressBarAtTop)
+        XCTAssertTrue(browserScreen.bookOfMozillaPageContentExists(), "The website did not load")
+        browserScreen.assertAddressBar_LockIconOffExist()
+        openConnectionPanel()
+        trackingProtectionScreen.assertPanelConnectionIs(secure: false)
+
+        // Step 2: after switching to Strict and going back, the connection is still shown as insecure
+        trackingProtectionScreen.tapPrivacySettings()
+        trackingProtectionScreen.selectStrictProtectionLevel()
+        trackingProtectionScreen.closeTrackingProtectionSettings()
+        waitUntilPageLoad()
+        XCTAssertTrue(browserScreen.bookOfMozillaPageContentExists(), "The website did not load")
+        browserScreen.assertAddressBar_LockIconOffExist()
+        openConnectionPanel()
+        trackingProtectionScreen.assertPanelConnectionIs(secure: false)
+        trackingProtectionScreen.closePanel()
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/3167403
+    // [Config] nav:topbar
     // Regression
     func testConnectionDisplayedAsSecure() {
         // Step 1: the secure page loads with the secure connection shield
-        openPageForConnectionPanel("https://www.mozilla.org/")
+        openPageForConnectionPanel("https://www.mozilla.org/", addressBarAtTop: true)
         browserScreen.assertAddressBar_LockIconExist()
 
         // Step 2: after switching to Strict and going back, the connection is still shown as secure
@@ -310,17 +373,10 @@ class TrackingProtectionTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3168488
+    // [Config] nav:topbar
     // Regression
     func testSecureConnectionButtonWithProtectionsOff() {
-        if iPad() {
-            app.launch()
-        } else {
-            launchIntoSettings()
-            settingsScreen.navigateToToolbarSettings()
-            settingsScreen.selectTopToolbar()
-            settingsScreen.tapBackToSettings()
-            settingsScreen.closeSettingsWithDoneButton()
-        }
+        launchWithAddressBar(atTop: true)
         browserScreen.navigateToURLAndAssertAddressBarContains("https://www.mozilla.org/", host: "mozilla.org")
         waitUntilPageLoad()
 
@@ -458,12 +514,22 @@ class TrackingProtectionTests: BaseTestCase {
         waitForRotation(to: orientation)
     }
 
-    private func openPageForConnectionPanel(_ url: String) {
-        app.launch()
-        navigator.nowAt(NewTabScreen)
-        navigator.openURL(url)
+    /// iPad always has the address bar at the top, so it launches straight to the homepage there.
+    private func launchWithAddressBar(atTop: Bool) {
+        guard !iPad() else {
+            app.launch()
+            return
+        }
+        launchIntoSettings()
+        settingsScreen.setAddressBarPosition(atTop: atTop)
+    }
+
+    private func openPageForConnectionPanel(_ url: String, addressBarAtTop: Bool) {
+        launchWithAddressBar(atTop: addressBarAtTop)
+        browserScreen.navigateToURL(url)
         waitUntilPageLoad()
         waitForTabsButton()
+        browserScreen.assertAddressBarPosition(atTop: addressBarAtTop)
     }
 
     private func logInOnCookiePage(url: String) {

@@ -191,13 +191,29 @@ class UrlBarTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3167407
+    // [Config] nav:topbar
     // Regression
     func testHomepageAndNewTabButtonsFromWebsite() throws {
+        try verifyHomepageAndNewTabButtonsFromWebsite(addressBarAtTop: true)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3167407
+    // [Config] nav:bottombar
+    // Regression
+    func testHomepageAndNewTabButtonsFromWebsite_bottomToolbar() throws {
+        try verifyHomepageAndNewTabButtonsFromWebsite(addressBarAtTop: false)
+    }
+
+    private func verifyHomepageAndNewTabButtonsFromWebsite(addressBarAtTop: Bool) throws {
         guard !iPad() else {
             throw XCTSkip("The navigation toolbar middle button cannot be configured on iPad")
         }
+        openSettingsFromToolbarMenu()
+        settingScreen.setAddressBarPosition(atTop: addressBarAtTop)
+
         // Step 1: open a website
         openMozillaBookFromNewTab()
+        browserScreen.assertAddressBarPosition(atTop: addressBarAtTop)
 
         // Step 2 (1): the default "+" middle button creates a new tab
         toolbarScreen.tapOnNewTabButton()
@@ -207,8 +223,7 @@ class UrlBarTests: BaseTestCase {
         browserScreen.tapCancelButtonOnUrlBarExist()
 
         // Step 2 (2): with the Home middle button, the homepage opens on the same tab
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(SettingsScreen)
+        openSettingsFromToolbarMenu()
         settingScreen.navigateToToolbarSettings()
         settingScreen.selectNavigationToolbarMiddleButton(.home)
         settingScreen.tapBackToSettings()
@@ -245,11 +260,15 @@ class UrlBarTests: BaseTestCase {
     }
 
     private func openMozillaBookFromNewTab() {
-        navigator.nowAt(NewTabScreen)
-        navigator.openURL(path(forTestPage: TestPages.mozillaBook))
+        browserScreen.navigateToURL(path(forTestPage: TestPages.mozillaBook))
         waitUntilPageLoad()
         waitForTabsButton()
         XCTAssertTrue(browserScreen.bookOfMozillaPageContentExists(), "The website did not load")
+    }
+
+    private func openSettingsFromToolbarMenu() {
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenuScreen.tapSettings()
     }
 
     /// Tapping the address bar of a loaded page hands over the full URL, selected, for editing.

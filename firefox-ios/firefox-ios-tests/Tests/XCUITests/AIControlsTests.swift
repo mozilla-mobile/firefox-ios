@@ -106,6 +106,7 @@ final class AIControlsTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3135865
+    // [Config] nav:topbar
     // Regression
     func testSummarizeButtonReplacesReaderViewWithTopToolbar() throws {
         try launchWithToolbarSummarizer()
@@ -118,6 +119,7 @@ final class AIControlsTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3135866
+    // [Config] nav:bottombar
     // Regression
     func testSummarizeButtonReplacesReaderViewWithBottomToolbar() throws {
         try XCTSkipIf(iPad(), "The bottom toolbar is not available on iPad")
@@ -129,6 +131,7 @@ final class AIControlsTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3135867
+    // [Config] nav:bottombar
     // Regression
     func testLongPressOnSummarizeButtonAppliesReaderView() throws {
         try launchWithToolbarSummarizer()

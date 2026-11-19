@@ -252,6 +252,18 @@ final class SettingScreen {
         topToolbarButton.waitAndTap()
     }
 
+    /// From the Settings root, places the address bar at the top or the bottom, then closes Settings.
+    func setAddressBarPosition(atTop: Bool) {
+        navigateToToolbarSettings()
+        if atTop {
+            selectTopToolbar()
+        } else {
+            selectBottomToolbar()
+        }
+        tapBackToSettings()
+        closeSettingsWithDoneButton()
+    }
+
     /// Picks which button sits in the middle of the navigation toolbar. The Home option is what makes
     /// the custom homepage URL reachable, as the default New Tab button ignores it.
     func selectNavigationToolbarMiddleButton(_ button: NavigationToolbarMiddleButton) {

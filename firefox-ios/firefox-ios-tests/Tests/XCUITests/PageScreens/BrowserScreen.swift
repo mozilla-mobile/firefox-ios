@@ -501,6 +501,13 @@ final class BrowserScreen {
         addressBar.typeText("\n")
     }
 
+    /// Asserts the address bar sits in the top or the bottom half of the screen.
+    func assertAddressBarPosition(atTop: Bool) {
+        BaseTestCase().mozWaitForElementToExist(addressBar)
+        let isInTopHalf = addressBar.frame.midY < app.frame.midY
+        XCTAssertEqual(isInTopHalf, atTop, "The address bar should be at the \(atTop ? "top" : "bottom")")
+    }
+
     func navigateToURL(_ url: String) {
         tapOnAddressBar()
         addressBar.typeText(url)
