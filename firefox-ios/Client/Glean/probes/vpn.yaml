@@ -60,9 +60,9 @@ vpn:
   connection_stopped:
     type: event
     description: |
-      Recorded when the VPN was connected and gets turned off, either by the
-      user or through one of the choices in a VPN alert. Not recorded when the
-      VPN was not connected, or when the app is terminated with the VPN on.
+      Recorded when the VPN is turned off, either by the user or through one
+      of the choices in a VPN alert. Not recorded when the app is terminated
+      with the VPN on.
     extra_keys:
       source:
         type: string

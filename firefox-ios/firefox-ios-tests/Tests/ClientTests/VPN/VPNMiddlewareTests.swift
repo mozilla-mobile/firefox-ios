@@ -144,8 +144,7 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(firstTabManager.removeAllTabsCalledWith.isEmpty)
     }
 
-    func testStop_whenRunning_recordsSettingsSource() async {
-        mockVPNManager.isRunning = true
+    func testStop_recordsSettingsSource() async {
         let subject = createSubject()
 
         await dispatchAndWaitForPreference(.stop, to: subject)
@@ -153,16 +152,7 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockTelemetry.stops, [.settings])
     }
 
-    func testStop_whenNotRunning_doesNotRecordTelemetry() async {
-        let subject = createSubject()
-
-        await dispatchAndWaitForPreference(.stop, to: subject)
-
-        XCTAssertEqual(mockVPNManager.stopCalled, 1)
-        XCTAssertTrue(mockTelemetry.stops.isEmpty)
-    }
-
-    func testAlertChoices_whenRunning_recordMatchingSource() async {
+    func testAlertChoices_recordMatchingSource() async {
         let cases: [(VPNModernAction, VPNConnectionStopSource)] = [
             (.continueWithoutVPN, .continueWithoutVPN),
             (.closeThisTab, .closeThisTab),
@@ -171,7 +161,6 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         let subject = createSubject()
 
         for (action, _) in cases {
-            mockVPNManager.isRunning = true
             await dispatchAndWaitForPreference(action, to: subject)
         }
 

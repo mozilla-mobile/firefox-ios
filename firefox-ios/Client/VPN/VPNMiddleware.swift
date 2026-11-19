@@ -193,11 +193,8 @@ final class VPNMiddleware {
             logger.log("VPN stop with no VPNManager registered", level: .warning, category: .vpn)
             return
         }
-        let wasRunning = vpnManager.isRunning
         await vpnManager.stop()
-        if wasRunning {
-            telemetry.recordConnectionStopped(source: source)
-        }
+        telemetry.recordConnectionStopped(source: source)
         userPreferences.setPreferenceFor(.vpnFeature, to: false)
     }
 }
