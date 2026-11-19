@@ -112,6 +112,7 @@ final class DefaultVPNTelemetryTests: XCTestCase {
             (AppAttestServiceError.keychain(description: ""), "keychain"),
             (AppAttestServiceError.invalidPayload, "invalid_response"),
             (AppAttestServiceError.invalidURL(description: ""), "invalid_url"),
+            (VPNAuthError.quotaExceeded(nil), "quota_exceeded"),
             (VPNAuthError.sessionRejected, "auth"),
             (CancellationError(), "unknown")
         ]

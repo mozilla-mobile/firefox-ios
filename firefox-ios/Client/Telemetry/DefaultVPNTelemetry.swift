@@ -14,6 +14,8 @@ enum VPNConnectionFailureReason: String {
     case tokenProviderUnavailable = "token_provider_unavailable"
     case network
     case serverError = "server_error"
+    /// The device has used its monthly bandwidth quota.
+    case quotaExceeded = "quota_exceeded"
     case auth
     /// The device can't do App Attest, so the VPN can never connect on it.
     case attestationUnsupported = "attestation_unsupported"
@@ -50,6 +52,8 @@ enum VPNConnectionFailureReason: String {
             self = .invalidResponse
         case AppAttestServiceError.invalidURL:
             self = .invalidURL
+        case VPNAuthError.quotaExceeded:
+            self = .quotaExceeded
         case is VPNAuthError:
             self = .auth
         default:
