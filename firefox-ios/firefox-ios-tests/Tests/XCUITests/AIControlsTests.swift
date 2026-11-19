@@ -134,10 +134,9 @@ final class AIControlsTests: FeatureFlaggedTestBase {
     // [Config] nav:bottombar
     // Regression
     func testLongPressOnSummarizeButtonAppliesReaderView() throws {
+        try XCTSkipIf(iPad(), "The bottom toolbar is not available on iPad")
         try launchWithToolbarSummarizer()
-        if !iPad() {
-            selectToolbarPosition(top: false)
-        }
+        selectToolbarPosition(top: false)
 
         navigateToBookOfMozillaPage()
         toolBarScreen.assertSummarizeContextualHintIsDisplayed()
@@ -299,14 +298,7 @@ final class AIControlsTests: FeatureFlaggedTestBase {
 
     private func selectToolbarPosition(top: Bool) {
         openSettingsFromToolbarMenu()
-        settingsScreen.navigateToToolbarSettings()
-        if top {
-            settingsScreen.selectTopToolbar()
-        } else {
-            settingsScreen.selectBottomToolbar()
-        }
-        settingsScreen.tapBackToSettings()
-        settingsScreen.closeSettingsWithDoneButton()
+        settingsScreen.setAddressBarPosition(atTop: top)
     }
 
     private func assertSummarizeButtonReplacesReaderViewWithContextualHint() {

@@ -135,10 +135,7 @@ class SwipingTabsTests: BaseTestCase {
         }
         toolbarScreen.tapSettingsMenuButton()
         mainMenuScreen.tapSettings()
-        settingScreen.navigateToToolbarSettings()
-        settingScreen.selectBottomToolbar()
-        settingScreen.tapBackToSettings()
-        settingScreen.closeSettingsWithDoneButton()
+        settingScreen.setAddressBarPosition(atTop: false)
         waitForTabsButton()
 
         assertSwipeUpOpensTabTrayOnHomepageAndWebsite()

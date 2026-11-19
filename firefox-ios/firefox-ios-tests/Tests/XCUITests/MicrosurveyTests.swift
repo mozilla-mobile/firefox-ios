@@ -76,10 +76,7 @@ final class MicrosurveyTests: BaseTestCase {
         }
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
-        settingScreen.navigateToToolbarSettings()
-        settingScreen.selectBottomToolbar()
-        settingScreen.tapBackToSettings()
-        settingScreen.closeSettingsWithDoneButton()
+        settingScreen.setAddressBarPosition(atTop: false)
         generateTriggerForMicrosurvey()
 
         microsurveyScreen.assertTopBorderHidden()
