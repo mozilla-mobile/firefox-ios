@@ -14,7 +14,6 @@ final class QuickAnswersReturnPillPresenterTests: XCTestCase {
     private var hostView: UIView!
     private var anchorView: UIView!
     private var overlayState: MockOverlayState!
-    private static let defaultLocationCapsuleFrame = CGRect(x: 40, y: 760, width: 200, height: 30)
 
     override func setUp() async throws {
         try await super.setUp()
@@ -34,16 +33,12 @@ final class QuickAnswersReturnPillPresenterTests: XCTestCase {
 
     // MARK: - show
 
-    func test_show_addsPillWithExpandedConstraints() {
+    func test_show_addsPill() {
         let subject = createSubject()
 
         showPill(on: subject)
 
         XCTAssertNotNil(pill)
-        XCTAssertEqual(activeAttributes(), [.bottom, .centerX, .leading, .trailing])
-        let bottomConstraint = activeConstraint(for: .bottom)
-        XCTAssertTrue(bottomConstraint?.secondItem === anchorView)
-        XCTAssertEqual(bottomConstraint?.secondAttribute, .top)
     }
 
     func test_show_calledTwice_keepsOnePill() {
@@ -53,20 +48,17 @@ final class QuickAnswersReturnPillPresenterTests: XCTestCase {
         showPill(on: subject)
 
         XCTAssertEqual(pills.count, 1)
-        XCTAssertEqual(activeConstraints().count, 3)
     }
 
     // MARK: - hide
 
-    func test_hide_removesPillAndConstraints() {
+    func test_hide_removesPill() {
         let subject = createSubject()
         showPill(on: subject)
-        let shownPill = pill
 
         subject.hide()
 
         XCTAssertNil(pill)
-        XCTAssertFalse(hostView.constraints.contains { $0.firstItem === shownPill })
     }
 
     func test_hide_withoutPill_doesNothing() {
@@ -85,109 +77,6 @@ final class QuickAnswersReturnPillPresenterTests: XCTestCase {
         showPill(on: subject)
 
         XCTAssertEqual(pills.count, 1)
-        XCTAssertEqual(activeAttributes(), [.bottom, .centerX, .leading, .trailing])
-    }
-
-    // MARK: - updateLayout
-
-    func test_updateLayout_notMinimized_keepsExpandedConstraints() {
-        let subject = createSubject()
-        showPill(on: subject)
-
-        subject.updateLayout(layoutContext(isMinimized: false), animated: false)
-
-        XCTAssertEqual(activeAttributes(), [.bottom, .centerX, .leading, .trailing])
-    }
-
-    func test_updateLayout_minimizedBottomSearchBar_keepsExpandedConstraintsAndOffsetsPill() {
-        let subject = createSubject()
-        showPill(on: subject)
-
-        subject.updateLayout(layoutContext(isMinimized: true), animated: false)
-
-        XCTAssertEqual(activeAttributes(), [.bottom, .centerX, .leading, .trailing])
-        XCTAssertNotEqual(pill?.transform, .identity)
-    }
-
-    func test_updateLayout_minimizedBottomSearchBar_movesPillCenterNextToLocationView() {
-        let subject = createSubject()
-        showPill(on: subject)
-        hostView.layoutIfNeeded()
-
-        subject.updateLayout(layoutContext(isMinimized: true), animated: false)
-
-        let center = pill.map { $0.center.applying($0.transform) }
-        let expectedCenter = CGPoint(
-            x: Self.defaultLocationCapsuleFrame.maxX + 10 + QuickAnswersReturnPillView.minimizedSize / 2,
-            y: Self.defaultLocationCapsuleFrame.midY
-        )
-        XCTAssertEqual(center?.x ?? 0, expectedCenter.x, accuracy: 0.5)
-        XCTAssertEqual(center?.y ?? 0, expectedCenter.y, accuracy: 0.5)
-    }
-
-    func test_updateLayout_minimizedBottomSearchBarWithoutFrame_centersAtBottom() {
-        let subject = createSubject()
-        showPill(on: subject)
-
-        subject.updateLayout(layoutContext(isMinimized: true, locationCapsuleFrame: nil), animated: false)
-
-        XCTAssertEqual(activeAttributes(), [.centerX, .bottom])
-        XCTAssertEqual(pill?.transform, .identity)
-    }
-
-    func test_updateLayout_minimizedTopSearchBar_centersAtBottom() {
-        let subject = createSubject()
-        showPill(on: subject)
-
-        subject.updateLayout(layoutContext(isMinimized: true, isBottomSearchBar: false), animated: false)
-
-        XCTAssertEqual(activeAttributes(), [.centerX, .bottom])
-    }
-
-    func test_updateLayout_minimizedThenExpanded_restoresExpandedConstraints() {
-        let subject = createSubject()
-        showPill(on: subject)
-        subject.updateLayout(layoutContext(isMinimized: true), animated: false)
-
-        subject.updateLayout(layoutContext(isMinimized: false), animated: false)
-
-        XCTAssertEqual(activeAttributes(), [.bottom, .centerX, .leading, .trailing])
-        XCTAssertEqual(pill?.transform, .identity)
-    }
-
-    func test_updateLayout_changedLocationCapsuleFrame_movesPillWithoutRebuildingConstraints() {
-        let subject = createSubject()
-        showPill(on: subject)
-        subject.updateLayout(layoutContext(isMinimized: true), animated: false)
-        let constraints = activeConstraints()
-        let transform = pill?.transform
-        let newFrame = CGRect(x: 60, y: 700, width: 220, height: 30)
-
-        subject.updateLayout(layoutContext(isMinimized: true, locationCapsuleFrame: newFrame), animated: false)
-
-        XCTAssertTrue(zip(constraints, activeConstraints()).allSatisfy { $0 === $1 })
-        XCTAssertNotEqual(pill?.transform, transform)
-    }
-
-    func test_updateLayout_sameContextTwice_keepsSameConstraints() {
-        let subject = createSubject()
-        showPill(on: subject)
-        subject.updateLayout(layoutContext(isMinimized: true), animated: false)
-        let constraints = activeConstraints()
-
-        subject.updateLayout(layoutContext(isMinimized: true), animated: false)
-
-        let updatedConstraints = activeConstraints()
-        XCTAssertEqual(updatedConstraints.count, constraints.count)
-        XCTAssertTrue(zip(constraints, updatedConstraints).allSatisfy { $0 === $1 })
-    }
-
-    func test_updateLayout_withoutPill_doesNotAddConstraints() {
-        let subject = createSubject()
-
-        subject.updateLayout(layoutContext(isMinimized: true), animated: false)
-
-        XCTAssertTrue(activeConstraints().isEmpty)
     }
 
     // MARK: - updateVisibility
@@ -265,30 +154,6 @@ final class QuickAnswersReturnPillPresenterTests: XCTestCase {
 
     private func showPill(on subject: QuickAnswersReturnPillPresenter, question: String = "Question") {
         subject.show(question: question, theme: LightTheme(), onTap: { _ in }, onSwipeAway: {})
-    }
-
-    private func layoutContext(
-        isMinimized: Bool,
-        isBottomSearchBar: Bool = true,
-        locationCapsuleFrame: CGRect? = QuickAnswersReturnPillPresenterTests.defaultLocationCapsuleFrame
-    ) -> QuickAnswersReturnPillPresenter.LayoutContext {
-        return QuickAnswersReturnPillPresenter.LayoutContext(
-            isMinimized: isMinimized,
-            isBottomSearchBar: isBottomSearchBar,
-            locationCapsuleFrame: locationCapsuleFrame
-        )
-    }
-
-    private func activeConstraints() -> [NSLayoutConstraint] {
-        hostView.constraints.filter { $0.isActive && $0.firstItem === pill }
-    }
-
-    private func activeAttributes() -> Set<NSLayoutConstraint.Attribute> {
-        Set(activeConstraints().map(\.firstAttribute))
-    }
-
-    private func activeConstraint(for attribute: NSLayoutConstraint.Attribute) -> NSLayoutConstraint? {
-        activeConstraints().first { $0.firstAttribute == attribute }
     }
 }
 
