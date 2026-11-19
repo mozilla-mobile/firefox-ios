@@ -72,7 +72,7 @@ final class BrowserCoordinator: BaseCoordinator,
         return summarizerNimbusUtils.isSummarizeFeatureToggledOn
     }
     private var pendingOnboardingCardAction: OnboardingCardButtonAction = .none
-    private let quickAnswersSessionStorage = QuickAnswersSessionStorage()
+    private let quickAnswersSessionStorage: QuickAnswersSessionStorage
 
     override var isDismissible: Bool { false }
 
@@ -88,6 +88,7 @@ final class BrowserCoordinator: BaseCoordinator,
          applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
          windowMerger: WindowMerging = MergeWindowsManager(),
          googleLensService: GoogleLensServicing = GoogleLensService(),
+         quickAnswersSessionStorage: QuickAnswersSessionStorage = QuickAnswersSessionStorage(),
          isCameraAvailable: @escaping @MainActor () -> Bool = {
              UIImagePickerController.isSourceTypeAvailable(.camera)
          }) {
@@ -106,6 +107,7 @@ final class BrowserCoordinator: BaseCoordinator,
         self.applicationHelper = applicationHelper
         self.glean = glean
         self.googleLensService = googleLensService
+        self.quickAnswersSessionStorage = quickAnswersSessionStorage
         self.isCameraAvailable = isCameraAvailable
         super.init(router: router)
 
@@ -1322,6 +1324,12 @@ final class BrowserCoordinator: BaseCoordinator,
 
     func showQuickAnswers(transitionType: QuickAnswersTransitionType) {
         guard !childCoordinators.contains(where: { $0 is QuickAnswersCoordinator }) else { return }
+        switch transitionType {
+        case .sourceReveal:
+            discardParkedQuickAnswers(reason: .newSession)
+        case .returnToAnswer:
+            browserViewController.hideQuickAnswersReturnPill()
+        }
         let coordinator = QuickAnswersCoordinator(
             parentCoordinatorDelegate: self,
             prefs: profile.prefs,
@@ -1330,16 +1338,41 @@ final class BrowserCoordinator: BaseCoordinator,
             themeManager: themeManager,
             router: router,
             transitionType: transitionType,
-        ) { [weak self] navigationType in
-            switch navigationType {
-            case .url(let url):
-                self?.navigateFromHomePanel(to: url, visitType: .link, isGoogleTopSite: false)
-            case .searchResult(let query):
-                self?.browserViewController.openSearchNewTab(query)
+            onNavigate: { [weak self] navigationType in
+                switch navigationType {
+                case .url(let url):
+                    self?.navigateFromHomePanel(to: url, visitType: .link, isGoogleTopSite: false)
+                case .searchResult(let query):
+                    self?.browserViewController.openSearchNewTab(query)
+                }
+            },
+            onPark: { [weak self] in
+                self?.showQuickAnswersReturnPill()
             }
-        }
+        )
         add(child: coordinator)
         coordinator.start()
+    }
+
+    private func showQuickAnswersReturnPill() {
+        guard let question = quickAnswersSessionStorage.latestSession?.question else { return }
+        browserViewController.showQuickAnswersReturnPill(
+            question: question,
+            onTap: { [weak self] _ in self?.resumeParkedQuickAnswers() },
+            onSwipeAway: { [weak self] in self?.discardParkedQuickAnswers(reason: .swipe) }
+        )
+    }
+
+    private func resumeParkedQuickAnswers() {
+        guard quickAnswersSessionStorage.latestSession != nil,
+              router.navigationController.presentedViewController == nil else { return }
+        showQuickAnswers(transitionType: .returnToAnswer)
+    }
+
+    private func discardParkedQuickAnswers(reason: QuickAnswersReturnPillDismissReason) {
+        guard quickAnswersSessionStorage.latestSession != nil else { return }
+        quickAnswersSessionStorage.removeAll()
+        browserViewController.hideQuickAnswersReturnPill()
     }
 
     func showGoogleLensPhotoPicker() {
