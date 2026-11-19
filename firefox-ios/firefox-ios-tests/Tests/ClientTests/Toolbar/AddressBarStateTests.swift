@@ -518,13 +518,10 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         let reducer = addressBarReducer()
 
         let urlDidChangeState = loadWebsiteAction(state: initialState, reducer: reducer)
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             urlDidChangeState,
-            ToolbarAction(
-                searchTerm: nil,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.cancelEdit
-            )
+            ToolbarModernAction.cancelEdit(url: nil),
+            windowUUID
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
@@ -534,6 +531,23 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(newState.shouldShowKeyboard)
         XCTAssertFalse(newState.shouldSelectSearchTerm)
         XCTAssertFalse(newState.didStartTyping)
+        XCTAssertFalse(newState.isEmptySearch)
+    }
+
+    func test_cancelEditAction_withURL_restoresURL() {
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+        let url = URL(string: "https://www.mozilla.org")!
+
+        let newState = reducer.modernReducer(
+            initialState,
+            ToolbarModernAction.cancelEdit(url: url),
+            windowUUID
+        )
+
+        XCTAssertEqual(newState.url, url)
+        XCTAssertFalse(newState.isEditing)
         XCTAssertFalse(newState.isEmptySearch)
     }
 

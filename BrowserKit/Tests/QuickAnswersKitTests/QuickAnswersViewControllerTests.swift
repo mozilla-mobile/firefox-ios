@@ -10,6 +10,25 @@ import TestKit
 
 @MainActor
 final class QuickAnswersViewControllerTests: XCTestCase {
+    private var navigationHandler: MockNavigationHandler!
+    private var service: MockTestQuickAnswersService!
+    private var sessionStorage: QuickAnswersSessionStorage!
+    private let citationURL = URL(string: "https://example.com")!
+
+    override func setUp() async throws {
+        try await super.setUp()
+        navigationHandler = MockNavigationHandler()
+        service = MockTestQuickAnswersService()
+        sessionStorage = QuickAnswersSessionStorage()
+    }
+
+    override func tearDown() async throws {
+        navigationHandler = nil
+        service = nil
+        sessionStorage = nil
+        try await super.tearDown()
+    }
+
     func testInit_withSourceRevealTransition_usesCustomPresentationAndOptInTransitionAnimator() {
         let subject = createSubject(transitionType: .sourceReveal(sourceRect: .zero))
 
@@ -17,29 +36,98 @@ final class QuickAnswersViewControllerTests: XCTestCase {
         XCTAssertTrue(subject.transitioningDelegate is OptInTransitionAnimator)
     }
 
-    func testInit_withSourceRevealTransition_fallsBackToSourceRevealTransitionAnimator() {
+    func testInit_withSourceRevealTransition_fallsBackToReturnToBrowserTransitionAnimator() {
         let subject = createSubject(transitionType: .sourceReveal(sourceRect: .zero))
 
         let transitionAnimator = subject.transitioningDelegate as? OptInTransitionAnimator
-        XCTAssertTrue(transitionAnimator?.fallback is SourceRevealTransitionAnimator)
+        let returnAnimator = transitionAnimator?.fallback as? ReturnToBrowserTransitionAnimator
+        XCTAssertNotNil(returnAnimator)
+        XCTAssertTrue(returnAnimator?.fallback is SourceRevealTransitionAnimator)
+    }
+
+    func testInit_withReturnToAnswerTransition_usesCustomPresentationAndOptInTransitionAnimator() {
+        let subject = createSubject(transitionType: .returnToAnswer)
+
+        XCTAssertEqual(subject.modalPresentationStyle, .custom)
+        XCTAssertTrue(subject.transitioningDelegate is OptInTransitionAnimator)
+    }
+
+    func testInit_withReturnToAnswerTransition_fallsBackToReturnToBrowserTransitionAnimatorWithoutFallback() {
+        let subject = createSubject(transitionType: .returnToAnswer)
+
+        let transitionAnimator = subject.transitioningDelegate as? OptInTransitionAnimator
+        let returnAnimator = transitionAnimator?.fallback as? ReturnToBrowserTransitionAnimator
+        XCTAssertNotNil(returnAnimator)
+        XCTAssertNil(returnAnimator?.fallback)
+    }
+
+    func testInit_withReturnToAnswerTransition_returnsReturnAnimatorForPresentationAndDismissal() throws {
+        let subject = createSubject(transitionType: .returnToAnswer)
+        let transitionDelegate = try XCTUnwrap(subject.transitioningDelegate)
+
+        let presentation = transitionDelegate.animationController?(
+            forPresented: subject,
+            presenting: subject,
+            source: subject
+        )
+        let dismissal = transitionDelegate.animationController?(forDismissed: subject)
+
+        XCTAssertTrue(presentation is ReturnToBrowserTransitionAnimator)
+        XCTAssertTrue(dismissal is ReturnToBrowserTransitionAnimator)
+    }
+
+    // MARK: - Dismissal animator
+    func test_dismissalAnimator_withSourceRevealAndNoParkedSession_isSourceRevealTransitionAnimator() throws {
+        let subject = createSubject(transitionType: .sourceReveal(sourceRect: .zero))
+        let transitionDelegate = try XCTUnwrap(subject.transitioningDelegate)
+
+        let dismissal = transitionDelegate.animationController?(forDismissed: subject)
+
+        XCTAssertTrue(dismissal is SourceRevealTransitionAnimator)
+    }
+
+    func test_dismissalAnimator_withSourceRevealAndParkedSession_isReturnToBrowserTransitionAnimator() throws {
+        sessionStorage.latestSession = makeSnapshot()
+        let subject = createSubject(
+            transitionType: .sourceReveal(sourceRect: .zero),
+            isReturnToAnswerEnabled: true,
+            isReturningToAnswer: true
+        )
+        let transitionDelegate = try XCTUnwrap(subject.transitioningDelegate)
+
+        let dismissal = transitionDelegate.animationController?(forDismissed: subject)
+
+        XCTAssertTrue(dismissal is ReturnToBrowserTransitionAnimator)
     }
 
     // MARK: - Helper
     private func createSubject(
-        transitionType: QuickAnswersTransitionType,
+        transitionType: QuickAnswersTransitionType = .sourceReveal(sourceRect: .zero),
+        prefs: Prefs = MockProfilePrefs(),
+        isReturnToAnswerEnabled: Bool = false,
+        isReturningToAnswer: Bool = false,
         file: StaticString = #filePath,
         line: UInt = #line
     ) -> QuickAnswersViewController {
         let viewModel = QuickAnswersViewModel(
-            prefs: MockProfilePrefs(),
+            prefs: prefs,
+            sessionStorage: sessionStorage,
+            isReturningToAnswer: isReturningToAnswer,
             telemetry: MockQuickAnswersTelemetry(),
-            configFetcher: nil,
-            makeService: { _, _ in
-                MockTestQuickAnswersService()
+            configFetcher: DefaultQuickAnswersConfigFetcher(
+                feature: QuickAnswersFeature(
+                    model: .exa,
+                    isOptInRedesignEnabled: false,
+                    isFollowUpEnabled: false,
+                    isReturnToAnswerEnabled: isReturnToAnswerEnabled
+                )
+            ),
+            makeService: { _, _, _ in
+                self.service
             }
         )
         let subject = QuickAnswersViewController(
-            navigationHandler: MockNavigationHandler(),
+            navigationHandler: navigationHandler,
             viewModel: viewModel,
             transitionType: transitionType,
             windowUUID: .XCTestDefaultUUID,
@@ -50,6 +138,17 @@ final class QuickAnswersViewControllerTests: XCTestCase {
         )
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
+    }
+
+    private func makeSnapshot() -> QuickAnswersSessionSnapshot {
+        return QuickAnswersSessionSnapshot(
+            question: "Question",
+            result: SearchResult(
+                resultText: "Answer",
+                sources: [SearchResult.Source(title: "Source", url: citationURL, thumbnailURL: nil, faviconURL: nil)]
+            ),
+            conversation: MockQuickAnswersConversation()
+        )
     }
 }
 

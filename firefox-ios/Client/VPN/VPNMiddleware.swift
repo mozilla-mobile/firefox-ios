@@ -34,12 +34,13 @@ final class VPNMiddleware {
         }
     }
 
-    /// Only creates a manager where `ProxyConfiguration` is available and the feature is enabled.
+    /// Only returns a manager where `ProxyConfiguration` is available and the feature is enabled.
+    /// Resolved from the container so the middleware and VPN settings share the same connection.
     static func makeVPNManager(
         featureFlags: FeatureFlagProviding = AppContainer.shared.resolve()
     ) -> VPNRunnable? {
         guard #available(iOS 17.0, *), featureFlags.isEnabled(.vpnFeature) else { return nil }
-        return VPNManager()
+        return AppContainer.shared.resolve() as VPNRunnable
     }
 
     private var selectedCountryCode: String? {
@@ -61,13 +62,18 @@ final class VPNMiddleware {
 
     private func handleVPNEvent(_ event: VPNEvent) {
         switch event {
-        case .passUpdated(let pass):
-            guard let usage = pass.usage, !usage.unlimited, usage.remaining <= 0 else { return }
-            dispatchAlert(.showDataLimitAlert(dataLimitBytes: usage.max))
+        case .passUpdated:
+            break
         case .rotationFailed:
             dispatchAlert(.showFailureAlert)
+        case .quotaExceeded(let usage):
+            guard let usage else {
+                dispatchAlert(.showFailureAlert)
+                return
+            }
+            dispatchAlert(.showDataLimitAlert(dataLimitBytes: usage.max))
         case .selectedLocationUnavailable:
-            // TODO: FXIOS-16876 wire up location selection errors
+            // TODO: FXIOS-17347 wire up location selection errors
             break
         }
     }
@@ -94,8 +100,10 @@ final class VPNMiddleware {
             await startVPN()
         case .stop, .continueWithoutVPN:
             await stopVPN()
-        case .changeLocation:
-            await changeVPNLocation()
+        case .changeLocation(let countryCode):
+            await changeVPNLocation(countryCode)
+        case .resetVPNAtLaunch:
+            resetVPNAtLaunch()
         case .closeThisTab:
             let tabManager = windowManager.tabManager(for: windowUUID)
             if let selectedTab = tabManager?.selectedTab {
@@ -111,6 +119,10 @@ final class VPNMiddleware {
         }
     }
 
+    private func resetVPNAtLaunch() {
+        userPreferences.setPreferenceFor(.vpnFeature, to: false)
+    }
+
     private func startVPN() async {
         guard let vpnManager else {
             logger.log("VPN start with no VPNManager registered", level: .warning, category: .vpn)
@@ -118,20 +130,25 @@ final class VPNMiddleware {
         }
         do {
             try await vpnManager.start(countryCode: selectedCountryCode)
-            userPreferences.setPreferenceFor(.vpnFeature, to: true)
+            userPreferences.setPreferenceFor(.vpnFeature, to: vpnManager.isRunning)
+            UIAccessibility.post(notification: .announcement, argument: String.VPN.Settings.Connected)
         } catch {
             logger.log("VPN start failed: \(error)", level: .warning, category: .vpn)
         }
     }
 
-    private func changeVPNLocation() async {
+    private func changeVPNLocation(_ countryCode: String) async {
         guard let vpnManager else {
             logger.log("VPN location change with no VPNManager registered", level: .warning, category: .vpn)
             return
         }
+        guard countryCode != vpnManager.selectedCountryCode else { return }
+        vpnManager.selectedCountryCodeDidChange(countryCode: countryCode)
+
+        // if the VPN is running when the selected location changes, start a new connection
         guard vpnManager.isRunning else { return }
         do {
-            try await vpnManager.start(countryCode: selectedCountryCode)
+            try await vpnManager.start(countryCode: countryCode)
         } catch {
             logger.log("VPN location change failed: \(error)", level: .warning, category: .vpn)
         }

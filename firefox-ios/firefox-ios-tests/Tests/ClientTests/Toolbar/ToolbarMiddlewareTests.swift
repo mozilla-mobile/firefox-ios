@@ -397,23 +397,6 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionCalled.middleButton, .home)
     }
 
-    func testToolbarPositionChanged_dispatchesToolbarPositionChanged() throws {
-        let subject = createSubject()
-        let action = GeneralBrowserMiddlewareAction(
-            toolbarPosition: .bottom,
-            windowUUID: windowUUID,
-            actionType: GeneralBrowserMiddlewareActionType.toolbarPositionChanged)
-
-        subject.toolbarProvider.legacyMiddleware(mockStore.state, action)
-
-        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
-        let actionType = try XCTUnwrap(actionCalled.actionType as? ToolbarActionType)
-
-        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
-        XCTAssertEqual(actionType, ToolbarActionType.toolbarPositionChanged)
-        XCTAssertEqual(actionCalled.toolbarPosition, action.toolbarPosition)
-    }
-
     func testLoadSummary_whenWebViewIsNil_doesntDispatchToolbarAction() {
         setIsHostedSummaryEnabled(true)
         let subject = createSubject()
@@ -539,7 +522,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
         subject.toolbarProvider.legacyMiddleware(mockStore.state, action)
 
-        try cancelEditMode(dispatchedActionsCount: 3)
+        try cancelEditMode(dispatchedActionsCount: 2)
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.last as? GeneralBrowserAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? GeneralBrowserActionType)
@@ -588,7 +571,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
         subject.toolbarProvider.legacyMiddleware(mockStore.state, action)
 
-        try cancelEditMode(dispatchedActionsCount: 3)
+        try cancelEditMode(dispatchedActionsCount: 2)
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.last as? GeneralBrowserAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? GeneralBrowserActionType)
@@ -618,7 +601,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
         subject.toolbarProvider.legacyMiddleware(mockStore.state, action)
 
-        try cancelEditMode(dispatchedActionsCount: 2)
+        try cancelEditMode()
     }
 
     func testDidTapButton_tapOnReaderModeButton_dispatchesShowReaderModes() throws {
@@ -923,14 +906,11 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
-    // MARK: - ToolbarAction
+    // MARK: - ToolbarModernAction
     func testCancelEdit_dispatchesDidClearAlternativeSearchEngine() throws {
         let subject = createSubject()
-        let action = ToolbarAction(
-            windowUUID: windowUUID,
-            actionType: ToolbarActionType.cancelEdit)
 
-        subject.toolbarProvider.legacyMiddleware(mockStore.state, action)
+        subject.toolbarProvider.modernMiddleware(mockStore.state, ToolbarModernAction.cancelEdit(url: nil), windowUUID)
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? SearchEngineSelectionAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? SearchEngineSelectionMiddlewareActionType)
@@ -1140,15 +1120,16 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionCalled.navigationDestination.destination, .readerMode)
     }
 
-    private func cancelEditMode(dispatchedActionsCount: Int = 2) throws {
-        let firstActionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
-        let firstActionType = try XCTUnwrap(firstActionCalled.actionType as? ToolbarActionType)
-        let secondActionCalled = try XCTUnwrap(mockStore.dispatchedActions[1] as? GeneralBrowserAction)
-        let secondActionType = try XCTUnwrap(secondActionCalled.actionType as? GeneralBrowserActionType)
+    private func cancelEditMode(dispatchedActionsCount: Int = 1) throws {
+        let modernAction = try XCTUnwrap(mockStore.dispatchedModernActions.first as? ToolbarModernAction)
+        let browserAction = try XCTUnwrap(mockStore.dispatchedActions.first as? GeneralBrowserAction)
+        let browserActionType = try XCTUnwrap(browserAction.actionType as? GeneralBrowserActionType)
 
+        guard case .cancelEdit = modernAction else {
+            return XCTFail("Expected cancelEdit, got \(modernAction)")
+        }
         XCTAssertEqual(mockStore.dispatchedActions.count, dispatchedActionsCount)
-        XCTAssertEqual(firstActionType, ToolbarActionType.cancelEdit)
-        XCTAssertEqual(secondActionType, GeneralBrowserActionType.leaveOverlay)
+        XCTAssertEqual(browserActionType, GeneralBrowserActionType.leaveOverlay)
     }
 
     private func setIsHostedSummaryEnabled(_ isEnabled: Bool) {

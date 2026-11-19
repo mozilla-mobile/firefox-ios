@@ -58,7 +58,20 @@ final class ToolbarMiddleware {
     lazy var toolbarProvider: Middleware<AppState> = (legacyProvider, modernProvider)
 
     lazy var modernProvider: MiddlewareClosure<AppState> = { [self] state, action, windowUUID in
-        // Does not test any modern actions
+        guard let action = action as? ToolbarModernAction else { return }
+
+        switch action {
+        case .cancelEdit:
+            // When editing ends, we need to also clear the address bar's search engine selection (if not default)
+            store.dispatch(
+                SearchEngineSelectionAction(
+                    windowUUID: windowUUID,
+                    actionType: SearchEngineSelectionMiddlewareActionType.didClearAlternativeSearchEngine
+                )
+            )
+        default:
+            break
+        }
     }
 
     lazy var legacyProvider: LegacyMiddlewareClosure<AppState> = { [self] state, action in
@@ -108,9 +121,6 @@ final class ToolbarMiddleware {
             store.dispatch(action)
             dispatchGoogleLensAvailability(for: uuid)
 
-        case GeneralBrowserMiddlewareActionType.toolbarPositionChanged:
-            updateToolbarPosition(action: action)
-
         default:
             break
         }
@@ -150,14 +160,6 @@ final class ToolbarMiddleware {
 
     private func resolveToolbarActions(action: ToolbarAction, state: AppState) {
         switch action.actionType {
-        case ToolbarActionType.cancelEdit:
-            // When editing ends, we need to also clear the address bar's search engine selection (if not default)
-            let action = SearchEngineSelectionAction(
-                windowUUID: action.windowUUID,
-                actionType: SearchEngineSelectionMiddlewareActionType.didClearAlternativeSearchEngine
-            )
-            store.dispatch(action)
-
         case ToolbarActionType.searchEngineDidChange, ToolbarActionType.googleLensSettingDidChange:
             dispatchGoogleLensAvailability(for: action.windowUUID)
 
@@ -377,16 +379,6 @@ final class ToolbarMiddleware {
         }
     }
 
-    // MARK: - Position
-    private func updateToolbarPosition(action: GeneralBrowserMiddlewareAction) {
-        guard let searchBarPosition = action.toolbarPosition else { return }
-
-        let toolbarAction = ToolbarAction(toolbarPosition: searchBarPosition,
-                                          windowUUID: action.windowUUID,
-                                          actionType: ToolbarActionType.toolbarPositionChanged)
-        store.dispatch(toolbarAction)
-    }
-
     @MainActor
     private func checkPageCanSummarize(action: ToolbarMiddlewareAction) {
         guard let webView = windowManager.tabManager(for: action.windowUUID)?.selectedTab?.webView,
@@ -413,8 +405,7 @@ final class ToolbarMiddleware {
         if let currentURL = url {
             url = (currentURL.isWebPage() && !currentURL.isReaderModeURL) ? url : nil
         }
-        let action = ToolbarAction(url: url, windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
-        store.dispatch(action)
+        store.dispatch(ToolbarModernAction.cancelEdit(url: url), forWindowUUID: windowUUID)
 
         let browserAction = GeneralBrowserAction(showOverlay: false,
                                                  windowUUID: windowUUID,

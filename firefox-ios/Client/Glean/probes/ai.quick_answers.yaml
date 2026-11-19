@@ -35,7 +35,7 @@ ai.quick_answers:
       - https://github.com/mozilla-mobile/firefox-ios/pull/35175
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-12-01"
+    expires: never
     metadata:
       tags:
         - Homepage
@@ -56,7 +56,7 @@ ai.quick_answers:
       - https://github.com/mozilla-mobile/firefox-ios/pull/35786
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-12-01"
+    expires: never
   recording_started:
     type: event
     description: |
@@ -73,7 +73,7 @@ ai.quick_answers:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34483
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-12-01"
+    expires: never
   recording_completed:
     type: event
     description: |
@@ -98,7 +98,7 @@ ai.quick_answers:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34483
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-12-01"
+    expires: never
   results_started:
     type: event
     description: |
@@ -115,7 +115,7 @@ ai.quick_answers:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34483
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-12-01"
+    expires: never
   results_completed:
     type: event
     description: |
@@ -148,7 +148,7 @@ ai.quick_answers:
       - https://github.com/mozilla-mobile/firefox-ios/pull/35786
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-12-01"
+    expires: never
   permission_denied:
     type: event
     description: |
@@ -168,7 +168,7 @@ ai.quick_answers:
       - https://github.com/mozilla-mobile/firefox-ios/pull/35786
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-12-01"
+    expires: never
   closed:
     type: event
     description: |
@@ -179,7 +179,7 @@ ai.quick_answers:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34483
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-12-01"
+    expires: never
   results_time:
     type: timing_distribution
     description: |
@@ -192,7 +192,7 @@ ai.quick_answers:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34483
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-12-01"
+    expires: never
   citation_tapped:
     type: event
     description: |
@@ -203,7 +203,7 @@ ai.quick_answers:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34483
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-12-01"
+    expires: never
   consent_shown:
     type: event
     description: |
@@ -219,4 +219,48 @@ ai.quick_answers:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34483
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-12-01"
+    expires: never
+  return_pill_shown:
+    type: event
+    description: |
+      Recorded when the Quick Answers return pill is shown after the user opens a citation.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-17380
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/36610
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  return_pill_tapped:
+    type: event
+    description: |
+      Recorded when the user taps the Quick Answers return pill to go back to the answer.
+    extra_keys:
+      is_minimized:
+        type: boolean
+        description: |
+          Whether the pill was in its minimized form (minimal address bar) when tapped.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-17380
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/36610
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  return_pill_dismissed:
+    type: event
+    description: |
+      Recorded when the Quick Answers return pill goes away without the user returning to the answer.
+    extra_keys:
+      reason:
+        type: string
+        description: |
+          Why the pill went away. One of `swipe` or `new_session`. See the
+          `QuickAnswersReturnPillDismissReason` enum for the valid values.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-17380
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/36610
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never

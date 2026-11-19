@@ -1073,8 +1073,7 @@ final class HomepageViewController: UIViewController,
 
     @objc
     private func dismissKeyboard() {
-        let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
-        store.dispatch(action)
+        store.dispatch(ToolbarModernAction.cancelEdit(url: nil), forWindowUUID: windowUUID)
     }
 
     // MARK: Long Press (Photon Action Sheet)

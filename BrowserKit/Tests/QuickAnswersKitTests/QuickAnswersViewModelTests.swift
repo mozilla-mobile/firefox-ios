@@ -11,16 +11,21 @@ import TestKit
 final class QuickAnswersViewModelTests: XCTestCase {
     private var mockService: MockTestQuickAnswersService!
     private var mockTelemetry: MockQuickAnswersTelemetry!
+    private var sessionStorage: QuickAnswersSessionStorage!
+    private var capturedConversation: QuickAnswersConversation?
 
     override func setUp() async throws {
         try await super.setUp()
         mockService = MockTestQuickAnswersService()
         mockTelemetry = MockQuickAnswersTelemetry()
+        sessionStorage = QuickAnswersSessionStorage()
     }
 
     override func tearDown() async throws {
         mockService = nil
         mockTelemetry = nil
+        sessionStorage = nil
+        capturedConversation = nil
         try await super.tearDown()
     }
 
@@ -292,14 +297,126 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(mockTelemetry.closedCalledCount, 1)
     }
 
-    // MARK: - Telemetry Passthrough Tests
+    // MARK: - Return To Answer Tests
 
-    func testRecordCitationTapped_recordsCitationTapped() {
+    func test_init_returningToAnswerWithSavedSession_restoresIt() {
+        sessionStorage.latestSession = makeSnapshot(question: "Saved question")
+
+        let subject = createSubject(isReturnToAnswerEnabled: true, isReturningToAnswer: true)
+
+        XCTAssertEqual(subject.restoredSession?.question, "Saved question")
+        XCTAssertEqual(sessionStorage.latestSession?.question, "Saved question")
+    }
+
+    func test_init_notReturningToAnswer_doesNotRestore() {
+        sessionStorage.latestSession = makeSnapshot(question: "Saved question")
+
+        let subject = createSubject(isReturnToAnswerEnabled: true, isReturningToAnswer: false)
+
+        XCTAssertNil(subject.restoredSession)
+    }
+
+    func test_init_returningToAnswerWithFlagOff_doesNotRestore() {
+        sessionStorage.latestSession = makeSnapshot(question: "Saved question")
+
+        let subject = createSubject(isReturnToAnswerEnabled: false, isReturningToAnswer: true)
+
+        XCTAssertNil(subject.restoredSession)
+    }
+
+    func test_init_whenRestoring_doesNotRecordQuickAnswersRequested() {
+        sessionStorage.latestSession = makeSnapshot(question: "Saved question")
+
+        _ = createSubject(isReturnToAnswerEnabled: true, isReturningToAnswer: true)
+
+        XCTAssertEqual(mockTelemetry.quickAnswersRequestedCalledCount, 0)
+    }
+
+    func test_init_whenRestoring_passesSnapshotConversationToService() {
+        let conversation = MockQuickAnswersConversation()
+        sessionStorage.latestSession = makeSnapshot(question: "Saved question", conversation: conversation)
+
+        _ = createSubject(isReturnToAnswerEnabled: true, isReturningToAnswer: true)
+
+        XCTAssertTrue((capturedConversation as AnyObject?) === conversation)
+    }
+
+    func test_searchResult_withFlagOn_savesSessionWithServiceConversation() {
+        let conversation = MockQuickAnswersConversation()
+        mockService.conversation = conversation
+        let subject = createSubject(prefs: optInCompletedPrefs(), isReturnToAnswerEnabled: true)
+
+        answerQuestion("Hello world", with: subject)
+
+        XCTAssertEqual(sessionStorage.latestSession?.question, "Hello world")
+        XCTAssertEqual(sessionStorage.latestSession?.result.resultText, "Answer")
+        XCTAssertTrue((sessionStorage.latestSession?.conversation as AnyObject?) === conversation)
+    }
+
+    func test_searchResult_withFlagOff_doesNotSaveSession() {
+        let subject = createSubject(prefs: optInCompletedPrefs(), isReturnToAnswerEnabled: false)
+
+        answerQuestion("Hello world", with: subject)
+
+        XCTAssertNil(sessionStorage.latestSession)
+    }
+
+    func test_hasParkedSession_withStoredSession_isTrue() {
+        let subject = createSubject(isReturnToAnswerEnabled: true)
+
+        sessionStorage.latestSession = makeSnapshot(question: "Saved question")
+
+        XCTAssertTrue(subject.hasParkedSession)
+    }
+
+    func test_hasParkedSession_afterDismiss_isFalse() {
+        let subject = createSubject(prefs: optInCompletedPrefs(), isReturnToAnswerEnabled: true)
+        answerQuestion("Hello world", with: subject)
+
+        subject.dismiss()
+
+        XCTAssertFalse(subject.hasParkedSession)
+    }
+
+    func test_handleCitationTap_withAnsweredSession_returnsTrue() {
+        let subject = createSubject(prefs: optInCompletedPrefs(), isReturnToAnswerEnabled: true)
+        answerQuestion("Hello world", with: subject)
+
+        XCTAssertTrue(subject.handleCitationTap())
+    }
+
+    func test_handleCitationTap_withFlagOff_returnsFalse() {
+        let subject = createSubject(prefs: optInCompletedPrefs(), isReturnToAnswerEnabled: false)
+        answerQuestion("Hello world", with: subject)
+
+        XCTAssertFalse(subject.handleCitationTap())
+    }
+
+    func test_dismiss_removesAllSessions() {
+        sessionStorage.latestSession = makeSnapshot(question: "Saved question")
+        let subject = createSubject(isReturnToAnswerEnabled: true)
+
+        subject.dismiss()
+
+        XCTAssertNil(sessionStorage.latestSession)
+    }
+
+    func test_handleCitationTap_keepsSession() {
+        let subject = createSubject(prefs: optInCompletedPrefs(), isReturnToAnswerEnabled: true)
+        answerQuestion("Hello world", with: subject)
+
+        _ = subject.handleCitationTap()
+
+        XCTAssertEqual(sessionStorage.latestSession?.question, "Hello world")
+    }
+
+    func test_handleCitationTap_recordsCitationTappedAndClosed() {
         let subject = createSubject()
 
-        subject.recordCitationTapped()
+        _ = subject.handleCitationTap()
 
         XCTAssertEqual(mockTelemetry.citationTappedCalledCount, 1)
+        XCTAssertEqual(mockTelemetry.closedCalledCount, 1)
     }
 
     // MARK: - Model Display Name Tests
@@ -381,19 +498,25 @@ final class QuickAnswersViewModelTests: XCTestCase {
         prefs: Prefs = MockProfilePrefs(),
         model: QuickAnswersModel = .exa,
         isOptInRedesignEnabled: Bool = false,
-        isFollowUpEnabled: Bool = false
+        isFollowUpEnabled: Bool = false,
+        isReturnToAnswerEnabled: Bool = false,
+        isReturningToAnswer: Bool = false
     ) -> QuickAnswersViewModel {
         let subject = QuickAnswersViewModel(
             prefs: prefs,
+            sessionStorage: sessionStorage,
+            isReturningToAnswer: isReturningToAnswer,
             telemetry: mockTelemetry,
             configFetcher: DefaultQuickAnswersConfigFetcher(
                 feature: QuickAnswersFeature(
                     model: model,
                     isOptInRedesignEnabled: isOptInRedesignEnabled,
-                    isFollowUpEnabled: isFollowUpEnabled
+                    isFollowUpEnabled: isFollowUpEnabled,
+                    isReturnToAnswerEnabled: isReturnToAnswerEnabled
                 )
             ),
-            makeService: { _, _ in
+            makeService: { _, _, conversation in
+                self.capturedConversation = conversation
                 return self.mockService
             }
         )
@@ -405,12 +528,33 @@ final class QuickAnswersViewModelTests: XCTestCase {
         struct ServiceInitError: Error {}
         let model = QuickAnswersViewModel(
             prefs: prefs,
+            sessionStorage: sessionStorage,
+            isReturningToAnswer: false,
             telemetry: mockTelemetry,
             configFetcher: nil,
-            makeService: { _, _ in throw ServiceInitError() }
+            makeService: { _, _, _ in throw ServiceInitError() }
         )
         trackForMemoryLeaks(model)
         return model
+    }
+
+    private func makeSnapshot(
+        question: String,
+        conversation: QuickAnswersConversation = MockQuickAnswersConversation()
+    ) -> QuickAnswersSessionSnapshot {
+        return QuickAnswersSessionSnapshot(question: question, result: .empty(), conversation: conversation)
+    }
+
+    private func answerQuestion(_ question: String, with subject: QuickAnswersViewModel) {
+        mockService.speechResults = [SpeechResult(text: question, isFinal: true)]
+        mockService.searchResult = .success(SearchResult(resultText: "Answer", sources: []))
+        let expectation = XCTestExpectation()
+        subject.onStateChange = { state in
+            guard case .showSearchResult = state else { return }
+            expectation.fulfill()
+        }
+        subject.startFlow()
+        wait(for: [expectation])
     }
 
     private func optInCompletedPrefs() -> MockProfilePrefs {

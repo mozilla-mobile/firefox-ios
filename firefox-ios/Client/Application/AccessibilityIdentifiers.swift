@@ -36,6 +36,10 @@ enum AccessibilityIdentifiers {
     }
 
     enum Browser {
+        enum QuickAnswers {
+            static let returnPill = "Browser.QuickAnswers.ReturnPill"
+        }
+
         enum TopTabs {
             static let collectionView = "Top Tabs View"
             static let privateModeButton = "TopTabsViewController.privateModeButton"

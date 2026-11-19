@@ -72,6 +72,8 @@ final class BrowserCoordinator: BaseCoordinator,
         return summarizerNimbusUtils.isSummarizeFeatureToggledOn
     }
     private var pendingOnboardingCardAction: OnboardingCardButtonAction = .none
+    private let quickAnswersSessionStorage: QuickAnswersSessionStorage
+    private let quickAnswersPillTelemetry: QuickAnswersReturnPillTelemetry
 
     override var isDismissible: Bool { false }
 
@@ -87,6 +89,8 @@ final class BrowserCoordinator: BaseCoordinator,
          applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
          windowMerger: WindowMerging = MergeWindowsManager(),
          googleLensService: GoogleLensServicing = GoogleLensService(),
+         quickAnswersSessionStorage: QuickAnswersSessionStorage = QuickAnswersSessionStorage(),
+         quickAnswersPillTelemetry: QuickAnswersReturnPillTelemetry = DefaultQuickAnswersTelemetry(),
          isCameraAvailable: @escaping @MainActor () -> Bool = {
              UIImagePickerController.isSourceTypeAvailable(.camera)
          }) {
@@ -105,6 +109,8 @@ final class BrowserCoordinator: BaseCoordinator,
         self.applicationHelper = applicationHelper
         self.glean = glean
         self.googleLensService = googleLensService
+        self.quickAnswersSessionStorage = quickAnswersSessionStorage
+        self.quickAnswersPillTelemetry = quickAnswersPillTelemetry
         self.isCameraAvailable = isCameraAvailable
         super.init(router: router)
 
@@ -769,7 +775,7 @@ final class BrowserCoordinator: BaseCoordinator,
 
     func presentVPNSettings() {
         guard #available(iOS 17.0, *) else { return }
-        let vpnSettings = VPNSettingsViewController(windowUUID: windowUUID, prefs: profile.prefs)
+        let vpnSettings = VPNSettingsViewController(windowUUID: windowUUID)
         let navigationController = DismissableNavigationViewController(rootViewController: vpnSettings)
         setupSettingsSheetDetents(for: navigationController)
         navigationController.sheetPresentationController?.prefersGrabberVisible = true
@@ -1321,23 +1327,60 @@ final class BrowserCoordinator: BaseCoordinator,
 
     func showQuickAnswers(transitionType: QuickAnswersTransitionType) {
         guard !childCoordinators.contains(where: { $0 is QuickAnswersCoordinator }) else { return }
+        switch transitionType {
+        case .sourceReveal:
+            discardParkedQuickAnswers(reason: .newSession)
+        case .returnToAnswer:
+            browserViewController.hideQuickAnswersReturnPill()
+        }
         let coordinator = QuickAnswersCoordinator(
             parentCoordinatorDelegate: self,
             prefs: profile.prefs,
+            sessionStorage: quickAnswersSessionStorage,
             windowUUID: windowUUID,
             themeManager: themeManager,
             router: router,
             transitionType: transitionType,
-        ) { [weak self] navigationType in
-            switch navigationType {
-            case .url(let url):
-                self?.navigateFromHomePanel(to: url, visitType: .link, isGoogleTopSite: false)
-            case .searchResult(let query):
-                self?.browserViewController.openSearchNewTab(query)
+            onNavigate: { [weak self] navigationType in
+                switch navigationType {
+                case .url(let url):
+                    self?.navigateFromHomePanel(to: url, visitType: .link, isGoogleTopSite: false)
+                case .searchResult(let query):
+                    self?.browserViewController.openSearchNewTab(query)
+                }
+            },
+            onPark: { [weak self] in
+                self?.showQuickAnswersReturnPill()
             }
-        }
+        )
         add(child: coordinator)
         coordinator.start()
+    }
+
+    private func showQuickAnswersReturnPill() {
+        guard let question = quickAnswersSessionStorage.latestSession?.question else { return }
+        quickAnswersPillTelemetry.returnPillShown()
+        browserViewController.showQuickAnswersReturnPill(
+            question: question,
+            onTap: { [weak self] isMinimized in
+                self?.resumeParkedQuickAnswers(isMinimized: isMinimized)
+            },
+            onSwipeAway: { [weak self] in self?.discardParkedQuickAnswers(reason: .swipe) }
+        )
+    }
+
+    private func resumeParkedQuickAnswers(isMinimized: Bool) {
+        guard quickAnswersSessionStorage.latestSession != nil,
+              router.navigationController.presentedViewController == nil else { return }
+        quickAnswersPillTelemetry.returnPillTapped(isMinimized: isMinimized)
+        showQuickAnswers(transitionType: .returnToAnswer)
+    }
+
+    private func discardParkedQuickAnswers(reason: QuickAnswersReturnPillDismissReason) {
+        guard quickAnswersSessionStorage.latestSession != nil else { return }
+        quickAnswersPillTelemetry.returnPillDismissed(reason: reason)
+        quickAnswersSessionStorage.removeAll()
+        browserViewController.hideQuickAnswersReturnPill()
     }
 
     func showGoogleLensPhotoPicker() {
