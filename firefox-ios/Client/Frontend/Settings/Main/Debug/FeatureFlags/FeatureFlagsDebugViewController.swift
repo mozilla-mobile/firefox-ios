@@ -369,6 +369,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .syncStringUpdates,
+                titleText: format(string: "Sync String Updates"),
+                statusText: format(string: "Toggle to enable the updated sync strings")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .tabGroups,
                 titleText: format(string: "Tab Groups"),
                 statusText: format(string: "Toggle to enable Tab Groups")

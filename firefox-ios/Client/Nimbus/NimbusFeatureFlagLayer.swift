@@ -211,6 +211,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .summarizerPermissiveGuardrails:
             return checkSummarizerPermissiveGuardrailsFeature()
 
+        case .syncStringUpdates:
+            return checkSyncStringUpdatesFeature()
+
         case .tabGroups:
             return checkTabGroupsFeature()
 
@@ -480,6 +483,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkSummarizerPermissiveGuardrailsFeature() -> Bool {
         return nimbus.features.summarizerPermissiveGuardrailsFeature.value().enabled
+    }
+
+    private func checkSyncStringUpdatesFeature() -> Bool {
+        return nimbus.features.syncStringUpdatesFeature.value().enabled
     }
 
     private func checkMondernOnboardingUIFeature() -> Bool {
