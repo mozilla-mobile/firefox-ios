@@ -31,6 +31,18 @@ final class TabTrayViewControllerTests: XCTestCase {
         try await super.tearDown()
     }
 
+    func testSwipeThemeKeepsEachPanelsAccentGradient() {
+        let regularTheme = NovaLightTheme()
+        let privateTheme = NovaPrivateTheme()
+        let swipeTheme = TabTrayPanelSwipeTheme(from: regularTheme, to: privateTheme, progress: 0.5)
+        let regularSwipeTheme = swipeTheme.withAccentGradient(from: regularTheme)
+        let privateSwipeTheme = swipeTheme.withAccentGradient(from: privateTheme)
+
+        XCTAssertEqual(regularSwipeTheme.colors.gradientAccent.colors, regularTheme.colors.gradientAccent.colors)
+        XCTAssertEqual(privateSwipeTheme.colors.gradientAccent.colors, privateTheme.colors.gradientAccent.colors)
+        XCTAssertEqual(regularSwipeTheme.colors.layer1, privateSwipeTheme.colors.layer1)
+    }
+
     // MARK: Compact layout
     func testToolbarItems_ForCompact() {
         let viewController = createSubject()

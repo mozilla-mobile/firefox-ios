@@ -8,6 +8,7 @@ import UIKit
 struct TabTrayPanelSwipePalette: ThemeColourPalette {
     private let base: ThemeColourPalette
     private let partialOverrides: PartialOverrides
+    var accentGradientOverride: Gradient?
 
     // MARK: Overridden colors
     var layer1: UIColor {
@@ -195,10 +196,10 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var borderAccentToast: UIColor { base.borderAccentToast }
     var borderRadioButtonDefault: UIColor { base.borderRadioButtonDefault }
     var gradient: Gradient { base.gradient }
-    var gradientAccent: Gradient { base.gradientAccent }
+    var gradientAccent: Gradient { accentGradientOverride ?? base.gradientAccent }
     var gradientAccentSubtle: Gradient { base.gradientAccentSubtle }
     var gradientAIStrong: Gradient { base.gradientAIStrong }
-    @available(*, deprecated, renamed: "gradientAccent")
+    @available(*, deprecated, message: "Use gradientAccent for the default tab border.")
     var gradientBorder: Gradient { base.gradientBorder }
     var gradientTabBorderYellow: Gradient { base.gradientTabBorderYellow }
     var gradientTabBorderOrange: Gradient { base.gradientTabBorderOrange }

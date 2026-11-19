@@ -128,7 +128,7 @@ public protocol ThemeColourPalette {
     var gradientAccent: Gradient { get }
     var gradientAccentSubtle: Gradient { get }
     var gradientAIStrong: Gradient { get }
-    @available(*, deprecated, renamed: "gradientAccent")
+    @available(*, deprecated, message: "Use gradientAccent for the default tab border.")
     var gradientBorder: Gradient { get }
     var gradientTabBorderYellow: Gradient { get }
     var gradientTabBorderOrange: Gradient { get }
