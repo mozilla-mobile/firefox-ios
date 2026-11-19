@@ -1555,6 +1555,9 @@
 /* Footer information for tracker protection level. */
 "Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Ако сайт не работи според очакванията, докоснете ключалката в адресната лента и изключете подобрената защита от проследяване за тази страница.";
 
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Strict.v161" = "Ако някой сайт не работи, отворете менюто и опитайте да изключите подобрената защита от проследяване.";
+
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Позволява известно проследяване на рекламите, за да работят правилно уебсайтовете.";
 

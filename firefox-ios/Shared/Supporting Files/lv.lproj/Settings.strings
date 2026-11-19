@@ -25,6 +25,9 @@
 /* This is the text for the link in the Header Card under the AI Controls settings section that links to more information. */
 "Settings.AIControls.HeaderCard.Link.v151" = "Uzzināt vairāk";
 
+/* In the settings menu, in the General section, this is the title for Autofills & Passwords customization section. */
+"Settings.AutofillAndPassword.Title.v137" = "Automātiskā aizpilde un paroles";
+
 /* In the settings menu, in the Autoplay customization section, this label indicates that selecting this will block audio from autoplaying. */
 "Settings.Autoplay.BlockAudio.v137" = "Liegt skaņu";
 
@@ -117,6 +120,9 @@
 
 /* Section header for the preferred languages list in the Translation settings screen. */
 "Settings.Translation.PreferredLanguages.SectionTitle.v151" = "Vēlamās valodas";
+
+/* This is the title for the setting that toggles the Translation feature that allows users to translate web pages under the Translation settings section. */
+"Settings.Translation.ToggleTitle.v145" = "Iespējot tulkojumus";
 
 /* Text displayed on the locations screen when the app loads a list of locations for the user to pick from. “Locations” here means the locations of VPN servers the user can connect to. */
 "VPN.LocationPicker.FindingLocationsText.v160" = "Meklē atrašanās vietas…";

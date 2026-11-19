@@ -31,9 +31,6 @@
 /* Accessibility hint spoken on the Preview and Send Report buttons when they are disabled because no specific problem has been selected yet, in the Report a Website Issue form. */
 "WebCompatReporter.Fields.ChooseSubOptionAccessibilityHint.v156" = "请为所选问题类型选择一个具体问题";
 
-/* Accessibility label for the multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form. */
-"WebCompatReporter.Fields.DetailsAccessibilityLabel.v154" = "详细描述问题";
-
 /* Placeholder shown in the optional multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form. */
 "WebCompatReporter.Fields.DetailsPlaceholder.v154" = "详细描述问题（选填）";
 
@@ -42,9 +39,6 @@
 
 /* Leading label of the editable row showing the web address being reported, in the Report a Website Issue form. */
 "WebCompatReporter.Fields.URLLabel.v154" = "网址";
-
-/* Placeholder shown in the URL field when no web address has been entered, in the Report a Website Issue form. */
-"WebCompatReporter.Fields.URLPlaceholder.v154" = "网址";
 
 /* Placeholder shown in the issue-type pull-down before the user has picked a website problem category, in the Report a Website Issue form. */
 "WebCompatReporter.IssueSection.CategoryPlaceholder.v154" = "选择问题类型…";

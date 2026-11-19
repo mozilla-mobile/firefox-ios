@@ -311,7 +311,7 @@
 "ErrorPages.CertWarning.Description" = "Lastnik %@ je nepravilno nastavil svojo spletno stran. Firefox se ni povezal nanjo, da bi preprečil krajo vaših podatkov.";
 
 /* Title on the certificate error page */
-"ErrorPages.CertWarning.Title" = "Vaša povezava ni zasebna";
+"ErrorPages.CertWarning.Title" = "Ta povezava je nepreverjena";
 
 /* Label for button to go back from the error page */
 "ErrorPages.GoBack.Button" = "Nazaj";
@@ -995,7 +995,7 @@
 "ScanQRCode.InvalidDataError.Message" = "Podatek je neveljaven";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "Izberite \"Nastavitve\" > \"Firefox\". Dajte Firefoxu dovoljenje za dostop do kamere.";
+"ScanQRCode.PermissionError.Message.v100" = "V napravi izberite \"Nastavitve\" > \"Firefox\". Dajte Firefoxu dovoljenje za dostop do kamere.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Skenirajte QR-kodo";

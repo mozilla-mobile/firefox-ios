@@ -1,3 +1,6 @@
+/* Button label on the auto-translate prompt that enables the auto-translate feature when tapped. */
+"Translations.AutoTranslatePrompt.EnableButton.v151" = "Iespējot";
+
 /* Menu item at the bottom of the translate language picker that navigates the user to the Translation Preferred Languages settings screen. */
 "Translations.LanguagePicker.PreferredLanguages.v151" = "Vēlamās valodas…";
 

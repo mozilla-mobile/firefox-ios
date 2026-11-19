@@ -1555,6 +1555,9 @@
 /* Footer information for tracker protection level. */
 "Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Se un sito non funziona come previsto, tocca il lucchetto nella barra degli indirizzi e disattiva la protezione antitracciamento avanzata per quella pagina.";
 
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Strict.v161" = "Se un sito non funziona correttamente, apri il menu e prova a disattivare la protezione antitracciamento avanzata.";
+
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Consente alcune pubblicità traccianti per garantire il corretto funzionamento dei siti.";
 
