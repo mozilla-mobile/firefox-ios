@@ -7,9 +7,3 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This is the title of the one that explains how to search with Google Lens from the address toolbar. */
 "ContextualHints.Toolbar.GoogleLens.Title.v154" = "Rechercher avec Google Lens";
 
-/* Contextual hints are little popups that appear for the users informing them of new features. This is the body description of one that points the user to the new translation icon on the toolbar. */
-"ContextualHints.Translations.Body.v145" = "Des traductions rapides et confidentielles vous attendent dès que vous en avez besoin.";
-
-/* Contextual hints are little popups that appear for the users informing them of new features. This is the title of one that points the user to the new translation icon on the toolbar. %@ is the app name (e.g. Firefox). */
-"ContextualHints.Translations.Title.v145" = "%@ parle votre langue";
-

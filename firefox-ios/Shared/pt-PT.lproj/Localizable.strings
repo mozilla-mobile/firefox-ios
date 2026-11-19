@@ -1555,6 +1555,9 @@
 /* Footer information for tracker protection level. */
 "Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Se um site não funcionar conforme o esperado, toque no cadeado na barra de endereço e desative a Proteção melhorada contra a monitorização para essa página.";
 
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Strict.v161" = "Se um site não estiver a funcionar, abra o menu e tente desativar a Proteção Melhorada Contra Monitorização.";
+
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Permite alguma monitorização de anúncios para que os sites de Internet funcionem corretamente.";
 

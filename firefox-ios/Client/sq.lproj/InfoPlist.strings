@@ -8,7 +8,7 @@
 "New Tab" = "Skedë e Re";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox can use your camera to scan QR codes or take photos and video.";
+"NSCameraUsageDescription" = "Firefox-i mund të përdorë kamerën tuaj për të skanuar kode QR, ose për të bërë foto dhe video.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox-i lyp Face ID që të hyjë në fjalëkalimet dhe metoda pagesash tuajat të ruajtura.";
@@ -21,6 +21,9 @@
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Kjo ju lejon të ruani foto.";
+
+/* Privacy - Speech Recognition Usage Description */
+"NSSpeechRecognitionUsageDescription" = "Kjo e lejon Firefox-in të transkriptojë audion tuaj.";
 
 /* (No Comment) */
 "Scan QR Code" = "Skanonin Kodin QR";

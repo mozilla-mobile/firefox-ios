@@ -1501,6 +1501,9 @@
 /* Button label that appears in the settings to prompt the user to sign in to Firefox for iOS sync service to sync and save data. */
 "Settings.Sync.ButtonTitle.v103" = "Njëkohësoni dhe Ruani të Dhëna";
 
+/* In the settings account row, shown transiently while the user is being signed out of their account. */
+"Settings.Sync.SigningOut.Title.v154" = "Po dilet…";
+
 /* Title for the page where the user sign in to their Firefox Sync account. */
 "Settings.Sync.SignInView.Title.v103" = "Njëkohësoni dhe Ruani të Dhëna";
 
@@ -1551,6 +1554,9 @@
 
 /* Footer information for tracker protection level. */
 "Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Nëse një sajt nuk funksionon si pritej, prekni drynin te shtylla e adresave dhe çaktivizoni Mbrojtjen e Thelluar Nga Gjurmimet për atë faqe.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Strict.v161" = "Nëse një sajt s’funksionon, hapni menunë dhe provoni të çaktivizoni Mbrojtje të Thelluar nga Gjurmimet.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Lejon disa reklama gjurmimi, kështu që sajtet punojnë si pritet.";

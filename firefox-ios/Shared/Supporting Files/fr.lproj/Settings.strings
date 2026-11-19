@@ -302,7 +302,7 @@
 "Settings.Search.GoogleLens.Description.v153" = "Envoyez des images à Google pour effectuer des recherches.";
 
 /* In the Search settings, this is the disclaimer underneath the Google Lens settings toggle that explains the conditions required for Google Lens to be available. */
-"Settings.Search.GoogleLens.Footnote.v153" = "Disponible uniquement si Google est activé ci-dessus et défini comme moteur de recherche principal lors de la navigation.";
+"Settings.Search.GoogleLens.Footnote.v153" = "Disponible uniquement si Google est activé ci-dessus et qu’il est le moteur de recherche actif lors de la navigation.";
 
 /* In the Search settings, this is the title that describes the Google Lens feature */
 "Settings.Search.GoogleLens.Title.v153" = "Google Lens";

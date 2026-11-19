@@ -1,3 +1,6 @@
+/* Name of the bookmarks folder that holds bookmarks imported from another browser. %@ is the date when the import happens, formatted for the user’s locale without the time. */
+"BrowserDataTransfer.ImportedBookmarksFolder.Title.v160" = "Importuar më %@";
+
 /* Button that dismisses the alert shown when Firefox could not finish importing data from another browser. */
 "BrowserDataTransfer.ImportFailure.DismissButton.v160" = "Hidhe tej";
 
@@ -10,6 +13,12 @@
 /* Button that dismisses the alert shown after Firefox finishes importing data from another browser. */
 "BrowserDataTransfer.ImportSuccess.GotItButton.v160" = "E mora vesh";
 
+/* Message of the alert shown after Firefox finishes importing data from another browser. %@ is the app name (e.g. Firefox). */
+"BrowserDataTransfer.ImportSuccess.Message.v160" = "Të dhënat tuaja të importuara janë gati për t’u përdorur në %@.";
+
+/* Title of the alert shown after Firefox finishes importing data from another browser. %@ is the name of the other browser, for example Safari. */
+"BrowserDataTransfer.ImportSuccess.Title.v160" = "Importim %@ i Plotësuar";
+
 /* On the Data Management screen in Settings, the button that starts sending Firefox bookmarks, history, and reading lists to another browser installed on the device. */
 "BrowserDataTransfer.Settings.ExportButton.v160" = "Eksportoni në Tjetër Shfletues";
 
@@ -18,4 +27,7 @@
 
 /* On the Data Management screen in Settings, the header of the section that contains the actions to import data from, or export data to, another browser installed on the device. */
 "BrowserDataTransfer.Settings.SectionTitle.v160" = "Importim dhe Eksportim të Dhënash";
+
+/* On the Data Management screen in Settings, the footer below the import and export buttons explaining which kinds of data can be moved between the app and another browser. %1$@ is the app name (e.g. Firefox), used in both places. */
+"BrowserDataTransfer.Settings.SupportedDataFooter.v160" = "Sillni në %1$@ faqerojtës, historik dhe lista leximesh , ose dërgojini të dhënat tuaja %1$@ në një tjetër shfletues.";
 

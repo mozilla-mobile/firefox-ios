@@ -1555,6 +1555,9 @@
 /* Footer information for tracker protection level. */
 "Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Os nad yw gwefan yn gweithio yn ôl y disgwyl, tapiwch y clo yn y bar cyfeiriad a diffoddwch Ddiogelwch Uwch Rhag Tracio ar gyfer y dudalen honno.";
 
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Strict.v161" = "Os nad yw gwefan yn gweithio, agorwch y ddewislen a cheisiwch ddiffodd Diogelu Tracio Rhag Uwch.";
+
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Caniatáu rhai tracwyr hysbysebion fel bod gwefannau'n gweithio'n iawn.";
 
