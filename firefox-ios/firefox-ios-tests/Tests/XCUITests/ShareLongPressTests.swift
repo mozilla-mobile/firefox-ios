@@ -232,7 +232,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
         // Long-press on a website
         app.tables.cells.staticTexts.firstMatch.press(forDuration: 1.0)
         // Tap the Share button in the context menu
-        app.tables["Context Menu"].buttons["shareAppleLarge"].waitAndTap()
+        selectOptionFromUIMenu(identifier: AccessibilityIdentifiers.LibraryPanels.ReadingListPanel.ContextMenu.share)
         // Tap the Reminders button in the menu
         if #available(iOS 16, *) {
             let optionCell = app.collectionViews.cells[option]
