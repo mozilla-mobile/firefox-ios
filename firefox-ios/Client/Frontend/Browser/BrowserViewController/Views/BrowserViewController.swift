@@ -1113,7 +1113,8 @@ class BrowserViewController: UIViewController,
         // This toast is generated from GeneralBrowserActionType.showToast
         switch toast {
         case .clearCookies,
-                .shakeToSummarizeNotAvailable:
+                .shakeToSummarizeNotAvailable,
+                .vpnClosedTabs:
             showPlainToast(message: toast.title)
         case .addBookmark(let urlString):
             showBookmarkToast(urlString: urlString, action: .add)

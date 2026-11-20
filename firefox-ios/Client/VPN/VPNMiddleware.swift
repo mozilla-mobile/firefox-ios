@@ -116,11 +116,20 @@ final class VPNMiddleware {
             }
             await stopVPN(source: .closeThisTab)
         case .closeAllTabs:
-            for tabManager in windowManager.allWindowTabManagers() {
+            let tabManagers = windowManager.allWindowTabManagers()
+            let closedTabsCount = tabManagers.reduce(0) { $0 + $1.tabs.count }
+            for tabManager in tabManagers {
                 tabManager.removeAllTabs(isPrivateMode: true)
                 tabManager.removeAllTabs(isPrivateMode: false)
             }
             await stopVPN(source: .closeAllTabs)
+            store.dispatch(
+                GeneralBrowserAction(
+                    toastType: .vpnClosedTabs(count: closedTabsCount),
+                    windowUUID: windowUUID,
+                    actionType: GeneralBrowserActionType.showToast
+                )
+            )
         }
     }
 
