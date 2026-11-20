@@ -257,6 +257,7 @@ final class VPNManager: VPNRunnable {
         isRotationPaused = false
         guard rotationTask == nil, isRunning, let latestPass else { return }
         startPassRotation(after: latestPass)
+    }
 
     // TODO: FXIOS-17399 Remove simulated VPN failure debug hooks after testing
     /// One-shot debug hook: fails the next connection or location switch.
