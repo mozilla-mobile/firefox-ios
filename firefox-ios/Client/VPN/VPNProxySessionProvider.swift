@@ -6,7 +6,7 @@ import Network
 import Foundation
 
 /// Mirrors the proxy stack applied to WebKit so app-side `URLSession`s route through it too.
-@available(iOS 17.0, *)
+@available(iOS 27.2, *)
 final class VPNProxySessionProvider: @unchecked Sendable {
     static let shared = VPNProxySessionProvider()
 

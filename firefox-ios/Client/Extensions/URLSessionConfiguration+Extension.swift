@@ -19,7 +19,7 @@ extension URLSessionConfiguration {
 
     /// Applies the current VPN proxy stack, if any, so requests match the webview's routing.
     func withVPNProxy() -> URLSessionConfiguration {
-        if #available(iOS 17.0, *) {
+        if #available(iOS 27.2, *) {
             proxyConfigurations = VPNProxySessionProvider.shared.proxyConfigurations
         }
         return self
