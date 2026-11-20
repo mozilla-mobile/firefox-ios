@@ -69,7 +69,7 @@ workflows:
         - test_plan: Smoketest
         - xcodebuild_options: ONLY_ACTIVE_ARCH=YES COMPILER_INDEX_STORE_ENABLE=NO
         - destination: $SMOKETEST_DESTINATION
-    - xcode-test-without-building@0:
+    - xcode-test-without-building@1:
         title: "Run all smoke tests"
         timeout: 3000
         inputs:
@@ -151,7 +151,7 @@ workflows:
         - project_path: focus-ios/Blockzilla.xcodeproj
         - xcodebuild_options: '"ONLY_ACTIVE_ARCH=YES" "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -skipMacroValidation'
         - destination: $FOCUS_IPHONE_DESTINATION
-    - xcode-test-without-building@0:
+    - xcode-test-without-building@1:
         title: "Focus Smoketest - iPhone"
         is_always_run: true
         run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
@@ -172,7 +172,7 @@ workflows:
             fi
             echo "Smoketest (iPhone) failures: ${FAILED_COUNT:-n/a}"
             envman add --key FOCUS_FAILED_SMOKETEST_IPHONE --value "${FAILED_COUNT:-n/a}"
-    - xcode-test-without-building@0:
+    - xcode-test-without-building@1:
         title: "Focus Full Functional Tests - iPhone"
         is_always_run: true
         run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
@@ -193,7 +193,7 @@ workflows:
             fi
             echo "Full Functional Tests (iPhone) failures: ${FAILED_COUNT:-n/a}"
             envman add --key FOCUS_FAILED_FULL_FUNCTIONAL_IPHONE --value "${FAILED_COUNT:-n/a}"
-    - xcode-test-without-building@0:
+    - xcode-test-without-building@1:
         title: "Focus Smoketest - iPad"
         is_always_run: true
         run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
@@ -214,7 +214,7 @@ workflows:
             fi
             echo "Smoketest (iPad) failures: ${FAILED_COUNT:-n/a}"
             envman add --key FOCUS_FAILED_SMOKETEST_IPAD --value "${FAILED_COUNT:-n/a}"
-    - xcode-test-without-building@0:
+    - xcode-test-without-building@1:
         title: "Focus Full Functional Tests - iPad"
         is_always_run: true
         run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
@@ -235,7 +235,7 @@ workflows:
             fi
             echo "Full Functional Tests (iPad) failures: ${FAILED_COUNT:-n/a}"
             envman add --key FOCUS_FAILED_FULL_FUNCTIONAL_IPAD --value "${FAILED_COUNT:-n/a}"
-    - xcode-test-without-building@0:
+    - xcode-test-without-building@1:
         title: "Focus Smoketest - iPhone Duo"
         is_always_run: true
         run_if: '{{and (getenv "FOCUS_DUO_DESTINATION" | ne "") (enveq "BITRISE_TEST_BUNDLE_PATH" "" | not)}}'
@@ -257,7 +257,7 @@ workflows:
             fi
             echo "Smoketest (iPhone Duo) failures: ${FAILED_COUNT:-n/a}"
             envman add --key FOCUS_FAILED_SMOKETEST_DUO --value "${FAILED_COUNT:-n/a}"
-    - xcode-test-without-building@0:
+    - xcode-test-without-building@1:
         title: "Focus Full Functional Tests - iPhone Duo"
         is_always_run: true
         run_if: '{{and (getenv "FOCUS_DUO_DESTINATION" | ne "") (enveq "BITRISE_TEST_BUNDLE_PATH" "" | not)}}'
@@ -353,7 +353,7 @@ workflows:
             set -euxo pipefail
             XCTESTRUN=$(find "$BITRISE_TEST_BUNDLE_PATH" -name "Fennec_FullFunctionalTestPlan_*.xctestrun" | head -n 1)
             envman add --key FULLFUNCTIONAL_XCTESTRUN --value "$XCTESTRUN"
-    - xcode-test-without-building@0:
+    - xcode-test-without-building@1:
         title: Run full functional tests shard
         inputs:
         - only_testing: $BITRISE_TEST_SHARDS_PATH/$BITRISE_IO_PARALLEL_INDEX
