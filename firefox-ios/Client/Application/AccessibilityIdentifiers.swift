@@ -351,6 +351,13 @@ enum AccessibilityIdentifiers {
                 }
             }
         }
+
+        enum PrivacyNotice {
+            static let title = "PrivacyNotice.titleLabel"
+            static let description = "PrivacyNotice.descriptionLabel"
+            static let learnMore = "PrivacyNotice.learnMoreButton"
+            static let close = "PrivacyNotice.closeButton"
+        }
     }
 
     enum GeneralizedIdentifiers {

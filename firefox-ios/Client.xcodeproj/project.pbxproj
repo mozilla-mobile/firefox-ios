@@ -2169,6 +2169,7 @@
 		E14C78962C105488002AD3C7 /* AddressToolbarContainerModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14C78952C105488002AD3C7 /* AddressToolbarContainerModelTests.swift */; };
 		E14D6D342CCBA9FF0058B910 /* AddressBarStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14D6D332CCBA9FF0058B910 /* AddressBarStateTests.swift */; };
 		E14F7DF2288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14F7DF1288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift */; };
+		E1533FE830ADF4140030C972 /* LegacyPrivacyNoticeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1533FE730ADF4110030C972 /* LegacyPrivacyNoticeCell.swift */; };
 		E153FBAA2DD47C9B0040CE37 /* SearchBarLocationSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E153FBA92DD47C540040CE37 /* SearchBarLocationSaver.swift */; };
 		E153FBAC2DD492BD0040CE37 /* SearchBarLocationSaverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E153FBAB2DD492AE0040CE37 /* SearchBarLocationSaverTests.swift */; };
 		E1549A632D9D268B00895330 /* ReaderModeSettingsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1549A622D9D268300895330 /* ReaderModeSettingsButton.swift */; };
@@ -12416,6 +12417,7 @@
 		E14C78952C105488002AD3C7 /* AddressToolbarContainerModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressToolbarContainerModelTests.swift; sourceTree = "<group>"; };
 		E14D6D332CCBA9FF0058B910 /* AddressBarStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressBarStateTests.swift; sourceTree = "<group>"; };
 		E14F7DF1288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedTableSectionHeaderFooterView.swift; sourceTree = "<group>"; };
+		E1533FE730ADF4110030C972 /* LegacyPrivacyNoticeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyPrivacyNoticeCell.swift; sourceTree = "<group>"; };
 		E153FBA92DD47C540040CE37 /* SearchBarLocationSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarLocationSaver.swift; sourceTree = "<group>"; };
 		E153FBAB2DD492AE0040CE37 /* SearchBarLocationSaverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarLocationSaverTests.swift; sourceTree = "<group>"; };
 		E1549A622D9D268300895330 /* ReaderModeSettingsButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderModeSettingsButton.swift; sourceTree = "<group>"; };
@@ -16664,6 +16666,7 @@
 		C71158CB2EEA0ADF009766B8 /* PrivacyNotice */ = {
 			isa = PBXGroup;
 			children = (
+				E1533FE730ADF4110030C972 /* LegacyPrivacyNoticeCell.swift */,
 				C71158CC2EEA0B0A009766B8 /* PrivacyNoticeCell.swift */,
 				C71158D02EEA0B0A009766B8 /* PrivacyNoticeState.swift */,
 			);
@@ -21643,6 +21646,7 @@
 				8A5D1CB62A30DBB0005AD35C /* DefaultBrowserSetting.swift in Sources */,
 				4393932029AC6CE900DC5A85 /* EnvironmentValues+Extension.swift in Sources */,
 				ABEF80D12A24D2BE003F52C4 /* CreditCardBottomSheetViewModel.swift in Sources */,
+				E1533FE830ADF4140030C972 /* LegacyPrivacyNoticeCell.swift in Sources */,
 				21AFCFF02AE80D370027E9CE /* RemoteTabsCoordinator.swift in Sources */,
 				7ADC1D192C27D35B003ED924 /* WebContextMenuActionsProvider.swift in Sources */,
 				8AD8FAF62EBAFA2C00FDFD78 /* HomepageUX.swift in Sources */,

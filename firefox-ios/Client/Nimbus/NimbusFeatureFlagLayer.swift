@@ -238,6 +238,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .touFeature:
             return checkTouFeature()
 
+        case .touNotificationRedesign:
+            return checkTouNotificationRedesign()
+
         case .translation:
             return checkTranslationFeature()
 
@@ -354,6 +357,11 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkTouFeature() -> Bool {
         return nimbus.features.touFeature.value().status
+    }
+
+    private func checkTouNotificationRedesign() -> Bool {
+        let config = nimbus.features.touFeature.value()
+        return config.enableNotificationRedesign
     }
 
     private func checkTranslationFeature() -> Bool {
