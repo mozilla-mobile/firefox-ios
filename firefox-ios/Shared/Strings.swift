@@ -5083,6 +5083,16 @@ extension String {
         }
 
         public enum Sync {
+            public static let SignInDescription = MZLocalizedString(
+                key: "TabsTray.Sync.SignIn.Description.v162",
+                tableName: "TabsTray",
+                value: "Sign in to view open tabs on your other devices.",
+                comment: "Description shown in the synced tabs panel when the user is signed out. Signing in lets the user view tabs open on their other devices.")
+            public static let Refresh = MZLocalizedString(
+                key: "TabsTray.Sync.RefreshButton.Title.v162",
+                tableName: "TabsTray",
+                value: "Refresh",
+                comment: "Button in the synced tabs panel of the tab tray. Tapping it refreshes the list of tabs from the user's other devices.")
             public static let SyncTabs = MZLocalizedString(
                 key: "TabsTray.SyncTabs.SyncTabsButton.Title.v119",
                 tableName: "TabsTray",

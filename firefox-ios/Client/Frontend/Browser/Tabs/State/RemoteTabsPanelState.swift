@@ -20,16 +20,23 @@ enum RemoteTabsPanelRefreshState {
 }
 
 /// Replaces LegacyRemoteTabsErrorDataSource.ErrorType
-enum RemoteTabsPanelEmptyStateReason {
+enum RemoteTabsPanelEmptyStateReason: FeatureFlaggable {
     case notLoggedIn
     case noClients
     case noTabs
     case failedToSync
     case syncDisabledByUser
 
+    private var usesUpdatedSyncStrings: Bool {
+        featureFlagsProvider.isEnabled(.syncStringUpdates)
+    }
+
     func localizedString() -> String {
         switch self {
-        case .notLoggedIn: return .EmptySyncedTabsPanelNotSignedInStateDescription
+        case .notLoggedIn:
+            return usesUpdatedSyncStrings
+                ? .TabsTray.Sync.SignInDescription
+                : .EmptySyncedTabsPanelNotSignedInStateDescription
         case .noClients: return .EmptySyncedTabsPanelNullStateDescription
         case .noTabs: return .RemoteTabErrorNoTabs
         case .failedToSync: return .RemoteTabErrorFailedToSync
