@@ -236,61 +236,48 @@ class AppSettingsTableViewControllerTests: XCTestCase {
         }
     }
 
-    func testInstallationDetails_whenHistoryExists_showsValuesWithoutChangingHistory() async {
+    func testInstallationDetails_whenHistoryExists_showsValuesWithoutChangingHistory() {
         let settings = ResetHistorySettingsSpy(windowUUID: .XCTestDefaultUUID)
         let historyStore = ResetHistoryStoreMock()
         historyStore.state = .valid(InstallationHistory(installCounter: 4, lastSeenDate: Date(timeIntervalSince1970: 60)))
-        let acquisition = InstallationDetailsAcquisitionMock()
-        acquisition.result = .available(AppAcquisition(originalPurchaseDate: Date(timeIntervalSince1970: 0),
-                                                       originalAppVersion: "42"))
         profile.prefs.setBool(true, forKey: PrefsKeys.installationProcessedKey)
         let subject = InstallationDetailsSetting(settings: settings,
                                                  historyStore: historyStore,
-                                                 acquisition: acquisition,
                                                  installationPrefs: profile.prefs)
 
-        let message = await subject.details()
+        let message = subject.details()
 
         XCTAssertTrue(message.contains("Processing: Complete"))
         XCTAssertTrue(message.contains("Install count: 4"))
         XCTAssertTrue(message.contains("Last seen (UTC): 1970-01-01T00:01:00Z"))
-        XCTAssertTrue(message.contains("Original purchase date (UTC): 1970-01-01"))
-        XCTAssertTrue(message.contains("Original app version: 42"))
         XCTAssertEqual(historyStore.loadCallCount, 1)
         XCTAssertEqual(historyStore.resetCallCount, 0)
     }
 
-    func testInstallationDetails_whenValuesAreUnavailable_showsTheirStates() async {
+    func testInstallationDetails_whenValuesAreUnavailable_showsTheirStates() {
         let settings = ResetHistorySettingsSpy(windowUUID: .XCTestDefaultUUID)
         let historyStore = ResetHistoryStoreMock()
-        let acquisition = InstallationDetailsAcquisitionMock()
         let subject = InstallationDetailsSetting(settings: settings,
                                                  historyStore: historyStore,
-                                                 acquisition: acquisition,
                                                  installationPrefs: profile.prefs)
         profile.prefs.setBool(false, forKey: PrefsKeys.installationProcessedKey)
 
-        let missingMessage = await subject.details()
+        let missingMessage = subject.details()
 
         XCTAssertTrue(missingMessage.contains("Processing: Pending"))
         XCTAssertTrue(missingMessage.contains("Retained history: Missing"))
-        XCTAssertTrue(missingMessage.contains("StoreKit request failed"))
         historyStore.state = .corrupt
-        acquisition.result = .unavailable(.unverified)
         profile.prefs.removeObjectForKey(PrefsKeys.installationProcessedKey)
 
-        let corruptMessage = await subject.details()
+        let corruptMessage = subject.details()
 
         XCTAssertTrue(corruptMessage.contains("Processing: Not initialized"))
         XCTAssertTrue(corruptMessage.contains("Retained history: Corrupt"))
-        XCTAssertTrue(corruptMessage.contains("Unverified transaction"))
         historyStore.error = NSError(domain: "Test", code: 1, userInfo: [NSLocalizedDescriptionKey: "History locked"])
-        acquisition.result = .unavailable(.unsupportedOS)
 
-        let errorMessage = await subject.details()
+        let errorMessage = subject.details()
 
         XCTAssertTrue(errorMessage.contains("History locked"))
-        XCTAssertTrue(errorMessage.contains("Requires iOS 16 or later"))
         XCTAssertFalse(errorMessage.contains("Install count:"))
         XCTAssertEqual(historyStore.resetCallCount, 0)
     }
@@ -346,12 +333,5 @@ private final class ResetHistoryStoreMock: InstallationHistoryStoring {
         if let error { throw error }
         state = .missing
     }
-}
-
-@MainActor
-private final class InstallationDetailsAcquisitionMock: AppAcquisitionProviding {
-    var result: AcquisitionOutcome = .unavailable(.storeKitFailure)
-
-    func fetch() async -> AcquisitionOutcome { result }
 }
 #endif
