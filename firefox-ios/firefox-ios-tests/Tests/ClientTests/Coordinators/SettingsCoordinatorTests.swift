@@ -550,7 +550,7 @@ final class SettingsCoordinatorTests: XCTestCase {
     }
 
     func testPrivacySettingsDelegate_pushedVPN() {
-        guard #available(iOS 17.0, *) else { return }
+        guard #available(iOS 27.2, *) else { return }
         let subject = createSubject()
 
         subject.pressedVPN()

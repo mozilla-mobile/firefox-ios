@@ -605,7 +605,7 @@ class MainMenuViewController: UIViewController,
 
         let vpn: MenuSiteBadgeData? = {
             // VPN backend is only possible on iOS 17 and later
-            guard #available(iOS 17.0, *), featureFlagsProvider.isEnabled(.vpnFeature) else { return nil }
+            guard #available(iOS 27.2, *), featureFlagsProvider.isEnabled(.vpnFeature) else { return nil }
             let isVPNOn = userPreferences.getPreferenceFor(.vpnFeature)
             return MenuSiteBadgeData(title: String.MainMenu.SiteProtection.VPN,
                                      image: StandardImageIdentifiers.Large.globe,

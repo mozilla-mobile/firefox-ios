@@ -8,7 +8,7 @@ import Observation
 import Redux
 import Shared
 
-@available(iOS 17.0, *)
+@available(iOS 27.2, *)
 @MainActor
 @Observable
 final class VPNSettingsViewModel {

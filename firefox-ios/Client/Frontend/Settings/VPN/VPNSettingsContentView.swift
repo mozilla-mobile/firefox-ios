@@ -6,7 +6,7 @@ import SwiftUI
 import Common
 import Shared
 
-@available(iOS 17.0, *)
+@available(iOS 27.2, *)
 struct VPNSettingsContentView: View {
     private enum UX {
         static let globeViewPadding: CGFloat = 16
