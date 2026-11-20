@@ -15,6 +15,7 @@ final class VPNSettingsViewModel {
     @ObservationIgnored private let vpnManager: VPNRunnable
     @ObservationIgnored private let windowUUID: WindowUUID
     @ObservationIgnored private let localeProvider: LocaleProvider
+    @ObservationIgnored private let settingsTelemetry: SettingsTelemetry
 
     var isVPNEnabled: Bool { vpnManager.isRunning }
     var isVPNConnecting: Bool { vpnManager.isConnecting }
@@ -53,11 +54,17 @@ final class VPNSettingsViewModel {
     init(
         vpnManager: VPNRunnable,
         windowUUID: WindowUUID,
-        localeProvider: LocaleProvider = SystemLocaleProvider()
+        localeProvider: LocaleProvider = SystemLocaleProvider(),
+        settingsTelemetry: SettingsTelemetry = SettingsTelemetry()
     ) {
         self.vpnManager = vpnManager
         self.windowUUID = windowUUID
         self.localeProvider = localeProvider
+        self.settingsTelemetry = settingsTelemetry
+    }
+
+    func openedLocationList() {
+        settingsTelemetry.optionSelected(option: .VPNLocationList)
     }
 
     func selectLocation(_ countryCode: String) {

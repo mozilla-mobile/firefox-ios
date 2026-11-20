@@ -371,6 +371,7 @@ final class SettingsCoordinator: BaseCoordinator,
         guard #available(iOS 17.0, *) else { return }
         let viewController = VPNSettingsViewController(windowUUID: windowUUID)
         router.push(viewController)
+        settingsTelemetry.optionSelected(option: .VPN)
     }
 
     func pressedContentBlocker() {

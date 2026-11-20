@@ -154,9 +154,9 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
 
     func testAlertChoices_recordMatchingSource() async {
         let cases: [(VPNModernAction, VPNConnectionStopSource)] = [
-            (.continueWithoutVPN, .continueWithoutVPN),
-            (.closeThisTab, .closeThisTab),
-            (.closeAllTabs, .closeAllTabs)
+            (.continueWithoutVPN(alertType: .sessionError), .continueWithoutVPN),
+            (.closeThisTab(alertType: .sessionError), .closeThisTab),
+            (.closeAllTabs(alertType: .sessionError), .closeAllTabs)
         ]
         let subject = createSubject()
 
@@ -221,7 +221,7 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         mockUserPreferences.boolPreferences[.vpnFeature] = true
         let subject = createSubject()
 
-        await dispatchAndWaitForPreference(.continueWithoutVPN, to: subject)
+        await dispatchAndWaitForPreference(.continueWithoutVPN(alertType: .sessionError), to: subject)
 
         XCTAssertEqual(mockUserPreferences.boolPreferences[.vpnFeature], false)
     }
@@ -229,7 +229,7 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
     func testContinueWithoutVPN_stopsVPNWithoutClosingTabs() async {
         let subject = createSubject()
 
-        await dispatch(.continueWithoutVPN, to: subject)
+        await dispatch(.continueWithoutVPN(alertType: .sessionError), to: subject)
 
         XCTAssertEqual(mockVPNManager.stopCalled, 1)
         XCTAssertTrue(firstTabManager.removeTabCalledWith.isEmpty)
@@ -243,7 +243,7 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         secondTabManager.selectedTab = MockTab(profile: mockProfile, windowUUID: secondWindowUUID)
         let subject = createSubject()
 
-        await dispatch(.closeThisTab, to: subject)
+        await dispatch(.closeThisTab(alertType: .sessionError), to: subject)
 
         XCTAssertEqual(firstTabManager.removeTabCalledWith, [tab.tabUUID])
         XCTAssertTrue(secondTabManager.removeTabCalledWith.isEmpty)
@@ -253,7 +253,7 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
     func testCloseThisTab_withNoSelectedTab_stillStopsVPN() async {
         let subject = createSubject()
 
-        await dispatch(.closeThisTab, to: subject)
+        await dispatch(.closeThisTab(alertType: .sessionError), to: subject)
 
         XCTAssertTrue(firstTabManager.removeTabCalledWith.isEmpty)
         XCTAssertEqual(mockVPNManager.stopCalled, 1)
@@ -262,7 +262,7 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
     func testCloseAllTabs_closesPrivateAndNormalTabsInAllWindowsAndStopsVPN() async {
         let subject = createSubject()
 
-        await dispatch(.closeAllTabs, to: subject)
+        await dispatch(.closeAllTabs(alertType: .sessionError), to: subject)
 
         XCTAssertEqual(firstTabManager.removeAllTabsCalledWith, [true, false])
         XCTAssertEqual(secondTabManager.removeAllTabsCalledWith, [true, false])
@@ -279,7 +279,7 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         }
         let subject = createSubject()
 
-        await dispatch(.closeAllTabs, to: subject)
+        await dispatch(.closeAllTabs(alertType: .sessionError), to: subject)
 
         XCTAssertEqual(tabCountsClosedAtStop, [2, 2])
     }
@@ -532,4 +532,10 @@ private final class MockVPNClientTelemetry: VPNClientTelemetry {
         stops.append(source)
         onRecord?()
     }
+
+    func recordVPNSettingChanged(isEnabled: Bool) {}
+
+    func recordLocationSelected(countryCode: String, isVPNConnected: Bool, isUsingFallback: Bool?) {}
+
+    func recordAlertOptionSelected(_ option: VPNAlertOption, alertType: VPNAlertType) {}
 }
