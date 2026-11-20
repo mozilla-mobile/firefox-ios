@@ -45,7 +45,6 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
         guard let action = action as? ToolbarModernAction else { return }
 
         switch action {
-        // FIXME: FXIOS-17387 cancelEdit doesn't fire when scrolling mid edit (cancelEditOnHomepage)
         case .cancelEdit, .toolbarPositionChanged:
             dispatchSearchBarConfigurationAction(state: state, windowUUID: windowUUID)
         default:

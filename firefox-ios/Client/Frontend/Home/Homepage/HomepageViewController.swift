@@ -394,7 +394,7 @@ final class HomepageViewController: UIViewController,
 
     private func handleToolbarStateOnScroll() {
         // When the user scrolls the homepage (not overlaid on a webpage when searching) we cancel edit mode
-        store.dispatch(ToolbarModernAction.cancelEditOnHomepage, forWindowUUID: windowUUID)
+        store.dispatch(ToolbarModernAction.cancelEdit(url: nil), forWindowUUID: windowUUID)
     }
 
     /// Calculates the number of tiles that can fit in a single row based on the available width.

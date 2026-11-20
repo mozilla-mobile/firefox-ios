@@ -130,8 +130,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
             return state.copy(shouldShowKeyboard: shouldShow)
         case .cancelEdit(let url):
             return handleCancelEditAction(state: state, url: url)
-        case .cancelEditOnHomepage:
-            return handleCancelEditOnHomepageAction(state: state)
         case .searchTermDidSet(let searchTerm):
             return handleSearchTermDidSetAction(state: state, searchTerm: searchTerm)
         case .lockIconChanged(let hasOnlySecureContent, let isWebsiteMode):
@@ -324,18 +322,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
             .copy(shouldSelectSearchTerm: true)
             .copy(didStartTyping: false)
             .copy(isEmptySearch: isEmptySearch)
-    }
-
-    @MainActor
-    private static func handleCancelEditOnHomepageAction(state: Self) -> Self {
-        guard state.url == nil else {
-            // This case can occur when scrolling on homepage or in search view
-            // and the user is still in isEditing mode (aka Cancel button is shown)
-            // But we don't show the keyboard and the cursor is not active
-            return state.copy(shouldShowKeyboard: false)
-        }
-
-        return handleCancelEditAction(state: state, url: nil)
     }
 
     @MainActor

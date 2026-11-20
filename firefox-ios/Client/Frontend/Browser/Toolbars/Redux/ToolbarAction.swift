@@ -92,17 +92,12 @@ enum ToolbarModernAction: ModernAction {
     /// the address bar's keyboard should be shown while editing. shouldShow is `false` when the
     /// keyboard hides (or a search engine is selected) while isEditing. `true` when the keyboard
     /// genuinely finishes presenting while still editing. Also restores `shouldShowKeyboard` after it
-    /// was set to `false` by a path that doesn't fully leave overlay mode (like scrolling the
-    /// homepage mid-edit via `cancelEditOnHomepage`)
+    /// was set to `false` by a path that doesn't fully leave overlay mode
     case didKeyboardRequestChange(shouldShow: Bool)
 
     /// The user left address bar editing. `url` is the committed website to restore,
     /// or `nil` to keep the address bar's current URL.
     case cancelEdit(url: URL?)
-
-    /// The user scrolled while editing. Cancels editing only if there's no committed website (Homepage),
-    /// otherwise just hides the keyboard (visually still looks like homepage but is zero search state)
-    case cancelEditOnHomepage
 
     /// Sets the address bar's search term and puts it into editing mode with the keyboard shown. Sent when
     /// the user pastes into the address bar, and when search suggestions highlight or append a row's text.
