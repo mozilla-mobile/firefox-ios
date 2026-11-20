@@ -6,19 +6,17 @@ import Foundation
 import Common
 import Shared
 
-/// Tracks the install count and last seen date, along with the original purchase date and app version.
+/// Tracks the install count and last seen date.
 /// Keychain history survives reinstalls
 @MainActor
 final class InstallationTelemetryService {
     private let history: InstallationHistoryStoring
-    private let acquisition: AppAcquisitionProviding
     private let telemetry: InstallationTelemetry
     private let profilePrefs: Prefs
     private let featureFlagsProvider: FeatureFlagProviding
     private let dateProvider: DateProvider
     private let installationPrefs: Prefs
     private let logger: Logger
-    private var isProcessing = false
     private var hasProcessedInstallation: Bool {
         installationPrefs.boolForKey(PrefsKeys.installationProcessedKey) == true
     }
@@ -32,7 +30,6 @@ final class InstallationTelemetryService {
         profilePrefs: Prefs,
         installationPrefs: Prefs = NSUserDefaultsPrefs(prefix: "installationTelemetry", userDefaults: .standard),
         history: InstallationHistoryStoring = InstallationHistoryStore(),
-        acquisition: AppAcquisitionProviding = StoreKitAppAcquisitionProvider(),
         telemetry: InstallationTelemetry = InstallationTelemetry(),
         featureFlagsProvider: FeatureFlagProviding = AppContainer.shared.resolve(),
         dateProvider: DateProvider = SystemDateProvider(),
@@ -40,7 +37,6 @@ final class InstallationTelemetryService {
     ) {
         self.installationPrefs = installationPrefs
         self.history = history
-        self.acquisition = acquisition
         self.telemetry = telemetry
         self.profilePrefs = profilePrefs
         self.featureFlagsProvider = featureFlagsProvider
@@ -60,34 +56,29 @@ final class InstallationTelemetryService {
     }
 
     func update() {
-        guard !AppConstants.isRunningUnitTest else { return }
-        Task {
-            do {
-                try await updateInstallationHistory()
-            } catch {
-                logger.log("Could not update installation history",
-                           level: hasProcessedInstallation ? .warning : .fatal,
-                           category: .telemetry,
-                           description: error.localizedDescription)
-            }
+        guard !AppConstants.isRunningUnitTest, !AppConstants.isRunningUITests else { return }
+        do {
+            try updateInstallationHistory()
+        } catch {
+            logger.log("Could not update installation history",
+                       level: hasProcessedInstallation ? .warning : .fatal,
+                       category: .telemetry,
+                       description: error.localizedDescription)
         }
     }
 
-    func updateInstallationHistory() async throws {
-        guard canCollectTelemetry, !isProcessing else { return }
+    func updateInstallationHistory() throws {
+        guard canCollectTelemetry else { return }
         initializeProcessingState()
-        isProcessing = true
-        defer { isProcessing = false }
 
         let currentHistory = try history.load()
         let updatedHistory: InstallationHistory
         if !hasProcessedInstallation {
-            updatedHistory = try await processNewInstallation(currentHistory: currentHistory)
+            updatedHistory = processNewInstallation(currentHistory: currentHistory)
         } else {
             updatedHistory = refreshLastSeenDate(currentHistory)
         }
 
-        guard canCollectTelemetry else { return }
         try saveInstallationHistory(updatedHistory)
     }
 
@@ -113,31 +104,14 @@ final class InstallationTelemetryService {
         }
     }
 
-    func getAppAcquisition() async throws -> AppAcquisition {
-        let acquisitionResult = await acquisition.fetch()
-
-        switch acquisitionResult {
-        case .available(let appAcquisition):
-            return appAcquisition
-
-        case .unavailable(let error):
-            throw error
-        }
-    }
-
-    /// Prepares the new history and records installation telemetry.
-    private func processNewInstallation(currentHistory: InstallationHistoryState) async throws -> InstallationHistory {
-        let appAcquisition = try await getAppAcquisition()
-        try Task.checkCancellation()
+    private func processNewInstallation(currentHistory: InstallationHistoryState) -> InstallationHistory {
         let installationHistory = historyForNewInstallation(currentHistory)
-        guard canCollectTelemetry else { return installationHistory }
 
         var previousLastSeenDate: Date?
         if case .valid(let history) = currentHistory {
             previousLastSeenDate = history.lastSeenDate
         }
         telemetry.recordInstallationHistory(count: installationHistory.installCounter, lastSeenDate: previousLastSeenDate)
-        telemetry.recordAcquisition(appAcquisition: appAcquisition)
         return installationHistory
     }
 

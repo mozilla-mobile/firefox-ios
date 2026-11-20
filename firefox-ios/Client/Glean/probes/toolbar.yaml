@@ -384,7 +384,7 @@ toolbar.address_bar:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34887
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: 2026-12-01
+    expires: never
   swiped:
     type: event
     description: |
@@ -395,7 +395,7 @@ toolbar.address_bar:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34299
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: 2026-12-01
+    expires: never
 
 # Awesomebar related telemetry
 awesomebar:

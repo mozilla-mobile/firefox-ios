@@ -10,7 +10,8 @@ protocol TopSitesSelectorsSet {
     var COLLECTION_VIEW: Selector { get }
     var TOPSITE_YOUTUBE: Selector { get }
     var PIN: Selector { get }
-    var PIN_SLASH: Selector { get }
+    var UNPIN: Selector { get }
+    var SHARE: Selector { get }
     var all: [Selector] { get }
 }
 
@@ -20,7 +21,8 @@ struct TopSitesSelectors: TopSitesSelectorsSet {
         static let itemCell = AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell
         static let youtube = "YouTube"
         static let pin = StandardImageIdentifiers.ExtraSmall.pin
-        static let pinSlash = StandardImageIdentifiers.Large.pinSlash
+        static let unpin = "Unpin"
+        static let share = "Share"
     }
 
     let TOP_SITE_ITEM_CELL = Selector.linkById(
@@ -47,9 +49,15 @@ struct TopSitesSelectors: TopSitesSelectorsSet {
         groups: ["homepage", "topsites"]
     )
 
-    let PIN_SLASH = Selector.buttonId(
-        IDs.pinSlash,
-        description: "Unpinned button",
+    let UNPIN = Selector.buttonByLabel(
+        IDs.unpin,
+        description: "Unpin option in the top site context menu",
+        groups: ["homepage", "topsites"]
+    )
+
+    let SHARE = Selector.buttonByLabel(
+        IDs.share,
+        description: "Share option in the top site context menu",
         groups: ["homepage", "topsites"]
     )
 
@@ -58,7 +66,7 @@ struct TopSitesSelectors: TopSitesSelectorsSet {
             TOP_SITE_ITEM_CELL,
             COLLECTION_VIEW,
             TOPSITE_YOUTUBE,
-            PIN, PIN_SLASH
+            PIN, UNPIN, SHARE
         ]
     }
 }

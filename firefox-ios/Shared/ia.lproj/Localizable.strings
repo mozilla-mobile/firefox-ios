@@ -1555,6 +1555,9 @@
 /* Footer information for tracker protection level. */
 "Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Si un sito non functiona como expectate, tocca le scuto in le barra de adresse e disactiva Protection antitraciamento reinfortiate pro ille pagina.";
 
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Strict.v161" = "Si un sito non functiona correctemente, aperi le menu e tenta disactivar la Protection antitraciamento reinfortiate.";
+
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Permitter alcun avisos traciatores a fin que le sitos web functiona correctemente.";
 

@@ -439,6 +439,22 @@ final class AddressToolbarContainerModelTests: XCTestCase {
     // MARK: - Private helpers
 
     @MainActor
+    func testEquality_whenStatesAreIdentical_modelsAreEqual() {
+        let state = createToolbarState()
+
+        XCTAssertEqual(createSubject(withState: state), createSubject(withState: state))
+    }
+
+    @MainActor
+    func testEquality_whenOnlyIsTranslucentDiffers_modelsAreNotEqual() {
+        let state = createToolbarState()
+        let opaqueModel = createSubject(withState: state.copy(isTranslucent: false))
+        let translucentModel = createSubject(withState: state.copy(isTranslucent: true))
+
+        XCTAssertNotEqual(opaqueModel, translucentModel)
+    }
+
+    @MainActor
     private func createSubject(
         withState state: ToolbarState,
         isSearchTermInAddressBarEnabled: Bool = false,
@@ -468,7 +484,6 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                                editingAccessoryAction: makeEditingAccessoryAction(
                                    isGoogleLensEnabled: isGoogleLensEnabled
                                ),
-                               borderPosition: nil,
                                url: url,
                                searchTerm: nil,
                                hasOnlySecureContent: nil,
@@ -515,7 +530,6 @@ final class AddressToolbarContainerModelTests: XCTestCase {
 
     private func createBasicNavigationBarState() -> NavigationBarState {
         return NavigationBarState(windowUUID: windowUUID,
-                                  displayBorder: false,
                                   middleButton: .newTab,
                                   isNovaDesignEnabled: false)
     }
@@ -549,7 +563,8 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                             previousTabScreenshot: nil,
                             nextTabScreenshot: nil,
                             isAddressBarMinimized: false,
-                            isAccessoryViewVisible: false)
+                            isAccessoryViewVisible: false,
+                            isScrolled: false)
     }
 
     private func createToolbarStateWithAlternativeSearchEngine(searchEngine: SearchEngineModel) -> ToolbarState {
@@ -573,7 +588,8 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                             previousTabScreenshot: nil,
                             nextTabScreenshot: nil,
                             isAddressBarMinimized: false,
-                            isAccessoryViewVisible: false)
+                            isAccessoryViewVisible: false,
+                            isScrolled: false)
     }
 
     @MainActor

@@ -94,6 +94,33 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
         XCTAssertEqual(router.dismissCalled, 1)
     }
 
+    func test_parkQuickAnswers_navigatesCallsOnParkDismissesAndFinishes() {
+        var events = [String]()
+        router.onDismiss = { events.append("dismiss") }
+        let subject = createSubject(
+            onNavigate: { type in
+                XCTAssertEqual(type, .url(self.testURL))
+                events.append("navigate")
+            },
+            onPark: { events.append("park") }
+        )
+
+        subject.parkQuickAnswers(with: .url(testURL))
+
+        XCTAssertEqual(events, ["navigate", "park", "dismiss"])
+        XCTAssertEqual(router.dismissCalled, 1)
+        XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
+    }
+
+    func test_dismissQuickAnswers_doesNotCallOnPark() {
+        var didCallOnPark = false
+        let subject = createSubject(onPark: { didCallOnPark = true })
+
+        subject.dismissQuickAnswers(with: .url(testURL))
+
+        XCTAssertFalse(didCallOnPark)
+    }
+
     func test_resolvedModel_withoutOverride_returnsNimbusModel() {
         setupNimbus(model: .liner)
         let subject = createSubject()
@@ -127,7 +154,12 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
 
         XCTAssertEqual(
             subject.resolvedFeature(),
-            QuickAnswersKit.QuickAnswersFeature(model: .liner, isOptInRedesignEnabled: true)
+            QuickAnswersKit.QuickAnswersFeature(
+                model: .liner,
+                isOptInRedesignEnabled: true,
+                isFollowUpEnabled: false,
+                isReturnToAnswerEnabled: false
+            )
         )
     }
 
@@ -137,7 +169,12 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
 
         XCTAssertEqual(
             subject.resolvedFeature(),
-            QuickAnswersKit.QuickAnswersFeature(model: .exa, isOptInRedesignEnabled: false)
+            QuickAnswersKit.QuickAnswersFeature(
+                model: .exa,
+                isOptInRedesignEnabled: false,
+                isFollowUpEnabled: false,
+                isReturnToAnswerEnabled: false
+            )
         )
     }
 
@@ -148,8 +185,36 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
 
         XCTAssertEqual(
             subject.resolvedFeature(),
-            QuickAnswersKit.QuickAnswersFeature(model: .exa, isOptInRedesignEnabled: false, isFollowUpEnabled: true)
+            QuickAnswersKit.QuickAnswersFeature(
+                model: .exa,
+                isOptInRedesignEnabled: false,
+                isFollowUpEnabled: true,
+                isReturnToAnswerEnabled: false
+            )
         )
+    }
+
+    func test_resolvedFeature_withReturnToAnswerEnabled_setsFlag() {
+        setupNimbus(model: .exa)
+        featureFlagsProvider.enabledFlags = [.quickAnswersReturnToAnswer]
+        let subject = createSubject()
+
+        XCTAssertEqual(
+            subject.resolvedFeature(),
+            QuickAnswersKit.QuickAnswersFeature(
+                model: .exa,
+                isOptInRedesignEnabled: false,
+                isFollowUpEnabled: false,
+                isReturnToAnswerEnabled: true
+            )
+        )
+    }
+
+    func test_resolvedFeature_withReturnToAnswerDisabled_doesNotSetFlag() {
+        setupNimbus(model: .exa)
+        let subject = createSubject()
+
+        XCTAssertFalse(subject.resolvedFeature().isReturnToAnswerEnabled)
     }
 
     // MARK: - Helper Methods
@@ -162,18 +227,21 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
     private func createSubject(
         prefs: Prefs = MockProfilePrefs(),
         onNavigate: @escaping (QuickAnswersNavigationType) -> Void = { _ in },
+        onPark: @escaping () -> Void = {},
         file: StaticString = #filePath,
         line: UInt = #line
     ) -> QuickAnswersCoordinator {
         let subject = QuickAnswersCoordinator(
             parentCoordinatorDelegate: parentCoordinator,
             prefs: prefs,
+            sessionStorage: QuickAnswersSessionStorage(),
             windowUUID: .XCTestDefaultUUID,
             themeManager: themeManager,
             router: router,
             transitionType: .sourceReveal(sourceRect: .zero),
             featureFlagsProvider: featureFlagsProvider,
-            onNavigate: onNavigate
+            onNavigate: onNavigate,
+            onPark: onPark
         )
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject

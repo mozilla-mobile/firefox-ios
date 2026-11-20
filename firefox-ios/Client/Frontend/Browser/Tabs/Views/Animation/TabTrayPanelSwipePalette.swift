@@ -8,6 +8,7 @@ import UIKit
 struct TabTrayPanelSwipePalette: ThemeColourPalette {
     private let base: ThemeColourPalette
     private let partialOverrides: PartialOverrides
+    var accentGradientOverride: Gradient?
 
     // MARK: Overridden colors
     var layer1: UIColor {
@@ -187,6 +188,7 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var layerAccentSubtle: UIColor { base.layerAccentSubtle }
     var layerInverse: UIColor { base.layerInverse }
     var layerGlassSelectedFill: UIColor { base.layerGlassSelectedFill }
+    var layerTabGroupGlassTint: UIColor { base.layerTabGroupGlassTint }
     var textToast: UIColor { base.textToast }
     var iconOnColorDisabled: UIColor { base.iconOnColorDisabled }
     var iconPrivate: UIColor { base.iconPrivate }
@@ -194,15 +196,38 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var borderAccentToast: UIColor { base.borderAccentToast }
     var borderRadioButtonDefault: UIColor { base.borderRadioButtonDefault }
     var gradient: Gradient { base.gradient }
-    var gradientAccent: Gradient { base.gradientAccent }
+    var gradientAccent: Gradient { accentGradientOverride ?? base.gradientAccent }
     var gradientAccentSubtle: Gradient { base.gradientAccentSubtle }
     var gradientAIStrong: Gradient { base.gradientAIStrong }
+    @available(*, deprecated, message: "Use gradientAccent for the default tab border.")
     var gradientBorder: Gradient { base.gradientBorder }
+    var gradientTabBorderYellow: Gradient { base.gradientTabBorderYellow }
+    var gradientTabBorderOrange: Gradient { base.gradientTabBorderOrange }
+    var gradientTabBorderRed: Gradient { base.gradientTabBorderRed }
+    var gradientTabBorderPink: Gradient { base.gradientTabBorderPink }
+    var gradientTabBorderPurple: Gradient { base.gradientTabBorderPurple }
+    var gradientTabBorderBlue: Gradient { base.gradientTabBorderBlue }
+    var gradientTabBorderCyan: Gradient { base.gradientTabBorderCyan }
+    var gradientTabBorderGreen: Gradient { base.gradientTabBorderGreen }
+    var gradientTabBorderGrey: Gradient { base.gradientTabBorderGrey }
+    var gradientTabBorderNoColor: Gradient { base.gradientTabBorderNoColor }
     var gradientPrivacy: Gradient { base.gradientPrivacy }
     var gradientPrivacyMask: Gradient { base.gradientPrivacyMask }
     var gradientWidgetSurface: Gradient { base.gradientWidgetSurface }
     var gradientWidgetSurfaceStandard: Gradient { base.gradientWidgetSurfaceStandard }
     var gradientWidgetSurfacePrivate: Gradient { base.gradientWidgetSurfacePrivate }
+
+    // MARK: - Tab Group
+    var tabGroupYellow: UIColor { base.tabGroupYellow }
+    var tabGroupOrange: UIColor { base.tabGroupOrange }
+    var tabGroupRed: UIColor { base.tabGroupRed }
+    var tabGroupPink: UIColor { base.tabGroupPink }
+    var tabGroupPurple: UIColor { base.tabGroupPurple }
+    var tabGroupBlue: UIColor { base.tabGroupBlue }
+    var tabGroupCyan: UIColor { base.tabGroupCyan }
+    var tabGroupGreen: UIColor { base.tabGroupGreen }
+    var tabGroupGrey: UIColor { base.tabGroupGrey }
+    var tabGroupNoColor: UIColor { base.tabGroupNoColor }
 
     init(base: ThemeColourPalette, overrides: PartialOverrides) {
         self.base = base

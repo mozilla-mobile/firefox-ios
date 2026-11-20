@@ -41,6 +41,7 @@ class ScreenGraphTest: XCTestCase {
                                LaunchArguments.SkipIntro,
                                LaunchArguments.SkipWhatsNew,
                                LaunchArguments.SkipETPCoverSheet,
+                               LaunchArguments.SkipTermsOfUse,
                                LaunchArguments.SkipContextualHints,
                                LaunchArguments.DisableAnimations]
         app.activate()

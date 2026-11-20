@@ -25,7 +25,7 @@ struct NavigationToolbarContainerModel: Equatable {
         windowUUID: WindowUUID
     ) {
         let state = lens.toolbarState
-        self.displayBorder = state.navigationToolbar.displayBorder
+        self.displayBorder = lens.displayNavBorder
         self.canShowNavigationHint = state.canShowNavigationHint
         self.isTranslucent = state.isTranslucent
         self.actions = lens.navigationToolbarActions.map { action in

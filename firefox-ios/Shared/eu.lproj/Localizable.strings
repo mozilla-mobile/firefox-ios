@@ -1555,6 +1555,9 @@
 /* Footer information for tracker protection level. */
 "Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Gune bat ez badabil espero bezala, sakatu helbide-barrako babesaren ikonoa eta desaktibatu jarraipenaren babes hobetua orri horretarako.";
 
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Strict.v161" = "Gune bat ez badabil, ireki menua eta probatu jarraipenaren babes hobetua desgaitzen.";
+
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Baimendu neurri baterainoko iragarkien jarraipena webguneak ondo ibil daitezen.";
 

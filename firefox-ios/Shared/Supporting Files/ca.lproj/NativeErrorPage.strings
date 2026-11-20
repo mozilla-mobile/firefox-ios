@@ -52,3 +52,6 @@
 /* On error page, this is the title for no internet connection */
 "NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "Sembla que hi ha un problema amb la connexió a Internet.";
 
+/* Title of the error page when the app is unable to connect to the server and will show a wayback fallback. */
+"NativeErrorPage.Wayback.Error.Title.v154" = "No s'ha pogut connectar";
+

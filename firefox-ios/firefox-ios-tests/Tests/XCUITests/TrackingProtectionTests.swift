@@ -9,6 +9,12 @@ import XCTest
 let websiteWithBlockedElements = "twitter.com"
 let differentWebsite = path(forTestPage: TestPages.exampleHTML)
 let trackingProtectionTestUrl = "https://senglehardt.com/test/trackingprotection/test_pages/"
+// The Block Ads list exempts localhost, so the ad page is served through wildcard loopback hosts,
+// which need public DNS. They stand in for the cnn.com and espn.com pages of the TestRail cases
+private let firstAdPublisherHost = "lvh.me"
+private let secondAdPublisherHost = "localtest.me"
+private let firstAdPublisherPage = "http://\(firstAdPublisherHost):\(serverPort)/test-fixture/\(TestPages.adPlacements)"
+private let secondAdPublisherPage = "http://\(secondAdPublisherHost):\(serverPort)/test-fixture/\(TestPages.adPlacements)"
 
 // Selectors
 let buttonSettings = "Settings"
@@ -23,6 +29,7 @@ class TrackingProtectionTests: BaseTestCase {
     var toolbarScreen: ToolbarScreen!
     var mainMenuScreen: MainMenuScreen!
     var websiteDataScreen: WebsiteDataScreen!
+    var tabTrayScreen: TabTrayScreen!
 
     override func setUp() async throws {
         try await super.setUp()
@@ -32,6 +39,7 @@ class TrackingProtectionTests: BaseTestCase {
         toolbarScreen = ToolbarScreen(app: app)
         mainMenuScreen = MainMenuScreen(app: app)
         websiteDataScreen = WebsiteDataScreen(app: app)
+        tabTrayScreen = TabTrayScreen(app: app)
     }
 
     override func tearDown() async throws {
@@ -130,8 +138,11 @@ class TrackingProtectionTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307061
     // Regression
-    func testTrackingProtectionButtonMenu() {
+    func testTrackingProtectionButtonMenu() throws {
         let sslScreen = SSLWarningScreen(app: app)
+        let untrustedServer = try UntrustedHTTPSServer()
+        try untrustedServer.start()
+        addTeardownBlock { untrustedServer.stop() }
 
         app.launch()
         // Step 1: the page is correctly loaded
@@ -149,23 +160,36 @@ class TrackingProtectionTests: BaseTestCase {
         trackingProtectionScreen.assertConnectionIsSecure()
         trackingProtectionScreen.assertConnectionVerifiedByCertificate()
 
-        // Step 3: the expired certificate page loads with the lock icon disabled. Opened directly
-        // because tapping "expired" on badssl.com does not raise the interstitial reliably.
+        // Step 3: the untrusted certificate page loads with the lock icon disabled. A local site with an
+        // untrusted certificate stands in for badssl.com's "expired" page, which loads too slowly to rely on.
         trackingProtectionScreen.closeConnectionDetails()
         navigator.nowAt(BrowserTab)
-        navigator.openURL("https://expired.badssl.com/")
+        navigator.openURL(untrustedServer.siteURL)
         sslScreen.waitForWarning()
         sslScreen.tapAdvanced()
         sslScreen.tapVisitSiteAnyway()
-        sslScreen.waitForPageToLoadAfterBypass()
+        sslScreen.waitForUntrustedTestSiteToLoad()
         browserScreen.assertAddressBar_LockIconOffExist()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3167401
+    // [Config] nav:topbar
     // Regression
     func testSecureSiteConnectionElements() {
+        verifySecureSiteConnectionElements(addressBarAtTop: true)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3167401
+    // [Config] nav:bottombar
+    // Regression
+    func testSecureSiteConnectionElements_bottomToolbar() throws {
+        try XCTSkipIf(iPad(), "The address bar cannot be placed at the bottom on iPad")
+        verifySecureSiteConnectionElements(addressBarAtTop: false)
+    }
+
+    private func verifySecureSiteConnectionElements(addressBarAtTop: Bool) {
         // Step 1: the secure page is opened
-        openPageForConnectionPanel("https://www.mozilla.org/")
+        openPageForConnectionPanel("https://www.mozilla.org/", addressBarAtTop: addressBarAtTop)
         browserScreen.assertAddressBar_LockIconExist()
 
         // Step 2: the panel shows the site, the secure connection, the ETP switch and Privacy settings
@@ -173,21 +197,71 @@ class TrackingProtectionTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3167402
+    // [Config] nav:topbar
     // Regression
     func testInsecureSiteConnectionElements() {
+        verifyInsecureSiteConnectionElements(addressBarAtTop: true)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3167402
+    // [Config] nav:bottombar
+    // Regression
+    func testInsecureSiteConnectionElements_bottomToolbar() throws {
+        try XCTSkipIf(iPad(), "The address bar cannot be placed at the bottom on iPad")
+        verifyInsecureSiteConnectionElements(addressBarAtTop: false)
+    }
+
+    private func verifyInsecureSiteConnectionElements(addressBarAtTop: Bool) {
         // Step 1: the insecure (plain HTTP) page is opened
-        openPageForConnectionPanel(path(forTestPage: TestPages.mozillaBook))
+        openPageForConnectionPanel(path(forTestPage: TestPages.mozillaBook), addressBarAtTop: addressBarAtTop)
         XCTAssertTrue(browserScreen.bookOfMozillaPageContentExists(), "The website did not load")
 
         // Step 2: the panel shows the site, the insecure connection, the ETP switch and Privacy settings
         assertConnectionPanelAndProtectionSettings(domain: "localhost", secure: false)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3167404
+    // [Config] nav:topbar
+    // Regression
+    func testConnectionDisplayedAsInsecure() {
+        verifyConnectionDisplayedAsInsecure(addressBarAtTop: true)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3167404
+    // [Config] nav:bottombar
+    // Regression
+    func testConnectionDisplayedAsInsecure_bottomToolbar() throws {
+        try XCTSkipIf(iPad(), "The address bar cannot be placed at the bottom on iPad")
+        verifyConnectionDisplayedAsInsecure(addressBarAtTop: false)
+    }
+
+    /// A local plain HTTP page stands in for http.badssl.com.
+    private func verifyConnectionDisplayedAsInsecure(addressBarAtTop: Bool) {
+        // Step 1: the insecure page loads with the insecure connection icon, also shown in the panel
+        openPageForConnectionPanel(path(forTestPage: TestPages.mozillaBook), addressBarAtTop: addressBarAtTop)
+        XCTAssertTrue(browserScreen.bookOfMozillaPageContentExists(), "The website did not load")
+        browserScreen.assertAddressBar_LockIconOffExist()
+        openConnectionPanel()
+        trackingProtectionScreen.assertPanelConnectionIs(secure: false)
+
+        // Step 2: after switching to Strict and going back, the connection is still shown as insecure
+        trackingProtectionScreen.tapPrivacySettings()
+        trackingProtectionScreen.selectStrictProtectionLevel()
+        trackingProtectionScreen.closeTrackingProtectionSettings()
+        waitUntilPageLoad()
+        XCTAssertTrue(browserScreen.bookOfMozillaPageContentExists(), "The website did not load")
+        browserScreen.assertAddressBar_LockIconOffExist()
+        openConnectionPanel()
+        trackingProtectionScreen.assertPanelConnectionIs(secure: false)
+        trackingProtectionScreen.closePanel()
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/3167403
+    // [Config] nav:topbar
     // Regression
     func testConnectionDisplayedAsSecure() {
         // Step 1: the secure page loads with the secure connection shield
-        openPageForConnectionPanel("https://www.mozilla.org/")
+        openPageForConnectionPanel("https://www.mozilla.org/", addressBarAtTop: true)
         browserScreen.assertAddressBar_LockIconExist()
 
         // Step 2: after switching to Strict and going back, the connection is still shown as secure
@@ -299,17 +373,10 @@ class TrackingProtectionTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3168488
+    // [Config] nav:topbar
     // Regression
     func testSecureConnectionButtonWithProtectionsOff() {
-        if iPad() {
-            app.launch()
-        } else {
-            launchIntoSettings()
-            settingsScreen.navigateToToolbarSettings()
-            settingsScreen.selectTopToolbar()
-            settingsScreen.tapBackToSettings()
-            settingsScreen.closeSettingsWithDoneButton()
-        }
+        launchWithAddressBar(atTop: true)
         browserScreen.navigateToURLAndAssertAddressBarContains("https://www.mozilla.org/", host: "mozilla.org")
         waitUntilPageLoad()
 
@@ -447,12 +514,22 @@ class TrackingProtectionTests: BaseTestCase {
         waitForRotation(to: orientation)
     }
 
-    private func openPageForConnectionPanel(_ url: String) {
-        app.launch()
-        navigator.nowAt(NewTabScreen)
-        navigator.openURL(url)
+    /// iPad always has the address bar at the top, so it launches straight to the homepage there.
+    private func launchWithAddressBar(atTop: Bool) {
+        guard !iPad() else {
+            app.launch()
+            return
+        }
+        launchIntoSettings()
+        settingsScreen.setAddressBarPosition(atTop: atTop)
+    }
+
+    private func openPageForConnectionPanel(_ url: String, addressBarAtTop: Bool) {
+        launchWithAddressBar(atTop: addressBarAtTop)
+        browserScreen.navigateToURL(url)
         waitUntilPageLoad()
         waitForTabsButton()
+        browserScreen.assertAddressBarPosition(atTop: addressBarAtTop)
     }
 
     private func logInOnCookiePage(url: String) {
@@ -572,5 +649,81 @@ class TrackingProtectionTests: BaseTestCase {
                 secureTrackingProtectionOnLabel
             )
         }
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/4162777
+    // Regression
+    func testBlockAdsAppliesToNewlyOpenedPublisherTabs() {
+        // Control: with Block Ads off, the ad placements of the local publisher page are shown
+        launchOpening(firstAdPublisherPage)
+        browserScreen.assertAdPlacementsAre(hidden: false)
+
+        // Precondition: Block Ads is ON
+        enableBlockAdsFromMenu()
+
+        // Step 1: a new tab with the first publisher page loads with its ad placements removed
+        toolbarScreen.tapOnNewTabButton()
+        browserScreen.dismissMicrosurveyIfExists()
+        browserScreen.openTypedURL(firstAdPublisherPage)
+        waitUntilPageLoad()
+        browserScreen.assertAdPlacementsAre(hidden: true)
+
+        // Step 2: the second publisher page loads with its ad placements removed
+        browserScreen.openTypedURL(secondAdPublisherPage)
+        waitUntilPageLoad()
+        browserScreen.assertAddressBarContains(value: secondAdPublisherHost)
+        browserScreen.assertAdPlacementsAre(hidden: true)
+
+        // The ad placements stay removed on the first page
+        browserScreen.tapBackButton()
+        browserScreen.assertAddressBarContains(value: firstAdPublisherHost)
+        browserScreen.assertAdPlacementsAre(hidden: true)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/4162784
+    // Regression
+    func testAdBlockerBadgeAndBlockingInPrivateBrowsing() {
+        app.launch()
+        toolbarScreen.assertTabsButtonExists()
+
+        // Control: with Block Ads off, the badge in a private tab shows the OFF state
+        toolbarScreen.tapOnTabsButton()
+        tabTrayScreen.switchToPrivateMode()
+        openAdPublisherPageInNewPrivateTab()
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenuScreen.assertAdBlockerBadgeIsOff()
+        mainMenuScreen.closeMenu()
+
+        // Precondition: Block Ads is ON
+        enableBlockAdsFromMenu()
+
+        // Step 1: a private tab loads the publisher page
+        toolbarScreen.tapOnTabsButton()
+        openAdPublisherPageInNewPrivateTab()
+
+        // Step 2: the menu's Ad Blocker badge shows the ON state
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenuScreen.assertAdBlockerBadgeIsOn()
+        mainMenuScreen.closeMenu()
+
+        // Step 3: the ad placements are removed
+        browserScreen.assertAdPlacementsAre(hidden: true)
+    }
+
+    private func openAdPublisherPageInNewPrivateTab() {
+        tabTrayScreen.tapOnNewTabButton()
+        browserScreen.assertPrivateModeMessageCardExists()
+        browserScreen.openTypedURL(firstAdPublisherPage)
+        waitUntilPageLoad()
+        browserScreen.assertWebViewShowsText(containing: TestLabels.adPlacementsContent)
+    }
+
+    private func enableBlockAdsFromMenu() {
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenuScreen.tapSettings()
+        settingsScreen.openBrowsingSettings()
+        settingsScreen.enableAdBlocker()
+        settingsScreen.tapBackToSettings()
+        settingsScreen.closeSettingsWithDoneButton()
     }
 }

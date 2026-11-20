@@ -36,6 +36,10 @@ enum AccessibilityIdentifiers {
     }
 
     enum Browser {
+        enum QuickAnswers {
+            static let returnPill = "Browser.QuickAnswers.ReturnPill"
+        }
+
         enum TopTabs {
             static let collectionView = "Top Tabs View"
             static let privateModeButton = "TopTabsViewController.privateModeButton"
@@ -346,6 +350,13 @@ enum AccessibilityIdentifiers {
                     return "TrackerBlockerModule.Sheet.categoryRow.\(index)"
                 }
             }
+        }
+
+        enum PrivacyNotice {
+            static let title = "PrivacyNotice.titleLabel"
+            static let description = "PrivacyNotice.descriptionLabel"
+            static let learnMore = "PrivacyNotice.learnMoreButton"
+            static let close = "PrivacyNotice.closeButton"
         }
     }
 

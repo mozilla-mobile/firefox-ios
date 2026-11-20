@@ -17,17 +17,13 @@ struct ToolbarAction: Action {
     let searchTerm: String?
     let isPrivate: Bool?
     let isShowingNavigationToolbar: Bool?
-    let isShowingTopTabs: Bool?
     let canGoBack: Bool?
     let canGoForward: Bool?
     let canSummarize: Bool
     let readerModeState: ReaderModeState?
-    let addressBorderPosition: AddressToolbarBorderPosition?
-    let displayNavBorder: Bool?
     let hasOnlySecureContent: Bool?
     let isWebsiteMode: Bool?
     let safeListedURLImageName: String?
-    let isLoading: Bool?
     let middleButton: NavigationBarMiddleButtonType?
     let isTranslationsEnabled: Bool?
     let translationConfiguration: TranslationConfiguration?
@@ -41,17 +37,13 @@ struct ToolbarAction: Action {
          searchTerm: String? = nil,
          isPrivate: Bool? = nil,
          isShowingNavigationToolbar: Bool? = nil,
-         isShowingTopTabs: Bool? = nil,
          canGoBack: Bool? = nil,
          canGoForward: Bool? = nil,
          canSummarize: Bool = false,
          readerModeState: ReaderModeState? = nil,
-         addressBorderPosition: AddressToolbarBorderPosition = .none,
-         displayNavBorder: Bool? = nil,
          hasOnlySecureContent: Bool? = nil,
          isWebsiteMode: Bool? = nil,
          safeListedURLImageName: String? = nil,
-         isLoading: Bool? = nil,
          shouldShowKeyboard: Bool? = nil,
          middleButton: NavigationBarMiddleButtonType? = nil,
          isTranslationsEnabled: Bool? = nil,
@@ -69,16 +61,12 @@ struct ToolbarAction: Action {
         self.searchTerm = searchTerm
         self.isPrivate = isPrivate
         self.isShowingNavigationToolbar = isShowingNavigationToolbar
-        self.isShowingTopTabs = isShowingTopTabs
         self.canGoBack = canGoBack
         self.canGoForward = canGoForward
         self.readerModeState = readerModeState
-        self.addressBorderPosition = addressBorderPosition
-        self.displayNavBorder = displayNavBorder
         self.hasOnlySecureContent = hasOnlySecureContent
         self.isWebsiteMode = isWebsiteMode
         self.safeListedURLImageName = safeListedURLImageName
-        self.isLoading = isLoading
         self.canSummarize = canSummarize
         self.middleButton = middleButton
         self.isTranslationsEnabled = isTranslationsEnabled
@@ -108,12 +96,17 @@ enum ToolbarModernAction: ModernAction {
     /// homepage mid-edit via `cancelEditOnHomepage`)
     case didKeyboardRequestChange(shouldShow: Bool)
 
+    /// The user left address bar editing. `url` is the committed website to restore,
+    /// or `nil` to keep the address bar's current URL.
+    case cancelEdit(url: URL?)
+
     /// The user scrolled while editing. Cancels editing only if there's no committed website (Homepage),
     /// otherwise just hides the keyboard (visually still looks like homepage but is zero search state)
     case cancelEditOnHomepage
 
-    /// The user pasted text into the address bar, entering editing mode with the pasted term.
-    case didPasteSearchTerm(searchTerm: String?)
+    /// Sets the address bar's search term and puts it into editing mode with the keyboard shown. Sent when
+    /// the user pastes into the address bar, and when search suggestions highlight or append a row's text.
+    case searchTermDidSet(searchTerm: String?)
 
     /// The number of tabs in the window changed.
     case numberOfTabsChanged(count: Int)
@@ -128,6 +121,17 @@ enum ToolbarModernAction: ModernAction {
     /// The page's secure content status changed. `isWebsiteMode` is `false` for reader mode pages,
     /// where the lock icon isn't shown. The lock icon itself is derived from these in the Lens.
     case lockIconChanged(hasOnlySecureContent: Bool, isWebsiteMode: Bool)
+
+    /// The page's loading state changed. Drives the reload/stop button and the share and translate
+    /// icons' enabled state. Also sent with `false` when the user taps stop, since stopping doesn't
+    /// always update the web view's own loading state.
+    case websiteLoadingStateDidChange(isLoading: Bool)
+
+    /// The address bar was moved to the top or bottom of the screen.
+    case toolbarPositionChanged(position: SearchBarPosition)
+
+    /// The trait collection changed, which can change whether the navigation toolbar and the top tabs are shown.
+    case traitCollectionDidChange(isShowingNavigationToolbar: Bool, isShowingTopTabs: Bool)
 
     /// The menu button's warning badge changed, for example when the account needs the user's attention.
     case showMenuWarningBadge(isShown: Bool)
@@ -151,15 +155,9 @@ enum ToolbarModernAction: ModernAction {
 enum ToolbarActionType: ActionType {
     case didLoadToolbars
     case urlDidChange
-    case didSetTextInLocationView
-    case borderPositionChanged
-    case toolbarPositionChanged
     case didStartEditingUrl
-    case cancelEdit
     case readerModeStateChanged
     case backForwardButtonStateChanged
-    case traitCollectionDidChange
-    case websiteLoadingStateDidChange
     case searchEngineDidChange
     case googleLensSettingDidChange
     case didSummarizeSettingsChange

@@ -167,6 +167,18 @@ final class BrowserScreen {
         assertBookOfMozillaPageDisplayed(timeout: timeout)
     }
 
+    /// Loads `url` and asserts `text` is in the web view, retrying once for the same reason as
+    /// `navigateToURLAndAssertMobileUserAgent` (https://github.com/mozilla-mobile/firefox-ios/issues/35933).
+    func openURLAndAssertPageText(_ url: String, text: String, timeout: TimeInterval = TIMEOUT) {
+        let pageText = sel.webViewText(text).element(in: app)
+        openURL(url)
+        if BaseTestCase().mozWaitForElementToExist(pageText, timeout: timeout, failOnTimeout: false) {
+            return
+        }
+        openURL(url)
+        BaseTestCase().mozWaitForElementToExist(pageText, timeout: timeout)
+    }
+
     /// Loads `url` and asserts the address bar shows `host`, retrying once for the same reason as
     /// `navigateToURLAndAssertMobileUserAgent` (https://github.com/mozilla-mobile/firefox-ios/issues/35933).
     func navigateToURLAndAssertAddressBarContains(_ url: String, host: String, timeout: TimeInterval = TIMEOUT) {
@@ -254,6 +266,27 @@ final class BrowserScreen {
 
     func assertWebViewShowsText(containing text: String, timeout: TimeInterval = TIMEOUT) {
         XCTAssertTrue(webViewShowsText(containing: text, timeout: timeout), "The web page should show '\(text)'")
+    }
+
+    /// Waits for the ad test page's article text with its ad placements `hidden` or shown, then checks the
+    /// state holds for a second, since turning on Block Ads reloads open tabs once its list is compiled.
+    func assertAdPlacementsAre(hidden: Bool, timeout: TimeInterval = TIMEOUT_LONG) {
+        let content = sel.webViewText(TestLabels.adPlacementsContent).element(in: app)
+        let placements = TestLabels.adPlacements.map { sel.webViewText($0).element(in: app) }
+        let pageInExpectedState = { content.exists && placements.allSatisfy { $0.exists != hidden } }
+
+        let reachesState = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in pageInExpectedState() },
+                                                     object: nil)
+        let leavesState = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in !pageInExpectedState() },
+                                                    object: nil)
+        leavesState.isInverted = true
+        let settled = XCTWaiter().wait(for: [reachesState], timeout: timeout) == .completed
+            && XCTWaiter().wait(for: [leavesState], timeout: 1) == .completed
+
+        let visible = TestLabels.adPlacements.filter { sel.webViewText($0).element(in: app).exists }
+        XCTAssertTrue(settled,
+                      "Expected the ad placements to be \(hidden ? "hidden" : "shown"), page content shown: " +
+                      "\(content.exists), visible placements: \(visible)")
     }
 
     /// The previous/next tab address bars only exist with a bottom toolbar. They sit off-screen
@@ -462,6 +495,19 @@ final class BrowserScreen {
         addressBar.typeText(text)
     }
 
+    /// Re-submits the address bar's current URL, which reloads the page.
+    func submitAddressBar() {
+        XCTAssertTrue(addressBar.tapUntilKeyboardFocused(), "The address bar never got keyboard focus")
+        addressBar.typeText("\n")
+    }
+
+    /// Asserts the address bar sits in the top or the bottom half of the screen.
+    func assertAddressBarPosition(atTop: Bool) {
+        BaseTestCase().mozWaitForElementToExist(addressBar)
+        let isInTopHalf = addressBar.frame.midY < app.frame.midY
+        XCTAssertEqual(isInTopHalf, atTop, "The address bar should be at the \(atTop ? "top" : "bottom")")
+    }
+
     func navigateToURL(_ url: String) {
         tapOnAddressBar()
         addressBar.typeText(url)
@@ -498,6 +544,12 @@ final class BrowserScreen {
 
     func assertCancelButtonOnUrlBarExists() {
         BaseTestCase().mozWaitForElementToExist(cancelButton)
+    }
+
+    func assertCancelButtonIsRightOfAddressBar() {
+        BaseTestCase().waitForElementsToExist([addressBar, cancelButton])
+        XCTAssertTrue(cancelButton.isRightOf(rightElement: addressBar),
+                      "The Cancel button should be on the right side of the address bar")
     }
 
     func scrollPageDown() {
@@ -819,12 +871,20 @@ final class BrowserScreen {
     func searchFromAddressBar(term: String, maxAttempts: Int = 3) {
         let hasTerm = NSPredicate(format: "value BEGINSWITH %@", term)
         for _ in 0..<maxAttempts {
-            tapOnAddressBar()
+            addressBar.tapUntilKeyboardFocused()
             clearAddressBarText()
             typeOnSearchBar(text: term)
             let expectation = XCTNSPredicateExpectation(predicate: hasTerm, object: addressBar)
             if XCTWaiter().wait(for: [expectation], timeout: TIMEOUT_PICKER_PROBE) == .completed { return }
         }
+    }
+
+    /// Like `openURL`, but retypes the URL until the field holds all of it, since a new tab can drop the
+    /// first keystroke and turn "http://host" into a lookup of the host "ttp".
+    func openTypedURL(_ url: String) {
+        searchFromAddressBar(term: url)
+        assertAddressBarValueEquals(url, timeout: TIMEOUT_PICKER_PROBE)
+        typeOnSearchBar(text: "\r")
     }
 
     /// Fails rather than returning with text still in the field, so a retry cannot append to the

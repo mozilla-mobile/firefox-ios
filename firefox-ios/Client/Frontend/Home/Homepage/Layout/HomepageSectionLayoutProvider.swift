@@ -19,7 +19,6 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         static let spacingBetweenSections: CGFloat = 44
         static let standardSingleItemHeight: CGFloat = 100
         static let sectionHeaderHeight: CGFloat = 75
-        static let embeddedAddressBarHeight: CGFloat = 50
 
         @MainActor
         static func leadingInset(
@@ -598,7 +597,11 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         var totalHeight: CGFloat = 0
         let containerWidth = normalizedDimension(environment.container.contentSize.width)
 
-        let privacyNoticeCell = PrivacyNoticeCell()
+        let privacyNoticeCell = if featureFlagsProvider.isEnabled(.touNotificationRedesign) {
+            PrivacyNoticeCell()
+        } else {
+            LegacyPrivacyNoticeCell()
+        }
         totalHeight += HomepageDimensionCalculator.fittingHeight(for: privacyNoticeCell, width: containerWidth)
         totalHeight += UX.PrivacyNoticeConstants.bottomInsets
         return totalHeight

@@ -125,7 +125,7 @@ public final class QuickAnswersEntryPointButton: UIButton {
         restingBackgroundColor = theme.colors.layer4
         borderGradientLayer.colors = closedStops(shiftedBy: 0)
         backgroundGradientLayer.colors = closedStops(shiftedBy: 0)
-        configuration?.image = gradientTintedIcon() ?? icon?.withRenderingMode(.alwaysTemplate)
+        configuration?.image = icon?.verticalGradientTinted(with: gradientStops) ?? icon?.withRenderingMode(.alwaysTemplate)
         configuration?.baseForegroundColor = theme.colors.textPrimary
 
         if isGlowing {
@@ -219,27 +219,6 @@ public final class QuickAnswersEntryPointButton: UIButton {
         flow.duration = UX.flowDuration
         flow.repeatCount = .infinity
         backgroundGradientLayer.add(flow, forKey: UX.flowAnimationKey)
-    }
-
-    private func gradientTintedIcon() -> UIImage? {
-        guard let icon,
-              let gradient = CGGradient(
-                colorsSpace: CGColorSpaceCreateDeviceRGB(),
-                colors: gradientStops.map(\.cgColor) as CFArray,
-                locations: nil
-              )
-        else { return nil }
-
-        let rect = CGRect(origin: .zero, size: icon.size)
-        return UIGraphicsImageRenderer(size: icon.size).image { context in
-            context.cgContext.drawLinearGradient(
-                gradient,
-                start: CGPoint(x: rect.midX, y: rect.minY),
-                end: CGPoint(x: rect.midX, y: rect.maxY),
-                options: []
-            )
-            icon.draw(in: rect, blendMode: .destinationIn, alpha: 1.0)
-        }.withRenderingMode(.alwaysOriginal)
     }
 
     /// Gradient stops rotated by `shift` value.

@@ -54,6 +54,7 @@ protocol BrowserSelectorsSet {
     func linkPreview(named preview: String) -> Selector
     func webPageElement(with text: String) -> Selector
     func suggestionRow(titled title: String) -> Selector
+    func webViewText(_ text: String) -> Selector
     var all: [Selector] { get }
 }
 
@@ -372,6 +373,16 @@ struct BrowserSelectors: BrowserSelectorsSet {
         Selector.staticTextByExactLabel(
             text,
             description: "Web page text",
+            groups: ["browser", "webview"]
+        )
+    }
+
+    /// Unlike `webPageElement(with:)`, only matches inside the web view, as iPad tab titles can repeat page text.
+    func webViewText(_ text: String) -> Selector {
+        Selector.staticTextByExactLabel(
+            text,
+            in: WEB_VIEW,
+            description: "Text '\(text)' in the web view",
             groups: ["browser", "webview"]
         )
     }

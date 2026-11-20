@@ -226,6 +226,11 @@ final class AddressToolbarContainer: UIView,
         subscribeToRedux()
     }
 
+    func locationCapsuleFrame(in view: UIView) -> CGRect? {
+        guard toolbar.isDescendant(of: view) else { return nil }
+        return toolbar.locationCapsuleFrame(in: view)
+    }
+
     func updateProgressBar(progress: Double) {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
@@ -769,7 +774,7 @@ final class AddressToolbarContainer: UIView,
         delegate?.addressToolbarDidEnterOverlayMode(self)
 
         if pasted {
-            store.dispatch(ToolbarModernAction.didPasteSearchTerm(searchTerm: locationText), forWindowUUID: windowUUID)
+            store.dispatch(ToolbarModernAction.searchTermDidSet(searchTerm: locationText), forWindowUUID: windowUUID)
 
             delegate?.openSuggestions(searchTerm: locationText ?? "")
         } else {
@@ -791,8 +796,7 @@ final class AddressToolbarContainer: UIView,
         delegate?.addressToolbar(self, didLeaveOverlayModeForReason: reason)
 
         if toolbarState.addressToolbar.isEditing {
-            let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
-            store.dispatch(action)
+            store.dispatch(ToolbarModernAction.cancelEdit(url: nil), forWindowUUID: windowUUID)
         }
     }
 

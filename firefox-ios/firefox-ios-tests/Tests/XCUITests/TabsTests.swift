@@ -691,6 +691,13 @@ class TabsTestsIphone: BaseTestCase {
         newTabsScreen = NewTabsScreen(app: app)
     }
 
+    /// On a fresh simulator the first-run Google Lens tip swallows the Cancel tap, leaving edit mode on
+    /// with dead toolbar buttons, so the tab tray never opens.
+    private func exitAddressBarEditMode() {
+        toolBarScreen.dismissGoogleLensTipIfPresented()
+        browserScreen.dismissURLBarOverlay()
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2355535
     // Smoketest
     func testCloseTabFromLongPressTabsButton() {
@@ -723,7 +730,7 @@ class TabsTestsIphone: BaseTestCase {
         toolBarScreen.assertTabsButtonExists()
         navigator.performAction(Action.OpenNewTabLongPressTabsButton)
         navigator.nowAt(BrowserTab)
-        browserScreen.tapCancelButtonIfExist()
+        exitAddressBarEditMode()
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
     }
 
@@ -737,7 +744,7 @@ class TabsTestsIphone: BaseTestCase {
         navigator.performAction(Action.OpenPrivateTabLongPressTabsButton)
         navigator.nowAt(BrowserTab)
         // Adding tapping action to avoid the test to fail in bitrise
-        browserScreen.tapCancelButtonIfExist()
+        exitAddressBarEditMode()
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
         tabTrayScreen.assertTabButtonEnabled(at: 0)
         XCTAssertTrue(userState.isPrivate)

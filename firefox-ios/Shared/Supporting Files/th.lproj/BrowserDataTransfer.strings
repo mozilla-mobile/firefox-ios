@@ -1,0 +1,12 @@
+/* Button that dismisses the alert shown when Firefox could not finish importing data from another browser. */
+"BrowserDataTransfer.ImportFailure.DismissButton.v160" = "ยกเลิก";
+
+/* Message of the alert shown when Firefox could not finish importing data from another browser. */
+"BrowserDataTransfer.ImportFailure.Message.v160" = "ลองอีกครั้งในภายหลัง";
+
+/* Button that dismisses the alert shown after Firefox finishes importing data from another browser. */
+"BrowserDataTransfer.ImportSuccess.GotItButton.v160" = "เข้าใจแล้ว";
+
+/* On the Data Management screen in Settings, the button that starts importing bookmarks, history, and reading lists from another browser installed on the device into Firefox. */
+"BrowserDataTransfer.Settings.ImportButton.v160" = "นำเข้าจากเบราว์เซอร์อื่น";
+

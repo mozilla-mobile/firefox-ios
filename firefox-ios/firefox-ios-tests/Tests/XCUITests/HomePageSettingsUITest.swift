@@ -20,6 +20,13 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
     private var settingScreen: SettingScreen!
     private var toolbarScreen: ToolbarScreen!
     private var browserScreen: BrowserScreen!
+    private var mainMenuScreen: MainMenuScreen!
+    private var trackingProtectionScreen: TrackingProtectionScreen!
+    // The same tracker page on another host, so loading it counts as a new page.
+    // localtest.me resolves to 127.0.0.1 through public DNS, so these steps need DNS access
+    private var otherTrackerPage: String { "http://localtest.me:\(serverPort)/test-fixture/\(TestPages.trackers)" }
+    private let trackersOnTrackerPage = 2
+    private let trackersOnAdvertisingPage = 1
 
     private func enterWebPageAsHomepage(text: String) {
         homepageSettingsScreen.typeCustomHomepageURL(text)
@@ -48,6 +55,8 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         settingScreen = SettingScreen(app: app)
         toolbarScreen = ToolbarScreen(app: app)
         browserScreen = BrowserScreen(app: app)
+        mainMenuScreen = MainMenuScreen(app: app)
+        trackingProtectionScreen = TrackingProtectionScreen(app: app)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2339256
@@ -304,6 +313,137 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
             validateNumberOfTopSitesDisplayed(row: 0, minBoundary: 1, maxBoundary: 10)
             validateNumberOfTopSitesDisplayed(row: 1, minBoundary: 7, maxBoundary: 14)
         }
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/4367222
+    // Regression
+    func testPrivacyReportToggleOnRestoresTrackerBlockerCount() throws {
+        try launchWithTrackerBlockerModuleEnabled()
+        // A local page loading known tracker hosts stands in for nytimes.com and theverge.com
+        let trackerPage = path(forTestPage: TestPages.trackers)
+
+        // Precondition: the Privacy Report toggle is turned off once there is a lifetime count
+        browserScreen.openURLAndAssertPageText(trackerPage, text: TestLabels.trackers)
+        assertBlockedTrackersInPanel(equals: trackersOnTrackerPage)
+        openNewTab()
+        homePageScreen.assertTrackerBlockerCount(atLeast: 1)
+        setHomepageSections(privacyReportIsOn: false)
+        homePageScreen.assertTrackerBlockerPillDoesNotExist()
+
+        // Step 1
+        let pagesWhileHidden = [trackerPage, otherTrackerPage]
+        for page in pagesWhileHidden {
+            browserScreen.openURLAndAssertPageText(page, text: TestLabels.trackers)
+            assertBlockedTrackersInPanel(equals: trackersOnTrackerPage)
+        }
+
+        // Step 2
+        setHomepageSections(privacyReportIsOn: true)
+
+        // Step 3: ClearProfile resets the lifetime count, so it only holds the tracker page loads. The pill
+        // read in the precondition isn't used, it can be shown before the last page's trackers are stored
+        let pageLoads = 1 + pagesWhileHidden.count
+        openNewTab()
+        homePageScreen.assertTrackerBlockerPillIsBetweenShortcutsAndJumpBackIn()
+        homePageScreen.assertTrackerBlockerCount(
+            equals: pageLoads * trackersOnTrackerPage,
+            breakdown: "\(trackersOnTrackerPage) trackers on each of \(pageLoads) tracker page loads"
+        )
+
+        // Step 4
+        homePageScreen.tapTrackerBlockerPill()
+        homePageScreen.assertTrackerBlockerWeeklySheet()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/4367231
+    // Regression
+    func testTrackerBlockerPillMatchesLifetimeTotalInWeeklyPanel() throws {
+        try launchWithTrackerBlockerModuleEnabled()
+        // A local page loading known tracker hosts stands in for the tracker-heavy sites and itisatrap.org
+        browserScreen.openURLAndAssertPageText(path(forTestPage: TestPages.trackers), text: TestLabels.trackers)
+        openNewTab()
+
+        // Steps 1-3
+        let totals = homePageScreen.assertTrackerBlockerTotals()
+        homePageScreen.closeTrackerBlockerSheet()
+
+        // Step 4
+        browserScreen.openURLAndAssertPageText(otherTrackerPage, text: TestLabels.trackers)
+        assertBlockedTrackersInPanel(equals: trackersOnTrackerPage)
+        openNewTab()
+        homePageScreen.assertTrackerBlockerTotals(previous: totals, increasedBy: trackersOnTrackerPage)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/4367233
+    // Regression
+    func testWeeklyPanelRefreshesAfterNewTrackersAreBlocked() throws {
+        try launchWithTrackerBlockerModuleEnabled()
+        // Local tracker pages stand in for nytimes.com. The second one only has an advertising tracker, so
+        // Tracking Content keeps its value and its bar can be checked to get shorter
+        browserScreen.openURLAndAssertPageText(path(forTestPage: TestPages.trackers), text: TestLabels.trackers)
+        openNewTab()
+
+        // Step 1
+        let previous = homePageScreen.recordTrackerBlockerValues()
+        homePageScreen.closeTrackerBlockerSheet()
+
+        // Step 2
+        browserScreen.openURLAndAssertPageText(
+            path(forTestPage: TestPages.advertisingTrackerOnly),
+            text: TestLabels.trackers
+        )
+        let blockedByCategory = assertBlockedTrackersInPanel(equals: trackersOnAdvertisingPage, readingCategories: true)
+
+        // Steps 3-4
+        openNewTab()
+        homePageScreen.assertTrackerBlockerPanelRefreshed(
+            from: previous,
+            blocked: trackersOnAdvertisingPage,
+            blockedByCategory: blockedByCategory
+        )
+    }
+
+    private func launchWithTrackerBlockerModuleEnabled() throws {
+        try XCTSkipIf(
+            isFirefox || isFirefoxBeta,
+            "Skipping because on Firefox and FirefoxBeta addLaunchArgument cannot override the default " +
+            "experiment values, so the Tracker Blocker module cannot be forced on"
+        )
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "homepage-tracker-blocker-module-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "privacy-dashboard-feature")
+        app.launch()
+    }
+
+    /// Opens the protections panel, asserts it reports `expected` blocked trackers and closes it again. With
+    /// `readingCategories`, also returns the per-category counts from the blocked trackers list.
+    @discardableResult
+    private func assertBlockedTrackersInPanel(equals expected: Int, readingCategories: Bool = false) -> [Int] {
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenuScreen.tapSiteProtections()
+        trackingProtectionScreen.assertBlockedTrackersCount(equals: expected)
+        guard readingCategories else {
+            trackingProtectionScreen.closePanel()
+            return []
+        }
+        return trackingProtectionScreen.blockedTrackersByCategory()
+    }
+
+    /// A new tab focuses the address bar, and its keyboard covers the toolbar menu button.
+    private func openNewTab() {
+        toolbarScreen.tapOnNewTabButton()
+        browserScreen.dismissMicrosurveyIfExists()
+        browserScreen.dismissURLBarOverlay()
+    }
+
+    /// Jump Back In is off by default, and is turned on to check the pill sits above it.
+    private func setHomepageSections(privacyReportIsOn: Bool) {
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenuScreen.tapSettings()
+        settingScreen.openHomepageSettings()
+        homepageSettingsScreen.setPrivacyReportToggle(isOn: privacyReportIsOn)
+        homepageSettingsScreen.enableJumpBackInToggle()
+        settingScreen.tapBackToSettings()
+        settingScreen.closeSettingsWithDoneButton()
     }
 
     private func validateNumberOfTopSitesDisplayed(row: Int, minBoundary: Int, maxBoundary: Int) {

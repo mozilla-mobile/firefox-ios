@@ -1552,6 +1552,9 @@
 /* Footer information for tracker protection level. */
 "Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "אם אתר לא פועל כראוי, ניתן לגעת בסמל המנעול בשורת הכתובת ולכבות את הגנת המעקב המתקדמת עבור אותו דף.";
 
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Strict.v161" = "אם אתר מסוים אינו פועל, אפשר לפתוח את התפריט ולנסות לכבות את הגנת המעקב המתקדמת.";
+
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "מאפשר את פעולתם של חלק מרכיבי המעקב כדי שהאתרים יפעלו כראוי.";
 

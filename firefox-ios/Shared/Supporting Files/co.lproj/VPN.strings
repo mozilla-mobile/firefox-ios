@@ -37,6 +37,15 @@
 /* Title of a popup shown when the app fails to connect to the VPN. */
 "VPN.ErrorConnectingPopup.Title.v160" = "Ùn si pò micca cunnette à a VPN";
 
+/* Body text of the popup shown when the VPN server the user picked can’t be used right now. Explains that the VPN has connected through the recommended location instead. The recommended location is the one with the fastest connection. “Location” means the VPN server’s location. */
+"VPN.LocationPicker.LocationUnavailableBody.v162" = "Vi avemu cunnessu à a pusizione ricumandata.";
+
+/* Button on the popup shown when the VPN server location the user picked can’t be used right now. Indicates the user understands and acknowledges the location has changed. Tapping it closes the popup. */
+"VPN.LocationPicker.LocationUnavailableButtonText.v162" = "Vai";
+
+/* Title of the popup shown when the VPN server the user picked can’t be used right now. “Location” means the VPN server’s location. */
+"VPN.LocationPicker.LocationUnavailableTitle.v162" = "Pusizione indispunibule";
+
 /* Alternative body text for the popup shown when the user has used all of their free monthly VPN data. Explains that their VPN data resets at the start of next month. %1$@ is the monthly data limit in gigabytes (for example, 5). “GB” stands for gigabytes. */
 "VPN.ReachedDataLimitPopup.AltPopupBody.v160" = "Avete impiegatu i vostri %1$@ Go di dati VPN. L’accessu serà ristabilitu u mese chì vene.";
 

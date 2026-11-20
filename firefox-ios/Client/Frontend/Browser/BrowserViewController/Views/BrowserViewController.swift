@@ -142,6 +142,27 @@ class BrowserViewController: UIViewController,
 
     // MARK: Lazy loading UI elements
     private var documentLoadingView: TemporaryDocumentLoadingView?
+    private lazy var quickAnswersReturnPillPresenter: QuickAnswersReturnPillPresenter? = {
+        guard featureFlagsProvider.isEnabled(.quickAnswers),
+              featureFlagsProvider.isEnabled(.quickAnswersReturnToAnswer) else { return nil }
+        return QuickAnswersReturnPillPresenter(
+            hostView: view,
+            anchorView: bottomContentStackView,
+            overlayState: overlayManager
+        )
+    }()
+    private var quickAnswersReturnPillLayoutContext: QuickAnswersReturnPillPresenter.LayoutContext {
+        let isMinimized = store.state.componentState(
+            ToolbarState.self,
+            for: .toolbar,
+            window: windowUUID
+        )?.isAddressBarMinimized == true
+        return QuickAnswersReturnPillPresenter.LayoutContext(
+            isMinimized: isMinimized,
+            isBottomSearchBar: isBottomSearchBar,
+            locationCapsuleFrame: addressToolbarContainer.locationCapsuleFrame(in: view)
+        )
+    }
     private(set) lazy var mailtoLinkHandler = MailtoLinkHandler()
     private lazy var statusBarOverlay: StatusBarOverlay = .build { view in
         view.accessibilityIdentifier = AccessibilityIdentifiers.Browser.statusBarOverlay
@@ -662,14 +683,11 @@ class BrowserViewController: UIViewController,
         updateMicrosurveyConstraints()
         updateAutoTranslatePromptConstraints()
         updateToolbarDisplay()
+        updateQuickAnswersReturnPillLayout(animated: false)
         addOrUpdateMaskViewIfNeeded()
 
-        let action = GeneralBrowserMiddlewareAction(
-            scrollOffset: scrollController.contentOffset,
-            toolbarPosition: effectiveSearchBarPosition,
-            windowUUID: windowUUID,
-            actionType: GeneralBrowserMiddlewareActionType.toolbarPositionChanged)
-        store.dispatch(action)
+        store.dispatch(ToolbarModernAction.toolbarPositionChanged(position: effectiveSearchBarPosition),
+                       forWindowUUID: windowUUID)
         updateSwipingTabs()
 
         searchController?.viewModel.updateBottomSearchBarState(isBottomSearchBar: isBottomSearchBar)
@@ -686,6 +704,8 @@ class BrowserViewController: UIViewController,
             view.bringSubviewToFront(header)
         }
 
+        quickAnswersReturnPillPresenter?.bringPillToFront()
+
         if shouldUpdateBlurViews {
             updateBlurViews(scrollOffset: scrollOffset)
         }
@@ -694,6 +714,7 @@ class BrowserViewController: UIViewController,
     // MARK: - Translucency and blur helpers
 
     func updateBlurViews(scrollOffset: CGFloat? = nil) {
+        updateQuickAnswersReturnPillLayout(animated: true)
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         let isToolbarCollapsed = store.state.componentState(
             ToolbarState.self,
@@ -1076,7 +1097,7 @@ class BrowserViewController: UIViewController,
         }
 
         dismissModalsIfStartAtHome()
-        shouldHideAddressToolbar()
+        addressToolbarContainer.isHidden = state.isCenterSearchBarShowing
     }
 
     private func showToastType(toast: ToastType) {
@@ -1408,35 +1429,6 @@ class BrowserViewController: UIViewController,
                        forWindowUUID: windowUUID)
     }
 
-    /// As part of the homepage search bar work, we want to only hide the toolbar when the homepage search bar appears.
-    /// The homepage search bar should not appear if we are in editing mode.
-    private func shouldHideAddressToolbar() {
-        guard featureFlagsProvider.isEnabled(.homepageAnimatedCenterSearchBar) else { return }
-        let toolbarState = store.state.componentState(
-            ToolbarState.self,
-            for: .toolbar,
-            window: windowUUID
-        )
-
-        let isEditing = toolbarState?.addressToolbar.isEditing ?? false
-
-        let shouldShowSearchBar = store.state.componentState(
-            HomepageState.self,
-            for: .homepage,
-            window: windowUUID
-        )?.searchBarState.shouldShowSearchBar ?? false
-
-        guard shouldShowSearchBar, !isEditing, contentContainer.hasHomepage else {
-            guard addressToolbarContainer.isHidden == true else { return }
-            addressToolbarContainer.isHidden = false
-            store.dispatch(
-                GeneralBrowserAction(windowUUID: windowUUID, actionType: GeneralBrowserActionType.didUnhideToolbar)
-            )
-            return
-        }
-        addressToolbarContainer.isHidden = true
-    }
-
     private func addAddressToolbar() {
         addressToolbarContainer.configure(
             windowUUID: windowUUID,
@@ -1596,6 +1588,7 @@ class BrowserViewController: UIViewController,
         // This also required for iPad rotation
         addOrUpdateMaskViewIfNeeded()
         updateContentContainerTopConstraint()
+        updateQuickAnswersReturnPillLayout(animated: false)
 
         // Update available height for the homepage
         dispatchAvailableContentHeightChangedAction()
@@ -1695,6 +1688,7 @@ class BrowserViewController: UIViewController,
                 updateHeaderConstraints()
                 updateAddressToolbarContainerPosition(for: traitCollection)
                 updateZoomPageBarPlacement()
+                updateQuickAnswersReturnPillLayout(animated: false)
             }
             updateToolbarStateForTraitCollection(traitCollection)
         }
@@ -1816,6 +1810,7 @@ class BrowserViewController: UIViewController,
                 : [topBlurView, bottomBlurView, topTouchArea, statusBarOverlay, header,
                    bottomContentStackView, bottomContainer, overKeyboardContainer]
             frontViews.filter { $0.superview === view }.forEach(view.bringSubviewToFront)
+            quickAnswersReturnPillPresenter?.bringPillToFront()
             if let searchView = searchController?.view, searchView.superview === view {
                 view.bringSubviewToFront(searchView)
             }
@@ -2023,6 +2018,7 @@ class BrowserViewController: UIViewController,
 
         view.bringSubviewToFront(header)
         view.bringSubviewToFront(overKeyboardContainer)
+        quickAnswersReturnPillPresenter?.bringPillToFront()
         documentLoadingView.animateLoadingAppearanceIfNeeded()
         documentLoadingView.applyTheme(theme: currentTheme())
         self.documentLoadingView = documentLoadingView
@@ -2036,6 +2032,40 @@ class BrowserViewController: UIViewController,
             documentLoadingView.removeFromSuperview()
             self.documentLoadingView = nil
         }
+    }
+
+    // MARK: - Quick Answers return pill
+
+    /// Does nothing when Quick Answers or return to answer is disabled.
+    func showQuickAnswersReturnPill(
+        question: String,
+        onTap: @escaping (Bool) -> Void,
+        onSwipeAway: @escaping () -> Void
+    ) {
+        guard let quickAnswersReturnPillPresenter else { return }
+        scrollController.showToolbars(animated: false)
+        quickAnswersReturnPillPresenter.show(
+            question: question,
+            theme: currentTheme(),
+            onTap: onTap,
+            onSwipeAway: onSwipeAway
+        )
+        updateQuickAnswersReturnPillLayout(animated: false)
+    }
+
+    func hideQuickAnswersReturnPill() {
+        quickAnswersReturnPillPresenter?.hide()
+    }
+
+    private func updateQuickAnswersReturnPillLayout(animated: Bool) {
+        guard let quickAnswersReturnPillPresenter, quickAnswersReturnPillPresenter.isShowingPill else { return }
+        let context = quickAnswersReturnPillLayoutContext
+        // Minimizing can change the location capsule's constraints. The legacy scroll controller lays out the
+        // whole view while minimizing, but the refactored one only animates transforms, so settle them here.
+        if isTabScrollRefactoringEnabled && context.isMinimized && context.isBottomSearchBar {
+            addressToolbarContainer.layoutIfNeeded()
+        }
+        quickAnswersReturnPillPresenter.updateLayout(quickAnswersReturnPillLayoutContext, animated: animated)
     }
 
     // MARK: - Microsurvey
@@ -2541,12 +2571,8 @@ class BrowserViewController: UIViewController,
             loading = doc.isDownloading
         }
 
-        let action = ToolbarAction(
-            isLoading: loading,
-            windowUUID: windowUUID,
-            actionType: ToolbarActionType.websiteLoadingStateDidChange
-        )
-        store.dispatch(action)
+        store.dispatch(ToolbarModernAction.websiteLoadingStateDidChange(isLoading: loading),
+                       forWindowUUID: windowUUID)
     }
 
     private func handleURL(url: URL?, tab: Tab, webView: WKWebView) {
@@ -2951,12 +2977,8 @@ class BrowserViewController: UIViewController,
             // There is an edge case in which calling stop on the webView doesn't update webView's isLoading var.
             // To make sure we show the correct button change toolbar state directly when the user stops loading
             // the website.
-            let action = ToolbarAction(
-                isLoading: false,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.websiteLoadingStateDidChange
-            )
-            store.dispatch(action)
+            store.dispatch(ToolbarModernAction.websiteLoadingStateDidChange(isLoading: false),
+                           forWindowUUID: windowUUID)
             addressToolbarContainer.updateProgressBar(progress: 0.0)
         case .newTab:
             willNavigateAway(from: tabManager.selectedTab)
@@ -3199,13 +3221,11 @@ class BrowserViewController: UIViewController,
               toolbarState.isShowingTopTabs != showTopTabs || toolbarState.isShowingNavigationToolbar != showNavToolbar
         else { return }
 
-        let action = ToolbarAction(
-            isShowingNavigationToolbar: showNavToolbar,
-            isShowingTopTabs: showTopTabs,
-            windowUUID: windowUUID,
-            actionType: ToolbarActionType.traitCollectionDidChange
+        store.dispatch(
+            ToolbarModernAction.traitCollectionDidChange(isShowingNavigationToolbar: showNavToolbar,
+                                                         isShowingTopTabs: showTopTabs),
+            forWindowUUID: windowUUID
         )
-        store.dispatch(action)
     }
 
     func dispatchAvailableContentHeightChangedAction() {
@@ -3478,9 +3498,7 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Toolbar Refactor Deeplink Helper Method.
     private func cancelEditMode() {
-        let action = ToolbarAction(windowUUID: self.windowUUID,
-                                   actionType: ToolbarActionType.cancelEdit)
-        store.dispatch(action)
+        store.dispatch(ToolbarModernAction.cancelEdit(url: nil), forWindowUUID: windowUUID)
     }
 
     func closeAllPrivateTabs() {
@@ -3973,6 +3991,7 @@ class BrowserViewController: UIViewController,
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
         addressToolbarContainer.applyUIMode(isPrivate: isPrivate, theme: currentTheme)
         documentLoadingView?.applyTheme(theme: currentTheme)
+        quickAnswersReturnPillPresenter?.applyTheme(currentTheme)
 
         guard let contentScript = tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) else { return }
         applyThemeForPreferences(profile.prefs, contentScript: contentScript)
@@ -4156,6 +4175,7 @@ class BrowserViewController: UIViewController,
     }
 
     func addressToolbarDidEnterOverlayMode(_ view: UIView) {
+        quickAnswersReturnPillPresenter?.updateVisibility()
         guard let profile = profile as? BrowserProfile else { return }
 
         if isSwipingTabsEnabled {
@@ -4185,6 +4205,7 @@ class BrowserViewController: UIViewController,
     }
 
     func addressToolbar(_ view: UIView, didLeaveOverlayModeForReason reason: URLBarLeaveOverlayModeReason) {
+        quickAnswersReturnPillPresenter?.updateVisibility()
         if isSwipingTabsEnabled {
             let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
             if showNavToolbar {
@@ -4606,11 +4627,7 @@ extension BrowserViewController {
                                 theme: currentTheme(),
                                 completion: { buttonPressed in
             if buttonPressed {
-                let toolbarAction = ToolbarAction(
-                    windowUUID: self.windowUUID,
-                    actionType: ToolbarActionType.cancelEdit
-                )
-                store.dispatch(toolbarAction)
+                store.dispatch(ToolbarModernAction.cancelEdit(url: nil), forWindowUUID: self.windowUUID)
                 self.tabManager.selectTab(tab)
             }
         })
@@ -4685,12 +4702,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
     }
 
     func setLocationView(text: String, search: Bool) {
-        let toolbarAction = ToolbarAction(
-            searchTerm: text,
-            windowUUID: windowUUID,
-            actionType: ToolbarActionType.didSetTextInLocationView
-        )
-        store.dispatch(toolbarAction)
+        store.dispatch(ToolbarModernAction.searchTermDidSet(searchTerm: text), forWindowUUID: windowUUID)
 
         if search {
             openSuggestions(searchTerm: text)
@@ -4963,6 +4975,10 @@ extension BrowserViewController: TabManagerDelegate {
         if self.view.window == nil {
             self.pendingToast = toast
             return
+        }
+
+        toast.onPresentationChange = { [weak self] in
+            self?.quickAnswersReturnPillPresenter?.updateVisibility()
         }
 
         scrollController.showToolbars(animated: false)

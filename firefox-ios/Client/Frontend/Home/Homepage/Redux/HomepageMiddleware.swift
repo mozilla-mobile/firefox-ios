@@ -42,9 +42,18 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
     lazy var homepageProvider: Middleware<AppState> = (legacyProvider, modernProvider)
 
     lazy var modernProvider: MiddlewareClosure<AppState> = { [self] state, action, windowUUID in
-        // Does not test any modern actions
+        guard let action = action as? ToolbarModernAction else { return }
+
+        switch action {
+        // FIXME: FXIOS-17387 cancelEdit doesn't fire when scrolling mid edit (cancelEditOnHomepage)
+        case .cancelEdit, .toolbarPositionChanged:
+            dispatchSearchBarConfigurationAction(state: state, windowUUID: windowUUID)
+        default:
+            break
+        }
     }
 
+    // swiftlint:disable:next closure_body_length
     lazy var legacyProvider: LegacyMiddlewareClosure<AppState> = { [self] state, action in
         switch action.actionType {
         case HomepageActionType.viewDidAppear:
@@ -76,15 +85,16 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
         case HomepageActionType.initialize:
             self.dispatchPrivacyNoticeConfigurationAction(action: action)
             self.dispatchNotificationCardConfigurationAction(action: action)
-            self.dispatchSearchBarConfigurationAction(action: action)
+            self.dispatchSearchBarConfigurationAction(state: state, windowUUID: action.windowUUID)
 
         case HomepageActionType.notificationCardCloseButtonTapped,
             HomepageActionType.notificationCardEnableButtonTapped:
             self.handleNotificationCardDismissed(action: action)
 
-        case HomepageActionType.viewWillTransition, ToolbarActionType.cancelEdit,
-            GeneralBrowserActionType.navigateBack, GeneralBrowserActionType.didCloseTabFromToolbar:
-            self.dispatchSearchBarConfigurationAction(action: action)
+        case HomepageActionType.viewWillTransition, HomepageActionType.viewWillAppear,
+            GeneralBrowserActionType.navigateBack,
+            GeneralBrowserActionType.didCloseTabFromToolbar:
+            self.dispatchSearchBarConfigurationAction(state: state, windowUUID: action.windowUUID)
 
         default:
             break
@@ -158,17 +168,24 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
         profile.prefs.setBool(true, forKey: PrefsKeys.onboardingNotificationCardDismissed)
     }
 
-    private func dispatchSearchBarConfigurationAction(action: Action) {
+    private func dispatchSearchBarConfigurationAction(state: AppState, windowUUID: WindowUUID) {
+        let isEditing = state.componentState(
+            ToolbarState.self,
+            for: .toolbar,
+            window: windowUUID
+        )?.addressToolbar.isEditing ?? false
+
         store.dispatch(
             HomepageAction(
-                isSearchBarEnabled: self.shouldShowSearchBar(),
-                windowUUID: action.windowUUID,
+                isCenterSearchEnabled: self.shouldShowSearchBar(isEditing: isEditing),
+                windowUUID: windowUUID,
                 actionType: HomepageMiddlewareActionType.configuredSearchBar
             )
         )
     }
 
     private func shouldShowSearchBar(
+        isEditing: Bool,
         for device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
         and isLandscape: Bool = UIWindow.isLandscape
     ) -> Bool {
@@ -176,7 +193,7 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
         let isCompact = device == .phone && !isLandscape
         let isTopAddressBar = userPreferences.searchBarPosition == .top
 
-        guard isHomepageSearchEnabled, isCompact, isTopAddressBar else {
+        guard isHomepageSearchEnabled, isCompact, isTopAddressBar, !isEditing else {
             return false
         }
         return true

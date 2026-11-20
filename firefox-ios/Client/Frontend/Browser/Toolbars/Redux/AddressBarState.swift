@@ -12,7 +12,6 @@ import SummarizeKit
 struct AddressBarState: StateType, Sendable, Equatable {
     var windowUUID: WindowUUID
     var editingAccessoryAction: ToolbarActionConfiguration?
-    let borderPosition: AddressToolbarBorderPosition?
     var url: URL?
     var searchTerm: String?
     var hasOnlySecureContent: Bool?
@@ -65,7 +64,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
         self.init(
             windowUUID: windowUUID,
             editingAccessoryAction: nil,
-            borderPosition: nil,
             url: nil,
             searchTerm: nil,
             hasOnlySecureContent: nil,
@@ -87,7 +85,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
     init(windowUUID: WindowUUID,
          editingAccessoryAction: ToolbarActionConfiguration?,
-         borderPosition: AddressToolbarBorderPosition?,
          url: URL?,
          searchTerm: String?,
          hasOnlySecureContent: Bool?,
@@ -106,7 +103,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
          isNovaDesignEnabled: Bool) {
         self.windowUUID = windowUUID
         self.editingAccessoryAction = editingAccessoryAction
-        self.borderPosition = borderPosition
         self.url = url
         self.searchTerm = searchTerm
         self.hasOnlySecureContent = hasOnlySecureContent
@@ -132,10 +128,12 @@ struct AddressBarState: StateType, Sendable, Equatable {
         switch action {
         case .didKeyboardRequestChange(let shouldShow):
             return state.copy(shouldShowKeyboard: shouldShow)
+        case .cancelEdit(let url):
+            return handleCancelEditAction(state: state, url: url)
         case .cancelEditOnHomepage:
-            return handleCancelEditOnHomepageAction(state: state, windowUUID: actionWindowUUID)
-        case .didPasteSearchTerm(let searchTerm):
-            return handleDidPasteSearchTermAction(state: state, searchTerm: searchTerm)
+            return handleCancelEditOnHomepageAction(state: state)
+        case .searchTermDidSet(let searchTerm):
+            return handleSearchTermDidSetAction(state: state, searchTerm: searchTerm)
         case .lockIconChanged(let hasOnlySecureContent, let isWebsiteMode):
             return state
                 .copy(hasOnlySecureContent: hasOnlySecureContent)
@@ -144,6 +142,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             return handleSearchTermDidChangeAction(state: state, isEmpty: isEmpty)
         case .searchTermDidClear:
             return handleSearchTermDidClearAction(state: state)
+        case .websiteLoadingStateDidChange(let isLoading):
+            return state.copy(isLoading: isLoading)
         default:
             return defaultState(from: state)
         }
@@ -174,27 +174,14 @@ struct AddressBarState: StateType, Sendable, Equatable {
         case ToolbarActionType.readerModeStateChanged:
             return handleReaderModeStateChangedAction(state: state, action: action)
 
-        case ToolbarActionType.websiteLoadingStateDidChange:
-            return handleWebsiteLoadingStateDidChangeAction(state: state, action: action)
-
         case ToolbarActionType.urlDidChange:
             return handleUrlDidChangeAction(state: state, action: action)
 
         case ToolbarActionType.backForwardButtonStateChanged:
             return handleBackForwardButtonStateChangedAction(state: state, action: action)
 
-        case ToolbarActionType.borderPositionChanged,
-            ToolbarActionType.toolbarPositionChanged:
-            return handlePositionChangedAction(state: state, action: action)
-
         case ToolbarActionType.didStartEditingUrl:
             return handleDidStartEditingUrlAction(state: state, action: action)
-
-        case ToolbarActionType.cancelEdit:
-            return handleCancelEditAction(state: state, action: action)
-
-        case ToolbarActionType.didSetTextInLocationView:
-            return handleDidSetTextInLocationViewAction(state: state, action: action)
 
         case ToolbarActionType.didStartTyping:
             return handleDidStartTypingAction(state: state, action: action)
@@ -215,14 +202,10 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
     @MainActor
     private static func handleDidLoadToolbarsAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction,
-              let borderPosition = toolbarAction.addressBorderPosition else {
-            return defaultState(from: state)
-        }
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
         return state
             .copy(editingAccessoryAction: nil)
-            .copy(borderPosition: borderPosition)
             .copy(url: nil)
             .copy(searchTerm: nil)
             .copy(hasOnlySecureContent: nil)
@@ -274,14 +257,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
     }
 
     @MainActor
-    private static func handleWebsiteLoadingStateDidChangeAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-
-        return state
-            .copy(isLoading: toolbarAction.isLoading ?? state.isLoading)
-    }
-
-    @MainActor
     private static func handleUrlDidChangeAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -318,23 +293,13 @@ struct AddressBarState: StateType, Sendable, Equatable {
     }
 
     @MainActor
-    private static func handlePositionChangedAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-
-        return state
-            .copy(borderPosition: toolbarAction.addressBorderPosition)
-    }
-
-    @MainActor
-    private static func handleDidPasteSearchTermAction(state: Self, searchTerm: String?) -> Self {
+    private static func handleSearchTermDidSetAction(state: Self, searchTerm: String?) -> Self {
         let isEmptySearch = searchTerm == nil || searchTerm?.isEmpty == true
         // This action always puts the address bar into editing mode.
-        // Declared once and reused so the actions computed here can never drift out of sync
-        let isEditing = true
 
         return state
             .copy(searchTerm: searchTerm)
-            .copy(isEditing: isEditing)
+            .copy(isEditing: true)
             .copy(shouldShowKeyboard: true)
             .copy(shouldSelectSearchTerm: false)
             .copy(didStartTyping: false)
@@ -362,7 +327,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
     }
 
     @MainActor
-    private static func handleCancelEditOnHomepageAction(state: Self, windowUUID: WindowUUID) -> Self {
+    private static func handleCancelEditOnHomepageAction(state: Self) -> Self {
         guard state.url == nil else {
             // This case can occur when scrolling on homepage or in search view
             // and the user is still in isEditing mode (aka Cancel button is shown)
@@ -370,15 +335,12 @@ struct AddressBarState: StateType, Sendable, Equatable {
             return state.copy(shouldShowKeyboard: false)
         }
 
-        let cancelEditAction = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
-        return handleCancelEditAction(state: state, action: cancelEditAction)
+        return handleCancelEditAction(state: state, url: nil)
     }
 
     @MainActor
-    private static func handleCancelEditAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-
-        let url = toolbarAction.url ?? state.url
+    private static func handleCancelEditAction(state: Self, url: URL?) -> Self {
+        let url = url ?? state.url
         let isEmptySearch = url == nil
         // This action always leaves editing mode. Declared once and reused so the actions computed here
         // can never drift out of sync
@@ -389,24 +351,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
             .copy(searchTerm: nil)
             .copy(isEditing: isEditing)
             .copy(shouldShowKeyboard: false)
-            .copy(shouldSelectSearchTerm: false)
-            .copy(didStartTyping: false)
-            .copy(isEmptySearch: isEmptySearch)
-    }
-
-    @MainActor
-    private static func handleDidSetTextInLocationViewAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-
-        let isEmptySearch = toolbarAction.searchTerm == nil || toolbarAction.searchTerm?.isEmpty == true
-        // This action always puts the address bar into editing mode.
-        // Declared once and reused so the actions computed here can never drift out of sync
-        let isEditing = true
-
-        return state
-            .copy(searchTerm: toolbarAction.searchTerm)
-            .copy(isEditing: isEditing)
-            .copy(shouldShowKeyboard: true)
             .copy(shouldSelectSearchTerm: false)
             .copy(didStartTyping: false)
             .copy(isEmptySearch: isEmptySearch)
@@ -462,7 +406,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             editingAccessoryAction: state.editingAccessoryAction,
-            borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: state.searchTerm,
             hasOnlySecureContent: state.hasOnlySecureContent,

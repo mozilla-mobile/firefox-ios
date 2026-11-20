@@ -179,6 +179,42 @@ final class TrackingProtectionScreen {
         }
     }
 
+    /// Waits for the panel to report `expected` blocked trackers. Hosts are counted as they're checked against the
+    /// blocklists, so a page can show its text before all its trackers are counted.
+    @MainActor
+    func assertBlockedTrackersCount(equals expected: Int, timeout: TimeInterval = TIMEOUT) {
+        let trackers = sel.PANEL_TRACKERS_BUTTON.element(in: app)
+        let label = String(format: .Menu.EnhancedTrackingProtection.trackersBlockedLabel, String(expected))
+        XCTAssertTrue(
+            trackers.waitFor(NSPredicate(format: "label == %@", label), timeout: timeout),
+            "The panel should report \(expected) blocked trackers, its label is '\(trackers.label)'"
+        )
+    }
+
+    /// Opens the blocked trackers list and returns each category's count, ordered like the Tracker Blocker panel
+    /// rows. Closing the list also closes the panel.
+    @MainActor
+    func blockedTrackersByCategory(timeout: TimeInterval = TIMEOUT) -> [Int] {
+        sel.PANEL_TRACKERS_BUTTON.element(in: app).waitAndTap()
+        let formats: [String] = [
+            .Menu.EnhancedTrackingProtection.crossSiteTrackersBlockedLabel,
+            .Menu.EnhancedTrackingProtection.fingerprinterBlockedLabel,
+            .Menu.EnhancedTrackingProtection.analyticsTrackersBlockedLabel,
+            .Menu.EnhancedTrackingProtection.socialMediaTrackersBlockedLabel
+        ]
+        let counts = zip(sel.BLOCKED_TRACKERS_CATEGORY_LABELS, formats).map { selector, format in
+            let label = selector.element(in: app)
+            BaseTestCase().mozWaitForElementToExist(label, timeout: timeout)
+            guard let count = label.wholeNumberInLabel(after: String(format: format, ""), timeout: timeout) else {
+                XCTFail("No count in the blocked trackers category '\(label.label)'")
+                return 0
+            }
+            return count
+        }
+        sel.DETAILS_CLOSE_BUTTON.element(in: app).waitAndTap()
+        return counts
+    }
+
     @MainActor
     func assertSecureConnectionIsBelowTrackers() {
         let trackers = sel.PANEL_TRACKERS_BUTTON.element(in: app)

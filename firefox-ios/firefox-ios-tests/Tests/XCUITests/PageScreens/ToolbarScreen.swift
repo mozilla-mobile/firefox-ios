@@ -43,6 +43,12 @@ final class ToolbarScreen {
         settingsButton.waitAndTap()
     }
 
+    /// Opens Settings from the toolbar menu.
+    func openSettingsFromMenu() {
+        tapSettingsMenuButton()
+        MainMenuScreen(app: app).tapSettings()
+    }
+
     func assertTabsButtonExists(timeout: TimeInterval = TIMEOUT) {
         BaseTestCase().mozWaitForElementToExist(tabsButton)
     }

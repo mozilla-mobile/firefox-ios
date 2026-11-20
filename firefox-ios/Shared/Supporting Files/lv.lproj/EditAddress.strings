@@ -1,6 +1,12 @@
 /* Title for the interface option where users can add a new address for autofill purposes. This facilitates quicker form completion by automatically filling in the user's address information. */
 "Addresses.EditAddress.AutofillAddAddressTitle.v129" = "Pievienot adresi";
 
+/* Title for the option allowing users to edit an existing saved address. This is used within the settings for autofill, enabling users to update their address details for accurate form autofilling. */
+"Addresses.EditAddress.AutofillEditAddressTitle.v129" = "Labot adresi";
+
+/* Button label for editing the address details shown in the form. */
+"Addresses.EditAddress.EditNavBarButtonLabel.v129" = "Labot";
+
 /* Suggestion to try again after an error occurred while trying to save an address. */
 "Addresses.Toast.AddressSaveRetrySuggestion.v129" = "Mēģināt vēlreiz";
 

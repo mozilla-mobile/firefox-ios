@@ -10,6 +10,7 @@ import VPNKit
 
 protocol VPNGuardianProviding: Sendable {
     func getPass() async throws -> VPNProxyPass
+    func getUsage() async throws -> VPNProxyUsage
     func passRotation(after initial: VPNProxyPass) -> AsyncThrowingStream<VPNProxyPass, Error>
 }
 
@@ -45,6 +46,8 @@ final class VPNGuardian: VPNGuardianProviding {
 
     private let tokenProvider: VPNTokenProviding
     private let logger: Logger
+    // TODO: FXIOS-17399 Remove simulateQuotaExceeded debug hook after testing
+    private let prefs: Prefs?
 
     private static let retryableURLErrorCodes: Set<URLError.Code> = [
         .timedOut,
@@ -57,10 +60,12 @@ final class VPNGuardian: VPNGuardianProviding {
 
     init(
         tokenProvider: VPNTokenProviding,
-        logger: Logger
+        logger: Logger,
+        prefs: Prefs? = nil
     ) {
         self.tokenProvider = tokenProvider
         self.logger = logger
+        self.prefs = prefs
     }
 
     convenience init?(authCreator: VPNAuthCreating, prefs: Prefs, logger: Logger) {
@@ -73,11 +78,52 @@ final class VPNGuardian: VPNGuardianProviding {
             return nil
         }
 
-        self.init(tokenProvider: tokenProvider, logger: logger)
+        self.init(tokenProvider: tokenProvider, logger: logger, prefs: prefs)
     }
 
     func getPass() async throws -> VPNProxyPass {
+        // TODO: FXIOS-17399 Remove simulateQuotaExceeded debug hook after testing
+        try throwIfSimulatingQuotaExceeded()
         return try await tokenProvider.proxyToken()
+    }
+
+    func getUsage() async throws -> VPNProxyUsage {
+        // TODO: FXIOS-17399 Remove simulateQuotaExceeded debug hook after testing
+        if let simulatedUsage = simulatedQuotaExceededUsage() {
+            return simulatedUsage
+        }
+        return try await tokenProvider.proxyUsage()
+    }
+
+    // TODO: FXIOS-17399 Remove simulateQuotaExceeded debug hook after testing
+    /// How long a triggered simulated quota stays exhausted before its reset date.
+    private static let simulatedQuotaPeriod: TimeInterval = 2 * 60
+
+    // TODO: FXIOS-17399 Remove simulateQuotaExceeded debug hook after testing
+    /// Throws as if Guardian returned 429. An armed flag starts a simulated quota period on the next pass
+    /// request, which then keeps throwing until the period's reset date.
+    private func throwIfSimulatingQuotaExceeded() throws {
+        if let prefs, prefs.boolForKey(PrefsKeys.VPNSettings.simulateQuotaExceeded) == true {
+            prefs.removeObjectForKey(PrefsKeys.VPNSettings.simulateQuotaExceeded)
+            let reset = Date().addingTimeInterval(Self.simulatedQuotaPeriod)
+            prefs.setTimestamp(reset.toTimestamp(), forKey: PrefsKeys.VPNSettings.simulatedQuotaResetDate)
+        }
+        guard let simulatedUsage = simulatedQuotaExceededUsage() else { return }
+        throw VPNAuthError.quotaExceeded(simulatedUsage)
+    }
+
+    // TODO: FXIOS-17399 Remove simulateQuotaExceeded debug hook after testing
+    /// Exhausted usage until the simulated reset date, then nil and the pref is cleared.
+    private func simulatedQuotaExceededUsage() -> VPNProxyUsage? {
+        let key = PrefsKeys.VPNSettings.simulatedQuotaResetDate
+        guard let prefs, let resetTimestamp = prefs.timestampForKey(key) else { return nil }
+        let reset = Date.fromTimestamp(resetTimestamp)
+        guard reset > Date() else {
+            prefs.removeObjectForKey(key)
+            return nil
+        }
+        let fiveGiB: Int64 = 5 * 1024 * 1024 * 1024
+        return VPNProxyUsage(max: fiveGiB, remaining: 0, reset: reset, unlimited: false)
     }
 
     /// Emits a fresh `VPNProxyPass` shortly before the previous one expires. Cancel the consuming

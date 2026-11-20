@@ -4,10 +4,14 @@
 
 import Redux
 
-enum VPNModernAction: ModernAction {
+enum VPNModernAction: ModernAction, Equatable {
     case start
     case stop
-    case changeLocation
+    case changeLocation(countryCode: String)
+    case refreshUsage
+    /// Dispatched on app foreground; only refetches once the stored reset date has passed.
+    case refreshUsageIfResetDue
+    case resetVPNAtLaunch
     // User choices from the VPN alerts. Each one turns the VPN off.
     case continueWithoutVPN
     case closeThisTab

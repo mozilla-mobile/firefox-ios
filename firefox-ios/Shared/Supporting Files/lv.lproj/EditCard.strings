@@ -1,3 +1,6 @@
 /* Title label for the view where user can add their credit card info */
 "CreditCard.EditCard.AddCreditCardTitle.v122" = "Pievienot karti";
 
+/* Button label for editing the credit card details shown in the form */
+"CreditCard.EditCard.EditNavBarButtonLabel.v113" = "Labot";
+

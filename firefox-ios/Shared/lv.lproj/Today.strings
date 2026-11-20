@@ -10,3 +10,6 @@
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Meklēt\nprivātā cilnē";
 
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitle" = "Apmeklētākās vietnes";
+

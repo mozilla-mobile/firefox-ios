@@ -26,6 +26,7 @@ protocol TabTrayViewControllerDelegate: AnyObject {
 
 final class TabTrayViewController: UIViewController,
                                    TabTrayController,
+                                   FeatureFlaggable,
                                    UIToolbarDelegate,
                                    UIPageViewControllerDataSource,
                                    UIPageViewControllerDelegate,
@@ -198,6 +199,10 @@ final class TabTrayViewController: UIViewController,
         (AppContainer.shared.resolve() as FeatureFlagProviding).isEnabled(.novaDesign)
     }
 
+    private var usesUpdatedSyncStrings: Bool {
+        featureFlagsProvider.isEnabled(.syncStringUpdates)
+    }
+
     private var usesNovaGlassToolbarButtons: Bool {
         guard #available(iOS 26.0, *) else { return false }
         return isNovaDesignEnabled
@@ -267,7 +272,10 @@ final class TabTrayViewController: UIViewController,
     }()
 
     private lazy var syncTabButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(title: .TabsTray.Sync.SyncTabs,
+        let title: String = usesUpdatedSyncStrings
+            ? .TabsTray.Sync.Refresh
+            : .TabsTray.Sync.SyncTabs
+        let button = UIBarButtonItem(title: title,
                                      style: .plain,
                                      target: self,
                                      action: #selector(syncTabsTapped))
@@ -565,7 +573,11 @@ final class TabTrayViewController: UIViewController,
               let toTheme = childPanelThemes?[safe: toIndex] else { return }
 
         let swipeTheme = TabTrayPanelSwipeTheme(from: fromTheme, to: toTheme, progress: progress)
-        childPanelControllers.forEach({ ($0.topViewController as? TabTrayThemeable)?.applyTheme(swipeTheme) })
+        for (index, navigationController) in childPanelControllers.enumerated() {
+            let panelTheme = childPanelThemes?[safe: index]
+            let theme = panelTheme.map(swipeTheme.withAccentGradient(from:)) ?? swipeTheme
+            (navigationController.topViewController as? TabTrayThemeable)?.applyTheme(theme)
+        }
 
         view.backgroundColor = swipeTheme.colors.layer1
         navigationToolbar.barTintColor = swipeTheme.colors.layer1

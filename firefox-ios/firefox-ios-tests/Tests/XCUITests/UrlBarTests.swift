@@ -13,6 +13,7 @@ class UrlBarTests: BaseTestCase {
     private var tabTrayScreen: TabTrayScreen!
     private var settingScreen: SettingScreen!
     private var homePageScreen: HomePageScreen!
+    private var searchScreen: SearchScreen!
 
     override func setUp() async throws {
         if name.contains("testSearchEngineLogo") {
@@ -29,6 +30,7 @@ class UrlBarTests: BaseTestCase {
         tabTrayScreen = TabTrayScreen(app: app)
         settingScreen = SettingScreen(app: app)
         homePageScreen = HomePageScreen(app: app)
+        searchScreen = SearchScreen(app: app)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306888
@@ -189,13 +191,29 @@ class UrlBarTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3167407
+    // [Config] nav:topbar
     // Regression
     func testHomepageAndNewTabButtonsFromWebsite() throws {
+        try verifyHomepageAndNewTabButtonsFromWebsite(addressBarAtTop: true)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3167407
+    // [Config] nav:bottombar
+    // Regression
+    func testHomepageAndNewTabButtonsFromWebsite_bottomToolbar() throws {
+        try verifyHomepageAndNewTabButtonsFromWebsite(addressBarAtTop: false)
+    }
+
+    private func verifyHomepageAndNewTabButtonsFromWebsite(addressBarAtTop: Bool) throws {
         guard !iPad() else {
             throw XCTSkip("The navigation toolbar middle button cannot be configured on iPad")
         }
+        toolbarScreen.openSettingsFromMenu()
+        settingScreen.setAddressBarPosition(atTop: addressBarAtTop)
+
         // Step 1: open a website
         openMozillaBookFromNewTab()
+        browserScreen.assertAddressBarPosition(atTop: addressBarAtTop)
 
         // Step 2 (1): the default "+" middle button creates a new tab
         toolbarScreen.tapOnNewTabButton()
@@ -205,8 +223,7 @@ class UrlBarTests: BaseTestCase {
         browserScreen.tapCancelButtonOnUrlBarExist()
 
         // Step 2 (2): with the Home middle button, the homepage opens on the same tab
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(SettingsScreen)
+        toolbarScreen.openSettingsFromMenu()
         settingScreen.navigateToToolbarSettings()
         settingScreen.selectNavigationToolbarMiddleButton(.home)
         settingScreen.tapBackToSettings()
@@ -217,9 +234,33 @@ class UrlBarTests: BaseTestCase {
         toolbarScreen.assertTabsButtonValue(expectedCount: "2", message: "The Home button opened a new tab")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3173837
+    // Regression
+    func testSearchSuggestionsUIElements() {
+        // A space keeps domain autocompletion from appending to the typed text
+        let searchQuery = "mozilla firefox"
+
+        // Step 1: open a new tab, the homepage loads. The tab tray is used because on the iPhone
+        // homepage the toolbar's middle button is Search, not "+"
+        toolbarScreen.tapOnTabsButton()
+        tabTrayScreen.tapOnNewTabButton()
+        homePageScreen.assertHomepageIsDisplayed()
+        browserScreen.dismissMicrosurveyIfExists()
+
+        // Step 2: tap the address bar, it is focused and the keyboard is shown
+        browserScreen.tapOnAddressBar()
+        browserScreen.assertAddressBarFocusedWithKeyboard()
+
+        // Step 3: type a query, the text, suggestions, engine icon and Cancel button are shown
+        browserScreen.searchFromAddressBar(term: searchQuery)
+        browserScreen.assertAddressBarValueEquals(searchQuery)
+        searchScreen.assertSearchSuggestionExists(containing: searchQuery)
+        browserScreen.assertSearchEngineLogoExists()
+        browserScreen.assertCancelButtonIsRightOfAddressBar()
+    }
+
     private func openMozillaBookFromNewTab() {
-        navigator.nowAt(NewTabScreen)
-        navigator.openURL(path(forTestPage: TestPages.mozillaBook))
+        browserScreen.navigateToURL(path(forTestPage: TestPages.mozillaBook))
         waitUntilPageLoad()
         waitForTabsButton()
         XCTAssertTrue(browserScreen.bookOfMozillaPageContentExists(), "The website did not load")

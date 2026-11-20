@@ -169,6 +169,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .quickAnswersFollowUp:
             return checkQuickAnswersFollowUpFeature()
 
+        case .quickAnswersReturnToAnswer:
+            return checkQuickAnswersReturnToAnswerFeature()
+
         case .recentSearches:
             return checkRecentSearchesFeature()
 
@@ -208,6 +211,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .summarizerPermissiveGuardrails:
             return checkSummarizerPermissiveGuardrailsFeature()
 
+        case .syncStringUpdates:
+            return checkSyncStringUpdatesFeature()
+
         case .tabGroups:
             return checkTabGroupsFeature()
 
@@ -231,6 +237,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .touFeature:
             return checkTouFeature()
+
+        case .touNotificationRedesign:
+            return checkTouNotificationRedesign()
 
         case .translation:
             return checkTranslationFeature()
@@ -350,7 +359,15 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         return nimbus.features.touFeature.value().status
     }
 
+    private func checkTouNotificationRedesign() -> Bool {
+        let config = nimbus.features.touFeature.value()
+        return config.enableNotificationRedesign
+    }
+
     private func checkTranslationFeature() -> Bool {
+        // This guard should be kept when removing the feature flag since translations are not
+        // eligible on older iOS versions due to Bergamot using WASM SIMD instructions.
+        guard #available(iOS 16.4, *) else { return false }
         return nimbus.features.translationsFeature.value().enabled
     }
 
@@ -372,6 +389,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkQuickAnswersFollowUpFeature() -> Bool {
         return nimbus.features.quickAnswersFeature.value().followUpEnabled
+    }
+
+    private func checkQuickAnswersReturnToAnswerFeature() -> Bool {
+        return nimbus.features.quickAnswersFeature.value().returnToAnswerEnabled
     }
 
     private func checkStartAtHomeFeature(for featureID: FeatureFlagID) -> StartAtHome {
@@ -470,6 +491,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkSummarizerPermissiveGuardrailsFeature() -> Bool {
         return nimbus.features.summarizerPermissiveGuardrailsFeature.value().enabled
+    }
+
+    private func checkSyncStringUpdatesFeature() -> Bool {
+        return nimbus.features.syncStringUpdatesFeature.value().enabled
     }
 
     private func checkMondernOnboardingUIFeature() -> Bool {

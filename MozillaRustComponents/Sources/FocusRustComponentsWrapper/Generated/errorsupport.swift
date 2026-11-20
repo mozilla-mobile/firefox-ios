@@ -507,6 +507,14 @@ fileprivate struct FfiConverterString: FfiConverter {
         writeBytes(&buf, value.utf8)
     }
 }
+public func reportError(typeName: String, message: String)  {try! rustCall() {
+        uniffiCallStatus in
+    uniffi_error_support_fn_func_report_error(
+        FfiConverterString.lower(typeName),
+        FfiConverterString.lower(message),uniffiCallStatus
+    )
+}
+}
 
 private enum InitializationResult {
     case ok
@@ -522,6 +530,9 @@ private let initializationResult: InitializationResult = {
     let scaffolding_contract_version = ffi_error_support_uniffi_contract_version()
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
+    }
+    if (uniffi_error_support_checksum_func_report_error() != 35092) {
+        return InitializationResult.apiChecksumMismatch
     }
 
     return InitializationResult.ok

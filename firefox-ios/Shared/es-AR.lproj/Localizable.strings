@@ -1555,6 +1555,9 @@
 /* Footer information for tracker protection level. */
 "Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Si un sitio no funciona como se esperaba, tocá el candado en la barra de direcciones y desactivá la protección de rastreo aumentada para esa página.";
 
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Strict.v161" = "Si un sitio no está funcionando, abrí el menú y probá desactivar la protección contra rastreo aumentada.";
+
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Permite cierto rastreo de publicidad para que los sitios web funcionen correctamente.";
 

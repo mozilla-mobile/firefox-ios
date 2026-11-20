@@ -1,8 +1,20 @@
+/* Explanatory caption below the Additional Info section. %1$@ is the app name (e.g. Firefox). %2$@ is replaced by the tappable 'Learn more' link, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.FooterText.v154" = "Njoftimi juaj na ndihmon të kuptojmë dhe ndreqim probleme në %1$@, për ta bërë më të mirë për këdo. %2$@";
+
+/* Label of the toggle that includes the list of trackers blocked on the page with the report, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.IncludeBlockedList.v154" = "Dërgo listë objektesh të bllokuar nga mbrojtja nga gjurmimet";
+
+/* Label of the toggle that includes a screenshot of the page with the report, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.IncludeScreenshot.v154" = "Përfshi automatikisht një foto ekrani që të shfaqet problemi";
+
 /* Tappable link at the end of the Additional Info caption that opens a page explaining how the report data is used, in the Report a Website Issue form. */
 "WebCompatReporter.AdditionalInfo.LearnMore.v154" = "Mësoni më tepër";
 
 /* Header of the section containing optional toggles that control extra data included with the report, in the Report a Website Issue form. */
 "WebCompatReporter.AdditionalInfo.Title.v154" = "Hollësi Shtesë";
+
+/* Title of the issue category a user picks when a site's layout or design is broken, in the Report a Website Issue form. */
+"WebCompatReporter.Category.DesignBroken.v154" = "Hartimi grafik është i dëmtuar";
 
 /* Title of the issue category a user picks for problems not covered by the other options, in the Report a Website Issue form. */
 "WebCompatReporter.Category.Other.v154" = "Tjetër";
@@ -15,6 +27,42 @@
 
 /* Accessibility hint spoken on the Preview and Send Report buttons when they are disabled because no issue type has been selected yet, in the Report a Website Issue form. */
 "WebCompatReporter.Fields.ChooseIssueTypeAccessibilityHint.v156" = "Së pari zgjidhni një lloj problemi";
+
+/* Accessibility hint spoken on the Preview and Send Report buttons when they are disabled because no specific problem has been selected yet, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.ChooseSubOptionAccessibilityHint.v156" = "Zgjidhni një problem specifik për llojin tuaj të problemit që përzgjodhët";
+
+/* Placeholder shown in the optional multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.DetailsPlaceholder.v154" = "Përshkruajeni problemin hollësisht (në daçi)";
+
+/* Error message shown under the URL field when the address entered has an invalid format, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.URLError.v155" = "Jepni një URL të vlefshme";
+
+/* Leading label of the editable row showing the web address being reported, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.URLLabel.v154" = "URL";
+
+/* Placeholder shown in the issue-type pull-down before the user has picked a website problem category, in the Report a Website Issue form. */
+"WebCompatReporter.IssueSection.CategoryPlaceholder.v154" = "Zgjidhni lloj problemi…";
+
+/* Header of the section where the user picks the type of website problem they are reporting, in the Report a Website Issue form. */
+"WebCompatReporter.IssueSection.Title.v154" = "Problem Sajti";
+
+/* Bullet on the Report Preview screen. The reported page's address is shown underneath it. */
+"WebCompatReporter.Preview.Data.PageURL.v155" = "URL Faqeje";
+
+/* Bullet on the Report Preview screen, for the screen's physical pixels per layout point. */
+"WebCompatReporter.Preview.Data.PixelDensity.v155" = "Dendësi pikselash e ekranit tuaj";
+
+/* Bullet on the Report Preview screen, for whether the page was open in private browsing. */
+"WebCompatReporter.Preview.Data.PrivateBrowsingStatus.v155" = "Gjendje shfletimi privat: on, ose off";
+
+/* Bullet on the Report Preview screen, for the tracking protection strength the user has chosen. */
+"WebCompatReporter.Preview.Data.TrackingProtectionSetting.v155" = "Rregullim “Mbrojtje e Thelluar Nga Gjurmimet” për këtë sajt";
+
+/* Bullet on the Report Preview screen. Those three versions are only ever sent as tokens inside the user agent, never as fields of their own. %@ is the app name (e.g. Firefox). */
+"WebCompatReporter.Preview.Data.UserAgent.v155" = "Agjenti i përdoruesit i shfletuesit tuaj, çka përfshin versionin e iOS-it tuaj, version %@ dhe version mekanizimi shfletuesi";
+
+/* Accessibility label for the page screenshot thumbnail on the Report Preview screen. */
+"WebCompatReporter.Preview.ScreenshotAccessibilityLabel.v154" = "Foto ekrani e faqes që po raportoni. Prekeni dyfish që ta shihni sa krejt ekrani.";
 
 /* Accessibility label for the button that closes the full-screen screenshot viewer on the Report Preview screen. */
 "WebCompatReporter.Preview.ScreenshotCloseAccessibilityLabel.v154" = "Mbylle";
@@ -36,6 +84,42 @@
 
 /* A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form. */
 "WebCompatReporter.SubOption.BrowserBlocked.v154" = "Shfletuesi është i bllokuar, ose s’mbulohet";
+
+/* A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ButtonsNotWorking.v154" = "S’punojnë butona ose lidhje";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.CaptionsMissing.v154" = "Mungojnë titra";
+
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ImagesNotLoaded.v154" = "S’ngarkohen figura";
+
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ItemsMisaligned.v154" = "Elementët janë të keqvendosur";
+
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ItemsNotVisible.v154" = "Elementë jo plotësisht të dukshëm";
+
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ItemsOverlapped.v154" = "Elementë njëri mbi tjetrin";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.MediaControlsBroken.v154" = "Kontrollet media s’punojnë, ose mungojnë fare";
+
+/* A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.MissingItems.v154" = "Mungojnë gjëra";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.NoAudio.v154" = "S’ka audio";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.NoVideo.v154" = "S’ka video";
+
+/* A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.PageNotLoading.v154" = "Faqe që s’ngarkohet si duhet";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.PlaybackFails.v154" = "S’luhet videoja apo audioja";
 
 /* Message of the toast shown after the user successfully submits a website issue report. */
 "WebCompatReporter.Toast.ReportSent.v155" = "Njoftimi u dërgua";

@@ -342,17 +342,39 @@ extension XCUIElement {
     /// Share of the element's on-screen pixels whose HSV saturation is above `threshold`, from 0 to 1.
     /// Near 0 means the element is drawn in grays or pale tints only.
     func saturatedPixelRatio(threshold: Double = 0.3) -> Double {
+        shareOfPixels { _, saturation in saturation > threshold }
+    }
+
+    /// Share of the element's on-screen pixels, from 0 to 1, whose HSV hue in degrees falls in `hueRange`
+    /// and whose saturation is above `minimumSaturation`.
+    func shareOfPixels(inHueRange hueRange: ClosedRange<Double>, minimumSaturation: Double = 0.2) -> Double {
+        shareOfPixels { hue, saturation in saturation > minimumSaturation && hueRange.contains(hue) }
+    }
+
+    /// Share of the sampled pixels for which `matches(hue, saturation)` holds; black pixels never match.
+    private func shareOfPixels(matching matches: (Double, Double) -> Bool) -> Double {
         let pixels = sampledRGBAPixels()
         guard !pixels.isEmpty else { return 0 }
-        var saturated = 0
+        var matching = 0
         for offset in stride(from: 0, to: pixels.count, by: 4) {
-            let channels = pixels[offset..<offset + 3].map { Double($0) }
-            guard let maximum = channels.max(), let minimum = channels.min(), maximum > 0 else { continue }
-            if (maximum - minimum) / maximum > threshold {
-                saturated += 1
+            let red = Double(pixels[offset]), green = Double(pixels[offset + 1]), blue = Double(pixels[offset + 2])
+            let maximum = max(red, green, blue), minimum = min(red, green, blue)
+            guard maximum > 0 else { continue }
+            let delta = maximum - minimum
+            var hue = 0.0
+            if delta > 0 {
+                if maximum == red {
+                    hue = 60 * ((green - blue) / delta)
+                } else if maximum == green {
+                    hue = 60 * ((blue - red) / delta + 2)
+                } else {
+                    hue = 60 * ((red - green) / delta + 4)
+                }
+                if hue < 0 { hue += 360 }
             }
+            if matches(hue, delta / maximum) { matching += 1 }
         }
-        return Double(saturated) / Double(pixels.count / 4)
+        return Double(matching) / Double(pixels.count / 4)
     }
 
     /// The element's screenshot scaled down to `side` x `side` RGBA bytes, or empty if it can't be drawn.
@@ -381,5 +403,18 @@ extension XCUIElement {
         let predicate = NSPredicate { _, _ in condition(self.averageLuminance()) }
         let expectation = XCTNSPredicateExpectation(predicate: predicate, object: nil)
         return XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed
+    }
+
+    /// Waits for the label to start with `prefix` and returns the whole number right after it, ignoring
+    /// grouping separators ("5,305"). Returns nil on timeout or when no number follows the prefix.
+    func wholeNumberInLabel(after prefix: String = "", timeout: TimeInterval = TIMEOUT) -> Int? {
+        // BEGINSWITH never matches an empty string, so with no prefix any non-empty label will do
+        let hasPrefix = prefix.isEmpty
+            ? NSPredicate(format: "label != ''")
+            : NSPredicate(format: "label BEGINSWITH %@", prefix)
+        let expectation = XCTNSPredicateExpectation(predicate: hasPrefix, object: self)
+        guard XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed else { return nil }
+        let number = label.dropFirst(prefix.count).prefix { $0.isNumber || $0.isPunctuation || $0.isWhitespace }
+        return Int(String(number.filter(\.isNumber)))
     }
 }

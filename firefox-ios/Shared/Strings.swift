@@ -3445,6 +3445,13 @@ extension String {
                 comment: "Title of an onboarding card that introduces the built-in VPN. %1$@ is the app name (for example, Firefox)."
             )
 
+            public static let Subheading = MZLocalizedString(
+                key: "VPN.Onboarding.Subheading.v162",
+                tableName: "Onboarding",
+                value: "Help hide your location from websites while you browse.",
+                comment: "Subtitle text on the VPN onboarding card. Explains that the VPN helps hide where the user is from the websites they visit."
+            )
+
             public static let WifiSubheading = MZLocalizedString(
                 key: "VPN.Onboarding.WifiSubheading.v160",
                 tableName: "Onboarding",
@@ -3485,6 +3492,13 @@ extension String {
                 tableName: "Onboarding",
                 value: "Start using it without signing in",
                 comment: "Body text below the “5 GB, Free Every Month” (VPN.Onboarding.LimitSubheading.v160) subheading on the VPN onboarding card. Explains that the user can start using the VPN without signing in to an account. “it” refers to the VPN."
+            )
+
+            public static let TurnOnVPNButton = MZLocalizedString(
+                key: "VPN.Onboarding.TurnOnVPNButton.v162",
+                tableName: "Onboarding",
+                value: "Turn On VPN",
+                comment: "Text on a button on the VPN onboarding card. Tapping it turns on the VPN."
             )
         }
 
@@ -3672,6 +3686,20 @@ extension String {
                 tableName: "Settings",
                 value: "Finding Locations…",
                 comment: "Text displayed on the locations screen when the app loads a list of locations for the user to pick from. “Locations” here means the locations of VPN servers the user can connect to."
+            )
+
+            public static let NoLocationsTitle = MZLocalizedString(
+                key: "VPN.LocationPicker.NoLocationsTitle.v162",
+                tableName: "Settings",
+                value: "Couldn’t Load Locations",
+                comment: "Title shown on the VPN location picker screen when the app fails to load a list of locations. “Locations” here means the locations of VPN servers the user can connect to."
+            )
+
+            public static let NoLocationsSubtitle = MZLocalizedString(
+                key: "VPN.LocationPicker.NoLocationsSubtitle.v162",
+                tableName: "Settings",
+                value: "Try again in a few minutes.",
+                comment: "Subtitle text shown on the VPN location picker screen when the app fails to load a list of locations. Suggests the user try loading the list of locations again soon. “Locations” here means the locations of VPN servers the user can connect to."
             )
 
             public static let LocationUnavailableTitle = MZLocalizedString(
@@ -5055,6 +5083,16 @@ extension String {
         }
 
         public enum Sync {
+            public static let SignInDescription = MZLocalizedString(
+                key: "TabsTray.Sync.SignIn.Description.v162",
+                tableName: "TabsTray",
+                value: "Sign in to view open tabs on your other devices.",
+                comment: "Description shown in the synced tabs panel when the user is signed out. Signing in lets the user view tabs open on their other devices.")
+            public static let Refresh = MZLocalizedString(
+                key: "TabsTray.Sync.RefreshButton.Title.v162",
+                tableName: "TabsTray",
+                value: "Refresh",
+                comment: "Button in the synced tabs panel of the tab tray. Tapping it refreshes the list of tabs from the user's other devices.")
             public static let SyncTabs = MZLocalizedString(
                 key: "TabsTray.SyncTabs.SyncTabsButton.Title.v119",
                 tableName: "TabsTray",
@@ -6913,6 +6951,11 @@ extension String {
                 tableName: "MainMenu",
                 value: "Ad Blocker",
                 comment: "On the main menu, at the top, title for a badge next to Protections that opens the ad blocker setting.")
+            public static let VPN = MZLocalizedString(
+                key: "MainMenu.SiteProtection.VPN.Title.v162",
+                tableName: "MainMenu",
+                value: "VPN",
+                comment: "On the main menu, at the top, title for a badge next to Protections that opens the VPN settings.")
             public static let ProtectionsOn = MZLocalizedString(
                 key: "MainMenu.SiteProtection.ProtectionsOn.Title.v141",
                 tableName: "MainMenu",
@@ -9802,74 +9845,6 @@ extension String {
     /// https://github.com/mozilla-mobile/firefox-ios/wiki/How-to-add-and-modify-Strings#oldstrings-struct
     /// periphery:ignore - These strings are getting removed every couple of months
     enum OldStrings {
-        enum v158 {
-            public static let TitleLabel = MZLocalizedString(
-                key: "NativeErrorPage.GenericError.TitleLabel.v131",
-                tableName: "NativeErrorPage",
-                value: "Be careful. Something doesn’t look right.",
-                comment: "On error page, this is the title for generic error.")
-            public static let Description = MZLocalizedString(
-                key: "NativeErrorPage.GenericError.Description.v134",
-                tableName: "NativeErrorPage",
-                value: "The owner of %@ hasn’t set it up properly and a secure connection can’t be created.",
-                comment: "On error page, this is the description for a generic error. %@ is the site url.")
-        }
-        enum v157 {
-            public static let Title = MZLocalizedString(
-                key: "ContextualHints.Translations.Title.v145",
-                tableName: "ContextualHints",
-                value: "%@ Speaks Your Language",
-                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the title of one that points the user to the new translation icon on the toolbar. %@ is the app name (e.g. Firefox).")
-            public static let Body = MZLocalizedString(
-                key: "ContextualHints.Translations.Body.v145",
-                tableName: "ContextualHints",
-                value: "Fast, private translations are ready when you are.",
-                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the body description of one that points the user to the new translation icon on the toolbar.")
-        }
-        enum v156 {
-            public static let WebCompatReporterFieldsURLPlaceholder = MZLocalizedString(
-                key: "WebCompatReporter.Fields.URLPlaceholder.v154",
-                tableName: "WebCompatReporter",
-                value: "URL",
-                comment: "Placeholder shown in the URL field when no web address has been entered, in the Report a Website Issue form.")
-            public static let DetailsAccessibilityLabel = MZLocalizedString(
-                key: "WebCompatReporter.Fields.DetailsAccessibilityLabel.v154",
-                tableName: "WebCompatReporter",
-                value: "Describe the issue in detail",
-                comment: "Accessibility label for the multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form.")
-            public enum Wallpaper {
-                public static let Title = MZLocalizedString(
-                    key: "Onboarding.Wallpaper.Title.v114",
-                    tableName: "Onboarding",
-                    value: "Choose a %@ Wallpaper",
-                    comment: "Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. %@ is the app name (e.g. Firefox).")
-                public static let Action = MZLocalizedString(
-                    key: "Onboarding.Wallpaper.Action.v114",
-                    tableName: "Onboarding",
-                    value: "Set Wallpaper",
-                    comment: "Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper.")
-                public static let SelectorTitle = MZLocalizedString(
-                    key: "Onboarding.Wallpaper.SelectorTitle.v114",
-                    tableName: "Onboarding",
-                    value: "Try a splash of color",
-                    comment: "Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers.")
-                public static let SelectorDescription = MZLocalizedString(
-                    key: "Onboarding.Wallpaper.Description.v114",
-                    tableName: "Onboarding",
-                    value: "Choose a wallpaper that speaks to you.",
-                    comment: "Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers.")
-                public static let ClassicWallpaper = MZLocalizedString(
-                    key: "Onboarding.Wallpaper.Accessibility.Classic.v114",
-                    tableName: "Onboarding",
-                    value: "Classic Wallpaper",
-                    comment: "Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing.")
-                public static let LimitedEditionWallpaper = MZLocalizedString(
-                    key: "Onboarding.Wallpaper.Accessibility.LimitedEdition.v114",
-                    tableName: "Onboarding",
-                    value: "Limited Edition Wallpaper",
-                    comment: "Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing.")
-            }
-        }
     }
 }
 

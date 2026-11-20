@@ -27,11 +27,25 @@ final class PrivacyNoticeHelperTests: XCTestCase {
 
         XCTAssertFalse(result)
     }
-    // Use TermsOfUseAcceptedDate (migrated from TermsOfServiceAcceptedDate)
+
     func test_shouldShowPrivacyNotice_whenAcceptanceAfterUpdate_returnsFalse() {
         let subject = createSubject()
+
+        // Acceptance was after the update
         let now = subject.privacyNoticeUpdateInMilliseconds + 1000
         prefs.setTimestamp(now, forKey: PrefsKeys.TermsOfUseAcceptedDate)
+
+        let result = subject.shouldShowPrivacyNotice()
+        XCTAssertFalse(result)
+    }
+
+    func test_shouldShowPrivacyNotice_whenAcceptedBeforeUpdate_andUpdateInFuture_returnsFalse() {
+        // notification timestamp is in the future
+        let subject = createSubject(notificationTimestamp: Date().addingTimeInterval(3600).toTimestamp())
+
+        // Acceptance was before the update
+        let acceptance = subject.privacyNoticeUpdateInMilliseconds - 10000
+        prefs.setTimestamp(acceptance, forKey: PrefsKeys.TermsOfUseAcceptedDate)
 
         let result = subject.shouldShowPrivacyNotice()
 
@@ -65,7 +79,6 @@ final class PrivacyNoticeHelperTests: XCTestCase {
         XCTAssertNil(prefs.timestampForKey(PrefsKeys.PrivacyNotice.notifiedDate))
 
         let result = subject.shouldShowPrivacyNotice()
-
         XCTAssertTrue(result)
 
         // Should set notified date in prefs
@@ -76,14 +89,15 @@ final class PrivacyNoticeHelperTests: XCTestCase {
     func test_shouldShowPrivacyNotice_whenAcceptedBeforeUpdate_andNotifiedBeforeUpdate_returnsTrueAndUpdatesTimestamp() {
         let subject = createSubject()
 
+        // Acceptance before update
         let acceptance = subject.privacyNoticeUpdateInMilliseconds - 100000
-        let oldNotified = subject.privacyNoticeUpdateInMilliseconds - 200000
-
         prefs.setTimestamp(acceptance, forKey: PrefsKeys.TermsOfUseAcceptedDate)
+
+        // Notified before the update
+        let oldNotified = subject.privacyNoticeUpdateInMilliseconds - 50000
         prefs.setTimestamp(oldNotified, forKey: PrefsKeys.PrivacyNotice.notifiedDate)
 
         let result = subject.shouldShowPrivacyNotice()
-
         XCTAssertTrue(result)
 
         // Should set notified date in prefs
@@ -93,7 +107,19 @@ final class PrivacyNoticeHelperTests: XCTestCase {
 
     // MARK: - Helper Methods
 
-    private func createSubject() -> PrivacyNoticeHelper {
+    private func createSubject(
+        notificationTimestamp: Timestamp = Date().lastMonth.toTimestamp()
+    ) -> PrivacyNoticeHelper {
+        FxNimbus.shared.features.touFeature.with { _ in
+            return TouFeature(
+                contentOption: .value0,
+                enableDragToDismiss: true,
+                maxRemindersCount: 2,
+                notificationTimestamp: Int(notificationTimestamp),
+                status: false
+            )
+        }
+
         return PrivacyNoticeHelper(prefs: prefs)
     }
 }

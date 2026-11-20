@@ -7,6 +7,7 @@ import ComponentLibrary
 
 public enum QuickAnswersTransitionType: Equatable, Sendable {
     case sourceReveal(sourceRect: CGRect)
+    case returnToAnswer
 }
 
 /// Both directions animate the scale of a soft edged circular mask centered on the source rect, so the
@@ -98,6 +99,7 @@ final class SourceRevealTransitionAnimator: NSObject,
             quickAnswersController.applyPresentationTransition(isOptInVisible: isOptInVisible)
         } completion: { _ in
             presentedController.view.mask = nil
+            blurView.removeFromSuperview()
             transitionContext.completeTransition(true)
         }
 
@@ -134,6 +136,7 @@ final class SourceRevealTransitionAnimator: NSObject,
             maskView.transform = CGAffineTransform(scaleX: UX.collapsedMaskScale, y: UX.collapsedMaskScale)
         } completion: { _ in
             blurView.removeFromSuperview()
+            containerView.mask = nil
             transitionContext.completeTransition(true)
         }
     }

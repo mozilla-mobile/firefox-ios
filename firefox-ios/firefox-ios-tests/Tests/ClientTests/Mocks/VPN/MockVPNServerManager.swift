@@ -21,4 +21,8 @@ final class MockVPNServerManager: VPNServerManaging, @unchecked Sendable {
         selectServerCountryCodes.append(countryCode)
         return server.map { VPNServerSelection(server: $0, didFallBack: didFallBack) }
     }
+
+    func listCountries() async -> [VPNServerManager.Country] {
+        return []
+    }
 }
