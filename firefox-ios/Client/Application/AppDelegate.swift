@@ -207,6 +207,8 @@ class AppDelegate: UIResponder,
 
         TelemetryWrapper.recordEvent(category: .action, method: .foreground, object: .app)
 
+        refreshVPNUsageIfResetDue()
+
         ConversionActivityLogger().recordActiveToday()
         ConversionEventTracker().recordActivityEvents()
 
@@ -397,6 +399,12 @@ class AppDelegate: UIResponder,
         guard #available(iOS 17.0, *),
               featureFlagsProvider.isEnabled(.vpnFeature) else { return }
         store.dispatch(VPNModernAction.resetVPNAtLaunch, forWindowUUID: .unavailable)
+    }
+
+    private func refreshVPNUsageIfResetDue() {
+        guard #available(iOS 17.0, *),
+              featureFlagsProvider.isEnabled(.vpnFeature) else { return }
+        store.dispatch(VPNModernAction.refreshUsageIfResetDue, forWindowUUID: .unavailable)
     }
 
     private func fixSimulatorDevBuild(_ application: UIApplication) {

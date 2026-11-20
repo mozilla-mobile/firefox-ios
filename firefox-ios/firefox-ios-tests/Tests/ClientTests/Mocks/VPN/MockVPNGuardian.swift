@@ -11,8 +11,11 @@ final class MockVPNGuardian: VPNGuardianProviding, @unchecked Sendable {
             bearerToken: "initial-token",
             notBefore: Date(),
             expiresAt: Date().addingTimeInterval(3600),
-            usage: nil
+            usage: VPNProxyUsage(max: 1_000, remaining: 1_000, reset: .distantFuture, unlimited: false)
         )
+    )
+    var usageResult: Result<VPNProxyUsage, Error> = .success(
+        VPNProxyUsage(max: 0, remaining: 0, reset: Date(), unlimited: false)
     )
     var passRotationInitialPasses: [VPNProxyPass] = []
     var onPassRotation: (() -> Void)?
@@ -20,6 +23,10 @@ final class MockVPNGuardian: VPNGuardianProviding, @unchecked Sendable {
 
     func getPass() async throws -> VPNProxyPass {
         return try passResult.get()
+    }
+
+    func getUsage() async throws -> VPNProxyUsage {
+        return try usageResult.get()
     }
 
     func passRotation(after initial: VPNProxyPass) -> AsyncThrowingStream<VPNProxyPass, Error> {

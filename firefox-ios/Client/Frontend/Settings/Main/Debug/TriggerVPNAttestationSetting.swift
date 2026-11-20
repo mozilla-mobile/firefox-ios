@@ -237,6 +237,7 @@ final class ShowVPNDataLimitAlertSetting: HiddenSetting {
 
 // TODO: FXIOS-17399 Remove simulateQuotaExceeded debug hook after testing
 /// Makes the next VPN proxy token request throw `quotaExceeded`, as if Guardian returned 429.
+/// Token and usage requests then stay exhausted for two minutes, so the normal reset flow runs afterwards.
 final class SimulateVPNQuotaExceededSetting: HiddenSetting {
     private let prefs: Prefs = { return (AppContainer.shared.resolve() as Profile).prefs }()
 
@@ -253,7 +254,8 @@ final class SimulateVPNQuotaExceededSetting: HiddenSetting {
 
         let alert = UIAlertController(
             title: "VPN Quota Exceeded Armed",
-            message: "The next proxy token request (rotation or VPN start) will fail with quotaExceeded.",
+            message: "The next proxy token request (rotation or VPN start) will fail with quotaExceeded. "
+                + "Usage stays exhausted for 2 minutes; afterwards, foreground the app to refetch real usage.",
             preferredStyle: .alert
         )
         alert.addAction(UIAlertAction(title: "OK", style: .default))

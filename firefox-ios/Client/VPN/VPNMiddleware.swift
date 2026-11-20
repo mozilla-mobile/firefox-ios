@@ -67,10 +67,6 @@ final class VPNMiddleware {
         case .rotationFailed:
             dispatchAlert(.showFailureAlert)
         case .quotaExceeded(let usage):
-            guard let usage else {
-                dispatchAlert(.showFailureAlert)
-                return
-            }
             dispatchAlert(.showDataLimitAlert(dataLimitBytes: usage.max))
         case .selectedLocationUnavailable:
             // TODO: FXIOS-17347 wire up location selection errors
@@ -104,6 +100,10 @@ final class VPNMiddleware {
             await changeVPNLocation(countryCode)
         case .resetVPNAtLaunch:
             resetVPNAtLaunch()
+        case .refreshUsage:
+            await refreshVPNUsage()
+        case .refreshUsageIfResetDue:
+            await refreshVPNUsageIfResetDue()
         case .closeThisTab:
             let tabManager = windowManager.tabManager(for: windowUUID)
             if let selectedTab = tabManager?.selectedTab {
@@ -151,6 +151,24 @@ final class VPNMiddleware {
             try await vpnManager.start(countryCode: countryCode)
         } catch {
             logger.log("VPN location change failed: \(error)", level: .warning, category: .vpn)
+        }
+    }
+
+    /// Refetches usage only once the stored reset date has passed, so the limit clears after a reset.
+    private func refreshVPNUsageIfResetDue() async {
+        guard vpnManager?.isUsageResetDue == true else { return }
+        await refreshVPNUsage()
+    }
+
+    private func refreshVPNUsage() async {
+        guard let vpnManager else {
+            logger.log("VPN usage refresh with no VPNManager registered", level: .warning, category: .vpn)
+            return
+        }
+        do {
+            try await vpnManager.refreshUsage()
+        } catch {
+            logger.log("VPN usage refresh failed: \(error)", level: .warning, category: .vpn)
         }
     }
 

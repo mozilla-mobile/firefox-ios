@@ -180,6 +180,7 @@ public enum PrefsKeys {
         public static let selectedCountryCode = "vpnSelectedCountryCode"
         // TODO: FXIOS-17399 Remove simulateQuotaExceeded debug hook after testing
         public static let simulateQuotaExceeded = "vpnSimulateQuotaExceeded"
+        public static let simulatedQuotaResetDate = "vpnSimulatedQuotaResetDate"
     }
 
     public enum UserFeatureFlagPrefs {

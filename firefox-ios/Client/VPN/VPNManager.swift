@@ -17,7 +17,7 @@ enum VPNEvent: Equatable {
     case passUpdated(VPNProxyPass)
     case rotationFailed
     /// Guardian refused a pass because the monthly bandwidth quota is used up.
-    case quotaExceeded(VPNProxyUsage?)
+    case quotaExceeded(VPNProxyUsage)
     /// The selected location had no usable server, so a fallback server was used instead.
     case selectedLocationUnavailable
 }
@@ -30,6 +30,8 @@ protocol VPNRunnable {
     var dataLimitInGB: Double { get }
     var usageFraction: Double { get }
     var isLimitReached: Bool { get }
+    /// True once the stored usage's reset date has passed; false if no usage has been fetched.
+    var isUsageResetDue: Bool { get }
     var selectedCountryCode: String { get }
     /// Single-consumer stream of `VPNEvent`s, observed by `VPNMiddleware`.
     var events: AsyncStream<VPNEvent> { get }
@@ -37,6 +39,8 @@ protocol VPNRunnable {
     func start(countryCode: String?) async throws
     func stop() async
     func listCountries() async -> [VPNServerManager.Country]
+    /// Fetches the current bandwidth usage, whether or not the VPN is running.
+    func refreshUsage() async throws
     /// Redraws views reading `selectedCountryCode` after its pref changes.
     func selectedCountryCodeDidChange(countryCode: String)
 }
@@ -88,7 +92,6 @@ final class VPNManager: VPNRunnable {
         return prefs.stringForKey(PrefsKeys.VPNSettings.selectedCountryCode) ?? VPNServerManager.recommendedCountryCode
     }
 
-    // TODO: FXIOS-17238 guardian doesn't return usage yet, so the pass's usage stays nil
     private var currentUsage: VPNProxyUsage?
     private static let bytesPerGB: UInt64 = 0x1 << 30
 
@@ -108,8 +111,13 @@ final class VPNManager: VPNRunnable {
     }
 
     var isLimitReached: Bool {
-        guard let usage = currentUsage else { return false }
+        guard let usage = currentUsage, !isUsageResetDue else { return false }
         return !usage.unlimited && usage.remaining <= 0
+    }
+
+    var isUsageResetDue: Bool {
+        guard let usage = currentUsage else { return false }
+        return usage.reset <= Date()
     }
 
     private var rotationTask: Task<Void, Never>?
@@ -187,6 +195,13 @@ final class VPNManager: VPNRunnable {
 
     func listCountries() async -> [VPNServerManager.Country] {
         return await serverManager.listCountries()
+    }
+
+    func refreshUsage() async throws {
+        guard let guardian else {
+            throw VPNError.tokenProviderUnavailable
+        }
+        currentUsage = try await guardian.getUsage()
     }
 
     func selectedCountryCodeDidChange(countryCode: String) {
