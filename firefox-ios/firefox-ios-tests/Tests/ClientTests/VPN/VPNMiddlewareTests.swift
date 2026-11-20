@@ -284,6 +284,25 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(tabCountsClosedAtStop, [2, 2])
     }
 
+    func testCloseAllTabs_dispatchesClosedTabsToastWithTotalTabCount() async throws {
+        firstTabManager.tabs = [
+            MockTab(profile: mockProfile, windowUUID: firstWindowUUID),
+            MockTab(profile: mockProfile, isPrivate: true, windowUUID: firstWindowUUID)
+        ]
+        secondTabManager.tabs = [MockTab(profile: mockProfile, windowUUID: secondWindowUUID)]
+        let toastDispatched = expectation(description: "Toast dispatched")
+        mockStore.dispatchCalled = { toastDispatched.fulfill() }
+        let subject = createSubject()
+
+        subject.vpnProvider.modernMiddleware(AppState(), VPNModernAction.closeAllTabs, firstWindowUUID)
+        await fulfillment(of: [toastDispatched], timeout: 1)
+
+        let action = try XCTUnwrap(mockStore.dispatchedActions.first as? GeneralBrowserAction)
+        XCTAssertEqual(action.actionType as? GeneralBrowserActionType, .showToast)
+        XCTAssertEqual(action.toastType, .vpnClosedTabs(count: 3))
+        XCTAssertEqual(action.windowUUID, firstWindowUUID)
+    }
+
     func testAlertAction_isIgnored() async {
         let subject = createSubject()
 

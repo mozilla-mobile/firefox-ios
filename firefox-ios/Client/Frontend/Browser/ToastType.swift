@@ -15,6 +15,7 @@ enum ToastType: Equatable {
     case removeShortcut
     case retryTranslatingPage
     case shakeToSummarizeNotAvailable
+    case vpnClosedTabs(count: Int)
 
     var title: String {
         switch self {
@@ -34,6 +35,10 @@ enum ToastType: Equatable {
             return .Translations.Sheet.Error.GeneralTitle
         case .shakeToSummarizeNotAvailable:
             return .Summarizer.ToastLabel
+        case .vpnClosedTabs(let count):
+            return count == 1
+                ? .VPN.ErrorBrowsingPopup.ClosedOneTab
+                : String(format: .VPN.ErrorBrowsingPopup.ClosedXTabs, "\(count)")
         }
     }
 
@@ -58,7 +63,8 @@ enum ToastType: Equatable {
                 .openNewTab,
                 .removeFromReadingList,
                 .removeShortcut,
-                .shakeToSummarizeNotAvailable:
+                .shakeToSummarizeNotAvailable,
+                .vpnClosedTabs:
             return nil
         }
     }
