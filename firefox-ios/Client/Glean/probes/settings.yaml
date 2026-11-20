@@ -282,7 +282,7 @@ settings.vpn.location_list:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/VPN-7852
     data_reviews:
-      - TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/36694
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
