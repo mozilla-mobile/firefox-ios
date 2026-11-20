@@ -294,7 +294,11 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         mockStore.dispatchCalled = { toastDispatched.fulfill() }
         let subject = createSubject()
 
-        subject.vpnProvider.modernMiddleware(AppState(), VPNModernAction.closeAllTabs, firstWindowUUID)
+        subject.vpnProvider.modernMiddleware(
+            AppState(),
+            VPNModernAction.closeAllTabs(alertType: .monthlyLimit),
+            firstWindowUUID
+        )
         await fulfillment(of: [toastDispatched], timeout: 1)
 
         let action = try XCTUnwrap(mockStore.dispatchedActions.first as? GeneralBrowserAction)
