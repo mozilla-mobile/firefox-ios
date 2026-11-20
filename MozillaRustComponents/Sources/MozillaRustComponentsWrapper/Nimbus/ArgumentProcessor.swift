@@ -21,20 +21,10 @@ enum ArgumentProcessor {
             nimbus.dumpStateToLog()
         }
         if let expression = args.evalJexl {
-            // Evaluate JEXL and log the result
-            do {
-                let messagingHelper = try nimbus.createMessageHelper()
-                let result = try messagingHelper.evalJexl(expression: expression)
-                let resultJson = #"{"success": true, "result": \#(result)}"#
-                // swiftlint:disable:next nslocalizedstring_key
-                // NSLog is intentionally used here for nimbus-cli to capture structured JSON output from device logs
-                NSLog("JEXL_RESULT: \(resultJson)")
-            } catch {
-                let errorJson = #"{"success": false, "error": "\#(error.localizedDescription)"}"#
-                // swiftlint:disable:next nslocalizedstring_key
-                // NSLog is intentionally used here for nimbus-cli to capture structured JSON output from device logs
-                NSLog("JEXL_RESULT: \(errorJson)")
-            }
+            let resultJson = evalJexl(nimbus: nimbus, expression: expression)
+            // swiftlint:disable:next nslocalizedstring_key
+            // NSLog is intentionally used here for nimbus-cli to capture structured JSON output from device logs
+            NSLog("JEXL_RESULT: \(resultJson)")
         }
     }
 
@@ -104,6 +94,15 @@ enum ArgumentProcessor {
         }
 
         return true
+    }
+
+    static func evalJexl(nimbus: NimbusInterface, expression: String) -> String {
+        do {
+            let messagingHelper = try nimbus.createMessageHelper()
+            return try messagingHelper.evalJexlDebug(expression: expression)
+        } catch {
+            return #"{"success": false, "error": "\#(error.localizedDescription)"}"#
+        }
     }
 }
 
