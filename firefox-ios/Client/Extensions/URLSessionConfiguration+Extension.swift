@@ -16,4 +16,12 @@ extension URLSessionConfiguration {
         conf.multipathServiceType = .handover
         return conf
     }
+
+    /// Applies the current VPN proxy stack, if any, so requests match the webview's routing.
+    func withVPNProxy() -> URLSessionConfiguration {
+        if #available(iOS 17.0, *) {
+            proxyConfigurations = VPNProxySessionProvider.shared.proxyConfigurations
+        }
+        return self
+    }
 }

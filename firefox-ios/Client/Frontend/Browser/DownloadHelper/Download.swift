@@ -171,7 +171,7 @@ final class HTTPDownload: Download, URLSessionTaskDelegate, URLSessionDownloadDe
             // invalidated, so creating it in init would leak the download when it is never
             // started (e.g. the user cancels the download prompt).
             if session == nil {
-                session = URLSession(configuration: .ephemeralMPTCP, delegate: self, delegateQueue: .main)
+                session = URLSession(configuration: .ephemeralMPTCP.withVPNProxy(), delegate: self, delegateQueue: .main)
             }
             cookies.forEach { cookie in
                 session?.configuration.httpCookieStorage?.setCookie(cookie)

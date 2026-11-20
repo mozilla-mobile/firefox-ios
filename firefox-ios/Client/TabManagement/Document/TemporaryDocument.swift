@@ -131,7 +131,7 @@ final class DefaultTemporaryDocument: NSObject,
         mimeType: String? = nil,
         cookies: [HTTPCookie] = [],
         credential: URLCredential? = nil,
-        session: URLSession = .shared,
+        session: URLSession = .sharedWithVPNProxy,
         logger: Logger = DefaultLogger.shared
     ) {
         self.request = Self.applyCookiesToRequest(request, cookies: cookies)
@@ -149,7 +149,7 @@ final class DefaultTemporaryDocument: NSObject,
         preflightResponse: URLResponse,
         request: URLRequest? = nil,
         mimeType: String? = nil,
-        session: URLSession = .shared,
+        session: URLSession = .sharedWithVPNProxy,
         logger: Logger = DefaultLogger.shared
     ) {
         self.request = request
