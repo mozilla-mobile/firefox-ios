@@ -150,6 +150,7 @@ final class VPNMiddleware {
             return
         }
         let telemetryCountryCode = selectedCountryCode ?? VPNServerManager.recommendedCountryCode
+        let wasRunning = vpnManager.isRunning
         do {
             try await vpnManager.start(countryCode: selectedCountryCode)
             telemetry.recordConnectionSucceeded(
@@ -157,7 +158,7 @@ final class VPNMiddleware {
                 countryCode: telemetryCountryCode,
                 isUsingFallback: vpnManager.isUsingFallback
             )
-            if source == .settings {
+            if source == .settings, !wasRunning {
                 telemetry.recordVPNSettingChanged(isEnabled: true)
             }
             userPreferences.setPreferenceFor(.vpnFeature, to: vpnManager.isRunning)
@@ -221,9 +222,10 @@ final class VPNMiddleware {
             logger.log("VPN stop with no VPNManager registered", level: .warning, category: .vpn)
             return
         }
+        let wasRunning = vpnManager.isRunning
         await vpnManager.stop()
         telemetry.recordConnectionStopped(source: source)
-        if source == .settings {
+        if source == .settings, wasRunning {
             telemetry.recordVPNSettingChanged(isEnabled: false)
         }
         userPreferences.setPreferenceFor(.vpnFeature, to: false)
