@@ -41,6 +41,10 @@ struct TabGroupsPickerViewModel: Equatable {
     let selectedDestinationID: String
     let createEmptyGroupTitle: String
     let createWithSelectedTabsTitle: String?
+
+    var switcherDestinations: [Destination] {
+        destinations.filter { $0.kind != .privateTabs }
+    }
 }
 
 enum TabGroupsPickerAction: Equatable {
