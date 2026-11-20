@@ -208,7 +208,7 @@ class UrlBarTests: BaseTestCase {
         guard !iPad() else {
             throw XCTSkip("The navigation toolbar middle button cannot be configured on iPad")
         }
-        openSettingsFromToolbarMenu()
+        toolbarScreen.openSettingsFromMenu()
         settingScreen.setAddressBarPosition(atTop: addressBarAtTop)
 
         // Step 1: open a website
@@ -223,7 +223,7 @@ class UrlBarTests: BaseTestCase {
         browserScreen.tapCancelButtonOnUrlBarExist()
 
         // Step 2 (2): with the Home middle button, the homepage opens on the same tab
-        openSettingsFromToolbarMenu()
+        toolbarScreen.openSettingsFromMenu()
         settingScreen.navigateToToolbarSettings()
         settingScreen.selectNavigationToolbarMiddleButton(.home)
         settingScreen.tapBackToSettings()
@@ -264,11 +264,6 @@ class UrlBarTests: BaseTestCase {
         waitUntilPageLoad()
         waitForTabsButton()
         XCTAssertTrue(browserScreen.bookOfMozillaPageContentExists(), "The website did not load")
-    }
-
-    private func openSettingsFromToolbarMenu() {
-        toolbarScreen.tapSettingsMenuButton()
-        mainMenuScreen.tapSettings()
     }
 
     /// Tapping the address bar of a loaded page hands over the full URL, selected, for editing.
