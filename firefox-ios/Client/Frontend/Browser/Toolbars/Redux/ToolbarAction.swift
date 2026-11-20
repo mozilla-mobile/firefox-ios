@@ -145,6 +145,10 @@ enum ToolbarModernAction: ModernAction {
     /// The user tapped the address bar's clear button. Clears the stored search term and leaves the
     /// address bar editing with an empty search.
     case searchTermDidClear
+
+    /// The selected tab's back or forward availability changed. Each value is `nil` when it did not change,
+    /// so the state keeps its current value for it.
+    case backForwardButtonStateChanged(canGoBack: Bool?, canGoForward: Bool?)
 }
 
 enum ToolbarActionType: ActionType {
@@ -152,7 +156,6 @@ enum ToolbarActionType: ActionType {
     case urlDidChange
     case didStartEditingUrl
     case readerModeStateChanged
-    case backForwardButtonStateChanged
     case searchEngineDidChange
     case googleLensSettingDidChange
     case didSummarizeSettingsChange
