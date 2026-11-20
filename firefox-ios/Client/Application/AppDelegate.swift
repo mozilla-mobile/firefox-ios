@@ -402,13 +402,13 @@ class AppDelegate: UIResponder,
     }
 
     private func dispatchVPNAction(_ action: VPNModernAction) {
-        guard #available(iOS 17.0, *),
+        guard #available(iOS 27.2, *),
               featureFlagsProvider.isEnabled(.vpnFeature) else { return }
         store.dispatch(action, forWindowUUID: .unavailable)
     }
 
     private func refreshVPNUsageIfResetDue() {
-        guard #available(iOS 17.0, *),
+        guard #available(iOS 27.2, *),
               featureFlagsProvider.isEnabled(.vpnFeature) else { return }
         store.dispatch(VPNModernAction.refreshUsageIfResetDue, forWindowUUID: .unavailable)
     }

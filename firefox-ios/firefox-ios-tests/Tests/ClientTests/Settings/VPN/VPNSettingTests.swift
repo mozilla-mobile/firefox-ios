@@ -7,7 +7,7 @@ import Shared
 import XCTest
 @testable import Client
 
-@available(iOS 17.0, *)
+@available(iOS 27.2, *)
 @MainActor
 final class VPNSettingTests: XCTestCase {
     private var delegate: MockSettingsFlowDelegate!

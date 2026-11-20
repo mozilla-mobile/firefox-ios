@@ -5,7 +5,7 @@
 import Common
 import Shared
 
-@available(iOS 17.0, *)
+@available(iOS 27.2, *)
 final class VPNSetting: Setting {
     private weak var settingsDelegate: PrivacySettingsDelegate?
     // TODO: FXIOS-17388 redux-ify VPN state so we don't have to hold a VPNManager

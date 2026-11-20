@@ -8,7 +8,7 @@ import XCTest
 
 @testable import Client
 
-@available(iOS 17.0, *)
+@available(iOS 27.2, *)
 @MainActor
 final class VPNSettingsViewModelTests: XCTestCase, StoreTestUtility {
     var mockStore: MockStoreForMiddleware<AppState>!
