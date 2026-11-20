@@ -43,7 +43,7 @@ final class AIControlsTests: FeatureFlaggedTestBase {
         toolBarScreen.assertTranslateButtonExists(with: .inactive)
 
         // Configuration 1: Block AI Enhancements ON forces Translation and Page Summaries OFF
-        openSettingsFromToolbarMenu()
+        toolBarScreen.openSettingsFromMenu()
         settingsScreen.openAIControlsSettings()
         aiControlsScreen.assertScreenShown()
         // Establish a known "available" baseline before blocking so the transition to off is meaningful
@@ -57,7 +57,7 @@ final class AIControlsTests: FeatureFlaggedTestBase {
         assertAIFeaturesAreNotAvailable()
 
         // Configuration 2: Block AI Enhancements OFF, but each feature toggled OFF individually
-        openSettingsFromToolbarMenu()
+        toolBarScreen.openSettingsFromMenu()
         settingsScreen.openAIControlsSettings()
         aiControlsScreen.assertScreenShown()
         // Turning the kill switch off re-enables the features; verify then turn each off individually
@@ -106,6 +106,7 @@ final class AIControlsTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3135865
+    // [Config] nav:topbar
     // Regression
     func testSummarizeButtonReplacesReaderViewWithTopToolbar() throws {
         try launchWithToolbarSummarizer()
@@ -118,6 +119,7 @@ final class AIControlsTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3135866
+    // [Config] nav:bottombar
     // Regression
     func testSummarizeButtonReplacesReaderViewWithBottomToolbar() throws {
         try XCTSkipIf(iPad(), "The bottom toolbar is not available on iPad")
@@ -129,12 +131,12 @@ final class AIControlsTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3135867
+    // [Config] nav:bottombar
     // Regression
     func testLongPressOnSummarizeButtonAppliesReaderView() throws {
+        try XCTSkipIf(iPad(), "The bottom toolbar is not available on iPad")
         try launchWithToolbarSummarizer()
-        if !iPad() {
-            selectToolbarPosition(top: false)
-        }
+        selectToolbarPosition(top: false)
 
         navigateToBookOfMozillaPage()
         toolBarScreen.assertSummarizeContextualHintIsDisplayed()
@@ -156,7 +158,7 @@ final class AIControlsTests: FeatureFlaggedTestBase {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "hosted-summarizer-feature")
         app.launch()
 
-        openSettingsFromToolbarMenu()
+        toolBarScreen.openSettingsFromMenu()
         settingsScreen.assertSummarizeSettingsIsInGeneralSection()
         settingsScreen.openSummarizeSettings()
         summarizeSettingScreen.assertSummarizeAndShakeTogglesAreOnByDefault()
@@ -171,7 +173,7 @@ final class AIControlsTests: FeatureFlaggedTestBase {
     /// Controls Translation toggle mirrors it and the translate toolbar button availability follows.
     private func verifyStandaloneTranslationMirrorsAIControls(blockAIEnhancementsFirst: Bool) {
         if blockAIEnhancementsFirst {
-            openSettingsFromToolbarMenu()
+            toolBarScreen.openSettingsFromMenu()
             settingsScreen.openAIControlsSettings()
             aiControlsScreen.turnOnBlockAIEnhancements()
             aiControlsScreen.assertTranslationToggleIsOff()
@@ -192,7 +194,7 @@ final class AIControlsTests: FeatureFlaggedTestBase {
 
     /// Sets the standalone Translations toggle, then reopens AI Controls to assert it reflects the state.
     private func setStandaloneTranslationAndAssertMirror(on: Bool) {
-        openSettingsFromToolbarMenu()
+        toolBarScreen.openSettingsFromMenu()
         settingsScreen.openTranslationSettings()
         translationSettingScreen.setTranslationSwitch(on: on)
         settingsScreen.tapBackToSettings()
@@ -211,7 +213,7 @@ final class AIControlsTests: FeatureFlaggedTestBase {
     /// Summaries toggle mirrors it. When off, the Summarize main-menu entry is absent.
     private func verifyStandalonePageSummariesMirrorsAIControls(blockAIEnhancementsFirst: Bool) {
         if blockAIEnhancementsFirst {
-            openSettingsFromToolbarMenu()
+            toolBarScreen.openSettingsFromMenu()
             settingsScreen.openAIControlsSettings()
             aiControlsScreen.turnOnBlockAIEnhancements()
             aiControlsScreen.assertPageSummariesToggleIsOff()
@@ -237,7 +239,7 @@ final class AIControlsTests: FeatureFlaggedTestBase {
         if fromOpenMenu {
             mainMenuScreen.tapSettings()
         } else {
-            openSettingsFromToolbarMenu()
+            toolBarScreen.openSettingsFromMenu()
         }
         settingsScreen.openSummarizeSettings()
         summarizeSettingScreen.setSummarizeSwitch(on: on)
@@ -295,26 +297,14 @@ final class AIControlsTests: FeatureFlaggedTestBase {
     }
 
     private func selectToolbarPosition(top: Bool) {
-        openSettingsFromToolbarMenu()
-        settingsScreen.navigateToToolbarSettings()
-        if top {
-            settingsScreen.selectTopToolbar()
-        } else {
-            settingsScreen.selectBottomToolbar()
-        }
-        settingsScreen.tapBackToSettings()
-        settingsScreen.closeSettingsWithDoneButton()
+        toolBarScreen.openSettingsFromMenu()
+        settingsScreen.setAddressBarPosition(atTop: top)
     }
 
     private func assertSummarizeButtonReplacesReaderViewWithContextualHint() {
         toolBarScreen.assertSummarizeButtonExists()
         readingListScreen.assertReaderButtonDoesNotExist()
         toolBarScreen.assertSummarizeContextualHintIsDisplayed()
-    }
-
-    private func openSettingsFromToolbarMenu() {
-        toolBarScreen.tapSettingsMenuButton()
-        mainMenuScreen.tapSettings()
     }
 
     private func navigateToTranslationTestPage() {

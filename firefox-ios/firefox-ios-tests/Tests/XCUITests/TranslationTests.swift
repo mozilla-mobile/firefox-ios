@@ -123,7 +123,7 @@ final class TranslationsTests: FeatureFlaggedTestBase {
         )
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "translations-feature")
         app.launch()
-        openSettingsFromToolbarMenu()
+        toolBarScreen.openSettingsFromMenu()
 
         // Check that translation setting is hidden
         settingsScreen.assertTranslationSettingsDoesNotExist()
@@ -270,18 +270,13 @@ final class TranslationsTests: FeatureFlaggedTestBase {
     }
 
     private func openTranslationSettings() {
-        openSettingsFromToolbarMenu()
+        toolBarScreen.openSettingsFromMenu()
         settingsScreen.openTranslationSettings()
     }
 
     private func dismissTranslationSettingsScreen() {
         translationSettingScreen.tapOnBackButton()
         settingsScreen.closeSettingsWithDoneButton()
-    }
-
-    private func openSettingsFromToolbarMenu() {
-        toolBarScreen.tapSettingsMenuButton()
-        mainMenuScreen.tapSettings()
     }
 
     private func navigateToTranslationTestPage() {

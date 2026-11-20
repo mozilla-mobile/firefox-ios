@@ -188,6 +188,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/4035645
+    // [Config] nav:topbar
     // Regression
     func testModernKitOnboardingToolbarPlacementTop() throws {
         if iPad() {
@@ -226,7 +227,8 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
         XCTAssertTrue(toolbar.frame.origin.y < screenHeight / 2, "Toolbar is not near the top")
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/4035645 [Config] nav:bottombar
+    // https://mozilla.testrail.io/index.php?/cases/view/4035645
+    // [Config] nav:bottombar
     // Regression
     func testModernKitOnboardingToolbarPlacementBottom() throws {
         if iPad() {
