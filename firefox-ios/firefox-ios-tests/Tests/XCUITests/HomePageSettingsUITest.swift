@@ -25,6 +25,8 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
     // The same tracker page on another host, so loading it counts as a new page.
     // localtest.me resolves to 127.0.0.1 through public DNS, so these steps need DNS access
     private var otherTrackerPage: String { "http://localtest.me:\(serverPort)/test-fixture/\(TestPages.trackers)" }
+    private let trackersOnTrackerPage = 2
+    private let trackersOnAdvertisingPage = 1
 
     private func enterWebPageAsHomepage(text: String) {
         homepageSettingsScreen.typeCustomHomepageURL(text)
@@ -322,29 +324,30 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
 
         // Precondition: the Privacy Report toggle is turned off once there is a lifetime count
         browserScreen.openURLAndAssertPageText(trackerPage, text: TestLabels.trackers)
-        let blockedBeforeHiding = assertBlockedTrackersInPanel().total
+        assertBlockedTrackersInPanel(equals: trackersOnTrackerPage)
         openNewTab()
         homePageScreen.assertTrackerBlockerCount(atLeast: 1)
         setHomepageSections(privacyReportIsOn: false)
         homePageScreen.assertTrackerBlockerPillDoesNotExist()
 
         // Step 1
-        var blockedWhileHidden: [Int] = []
-        for page in [trackerPage, otherTrackerPage] {
+        let pagesWhileHidden = [trackerPage, otherTrackerPage]
+        for page in pagesWhileHidden {
             browserScreen.openURLAndAssertPageText(page, text: TestLabels.trackers)
-            blockedWhileHidden.append(assertBlockedTrackersInPanel().total)
+            assertBlockedTrackersInPanel(equals: trackersOnTrackerPage)
         }
 
         // Step 2
         setHomepageSections(privacyReportIsOn: true)
 
-        // Step 3: ClearProfile resets the lifetime count, so it is the sum of the panel counts. The pill
+        // Step 3: ClearProfile resets the lifetime count, so it only holds the tracker page loads. The pill
         // read in the precondition isn't used, it can be shown before the last page's trackers are stored
+        let pageLoads = 1 + pagesWhileHidden.count
         openNewTab()
         homePageScreen.assertTrackerBlockerPillIsBetweenShortcutsAndJumpBackIn()
         homePageScreen.assertTrackerBlockerCount(
-            equals: blockedBeforeHiding + blockedWhileHidden.reduce(0, +),
-            breakdown: "panel counts: \(blockedBeforeHiding) before hiding, \(blockedWhileHidden) while hidden"
+            equals: pageLoads * trackersOnTrackerPage,
+            breakdown: "\(trackersOnTrackerPage) trackers on each of \(pageLoads) tracker page loads"
         )
 
         // Step 4
@@ -366,9 +369,9 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
 
         // Step 4
         browserScreen.openURLAndAssertPageText(otherTrackerPage, text: TestLabels.trackers)
-        let justBlocked = assertBlockedTrackersInPanel().total
+        assertBlockedTrackersInPanel(equals: trackersOnTrackerPage)
         openNewTab()
-        homePageScreen.assertTrackerBlockerTotals(previous: totals, increasedBy: justBlocked)
+        homePageScreen.assertTrackerBlockerTotals(previous: totals, increasedBy: trackersOnTrackerPage)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/4367233
@@ -389,14 +392,14 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
             path(forTestPage: TestPages.advertisingTrackerOnly),
             text: TestLabels.trackers
         )
-        let blocked = assertBlockedTrackersInPanel(readingCategories: true)
+        let blockedByCategory = assertBlockedTrackersInPanel(equals: trackersOnAdvertisingPage, readingCategories: true)
 
         // Steps 3-4
         openNewTab()
         homePageScreen.assertTrackerBlockerPanelRefreshed(
             from: previous,
-            blocked: blocked.total,
-            blockedByCategory: blocked.byCategory
+            blocked: trackersOnAdvertisingPage,
+            blockedByCategory: blockedByCategory
         )
     }
 
@@ -411,18 +414,18 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         app.launch()
     }
 
-    /// Opens the protections panel, asserts it reports blocked trackers and closes it again. With
+    /// Opens the protections panel, asserts it reports `expected` blocked trackers and closes it again. With
     /// `readingCategories`, also returns the per-category counts from the blocked trackers list.
     @discardableResult
-    private func assertBlockedTrackersInPanel(readingCategories: Bool = false) -> (total: Int, byCategory: [Int]) {
+    private func assertBlockedTrackersInPanel(equals expected: Int, readingCategories: Bool = false) -> [Int] {
         toolbarScreen.tapSettingsMenuButton()
         mainMenuScreen.tapSiteProtections()
-        let total = trackingProtectionScreen.assertBlockedTrackersCount()
+        trackingProtectionScreen.assertBlockedTrackersCount(equals: expected)
         guard readingCategories else {
             trackingProtectionScreen.closePanel()
-            return (total, [])
+            return []
         }
-        return (total, trackingProtectionScreen.blockedTrackersByCategory())
+        return trackingProtectionScreen.blockedTrackersByCategory()
     }
 
     /// A new tab focuses the address bar, and its keyboard covers the toolbar menu button.

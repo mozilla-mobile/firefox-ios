@@ -179,25 +179,18 @@ final class TrackingProtectionScreen {
         }
     }
 
-    /// Asserts the panel reports blocked trackers and returns the count once it stops changing, as hosts are
-    /// counted while they're checked against the blocklists.
+    /// Waits for the panel to report `expected` blocked trackers. Hosts are counted as they're checked against the
+    /// blocklists, so a page can show its text before all its trackers are counted.
     @MainActor
-    @discardableResult
-    func assertBlockedTrackersCount(timeout: TimeInterval = TIMEOUT) -> Int {
+    func assertBlockedTrackersCount(equals expected: Int, timeout: TimeInterval = TIMEOUT) {
         let trackers = sel.PANEL_TRACKERS_BUTTON.element(in: app)
-        let prefix = String(format: .Menu.EnhancedTrackingProtection.trackersBlockedLabel, "")
-        var count = trackers.wholeNumberInLabel(after: prefix, timeout: timeout)
-        let deadline = Date().addingTimeInterval(timeout)
-        while let current = count, Date() < deadline {
-            BaseTestCase().idle(for: 1)
-            count = trackers.wholeNumberInLabel(after: prefix, timeout: timeout)
-            if count == current { break }
-        }
-        guard let count else {
-            XCTFail("The panel shows no blocked trackers count, its label is '\(trackers.label)'")
-            return 0
-        }
-        return count
+        let label = String(format: .Menu.EnhancedTrackingProtection.trackersBlockedLabel, String(expected))
+        let expectation = XCTNSPredicateExpectation(predicate: NSPredicate(format: "label == %@", label), object: trackers)
+        XCTAssertEqual(
+            XCTWaiter().wait(for: [expectation], timeout: timeout),
+            .completed,
+            "The panel should report \(expected) blocked trackers, its label is '\(trackers.label)'"
+        )
     }
 
     /// Opens the blocked trackers list and returns each category's count, ordered like the Tracker Blocker panel
