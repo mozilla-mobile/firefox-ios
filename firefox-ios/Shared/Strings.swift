@@ -8690,7 +8690,7 @@ extension String {
             key: "DeleteLoginAlert.DeleteButton.Title.v162",
             tableName: "LoginManager",
             value: "Delete",
-            comment: "Destructive button in the password deletion confirmation dialog. Tapping it deletes the saved password.")
+            comment: "Primary button in the password deletion confirmation dialog. Tapping it deletes the saved password.")
     }
 
     public static let DeleteLoginAlertTitle = MZLocalizedString(
