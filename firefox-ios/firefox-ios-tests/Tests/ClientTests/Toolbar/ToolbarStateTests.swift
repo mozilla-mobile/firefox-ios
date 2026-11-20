@@ -147,20 +147,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
     }
 
-    func test_cancelEditOnHomepageAction_returnsExpectedState() {
-        let initialState = createSubject()
-        let reducer = toolbarReducer()
-
-        let newState = reducer.modernReducer(
-            initialState,
-            ToolbarModernAction.cancelEditOnHomepage,
-            windowUUID
-        )
-
-        XCTAssertEqual(newState.addressToolbar, initialState.addressToolbar)
-        XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
-    }
-
     func test_keyboardRequestChangeAction_whenHiding_returnsExpectedState() {
         let baseState = createSubject()
         let initialState = baseState.copy(addressToolbar: baseState.addressToolbar.copy(shouldShowKeyboard: true))

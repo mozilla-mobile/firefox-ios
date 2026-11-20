@@ -155,7 +155,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
                 $0 is ToolbarModernAction
             }) as? ToolbarModernAction
         )
-        XCTAssertEqual(actionCalled.description, ToolbarModernAction.cancelEditOnHomepage.description)
+        XCTAssertEqual(actionCalled.description, ToolbarModernAction.cancelEdit(url: nil).description)
     }
 
     func test_traitCollectionDidChange_triggersHomepageAction() throws {
