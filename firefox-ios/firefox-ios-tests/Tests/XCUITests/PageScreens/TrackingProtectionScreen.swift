@@ -185,10 +185,8 @@ final class TrackingProtectionScreen {
     func assertBlockedTrackersCount(equals expected: Int, timeout: TimeInterval = TIMEOUT) {
         let trackers = sel.PANEL_TRACKERS_BUTTON.element(in: app)
         let label = String(format: .Menu.EnhancedTrackingProtection.trackersBlockedLabel, String(expected))
-        let expectation = XCTNSPredicateExpectation(predicate: NSPredicate(format: "label == %@", label), object: trackers)
-        XCTAssertEqual(
-            XCTWaiter().wait(for: [expectation], timeout: timeout),
-            .completed,
+        XCTAssertTrue(
+            trackers.waitFor(NSPredicate(format: "label == %@", label), timeout: timeout),
             "The panel should report \(expected) blocked trackers, its label is '\(trackers.label)'"
         )
     }
