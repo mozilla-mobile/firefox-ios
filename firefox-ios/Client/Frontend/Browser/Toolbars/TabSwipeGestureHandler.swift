@@ -177,7 +177,9 @@ final class TabSwipeGestureHandler: NSObject, UIGestureRecognizerDelegate, Store
         let translation = gesture.translation(in: contentContainer)
 
         guard let selectedTab = tabManager.selectedTab else { return }
-        let tabs = selectedTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
+        let tabs = selectedTab.isPrivate
+            ? tabManager.privateTabs
+            : TabGroupsSessionStore.visibleNormalTabs(tabManager.normalTabs, for: windowUUID)
         guard let index = tabs.firstIndex(where: { $0 === selectedTab }) else { return }
 
         let isSwipingLeft = translation.x < 0
