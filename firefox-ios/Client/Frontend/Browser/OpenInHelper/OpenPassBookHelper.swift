@@ -28,7 +28,7 @@ final class OpenPassBookHelper: @unchecked Sendable {
     private let presenter: Presenter
     private lazy var session = makeURLSession(
         userAgent: UserAgent.fxaUserAgent,
-        configuration: .ephemeralMPTCP
+        configuration: .ephemeralMPTCP.withVPNProxy()
     )
     private let logger: Logger
 
@@ -122,7 +122,7 @@ final class OpenPassBookHelper: @unchecked Sendable {
         }
 
         do {
-            let (passData, _) = try await URLSession.shared.data(from: url)
+            let (passData, _) = try await URLSession.sharedWithVPNProxy.data(from: url)
             try open(passData: passData)
         } catch {
             sendLogError(with: error.localizedDescription)

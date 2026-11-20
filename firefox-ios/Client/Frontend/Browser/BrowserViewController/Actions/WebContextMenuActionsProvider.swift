@@ -242,7 +242,7 @@ class WebContextMenuActionsProvider {
 
             makeURLSession(
                 userAgent: UserAgent.fxaUserAgent,
-                configuration: URLSessionConfiguration.defaultMPTCP
+                configuration: URLSessionConfiguration.defaultMPTCP.withVPNProxy()
             ).dataTask(with: url) { [taskId = backgroundTask.id] (data, response, error) in
                 ensureMainThread {
                     guard validatedHTTPResponse(response, statusCode: 200..<300) != nil else {
