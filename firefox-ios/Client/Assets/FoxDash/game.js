@@ -116,6 +116,7 @@
   let clock = 0;
   let shake = 0;
   let shownScore = -1;
+  let reportedPlaying = false;
 
   // Seeded gameplay random in [min, max). Arcade.rand is for cosmetics only.
   const srand = (min, max) => min + rng() * (max - min);
@@ -779,12 +780,27 @@
     }
   }
 
+  function syncPlaying() {
+    const playing = state === 'playing';
+    if (playing === reportedPlaying) return;
+    reportedPlaying = playing;
+    window.webkit?.messageHandlers?.foxDashPlaying?.postMessage(playing);
+  }
+
   // ---------------------------------------------------------------- input --
 
   canvas.addEventListener('pointerdown', (e) => {
     e.preventDefault();
     jump();
   });
+
+  // While a round runs the app catches taps natively, because a tap handled by
+  // WebKit holds back the next frame, and forwards them here in CSS pixels.
+  window.foxDashTap = (x, y) => {
+    const button = document.elementFromPoint(x, y)?.closest('button');
+    if (button) button.click();
+    else jump();
+  };
 
   window.addEventListener('keydown', (e) => {
     if (e.repeat) return;
@@ -838,5 +854,6 @@
     if (!covered || needsRender) render();
     needsRender = !covered;
     syncHud();
+    syncPlaying();
   });
 })();
