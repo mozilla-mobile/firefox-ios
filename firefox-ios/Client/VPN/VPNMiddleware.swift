@@ -109,6 +109,10 @@ final class VPNMiddleware {
             await refreshVPNUsage()
         case .refreshUsageIfResetDue:
             await refreshVPNUsageIfResetDue()
+        case .appDidEnterBackground:
+            vpnManager?.pauseRotation()
+        case .appDidBecomeActive:
+            vpnManager?.resumeRotation()
         case .closeThisTab:
             let tabManager = windowManager.tabManager(for: windowUUID)
             if let selectedTab = tabManager?.selectedTab {
