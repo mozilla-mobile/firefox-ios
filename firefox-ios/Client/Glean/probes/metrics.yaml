@@ -2792,6 +2792,8 @@ nimbus_system:
       - nimbus
       - nimbus-targeting-context
     lifetime: application
+    no_lint:
+      - UNKNOWN_PING_REFERENCED # nimbus-targeting-context is defined in appservices
 
 remote_settings:
   uptake_remotesettings:
