@@ -98,6 +98,13 @@ final class DefaultVPNTelemetryTests: XCTestCase {
     }
 
     func test_connectionFailureReason_mapsErrors() {
+        let usage = VPNProxyUsage(
+            max: 5_368_709_120,
+            remaining: 0,
+            reset: Date(),
+            unlimited: false
+        )
+
         let cases: [(Error, String)] = [
             (VPNError.notSignedIn, "not_signed_in"),
             (VPNError.noServerFound, "no_server_found"),
@@ -112,7 +119,7 @@ final class DefaultVPNTelemetryTests: XCTestCase {
             (AppAttestServiceError.keychain(description: ""), "keychain"),
             (AppAttestServiceError.invalidPayload, "invalid_response"),
             (AppAttestServiceError.invalidURL(description: ""), "invalid_url"),
-            (VPNAuthError.quotaExceeded(nil), "quota_exceeded"),
+            (VPNAuthError.quotaExceeded(usage), "quota_exceeded"),
             (VPNAuthError.sessionRejected, "auth"),
             (CancellationError(), "unknown")
         ]
