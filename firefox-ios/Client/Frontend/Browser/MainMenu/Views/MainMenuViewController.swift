@@ -402,8 +402,10 @@ class MainMenuViewController: UIViewController,
         if isPad {
             view.addSubview(hintView)
             NSLayoutConstraint.activate([
-                hintView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.hintViewMargin * 4),
-                hintView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.hintViewMargin * 4)
+                hintView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,
+                                                  constant: UX.hintViewMargin * 4),
+                hintView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,
+                                                   constant: -UX.hintViewMargin * 4)
             ])
             hintView.topAnchor.constraint(equalTo: menuContent.topAnchor,
                                           constant: UX.hintViewMargin).isActive = true
@@ -421,8 +423,10 @@ class MainMenuViewController: UIViewController,
                                                  constant: -UX.hintViewMargin).isActive = true
             }
             NSLayoutConstraint.activate([
-                hintView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.hintViewMargin),
-                hintView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.hintViewMargin)
+                hintView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,
+                                                  constant: UX.hintViewMargin),
+                hintView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,
+                                                   constant: -UX.hintViewMargin)
             ])
         }
         hintViewHeightConstraint = hintView.heightAnchor.constraint(equalToConstant: UX.hintViewHeight)
