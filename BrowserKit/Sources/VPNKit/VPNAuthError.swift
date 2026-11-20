@@ -15,7 +15,7 @@ public enum VPNAuthError: Error, Equatable {
     case invalidToken
     /// The device has used its monthly bandwidth quota; the token endpoint returned 429.
     /// Usage is read from the 429's `X-Quota-*` headers.
-    case quotaExceeded(VPNProxyUsage?)
+    case quotaExceeded(VPNProxyUsage)
 }
 
 extension VPNAuthError {

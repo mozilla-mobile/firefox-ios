@@ -7,8 +7,9 @@ import UIKit
 
 struct TabTrayPanelSwipeTheme: Theme {
     var type: ThemeType
-    var colors: ThemeColourPalette
     var isNova: Bool
+    private var palette: TabTrayPanelSwipePalette
+    var colors: ThemeColourPalette { palette }
 
     init(from: Theme, to: Theme, progress: CGFloat) {
         let mixColor = Self.mixColors(from: from.colors, to: to.colors, progress: progress)
@@ -36,7 +37,14 @@ struct TabTrayPanelSwipeTheme: Theme {
 
         self.type = from.type
         self.isNova = from.isNova
-        self.colors = TabTrayPanelSwipePalette(base: from.colors, overrides: overrides)
+        self.palette = TabTrayPanelSwipePalette(base: from.colors, overrides: overrides)
+    }
+
+    func withAccentGradient(from panelTheme: Theme) -> Self {
+        guard isNova, panelTheme.isNova else { return self }
+        var swipeTheme = self
+        swipeTheme.palette.accentGradientOverride = panelTheme.colors.gradientAccent
+        return swipeTheme
     }
 
     private static func mixColors(

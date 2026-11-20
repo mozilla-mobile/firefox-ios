@@ -61,11 +61,38 @@
 /* Settings section title for the old Firefox account */
 "FxA.FirefoxAccount.v119" = "Llogari";
 
+/* Label of the toggle that enables or disables the Quick Answers feature on the Quick Answers settings screen. */
+"QuickAnswers.Settings.EnableQuickAnswers.v158" = "Aktivizoni Përgjigje të Shpejta";
+
+/* Link button on the Quick Answers settings screen that opens more information about the feature. */
+"QuickAnswers.Settings.LearnMore.v158" = "Mësoni më tepër";
+
+/* Status text shown next to the Quick Answers row in the general settings when the feature is disabled. */
+"QuickAnswers.Settings.StatusOff.v158" = "Off";
+
+/* Status text shown next to the Quick Answers row in the general settings when the feature is enabled. */
+"QuickAnswers.Settings.StatusOn.v158" = "On";
+
+/* Title shown in the navigation bar and as the toggle label on the Quick Answers settings screen. */
+"QuickAnswers.Settings.Title.v158" = "Përgjigje të Shpejta";
+
 /* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
 "Settings.AddressAutofill.Title.v126" = "Adresa";
 
+/* In the AI Controls settings, in the AI powered features section, this is the text that indicates the feature is turned on. */
+"Settings.AIControls.AIPoweredFeaturesSection.AvailableStatus.v151" = "E passhme";
+
+/* In the AI Controls settings, in the AI powered features section, this is the text that indicates the feature is turned off. */
+"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatus.v151" = "E bllokuar";
+
 /* In the AI Controls settings, in the AI powered features section, this is the title that describes the page summaries feature */
 "Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Title.v151" = "Përmbledhje Faqesh";
+
+/* In the AI Controls settings, in the AI powered features section, this is the title that describes the Quick Answers feature */
+"Settings.AIControls.AIPoweredFeaturesSection.QuickAnswersSection.Title.v154" = "Përgjigje të Shpejta";
+
+/* In the AI Controls settings, this is the title for the section that describes AI-powered features. This is uppercase to match the style on iOS apps. */
+"Settings.AIControls.AIPoweredFeaturesSection.Title.v151" = "VEÇORI TË BAZUARA NË IA";
 
 /* In the AI Controls settings, in the AI powered features section, this is the message that describes the translation feature */
 "Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Message.v151" = "Përkthimet mbeten private në pajisjen tuaj.";
@@ -76,8 +103,14 @@
 /* In the AI Controls settings, this is the text for the link that takes the user more information on AI features. */
 "Settings.AIControls.BlockAIEnhancementsLink.v151" = "Shihni ç’përfshihet dhe s’përfshihet";
 
+/* This is the title for the setting that toggles whether to block AI enhancements under the AI Controls settings section. */
+"Settings.AIControls.BlockAIEnhancementsTitle.v151" = "Blloko Zgjerime IA";
+
 /* This is the text for the link in the Header Card under the AI Controls settings section that links to more information. */
 "Settings.AIControls.HeaderCard.Link.v151" = "Mësoni më tepër";
+
+/* This is the title for the Header Card under the AI Controls settings section. %@ is the app name (e.g. Firefox). */
+"Settings.AIControls.HeaderCard.Title.v151" = "Keni përherë një zgjedhje në %@";
 
 /* In the settings menu, in the General section, this is the title for the AI Controls settings section */
 "Settings.AIControls.Title.v150" = "Kontrolle IA";
@@ -138,6 +171,12 @@
 
 /* Title for the Ad Blocker toggle in the Browsing settings page. */
 "Settings.Browsing.AdBlocker.Title.v155" = "Bllokues Reklamash";
+
+/* Title for the Background Audio toggle in the Browsing settings page. When enabled, audio from web pages continues playing after the app is backgrounded. */
+"Settings.Browsing.BackgroundAudio.Title.v156" = "Audio Në Sfond";
+
+/* Title for the Block Ads toggle in the Browsing settings page. When enabled, the app blocks advertisements. */
+"Settings.Browsing.BlockAds.Title.v153" = "Bllokoni Reklama";
 
 /* This is the title for the Content customization section under the Browsing settings page. */
 "Settings.Browsing.Content.v153" = "Lëndë";
@@ -331,6 +370,9 @@
 /* In the Appearance settings menu, in the Toolbar Button section, this label indicates that selecting this will make the New Tab button appear in the middle of the navigation toolbar. */
 "Settings.Toolbar.Navigation.MiddleButton.NewTab.v145" = "Skedë e Re";
 
+/* Title for the auto-translate toggle in the Translation settings screen. */
+"Settings.Translation.AutoTranslate.Title.v151" = "Përktheje Automatikisht";
+
 /* Navigation bar title of the language picker shown when adding a preferred translation language. */
 "Settings.Translation.LanguagePicker.NavTitle.v151" = "Përzgjidhni Gjuhë";
 
@@ -363,4 +405,37 @@
 
 /* This is the title for the setting that toggles the Translation feature that allows users to translate web pages under the Translation settings section. */
 "Settings.Translation.ToggleTitle.v145" = "Aktivizo Përkthime";
+
+/* Option in the VPN server location list. Choosing it lets the app pick the server with the fastest connection. */
+"VPN.LocationPicker.RecommendedMainText.v160" = "E rekomanduar";
+
+/* Shown next to the VPN switch on the VPN settings screen while the VPN is connecting, right after the user turns it on. */
+"VPN.Settings.Connecting.v160" = "Po lidhet…";
+
+/* Title of the section on the VPN settings screen that shows how much of the user's free monthly VPN data they have used. */
+"VPN.Settings.DataLimitTitle.v160" = "Kufi të Dhënash";
+
+/* Link below the description at the top of the VPN settings screen. Tapping it opens a support article about the VPN. */
+"VPN.Settings.LearnMore.v160" = "Mësoni më tepër…";
+
+/* Shown on the right side of the Location row on the VPN settings screen when the user lets Firefox select the location in their stead. The recommended location is the one with the fastest connection. */
+"VPN.Settings.LocationRecommended.v160" = "E rekomanduar";
+
+/* Used in two places: as the name of a row on the VPN settings screen, and as the title of the screen that row opens. On that screen, the user picks which VPN server location (country or region) to connect through. “Location” means the VPN server’s location, not the user’s own location. */
+"VPN.Settings.LocationTitle.v160" = "Vendndodhje";
+
+/* VPN status shown when the VPN is not connected. Used in two places: on the right side of the VPN row in the Privacy section of Settings, and on the small capsule-shaped VPN status indicator. */
+"VPN.Settings.StatusOff.v160" = "Off";
+
+/* VPN status shown when the VPN is connected. Used in two places: on the right side of the VPN row in the Privacy section of Settings, and on the small capsule-shaped VPN status indicator. */
+"VPN.Settings.StatusOn.v160" = "On";
+
+/* VPN status shown when the VPN is temporarily paused. Used in two places: on the right side of the VPN row in the Privacy section of Settings, and on the small capsule-shaped VPN status indicator. */
+"VPN.Settings.StatusPaused.v160" = "I ndalur";
+
+/* Name of the VPN row in the Privacy section of Settings. Also used as the title of the VPN settings screen. */
+"VPN.Settings.Title.v160" = "VPN e Brendshme";
+
+/* Used in two places: as the label for the toggle switch on the VPN settings screen that turns the VPN on or off, and as the label on the small capsule-shaped VPN status indicator, where it appears together with the current status (On, Off or Paused). */
+"VPN.Settings.ToggleTitle.v160" = "VPN";
 

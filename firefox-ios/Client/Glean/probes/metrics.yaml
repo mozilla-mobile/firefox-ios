@@ -2839,23 +2839,6 @@ remote_settings:
     expires: never
 
 installation:
-  original_purchase_date:
-    type: datetime
-    time_unit: day
-    description: |
-      Original app acquisition date.
-    lifetime: ping
-    send_in_pings:
-      - installation
-    bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-17053
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/36217
-    data_sensitivity:
-      - technical
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: never
   original_app_version:
     type: string
     description: |

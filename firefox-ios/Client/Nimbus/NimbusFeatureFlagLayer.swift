@@ -211,6 +211,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .summarizerPermissiveGuardrails:
             return checkSummarizerPermissiveGuardrailsFeature()
 
+        case .syncStringUpdates:
+            return checkSyncStringUpdatesFeature()
+
         case .tabGroups:
             return checkTabGroupsFeature()
 
@@ -362,6 +365,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
     }
 
     private func checkTranslationFeature() -> Bool {
+        // This guard should be kept when removing the feature flag since translations are not
+        // eligible on older iOS versions due to Bergamot using WASM SIMD instructions.
+        guard #available(iOS 16.4, *) else { return false }
         return nimbus.features.translationsFeature.value().enabled
     }
 
@@ -485,6 +491,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkSummarizerPermissiveGuardrailsFeature() -> Bool {
         return nimbus.features.summarizerPermissiveGuardrailsFeature.value().enabled
+    }
+
+    private func checkSyncStringUpdatesFeature() -> Bool {
+        return nimbus.features.syncStringUpdatesFeature.value().enabled
     }
 
     private func checkMondernOnboardingUIFeature() -> Bool {

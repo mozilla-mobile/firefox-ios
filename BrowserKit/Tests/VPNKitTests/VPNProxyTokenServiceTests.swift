@@ -12,7 +12,10 @@ import TestKit
 final class VPNProxyTokenServiceTests: XCTestCase {
     func test_fetchProxyPass_sendsStoredDSJ_andDecodesToken() async throws {
         let auth = MockVPNAuthenticating(session: session(jwt: "stored-dsj"))
-        let urlSession = MockURLSession(with: tokenJSON(), response: httpResponse(statusCode: 200))
+        let urlSession = MockURLSession(
+            with: tokenJSON(),
+            response: httpResponse(statusCode: 200, headers: quotaHeaders())
+        )
         let subject = VPNProxyTokenService(with: .dev, urlSession: urlSession, authService: auth)
 
         let result = try await subject.fetchProxyPass()
@@ -20,7 +23,6 @@ final class VPNProxyTokenServiceTests: XCTestCase {
         XCTAssertEqual(result.bearerToken, validJWT)
         XCTAssertEqual(result.notBefore, Date(timeIntervalSince1970: 1_700_000_000))
         XCTAssertEqual(result.expiresAt, Date(timeIntervalSince1970: 1_700_003_600))
-        XCTAssertNil(result.usage)
 
         let req = try XCTUnwrap(urlSession.lastURLRequest)
         XCTAssertEqual(req.url?.path, "/api/v1/ipn/token")
@@ -51,7 +53,7 @@ final class VPNProxyTokenServiceTests: XCTestCase {
         let auth = MockVPNAuthenticating(session: session(jwt: "stale-dsj"))
         let urlSession = SequencedURLSession(responses: [
             (Data(#"{"reason":"dsj-superseded"}"#.utf8), httpResponse(statusCode: 401)),
-            (tokenJSON(), httpResponse(statusCode: 200))
+            (tokenJSON(), httpResponse(statusCode: 200, headers: quotaHeaders()))
         ])
         let subject = VPNProxyTokenService(with: .dev, urlSession: urlSession, authService: auth)
 
@@ -126,7 +128,7 @@ final class VPNProxyTokenServiceTests: XCTestCase {
 
         let result = try await subject.fetchProxyPass()
 
-        XCTAssertEqual(result.usage?.reset, resetDate)
+        XCTAssertEqual(result.usage.reset, resetDate)
     }
 
     func test_fetchProxyPass_withNegativeRemainingHeader_clampsRemainingToZero() async throws {
@@ -139,21 +141,15 @@ final class VPNProxyTokenServiceTests: XCTestCase {
 
         let result = try await subject.fetchProxyPass()
 
-        XCTAssertEqual(result.usage?.remaining, 0)
+        XCTAssertEqual(result.usage.remaining, 0)
     }
 
-    func test_fetchProxyPass_withMalformedQuotaHeader_returnsNilUsage() async throws {
-        let auth = MockVPNAuthenticating(session: session(jwt: "stored-dsj"))
-        let urlSession = MockURLSession(
-            with: tokenJSON(),
-            response: httpResponse(statusCode: 200, headers: quotaHeaders(limit: "lots"))
-        )
-        let subject = VPNProxyTokenService(with: .dev, urlSession: urlSession, authService: auth)
+    func test_fetchProxyPass_withMalformedQuotaHeader_throwsInvalidPayload() async {
+        await assertFetchProxyPassThrowsInvalidPayload(headers: quotaHeaders(limit: "lots"))
+    }
 
-        let result = try await subject.fetchProxyPass()
-
-        XCTAssertEqual(result.bearerToken, validJWT)
-        XCTAssertNil(result.usage)
+    func test_fetchProxyPass_withoutQuotaHeaders_throwsInvalidPayload() async {
+        await assertFetchProxyPassThrowsInvalidPayload(headers: nil)
     }
 
     func test_fetchProxyPass_throwsQuotaExceeded_on429() async {
@@ -302,7 +298,10 @@ final class VPNProxyTokenServiceTests: XCTestCase {
 
     private func createSubject(responseToken: String) -> VPNProxyTokenService {
         let auth = MockVPNAuthenticating(session: session(jwt: "stored-dsj"))
-        let urlSession = MockURLSession(with: tokenJSON(token: responseToken), response: httpResponse(statusCode: 200))
+        let urlSession = MockURLSession(
+            with: tokenJSON(token: responseToken),
+            response: httpResponse(statusCode: 200, headers: quotaHeaders())
+        )
         return VPNProxyTokenService(with: .dev, urlSession: urlSession, authService: auth)
     }
 
@@ -317,6 +316,27 @@ final class VPNProxyTokenServiceTests: XCTestCase {
             XCTFail("Expected fetchProxyPass to throw", file: file, line: line)
         } catch let error as VPNAuthError {
             XCTAssertEqual(error, .invalidToken, file: file, line: line)
+        } catch {
+            XCTFail("Unexpected error: \(error)", file: file, line: line)
+        }
+    }
+
+    private func assertFetchProxyPassThrowsInvalidPayload(
+        headers: [String: String]?,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) async {
+        let auth = MockVPNAuthenticating(session: session(jwt: "stored-dsj"))
+        let urlSession = MockURLSession(
+            with: tokenJSON(),
+            response: httpResponse(statusCode: 200, headers: headers)
+        )
+        let subject = VPNProxyTokenService(with: .dev, urlSession: urlSession, authService: auth)
+        do {
+            _ = try await subject.fetchProxyPass()
+            XCTFail("Expected fetchProxyPass to throw", file: file, line: line)
+        } catch let error as AppAttestServiceError {
+            XCTAssertEqual(error, .invalidPayload, file: file, line: line)
         } catch {
             XCTFail("Unexpected error: \(error)", file: file, line: line)
         }

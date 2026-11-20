@@ -11,18 +11,6 @@ struct InstallationTelemetry {
         self.gleanWrapper = gleanWrapper
     }
 
-    /// Saves the original purchase date and app version to Glean when available.
-    func recordAcquisition(appAcquisition: AppAcquisition) {
-        gleanWrapper.recordDatetime(
-            for: GleanMetrics.Installation.originalPurchaseDate,
-            value: appAcquisition.originalPurchaseDate
-        )
-        gleanWrapper.recordString(
-            for: GleanMetrics.Installation.originalAppVersion,
-            value: appAcquisition.originalAppVersion
-        )
-    }
-
     func recordInstallationHistory(count: Int64, lastSeenDate: Date?) {
         gleanWrapper.recordQuantity(
             for: GleanMetrics.Installation.installCounter,

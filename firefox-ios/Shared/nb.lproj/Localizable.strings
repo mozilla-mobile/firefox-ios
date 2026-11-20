@@ -1555,6 +1555,9 @@
 /* Footer information for tracker protection level. */
 "Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Hvis et nettsted ikke fungerer som forventet, kan du trykke på låset i adressefeltet og slå av Utvidet sporingsbeskyttelse for denne siden.";
 
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Strict.v161" = "Hvis et nettsted ikke fungerer, åpne menyen og prøv å slå av utvidet sporingsbeskyttelse.";
+
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Tillater noe sporing fra reklamer slik at nettsteder fungerer riktig.";
 

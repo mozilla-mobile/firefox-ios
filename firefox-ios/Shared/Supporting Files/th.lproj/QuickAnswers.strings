@@ -10,6 +10,9 @@
 /* Loading label shown in the Quick Answers view while an answer is being fetched. */
 "QuickAnswers.ContentView.Answering.v158" = "กำลังตอบ…";
 
+/* Button shown below a Quick Answers result that the user taps to ask a new, unrelated question. */
+"QuickAnswers.ContentView.NewQuestionButton.v161" = "ถามคำถามใหม่";
+
 /* Placeholder text shown in the Quick Answers view before the user starts speaking. */
 "QuickAnswers.ContentView.Placeholder.v158" = "ถามอะไรก็ได้…";
 

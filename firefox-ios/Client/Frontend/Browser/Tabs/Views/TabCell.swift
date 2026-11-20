@@ -181,7 +181,7 @@ final class TabCell: UICollectionViewCell,
         }
 
         if theme.isNova {
-            borderGradientColors = theme.colors.gradientBorder.cgColors
+            borderGradientColors = theme.colors.gradientAccent.cgColors
             setNeedsLayout()
         } else {
             layer.borderColor = (isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent).cgColor

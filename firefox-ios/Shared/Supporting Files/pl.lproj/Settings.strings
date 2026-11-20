@@ -470,7 +470,7 @@
 "VPN.Settings.Connecting.v160" = "Łączenie…";
 
 /* Read aloud by VoiceOver for the Data Limit section on the VPN settings screen. %1$@ is the amount of VPN data used this month and %2$@ is the monthly limit, both in gigabytes (for example, “1.0 of 5.0 gigabytes used”). The second sentence explains that the user’s free monthly VPN data resets on the first day of each month. */
-"VPN.Settings.DataLimit.AccessibilityValue.v161" = "Wykorzystano %1$@ z %2$@ gigabajtów. Zostaje przywrócone pierwszego dnia każdego miesiąca.";
+"VPN.Settings.DataLimit.AccessibilityValue.v161" = "Wykorzystano %1$@ z %2$@ gigabajtów. Zostaje przywrócone pierwszego dnia każdego miesiąca.";
 
 /* Footer below the Data Limit section on the VPN settings screen. Explains when the user's free VPN data resets. %1$@ is the monthly limit in gigabytes (for example, 5.0). “GB” stands for gigabytes. */
 "VPN.Settings.DataLimitResetFooter.v160" = "Zostaje przywrócone do %1$@ GB pierwszego dnia każdego miesiąca";
@@ -479,7 +479,7 @@
 "VPN.Settings.DataLimitTitle.v160" = "Ograniczenie danych";
 
 /* Read aloud by VoiceOver for the data usage on the VPN settings screen. Same as the visible text, but with “gigabytes” written out instead of “GB”. %1$@ is the amount of VPN data used this month and %2$@ is the monthly limit (for example, “1.0 of 5.0 gigabytes used”). */
-"VPN.Settings.DataUsage.AccessibilityLabel.v160" = "Wykorzystano %1$@ z %2$@ gigabajtów";
+"VPN.Settings.DataUsage.AccessibilityLabel.v160" = "Wykorzystano %1$@ z %2$@ gigabajtów";
 
 /* Shown next to the Data Limit title on the VPN settings screen. %1$@ is the amount of VPN data used this month and %2$@ is the monthly limit, both in gigabytes (for example, “1.0 of 5.0 GB used”). “GB” stands for gigabytes. */
 "VPN.Settings.DataUsage.v160" = "Wykorzystano %1$@ z %2$@ GB";

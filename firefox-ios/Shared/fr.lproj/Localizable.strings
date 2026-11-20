@@ -1555,6 +1555,9 @@
 /* Footer information for tracker protection level. */
 "Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Si un site ne fonctionne pas comme prévu, appuyez sur le cadenas dans la barre d’adresse et désactivez la protection renforcée contre le pistage pour cette page.";
 
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Strict.v161" = "Si un site ne fonctionne pas correctement, ouvrez le menu et tentez de désactiver la protection renforcée contre le pistage.";
+
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Autorise certains traqueurs publicitaires afin que des sites fonctionnent correctement.";
 

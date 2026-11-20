@@ -10,9 +10,9 @@ public struct VPNProxyPass: Equatable, Sendable {
     public let bearerToken: String
     public let notBefore: Date
     public let expiresAt: Date
-    public let usage: VPNProxyUsage? // TODO: FXIOS-17238 This shouldn't be nil in the real world case
+    public let usage: VPNProxyUsage
 
-    public init(bearerToken: String, notBefore: Date, expiresAt: Date, usage: VPNProxyUsage?) {
+    public init(bearerToken: String, notBefore: Date, expiresAt: Date, usage: VPNProxyUsage) {
         self.bearerToken = bearerToken
         self.notBefore = notBefore
         self.expiresAt = expiresAt
@@ -45,7 +45,7 @@ public struct VPNProxyUsage: Equatable, Sendable {
     }
 
     /// Reads Guardian's `X-Quota-*` headers; nil if any are missing or malformed.
-    init?(response: URLResponse) {
+    init(response: URLResponse) throws {
         guard let httpResponse = response as? HTTPURLResponse,
               let maxString = httpResponse.value(forHTTPHeaderField: VPNConstants.quotaLimitHeader),
               let max = Int64(maxString),
@@ -53,7 +53,10 @@ public struct VPNProxyUsage: Equatable, Sendable {
               let remaining = Int64(remainingString),
               let resetString = httpResponse.value(forHTTPHeaderField: VPNConstants.quotaResetHeader),
               let reset = Self.parseISO8601(resetString)
-        else { return nil }
+        else {
+            throw AppAttestServiceError.invalidPayload
+        }
+
         self.init(max: max, remaining: Swift.max(0, remaining), reset: reset, unlimited: false)
     }
 

@@ -1555,6 +1555,9 @@
 /* Footer information for tracker protection level. */
 "Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Als een website niet werkt zoals verwacht, tik dan op het slot in de adresbalk en schakel Verbeterde bescherming tegen volgen voor die pagina uit.";
 
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Strict.v161" = "Als een website niet werkt, open dan het menu en probeer Verbeterde bescherming tegen volgen uit te schakelen.";
+
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Staat enkele advertentietrackers toe, zodat websites goed functioneren.";
 

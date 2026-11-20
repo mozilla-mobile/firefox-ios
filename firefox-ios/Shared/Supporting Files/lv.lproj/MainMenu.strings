@@ -13,14 +13,23 @@
 /* On the main menu, the accessibility label for the action that will take the user to the Downloads panel. */
 "MainMenu.PanelLinkSection.AccessibilityLabels.Downloads.v132" = "Lejupielādes";
 
+/* On the main menu, the accessibility label for the action that will take the user to the Passwords panel in the settings screen. */
+"MainMenu.PanelLinkSection.AccessibilityLabels.Passwords.v132" = "Paroles";
+
 /* On the main menu, the title for the action that will take the user to the Downloads panel. */
 "MainMenu.PanelLinkSection.Downloads.Title.v131" = "Lejupielādes";
+
+/* On the main menu, the title for the action that will take the user to the Passwords panel in the settings screen. */
+"MainMenu.PanelLinkSection.Passwords.Title.v131" = "Paroles";
 
 /* On the main menu, the accessibility labels for the action that will take the user to the Customize Homepage section in the settings screen. */
 "MainMenu.SettingsSection.AccessibilityLabels.CustomizeHomepage.v132" = "Pielāgot sākumlapu";
 
 /* On the main menu, the title for the action that will take the user to the Customize Hopegape section in the settings screen. */
 "MainMenu.SettingsSection.CustomizeHomepage.Title.v131" = "Pielāgot sākumlapu";
+
+/* On the main menu, this is the subtitle shown under the site title when the current page is displayed in Reader Mode. */
+"MainMenu.SiteProtection.Protections.ReaderModeSubtitle.v162" = "Lasītāja skats";
 
 /* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to add a website to the iOS home screen. */
 "MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Title.v132" = "Pievienot sākuma ekrānam";
@@ -31,6 +40,9 @@
 /* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Bookmarks tool. */
 "MainMenu.Submenus.Save.AccessibilityLabels.BookmarkThisPage.Subtitle.v132" = "Pievienot grāmatzīmi";
 
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to edit the bookmark for this particular page. */
+"MainMenu.Submenus.Save.AccessibilityLabels.EditBookmark.Title.v132" = "Labot grāmatzīmi";
+
 /* On the main menu, in the Save submenu, the title for the menu component that allows a user to add a website to the home screen. */
 "MainMenu.Submenus.Save.AddToHomeScreen.Title.v131" = "Pievienot sākuma ekrānam";
 
@@ -39,4 +51,7 @@
 
 /* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Bookmarks tool. */
 "MainMenu.Submenus.Save.BookmarkThisPage.Subtitle.v131" = "Pievienot grāmatzīmi";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows a user to edit the bookmark for this particular page. */
+"MainMenu.Submenus.Save.EditBookmark.Title.v131" = "Labot grāmatzīmi";
 

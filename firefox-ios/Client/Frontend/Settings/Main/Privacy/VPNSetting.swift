@@ -25,7 +25,6 @@ final class VPNSetting: Setting {
     override var status: NSAttributedString? {
         let statusString: String
         if vpnManager.isLimitReached {
-            // TODO: Clear the paused status when the monthly data limit resets
             statusString = .VPN.Settings.StatusPaused
         } else {
             statusString = vpnManager.isRunning ? .VPN.Settings.StatusOn : .VPN.Settings.StatusOff

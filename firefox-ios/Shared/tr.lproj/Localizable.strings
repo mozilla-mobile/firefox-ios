@@ -1555,6 +1555,9 @@
 /* Footer information for tracker protection level. */
 "Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Bir sitenin düzgün çalışmadığını fark ederseniz adres çubuğundaki kilit simgesine dokunarak o site için gelişmiş izlenme korumasını kapatabilirsiniz.";
 
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Strict.v161" = "Bir site düzgün çalışmıyorsa menüden gelişmiş izlenme korumasını kapatmayı deneyin.";
+
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Web sitelerinin düzgün çalışması için reklam takibine kısmen izin verir.";
 

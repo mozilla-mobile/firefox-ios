@@ -1555,6 +1555,9 @@
 /* Footer information for tracker protection level. */
 "Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Pokud web nefunguje podle očekávání, klepněte na zámek v adresním řádku a vypněte pro danou stránku rozšířenou ochranu proti sledování.";
 
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Strict.v161" = "Pokud stránka nefunguje správně, otevřete nabídku a zkuste vypnout rozšířenou ochranu proti sledování.";
+
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Povoluje některé sledující reklamy pro správné fungování stránek.";
 

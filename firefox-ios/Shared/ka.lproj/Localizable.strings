@@ -1555,6 +1555,9 @@
 /* Footer information for tracker protection level. */
 "Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "თუ საიტი არ მუშაობს სათანადოდ, შეეხეთ საკეტის ნიშანს მისამართების ველში თვალთვალისგან გაძლიერებული დაცვის გამოსართავად ამ გვერდზე.";
 
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Strict.v161" = "თუ საიტი არ მუშაობს, გახსენით მენიუ და სცადეთ თვალთვალისგან გაძლიერებული დაცვის გამორთვა.";
+
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "საიტის სათანადო მუშაობისთვის ზოგიერთი მეთვალყურე ნებადართულია.";
 

@@ -63,6 +63,37 @@ final class VPNSettingsViewModelTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(action, .changeLocation(countryCode: "DE"))
     }
 
+    func test_refreshUsage_dispatchesRefreshUsage() throws {
+        let subject = createSubject()
+
+        subject.refreshUsage()
+
+        let action = try XCTUnwrap(mockStore.dispatchedModernActions.last as? VPNModernAction)
+        XCTAssertEqual(action, .refreshUsage)
+    }
+
+    func test_isToggleDisabled_whenIdleAndUnderLimit_isFalse() {
+        let subject = createSubject()
+
+        XCTAssertFalse(subject.isToggleDisabled)
+    }
+
+    func test_isToggleDisabled_whenConnecting_isTrue() {
+        vpnManager.isConnecting = true
+
+        let subject = createSubject()
+
+        XCTAssertTrue(subject.isToggleDisabled)
+    }
+
+    func test_isToggleDisabled_whenLimitReached_isTrue() {
+        vpnManager.isLimitReached = true
+
+        let subject = createSubject()
+
+        XCTAssertTrue(subject.isToggleDisabled)
+    }
+
     func test_sortedByName_sortsByLocalizedCountryName() {
         let subject = createSubject()
 

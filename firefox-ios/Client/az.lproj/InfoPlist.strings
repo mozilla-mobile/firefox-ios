@@ -1,3 +1,6 @@
+/* iOS Home screen shortcut menu: Option to launch the app to the app icon customization screen */
+"App Icon" = "Tətbiq Loqosu";
+
 /* (No Comment) */
 "New Private Tab" = "Yeni Məxfi Vərəq";
 
@@ -5,7 +8,10 @@
 "New Tab" = "Yeni Vərəq";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox can use your camera to scan QR codes or take photos and video.";
+"NSCameraUsageDescription" = "Firefox QR kodları oxutmaq, foto və ya video çəkmək üçün kameranızdan istifadə edə bilər.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Firefox yadda saxlanmış parollarınıza və ödəniş üsullarınıza daxil olmaq üçün Face ID tələb edir.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Daxil olduğunuz saytlar sizin yerinizi soruşa bilərlər.";
