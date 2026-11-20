@@ -5,7 +5,7 @@
 import UIKit
 
 enum NovaTabGroupGradients {
-    private static var lightNeutralStop: UIColor { UIColor(rgb: 0x14092b).withAlphaComponent(0.7) }
+    private static var lightNeutralStop: UIColor { NovaColors.VioletDesaturated90.withAlphaComponent(0.7) }
     private static var darkNeutralStop: UIColor { NovaColors.VioletDesaturated0.withAlphaComponent(0.7) }
 
     static var yellow: Gradient {
