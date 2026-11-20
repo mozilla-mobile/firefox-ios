@@ -175,6 +175,17 @@ final class ContentBlockerTests: XCTestCase {
         XCTAssertNotEqual(hashAfterFirst, hashAfterSecond, "Different JSON should produce a new hash")
     }
 
+    func testProxyHardeningScript_compiles() async throws {
+        let store = try XCTUnwrap(WKContentRuleListStore.default())
+
+        let rule = try await store.compileContentRuleList(
+            forIdentifier: ProxyHardeningDefaults.scriptName,
+            encodedContentRuleList: ProxyHardeningDefaults.script
+        )
+
+        XCTAssertEqual(rule?.identifier, ProxyHardeningDefaults.scriptName)
+    }
+
     private static let validRuleJSON = """
     [{"trigger":{"url-filter":".*ads.*"},"action":{"type":"block"}}]
     """
