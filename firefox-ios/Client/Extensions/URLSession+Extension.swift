@@ -9,7 +9,7 @@ extension URLSession {
 
     /// `URLSession.shared`, or a session routed through the VPN proxy while it is on.
     static var sharedWithVPNProxy: URLSession {
-        guard #available(iOS 17.0, *) else { return .shared }
+        guard #available(iOS 27.2, *) else { return .shared }
         return VPNProxySessionProvider.shared.session
     }
 }
