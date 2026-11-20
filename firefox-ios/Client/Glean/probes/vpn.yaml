@@ -1,0 +1,82 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# This file defines the metrics that are recorded by the Glean SDK. They are
+# automatically converted to Swift code at build time using the `glean_parser`
+# PyPI package.
+
+# This file is organized (roughly) alphabetically by metric names
+# for easy navigation
+
+---
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
+
+$tags:
+  - VPN
+
+###############################################################################
+# Documentation
+###############################################################################
+
+# Add your new metrics and/or events here.
+vpn:
+  connection_started:
+    type: event
+    description: |
+      Recorded when the VPN tries to connect after the user turns it on. If
+      `error` is set, the connection failed. Changing location while the VPN is already connected
+      is not recorded.
+    extra_keys:
+      country_code:
+        type: string
+        description: |
+          The location the user selected, as an ISO 3166-1 alpha-2 country
+          code, or `REC` when the recommended location is selected.
+      error:
+        type: string
+        description: |
+          Set only when the connection failed, to why it failed. One of
+          `not_signed_in`, `no_server_found`, `proxy_url_cannot_be_generated`,
+          `token_provider_unavailable`, `network`, `server_error`,
+          `quota_exceeded`, `auth`, `attestation_unsupported`, `attestation`,
+          `keychain`, `invalid_response`, `invalid_url` or `unknown`
+          (see `VPNConnectionFailureReason`).
+      is_using_fallback:
+        type: boolean
+        description: |
+          Set only when the connection succeeded. True when the selected
+          location had no usable server, so a different location is used.
+      source:
+        type: string
+        description: |
+          What started the connection. Currently always `settings`, when the
+          user turns the VPN on in settings (see `VPNConnectionStartSource`).
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/VPN-7852
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/36630
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  connection_stopped:
+    type: event
+    description: |
+      Recorded when the VPN is turned off, either by the user or through one
+      of the choices in a VPN alert. Not recorded when the app is terminated
+      with the VPN on.
+    extra_keys:
+      source:
+        type: string
+        description: |
+          What turned the VPN off. One of `settings`, when the user turns it
+          off in settings, or the alert choice the user picked:
+          `continue_without_vpn`, `close_this_tab` or `close_all_tabs`
+          (see `VPNConnectionStopSource`).
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/VPN-7852
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/36630
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never

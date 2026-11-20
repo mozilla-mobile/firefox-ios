@@ -13,6 +13,7 @@ final class VPNMiddleware {
     private let prefs: Prefs
     private let logger: Logger
     private let userPreferences: UserFeaturePreferring
+    private let telemetry: VPNClientTelemetry
     /// Owned here so the proxy session and its pass rotation live as long as the store.
     private let vpnManager: VPNRunnable?
 
@@ -20,11 +21,13 @@ final class VPNMiddleware {
          profile: Profile = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
          userPreferences: UserFeaturePreferring = AppContainer.shared.resolve(),
+         telemetry: VPNClientTelemetry = DefaultVPNTelemetry(),
          vpnManager: VPNRunnable? = VPNMiddleware.makeVPNManager()) {
         self.windowManager = windowManager
         self.prefs = profile.prefs
         self.logger = logger
         self.userPreferences = userPreferences
+        self.telemetry = telemetry
         self.vpnManager = vpnManager
         Task { [weak self] in
             guard let events = self?.vpnManager?.events else { return }
@@ -93,9 +96,11 @@ final class VPNMiddleware {
     private func handleVPNAction(_ action: VPNModernAction, windowUUID: WindowUUID) async {
         switch action {
         case .start:
-            await startVPN()
-        case .stop, .continueWithoutVPN:
-            await stopVPN()
+            await startVPN(source: .settings)
+        case .stop:
+            await stopVPN(source: .settings)
+        case .continueWithoutVPN:
+            await stopVPN(source: .continueWithoutVPN)
         case .changeLocation(let countryCode):
             await changeVPNLocation(countryCode)
         case .resetVPNAtLaunch:
@@ -109,13 +114,13 @@ final class VPNMiddleware {
             if let selectedTab = tabManager?.selectedTab {
                 tabManager?.removeTab(selectedTab.tabUUID)
             }
-            await stopVPN()
+            await stopVPN(source: .closeThisTab)
         case .closeAllTabs:
             for tabManager in windowManager.allWindowTabManagers() {
                 tabManager.removeAllTabs(isPrivateMode: true)
                 tabManager.removeAllTabs(isPrivateMode: false)
             }
-            await stopVPN()
+            await stopVPN(source: .closeAllTabs)
         }
     }
 
@@ -123,17 +128,28 @@ final class VPNMiddleware {
         userPreferences.setPreferenceFor(.vpnFeature, to: false)
     }
 
-    private func startVPN() async {
+    private func startVPN(source: VPNConnectionStartSource) async {
         guard let vpnManager else {
             logger.log("VPN start with no VPNManager registered", level: .warning, category: .vpn)
             return
         }
+        let telemetryCountryCode = selectedCountryCode ?? VPNServerManager.recommendedCountryCode
         do {
             try await vpnManager.start(countryCode: selectedCountryCode)
+            telemetry.recordConnectionSucceeded(
+                source: source,
+                countryCode: telemetryCountryCode,
+                isUsingFallback: vpnManager.isUsingFallback
+            )
             userPreferences.setPreferenceFor(.vpnFeature, to: vpnManager.isRunning)
             UIAccessibility.post(notification: .announcement, argument: String.VPN.Settings.Connected)
         } catch {
             logger.log("VPN start failed: \(error)", level: .warning, category: .vpn)
+            telemetry.recordConnectionFailed(
+                source: source,
+                countryCode: telemetryCountryCode,
+                error: VPNConnectionFailureReason(error)
+            )
         }
     }
 
@@ -172,12 +188,13 @@ final class VPNMiddleware {
         }
     }
 
-    private func stopVPN() async {
+    private func stopVPN(source: VPNConnectionStopSource) async {
         guard let vpnManager else {
             logger.log("VPN stop with no VPNManager registered", level: .warning, category: .vpn)
             return
         }
         await vpnManager.stop()
+        telemetry.recordConnectionStopped(source: source)
         userPreferences.setPreferenceFor(.vpnFeature, to: false)
     }
 }
