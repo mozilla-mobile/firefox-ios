@@ -8,11 +8,13 @@ import Common
 class ShareLongPressTests: FeatureFlaggedTestBase {
     private var topSitesScreen: TopSitesScreen!
     private var readingListScreen: ReadingListScreen!
+    private var historyScreen: HistoryScreen!
 
     override func setUp() async throws {
         try await super.setUp()
         topSitesScreen = TopSitesScreen(app: app)
         readingListScreen = ReadingListScreen(app: app)
+        historyScreen = HistoryScreen(app: app)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864317
@@ -255,7 +257,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
         // Long-press on a website
         app.tables.cells.staticTexts.element(boundBy: 1).press(forDuration: 1.0)
         // Tap the Share button in the context menu
-        app.tables["Context Menu"].buttons["shareAppleLarge"].waitAndTap()
+        historyScreen.tapShareOption()
         // Tap the Reminders button in the menu
         if #available(iOS 16, *) {
             let optionCell = app.collectionViews.cells[option]

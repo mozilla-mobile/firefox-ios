@@ -29,6 +29,10 @@ final class HistoryScreen {
         delete.waitAndTap()
     }
 
+    func tapShareOption() {
+        selectContextMenuOption(sel.SHARE_OPTION)
+    }
+
     func assertExampleEntryRemoved() {
         BaseTestCase().mozWaitForElementToNotExist(historyEntryExample)
     }
@@ -64,5 +68,11 @@ final class HistoryScreen {
         } else {
             BaseTestCase().mozWaitForElementToNotExist(element, timeout: timeout)
         }
+    }
+
+    private func selectContextMenuOption(_ selector: Selector) {
+        let button = selector.element(in: app)
+        button.waitAndTap()
+        BaseTestCase().mozWaitForElementToNotExist(button)
     }
 }
