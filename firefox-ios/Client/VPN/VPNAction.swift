@@ -12,6 +12,9 @@ enum VPNModernAction: ModernAction, Equatable {
     /// Dispatched on app foreground; only refetches once the stored reset date has passed.
     case refreshUsageIfResetDue
     case resetVPNAtLaunch
+    // App lifecycle events that pause and resume pass rotation.
+    case appDidEnterBackground
+    case appDidBecomeActive
     // User choices from the VPN alerts. Each one turns the VPN off.
     case continueWithoutVPN
     case closeThisTab

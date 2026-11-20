@@ -201,6 +201,7 @@ class AppDelegate: UIResponder,
 
         profile.syncManager?.applicationDidBecomeActive()
         webServerUtil?.setUpWebServer()
+        dispatchVPNAction(.appDidBecomeActive)
 
         // Process any pending app extension telemetry events (e.g., from Share Extension)
         TelemetryWrapper.shared.processPendingAppExtensionTelemetry(profile: profile)
@@ -247,6 +248,7 @@ class AppDelegate: UIResponder,
         TelemetryWrapper.recordEvent(category: .action, method: .background, object: .app)
 
         profile.syncManager?.applicationDidEnterBackground()
+        dispatchVPNAction(.appDidEnterBackground)
 
         let singleShotTimer = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
         // 2 seconds is ample for a localhost request to be completed by GCDWebServer.
@@ -396,9 +398,13 @@ class AppDelegate: UIResponder,
 
     // makes sure VPN doesn't connect at launch
     private func resetVPNAtLaunch() {
+        dispatchVPNAction(.resetVPNAtLaunch)
+    }
+
+    private func dispatchVPNAction(_ action: VPNModernAction) {
         guard #available(iOS 17.0, *),
               featureFlagsProvider.isEnabled(.vpnFeature) else { return }
-        store.dispatch(VPNModernAction.resetVPNAtLaunch, forWindowUUID: .unavailable)
+        store.dispatch(action, forWindowUUID: .unavailable)
     }
 
     private func refreshVPNUsageIfResetDue() {

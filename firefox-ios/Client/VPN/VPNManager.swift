@@ -43,6 +43,10 @@ protocol VPNRunnable {
     func refreshUsage() async throws
     /// Redraws views reading `selectedCountryCode` after its pref changes.
     func selectedCountryCodeDidChange(countryCode: String)
+    /// Stops pass rotation while the app is backgrounded.
+    func pauseRotation()
+    /// Restarts pass rotation if the VPN is running, rotating right away if the pass is due.
+    func resumeRotation()
 }
 
 enum VPNError: Error {
@@ -121,6 +125,9 @@ final class VPNManager: VPNRunnable {
     }
 
     private var rotationTask: Task<Void, Never>?
+    /// Most recently applied pass, used to resume rotation when returning to the foreground.
+    private var latestPass: VPNProxyPass?
+    private var isRotationPaused = false
 
     init(
         logger: Logger = DefaultLogger.shared,
@@ -189,6 +196,7 @@ final class VPNManager: VPNRunnable {
     func stop() async {
         self.rotationTask?.cancel()
         self.rotationTask = nil
+        self.latestPass = nil
         await self.applyProxyAndRebuildWebViews(configs: [])
         self.activeServer = nil
     }
@@ -211,13 +219,31 @@ final class VPNManager: VPNRunnable {
         }
     }
 
+    /// A rotation started during a background wake can be suspended mid-request, which exhausts
+    /// `VPNGuardian.rotationTimeout` and fails the rotation on resume, so rotation only runs in the foreground.
+    func pauseRotation() {
+        isRotationPaused = true
+        rotationTask?.cancel()
+        rotationTask = nil
+    }
+
+    /// An overdue pass rotates almost immediately, since `passRotation` floors its delay at `minRotationInterval`.
+    func resumeRotation() {
+        isRotationPaused = false
+        guard rotationTask == nil, isRunning, let latestPass else { return }
+        startPassRotation(after: latestPass)
+    }
+
     /// Consumes `VPNGuardian.passRotation` and reapplies the proxy configuration with the new
     /// bearer token. The endpoint is unchanged, so this rotates without forcing a session
     /// reset: WebKit keeps its existing connection pool, in-flight requests finish under the
     /// proxy's grace period, and new requests pick up the rotated header. Forcing the reset
     /// here would tear down sessions out from under webviews that are still loading.
     private func startPassRotation(after initial: VPNProxyPass) {
+        latestPass = initial
         rotationTask?.cancel()
+        rotationTask = nil
+        guard !isRotationPaused else { return }
         rotationTask = Task { [weak self] in
             guard let stream = self?.guardian?.passRotation(after: initial) else { return }
             do {
@@ -226,6 +252,7 @@ final class VPNManager: VPNRunnable {
                           let server = self.activeServer else { return }
                     let config = try self.buildProxyConfig(server: server, pass: new)
                     self.proxyApplier.applyProxyConfigurations([config], forcingSessionReset: false)
+                    self.latestPass = new
                     self.currentUsage = new.usage
                     self.eventsContinuation.yield(.passUpdated(new))
                     self.logger.log(
