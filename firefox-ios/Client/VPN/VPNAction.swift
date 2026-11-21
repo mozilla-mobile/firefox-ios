@@ -25,4 +25,6 @@ enum VPNModernAction: ModernAction, Equatable {
 enum VPNAlertModernAction: ModernAction {
     case showFailureAlert
     case showDataLimitAlert(dataLimitBytes: Int64)
+    case showLocationUnavailableAlert
+    case showConnectionFailedAlert
 }

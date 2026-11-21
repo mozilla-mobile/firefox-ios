@@ -60,6 +60,8 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
     var showGoogleLensCameraCalled = 0
     var showVPNFailureAlertCalled = 0
     var showVPNDataLimitAlertCalled = 0
+    var showVPNLocationUnavailableAlertCalled = 0
+    var showVPNConnectionFailedAlertCalled = 0
     var searchGoogleLensCalled = 0
     var searchGoogleLensSource: GoogleLensTelemetry.Source?
     var searchGoogleLensTimerId: GleanTimerId?
@@ -208,6 +210,14 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
 
     func showVPNDataLimitAlert(dataLimitBytes: Int64) {
         showVPNDataLimitAlertCalled += 1
+    }
+
+    func showVPNLocationUnavailableAlert() {
+        showVPNLocationUnavailableAlertCalled += 1
+    }
+
+    func showVPNConnectionFailedAlert() {
+        showVPNConnectionFailedAlertCalled += 1
     }
 
     func searchGoogleLens(with image: UIImage,

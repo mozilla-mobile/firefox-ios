@@ -42,6 +42,8 @@ struct BrowserViewControllerState: ScreenState {
         case googleLensCamera
         case vpnFailureAlert
         case vpnDataLimitAlert(dataLimitBytes: Int64)
+        case vpnLocationUnavailableAlert
+        case vpnConnectionFailedAlert
     }
 
     let windowUUID: WindowUUID
@@ -160,6 +162,10 @@ struct BrowserViewControllerState: ScreenState {
             return state.resetTransientState().copy(displayView: .vpnFailureAlert)
         case .showDataLimitAlert(let dataLimitBytes):
             return state.resetTransientState().copy(displayView: .vpnDataLimitAlert(dataLimitBytes: dataLimitBytes))
+        case .showLocationUnavailableAlert:
+            return state.resetTransientState().copy(displayView: .vpnLocationUnavailableAlert)
+        case .showConnectionFailedAlert:
+            return state.resetTransientState().copy(displayView: .vpnConnectionFailedAlert)
         }
     }
 
