@@ -10,9 +10,10 @@ import XCTest
 
 final class TabManagerTests: TabManagerTestsBase {
     @MainActor
-    func testAddTab_withGroupID_preservesNormalBrowsing() {
+    func testAddTab_withGroupID_preservesNormalBrowsing() async throws {
         let subject: any TabManager = createSubject()
-        let groupID = UUID()
+        try await subject.tabGroupManager.restore()
+        let groupID = try subject.tabGroupManager.createGroup(title: "Group")
 
         let tab = subject.addTab(zombie: true, groupID: groupID)
 
@@ -20,19 +21,22 @@ final class TabManagerTests: TabManagerTestsBase {
         XCTAssertFalse(tab.isPrivate)
         XCTAssertEqual(subject.normalTabs, [tab])
         XCTAssertTrue(subject.privateTabs.isEmpty)
+        try await subject.tabGroupManager.flush()
     }
 
     @MainActor
-    func testAddTab_withGroupID_preservesPrivateBrowsing() {
+    func testAddTab_withGroupID_preservesPrivateBrowsing() async throws {
         let subject: any TabManager = createSubject()
-        let groupID = UUID()
+        try await subject.tabGroupManager.restore()
+        let groupID = try subject.tabGroupManager.createGroup(title: "Group")
 
         let tab = subject.addTab(zombie: true, isPrivate: true, groupID: groupID)
 
-        XCTAssertEqual(tab.groupID, groupID)
+        XCTAssertNil(tab.groupID)
         XCTAssertTrue(tab.isPrivate)
         XCTAssertTrue(subject.normalTabs.isEmpty)
         XCTAssertEqual(subject.privateTabs, [tab])
+        try await subject.tabGroupManager.flush()
     }
 
     @MainActor
@@ -47,10 +51,12 @@ final class TabManagerTests: TabManagerTestsBase {
     }
 
     @MainActor
-    func testAddPopupForParentTab_withNormalParent_inheritsPrivacyAndGroupID() {
-        let groupID = UUID()
+    func testAddPopupForParentTab_withNormalParent_inheritsPrivacyAndGroupID() async throws {
+        let manager = TabGroupManager(storage: mockGroupStorage)
+        try await manager.restore()
+        let groupID = try manager.createGroup(title: "Popup")
         let parent = Tab(profile: mockProfile, groupID: groupID, windowUUID: tabWindowUUID)
-        let subject = createSubject(tabs: [parent])
+        let subject = createSubject(tabs: [parent], groupManager: manager)
 
         let popup = subject.addPopupForParentTab(profile: mockProfile,
                                                  parentTab: parent,
@@ -61,23 +67,27 @@ final class TabManagerTests: TabManagerTestsBase {
         XCTAssertEqual(subject.tabs, [parent, popup])
         XCTAssertEqual(subject.normalTabs, [parent, popup])
         XCTAssertTrue(subject.privateTabs.isEmpty)
+        try await manager.flush()
     }
 
     @MainActor
-    func testAddPopupForParentTab_withPrivateParent_inheritsPrivacyAndGroupID() {
-        let groupID = UUID()
+    func testAddPopupForParentTab_withPrivateParent_inheritsPrivacyAndGroupID() async throws {
+        let manager = TabGroupManager(storage: mockGroupStorage)
+        try await manager.restore()
+        let groupID = try manager.createGroup(title: "Popup")
         let parent = Tab(profile: mockProfile, isPrivate: true, groupID: groupID, windowUUID: tabWindowUUID)
-        let subject = createSubject(tabs: [parent])
+        let subject = createSubject(tabs: [parent], groupManager: manager)
 
         let popup = subject.addPopupForParentTab(profile: mockProfile,
                                                  parentTab: parent,
                                                  configuration: WKWebViewConfiguration())
 
-        XCTAssertEqual(popup.groupID, groupID)
+        XCTAssertNil(popup.groupID)
         XCTAssertTrue(popup.isPrivate)
         XCTAssertEqual(subject.tabs, [parent, popup])
         XCTAssertTrue(subject.normalTabs.isEmpty)
         XCTAssertEqual(subject.privateTabs, [parent, popup])
+        try await manager.flush()
     }
 
     @MainActor

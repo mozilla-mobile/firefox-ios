@@ -24,6 +24,7 @@ final class DependencyHelperMock {
             localName: "profile"
         )
         AppContainer.shared.register(service: profile as Profile)
+        AppContainer.shared.register(service: TabGroupManager(storage: MockTabGroupStorage()))
 
         let diskImageStore: DiskImageStore = DefaultDiskImageStore(
             files: profile.files,
