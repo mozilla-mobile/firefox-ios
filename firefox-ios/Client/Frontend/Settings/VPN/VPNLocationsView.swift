@@ -52,6 +52,7 @@ struct VPNLocationsView: ThemeableView {
         .background(theme.colors.layer1.color)
         .navigationTitle(String.VPN.Settings.LocationTitle)
         .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
+        .onAppear { viewModel.openedLocationList() }
         .task { await loadLocations() }
     }
 

@@ -16,9 +16,9 @@ enum VPNModernAction: ModernAction, Equatable {
     case appDidEnterBackground
     case appDidBecomeActive
     // User choices from the VPN alerts. Each one turns the VPN off.
-    case continueWithoutVPN
-    case closeThisTab
-    case closeAllTabs
+    case continueWithoutVPN(alertType: VPNAlertType)
+    case closeThisTab(alertType: VPNAlertType)
+    case closeAllTabs(alertType: VPNAlertType)
 }
 
 /// Shows a VPN alert in the window the action is dispatched for.
