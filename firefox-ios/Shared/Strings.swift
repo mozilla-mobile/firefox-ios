@@ -1602,6 +1602,11 @@ extension String {
                 comment: "Within the history panel, a user can navigate into a screen with only grouped history items. Within that screen, a user can now swipe to delete a single item in the list. This label informs the user of a deletion action on the item.")
 
             public enum ClearHistorySheet {
+                public static let TitleV2 = MZLocalizedString(
+                    key: "LibraryPanel.History.ClearHistorySheet.Title.v162",
+                    tableName: "HistoryPanel",
+                    value: "Delete history, cookies, and other browsing data from %@, including history synced with other devices.",
+                    comment: "Message of the confirmation dialogue to clear browsing data. Explains what data will be deleted, including history synced with other devices. %@ is the app name (e.g. Firefox).")
                 public static let Title = MZLocalizedString(
                     key: "LibraryPanel.History.Title.v138",
                     tableName: "HistoryPanel",
