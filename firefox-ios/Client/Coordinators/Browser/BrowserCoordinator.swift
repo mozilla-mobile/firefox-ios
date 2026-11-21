@@ -33,7 +33,6 @@ final class BrowserCoordinator: BaseCoordinator,
                           PrivateHomepageDelegate,
                           WindowEventCoordinator,
                           MainMenuCoordinatorDelegate,
-                          ETPCoordinatorSSLStatusDelegate,
                           SearchEngineSelectionCoordinatorDelegate,
                           TermsOfUseDelegate,
                           ShareSheetCoordinatorDelegate,
@@ -391,12 +390,6 @@ final class BrowserCoordinator: BaseCoordinator,
         }
     }
 
-    // MARK: - ETPCoordinatorSSLStatusDelegate
-
-    var showHasOnlySecureContentInTrackingPanel: Bool {
-        return browserViewController.tabManager.selectedTab?.currentWebView()?.hasOnlySecureContent ?? false
-    }
-
     // MARK: - Route handling
 
     override func canHandle(route: Route) -> Bool {
@@ -611,8 +604,7 @@ final class BrowserCoordinator: BaseCoordinator,
 
     private func showETPMenu(sourceView: UIView) {
         let enhancedTrackingProtectionCoordinator = EnhancedTrackingProtectionCoordinator(router: router,
-                                                                                          tabManager: tabManager,
-                                                                                          secureConnectionDelegate: self)
+                                                                                          tabManager: tabManager)
         enhancedTrackingProtectionCoordinator.parentCoordinator = self
         add(child: enhancedTrackingProtectionCoordinator)
         enhancedTrackingProtectionCoordinator.start(sourceView: sourceView)
@@ -706,7 +698,7 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     func editBookmarkForCurrentTab() {
-        guard let urlString = tabManager.selectedTab?.url?.absoluteString else { return }
+        guard let urlString = tabManager.selectedTab?.url?.saveableURL.absoluteString else { return }
         browserViewController.openBookmarkEditPanel(urlString: urlString)
     }
 

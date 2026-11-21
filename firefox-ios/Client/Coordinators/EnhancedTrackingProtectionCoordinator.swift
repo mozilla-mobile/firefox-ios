@@ -13,11 +13,6 @@ protocol EnhancedTrackingProtectionCoordinatorDelegate: AnyObject {
     func settingsOpenPage(settings: Route.SettingsSection)
 }
 
-protocol ETPCoordinatorSSLStatusDelegate: AnyObject {
-    @MainActor
-    var showHasOnlySecureContentInTrackingPanel: Bool { get }
-}
-
 class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
                                              TrackingProtectionMenuDelegate,
                                              FeatureFlaggable {
@@ -34,13 +29,10 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
     init(router: Router,
          profile: Profile = AppContainer.shared.resolve(),
          tabManager: TabManager,
-         secureConnectionDelegate: ETPCoordinatorSSLStatusDelegate
     ) {
         let tab = tabManager.selectedTab
         let url = tab?.url ?? URL(fileURLWithPath: "")
-        let contentBlockerStatus = tab?.contentBlocker?.status ?? .blocking
         let contentBlockerStats = tab?.contentBlocker?.stats
-        let connectionSecure = secureConnectionDelegate.showHasOnlySecureContentInTrackingPanel
         self.profile = profile
         self.tabManager = tabManager
         super.init(router: router)
@@ -48,15 +40,13 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
         let etpViewModel = TrackingProtectionModel(
             userDefaults: UserDefaults(suiteName: AppInfo.sharedContainerIdentifier),
             url: url,
-            connectionSecure: connectionSecure,
             globalETPIsEnabled: FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs),
-            contentBlockerStatus: contentBlockerStatus,
             contentBlockerStats: contentBlockerStats,
-            selectedTab: tabManager.selectedTab
+            selectedTab: tabManager.selectedTab,
+            profile: profile
         )
 
         trackingProtectionMenuVC = TrackingProtectionViewController(viewModel: etpViewModel,
-                                                                    profile: profile,
                                                                     windowUUID: tabManager.windowUUID)
         trackingProtectionMenuVC?.trackingProtectionMenuDelegate = self
         trackingProtectionNavController = UINavigationController(
