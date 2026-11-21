@@ -8,6 +8,7 @@ protocol HistorySelectorsSet {
     var HISTORY_ENTRY_EXAMPLE: Selector { get }
     var DELETE_BUTTON: Selector { get }
     var EMPTY_RECENTLY_CLOSED_MSG: Selector { get }
+    var SHARE_OPTION: Selector { get }
     var all: [Selector] { get }
 }
 
@@ -17,6 +18,7 @@ struct HistorySelectors: HistorySelectorsSet {
         static let deleteButton = "Delete"
         static let emptyMsg     = emptyRecentlyClosedMesg
         static let tableViewId  = AccessibilityIdentifiers.LibraryPanels.HistoryPanel.tableView
+        static let shareOption = AccessibilityIdentifiers.LibraryPanels.HistoryPanel.ContextMenu.share
     }
 
     let HISTORY_ENTRY_EXAMPLE = Selector.staticTextByExactLabel(
@@ -37,5 +39,11 @@ struct HistorySelectors: HistorySelectorsSet {
         groups: ["library", "history"]
     )
 
-    var all: [Selector] { [HISTORY_ENTRY_EXAMPLE, DELETE_BUTTON, EMPTY_RECENTLY_CLOSED_MSG] }
+    let SHARE_OPTION = Selector.buttonId(
+        IDs.shareOption,
+        description: "Share option in the History context menu",
+        groups: ["history"]
+    )
+
+    var all: [Selector] { [HISTORY_ENTRY_EXAMPLE, DELETE_BUTTON, EMPTY_RECENTLY_CLOSED_MSG, SHARE_OPTION] }
 }
