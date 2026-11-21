@@ -36,67 +36,6 @@ enum ArgumentProcessor {
                 NSLog("JEXL_RESULT: \(errorJson)")
             }
         }
-        // We have isLauncher here doing nothing; this is to match the Android implementation.
-        // There is nothing to do at this point, because we're unable to affect the flow of the app.
-        if args.isLauncher {
-            ()  // NOOP.
-        }
-    }
-
-    static func createCommandLineArgs(url: URL) -> CliArgs? {
-        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
-            let scheme = components.scheme,
-            let queryItems = components.queryItems,
-            !["http", "https"].contains(scheme)
-        else {
-            return nil
-        }
-
-        var experiments: String?
-        var resetDatabase = false
-        var logState = false
-        var isLauncher = false
-        var evalJexl: String?
-        var meantForUs = false
-
-        func flag(_ v: String?) -> Bool {
-            guard let v = v else {
-                return true
-            }
-            return ["1", "true"].contains(v.lowercased())
-        }
-
-        for item in queryItems {
-            switch item.name {
-            case "--nimbus-cli":
-                meantForUs = flag(item.value)
-            case "--experiments":
-                experiments = item.value?.removingPercentEncoding
-            case "--reset-db":
-                resetDatabase = flag(item.value)
-            case "--log-state":
-                logState = flag(item.value)
-            case "--is-launcher":
-                isLauncher = flag(item.value)
-            case "--eval-jexl":
-                evalJexl = item.value?.removingPercentEncoding
-            default:
-                ()  // NOOP
-            }
-        }
-
-        if !meantForUs {
-            return nil
-        }
-
-        return check(
-            args: CliArgs(
-                resetDatabase: resetDatabase,
-                experiments: experiments,
-                logState: logState,
-                isLauncher: isLauncher,
-                evalJexl: evalJexl
-            ))
     }
 
     static func createCommandLineArgs(args: [String]?) -> CliArgs? {
@@ -113,26 +52,27 @@ enum ArgumentProcessor {
         var logState = false
 
         for arg in args {
-            var value: String?
             switch arg {
             case "--version":
                 key = "version"
+
             case "--experiments":
                 key = "experiments"
+
             case "--reset-db":
                 resetDatabase = true
+
             case "--log-state":
                 logState = true
+
             case "--eval-jexl":
                 key = "eval-jexl"
-            default:
-                value = arg.replacingOccurrences(of: "&apos;", with: "'")
-            }
 
-            if let k = key, let v = value {
-                argMap[k] = v
-                key = nil
-                value = nil
+            default:
+                if let k = key {
+                    argMap[k] = arg
+                    key = nil
+                }
             }
         }
 
@@ -140,27 +80,30 @@ enum ArgumentProcessor {
             return nil
         }
 
-        let experiments = argMap["experiments"]
-        let evalJexl = argMap["eval-jexl"]
+        let experiments = argMap["experiments"]?.replacingOccurrences(of: "&apos;", with: "'")
+        if !validateExperiments(experiments: experiments) {
+            return nil
+        }
 
-        return check(
-            args: CliArgs(
-                resetDatabase: resetDatabase,
-                experiments: experiments,
-                logState: logState,
-                isLauncher: false,
-                evalJexl: evalJexl
-            ))
+        let evalJexl = argMap["eval-jexl"]?.replacingOccurrences(of: "&apos;", with: "'")
+
+        return CliArgs(
+            resetDatabase: resetDatabase,
+            experiments: experiments,
+            logState: logState,
+            evalJexl: evalJexl
+        )
     }
 
-    static func check(args: CliArgs) -> CliArgs? {
-        if let string = args.experiments {
-            guard let payload = try? Dictionary.parse(jsonString: string), payload["data"] is [Any]
+    static func validateExperiments(experiments: String?) -> Bool {
+        if let json = experiments {
+            guard let payload = try? Dictionary.parse(jsonString: json), payload["data"] is [Any]
             else {
-                return nil
+                return false
             }
         }
-        return args
+
+        return true
     }
 }
 
@@ -168,17 +111,17 @@ struct CliArgs: Equatable {
     let resetDatabase: Bool
     let experiments: String?
     let logState: Bool
-    let isLauncher: Bool
     let evalJexl: String?
-}
 
-public extension NimbusInterface {
-    func initializeTooling(url: URL?) {
-        guard let url = url,
-            let args = ArgumentProcessor.createCommandLineArgs(url: url)
-        else {
-            return
-        }
-        ArgumentProcessor.initializeTooling(nimbus: self, args: args)
+    init(
+        resetDatabase: Bool = false,
+        experiments: String? = nil,
+        logState: Bool = false,
+        evalJexl: String? = nil
+    ) {
+        self.resetDatabase = resetDatabase
+        self.experiments = experiments
+        self.logState = logState
+        self.evalJexl = evalJexl
     }
 }
