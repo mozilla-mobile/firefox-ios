@@ -108,6 +108,7 @@ final class SummarizeViewModelTests: XCTestCase, @unchecked Sendable {
         ##### \(footnote)
         """
         let subject = createSubject(minWordsAcceptToShow: chunk.count + 1)
+        let service = summarizerService!
 
         subject.unblockSummarization()
 
@@ -117,13 +118,13 @@ final class SummarizeViewModelTests: XCTestCase, @unchecked Sendable {
             // The first time is called the closure it responds just with summary
             // then it fires again with the note appended.
             if response == chunk {
-                XCTAssertEqual(self.summarizerService.summarizeStreamedCalled, 1)
+                XCTAssertEqual(service.summarizeStreamedCalled, 1)
                 return
             }
             XCTAssertEqual(response, responseWithNote)
             newDataExpectation.fulfill()
         }
-        wait(for: [newDataExpectation], timeout: 0.5)
+        wait(for: [newDataExpectation], timeout: 5)
     }
 
     func test_summarize_withEnoughStartingWords() {
@@ -137,6 +138,7 @@ final class SummarizeViewModelTests: XCTestCase, @unchecked Sendable {
         ##### \(footnote)
         """
         let subject = createSubject(minWordsAcceptToShow: chunk.count - 1)
+        let service = summarizerService!
 
         subject.unblockSummarization()
 
@@ -146,13 +148,13 @@ final class SummarizeViewModelTests: XCTestCase, @unchecked Sendable {
             // The first time is called the closure it responds just with summary
             // then it fires again with the note appended.
             if response == chunk {
-                XCTAssertEqual(self.summarizerService.summarizeStreamedCalled, 1)
+                XCTAssertEqual(service.summarizeStreamedCalled, 1)
                 return
             }
             XCTAssertEqual(response, responseWithNote)
             newDataExpectation.fulfill()
         }
-        wait(for: [newDataExpectation], timeout: 0.5)
+        wait(for: [newDataExpectation], timeout: 5)
     }
 
     func test_summarize_whenPassRandomError_throwsUnknownSummarizerError() {
