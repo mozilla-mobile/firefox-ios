@@ -146,6 +146,61 @@ class TabTests: XCTestCase {
         XCTAssertEqual(tab.title, "Test Page Title", "Expected title to return the webView's title")
     }
 
+    // MARK: - hasUncommittedNavigation
+
+    func testHasUncommittedNavigation_whenWebViewIsNil_returnsFalse() {
+        let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
+        tab.hasProvisionalNavigation = true
+
+        XCTAssertFalse(tab.hasUncommittedNavigation)
+    }
+
+    func testHasUncommittedNavigation_whenWebViewIsNotLoading_returnsFalse() {
+        let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
+        let mockTabWebView = MockTabWebView(tab: tab)
+        tab.webView = mockTabWebView
+        mockTabWebView.loadedURL = URL(string: "https://www.mozilla.org")
+        mockTabWebView.mockIsLoading = false
+        // Left behind by a navigation whose failure went to another navigation delegate.
+        tab.hasProvisionalNavigation = true
+
+        XCTAssertFalse(tab.hasUncommittedNavigation)
+    }
+
+    func testHasUncommittedNavigation_whenLoadingURLIsNotTheCurrentBackForwardItem_returnsTrue() {
+        let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
+        let mockTabWebView = MockTabWebView(tab: tab)
+        tab.webView = mockTabWebView
+        mockTabWebView.loadedURL = URL(string: "https://www.mozilla.org")
+        mockTabWebView.mockIsLoading = true
+
+        XCTAssertTrue(tab.hasUncommittedNavigation)
+    }
+
+    func testHasUncommittedNavigation_whenProvisionalNavigationTargetsTheCurrentBackForwardItem_returnsTrue() {
+        let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
+        let mockTabWebView = MockTabWebView(tab: tab)
+        tab.webView = mockTabWebView
+        // `url` matches the current back/forward item (both nil here), as during a back/forward navigation,
+        // a restore, or a redirect back to the current URL.
+        mockTabWebView.loadedURL = nil
+        mockTabWebView.mockIsLoading = true
+        tab.hasProvisionalNavigation = true
+
+        XCTAssertTrue(tab.hasUncommittedNavigation)
+    }
+
+    func testHasUncommittedNavigation_whenCommittedPageIsLoadingSubresources_returnsFalse() {
+        let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
+        let mockTabWebView = MockTabWebView(tab: tab)
+        tab.webView = mockTabWebView
+        mockTabWebView.loadedURL = nil
+        mockTabWebView.mockIsLoading = true
+        tab.hasProvisionalNavigation = false
+
+        XCTAssertFalse(tab.hasUncommittedNavigation)
+    }
+
     @MainActor
     func testTabDoesntLeak() {
         let tab = Tab(profile: mockProfile, windowUUID: windowUUID)

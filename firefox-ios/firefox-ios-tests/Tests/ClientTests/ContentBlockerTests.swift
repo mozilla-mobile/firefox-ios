@@ -98,6 +98,19 @@ final class ContentBlockerTests: XCTestCase {
         XCTAssertEqual(subject.currentlyEnabledLists(), [ASAdBlockerListFetcher.adBlockerRecordID])
     }
 
+    func testNotifiedTabSetupRequired_whenTrackingProtectionEnabled_reloadsTabAfterRulesAreSetUp() async {
+        profile.prefs.setBool(true, forKey: ContentBlockingConfig.Prefs.EnabledKey)
+        let tab = MockContentBlockerTab()
+        let subject = FirefoxTabContentBlocker(tab: tab, prefs: profile.prefs)
+        let expectation = XCTestExpectation(description: "tab reloaded")
+        tab.onReload = { expectation.fulfill() }
+
+        subject.notifiedTabSetupRequired()
+
+        await fulfillment(of: [expectation], timeout: 2)
+        XCTAssertEqual(tab.reloadCalled, 1)
+    }
+
     func testReloadAdBlockerList_secondCallWithSameJSON_skipsRecompile() async {
         let mock = MockAdBlockerListFetcher(jsonToReturn: Self.validRuleJSON)
         ContentBlocker.shared.adBlockerListFetcher = mock
@@ -182,11 +195,4 @@ final class ContentBlockerTests: XCTestCase {
     private static let differentRuleJSON = """
     [{"trigger":{"url-filter":".*tracker.*"},"action":{"type":"block"}}]
     """
-}
-
-private final class MockContentBlockerTab: ContentBlockerTab {
-    var isPrivate = false
-    func currentURL() -> URL? { return nil }
-    func currentWebView() -> WKWebView? { return nil }
-    func imageContentBlockingEnabled() -> Bool { return false }
 }
