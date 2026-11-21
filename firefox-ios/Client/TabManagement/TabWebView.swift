@@ -66,6 +66,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Notifi
         // Workaround to avoid crash: https://mozilla.sentry.io/issues/3081569597/?project=6176941
         // For iPads with hardware keyboard we remove our custom `AccessoryView` as a temporary solution.
         if shouldSuppressAccessoryViewOniPad { return nil }
+        guard accessoryView.hasContent else { return nil }
 
         return accessoryView
     }
@@ -81,6 +82,10 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Notifi
                    navigationDelegate: WKNavigationDelegate?) {
         self.delegate = delegate
         self.navigationDelegate = navigationDelegate
+
+        accessoryView.contentAvailabilityChanged = { [weak self] in
+            self?.reloadInputViews()
+        }
 
         accessoryView.previousClosure = { [weak self] in
             guard let self else { return }

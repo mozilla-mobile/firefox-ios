@@ -33,6 +33,7 @@ final class AccessoryViewProvider: UIView,
     var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
     private var autofillAccessoryView: AutofillAccessoryViewButtonItem?
+    private let userInterfaceIdiom: UIUserInterfaceIdiom
     let windowUUID: WindowUUID
 
     // Stub closures - these closures will be given as selectors in a future task
@@ -44,6 +45,15 @@ final class AccessoryViewProvider: UIView,
     var savedLoginsClosure: (() -> Void)?
     var useStrongPasswordClosure: (() -> Void)?
     var useRelayMaskClosure: (() -> Void)?
+    /// Called when `hasContent` changes, so the owner can attach or detach the view from the keyboard.
+    var contentAvailabilityChanged: (() -> Void)?
+
+    /// On iPad with iOS 26+ the toolbar has no navigation or Done buttons, so without an autofill
+    /// item it would be an empty bar that still takes up space and touches above the keyboard.
+    var hasContent: Bool {
+        guard #available(iOS 26.0, *), userInterfaceIdiom == .pad else { return true }
+        return autofillAccessoryView != nil
+    }
 
     private var searchBarPosition: SearchBarPosition {
         return userPreferences.searchBarPosition
@@ -61,8 +71,7 @@ final class AccessoryViewProvider: UIView,
             ].compactMap { $0 }
         }
 
-        let isiPad = UIDevice.current.userInterfaceIdiom == .pad
-        if isiPad {
+        if userInterfaceIdiom == .pad {
             return [.flexibleSpace(), autofillAccessoryView].compactMap { $0 }
         } else if let autofillAccessoryView {
             return [navigationButtonsBarItem, .flexibleSpace(), autofillAccessoryView, .flexibleSpace(), doneButton]
@@ -214,10 +223,12 @@ final class AccessoryViewProvider: UIView,
     // MARK: - Initialization
     init(themeManager: ThemeManager = AppContainer.shared.resolve(),
          windowUUID: WindowUUID,
-         notificationCenter: NotificationCenter = NotificationCenter.default) {
+         notificationCenter: NotificationCenter = NotificationCenter.default,
+         userInterfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
         self.themeManager = themeManager
         self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
+        self.userInterfaceIdiom = userInterfaceIdiom
 
         super.init(frame: CGRect(width: 0, height: UX.accessoryViewHeight))
 
@@ -250,6 +261,7 @@ final class AccessoryViewProvider: UIView,
 
     // MARK: - Layout
     func reloadViewFor(_ accessoryType: AccessoryType) {
+        let hadContent = hasContent
         switch accessoryType {
         case .standard:
             autofillAccessoryView = nil
@@ -267,6 +279,7 @@ final class AccessoryViewProvider: UIView,
         }
         configureToolbarItems()
         layoutIfNeeded()
+        if hasContent != hadContent { contentAvailabilityChanged?() }
     }
 
     private func setupSpacer(_ spacer: UIView, width: CGFloat) {
