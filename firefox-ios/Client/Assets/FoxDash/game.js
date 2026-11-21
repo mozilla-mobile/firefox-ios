@@ -4,7 +4,6 @@
   'use strict';
 
   const { C, TAU, rand, lerp, clamp, fmt, theme } = Arcade;
-  const GAME = 'fox-dash';
   // Everything is measured in world units. The screen is at least VIEW_W units
   // wide and MIN_VIEW_H units tall, so landscape sees farther ahead instead of zooming.
   const VIEW_W = 430;
@@ -555,7 +554,7 @@
   function gameOver() {
     state = 'over';
     const final = score();
-    const { best, isNewBest } = Arcade.reportScore(GAME, final);
+    const { best, isNewBest } = Arcade.reportScore(final);
     ui.overCause.dataset.icon = cause;
     ui.overScore.textContent = fmt(final);
     ui.overBestScore.textContent = fmt(best);
@@ -812,7 +811,7 @@
   // ------------------------------------------------------------------ run --
 
   reset();
-  showBest(Arcade.bestScore(GAME));
+  showBest(Arcade.bestScore());
   Sprites.paintIcons();
 
   Arcade.loop((dt) => {

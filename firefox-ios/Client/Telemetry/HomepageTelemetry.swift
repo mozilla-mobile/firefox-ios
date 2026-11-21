@@ -16,6 +16,7 @@ struct HomepageTelemetry {
         case bookmarkShowAll = "bookmarks_show_all_button"
         case story = "story"
         case quickAnswersEntryPoint = "quick_answers_entry_point"
+        case foxDash = "fox_dash"
 
         var sectionName: String {
             switch self {
@@ -27,7 +28,7 @@ struct HomepageTelemetry {
                 return "bookmarks"
             case .story:
                 return "stories"
-            case .quickAnswersEntryPoint:
+            case .quickAnswersEntryPoint, .foxDash:
                 return "header"
             }
         }
