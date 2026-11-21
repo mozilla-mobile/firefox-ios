@@ -45,7 +45,10 @@ pipelines:
 workflows:
   determine_apps_affected:
     steps:
-    - git-clone@6: {}
+    # The diff below needs the full history, git-clone fetches only the last commit by default
+    - git-clone@8:
+        inputs:
+        - clone_depth: -1
     - script@1:
         title: Determine which application to base configuration
         inputs:
@@ -74,6 +77,11 @@ workflows:
                 BASE_BRANCH="origin/main"
                 echo $BASE_BRANCH
             fi
+
+            # git-clone checks out the PR merge ref without creating the base branch ref, so fetch it
+            BASE_BRANCH_NAME="${BASE_BRANCH#origin/}"
+            git fetch --no-tags origin "+refs/heads/$BASE_BRANCH_NAME:refs/remotes/origin/$BASE_BRANCH_NAME"
+            BASE_BRANCH="origin/$BASE_BRANCH_NAME"
 
             # Determine apps affected by the changes introduced in the commit/PR
             APPS_AFFECTED=$(git diff --name-only $BASE_BRANCH..."$BITRISE_GIT_COMMIT" | xargs -n1 dirname | sort | uniq)
@@ -248,7 +256,7 @@ workflows:
             envman add --key BITRISE_XCTESTRUN_UNIT_TEST_FILE_PATH --value "$UNIT_TESTS_XCTESTRUN"
             envman add --key BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH --value "$SMOKE_UI_XCTESTRUN"
 
-    - xcode-test-without-building@0:
+    - xcode-test-without-building@1:
         timeout: 1200
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
@@ -472,7 +480,7 @@ workflows:
     # - skip_macro_validation # TODO check if Needed here?
     steps:
     - pull-intermediate-files@1: {}
-    - xcode-test-without-building@0:
+    - xcode-test-without-building@1:
         timeout: 1200
         inputs:
         - only_testing: $BITRISE_TEST_SHARDS_PATH_FIREFOX/$BITRISE_IO_PARALLEL_INDEX
@@ -514,7 +522,7 @@ workflows:
 
             echo "Found UITest .xctestrun: $FOCUS_UI_XCTESTRUN"
             envman add --key BITRISE_XCTESTRUN_FOCUS_UI_TEST_FILE_PATH --value "$FOCUS_UI_XCTESTRUN"
-    - xcode-test-without-building@0:
+    - xcode-test-without-building@1:
         timeout: 1200
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
@@ -560,7 +568,7 @@ workflows:
         - project_path: /Users/vagrant/git/focus-ios/Blockzilla.xcodeproj
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
-    - xcode-test-without-building@0:
+    - xcode-test-without-building@1:
         timeout: 1200
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
@@ -597,7 +605,7 @@ workflows:
             fi
         - title: Check if build is scheduled or regular to set the test plan
     - pull-intermediate-files@1: {}
-    - xcode-test-without-building@0:
+    - xcode-test-without-building@1:
         timeout: 1200
         inputs:
         - only_testing: $BITRISE_TEST_SHARDS_PATH/$BITRISE_IO_PARALLEL_INDEX
