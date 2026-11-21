@@ -305,11 +305,14 @@ final class AddressToolbarContainerModel: Equatable {
     private static func mapAction(_ action: ToolbarActionConfiguration,
                                   longPressMenuProvider: @escaping LongPressMenuProvider = { _ in nil },
                                   windowUUID: UUID) -> ToolbarElement {
+        let action = TabGroupsToolbarButtonViewModel.configure(action, for: windowUUID)
         return ToolbarElement(
             iconName: action.iconName,
             title: action.actionLabel,
             badgeImageName: action.badgeImageName,
             bottomBadgeImage: action.bottomBadgeImage,
+            bottomLeadingBadgeImage: action.bottomLeadingBadgeImage,
+            bottomLeadingBadgeShadowColor: action.bottomLeadingBadgeShadowColor,
             maskImageName: action.maskImageName,
             templateModeForImage: action.templateModeForImage,
             loadingConfig: action.loadingConfig,

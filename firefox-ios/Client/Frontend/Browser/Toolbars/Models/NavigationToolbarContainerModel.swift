@@ -29,11 +29,15 @@ struct NavigationToolbarContainerModel: Equatable {
         self.canShowNavigationHint = state.canShowNavigationHint
         self.isTranslucent = state.isTranslucent
         self.actions = lens.navigationToolbarActions.map { action in
+            let action = TabGroupsToolbarButtonViewModel.configure(action, for: windowUUID)
             return ToolbarElement(
                 iconName: action.iconName,
                 title: action.actionLabel,
                 badgeImageName: action.badgeImageName,
+                bottomLeadingBadgeImage: action.bottomLeadingBadgeImage,
+                bottomLeadingBadgeShadowColor: action.bottomLeadingBadgeShadowColor,
                 maskImageName: action.maskImageName,
+                templateModeForImage: action.templateModeForImage,
                 numberOfTabs: action.numberOfTabs,
                 isEnabled: action.isEnabled,
                 isFlippedForRTL: action.isFlippedForRTL,
@@ -44,6 +48,7 @@ struct NavigationToolbarContainerModel: Equatable {
                 a11yLabel: action.a11yLabel,
                 a11yHint: action.a11yHint,
                 a11yId: action.a11yId,
+                cacheId: action.cacheId,
                 a11yCustomActionName: action.a11yCustomActionName,
                 a11yCustomAction: NavigationToolbarContainerModel.getA11yCustomAction(action: action,
                                                                                       windowUUID: windowUUID),
