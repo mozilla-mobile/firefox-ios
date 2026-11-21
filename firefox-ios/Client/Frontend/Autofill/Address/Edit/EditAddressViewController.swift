@@ -10,6 +10,7 @@ import Shared
 import struct MozillaAppServices.UpdatableAddressFields
 
 class EditAddressViewController: UIViewController,
+                                 FeatureFlaggable,
                                  WKNavigationDelegate,
                                  WKScriptMessageHandler,
                                  Themeable,
@@ -19,6 +20,10 @@ class EditAddressViewController: UIViewController,
         static let stackViewSpacing: CGFloat = 16
         static let removeButtonHeight: CGFloat = 44
         static let roundedCornerRadius: CGFloat = 24
+    }
+
+    private var usesUpdatedSyncStrings: Bool {
+        featureFlagsProvider.isEnabled(.syncStringUpdates)
     }
 
     private lazy var removeButton: RemoveAddressButton = {
@@ -226,9 +231,18 @@ class EditAddressViewController: UIViewController,
     }
 
     func presentRemoveAddressAlert() {
+        let title: String = usesUpdatedSyncStrings
+            ? .Addresses.Settings.Edit.DeleteAddressTitle
+            : .Addresses.Settings.Edit.RemoveAddressTitle
+        let message: String = usesUpdatedSyncStrings
+            ? String(format: .Addresses.Settings.Edit.DeleteAddressMessage, AppName.shortName.rawValue)
+            : .Addresses.Settings.Edit.RemoveAddressMessage
+        let deleteTitle: String = usesUpdatedSyncStrings
+            ? .Addresses.Settings.Edit.DeleteButtonTitle
+            : .Addresses.Settings.Edit.RemoveButtonTitle
         let alertController = UIAlertController(
-            title: String.Addresses.Settings.Edit.RemoveAddressTitle,
-            message: model.hasSyncableAccount ? String.Addresses.Settings.Edit.RemoveAddressMessage : nil,
+            title: title,
+            message: model.hasSyncableAccount ? message : nil,
             preferredStyle: .alert
         )
 
@@ -239,7 +253,7 @@ class EditAddressViewController: UIViewController,
         ))
 
         alertController.addAction(UIAlertAction(
-            title: String.Addresses.Settings.Edit.RemoveButtonTitle,
+            title: deleteTitle,
             style: .destructive,
             handler: { [weak self] _ in
                 self?.model.removeConfirmationButtonTap()
