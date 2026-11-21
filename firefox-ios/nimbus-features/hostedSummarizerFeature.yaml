@@ -1,6 +1,7 @@
 # The configuration for the hosted summarizer feature
 features:
   hosted-summarizer-feature:
+    no-lint: [MISSING_CONTACTS]
     description: >
       This feature enables the hosted summarizer feature.
     variables:

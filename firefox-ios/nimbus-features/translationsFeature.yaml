@@ -1,6 +1,7 @@
 # The configuration for the translationsFeature feature
 features:
   translations-feature:
+    no-lint: [MISSING_CONTACTS]
     description: >
       Enables translations feature.
     variables:

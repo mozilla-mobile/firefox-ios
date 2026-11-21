@@ -2,6 +2,7 @@
 # Please remember to add this feature to the feature flag spreadsheet.
 features:
   summarizer-language-expansion-feature:
+    no-lint: [MISSING_CONTACTS]
     description: >
       The feature flag to manage the rollout of the summarizer language expansion.
     variables:

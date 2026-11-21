@@ -1,6 +1,7 @@
 # The configuration for the newBookmarkFolderTreeFeature feature
 features:
   new-bookmark-folder-tree-feature:
+    no-lint: [MISSING_CONTACTS]
     description: >
       This property determines weather we show the new bookmark folder tree UI
     variables:

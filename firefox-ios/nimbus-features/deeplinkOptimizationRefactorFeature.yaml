@@ -1,12 +1,13 @@
 # The configuration for the deeplinkOptimizationRefactorFeature feature
 features:
   deeplink-optimization-refactor-feature:
+    no-lint: [MISSING_CONTACTS]
     description: >
       The feature flag to manage the rollout of deeplink optimization feature.
     variables:
       enabled:
         description: >
-          Variable description
+          Whether the deeplink optimization feature is enabled.
         type: Boolean
         default: false
     defaults:

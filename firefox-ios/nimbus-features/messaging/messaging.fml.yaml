@@ -20,9 +20,6 @@ features:
       - name: User documentation
         url: https://experimenter.info/messaging/mobile-messaging
     contacts:
-      # Nimbus team
-      - jhugman@mozilla.com
-      - brennie@mozilla.com
       # iOS team
       - gbuciu@mozilla.com
       - wteichmann@mozilla.com

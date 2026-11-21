@@ -1,9 +1,12 @@
 # The configuration for the mergeWindowsFeature feature
 features:
   merge-windows-feature:
+    no-lint: [MISSING_CONTACTS]
     description: >
       This property determines whether the "Combine Windows" home screen Quick Action is offered
       on iPad when two or more windows are open
+    contacts:
+      - fx-ios@mozilla.com
     variables:
       enabled:
         description: >

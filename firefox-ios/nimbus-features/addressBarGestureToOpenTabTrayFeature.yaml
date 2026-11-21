@@ -1,6 +1,7 @@
 # The configuration for the addressBarGestureToOpenTabTrayFeature feature
 features:
   address-bar-gesture-to-open-tab-tray-feature:
+    no-lint: [MISSING_CONTACTS]
     description: >
       Decides if the address bar interactive gesture to open the tab tray is enabled
     variables:

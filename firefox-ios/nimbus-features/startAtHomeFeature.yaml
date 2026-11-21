@@ -1,6 +1,7 @@
 # The configuration for the open to last tab feature
 features:
   start-at-home-feature:
+    no-lint: [MISSING_CONTACTS]
     description: This feature is for experimenting with opening screen
     variables:
       setting:

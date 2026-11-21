@@ -3,6 +3,9 @@ features:
   relay-integration-feature:
     description: >
       This feature is for managing the roll out of Relay email masking integration in iOS
+    contacts:
+      - mreagan@mozilla.com
+      - nfurlan@mozilla.com
     variables:
       enabled:
         description: >

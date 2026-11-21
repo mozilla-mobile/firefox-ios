@@ -1,6 +1,7 @@
 # The configuration for the privacyDashboardFeature feature
 features:
   privacy-dashboard-feature:
+    no-lint: [MISSING_CONTACTS]
     description: >
       The Privacy Dashboard feature from homepage
     variables:

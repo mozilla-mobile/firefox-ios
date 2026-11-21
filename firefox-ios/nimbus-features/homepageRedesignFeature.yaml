@@ -3,6 +3,10 @@ features:
   homepage-redesign-feature:
     description: >
       This feature is for managing the roll out of the Homepage New Tab Redesign feature.
+    contacts:
+      - fkio@mozilla.com
+      - gbuciu@mozilla.com
+      - jhall@mozilla.com
     variables:
       animated-center-search-bar:
         description: >

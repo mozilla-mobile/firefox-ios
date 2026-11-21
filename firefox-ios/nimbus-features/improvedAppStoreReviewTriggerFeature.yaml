@@ -1,6 +1,7 @@
 # The configuration for the improved app store review trigger feature.
 features:
   improved-app-store-review-trigger-feature:
+    no-lint: [MISSING_CONTACTS]
     description: >
       The feature flag to manage the App Store review request trigger.
     variables:

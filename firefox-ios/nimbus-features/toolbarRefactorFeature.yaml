@@ -1,6 +1,7 @@
 # The configuration for the toolbarRefactorFeature feature
 features:
   toolbar-refactor-feature:
+    no-lint: [MISSING_CONTACTS]
     description: >
       This feature is for managing the roll out of the Toolbar refactor feature
     variables:

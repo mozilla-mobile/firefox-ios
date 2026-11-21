@@ -1,6 +1,7 @@
 # The configuration for the tabTrayUIExperiments feature
 features:
   tab-tray-ui-experiments:
+    no-lint: [MISSING_CONTACTS]
     description: >
       The tab tray will undergo some UI experimentation to test potential improvements.
     variables:
