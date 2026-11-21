@@ -632,6 +632,36 @@ class NimbusTests: XCTestCase {
             ]]
         )
     }
+
+    func testEvalJexl() throws {
+        let appSettings = NimbusAppSettings(appName: "test", channel: "nightly")
+        let databasePath = createDatabasePath()
+        let nimbus = try Nimbus.create(server: nil, appSettings: appSettings, dbPath: databasePath) as! Nimbus
+
+        XTCAssertEqual(
+            Dictionary.parse(ArgumentProcessor.evalJexl(nimbus, "true")),
+            [
+                "success": true,
+                "result": true,
+            ]
+        )
+
+        XTCAssertEqual(
+            Dictionary.parse(ArgumentProcessor.evalJexl(nimbus, "\"true\"")),
+            [
+                "success": true,
+                "result": "true",
+            ]
+        )
+
+        XTCAssert(
+            Dictionary.parse(ArgumentProcessor.evalJexl(nimbus, "bogus")),
+            [
+                "success": false,
+                "error": "EvaluationError: Identifier 'bogus' is undefined"
+            ]
+        )
+    }
 }
 
 private extension Device {
