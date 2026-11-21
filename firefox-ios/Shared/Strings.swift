@@ -1063,6 +1063,22 @@ extension String {
 
         // System alert actions and descriptions
         public enum Alert {
+            public static let DeleteCardTitle = MZLocalizedString(
+                key: "CreditCard.Alert.DeleteCard.Title.v162",
+                tableName: "Alert",
+                value: "Delete Card?",
+                comment: "Title of the confirmation dialog shown when the user deletes a saved credit card.")
+            public static let DeleteCardSublabel = MZLocalizedString(
+                key: "CreditCard.Alert.DeleteCard.Message.v162",
+                tableName: "Alert",
+                value: "This will delete the card from %@ on all of your synced devices.",
+                comment: "Message in the card deletion confirmation dialog when the user has a sync account. %@ is the app name (e.g. Firefox). Deleting the card also deletes it from the user's synced devices.")
+            public static let DeleteCardButtonTitle = MZLocalizedString(
+                key: "CreditCard.Alert.DeleteCard.Button.Title.v162",
+                tableName: "Alert",
+                value: "Delete",
+                comment: "Primary button in the card deletion confirmation dialog. Tapping it deletes the saved credit card.")
+
             public static let RemoveCardTitle = MZLocalizedString(
                 key: "CreditCard.SnackBar.RemoveCardTitle.v122",
                 tableName: "Alert",

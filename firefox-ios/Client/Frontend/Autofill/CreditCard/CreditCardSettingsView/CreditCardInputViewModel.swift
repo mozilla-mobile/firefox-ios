@@ -5,6 +5,7 @@
 import Foundation
 import SwiftUI
 import Common
+import Shared
 import Storage
 
 import struct MozillaAppServices.CreditCard
@@ -94,7 +95,7 @@ enum CreditCardModifiedStatus {
 }
 
 // TODO: FXIOS-14112 - Fix CreditCardInputViewModel @unchecked Sendable
-final class CreditCardInputViewModel: ObservableObject, @unchecked Sendable {
+final class CreditCardInputViewModel: ObservableObject, FeatureFlaggable, @unchecked Sendable {
     typealias CreditCardText = String.CreditCard.Alert
     let logger: Logger
     let profile: Profile
@@ -153,11 +154,19 @@ final class CreditCardInputViewModel: ObservableObject, @unchecked Sendable {
 
     @Published var isRightBarButtonEnabled = false
 
+    private var usesUpdatedSyncStrings: Bool {
+        featureFlagsProvider.isEnabled(.syncStringUpdates)
+    }
+
     var signInRemoveButtonDetails: RemoveCardButton.AlertDetails {
         return RemoveCardButton.AlertDetails(
-            alertTitle: Text(CreditCardText.RemoveCardTitle),
-            alertBody: Text(CreditCardText.RemoveCardSublabel),
-            primaryButtonStyleAndText: .destructive(Text(CreditCardText.RemovedCardLabel)) { [unowned self] in
+            alertTitle: Text(usesUpdatedSyncStrings ? CreditCardText.DeleteCardTitle : CreditCardText.RemoveCardTitle),
+            alertBody: Text(usesUpdatedSyncStrings
+                ? String(format: CreditCardText.DeleteCardSublabel, AppName.shortName.rawValue)
+                : CreditCardText.RemoveCardSublabel),
+            primaryButtonStyleAndText: .destructive(Text(usesUpdatedSyncStrings
+                ? CreditCardText.DeleteCardButtonTitle
+                : CreditCardText.RemovedCardLabel)) { [unowned self] in
                 self.removeCreditCard(creditCard: creditCard) { status, successVal in
                     self.dismiss?(status, successVal)
                 }
@@ -169,9 +178,11 @@ final class CreditCardInputViewModel: ObservableObject, @unchecked Sendable {
 
     var regularRemoveButtonDetails: RemoveCardButton.AlertDetails {
         return RemoveCardButton.AlertDetails(
-            alertTitle: Text(CreditCardText.RemoveCardTitle),
+            alertTitle: Text(usesUpdatedSyncStrings ? CreditCardText.DeleteCardTitle : CreditCardText.RemoveCardTitle),
             alertBody: nil,
-            primaryButtonStyleAndText: .destructive(Text(CreditCardText.RemovedCardLabel)) { [unowned self] in
+            primaryButtonStyleAndText: .destructive(Text(usesUpdatedSyncStrings
+                ? CreditCardText.DeleteCardButtonTitle
+                : CreditCardText.RemovedCardLabel)) { [unowned self] in
                 self.removeCreditCard(creditCard: creditCard) { status, successVal in
                     self.dismiss?(status, successVal)
                 }
