@@ -27,7 +27,7 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         case messageCard
         case topSites(TextColor?, NumberOfTilesPerRow, ShouldShowSectionHeader)
         case notificationCard
-        case searchBar
+        case centerSearchBar
         case jumpBackIn(TextColor?, JumpBackInSectionLayoutConfiguration)
         case trackerBlockerModule
         case bookmarks(TextColor?)
@@ -141,8 +141,8 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         }
 
         if state.searchBarState.shouldShowSearchBar {
-            snapshot.appendSections([.searchBar])
-            snapshot.appendItems([.searchBar], toSection: .searchBar)
+            snapshot.appendSections([.centerSearchBar])
+            snapshot.appendItems([.searchBar], toSection: .centerSearchBar)
         }
 
         if let topSitesSnapshotData = getTopSites(with: state.topSitesState, and: textColor) {

@@ -31,8 +31,9 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             return traitCollection.horizontalSizeClass == .regular ? iPadInset : standardInset
         }
 
-        enum HeaderConstants {
-            static let bottomSpacing: CGFloat = 30
+        enum CenterSearchBarConstants {
+            static let spacingBelowHeader: CGFloat = 14
+            static let spacingAboveShortcuts: CGFloat = 23
         }
 
         enum PrivacyNoticeConstants {
@@ -134,11 +135,11 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
                 for: traitCollection,
                 bottomInsets: UX.PrivacyNoticeConstants.bottomInsets
             )
-        case .searchBar:
+        case .centerSearchBar:
             return createSingleItemSectionLayout(
                 for: traitCollection,
-                topInsets: UX.standardInset,
-                bottomInsets: UX.HeaderConstants.bottomSpacing
+                topInsets: centerSearchBarTopInset(),
+                bottomInsets: UX.CenterSearchBarConstants.spacingAboveShortcuts
             )
         case .messageCard:
             return createSingleItemSectionLayout(
@@ -224,7 +225,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         section.contentInsets = NSDirectionalEdgeInsets(
             top: UX.topSpacing,
             leading: horizontalInset,
-            bottom: UX.spacingBetweenSections,
+            bottom: headerBottomInset(),
             trailing: horizontalInset)
 
         return section
@@ -585,8 +586,27 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         // Match createHeaderSectionLayout so spacer calculations include the logo header's top spacing.
         totalHeight += UX.topSpacing
         totalHeight += HomepageDimensionCalculator.fittingHeight(for: headerLogoCell, width: containerWidth)
-        totalHeight += UX.spacingBetweenSections
+        totalHeight += headerBottomInset()
         return totalHeight
+    }
+
+    private func isCenterSearchBarDirectlyBelowHeader() -> Bool {
+        guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID) else {
+            return false
+        }
+        return state.searchBarState.shouldShowSearchBar
+            && !state.privacyNoticeState.shouldShowPrivacyNotice
+            && state.messageState.messageCardConfiguration == nil
+    }
+
+    private func headerBottomInset() -> CGFloat {
+        return isCenterSearchBarDirectlyBelowHeader()
+            ? UX.CenterSearchBarConstants.spacingBelowHeader
+            : UX.spacingBetweenSections
+    }
+
+    private func centerSearchBarTopInset() -> CGFloat {
+        return isCenterSearchBarDirectlyBelowHeader() ? 0 : UX.standardInset
     }
 
     private func getPrivacyNoticeSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
@@ -820,28 +840,23 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         return height
     }
 
-    /// Creates a "dummy" search bar section and returns its height
-    private func getSearchBarSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
-        guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID) else {
+    /// Creates a "dummy" center search bar section and returns its height
+    private func getCenterSearchBarSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
+        guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID),
+              state.searchBarState.shouldShowSearchBar else {
             return 0
         }
 
-        let searchState = state.searchBarState
         let containerWidth = normalizedDimension(environment.container.contentSize.width)
         let measurementKey = HomepageLayoutMeasurementCache.SearchBarMeasurement.Key(
-            shouldShowSearchBar: searchState.shouldShowSearchBar,
+            shouldShowSearchBar: state.searchBarState.shouldShowSearchBar,
             containerWidth: containerWidth,
             contentSizeCategory: environment.traitCollection.preferredContentSizeCategory
         )
 
         // Reuse the cached result when the key matches, overwrite it when inputs change.
         if let cachedHeight = measurementsCache.height(for: measurementKey) {
-            return cachedHeight
-        }
-
-        guard searchState.shouldShowSearchBar else {
-            measurementsCache.setHeight(0, for: measurementKey)
-            return 0
+            return cachedHeight + centerSearchBarTopInset()
         }
 
         let searchBarCell = SearchBarCell()
@@ -852,13 +867,10 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             verticalFittingPriority: .fittingSizeLevel
         ).height
 
-        var totalHeight: CGFloat = searchBarHeight
-        totalHeight += UX.standardInset
-        totalHeight += UX.HeaderConstants.bottomSpacing
-
+        let totalHeight = searchBarHeight + UX.CenterSearchBarConstants.spacingAboveShortcuts
         measurementsCache.setHeight(totalHeight, for: measurementKey)
 
-        return totalHeight
+        return totalHeight + centerSearchBarTopInset()
     }
 
     /// Creates a "dummy" header and returns its height
@@ -917,7 +929,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let jumpBackInHeight = getJumpBackInSectionHeight(environment: environment)
         let trackerBlockerModuleHeight = getTrackerBlockerModuleSectionHeight(environment: environment)
         let bookmarksHeight = getBookmarksSectionHeight(environment: environment)
-        let searchBarHeight = getSearchBarSectionHeight(environment: environment)
+        let searchBarHeight = getCenterSearchBarSectionHeight(environment: environment)
 
         return height
             - headerLogoHeight
