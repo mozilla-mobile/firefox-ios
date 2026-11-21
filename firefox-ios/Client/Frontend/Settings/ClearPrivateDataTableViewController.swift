@@ -7,7 +7,7 @@ import Shared
 import Common
 import ComponentLibrary
 
-class ClearPrivateDataTableViewController: ThemedTableViewController {
+class ClearPrivateDataTableViewController: ThemedTableViewController, FeatureFlaggable {
     override var shouldUsePrivateOverride: Bool { return true }
     override var shouldBeInPrivateTheme: Bool { return false }
 
@@ -18,6 +18,10 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
         case websiteData
         case toggles
         case clearButton
+    }
+
+    private var usesUpdatedSyncStrings: Bool {
+        featureFlagsProvider.isEnabled(.syncStringUpdates)
     }
 
     private let historyClearableIndex = 0
@@ -296,9 +300,15 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
     }
 
     private func clearSyncedHistoryAlert(okayCallback: @escaping (UIAlertAction) -> Void) -> UIAlertController {
+        let message: String = usesUpdatedSyncStrings
+            ? .Settings.DataManagement.SyncedHistoryDeletionMessage
+            : .ClearSyncedHistoryAlertMessage
+        let deleteTitle: String = usesUpdatedSyncStrings
+            ? .Settings.DataManagement.DeleteButtonTitle
+            : .ClearSyncedHistoryAlertOk
         let alert = UIAlertController(
             title: "",
-            message: .ClearSyncedHistoryAlertMessage,
+            message: message,
             preferredStyle: .alert
         )
 
@@ -309,7 +319,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
         )
 
         let okayOption = UIAlertAction(
-            title: .ClearSyncedHistoryAlertOk,
+            title: deleteTitle,
             style: .destructive,
             handler: okayCallback
         )
