@@ -33,6 +33,11 @@ class MockNotificationManager: NotificationManagerProtocol, @unchecked Sendable 
         return hasPermission
     }
 
+    var hasNoPermissionAndCanAsk = true
+    func hasNoPermissionAndCanAsk() async -> Bool {
+        return hasNoPermissionAndCanAsk
+    }
+
     var scheduledNotifications = 0
     var scheduleWithIntervalWasCalled = false
     func schedule(title: String,
