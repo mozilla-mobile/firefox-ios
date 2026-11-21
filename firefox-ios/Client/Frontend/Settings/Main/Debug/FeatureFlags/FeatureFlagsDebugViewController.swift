@@ -157,6 +157,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .foxDash,
+                titleText: format(string: "Fox Dash"),
+                statusText: format(string: "Toggle to enable the Fox Dash easter egg on the homepage logo")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .googleLens,
                 titleText: format(string: "Google Lens"),
                 statusText: format(string: "Toggle to enable Google Lens entry points")

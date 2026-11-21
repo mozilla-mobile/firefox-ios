@@ -43,7 +43,13 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         view.accessibilityLabel = AppName.shortName.rawValue
         view.isAccessibilityElement = true
         view.accessibilityTraits = .image
+        view.isUserInteractionEnabled = true
     }
+
+    private lazy var logoLongPressRecognizer = UILongPressGestureRecognizer(
+        target: self,
+        action: #selector(handleLogoLongPress)
+    )
 
     private lazy var logoImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
@@ -98,6 +104,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         contentView.addSubview(quickAnswersButton)
 
         logoStackView.pinToSuperview()
+        logoStackView.addGestureRecognizer(logoLongPressRecognizer)
 
         setupConstraints()
     }
@@ -143,6 +150,8 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
             : UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoBall)
 
         quickAnswersButton.isHidden = !headerState.showQuickAnswersButton
+
+        logoLongPressRecognizer.isEnabled = headerState.isFoxDashEnabled
 
         // if the quick answers button is visible and we are on iPhone setup, align the logo to the leading
         let alignLogoToLeading = headerState.showQuickAnswersButton && !showiPadSetup
@@ -222,6 +231,19 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
     private func cancelQuickAnswersTipObservation() {
         tipObservationTask?.cancel()
         tipObservationTask = nil
+    }
+
+    @objc
+    private func handleLogoLongPress(_ recognizer: UILongPressGestureRecognizer) {
+        guard recognizer.state == .began, let headerState else { return }
+        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.foxDash),
+                windowUUID: headerState.windowUUID,
+                actionType: NavigationBrowserActionType.longPressOnHomepageLogo
+            )
+        )
     }
 
     private func quickAnswerButtonTapped() {

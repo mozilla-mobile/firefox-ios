@@ -1383,6 +1383,13 @@ final class BrowserCoordinator: BaseCoordinator,
         browserViewController.hideQuickAnswersReturnPill()
     }
 
+    func showFoxDash() {
+        let foxDash = FoxDashViewController(windowUUID: windowUUID) { [weak self] in
+            self?.router.dismiss(animated: true, completion: nil)
+        }
+        router.present(foxDash, animated: true, completion: nil)
+    }
+
     func showGoogleLensPhotoPicker() {
         guard !childCoordinators.contains(where: { $0 is PhotoPickerCoordinator }) else { return }
         let coordinator = PhotoPickerCoordinator(

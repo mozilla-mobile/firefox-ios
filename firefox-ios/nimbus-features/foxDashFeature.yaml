@@ -1,0 +1,35 @@
+# The configuration for the foxDashFeature feature
+features:
+  fox-dash-feature:
+    description: >
+      The feature flag to manage the Fox Dash easter egg, opened by long
+      pressing the homepage logo.
+    variables:
+      enabled:
+        description: >
+          Enables the feature.
+        type: Boolean
+        default: false
+      theme:
+        description: >
+          The visual theme the game is shown with.
+        type: FoxDashTheme
+        default: normal
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+          theme: normal
+      - channel: developer
+        value:
+          enabled: true
+          theme: normal
+
+enums:
+  FoxDashTheme:
+    description: The visual theme of the Fox Dash game.
+    variants:
+      normal:
+        description: The regular look.
+      christmas:
+        description: Icy night skies, snowfall, and festive sprites.

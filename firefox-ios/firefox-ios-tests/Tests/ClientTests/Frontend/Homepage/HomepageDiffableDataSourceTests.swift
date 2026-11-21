@@ -688,7 +688,11 @@ final class HomepageDiffableDataSourceTests: XCTestCase, FeatureFlagTestUtility 
     private func headerState(showQuickAnswersButton: Bool) -> HeaderState {
         let quickAnswersStore = MockQuickAnswersStore()
         quickAnswersStore.isQuickAnswersEnabled = showQuickAnswersButton
-        return HeaderState(windowUUID: .XCTestDefaultUUID, quickAnswersStore: quickAnswersStore)
+        return HeaderState(
+            windowUUID: .XCTestDefaultUUID,
+            quickAnswersStore: quickAnswersStore,
+            featureFlagsProvider: MockNimbusFeatureFlags()
+        )
     }
 
     private func createSites(count: Int = 30) -> [TopSiteConfiguration] {

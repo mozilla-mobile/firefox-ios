@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#1D1133">
+  <title>Fox Dash</title>
+  <link rel="stylesheet" href="game.css">
+  <script src="theme-loader.js"></script>
+</head>
+<body class="game">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-trophy" viewBox="0 0 24 24"><path d="M7 4h10v5a5 5 0 0 1-10 0zM7 6H4v2a3 3 0 0 0 3 3M17 6h3v2a3 3 0 0 1-3 3M12 14v4M8 20h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-replay" viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 3-6.2M4 4v5h5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1.5" fill="currentColor"/><rect x="14" y="5" width="4" height="14" rx="1.5" fill="currentColor"/></symbol>
+  </svg>
+
+  <main class="stage">
+    <canvas id="canvas" aria-label="Fox Dash"></canvas>
+
+    <div class="hud">
+      <div class="hud-side">
+        <span class="hud-best" id="best" hidden><svg width="18" height="18" aria-hidden="true"><use href="#i-trophy"/></svg><span id="best-score"></span></span>
+        <button class="icon-btn" id="pause-btn" type="button" aria-label="Pause">
+          <svg width="20" height="20" aria-hidden="true"><use href="#i-pause"/></svg>
+        </button>
+        <button class="icon-btn mute-btn" id="mute" type="button" aria-label="Mute sound" aria-pressed="false">
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path class="icon-on" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path class="icon-off" d="M16 9l5 6M21 9l-5 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <output class="hud-score sticker-text" id="score" aria-label="Score">0</output>
+    </div>
+
+    <section class="overlay" id="start" aria-label="Fox Dash">
+      <div class="panel">
+        <button class="btn round" id="play" type="button" aria-label="Play"><svg width="36" height="36" aria-hidden="true"><use href="#i-play"/></svg></button>
+      </div>
+    </section>
+
+    <section class="overlay" id="pause" aria-label="Paused" hidden>
+      <div class="panel">
+        <svg class="pause-glyph" width="72" height="72" aria-hidden="true"><use href="#i-pause"/></svg>
+        <button class="btn round" id="resume" type="button" aria-label="Resume" data-autofocus><svg width="36" height="36" aria-hidden="true"><use href="#i-play"/></svg></button>
+      </div>
+    </section>
+
+    <section class="overlay" id="over" aria-label="Game over" hidden>
+      <div class="panel">
+        <canvas class="cause" id="over-cause" data-icon="tracker" aria-hidden="true"></canvas>
+        <p class="final-score sticker-text" id="over-score" aria-label="Score">0</p>
+        <p class="over-best" id="over-best" aria-label="Best score"><svg width="22" height="22" aria-hidden="true"><use href="#i-trophy"/></svg><span id="over-best-score"></span></p>
+        <p class="over-stats">
+          <span class="stat"><canvas data-icon="fox" aria-hidden="true"></canvas><span id="over-distance"></span></span>
+          <span class="stat"><canvas data-icon="shield" aria-hidden="true"></canvas><span id="over-shields"></span></span>
+          <span class="stat is-gold" id="over-combo" hidden></span>
+          <span class="stat" id="over-close" hidden></span>
+        </p>
+        <button class="btn round" id="again" type="button" aria-label="Play again" data-autofocus><svg width="36" height="36" aria-hidden="true"><use href="#i-replay"/></svg></button>
+      </div>
+    </section>
+  </main>
+
+  <script src="arcade.js"></script>
+  <script src="sprites.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
