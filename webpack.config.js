@@ -54,11 +54,11 @@ for (let [name, files] of Object.entries(needsFirefoxFile)) {
 }
 
 // Custom plugin used to replace imports used in Desktop code that use uris:
-// resource://... with Assets/...
+// resource://... and moz-src://... with Assets/...
 // This is needed because aliases are not supported for URI imports.
 // See: https://github.com/webpack/webpack/issues/12792
 const CustomResourceURIWebpackPlugin =
-  new webpack.NormalModuleReplacementPlugin(/resource:(.*)/, function (
+  new webpack.NormalModuleReplacementPlugin(/^(?:resource|moz-src):(.*)/, function (
     resource
   ) {
     const issuer = path.basename(resource.contextInfo.issuer);

@@ -1,4 +1,5 @@
-import { Logic } from "resource://gre/modules/LoginManager.shared.sys.mjs";
+import { LoginHelperDOM } from "moz-src:///toolkit/components/passwordmgr/shared/LoginHelperDOM.sys.mjs";
+import { LoginOriginUtils } from "moz-src:///toolkit/components/passwordmgr/shared/LoginOriginUtils.sys.mjs";
 
 const lazy = {};
 
@@ -103,9 +104,9 @@ export class LoginFormState {
 
   storeUserInput(field) {
     if (field.value && lazy.LoginHelper.captureInputChanges) {
-      if (Logic.isPasswordFieldType(field)) {
+      if (LoginHelperDOM.isPasswordFieldType(field)) {
         this.possiblePasswords.add(field.value);
-      } else if (Logic.isUsernameFieldType(field)) {
+      } else if (LoginHelperDOM.isUsernameFieldType(field)) {
         this.possibleUsernames.add(field.value);
       }
     }
@@ -125,7 +126,7 @@ export class LoginFormState {
 
     let result = this.#cachedIsInferredEmailField.get(inputElement);
     if (result === undefined) {
-      result = Logic.isInferredEmailField(inputElement);
+      result = LoginHelperDOM.isInferredEmailField(inputElement);
       this.#cachedIsInferredEmailField.set(inputElement, result);
     }
 
@@ -144,7 +145,7 @@ export class LoginFormState {
   isProbablyAUsernameField(inputElement) {
     let result = this.#cachedIsInferredUsernameField.get(inputElement);
     if (result === undefined) {
-      result = Logic.isInferredUsernameField(inputElement);
+      result = LoginHelperDOM.isInferredUsernameField(inputElement);
       this.#cachedIsInferredUsernameField.set(inputElement, result);
     }
 
@@ -176,11 +177,11 @@ export class LoginFormState {
       // form looks like a sign-in or sign-up form.
       if (
         this.isProbablyAUsernameField(inputElement) ||
-        Logic.isInferredLoginForm(formElement)
+        LoginHelperDOM.isInferredLoginForm(formElement)
       ) {
         // This is where we collect hints that indicate this is not a username
         // login form.
-        if (!Logic.isInferredNonUsernameField(inputElement)) {
+        if (!LoginHelperDOM.isInferredNonUsernameField(inputElement)) {
           result = true;
         }
       }
@@ -410,7 +411,7 @@ export class LoginFormState {
       }
 
       // Ignore input fields whose type are not username compatiable, ex, hidden.
-      if (!Logic.isUsernameFieldType(element)) {
+      if (!LoginHelperDOM.isUsernameFieldType(element)) {
         continue;
       }
 
@@ -583,7 +584,7 @@ export class LoginFormState {
       return;
     }
 
-    const confirmPasswordInput = Logic.findConfirmationField(
+    const confirmPasswordInput = LoginHelperDOM.findConfirmationField(
       passwordField,
       lazy.LoginFormFactory
     );
@@ -713,7 +714,7 @@ export class LoginFormState {
 
       for (let i = pwFields[0].index - 1; i >= 0; i--) {
         let element = form.elements[i];
-        if (!Logic.isUsernameFieldType(element, { ignoreConnect })) {
+        if (!LoginHelperDOM.isUsernameFieldType(element, { ignoreConnect })) {
           continue;
         }
 
@@ -869,13 +870,13 @@ export class LoginFormState {
     }
 
     // If the element is not a login form field, return all null.
-    if (!aField.hasBeenTypePassword && !Logic.isUsernameFieldType(aField)) {
+    if (!aField.hasBeenTypePassword && !LoginHelperDOM.isUsernameFieldType(aField)) {
       return noResult;
     }
 
     const form = lazy.LoginFormFactory.createFromField(aField);
     const doc = aField.ownerDocument;
-    const formOrigin = Logic.getLoginOrigin(doc.documentURI);
+    const formOrigin = LoginOriginUtils.getLoginOrigin(doc.documentURI);
     const recipes = lazy.LoginRecipesContent.getRecipes(
       formOrigin,
       doc.defaultView
@@ -901,7 +902,7 @@ export class LoginFormState {
     // If the element is not a proper form field, return null.
     if (
       !HTMLInputElement.isInstance(aField) ||
-      (!aField.hasBeenTypePassword && !Logic.isUsernameFieldType(aField)) ||
+      (!aField.hasBeenTypePassword && !LoginHelperDOM.isUsernameFieldType(aField)) ||
       aField.nodePrincipal.isNullPrincipal ||
       aField.nodePrincipal.schemeIs("about") ||
       !aField.ownerDocument
