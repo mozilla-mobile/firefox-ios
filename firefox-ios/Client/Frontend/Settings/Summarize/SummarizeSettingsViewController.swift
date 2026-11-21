@@ -9,6 +9,7 @@ final class SummarizeSettingsViewController: SettingsTableViewController {
     let prefs: Prefs
     private let nimbusUtils: SummarizerNimbusUtils
     private let settingsTelemetry: SettingsTelemetry
+    private var pendingSectionUpdate: DispatchWorkItem?
 
     init(
         prefs: Prefs,
@@ -59,10 +60,18 @@ final class SummarizeSettingsViewController: SettingsTableViewController {
             titleText: .Settings.Summarize.SummarizePagesTitle
         ) { [weak self] isOn in
             guard let self else { return }
-            // Reload sections to hide and show gesture section
-            // depending if summarize content setting toggle is On or Off
-            self.settings = self.generateSettings()
-            self.tableView.reloadData()
+            // Refresh the sections only after the switch animation has settled,
+            // and coalesce rapid toggles into a single update. Mutating the table
+            // mid-gesture rebuilds the toggle's cell and makes the switch
+            // animation glitch; animating the section change (even with .none)
+            // makes the iOS 26 switch cancel delivery of rapid subsequent
+            // valueChanged events, leaving the prefs and the UI out of sync.
+            pendingSectionUpdate?.cancel()
+            let update = DispatchWorkItem { [weak self] in
+                self?.updateSettingsSections()
+            }
+            pendingSectionUpdate = update
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: update)
 
             store.dispatch(
                 ToolbarAction(
@@ -79,6 +88,15 @@ final class SummarizeSettingsViewController: SettingsTableViewController {
             ),
             children: [summarizeContentSetting]
         )
+    }
+
+    private func updateSettingsSections() {
+        settings = generateSettings()
+        // Reload instead of animating section inserts/deletes: by the time this
+        // runs the switch animation has finished, so rebuilding the toggle's cell
+        // is invisible, and an unanimated reload does not interfere with the
+        // iOS 26 switch's deferred valueChanged delivery.
+        tableView.reloadData()
     }
 
     private var gesturesSection: SettingSection {
