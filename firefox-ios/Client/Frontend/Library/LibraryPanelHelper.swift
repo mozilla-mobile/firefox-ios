@@ -35,6 +35,11 @@ protocol LibraryPanel: UIViewController {
     @MainActor
     var bottomToolbarItems: [UIBarButtonItem] { get }
 
+    /// Heading the library shows while this panel is at the top of its navigation stack.
+    /// Root panels leave it nil so the library falls back to the panel type title.
+    @MainActor
+    var libraryTitle: String? { get }
+
     @MainActor
     func handleLeftTopButton()
 
@@ -57,6 +62,10 @@ extension LibraryPanel {
 
     func shouldDismissOnDone() -> Bool {
         return true
+    }
+
+    var libraryTitle: String? {
+        return nil
     }
 
     // no implementation needed
