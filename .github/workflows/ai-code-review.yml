@@ -1,0 +1,184 @@
+name: AI code review
+
+# Adding the `ai-review` label to a pull request runs a Claude review of it and
+# posts the findings as one review. The label is removed when the run ends, so
+# adding it again reviews the latest commit.
+# How it works: scripts/ci/ai-review/README.md
+#
+# pull_request_target, so that pull requests from forks get the API key. That
+# makes the pull request's code untrusted here: it is checked out only for
+# Claude to read, never built or run, and Claude can only read files. Only
+# people with write access can add the label and start a run.
+#
+# Everything is reviewed at the head commit in the event, so the diff and the
+# checked-out code agree even if someone pushes during the run. If the head
+# has moved by the time the review is ready, it isn't posted.
+
+on:
+  pull_request_target: # zizmor: ignore[dangerous-triggers] see the note above
+    types: [labeled]
+
+permissions: {}
+
+jobs:
+  review:
+    if: github.event.label.name == 'ai-review'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    concurrency:
+      group: ai-review-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
+    permissions:
+      contents: read
+      pull-requests: read
+      issues: read
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      REPO: ${{ github.repository }}
+      NUMBER: ${{ github.event.pull_request.number }}
+      COMMIT: ${{ github.event.pull_request.head.sha }}
+    steps:
+      - name: Check out the review setup from the base branch
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            .claude
+            scripts/ci/ai-review
+            AGENTS.md
+            CLAUDE.md
+            review-context.toml
+          sparse-checkout-cone-mode: false
+
+      - name: Check out the pull request for reading
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ env.COMMIT }}
+          path: pr-head
+          persist-credentials: false
+
+      # The same schema module, at the same commit, as validate-review-context.yml.
+      - name: Check out bugbug's review context schema
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          repository: mozilla/bugbug
+          ref: b2c767e9684d0347ba6fe84f2c16def7d5ed9b4f
+          path: .bugbug
+          sparse-checkout: bugbug/tools/code_review/review_context_schema.py
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+
+      - name: Gather the pull request's context
+        run: >-
+          python3 scripts/ci/ai-review/gather_context.py
+          --repo "$REPO" --pr "$NUMBER" --commit "$COMMIT" --out pr-context
+
+      - name: Load the matching review guidance
+        env:
+          PYTHONPATH: scripts/ci/ai-review:.bugbug/bugbug/tools/code_review
+          BASE_SHA: ${{ github.sha }}
+        run: >-
+          python3 scripts/ci/ai-review/load_guidance.py
+          --repo "$REPO" --ref "$BASE_SHA" --config review-context.toml
+          --files pr-context/files.json --out review-guidance.md
+
+      - name: Review
+        id: claude
+        uses: anthropics/claude-code-action@f431adaf77e0fecf918431e75a2b5b45b85af002 # v1.0.283
+        with:
+          anthropic_api_key: ${{ secrets.TEMP_CLAUDE_PR_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          display_report: false
+          prompt: |
+            Review pull request #${{ github.event.pull_request.number }} by
+            following the instructions in scripts/ci/ai-review/prompt.md.
+          claude_args: >-
+            --model claude-opus-5-5
+            --effort high
+            --max-turns 80
+            --permission-mode default
+            --allowedTools "Read,Grep,Glob"
+            --disallowedTools "Bash,Edit,Write,NotebookEdit,WebFetch,WebSearch"
+            --add-dir pr-head
+            --json-schema '{"type":"object","additionalProperties":false,"required":["summary","findings","followups"],"properties":{"summary":{"type":"string"},"followups":{"type":"array","items":{"type":"object","additionalProperties":false,"required":["comment_id","status","note"],"properties":{"comment_id":{"type":"integer"},"status":{"type":"string","enum":["fixed","partly_fixed","not_fixed"]},"note":{"type":"string"}}}},"findings":{"type":"array","items":{"type":"object","additionalProperties":false,"required":["severity","path","line","title","description","fix"],"properties":{"severity":{"type":"string","enum":["P0","P1","P2","P3"]},"path":{"type":"string"},"line":{"type":"integer","minimum":1},"start_line":{"type":"integer","minimum":1},"title":{"type":"string"},"description":{"type":"string"},"fix":{"type":"string"},"repro":{"type":"object","additionalProperties":false,"properties":{"steps":{"type":"array","items":{"type":"string"}},"expected":{"type":"string"},"actual":{"type":"string"}}}}}}}}'
+
+      # Only numbers, never text Claude wrote, go into the run's summary page.
+      - name: Summarize the run's cost
+        if: always() && steps.claude.outputs.execution_file != ''
+        env:
+          EXECUTION_FILE: ${{ steps.claude.outputs.execution_file }}
+        run: |
+          jq -r '[.[] | select(.type == "result")] | last | select(. != null) |
+            "### AI review cost\n\n| Estimated cost | Turns | Duration | Input tokens | Output tokens |\n|---|---|---|---|---|\n| $\(.total_cost_usd * 100 | round / 100) | \(.num_turns) | \(.duration_ms / 1000 | round)s | \(.usage.input_tokens + .usage.cache_read_input_tokens + .usage.cache_creation_input_tokens) | \(.usage.output_tokens) |\n\nEstimated by Claude Code from list prices."' \
+            "$EXECUTION_FILE" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Save the review
+        env:
+          REVIEW: ${{ steps.claude.outputs.structured_output }}
+        run: |
+          if [ -z "$REVIEW" ]; then
+            echo "::error::Claude returned no review."
+            exit 1
+          fi
+          printf '%s' "$REVIEW" > pr-context/review.json
+
+      - name: Upload the review
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
+        with:
+          name: ai-review
+          path: |
+            pr-context/review.json
+            pr-context/files.json
+          retention-days: 7
+
+  # A separate job, so the token that can comment is never in the job running Claude.
+  post:
+    needs: review
+    if: always() && github.event.label.name == 'ai-review'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    # contents: write is only for resolving the threads of fixed findings, which
+    # GitHub doesn't allow with pull-requests: write alone. This job runs only
+    # scripts from the base branch, never the pull request's code.
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      REPO: ${{ github.repository }}
+      NUMBER: ${{ github.event.pull_request.number }}
+      COMMIT: ${{ github.event.pull_request.head.sha }}
+      RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    steps:
+      - name: Check out the posting script from the base branch
+        if: needs.review.result == 'success'
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+          sparse-checkout: scripts/ci/ai-review
+          sparse-checkout-cone-mode: false
+
+      - name: Download the review
+        if: needs.review.result == 'success'
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: ai-review
+          path: review
+
+      - name: Post the review
+        if: needs.review.result == 'success'
+        run: >-
+          python3 scripts/ci/ai-review/post_review.py
+          --repo "$REPO" --pr "$NUMBER" --commit "$COMMIT"
+          --review review/review.json --files review/files.json
+          --run-url "$RUN_URL"
+
+      - name: Report a failed review
+        if: needs.review.result == 'failure' || failure()
+        run: >-
+          gh api --method POST "repos/$REPO/issues/$NUMBER/comments"
+          -f body="The AI code review didn't finish. [Workflow run]($RUN_URL)"
+
+      - name: Remove the label
+        if: always()
+        run: gh api --method DELETE "repos/$REPO/issues/$NUMBER/labels/ai-review" || true
