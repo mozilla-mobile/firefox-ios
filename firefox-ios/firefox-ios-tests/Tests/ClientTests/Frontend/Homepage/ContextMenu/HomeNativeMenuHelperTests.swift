@@ -8,7 +8,7 @@ import XCTest
 @testable import Client
 
 @MainActor
-final class NativeMenuHelperTests: XCTestCase {
+final class HomeNativeMenuHelperTests: XCTestCase {
     func test_menu_forRegularTopSite_returnsExpectedActions() {
         let subject = createSubject()
         let site = Site.createBasicSite(url: "https://www.mozilla.org", title: "Mozilla")
@@ -86,8 +86,8 @@ final class NativeMenuHelperTests: XCTestCase {
         XCTAssertNil(subject.menu(for: .addShortcutTile(nil), sourceView: nil))
     }
 
-    private func createSubject() -> NativeMenuHelper {
-        let subject = NativeMenuHelper(windowUUID: .XCTestDefaultUUID, toastContainer: UIView())
+    private func createSubject() -> HomeNativeMenuHelper {
+        let subject = HomeNativeMenuHelper(windowUUID: .XCTestDefaultUUID, toastContainer: UIView())
         trackForMemoryLeaks(subject)
         return subject
     }

@@ -7,7 +7,9 @@ import Shared
 import Storage
 
 @MainActor
-final class NativeMenuHelper {
+final class HomeNativeMenuHelper {
+    private typealias A11y = AccessibilityIdentifiers.FirefoxHomepage.TopSites.ContextMenu
+
     private let windowUUID: WindowUUID
     private let toastContainer: UIView
 
@@ -65,7 +67,7 @@ final class NativeMenuHelper {
     }
 
     private func getPinTopSiteAction(site: Site) -> UIAction {
-        UIAction(
+        let action = UIAction(
             title: .PinTopsiteActionTitle2,
             image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.pin)
         ) { [windowUUID] _ in
@@ -73,10 +75,12 @@ final class NativeMenuHelper {
                                              windowUUID: windowUUID,
                                              actionType: ContextMenuActionType.tappedOnPinTopSite))
         }
+        action.accessibilityIdentifier = A11y.pin
+        return action
     }
 
     private func getUnpinTopSiteAction(site: Site) -> UIAction {
-        UIAction(
+        let action = UIAction(
             title: .UnpinTopsiteActionTitle2,
             image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.pinSlash)
         ) { [windowUUID] _ in
@@ -84,10 +88,12 @@ final class NativeMenuHelper {
                                              windowUUID: windowUUID,
                                              actionType: ContextMenuActionType.tappedOnUnpinTopSite))
         }
+        action.accessibilityIdentifier = A11y.unpin
+        return action
     }
 
     private func getRemoveTopSiteAction(site: Site) -> UIAction {
-        UIAction(
+        let action = UIAction(
             title: .RemoveContextMenuTitle,
             image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross),
             attributes: .destructive
@@ -96,10 +102,12 @@ final class NativeMenuHelper {
                                              windowUUID: windowUUID,
                                              actionType: ContextMenuActionType.tappedOnRemoveTopSite))
         }
+        action.accessibilityIdentifier = A11y.remove
+        return action
     }
 
     private func getTopSitesSettingsAction() -> UIAction {
-        UIAction(
+        let action = UIAction(
             title: .FirefoxHomepage.ContextualMenu.Settings,
             image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.settings)
         ) { [windowUUID] _ in
@@ -110,10 +118,12 @@ final class NativeMenuHelper {
             store.dispatch(ContextMenuAction(windowUUID: windowUUID,
                                              actionType: ContextMenuActionType.tappedOnSettingsAction))
         }
+        action.accessibilityIdentifier = A11y.settings
+        return action
     }
 
     private func getSponsoredContentAction() -> UIAction {
-        UIAction(
+        let action = UIAction(
             title: .FirefoxHomepage.ContextualMenu.SponsoredContent,
             image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.helpCircle)
         ) { [windowUUID] _ in
@@ -128,10 +138,12 @@ final class NativeMenuHelper {
             store.dispatch(ContextMenuAction(windowUUID: windowUUID,
                                              actionType: ContextMenuActionType.tappedOnSponsoredAction))
         }
+        action.accessibilityIdentifier = A11y.sponsoredContent
+        return action
     }
 
     private func getOpenInNewTabAction(url: URL) -> UIAction {
-        UIAction(
+        let action = UIAction(
             title: .OpenInNewTabContextMenuTitle,
             image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus)
         ) { [windowUUID] _ in
@@ -143,10 +155,12 @@ final class NativeMenuHelper {
                 windowUUID: windowUUID,
                 actionType: NavigationBrowserActionType.tapOnOpenInNewTab))
         }
+        action.accessibilityIdentifier = A11y.openInNewTab
+        return action
     }
 
     private func getOpenInPrivateTabAction(url: URL, menuType: MenuType) -> UIAction {
-        UIAction(
+        let action = UIAction(
             title: .OpenInNewPrivateTabContextMenuTitle,
             image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.privateMode)
         ) { [windowUUID] _ in
@@ -161,10 +175,12 @@ final class NativeMenuHelper {
                                              windowUUID: windowUUID,
                                              actionType: ContextMenuActionType.tappedOnOpenNewPrivateTab))
         }
+        action.accessibilityIdentifier = A11y.openInPrivateTab
+        return action
     }
 
     private func getShareAction(url: URL, sourceView: UIView?) -> UIAction {
-        UIAction(
+        let action = UIAction(
             title: .ShareContextMenuTitle,
             image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.shareApple)
         ) { [windowUUID, toastContainer] _ in
@@ -179,5 +195,7 @@ final class NativeMenuHelper {
                 windowUUID: windowUUID,
                 actionType: NavigationBrowserActionType.tapOnShareSheet))
         }
+        action.accessibilityIdentifier = A11y.share
+        return action
     }
 }

@@ -89,7 +89,7 @@ final class TopSitesScreen {
         BaseTestCase().mozWaitForElementToExist(pinnedSite, timeout: timeout)
         // Verify pin icon is visible (matching legacy test behavior)
         if #available(iOS 17, *) {
-            let pinIcon = pinnedSite.images[sel.PIN.value]
+            let pinIcon = pinnedSite.images[sel.PIN_ICON.value]
             BaseTestCase().mozWaitForElementToExist(pinIcon, timeout: timeout)
         } else {
             // For iOS 16 and below, check for image at index 1
@@ -144,5 +144,39 @@ final class TopSitesScreen {
     func assertYoutubeTopSitesNotExist() {
         BaseTestCase().mozWaitForElementToNotExist(sel.TOP_SITE_ITEM_CELL.element(in: app))
         BaseTestCase().mozWaitForElementToNotExist(sel.TOPSITE_YOUTUBE.element(in: app))
+    }
+
+    func tapPin() {
+        selectContextMenuOption(sel.PIN)
+    }
+
+    func tapRemove() {
+        selectContextMenuOption(sel.REMOVE)
+    }
+
+    func tapOpenInPrivateTab() {
+        selectContextMenuOption(sel.OPEN_IN_PRIVATE_TAB)
+    }
+
+    func assertOpenInTabContextMenuOptionsExist() {
+        BaseTestCase().waitForElementsToExist([
+            sel.OPEN_IN_NEW_TAB.element(in: app),
+            sel.OPEN_IN_PRIVATE_TAB.element(in: app)
+        ])
+    }
+
+    func assertUnpinnedSiteContextMenuOptionsExist() {
+        BaseTestCase().waitForElementsToExist([
+            sel.PIN.element(in: app),
+            sel.OPEN_IN_NEW_TAB.element(in: app),
+            sel.OPEN_IN_PRIVATE_TAB.element(in: app),
+            sel.REMOVE.element(in: app)
+        ])
+    }
+
+    private func selectContextMenuOption(_ selector: Selector) {
+        let button = selector.element(in: app)
+        button.waitAndTap()
+        BaseTestCase().mozWaitForElementToNotExist(button)
     }
 }
