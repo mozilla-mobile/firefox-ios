@@ -449,7 +449,7 @@ final class HomepageViewController: UIViewController,
                                         == homepageState.wallpaperState.availableContentHeight
             self.homepageState = state
 
-            embeddedAddressBarView.isHidden = !state.searchBarState.shouldShowSearchBar
+            embeddedAddressBarView.isHidden = !state.searchBarState.isShowingCenterSearchBar
 
             refreshHomepageDataSourceSnapshot(
                 animatingDifferences: animatingDifferences
@@ -954,7 +954,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private func embeddedAddressBarOverlap(with headerView: UIView) -> CGFloat {
-        guard homepageState.searchBarState.shouldShowSearchBar,
+        guard homepageState.searchBarState.isShowingCenterSearchBar,
               embeddedAddressBarView.superview != nil
         else { return 0 }
 
