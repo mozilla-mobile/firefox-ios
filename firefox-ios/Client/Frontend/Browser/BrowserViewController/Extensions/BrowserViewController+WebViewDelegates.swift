@@ -355,12 +355,7 @@ extension BrowserViewController: WKUIDelegate {
             let previewViewController = ContextMenuPreviewViewController()
             previewViewController.view.isUserInteractionEnabled = false
 
-            let configuration = webView.configuration
-            // Ensures the preview doesn't autoplay media [FXIOS-15375]
-            configuration.allowsInlineMediaPlayback = false
-            configuration.allowsPictureInPictureMediaPlayback = false
-            configuration.mediaTypesRequiringUserActionForPlayback = .all
-            configuration.allowsAirPlayForMediaPlayback = false
+            let configuration = Self.linkPreviewConfiguration(from: webView)
             let clonedWebView = WKWebView(frame: webView.frame, configuration: configuration)
 
             previewViewController.view.addSubview(clonedWebView)
@@ -371,6 +366,20 @@ extension BrowserViewController: WKUIDelegate {
             return previewViewController
         }
         return provider
+    }
+
+    /// Builds the configuration for the link preview web view from the tab's web view.
+    static func linkPreviewConfiguration(from webView: WKWebView) -> WKWebViewConfiguration {
+        let configuration = webView.configuration
+        // WebKit writes the media settings below into the shared preferences when creating a web view,
+        // which would leak them into every tab using the same preferences.
+        configuration.preferences = WKPreferences()
+        // Ensures the preview doesn't autoplay media [FXIOS-15375]
+        configuration.allowsInlineMediaPlayback = false
+        configuration.allowsPictureInPictureMediaPlayback = false
+        configuration.mediaTypesRequiringUserActionForPlayback = .all
+        configuration.allowsAirPlayForMediaPlayback = false
+        return configuration
     }
 
     func addTab(rURL: URL, isPrivate: Bool, currentTab: Tab) {
