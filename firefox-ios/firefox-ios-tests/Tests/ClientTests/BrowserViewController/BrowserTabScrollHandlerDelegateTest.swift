@@ -152,7 +152,70 @@ final class BrowserTabScrollHandlerDelegateTest: BrowserViewControllerConstraint
         XCTAssertFalse(subject.toolbarAnimator === firstAnimator)
     }
 
+    // MARK: - Top Blur View
+
+    func testUpdateBlurViews_BottomSearchBar_homepageAtTop_showsTopBlur() {
+        // Until a navigation commits the tab keeps the homepage URL, so this also covers
+        // a webpage that is loading from the homepage
+        selectTab(url: URL(string: "internal://local/about/home"))
+        let subject = createSubject(isBottomSearchBar: true)
+        subject.toolbarHelper = MockToolbarHelper()
+        subject.topBlurView.alpha = 0
+
+        // A zero homepage scroll offset used to hide the top blur behind the status bar
+        subject.updateBlurViews(scrollOffset: 0)
+
+        XCTAssertEqual(subject.topBlurView.alpha, 1)
+        XCTAssertFalse(subject.header.isClearBackground)
+    }
+
+    func testUpdateBlurViews_TopToolbar_showsTopBlurWithClearHeader() {
+        selectTab(url: URL(string: "https://www.mozilla.org"))
+        let subject = createSubject(isBottomSearchBar: false)
+        subject.toolbarHelper = MockToolbarHelper()
+        subject.topBlurView.alpha = 0
+
+        subject.updateBlurViews()
+
+        XCTAssertEqual(subject.topBlurView.alpha, 1)
+        XCTAssertTrue(subject.header.isClearBackground)
+    }
+
+    func testUpdateBlurViews_reduceTransparencyEnabled_hidesBlurViews() {
+        selectTab(url: URL(string: "https://www.mozilla.org"))
+        let subject = createSubject(isBottomSearchBar: true)
+        let toolbarHelper = MockToolbarHelper()
+        toolbarHelper.reduceTransparencyEnabled = true
+        subject.toolbarHelper = toolbarHelper
+
+        subject.updateBlurViews()
+
+        XCTAssertEqual(subject.topBlurView.alpha, 0)
+        XCTAssertTrue(subject.bottomBlurView.isHidden)
+    }
+
+    func testUpdateBlurViews_reduceTransparencyDisabledAgain_restoresTopBlur() {
+        selectTab(url: URL(string: "https://www.mozilla.org"))
+        let subject = createSubject(isBottomSearchBar: true)
+        let toolbarHelper = MockToolbarHelper()
+        toolbarHelper.reduceTransparencyEnabled = true
+        subject.toolbarHelper = toolbarHelper
+        subject.updateBlurViews()
+
+        toolbarHelper.reduceTransparencyEnabled = false
+        subject.updateBlurViews()
+
+        XCTAssertEqual(subject.topBlurView.alpha, 1)
+        XCTAssertFalse(subject.bottomBlurView.isHidden)
+    }
+
     // MARK: - Private
+
+    private func selectTab(url: URL?) {
+        let tab = Tab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        tab.url = url
+        tabManager.selectedTab = tab
+    }
 
     private func selectReaderModeTab() {
         let tab = Tab(profile: profile, windowUUID: .XCTestDefaultUUID)
