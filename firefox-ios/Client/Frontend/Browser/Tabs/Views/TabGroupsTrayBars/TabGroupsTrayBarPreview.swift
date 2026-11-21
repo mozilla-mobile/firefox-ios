@@ -10,15 +10,17 @@ private struct TabGroupsTrayBarPreviewHost: View {
     @State private var isGroupSelected: Bool
     @State private var selectedPanel: TabGroupsTrayBarViewModel.Panel = .tabs
     @State private var tabCount: Int
+    @State private var selectedTabCount: Int?
 
     private var theme: any Theme {
         if colorScheme == .dark { return NovaDarkTheme() }
         return NovaLightTheme()
     }
 
-    init(isGroupSelected: Bool = false, tabCount: Int = 3) {
+    init(isGroupSelected: Bool = false, tabCount: Int = 3, selectedTabCount: Int? = nil) {
         _isGroupSelected = State(initialValue: isGroupSelected)
         _tabCount = State(initialValue: tabCount)
+        _selectedTabCount = State(initialValue: selectedTabCount)
     }
 
     var body: some View {
@@ -34,18 +36,24 @@ private struct TabGroupsTrayBarPreviewHost: View {
             moreAccessibilityLabel: "More tab options",
             addTabAccessibilityLabel: String.TabGroups.Accessibility.NewTabButton,
             tabCountTitle: countTitle,
+            selectionTitle: String.TabGroups.SelectTabsPrompt,
+            finishSelectionAccessibilityLabel: "Done selecting tabs",
+            newGroupTitle: "New Group",
+            moveToGroupTitle: "Move to Group",
+            closeSelectedTabsTitle: "Close Tabs",
             colors: .themed(theme),
             groupIcon: isGroupSelected ? .sfSymbol("house.fill") : nil,
-            groupColor: isGroupSelected ? Color(theme.colors.tabGroupOrange) : nil
+            groupColor: isGroupSelected ? Color(theme.colors.tabGroupOrange) : nil,
+            selectedTabCount: selectedTabCount
         )
 
         VStack(spacing: 0) {
             TabGroupsTrayTopBar(viewModel: viewModel, onAction: handle)
 
             HStack(alignment: .top, spacing: 12) {
-                tabCard
+                tabCard(isSelected: (selectedTabCount ?? 0) > 0)
                 if tabCount > 1 {
-                    tabCard
+                    tabCard(isSelected: (selectedTabCount ?? 0) > 1)
                 }
             }
             .padding(.horizontal, 20)
@@ -58,9 +66,16 @@ private struct TabGroupsTrayBarPreviewHost: View {
         .background(Color(theme.colors.layer1))
     }
 
-    private var tabCard: some View {
+    private func tabCard(isSelected: Bool) -> some View {
         RoundedRectangle(cornerRadius: 14)
             .fill(Color(theme.colors.layer2))
+            .overlay {
+                if isSelected {
+                    RoundedRectangle(cornerRadius: 11)
+                        .stroke(Color(theme.colors.tabGroupOrange), lineWidth: 2)
+                        .padding(4)
+                }
+            }
             .overlay(alignment: .topLeading) {
                 Text("Firefox")
                     .font(.system(size: 13, weight: .semibold))
@@ -79,7 +94,20 @@ private struct TabGroupsTrayBarPreviewHost: View {
             tabCount += 1
         case .selectPanel(let panel):
             selectedPanel = panel
-        case .openMoreMenu, .done:
+        case .finishSelection:
+            selectedTabCount = nil
+        case .toggleSelectAll:
+            selectedTabCount = (selectedTabCount ?? 0) > 0 ? 0 : tabCount
+        case .createGroupFromSelection:
+            selectedTabCount = nil
+            isGroupSelected = true
+        case .moveSelectionToGroup:
+            selectedTabCount = nil
+            isGroupSelected = true
+        case .closeSelectedTabs:
+            tabCount -= selectedTabCount ?? 0
+            selectedTabCount = nil
+        case .openMoreMenu, .done, .showSelections:
             break
         }
     }
@@ -91,6 +119,10 @@ private struct TabGroupsTrayBarPreviewHost: View {
 
 #Preview("Selected group") {
     TabGroupsTrayBarPreviewHost(isGroupSelected: true, tabCount: 1)
+}
+
+#Preview("Selecting tabs") {
+    TabGroupsTrayBarPreviewHost(selectedTabCount: 2)
 }
 
 #Preview("Dark") {

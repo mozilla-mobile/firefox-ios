@@ -10,6 +10,22 @@ import XCTest
 @testable import Client
 
 final class TabGroupsTrayBarTests: XCTestCase {
+    func testSelectionLabels_withNoSelection_promptAndSelectAll() {
+        let model = makeViewModel(selectedTabCount: 0)
+
+        XCTAssertEqual(model.selectionToggleTitle, String.TabGroups.SelectAll)
+        XCTAssertEqual(model.selectionReviewTitle, String.TabGroups.SelectTabsPrompt)
+        XCTAssertFalse(model.hasSelectedTabs)
+    }
+
+    func testSelectionLabels_withPartialSelection_showCountAndDeselectAll() {
+        let model = makeViewModel(selectedTabCount: 2)
+
+        XCTAssertEqual(model.selectionToggleTitle, String.TabGroups.DeselectAll)
+        XCTAssertEqual(model.selectionReviewTitle, String(format: String.TabGroups.ShowSelections, "2"))
+        XCTAssertTrue(model.hasSelectedTabs)
+    }
+
     func testActiveTint_onlyUsesGroupTintWhenGroupSelected() {
         var model = makeViewModel()
         model.groupColor = .orange
@@ -416,6 +432,51 @@ final class TabGroupsTrayBarTests: XCTestCase {
     }
 
     @MainActor
+    func testNativeToolbar_selectionReviewDisablesAtZeroAndRestoresStandardItems() throws {
+        var receivedAction: TabGroupsTrayBarAction?
+        let toolbar = TabGroupsTrayNativeToolbar { receivedAction = $0 }
+        toolbar.update(viewModel: makeViewModel(selectedTabCount: 0), usesGlassButtons: false)
+
+        XCTAssertEqual(toolbar.items.count, 3)
+        let reviewButton = try XCTUnwrap(toolbar.items.first {
+            $0.accessibilityIdentifier == "tabGroupsTray.showSelections"
+        })
+        XCTAssertFalse(reviewButton.isEnabled)
+
+        toolbar.update(viewModel: makeViewModel(selectedTabCount: 2), usesGlassButtons: false)
+        XCTAssertTrue(reviewButton.isEnabled)
+        XCTAssertEqual(reviewButton.title, String(format: String.TabGroups.ShowSelections, "2"))
+        let action = try XCTUnwrap(reviewButton.action)
+        UIApplication.shared.sendAction(action, to: reviewButton.target, from: reviewButton, for: nil)
+        XCTAssertEqual(receivedAction, .showSelections)
+
+        toolbar.update(viewModel: makeViewModel(), usesGlassButtons: false)
+        XCTAssertEqual(toolbar.items.count, 5)
+        XCTAssertFalse(toolbar.items.contains(reviewButton))
+
+        if #available(iOS 26.0, *) {
+            toolbar.update(viewModel: makeViewModel(selectedTabCount: 0), usesGlassButtons: true)
+            XCTAssertFalse(try XCTUnwrap(reviewButton.customView as? UIButton).isEnabled)
+            XCTAssertTrue(reviewButton.hidesSharedBackground)
+            toolbar.update(viewModel: makeViewModel(selectedTabCount: 2), usesGlassButtons: true)
+            let button = try XCTUnwrap(reviewButton.customView as? UIButton)
+            let title = String(format: String.TabGroups.ShowSelections, "2")
+            XCTAssertTrue(button.isEnabled)
+            XCTAssertEqual(button.configuration?.title, title)
+            XCTAssertEqual(button.accessibilityLabel, title)
+            XCTAssertEqual(button.accessibilityIdentifier, "tabGroupsTray.showSelections")
+            receivedAction = nil
+            button.sendActions(for: .touchUpInside)
+            XCTAssertEqual(receivedAction, .showSelections)
+            toolbar.update(viewModel: makeViewModel(selectedTabCount: 2), usesGlassButtons: false)
+            XCTAssertNil(reviewButton.customView)
+            XCTAssertFalse(reviewButton.hidesSharedBackground)
+            toolbar.update(viewModel: makeViewModel(), usesGlassButtons: true)
+            XCTAssertFalse(toolbar.items.contains(reviewButton))
+        }
+    }
+
+    @MainActor
     @available(iOS 26.0, *)
     private func withHostedGlassPanel(
         direction: UISemanticContentAttribute = .forceLeftToRight,
@@ -472,6 +533,7 @@ final class TabGroupsTrayBarTests: XCTestCase {
         isGroupSelected: Bool = false,
         groupColor: Color? = nil,
         selectedPanel: TabGroupsTrayBarViewModel.Panel = .tabs,
+        selectedTabCount: Int? = nil,
         privateTitle: String = String.TabsTray.TabsSelectorPrivateTabsTitle,
         syncedTitle: String = String.TabsTray.TabsSelectorSyncedTabsTitle
     ) -> TabGroupsTrayBarViewModel {
@@ -484,6 +546,12 @@ final class TabGroupsTrayBarTests: XCTestCase {
                                   moreAccessibilityLabel: String.TabGroups.Accessibility.OptionsButton,
                                   addTabAccessibilityLabel: String.TabGroups.Accessibility.NewTabButton,
                                   tabCountTitle: "20 Tabs",
-                                  groupColor: groupColor)
+                                  selectionTitle: String.TabGroups.SelectTabsPrompt,
+                                  finishSelectionAccessibilityLabel: String.TabGroups.Accessibility.DoneButton,
+                                  newGroupTitle: String.TabGroups.NewTabGroupMenu,
+                                  moveToGroupTitle: String.TabGroups.MoveToTabGroup,
+                                  closeSelectedTabsTitle: String.TabGroups.CloseSelectionButton,
+                                  groupColor: groupColor,
+                                  selectedTabCount: selectedTabCount)
     }
 }

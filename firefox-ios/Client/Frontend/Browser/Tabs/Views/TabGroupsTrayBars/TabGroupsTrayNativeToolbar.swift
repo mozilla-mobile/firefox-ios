@@ -111,6 +111,10 @@ final class TabGroupsTrayNativeToolbar: NSObject {
                                                   style: .plain,
                                                   target: self,
                                                   action: #selector(done))
+    private lazy var reviewButton = UIBarButtonItem(title: nil,
+                                                    style: .plain,
+                                                    target: self,
+                                                    action: #selector(showSelections))
     private lazy var panelItem = UIBarButtonItem(customView: panelSelector)
     private var glassPanelItem: UIBarButtonItem?
     private var glassRowItem: UIBarButtonItem?
@@ -151,13 +155,52 @@ final class TabGroupsTrayNativeToolbar: NSObject {
         }
         addButton.accessibilityIdentifier = "tabGroupsTray.addTab"
         doneButton.accessibilityIdentifier = "tabGroupsTray.done"
+        reviewButton.accessibilityIdentifier = "tabGroupsTray.showSelections"
     }
 
     func update(viewModel: TabGroupsTrayBarViewModel, usesGlassButtons: Bool) {
         configurePanels(viewModel: viewModel)
         configureButtons(viewModel: viewModel, usesGlassButtons: usesGlassButtons)
 
-        items = standardItems(viewModel: viewModel, usesGlassButtons: usesGlassButtons)
+        if viewModel.selectedTabCount != nil {
+            reviewButton.title = viewModel.selectionReviewTitle
+            reviewButton.accessibilityLabel = viewModel.selectionReviewTitle
+            reviewButton.isEnabled = viewModel.hasSelectedTabs
+            reviewButton.tintColor = UIColor(viewModel.colors.primaryText)
+            if #available(iOS 26.0, *), usesGlassButtons {
+                let button: UIButton
+                if let existingButton = reviewButton.customView as? UIButton {
+                    button = existingButton
+                } else {
+                    button = UIButton()
+                    button.addTarget(self, action: #selector(showSelections), for: .touchUpInside)
+                    reviewButton.customView = button
+                }
+                var configuration = UIButton.Configuration.clearGlass()
+                configuration.title = viewModel.selectionReviewTitle
+                configuration.baseForegroundColor = reviewButton.tintColor
+                configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { attributes in
+                    var attributes = attributes
+                    attributes.font = DefaultDynamicFontHelper.preferredFont(
+                        withTextStyle: .subheadline,
+                        size: 15,
+                        weight: .medium)
+                    return attributes
+                }
+                button.configuration = configuration
+                button.isEnabled = viewModel.hasSelectedTabs
+                button.accessibilityLabel = viewModel.selectionReviewTitle
+                button.accessibilityIdentifier = reviewButton.accessibilityIdentifier
+                button.sizeToFit()
+                reviewButton.hidesSharedBackground = true
+            } else {
+                reviewButton.customView = nil
+                if #available(iOS 26.0, *) { reviewButton.hidesSharedBackground = false }
+            }
+            items = [leadingSpace, reviewButton, trailingSpace]
+        } else {
+            items = standardItems(viewModel: viewModel, usesGlassButtons: usesGlassButtons)
+        }
     }
 
     private func standardItems(viewModel: TabGroupsTrayBarViewModel, usesGlassButtons: Bool) -> [UIBarButtonItem] {
@@ -275,6 +318,7 @@ final class TabGroupsTrayNativeToolbar: NSObject {
 
     @objc private func addTab() { onAction(.addTab) }
     @objc private func done() { onAction(.done) }
+    @objc private func showSelections() { onAction(.showSelections) }
 
     @objc private func selectPanel() {
         switch panelSelector.selectedSegmentIndex {
