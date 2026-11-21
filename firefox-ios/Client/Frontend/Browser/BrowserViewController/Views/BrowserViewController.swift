@@ -5066,7 +5066,7 @@ extension BrowserViewController {
                       failure: @escaping @MainActor @Sendable () -> Void) {
         makeURLSession(
             userAgent: UserAgent.fxaUserAgent,
-            configuration: URLSessionConfiguration.defaultMPTCP).dataTask(with: url
+            configuration: URLSessionConfiguration.defaultMPTCP.withVPNProxy()).dataTask(with: url
             ) { (data, response, error) in
             if validatedHTTPResponse(response, statusCode: 200..<300) != nil,
                let data = data {

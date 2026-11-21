@@ -68,6 +68,7 @@ protocol ProxyConfigurator {
 struct DefaultProxyConfigurator: ProxyConfigurator {
     func applyProxyConfigurations(_ configs: [ProxyConfiguration], forcingSessionReset: Bool) {
         DefaultWKEngineConfigurationProvider.applyProxyConfigurations(configs, forcingSessionReset: forcingSessionReset)
+        VPNProxySessionProvider.shared.update(configs)
     }
 }
 
