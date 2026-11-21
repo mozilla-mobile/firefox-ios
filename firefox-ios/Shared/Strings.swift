@@ -4978,6 +4978,446 @@ extension String {
     }
 }
 
+// MARK: - Tab Groups
+extension String {
+    public enum TabGroups {
+        public static let UngroupedTabsTitle = MZLocalizedString(
+            key: "TabGroups.UngroupedTabsTitle.v163",
+            tableName: "TabGroups",
+            value: "All Tabs (%@)",
+            comment: "Name of the ungrouped tab list. %@ is the formatted number of ungrouped tabs and can be 0, 1, or more. The wording must work for every count.")
+        public static let NewTabGroupTitle = MZLocalizedString(
+            key: "TabGroups.NewTabGroupTitle.v163",
+            tableName: "TabGroups",
+            value: "New Tab Group",
+            comment: "Title of the sheet for creating a new tab group.")
+        public static let EditTabGroupTitle = MZLocalizedString(
+            key: "TabGroups.EditTabGroupTitle.v163",
+            tableName: "TabGroups",
+            value: "Edit Tab Group",
+            comment: "Title of the sheet for editing an existing tab group.")
+        public static let GroupName = MZLocalizedString(
+            key: "TabGroups.GroupName.v163",
+            tableName: "TabGroups",
+            value: "Group Name",
+            comment: "Placeholder for the required name field in the new or edit tab group sheet.")
+        public static let NewTabGroupMenu = MZLocalizedString(
+            key: "TabGroups.NewTabGroupMenu.v163",
+            tableName: "TabGroups",
+            value: "New Tab Group…",
+            comment: "Menu action that opens the sheet for creating a tab group. The ellipsis indicates that another step is required.")
+        public static let SwitchTabGroups = MZLocalizedString(
+            key: "TabGroups.SwitchTabGroups.v163",
+            tableName: "TabGroups",
+            value: "Switch Tab Groups",
+            comment: "Toolbar menu item that opens the submenu for switching between tab groups.")
+        public static let MoveToTabGroup = MZLocalizedString(
+            key: "TabGroups.MoveToTabGroup.v163",
+            tableName: "TabGroups",
+            value: "Move to Tab Group",
+            comment: "Toolbar menu item that opens the submenu for moving the current tab into another group.")
+        public static let MoveToNewTabGroup = MZLocalizedString(
+            key: "TabGroups.MoveToNewTabGroup.v163",
+            tableName: "TabGroups",
+            value: "Move to New Tab Group…",
+            comment: "Toolbar menu action that creates a new group and moves the current tab into it.")
+        public static let CloseAllTabs = MZLocalizedString(
+            key: "TabGroups.CloseAllTabs.v163",
+            tableName: "TabGroups",
+            value: "Close All Tabs (%@)",
+            comment: "Menu action in the tab tray and toolbar that closes all tabs in the current group or ungrouped tab list. %@ is the number of tabs; it can be 1.")
+        public static let OpenInNewTabGroup = MZLocalizedString(
+            key: "TabGroups.OpenInNewTabGroup.v163",
+            tableName: "TabGroups",
+            value: "Open in New Tab Group…",
+            comment: "Web link context menu action that opens the link in a newly created tab group.")
+        public static let OpenInTabGroup = MZLocalizedString(
+            key: "TabGroups.OpenInTabGroup.v163",
+            tableName: "TabGroups",
+            value: "Open in Tab Group",
+            comment: "Web link context menu item that opens the submenu for choosing the tab group in which to open the link.")
+        public static let MoveTabToNewGroup = MZLocalizedString(
+            key: "TabGroups.MoveTabToNewGroup.v163",
+            tableName: "TabGroups",
+            value: "Move Tab to New Group…",
+            comment: "Tab card context menu action that creates a new group and moves the tab into it.")
+        public static let MoveTab = MZLocalizedString(
+            key: "TabGroups.MoveTab.v163",
+            tableName: "TabGroups",
+            value: "Move Tab",
+            comment: "Tab card context menu item that opens the submenu for moving the tab into another group.")
+        public static let ManageTitle = MZLocalizedString(
+            key: "TabGroups.ManageTitle.v163",
+            tableName: "TabGroups",
+            value: "Manage “%@”",
+            comment: "Heading of the management menu for the current tab group or ungrouped tab list. %@ is a user-created group name or the localized name of the ungrouped tab list, such as “All Tabs (20)”.")
+        public static let EditGroup = MZLocalizedString(
+            key: "TabGroups.EditGroup.v163",
+            tableName: "TabGroups",
+            value: "Edit",
+            comment: "Quick action in a tab group management menu that opens the group editing sheet.")
+        public static let ShareGroup = MZLocalizedString(
+            key: "TabGroups.ShareGroup.v163",
+            tableName: "TabGroups",
+            value: "Share Group",
+            comment: "Menu action that shares the current tab group.")
+        public static let CloseTabsOlderThan = MZLocalizedString(
+            key: "TabGroups.CloseTabsOlderThan.v163",
+            tableName: "TabGroups",
+            value: "Close Tabs Older Than…",
+            comment: "Submenu heading for closing older tabs. Options such as “1 Day Ago” are separate menu items, not inserted into this text.")
+        public static let DeleteGroup = MZLocalizedString(
+            key: "TabGroups.DeleteGroup.v163",
+            tableName: "TabGroups",
+            value: "Delete",
+            comment: "Destructive action that deletes a tab group and closes its tabs. Used in the management menu and deletion confirmation alert.")
+        public static let DeleteGroupTitle = MZLocalizedString(
+            key: "TabGroups.DeleteGroupTitle.v163",
+            tableName: "TabGroups",
+            value: "Delete “%@”?",
+            comment: "Title of the alert confirming deletion of a tab group and its tabs. %@ is the user-created group name.")
+        public static let DeleteGroupMessage = MZLocalizedString(
+            key: "TabGroups.DeleteGroupMessage.v163",
+            tableName: "TabGroups",
+            value: "This closes all tabs (%@) in the group and permanently deletes the group.",
+            comment: "Message in the tab group deletion alert. %@ is the number of tabs that will be closed when the group is deleted; it can be 1.")
+        public static let Ungroup = MZLocalizedString(
+            key: "TabGroups.Ungroup.v163",
+            tableName: "TabGroups",
+            value: "Ungroup",
+            comment: "Action that removes a tab group while keeping its tabs open. Used in the management menu and ungrouping confirmation alert.")
+        public static let UngroupTitle = MZLocalizedString(
+            key: "TabGroups.UngroupTitle.v163",
+            tableName: "TabGroups",
+            value: "Ungroup “%@”?",
+            comment: "Title of the alert confirming removal of a tab group while keeping its tabs open. %@ is the user-created group name.")
+        public static let UngroupMessage = MZLocalizedString(
+            key: "TabGroups.UngroupMessage.v163",
+            tableName: "TabGroups",
+            value: "This keeps all tabs (%@) open, but permanently deletes the group.",
+            comment: "Message in the ungrouping confirmation alert. %@ is the number of tabs that will remain open after the group is removed; it can be 1.")
+        public static let Cancel = MZLocalizedString(
+            key: "TabGroups.Cancel.v163",
+            tableName: "TabGroups",
+            value: "Cancel",
+            comment: "Button that cancels deleting or ungrouping a tab group and dismisses the confirmation alert.")
+        public static let SelectTabs = MZLocalizedString(
+            key: "TabGroups.SelectTabs.v163",
+            tableName: "TabGroups",
+            value: "Select Tabs",
+            comment: "Menu action that enters tab selection mode.")
+        public static let SelectTabsPrompt = MZLocalizedString(
+            key: "TabGroups.SelectTabsPrompt.v163",
+            tableName: "TabGroups",
+            value: "Select Tabs",
+            comment: "Label of the selection button in tab selection mode while no tabs are selected. Once tabs are selected, it shows their count instead.")
+        public static let SelectAll = MZLocalizedString(
+            key: "TabGroups.SelectAll.v163",
+            tableName: "TabGroups",
+            value: "Select All",
+            comment: "Button that selects all tabs in the current group or ungrouped tab list.")
+        public static let DeselectAll = MZLocalizedString(
+            key: "TabGroups.DeselectAll.v163",
+            tableName: "TabGroups",
+            value: "Deselect All",
+            comment: "Button that clears the current tab selection.")
+        public static let CloseSelectionButton = MZLocalizedString(
+            key: "TabGroups.CloseSelectionButton.v163",
+            tableName: "TabGroups",
+            value: "Close",
+            comment: "Button in tab selection mode that opens the confirmation menu for closing the selected tabs.")
+        public static let MoveSelectionButton = MZLocalizedString(
+            key: "TabGroups.MoveSelectionButton.v163",
+            tableName: "TabGroups",
+            value: "Move",
+            comment: "Button in tab selection mode that opens the destination menu for moving the selected tabs.")
+        public static let ShowSelections = MZLocalizedString(
+            key: "TabGroups.ShowSelections.v163",
+            tableName: "TabGroups",
+            value: "Show Selections (%@)",
+            comment: "Button that opens a sheet containing the selected tabs. %@ is the number of selected tabs; it can be 1.")
+        public static let SelectedTabsTitle = MZLocalizedString(
+            key: "TabGroups.SelectedTabsTitle.v163",
+            tableName: "TabGroups",
+            value: "Selected Tabs (%@)",
+            comment: "Title of the sheet containing selected tabs. %@ is the number of selected tabs; it can be 1.")
+        public static let MoveTabsToTitle = MZLocalizedString(
+            key: "TabGroups.MoveTabsToTitle.v163",
+            tableName: "TabGroups",
+            value: "Move Tabs (%@) to…",
+            comment: "Heading of the destination menu for moving selected tabs. %@ is the number of selected tabs; it can be 1. Destinations are listed separately by their user-created group names.")
+
+        public enum Accessibility {
+            public static let MenuButton = MZLocalizedString(
+                key: "TabGroups.Accessibility.MenuButton.v163",
+                tableName: "TabGroups",
+                value: "Tab groups menu",
+                comment: "VoiceOver label for the tab tray button that opens the tab groups menu.")
+            public static let OptionsButton = MZLocalizedString(
+                key: "TabGroups.Accessibility.OptionsButton.v163",
+                tableName: "TabGroups",
+                value: "Tab group options",
+                comment: "VoiceOver label for the button that opens options for the current tab group.")
+            public static let NewTabButton = MZLocalizedString(
+                key: "TabGroups.Accessibility.NewTabButton.v163",
+                tableName: "TabGroups",
+                value: "New tab",
+                comment: "VoiceOver label for the tab tray button that opens a new tab.")
+            public static let DoneButton = MZLocalizedString(
+                key: "TabGroups.Accessibility.DoneButton.v163",
+                tableName: "TabGroups",
+                value: "Done",
+                comment: "VoiceOver label for the button that closes the tab tray.")
+            public static let GroupNameRequired = MZLocalizedString(
+                key: "TabGroups.Accessibility.GroupNameRequired.v163",
+                tableName: "TabGroups",
+                value: "Group name required",
+                comment: "VoiceOver label for the tab group name field, not a validation error. The field must be filled in; its typed value is announced separately.")
+            public static let GroupColor = MZLocalizedString(
+                key: "TabGroups.Accessibility.GroupColor.v163",
+                tableName: "TabGroups",
+                value: "Group color",
+                comment: "VoiceOver label for the set of tab group color options; only one color can be selected.")
+            public static let GroupIcon = MZLocalizedString(
+                key: "TabGroups.Accessibility.GroupIcon.v163",
+                tableName: "TabGroups",
+                value: "Group icon",
+                comment: "VoiceOver label for the set of tab group icon options; only one icon can be selected.")
+        }
+
+        public enum ColorNames {
+            public static let Default = MZLocalizedString(
+                key: "TabGroups.ColorNames.Default.v163",
+                tableName: "TabGroups",
+                value: "Default, no color",
+                comment: "VoiceOver label for the default, no-color option in the tab group color picker.")
+            public static let Red = MZLocalizedString(
+                key: "TabGroups.ColorNames.Red.v163",
+                tableName: "TabGroups",
+                value: "Red",
+                comment: "VoiceOver label for the red color swatch in the tab group color picker.")
+            public static let Orange = MZLocalizedString(
+                key: "TabGroups.ColorNames.Orange.v163",
+                tableName: "TabGroups",
+                value: "Orange",
+                comment: "VoiceOver label for the orange color swatch in the tab group color picker.")
+            public static let Yellow = MZLocalizedString(
+                key: "TabGroups.ColorNames.Yellow.v163",
+                tableName: "TabGroups",
+                value: "Yellow",
+                comment: "VoiceOver label for the yellow color swatch in the tab group color picker.")
+            public static let Green = MZLocalizedString(
+                key: "TabGroups.ColorNames.Green.v163",
+                tableName: "TabGroups",
+                value: "Green",
+                comment: "VoiceOver label for the green color swatch in the tab group color picker.")
+            public static let Cyan = MZLocalizedString(
+                key: "TabGroups.ColorNames.Cyan.v163",
+                tableName: "TabGroups",
+                value: "Cyan",
+                comment: "VoiceOver label for the cyan color swatch in the tab group color picker.")
+            public static let Blue = MZLocalizedString(
+                key: "TabGroups.ColorNames.Blue.v163",
+                tableName: "TabGroups",
+                value: "Blue",
+                comment: "VoiceOver label for the blue color swatch in the tab group color picker.")
+            public static let Purple = MZLocalizedString(
+                key: "TabGroups.ColorNames.Purple.v163",
+                tableName: "TabGroups",
+                value: "Purple",
+                comment: "VoiceOver label for the purple color swatch in the tab group color picker.")
+            public static let Pink = MZLocalizedString(
+                key: "TabGroups.ColorNames.Pink.v163",
+                tableName: "TabGroups",
+                value: "Pink",
+                comment: "VoiceOver label for the pink color swatch in the tab group color picker.")
+            public static let Gray = MZLocalizedString(
+                key: "TabGroups.ColorNames.Gray.v163",
+                tableName: "TabGroups",
+                value: "Gray",
+                comment: "VoiceOver label for the gray color swatch in the tab group color picker.")
+        }
+
+        public enum IconNames {
+            public static let Default = MZLocalizedString(
+                key: "TabGroups.IconNames.Default.v163",
+                tableName: "TabGroups",
+                value: "Default, tab stack",
+                comment: "VoiceOver label for the default tab stack icon option in the tab group icon picker.")
+            public static let List = MZLocalizedString(
+                key: "TabGroups.IconNames.List.v163",
+                tableName: "TabGroups",
+                value: "List",
+                comment: "VoiceOver label for the list icon option in the tab group icon picker.")
+            public static let Fire = MZLocalizedString(
+                key: "TabGroups.IconNames.Fire.v163",
+                tableName: "TabGroups",
+                value: "Fire",
+                comment: "VoiceOver label for the fire icon option in the tab group icon picker.")
+            public static let Star = MZLocalizedString(
+                key: "TabGroups.IconNames.Star.v163",
+                tableName: "TabGroups",
+                value: "Star",
+                comment: "VoiceOver label for the star icon option in the tab group icon picker.")
+            public static let Bolt = MZLocalizedString(
+                key: "TabGroups.IconNames.Bolt.v163",
+                tableName: "TabGroups",
+                value: "Bolt",
+                comment: "VoiceOver label for the lightning bolt icon in the tab group icon picker.")
+            public static let Heart = MZLocalizedString(
+                key: "TabGroups.IconNames.Heart.v163",
+                tableName: "TabGroups",
+                value: "Heart",
+                comment: "VoiceOver label for the heart icon option in the tab group icon picker.")
+            public static let Sparkles = MZLocalizedString(
+                key: "TabGroups.IconNames.Sparkles.v163",
+                tableName: "TabGroups",
+                value: "Sparkles",
+                comment: "VoiceOver label for the sparkles icon option in the tab group icon picker.")
+            public static let Lightbulb = MZLocalizedString(
+                key: "TabGroups.IconNames.Lightbulb.v163",
+                tableName: "TabGroups",
+                value: "Lightbulb",
+                comment: "VoiceOver label for the lightbulb icon option in the tab group icon picker.")
+            public static let Cloud = MZLocalizedString(
+                key: "TabGroups.IconNames.Cloud.v163",
+                tableName: "TabGroups",
+                value: "Cloud",
+                comment: "VoiceOver label for the cloud icon option in the tab group icon picker.")
+            public static let Smiley = MZLocalizedString(
+                key: "TabGroups.IconNames.Smiley.v163",
+                tableName: "TabGroups",
+                value: "Smiley",
+                comment: "VoiceOver label for the smiling face icon in the tab group icon picker.")
+            public static let Paw = MZLocalizedString(
+                key: "TabGroups.IconNames.Paw.v163",
+                tableName: "TabGroups",
+                value: "Paw",
+                comment: "VoiceOver label for the paw icon option in the tab group icon picker.")
+            public static let House = MZLocalizedString(
+                key: "TabGroups.IconNames.House.v163",
+                tableName: "TabGroups",
+                value: "House",
+                comment: "VoiceOver label for the house icon option in the tab group icon picker.")
+            public static let Briefcase = MZLocalizedString(
+                key: "TabGroups.IconNames.Briefcase.v163",
+                tableName: "TabGroups",
+                value: "Briefcase",
+                comment: "VoiceOver label for the briefcase icon option in the tab group icon picker.")
+            public static let Education = MZLocalizedString(
+                key: "TabGroups.IconNames.Education.v163",
+                tableName: "TabGroups",
+                value: "Education",
+                comment: "VoiceOver label for the graduation cap icon in the tab group icon picker.")
+            public static let Book = MZLocalizedString(
+                key: "TabGroups.IconNames.Book.v163",
+                tableName: "TabGroups",
+                value: "Book",
+                comment: "VoiceOver label for the book icon option in the tab group icon picker.")
+            public static let Plane = MZLocalizedString(
+                key: "TabGroups.IconNames.Plane.v163",
+                tableName: "TabGroups",
+                value: "Plane",
+                comment: "VoiceOver label for the airplane icon option in the tab group icon picker.")
+            public static let Car = MZLocalizedString(
+                key: "TabGroups.IconNames.Car.v163",
+                tableName: "TabGroups",
+                value: "Car",
+                comment: "VoiceOver label for the car icon option in the tab group icon picker.")
+            public static let Map = MZLocalizedString(
+                key: "TabGroups.IconNames.Map.v163",
+                tableName: "TabGroups",
+                value: "Map",
+                comment: "VoiceOver label for the map icon option in the tab group icon picker.")
+            public static let Cart = MZLocalizedString(
+                key: "TabGroups.IconNames.Cart.v163",
+                tableName: "TabGroups",
+                value: "Cart",
+                comment: "VoiceOver label for the shopping cart icon option in the tab group icon picker.")
+            public static let Wallet = MZLocalizedString(
+                key: "TabGroups.IconNames.Wallet.v163",
+                tableName: "TabGroups",
+                value: "Wallet",
+                comment: "VoiceOver label for the wallet icon option in the tab group icon picker.")
+            public static let Popcorn = MZLocalizedString(
+                key: "TabGroups.IconNames.Popcorn.v163",
+                tableName: "TabGroups",
+                value: "Popcorn",
+                comment: "VoiceOver label for the popcorn icon option in the tab group icon picker.")
+            public static let Field = MZLocalizedString(
+                key: "TabGroups.IconNames.Field.v163",
+                tableName: "TabGroups",
+                value: "Field",
+                comment: "VoiceOver label for the sports field icon in the tab group icon picker.")
+            public static let Dumbbell = MZLocalizedString(
+                key: "TabGroups.IconNames.Dumbbell.v163",
+                tableName: "TabGroups",
+                value: "Dumbbell",
+                comment: "VoiceOver label for the dumbbell icon option in the tab group icon picker.")
+            public static let Controller = MZLocalizedString(
+                key: "TabGroups.IconNames.Controller.v163",
+                tableName: "TabGroups",
+                value: "Controller",
+                comment: "VoiceOver label for the game controller icon in the tab group icon picker.")
+            public static let Headphones = MZLocalizedString(
+                key: "TabGroups.IconNames.Headphones.v163",
+                tableName: "TabGroups",
+                value: "Headphones",
+                comment: "VoiceOver label for the headphones icon option in the tab group icon picker.")
+            public static let ArtPalette = MZLocalizedString(
+                key: "TabGroups.IconNames.ArtPalette.v163",
+                tableName: "TabGroups",
+                value: "Art Palette",
+                comment: "VoiceOver label for the artist’s paint palette icon in the tab group icon picker.")
+            public static let Image = MZLocalizedString(
+                key: "TabGroups.IconNames.Image.v163",
+                tableName: "TabGroups",
+                value: "Image",
+                comment: "VoiceOver label for the photograph icon in the tab group icon picker.")
+            public static let Flower = MZLocalizedString(
+                key: "TabGroups.IconNames.Flower.v163",
+                tableName: "TabGroups",
+                value: "Flower",
+                comment: "VoiceOver label for the flower icon option in the tab group icon picker.")
+            public static let Hammer = MZLocalizedString(
+                key: "TabGroups.IconNames.Hammer.v163",
+                tableName: "TabGroups",
+                value: "Hammer",
+                comment: "VoiceOver label for the hammer icon option in the tab group icon picker.")
+            public static let People = MZLocalizedString(
+                key: "TabGroups.IconNames.People.v163",
+                tableName: "TabGroups",
+                value: "People",
+                comment: "VoiceOver label for the people icon option in the tab group icon picker.")
+            public static let Bed = MZLocalizedString(
+                key: "TabGroups.IconNames.Bed.v163",
+                tableName: "TabGroups",
+                value: "Bed",
+                comment: "VoiceOver label for the bed icon option in the tab group icon picker.")
+            public static let Gift = MZLocalizedString(
+                key: "TabGroups.IconNames.Gift.v163",
+                tableName: "TabGroups",
+                value: "Gift",
+                comment: "VoiceOver label for the gift icon option in the tab group icon picker.")
+            public static let PartyPopper = MZLocalizedString(
+                key: "TabGroups.IconNames.PartyPopper.v163",
+                tableName: "TabGroups",
+                value: "Party Popper",
+                comment: "VoiceOver label for the party popper icon option in the tab group icon picker.")
+            public static let PulseLine = MZLocalizedString(
+                key: "TabGroups.IconNames.PulseLine.v163",
+                tableName: "TabGroups",
+                value: "Pulse Line",
+                comment: "VoiceOver label for the heartbeat line icon in the tab group icon picker.")
+            public static let Chart = MZLocalizedString(
+                key: "TabGroups.IconNames.Chart.v163",
+                tableName: "TabGroups",
+                value: "Chart",
+                comment: "VoiceOver label for the bar chart icon in the tab group icon picker.")
+        }
+    }
+}
+
 // MARK: - Tabs Tray
 extension String {
     public enum TabsTray {
