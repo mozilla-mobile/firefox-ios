@@ -82,19 +82,24 @@ final class VPNGuardian: VPNGuardianProviding {
     }
 
     func getPass() async throws -> VPNProxyPass {
+        #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
         // TODO: FXIOS-17399 Remove simulateQuotaExceeded debug hook after testing
         try throwIfSimulatingQuotaExceeded()
+        #endif
         return try await tokenProvider.proxyToken()
     }
 
     func getUsage() async throws -> VPNProxyUsage {
+        #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
         // TODO: FXIOS-17399 Remove simulateQuotaExceeded debug hook after testing
         if let simulatedUsage = simulatedQuotaExceededUsage() {
             return simulatedUsage
         }
+        #endif
         return try await tokenProvider.proxyUsage()
     }
 
+    #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
     // TODO: FXIOS-17399 Remove simulateQuotaExceeded debug hook after testing
     /// How long a triggered simulated quota stays exhausted before its reset date.
     private static let simulatedQuotaPeriod: TimeInterval = 2 * 60
@@ -125,6 +130,7 @@ final class VPNGuardian: VPNGuardianProviding {
         let fiveGiB: Int64 = 5 * 1024 * 1024 * 1024
         return VPNProxyUsage(max: fiveGiB, remaining: 0, reset: reset, unlimited: false)
     }
+    #endif
 
     /// Emits a fresh `VPNProxyPass` shortly before the previous one expires. Cancel the consuming
     /// task to stop rotation — the stream will tear down its internal fetch loop via
