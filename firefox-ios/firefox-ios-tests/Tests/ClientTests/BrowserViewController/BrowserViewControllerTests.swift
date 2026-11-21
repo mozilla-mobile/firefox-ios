@@ -31,12 +31,16 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         appStartupTelemetry = MockAppStartupTelemetry()
         recordVisitManager = MockRecordVisitObservationManager()
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: tabManager)
+        FxNimbus.shared.features.tabGroupsFeature.with { _ in TabGroupsFeature(enabled: false) }
         setIsSwipingTabsEnabled(false)
         setIsHostedSummarizerEnabled(false)
         setupStore()
     }
 
     override func tearDown() async throws {
+        FxNimbus.shared.features.tabGroupsFeature.with { variables in
+            TabGroupsFeature(variables)
+        }
         DependencyHelperMock().reset()
         profile = nil
         tabManager = nil
@@ -169,20 +173,20 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     }
 
     // TODO(FXIOS-13126): Fix and uncomment this test
-//    func testUpdateReaderModeState_whenSummarizeFeatureOff_dispatchesToolbarAction() throws {
-//        let expectation = XCTestExpectation(description: "expect mock store to dispatch an action")
-//        let subject = createSubject()
-//        let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
-//
-//        mockStore.dispatchCalled = {
-//            expectation.fulfill()
-//        }
-//        subject.updateReaderModeState(for: tab, readerModeState: .active)
-//        wait(for: [expectation])
-//
-//        let action = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
-//        XCTAssertEqual(action.readerModeState, .active)
-//    }
+    //    func testUpdateReaderModeState_whenSummarizeFeatureOff_dispatchesToolbarAction() throws {
+    //        let expectation = XCTestExpectation(description: "expect mock store to dispatch an action")
+    //        let subject = createSubject()
+    //        let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
+    //
+    //        mockStore.dispatchCalled = {
+    //            expectation.fulfill()
+    //        }
+    //        subject.updateReaderModeState(for: tab, readerModeState: .active)
+    //        wait(for: [expectation])
+    //
+    //        let action = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
+    //        XCTAssertEqual(action.readerModeState, .active)
+    //    }
 
     func testHandle_withoutURL_withSelectedTab_notRestoring_opensBlankNewTab_ifTabHasURL_and_isNotHomepage() {
         let mockBVC = MockBrowserViewController(profile: profile, tabManager: tabManager)
@@ -596,7 +600,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         let waybackCode = Int(CFNetworkErrors.cfurlErrorCannotFindHost.rawValue)
         let errorPageURL = URL(
             string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)"
-            + "?url=https%3A%2F%2Fexample.com&code=\(waybackCode)"
+                + "?url=https%3A%2F%2Fexample.com&code=\(waybackCode)"
         )!
 
         subject.rebuildNativeErrorPageStateIfNeeded(for: errorPageURL)
@@ -617,7 +621,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         let subject = createSubject()
         let errorPageURL = URL(
             string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)"
-            + "?url=https%3A%2F%2Fexample.com"
+                + "?url=https%3A%2F%2Fexample.com"
         )!
 
         subject.rebuildNativeErrorPageStateIfNeeded(for: errorPageURL)
@@ -630,7 +634,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         let waybackCode = Int(CFNetworkErrors.cfurlErrorCannotFindHost.rawValue)
         let errorPageURL = URL(
             string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)"
-            + "?code=\(waybackCode)"
+                + "?code=\(waybackCode)"
         )!
 
         subject.rebuildNativeErrorPageStateIfNeeded(for: errorPageURL)
@@ -711,8 +715,9 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         let subject = createSubject(gleanWrapper: gleanWrapper)
         let menu = try XCTUnwrap(subject.contextMenu(for: .tabs))
         let sections = try menu.children.map { try XCTUnwrap($0 as? UIMenu) }
-        let tabActions = try sections[0].children.map { try XCTUnwrap($0 as? UIAction) }
-        let closeAction = try XCTUnwrap(sections[1].children.first as? UIAction)
+        let actionsSection = sections[0]
+        let tabActions = try actionsSection.children.prefix(2).map { try XCTUnwrap($0 as? UIAction) }
+        let closeAction = try XCTUnwrap(sections[1].children.last as? UIAction)
         let savedMetric = try XCTUnwrap(
             gleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.TabTrayLongPressExtra>
         )
@@ -755,6 +760,190 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         let subject = createSubject()
 
         XCTAssertNil(subject.contextMenu(for: .locationView))
+    }
+
+    func testNativeToolbarTabsMenuShowsGroupsAndMoveDestinations() async throws {
+        FxNimbus.shared.features.tabGroupsFeature.with { _ in TabGroupsFeature(enabled: true) }
+        let subject = createSubject()
+        let tab = MockTab(profile: profile, windowUUID: subject.windowUUID)
+        tabManager.selectedTab = tab
+        tabManager.normalTabs = [tab]
+        try await tabManager.tabGroupManager.restore()
+        tabManager.normalTabs.forEach { tabManager.tabGroupManager.bind($0) }
+        let controller = TabGroupsSessionStore.controller(for: subject.windowUUID, tabManager: tabManager)
+        defer { TabGroupsSessionStore.removeController(for: subject.windowUUID) }
+        controller.createGroup(name: "Work", icon: .sfSymbol("bag.fill"), tabIDs: [tab.tabUUID], normalTabIDs: [tab.tabUUID])
+
+        let menu = try XCTUnwrap(subject.contextMenu(for: .tabs))
+        let sections = menu.children.compactMap { $0 as? UIMenu }
+        XCTAssertEqual(sections.map(\.children.count), [2, 2, 2])
+        let groupMenus = sections[1].children.compactMap { $0 as? UIMenu }
+        XCTAssertEqual(groupMenus.map(\.title), [String.TabGroups.SwitchTabGroups, String.TabGroups.MoveToTabGroup])
+        for destinationMenu in groupMenus {
+            let destinations = menuActions(in: destinationMenu)
+            XCTAssertEqual(destinations.map(\.title),
+                           [String(format: "%@ Tabs", "0"), "Work", String.TabGroups.NewTabGroupMenu])
+            XCTAssertEqual(destinations[1].state, .on)
+            XCTAssertNotNil(destinations[1].image)
+            XCTAssertEqual(destinations[1].image?.renderingMode, .alwaysOriginal)
+        }
+        let closureActions = menuActions(in: sections[2])
+        XCTAssertEqual(closureActions.first?.title, String(format: .TabGroups.CloseAllTabs, "1"))
+        XCTAssertTrue(closureActions.allSatisfy { $0.attributes.contains(.destructive) })
+    }
+
+    func testNativeToolbarMenuProviderIncludesDestructiveCloseAction() throws {
+        let subject = createSubject()
+        let menu = try XCTUnwrap(subject.contextMenu(for: .tabs))
+        let actions = menu.children.last as? UIMenu
+        let closeTab = actions?.children.last as? UIAction
+        XCTAssertTrue(closeTab?.attributes.contains(.destructive) == true)
+    }
+
+    func testNativeToolbarMoveDisablesForeignGroupWhileSwitchRemainsAvailable() async throws {
+        FxNimbus.shared.features.tabGroupsFeature.with { _ in TabGroupsFeature(enabled: true) }
+        let subject = createSubject()
+        let tab = MockTab(profile: profile, windowUUID: subject.windowUUID)
+        tabManager.selectedTab = tab
+        tabManager.normalTabs = [tab]
+        try await tabManager.tabGroupManager.restore()
+        tabManager.tabGroupManager.bind(tab)
+        let foreignGroup = try tabManager.tabGroupManager.createGroup(title: "Other Window")
+        _ = try tabManager.tabGroupManager.openGroup(foreignGroup, in: UUID())
+        defer { TabGroupsSessionStore.removeController(for: subject.windowUUID) }
+
+        let menu = try XCTUnwrap(subject.contextMenu(for: .tabs))
+        let groupSection = try XCTUnwrap(menu.children[1] as? UIMenu)
+        let switchMenu = try XCTUnwrap(groupSection.children.first as? UIMenu)
+        let moveMenu = try XCTUnwrap(groupSection.children.last as? UIMenu)
+        let switchDestination = try XCTUnwrap(menuActions(in: switchMenu).first { $0.title == "Other Window" })
+        let moveDestination = try XCTUnwrap(menuActions(in: moveMenu).first { $0.title == "Other Window" })
+
+        XCTAssertFalse(switchDestination.attributes.contains(.disabled))
+        XCTAssertTrue(moveDestination.attributes.contains(.disabled))
+    }
+
+    @available(iOS 16.0, *)
+    func testNativeToolbarTabsMenuSwitchesAndMovesActiveTab() async throws {
+        FxNimbus.shared.features.tabGroupsFeature.with { _ in TabGroupsFeature(enabled: true) }
+        let subject = createSubject()
+        let mobileTab = MockTab(profile: profile, windowUUID: subject.windowUUID)
+        let groupTab = MockTab(profile: profile, windowUUID: subject.windowUUID)
+        tabManager.normalTabs = [mobileTab, groupTab]
+        tabManager.selectedTab = mobileTab
+        tabManager.tabsByUUID[groupTab.tabUUID] = groupTab
+        try await tabManager.tabGroupManager.restore()
+        tabManager.normalTabs.forEach { tabManager.tabGroupManager.bind($0) }
+        let controller = TabGroupsSessionStore.controller(for: subject.windowUUID, tabManager: tabManager)
+        defer { TabGroupsSessionStore.removeController(for: subject.windowUUID) }
+        let groupID = try XCTUnwrap(controller.createGroup(name: "Work",
+                                                           tabIDs: [groupTab.tabUUID],
+                                                           normalTabIDs: [mobileTab.tabUUID, groupTab.tabUUID]))
+        controller.selectGroup(id: nil)
+
+        let menu = try XCTUnwrap(subject.contextMenu(for: .tabs))
+        let groupSection = try XCTUnwrap(menu.children[1] as? UIMenu)
+        let switchMenu = try XCTUnwrap(groupSection.children.first as? UIMenu)
+        let groupAction = try XCTUnwrap(menuActions(in: switchMenu).first { $0.title == "Work" })
+        let selection = expectation(description: "Group selected after opening")
+        controller.onChange = { _ in selection.fulfill() }
+        groupAction.performWithSender(nil, target: nil)
+        await fulfillment(of: [selection], timeout: 5)
+        controller.onChange = nil
+
+        XCTAssertEqual(controller.state.selectedGroupID, groupID)
+        XCTAssertEqual(tabManager.selectedTab?.tabUUID, groupTab.tabUUID)
+
+        let updatedMenu = try XCTUnwrap(subject.contextMenu(for: .tabs))
+        let actionsSection = try XCTUnwrap(updatedMenu.children[1] as? UIMenu)
+        let moveMenu = try XCTUnwrap(actionsSection.children.last as? UIMenu)
+        let moveToMobile = try XCTUnwrap(menuActions(in: moveMenu).first)
+        moveToMobile.performWithSender(nil, target: nil)
+
+        XCTAssertNil(controller.state.selectedGroupID)
+        XCTAssertEqual(controller.visibleTabIDs(normalTabIDs: tabManager.normalTabs.map(\.tabUUID)),
+                       [mobileTab.tabUUID, groupTab.tabUUID])
+        XCTAssertEqual(tabManager.selectedTab?.tabUUID, groupTab.tabUUID)
+    }
+
+    func testActivatingGroupSelectsItInHostingWindow() async throws {
+        let subject = createSubject()
+        let tab = MockTab(profile: profile, windowUUID: subject.windowUUID)
+        tabManager.normalTabs = [tab]
+        tabManager.tabsByUUID[tab.tabUUID] = tab
+        try await tabManager.tabGroupManager.restore()
+        tabManager.tabGroupManager.bind(tab)
+        let controller = TabGroupsSessionStore.controller(for: subject.windowUUID, tabManager: tabManager)
+        let windows: WindowManager = AppContainer.shared.resolve()
+        windows.newBrowserWindowConfigured(AppWindowInfo(tabManager: tabManager, sceneCoordinator: nil),
+                                           uuid: subject.windowUUID)
+        defer {
+            windows.windowWillClose(uuid: subject.windowUUID)
+            TabGroupsSessionStore.removeController(for: subject.windowUUID)
+        }
+        let work = try XCTUnwrap(controller.createGroup(name: "Work",
+                                                        tabIDs: [tab.tabUUID],
+                                                        normalTabIDs: [tab.tabUUID]))
+        let personal = try XCTUnwrap(controller.createGroup(name: "Personal", normalTabIDs: [tab.tabUUID]))
+        XCTAssertEqual(controller.state.selectedGroupID, personal)
+        try await activateTabGroupWindow(subject.windowUUID, groupID: work)
+        XCTAssertEqual(controller.state.selectedGroupID, work)
+        XCTAssertEqual(tabManager.selectedTab?.tabUUID, tab.tabUUID)
+    }
+
+    func testNativeToolbarTabsMenuPreservesPrivateTabActions() async throws {
+        FxNimbus.shared.features.tabGroupsFeature.with { _ in TabGroupsFeature(enabled: true) }
+        let subject = createSubject()
+        tabManager.selectedTab = MockTab(profile: profile, isPrivate: true, windowUUID: subject.windowUUID)
+        try await tabManager.tabGroupManager.restore()
+        let controller = TabGroupsSessionStore.controller(for: subject.windowUUID, tabManager: tabManager)
+        defer { TabGroupsSessionStore.removeController(for: subject.windowUUID) }
+        controller.createGroup(name: "Work", normalTabIDs: [])
+
+        let menu = subject.makeTabsLongPressMenu()
+        let sections = menu.children.compactMap { $0 as? UIMenu }
+        XCTAssertEqual(sections.map(\.children.count), [2, 1])
+        XCTAssertEqual(menuActions(in: menu).map(\.title),
+                       [String.KeyboardShortcuts.NewTab,
+                        String.KeyboardShortcuts.NewPrivateTab,
+                        String.Toolbars.TabToolbarLongPressActionsMenu.CloseThisTabButton])
+    }
+
+    func testNativeToolbarTabsMenuWithFlagOffPreservesOriginalActionsDespiteGroups() async throws {
+        let subject = createSubject()
+        tabManager.selectedTab = MockTab(profile: profile, windowUUID: subject.windowUUID)
+        try await tabManager.tabGroupManager.restore()
+        let controller = TabGroupsSessionStore.controller(for: subject.windowUUID, tabManager: tabManager)
+        defer { TabGroupsSessionStore.removeController(for: subject.windowUUID) }
+        controller.createGroup(name: "Work", normalTabIDs: [])
+
+        let menu = subject.makeTabsLongPressMenu()
+        let sections = menu.children.compactMap { $0 as? UIMenu }
+        XCTAssertEqual(sections.map(\.children.count), [2, 1])
+        XCTAssertEqual(menuActions(in: menu).map(\.title),
+                       [String.KeyboardShortcuts.NewTab,
+                        String.KeyboardShortcuts.NewPrivateTab,
+                        String.Toolbars.TabToolbarLongPressActionsMenu.CloseThisTabButton])
+    }
+
+    func testNativeToolbarTabsMenuWithoutGroupsOffersDirectCreationAndCountedClosure() async throws {
+        FxNimbus.shared.features.tabGroupsFeature.with { _ in TabGroupsFeature(enabled: true) }
+        let subject = createSubject()
+        let tabs = (0..<2).map { _ in MockTab(profile: profile, windowUUID: subject.windowUUID) }
+        tabManager.normalTabs = tabs
+        tabManager.selectedTab = tabs[0]
+        try await tabManager.tabGroupManager.restore()
+        tabs.forEach { tabManager.tabGroupManager.bind($0) }
+        defer { TabGroupsSessionStore.removeController(for: subject.windowUUID) }
+
+        let menu = try XCTUnwrap(subject.contextMenu(for: .tabs))
+        let sections = menu.children.compactMap { $0 as? UIMenu }
+        XCTAssertEqual(sections.map(\.children.count), [2, 1, 2])
+        let groupAction = try XCTUnwrap(sections[1].children.first as? UIAction)
+        XCTAssertEqual(groupAction.title, String.TabGroups.MoveToNewTabGroup)
+        let closeAll = try XCTUnwrap(sections[2].children.first as? UIAction)
+        XCTAssertEqual(closeAll.title, String(format: .TabGroups.CloseAllTabs, "2"))
+        XCTAssertTrue(closeAll.attributes.contains(.destructive))
     }
 
     @MainActor
@@ -813,6 +1002,14 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     }
 
     // MARK: - Private
+
+    private func menuActions(in menu: UIMenu) -> [UIAction] {
+        menu.children.flatMap { element -> [UIAction] in
+            if let action = element as? UIAction { return [action] }
+            if let submenu = element as? UIMenu { return menuActions(in: submenu) }
+            return []
+        }
+    }
 
     private func createSubject(gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
                                file: StaticString = #filePath,
