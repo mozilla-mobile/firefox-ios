@@ -7,7 +7,7 @@ import TestKit
 import XCTest
 @testable import Client
 
-@available(iOS 17.0, *)
+@available(iOS 27.2, *)
 @MainActor
 final class VPNProxySessionProviderTests: XCTestCase {
     override func setUp() async throws {
