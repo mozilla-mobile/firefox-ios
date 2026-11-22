@@ -393,6 +393,40 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         }
     }
 
+    func testSelectedLocationUnavailable_dispatchesLocationUnavailableAlert() async throws {
+        let subject = createSubject()
+
+        try await yieldAndWaitForDispatch(.selectedLocationUnavailable, subject: subject)
+
+        let action = try XCTUnwrap(mockStore.dispatchedModernActions.first as? VPNAlertModernAction)
+        guard case .showLocationUnavailableAlert = action else {
+            return XCTFail("Expected showLocationUnavailableAlert, got \(action)")
+        }
+    }
+
+    func testConnectionFailed_whenNotRunning_clearsPreferenceAndDispatchesAlert() async throws {
+        mockUserPreferences.setPreferenceFor(.vpnFeature, to: true)
+        let subject = createSubject()
+
+        try await yieldAndWaitForDispatch(.connectionFailed, subject: subject)
+
+        XCTAssertEqual(mockUserPreferences.boolPreferences[.vpnFeature], false)
+        let action = try XCTUnwrap(mockStore.dispatchedModernActions.first as? VPNAlertModernAction)
+        guard case .showConnectionFailedAlert = action else {
+            return XCTFail("Expected showConnectionFailedAlert, got \(action)")
+        }
+    }
+
+    func testConnectionFailed_whenStillRunning_keepsPreference() async throws {
+        mockUserPreferences.setPreferenceFor(.vpnFeature, to: true)
+        mockVPNManager.isRunning = true
+        let subject = createSubject()
+
+        try await yieldAndWaitForDispatch(.connectionFailed, subject: subject)
+
+        XCTAssertEqual(mockUserPreferences.boolPreferences[.vpnFeature], true)
+    }
+
     // MARK: - Helpers
 
     func setupAppState() -> AppState {

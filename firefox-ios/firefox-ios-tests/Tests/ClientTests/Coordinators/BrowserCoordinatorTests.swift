@@ -574,6 +574,27 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertEqual(alert.actions.first?.style, .destructive)
     }
 
+    func testShowVPNLocationUnavailableAlert_presentsAlertWithSingleAction() throws {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+
+        subject.showVPNLocationUnavailableAlert()
+
+        let alert = try XCTUnwrap(browserViewController.viewControllerToPresent as? UIAlertController)
+        XCTAssertEqual(alert.actions.count, 1)
+    }
+
+    func testShowVPNConnectionFailedAlert_presentsAlertWithPreferredCloseAndRetry() throws {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+
+        subject.showVPNConnectionFailedAlert()
+
+        let alert = try XCTUnwrap(browserViewController.viewControllerToPresent as? UIAlertController)
+        XCTAssertEqual(alert.actions.map(\.style), [.default, .default])
+        XCTAssertIdentical(alert.preferredAction, alert.actions.first)
+    }
+
     func testShowVPNAlert_whileVPNAlertStillAlive_doesNotPresentAnother() throws {
         let subject = createSubject()
         subject.browserViewController = browserViewController

@@ -83,6 +83,32 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.displayView, .vpnDataLimitAlert(dataLimitBytes: 5_000_000_000))
     }
 
+    func testShowVPNLocationUnavailableAlertAction() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        let newState = reducer.modernReducer(
+            initialState,
+            VPNAlertModernAction.showLocationUnavailableAlert,
+            .XCTestDefaultUUID
+        )
+
+        XCTAssertEqual(newState.displayView, .vpnLocationUnavailableAlert)
+    }
+
+    func testShowVPNConnectionFailedAlertAction() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        let newState = reducer.modernReducer(
+            initialState,
+            VPNAlertModernAction.showConnectionFailedAlert,
+            .XCTestDefaultUUID
+        )
+
+        XCTAssertEqual(newState.displayView, .vpnConnectionFailedAlert)
+    }
+
     func testShowVPNFailureAlertAction_forAnotherWindow_doesNotSetDisplayView() {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()

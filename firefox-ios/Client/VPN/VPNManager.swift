@@ -18,6 +18,7 @@ enum VPNEvent: Equatable {
     case rotationFailed
     /// Guardian refused a pass because the monthly bandwidth quota is used up.
     case quotaExceeded(VPNProxyUsage)
+    case connectionFailed
     /// The selected location had no usable server, so a fallback server was used instead.
     case selectedLocationUnavailable
 }
@@ -161,6 +162,20 @@ final class VPNManager: VPNRunnable {
     func start(countryCode: String?) async throws {
         isConnecting = true
         defer { isConnecting = false }
+        do {
+            try await connect(countryCode: countryCode)
+        } catch VPNAuthError.quotaExceeded(let usage) {
+            throw VPNAuthError.quotaExceeded(usage)
+        } catch {
+            eventsContinuation.yield(.connectionFailed)
+            throw error
+        }
+    }
+
+    private func connect(countryCode: String?) async throws {
+        // TODO: FXIOS-17399 Remove simulated VPN failure debug hooks after testing
+        try throwIfSimulatingFailure()
+
         guard let guardian = self.guardian else {
             throw VPNError.tokenProviderUnavailable
         }
@@ -174,8 +189,13 @@ final class VPNManager: VPNRunnable {
             throw VPNAuthError.quotaExceeded(usage)
         }
 
-        guard let selection = await serverManager.selectServer(countryCode: countryCode, environment: environment) else {
+        guard var selection = await serverManager.selectServer(countryCode: countryCode, environment: environment) else {
             throw VPNError.noServerFound
+        }
+        // TODO: FXIOS-17399 Remove simulated VPN failure hooks after testing
+        if consumeSimulatedLocationFallback(),
+           let fallback = await serverManager.selectServer(countryCode: nil, environment: environment) {
+            selection = VPNServerSelection(server: fallback.server, didFallBack: true)
         }
         let server = selection.server
 
@@ -237,6 +257,24 @@ final class VPNManager: VPNRunnable {
         isRotationPaused = false
         guard rotationTask == nil, isRunning, let latestPass else { return }
         startPassRotation(after: latestPass)
+    }
+
+    // TODO: FXIOS-17399 Remove simulated VPN failure debug hooks after testing
+    /// One-shot debug hook: fails the next connection or location switch.
+    private func throwIfSimulatingFailure() throws {
+        let key = PrefsKeys.VPNSettings.simulateConnectionFailure
+        guard prefs.boolForKey(key) == true else { return }
+        prefs.removeObjectForKey(key)
+        throw VPNError.noServerFound
+    }
+
+    // TODO: FXIOS-17399 Remove simulated VPN failure debug hooks after testing
+    /// One-shot debug hook: returns true once if the next location switch should fall back.
+    private func consumeSimulatedLocationFallback() -> Bool {
+        let key = PrefsKeys.VPNSettings.simulateLocationFallback
+        guard isRunning, prefs.boolForKey(key) == true else { return false }
+        prefs.removeObjectForKey(key)
+        return true
     }
 
     /// Consumes `VPNGuardian.passRotation` and reapplies the proxy configuration with the new

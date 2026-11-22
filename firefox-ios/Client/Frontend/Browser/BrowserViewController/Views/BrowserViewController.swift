@@ -2960,6 +2960,10 @@ class BrowserViewController: UIViewController,
             navigationHandler?.showVPNFailureAlert()
         case .vpnDataLimitAlert(let dataLimitBytes):
             navigationHandler?.showVPNDataLimitAlert(dataLimitBytes: dataLimitBytes)
+        case .vpnLocationUnavailableAlert:
+            navigationHandler?.showVPNLocationUnavailableAlert()
+        case .vpnConnectionFailedAlert:
+            navigationHandler?.showVPNConnectionFailedAlert()
         }
     }
 
