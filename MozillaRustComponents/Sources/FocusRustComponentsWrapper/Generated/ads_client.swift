@@ -894,8 +894,7 @@ public protocol MozAdsClientBuilderProtocol: AnyObject, Sendable {
     func build()  -> MozAdsClient
     
     /**
-     * Enables the HTTP cache with this configuration. Without it, nothing is
-     * cached.
+     * Configures the HTTP cache. Without it, responses are cached in memory.
      */
     func cacheConfig(cacheConfig: MozAdsCacheConfig)  -> MozAdsClientBuilder
     
@@ -960,8 +959,8 @@ open class MozAdsClientBuilder: MozAdsClientBuilderProtocol, @unchecked Sendable
         return try! rustCall { uniffi_ads_client_fn_clone_mozadsclientbuilder(self.handle, $0) }
     }
     /**
-     * A builder with the defaults: the production environment, no cache and
-     * no telemetry.
+     * A builder with the defaults: the production environment, a cache in
+     * memory and no telemetry.
      */
 public convenience init() {
     let handle =
@@ -999,8 +998,7 @@ open func build() -> MozAdsClient  {
 }
     
     /**
-     * Enables the HTTP cache with this configuration. Without it, nothing is
-     * cached.
+     * Configures the HTTP cache. Without it, responses are cached in memory.
      */
 open func cacheConfig(cacheConfig: MozAdsCacheConfig) -> MozAdsClientBuilder  {
     return try!  FfiConverterTypeMozAdsClientBuilder_lift(try! rustCall() {
@@ -3369,7 +3367,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_ads_client_checksum_method_mozadsclientbuilder_build() != 21245) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_ads_client_checksum_method_mozadsclientbuilder_cache_config() != 64624) {
+    if (uniffi_ads_client_checksum_method_mozadsclientbuilder_cache_config() != 35022) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_ads_client_checksum_method_mozadsclientbuilder_environment() != 57301) {
@@ -3381,7 +3379,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_ads_client_checksum_method_mozadsclientbuilder_user_agent() != 51123) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_ads_client_checksum_constructor_mozadsclientbuilder_new() != 48831) {
+    if (uniffi_ads_client_checksum_constructor_mozadsclientbuilder_new() != 22737) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_ads_client_checksum_method_mozadstelemetry_record_build_cache_error() != 25943) {
