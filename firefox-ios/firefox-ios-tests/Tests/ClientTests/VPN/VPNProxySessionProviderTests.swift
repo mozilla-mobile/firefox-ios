@@ -7,8 +7,8 @@ import TestKit
 import XCTest
 @testable import Client
 
-@available(iOS 27.2, *)
 @MainActor
+@available(iOS 27.2, *)
 final class VPNProxySessionProviderTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
@@ -91,7 +91,8 @@ final class VPNProxySessionProviderTests: XCTestCase {
         XCTAssertTrue(configuration.proxyConfigurations.isEmpty)
     }
 
-    func test_withVPNProxy_withProxy_appliesProxyConfigurations() {
+    func test_withVPNProxy_withProxy_appliesProxyConfigurations() throws {
+        if #unavailable(iOS 27.2) { throw XCTSkip("Requires iOS 27.2") }
         VPNProxySessionProvider.shared.update([makeProxyConfiguration()])
 
         let configuration = URLSessionConfiguration.ephemeral.withVPNProxy()
@@ -105,7 +106,8 @@ final class VPNProxySessionProviderTests: XCTestCase {
         XCTAssertTrue(URLSession.sharedWithVPNProxy === URLSession.shared)
     }
 
-    func test_sharedWithVPNProxy_withProxy_returnsProxiedSession() {
+    func test_sharedWithVPNProxy_withProxy_returnsProxiedSession() throws {
+        if #unavailable(iOS 27.2) { throw XCTSkip("Requires iOS 27.2") }
         VPNProxySessionProvider.shared.update([makeProxyConfiguration()])
 
         let session = URLSession.sharedWithVPNProxy
