@@ -4,7 +4,6 @@
 
 import XCTest
 import Common
-import ComponentLibrary
 import Shared
 import TestKit
 
