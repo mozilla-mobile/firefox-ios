@@ -42,7 +42,7 @@ final class VPNMiddleware {
     static func makeVPNManager(
         featureFlags: FeatureFlagProviding = AppContainer.shared.resolve()
     ) -> VPNRunnable? {
-        guard #available(iOS 27.2, *), featureFlags.isEnabled(.vpnFeature) else { return nil }
+        guard #available(iOS 17.0, *), featureFlags.isEnabled(.vpnFeature) else { return nil }
         return AppContainer.shared.resolve() as VPNRunnable
     }
 
