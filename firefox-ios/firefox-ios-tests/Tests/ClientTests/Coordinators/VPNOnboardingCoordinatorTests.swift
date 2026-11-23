@@ -18,7 +18,6 @@ final class VPNOnboardingCoordinatorTests: XCTestCase {
     private var prefs: MockProfilePrefs!
     private var featureFlagsProvider: MockNimbusFeatureFlags!
     private var telemetry: MockVPNClientTelemetry!
-    private var vpnManager: MockVPNManager!
     private var parentCoordinator: MockParentCoordinator!
     private var delegate: MockVPNOnboardingCoordinatorDelegate!
     private var tabManager: MockTabManager!
@@ -32,8 +31,6 @@ final class VPNOnboardingCoordinatorTests: XCTestCase {
         featureFlagsProvider = MockNimbusFeatureFlags()
         featureFlagsProvider.enabledFlags = [.vpnFeature, .vpnOnboardingSheet]
         telemetry = MockVPNClientTelemetry()
-        vpnManager = MockVPNManager()
-        vpnManager.dataLimitInGB = 5
         parentCoordinator = MockParentCoordinator()
         delegate = MockVPNOnboardingCoordinatorDelegate()
         tabManager = MockTabManager()
@@ -46,7 +43,6 @@ final class VPNOnboardingCoordinatorTests: XCTestCase {
         prefs = nil
         featureFlagsProvider = nil
         telemetry = nil
-        vpnManager = nil
         parentCoordinator = nil
         delegate = nil
         tabManager = nil
@@ -100,13 +96,6 @@ final class VPNOnboardingCoordinatorTests: XCTestCase {
 
     func test_shouldShow_whenSheetAlreadyShown_returnsFalse() {
         prefs.setBool(true, forKey: PrefsKeys.VPNSettings.onboardingSheetShown)
-        let subject = createSubject()
-
-        XCTAssertFalse(subject.shouldShow())
-    }
-
-    func test_shouldShow_whenDataLimitIsZero_returnsFalse() {
-        vpnManager.dataLimitInGB = 0
         let subject = createSubject()
 
         XCTAssertFalse(subject.shouldShow())
@@ -207,7 +196,6 @@ final class VPNOnboardingCoordinatorTests: XCTestCase {
             tabManager: tabManager,
             prefs: prefs,
             telemetry: telemetry,
-            vpnManager: vpnManager,
             featureFlagsProvider: featureFlagsProvider,
             onOpenURL: { [weak self] url in
                 self?.openedURLs.append(url)

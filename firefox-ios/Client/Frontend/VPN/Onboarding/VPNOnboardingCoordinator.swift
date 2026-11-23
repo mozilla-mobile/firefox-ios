@@ -17,6 +17,7 @@ protocol VPNOnboardingCoordinatorDelegate: AnyObject {
 final class VPNOnboardingCoordinator: BaseCoordinator {
     private enum UX {
         static let sheetHeightRatio: CGFloat = 2.0 / 3.0
+        static let dataLimitInGB: Double = 5
     }
 
     weak var parentCoordinator: ParentCoordinatorDelegate?
@@ -26,7 +27,6 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
     private let tabManager: TabManager
     private let prefs: Prefs
     private let telemetry: VPNClientTelemetry
-    private let vpnManager: VPNRunnable
     private let themeManager: ThemeManager
     private let featureFlagsProvider: FeatureFlagProviding
     private let onOpenURL: (URL) -> Void
@@ -37,7 +37,6 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
         tabManager: TabManager,
         prefs: Prefs,
         telemetry: VPNClientTelemetry = DefaultVPNTelemetry(),
-        vpnManager: VPNRunnable = AppContainer.shared.resolve(),
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         featureFlagsProvider: FeatureFlagProviding = AppContainer.shared.resolve(),
         onOpenURL: @escaping (URL) -> Void
@@ -46,18 +45,15 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
         self.tabManager = tabManager
         self.prefs = prefs
         self.telemetry = telemetry
-        self.vpnManager = vpnManager
         self.themeManager = themeManager
         self.featureFlagsProvider = featureFlagsProvider
         self.onOpenURL = onOpenURL
         super.init(router: router)
     }
 
-    /// False until the VPN usage has been fetched, since the sheet shows the account's data limit.
     func shouldShow() -> Bool {
         guard let selectedTab = tabManager.selectedTab,
               !selectedTab.isFxHomeTab,
-              vpnManager.dataLimitInGB > 0,
               featureFlagsProvider.isEnabled(.vpnFeature),
               featureFlagsProvider.isEnabled(.vpnOnboardingSheet)
         else { return false }
@@ -118,7 +114,7 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
 
     private func makeViewModel() -> OnboardingSheetViewModel {
         let appName = AppName.shortName.rawValue
-        let dataLimit = VPNHelpers.formatted(gigabytes: vpnManager.dataLimitInGB)
+        let dataLimit = VPNHelpers.formatted(gigabytes: UX.dataLimitInGB)
         return OnboardingSheetViewModel(
             heroImageName: StandardImageIdentifiers.Large.globe,
             heroGradient: .accent,

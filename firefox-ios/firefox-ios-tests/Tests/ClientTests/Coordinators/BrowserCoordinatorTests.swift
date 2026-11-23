@@ -273,8 +273,6 @@ final class BrowserCoordinatorTests: XCTestCase,
         guard #available(iOS 27.2, *) else { throw XCTSkip("The VPN onboarding sheet requires iOS 27.2") }
         featureFlags.enabledFlags = [.vpnFeature, .vpnOnboardingSheet]
         tabManager.selectedTab = MockTab(profile: profile, windowUUID: windowUUID, isHomePage: false)
-        let vpnManager = try XCTUnwrap(AppContainer.shared.resolve() as VPNRunnable as? MockVPNManager)
-        vpnManager.dataLimitInGB = 5
         let subject = createSubject()
         subject.browserViewController = browserViewController
 
