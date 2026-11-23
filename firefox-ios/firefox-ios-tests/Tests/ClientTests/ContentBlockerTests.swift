@@ -175,6 +175,48 @@ final class ContentBlockerTests: XCTestCase {
         XCTAssertNotEqual(hashAfterFirst, hashAfterSecond, "Different JSON should produce a new hash")
     }
 
+    func testSetupTrackingProtection_withProxyOn_addsProxyLeakGuardRule() async {
+        let (tab, controller) = await makeTabWithCompiledProxyLeakGuardRule()
+
+        ContentBlocker.shared.setupTrackingProtection(forTab: tab,
+                                                      isEnabled: false,
+                                                      rules: [],
+                                                      isProxyEnabled: true,
+                                                      completion: nil)
+
+        XCTAssertEqual(controller.ruleListIdentifiers, [ProxyLeakGuardRuleDefaults.ScriptName])
+    }
+
+    func testSetupTrackingProtection_withProxyOff_doesNotAddProxyLeakGuardRule() async {
+        let (tab, controller) = await makeTabWithCompiledProxyLeakGuardRule()
+
+        ContentBlocker.shared.setupTrackingProtection(forTab: tab,
+                                                      isEnabled: false,
+                                                      rules: [],
+                                                      isProxyEnabled: true,
+                                                      completion: nil)
+        ContentBlocker.shared.setupTrackingProtection(forTab: tab,
+                                                      isEnabled: false,
+                                                      rules: [],
+                                                      isProxyEnabled: false,
+                                                      completion: nil)
+
+        XCTAssertTrue(controller.ruleListIdentifiers.isEmpty)
+    }
+
+    private func makeTabWithCompiledProxyLeakGuardRule() async -> (MockContentBlockerTab, SpyUserContentController) {
+        let compiled = XCTestExpectation(description: "proxy leak guard rule compiled")
+        ContentBlocker.shared.compileProxyLeakGuardRule { compiled.fulfill() }
+        await fulfillment(of: [compiled], timeout: 5)
+
+        let controller = SpyUserContentController()
+        let configuration = WKWebViewConfiguration()
+        configuration.userContentController = controller
+        let tab = MockContentBlockerTab()
+        tab.webView = WKWebView(frame: .zero, configuration: configuration)
+        return (tab, controller)
+    }
+
     private static let validRuleJSON = """
     [{"trigger":{"url-filter":".*ads.*"},"action":{"type":"block"}}]
     """
@@ -186,7 +228,22 @@ final class ContentBlockerTests: XCTestCase {
 
 private final class MockContentBlockerTab: ContentBlockerTab {
     var isPrivate = false
+    var webView: WKWebView?
     func currentURL() -> URL? { return nil }
-    func currentWebView() -> WKWebView? { return nil }
+    func currentWebView() -> WKWebView? { return webView }
     func imageContentBlockingEnabled() -> Bool { return false }
+}
+
+private final class SpyUserContentController: WKUserContentController {
+    var ruleListIdentifiers: [String] = []
+
+    override func add(_ contentRuleList: WKContentRuleList) {
+        ruleListIdentifiers.append(contentRuleList.identifier)
+        super.add(contentRuleList)
+    }
+
+    override func removeAllContentRuleLists() {
+        ruleListIdentifiers.removeAll()
+        super.removeAllContentRuleLists()
+    }
 }
