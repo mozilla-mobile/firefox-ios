@@ -17,7 +17,7 @@ protocol VPNOnboardingCoordinatorDelegate: AnyObject {
 final class VPNOnboardingCoordinator: BaseCoordinator {
     private enum UX {
         static let sheetHeightRatio: CGFloat = 0.75
-        static let dataLimitInGB: Double = 5
+        static let dataLimitInGB = 5
     }
 
     weak var parentCoordinator: ParentCoordinatorDelegate?
@@ -120,7 +120,6 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
 
     private func makeViewModel() -> OnboardingSheetViewModel {
         let appName = AppName.shortName.rawValue
-        let dataLimit = VPNHelpers.formatted(gigabytes: UX.dataLimitInGB)
         return OnboardingSheetViewModel(
             heroImageName: StandardImageIdentifiers.Large.globe,
             heroGradient: .accent,
@@ -134,7 +133,7 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
                 ),
                 OnboardingSheetRow(
                     imageName: StandardImageIdentifiers.ExtraLarge.checkmarkBadge,
-                    title: String(format: .VPN.Onboarding.LimitSubheading, dataLimit),
+                    title: String(format: .VPN.Onboarding.LimitSubheading, String(UX.dataLimitInGB)),
                     subtitle: .VPN.Onboarding.LimitBody
                 )
             ],
