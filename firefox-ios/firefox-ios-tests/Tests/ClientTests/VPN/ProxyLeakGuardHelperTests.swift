@@ -9,8 +9,8 @@ import XCTest
 
 @MainActor
 final class ProxyLeakGuardHelperTests: XCTestCase {
-    private let validBody: [String: Any] = ["api": "WebAuthnRelatedOrigin", "kind": "get"]
-    private let connectionBody: [String: Any] = ["api": "DirectConnection", "kind": "RTCPeerConnection"]
+    private var validBody: [String: Any] { body("WebAuthnRelatedOrigin", "get") }
+    private var connectionBody: [String: Any] { body("DirectConnection", "RTCPeerConnection") }
     private var tab: Tab?
 
     override func setUp() async throws {
@@ -29,7 +29,7 @@ final class ProxyLeakGuardHelperTests: XCTestCase {
         let (subject, reported) = makeSubject()
 
         subject.handle(body: validBody, origin: "https://a.example")
-        subject.handle(body: ["api": "WebAuthnRelatedOrigin", "kind": "create"], origin: "https://b.example")
+        subject.handle(body: body("WebAuthnRelatedOrigin", "create"), origin: "https://b.example")
 
         XCTAssertEqual(reported.values, [
             .init(api: .webAuthnRelatedOrigin, origin: "https://a.example"),
@@ -41,7 +41,7 @@ final class ProxyLeakGuardHelperTests: XCTestCase {
         let (subject, reported) = makeSubject()
 
         subject.handle(body: connectionBody, origin: "https://a.example")
-        subject.handle(body: ["api": "DirectConnection", "kind": "webkitRTCPeerConnection"], origin: "https://b.example")
+        subject.handle(body: body("DirectConnection", "webkitRTCPeerConnection"), origin: "https://b.example")
 
         XCTAssertEqual(reported.values, [
             .init(api: .directConnection, origin: "https://a.example"),
@@ -52,15 +52,27 @@ final class ProxyLeakGuardHelperTests: XCTestCase {
     func test_handle_untrustedBodies_areIgnored() {
         let (subject, reported) = makeSubject()
 
-        subject.handle(body: ["api": "RTCPeerConnection", "kind": "get"], origin: "https://a.example")
-        subject.handle(body: ["api": "DirectConnection", "kind": "get"], origin: "https://a.example")
-        subject.handle(body: ["api": "DirectConnection", "kind": "WebTransport"], origin: "https://a.example")
-        subject.handle(body: ["api": "WebAuthnRelatedOrigin", "kind": "RTCPeerConnection"], origin: "https://a.example")
-        subject.handle(body: ["api": "WebRTC", "kind": "RTCPeerConnection"], origin: "https://a.example")
-        subject.handle(body: ["api": "WebAuthnRelatedOrigin", "kind": "delete"], origin: "https://a.example")
-        subject.handle(body: ["api": "WebAuthnRelatedOrigin"], origin: "https://a.example")
-        subject.handle(body: ["api": 1, "kind": "get"], origin: "https://a.example")
+        subject.handle(body: body("RTCPeerConnection", "get"), origin: "https://a.example")
+        subject.handle(body: body("DirectConnection", "get"), origin: "https://a.example")
+        subject.handle(body: body("DirectConnection", "WebTransport"), origin: "https://a.example")
+        subject.handle(body: body("WebAuthnRelatedOrigin", "RTCPeerConnection"), origin: "https://a.example")
+        subject.handle(body: body("WebRTC", "RTCPeerConnection"), origin: "https://a.example")
+        subject.handle(body: body("WebAuthnRelatedOrigin", "delete"), origin: "https://a.example")
+        var missingKind = validBody
+        missingKind["kind"] = nil
+        subject.handle(body: missingKind, origin: "https://a.example")
+        subject.handle(body: body(1, "get"), origin: "https://a.example")
         subject.handle(body: "WebAuthnRelatedOrigin", origin: "https://a.example")
+
+        XCTAssertTrue(reported.values.isEmpty)
+    }
+
+    func test_handle_missingOrWrongToken_isIgnored() {
+        let (subject, reported) = makeSubject()
+
+        subject.handle(body: ["api": "WebAuthnRelatedOrigin", "kind": "get"], origin: "https://a.example")
+        subject.handle(body: ["api": "WebAuthnRelatedOrigin", "kind": "get", "token": "guess"], origin: "https://a.example")
+        subject.handle(body: ["api": "WebAuthnRelatedOrigin", "kind": "get", "token": 1], origin: "https://a.example")
 
         XCTAssertTrue(reported.values.isEmpty)
     }
@@ -69,7 +81,7 @@ final class ProxyLeakGuardHelperTests: XCTestCase {
         let (subject, reported) = makeSubject()
 
         subject.handle(body: validBody, origin: "https://a.example")
-        subject.handle(body: ["api": "WebAuthnRelatedOrigin", "kind": "create"], origin: "https://a.example")
+        subject.handle(body: body("WebAuthnRelatedOrigin", "create"), origin: "https://a.example")
 
         XCTAssertEqual(reported.values, [.init(api: .webAuthnRelatedOrigin, origin: "https://a.example")])
     }
@@ -79,7 +91,7 @@ final class ProxyLeakGuardHelperTests: XCTestCase {
 
         subject.handle(body: connectionBody, origin: "https://a.example")
         subject.handle(body: validBody, origin: "https://a.example")
-        subject.handle(body: ["api": "DirectConnection", "kind": "webkitRTCPeerConnection"], origin: "https://a.example")
+        subject.handle(body: body("DirectConnection", "webkitRTCPeerConnection"), origin: "https://a.example")
 
         XCTAssertEqual(reported.values, [
             .init(api: .directConnection, origin: "https://a.example"),
@@ -155,6 +167,29 @@ final class ProxyLeakGuardHelperTests: XCTestCase {
         XCTAssertEqual(result, "undefined,undefined")
         await fulfillment(of: [fired], timeout: 2)
         XCTAssertEqual(reported.values, [.init(api: .directConnection, origin: "https://example.com")])
+    }
+
+    func test_page_directPostMessage_isIgnored() async throws {
+        let (webView, reported) = try await makeLoadedTabWebView()
+        let fired = expectation(description: "handler fired")
+        fired.isInverted = true
+        reported.onReport = { fired.fulfill() }
+
+        _ = try await webView.callAsyncJavaScript(
+            """
+            window.webkit.messageHandlers.\(ProxyLeakGuardHelper.handlerName).postMessage(
+              { api: "DirectConnection", kind: "RTCPeerConnection" }
+            );
+            """,
+            contentWorld: .page
+        )
+
+        await fulfillment(of: [fired], timeout: 0.5)
+        XCTAssertTrue(reported.values.isEmpty)
+    }
+
+    private func body(_ api: Any, _ kind: Any) -> [String: Any] {
+        return ["api": api, "kind": kind, "token": UserScriptManager.appIdToken]
     }
 
     private func makeSubject() -> (ProxyLeakGuardHelper, ReportedOrigins) {
