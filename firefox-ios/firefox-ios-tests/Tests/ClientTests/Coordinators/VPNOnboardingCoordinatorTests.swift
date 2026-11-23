@@ -7,7 +7,6 @@ import Common
 import ComponentLibrary
 import Shared
 import TestKit
-import VPNKit
 
 @testable import Client
 @testable import ComponentLibrary
@@ -111,45 +110,6 @@ final class VPNOnboardingCoordinatorTests: XCTestCase {
         let subject = createSubject()
 
         XCTAssertFalse(subject.shouldShow())
-    }
-
-    // MARK: - isOnboardingPending
-
-    func test_isOnboardingPending_whenSelectedTabIsHomepage_returnsTrue() {
-        tabManager.selectedTab = makeTab(isHomePage: true)
-        let subject = createSubject()
-
-        XCTAssertTrue(subject.isOnboardingPending)
-    }
-
-    func test_isOnboardingPending_whenSheetAlreadyShown_returnsFalse() {
-        prefs.setBool(true, forKey: PrefsKeys.VPNSettings.onboardingSheetShown)
-        let subject = createSubject()
-
-        XCTAssertFalse(subject.isOnboardingPending)
-    }
-
-    func test_isOnboardingPending_whenOnboardingSheetFlagDisabled_returnsFalse() {
-        featureFlagsProvider.enabledFlags = [.vpnFeature]
-        let subject = createSubject()
-
-        XCTAssertFalse(subject.isOnboardingPending)
-    }
-
-    // MARK: - dataLimitInGB
-
-    func test_dataLimitInGB_whenManagerHasALimit_returnsManagerLimit() {
-        vpnManager.dataLimitInGB = 50
-        let subject = createSubject()
-
-        XCTAssertEqual(subject.dataLimitInGB, 50)
-    }
-
-    func test_dataLimitInGB_whenManagerLimitIsZero_returnsFreeMonthlyLimit() {
-        vpnManager.dataLimitInGB = 0
-        let subject = createSubject()
-
-        XCTAssertEqual(subject.dataLimitInGB, Double(VPNConstants.freeMonthlyDataLimitInGB))
     }
 
     // MARK: - start

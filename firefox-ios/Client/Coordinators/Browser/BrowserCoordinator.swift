@@ -229,14 +229,7 @@ final class BrowserCoordinator: BaseCoordinator,
               !router.isPresenting else { return }
 
         guard #available(iOS 27.2, *) else { return }
-        let coordinator = makeVPNOnboardingCoordinator()
-        guard coordinator.shouldShow() else { return }
-        startVPNOnboarding(coordinator)
-    }
-
-    @available(iOS 27.2, *)
-    private func makeVPNOnboardingCoordinator() -> VPNOnboardingCoordinator {
-        return VPNOnboardingCoordinator(
+        let coordinator = VPNOnboardingCoordinator(
             router: router,
             windowUUID: windowUUID,
             parentHeight: browserViewController.view.frame.height,
@@ -246,10 +239,7 @@ final class BrowserCoordinator: BaseCoordinator,
                 self?.navigateFromHomePanel(to: url, visitType: .link, isGoogleTopSite: false)
             }
         )
-    }
-
-    @available(iOS 27.2, *)
-    private func startVPNOnboarding(_ coordinator: VPNOnboardingCoordinator) {
+        guard coordinator.shouldShow() else { return }
         coordinator.parentCoordinator = self
         coordinator.delegate = self
         add(child: coordinator)
@@ -814,19 +804,8 @@ final class BrowserCoordinator: BaseCoordinator,
         router.present(navigationController, animated: true)
     }
 
-    /// Shows the VPN onboarding instead when the user hasn't seen it yet, its CTA then leads to the settings.
     func presentVPNSettings() {
         guard #available(iOS 27.2, *) else { return }
-        let onboardingCoordinator = makeVPNOnboardingCoordinator()
-        guard !onboardingCoordinator.isOnboardingPending else {
-            startVPNOnboarding(onboardingCoordinator)
-            return
-        }
-        presentVPNSettingsSheet()
-    }
-
-    @available(iOS 27.2, *)
-    private func presentVPNSettingsSheet() {
         let vpnSettings = VPNSettingsViewController(windowUUID: windowUUID)
         let navigationController = DismissableNavigationViewController(rootViewController: vpnSettings)
         setupSettingsSheetDetents(for: navigationController)
@@ -1814,8 +1793,7 @@ final class BrowserCoordinator: BaseCoordinator,
 
     func vpnOnboardingDidTapCTA(from coordinator: Coordinator) {
         remove(child: coordinator)
-        guard #available(iOS 27.2, *) else { return }
-        presentVPNSettingsSheet()
+        presentVPNSettings()
     }
 
     // MARK: - ParentCoordinatorDelegate

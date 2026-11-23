@@ -1657,33 +1657,6 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertEqual(mockRouter.presentCalled, 1)
     }
 
-    // MARK: - presentVPNSettings
-
-    func testPresentVPNSettings_whenOnboardingIsPending_addsVPNOnboardingChildInsteadOfSettings() throws {
-        guard #available(iOS 27.2, *) else { throw XCTSkip("The VPN onboarding sheet requires iOS 27.2") }
-        featureFlags.enabledFlags = [.vpnFeature, .vpnOnboardingSheet]
-        let subject = createSubject()
-
-        subject.presentVPNSettings()
-
-        XCTAssertTrue(subject.childCoordinators.contains { $0 is VPNOnboardingCoordinator })
-        XCTAssertFalse(mockRouter.presentedViewController is UINavigationController)
-    }
-
-    func testPresentVPNSettings_whenOnboardingWasSeen_presentsVPNSettings() throws {
-        guard #available(iOS 27.2, *) else { throw XCTSkip("VPN settings require iOS 27.2") }
-        featureFlags.enabledFlags = [.vpnFeature, .vpnOnboardingSheet]
-        profile.prefs.setBool(true, forKey: PrefsKeys.VPNSettings.onboardingSheetShown)
-        let subject = createSubject()
-
-        subject.presentVPNSettings()
-
-        XCTAssertFalse(subject.childCoordinators.contains { $0 is VPNOnboardingCoordinator })
-        XCTAssertEqual(mockRouter.presentCalled, 1)
-        let navigationController = try XCTUnwrap(mockRouter.presentedViewController as? UINavigationController)
-        XCTAssertTrue(navigationController.viewControllers.first is VPNSettingsViewController)
-    }
-
     // MARK: - VPNOnboardingCoordinatorDelegate
 
     func testVPNOnboardingDidTapCTA_removesChildAndPresentsVPNSettings() throws {

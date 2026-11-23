@@ -6,7 +6,6 @@ import Common
 import ComponentLibrary
 import Shared
 import UIKit
-import VPNKit
 
 @MainActor
 protocol VPNOnboardingCoordinatorDelegate: AnyObject {
@@ -56,27 +55,15 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
         super.init(router: router)
     }
 
-    /// Whether the user still has to see the onboarding, wherever they are in the app.
-    var isOnboardingPending: Bool {
-        guard featureFlagsProvider.isEnabled(.vpnFeature),
-              featureFlagsProvider.isEnabled(.vpnOnboardingSheet)
-        else { return false }
-        return prefs.boolForKey(PrefsKeys.VPNSettings.onboardingSheetShown) != true
-    }
-
-    /// The account's monthly data limit, or the free plan's one while no usage has been fetched yet.
-    var dataLimitInGB: Double {
-        guard vpnManager.dataLimitInGB > 0 else { return Double(VPNConstants.freeMonthlyDataLimitInGB) }
-        return vpnManager.dataLimitInGB
-    }
-
-    /// False until the VPN usage has been fetched, so the sheet shown on websites never uses the fallback data limit.
+    /// False until the VPN usage has been fetched, since the sheet shows the account's data limit.
     func shouldShow() -> Bool {
         guard let selectedTab = tabManager.selectedTab,
               !selectedTab.isFxHomeTab,
-              vpnManager.dataLimitInGB > 0
+              vpnManager.dataLimitInGB > 0,
+              featureFlagsProvider.isEnabled(.vpnFeature),
+              featureFlagsProvider.isEnabled(.vpnOnboardingSheet)
         else { return false }
-        return isOnboardingPending
+        return prefs.boolForKey(PrefsKeys.VPNSettings.onboardingSheetShown) != true
     }
 
     func start() {
@@ -135,7 +122,7 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
 
     private func makeViewModel() -> OnboardingSheetViewModel {
         let appName = AppName.shortName.rawValue
-        let dataLimit = VPNHelpers.formatted(gigabytes: dataLimitInGB)
+        let dataLimit = VPNHelpers.formatted(gigabytes: vpnManager.dataLimitInGB)
         return OnboardingSheetViewModel(
             heroImageName: StandardImageIdentifiers.Large.globe,
             heroGradient: .accent,
