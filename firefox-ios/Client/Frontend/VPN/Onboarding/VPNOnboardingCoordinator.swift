@@ -15,10 +15,17 @@ protocol VPNOnboardingCoordinatorDelegate: AnyObject {
 
 @MainActor
 final class VPNOnboardingCoordinator: BaseCoordinator {
+    private enum UX {
+        static let sheetHeightRatio: CGFloat = 2.0 / 3.0
+    }
+
+    static let sheetDetentIdentifier = UISheetPresentationController.Detent.Identifier("vpnOnboardingTwoThirds")
+
     weak var parentCoordinator: ParentCoordinatorDelegate?
     weak var delegate: VPNOnboardingCoordinatorDelegate?
 
     private let windowUUID: WindowUUID
+    private let parentHeight: CGFloat
     private let tabManager: TabManager
     private let prefs: Prefs
     private let telemetry: VPNClientTelemetry
@@ -29,6 +36,7 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
     init(
         router: Router,
         windowUUID: WindowUUID,
+        parentHeight: CGFloat,
         tabManager: TabManager,
         prefs: Prefs,
         telemetry: VPNClientTelemetry = DefaultVPNTelemetry(),
@@ -37,6 +45,7 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
         onOpenURL: @escaping (URL) -> Void
     ) {
         self.windowUUID = windowUUID
+        self.parentHeight = parentHeight
         self.tabManager = tabManager
         self.prefs = prefs
         self.telemetry = telemetry
@@ -61,6 +70,7 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
     }
 
     func start() {
+        guard #available(iOS 27.2, *) else { return }
         let controller = OnboardingSheetViewController(
             windowUUID: windowUUID,
             themeManager: themeManager,
@@ -76,8 +86,11 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
             }
         )
         controller.modalPresentationStyle = .pageSheet
-        controller.sheetPresentationController?.detents = [.medium(), .large()]
-        controller.sheetPresentationController?.prefersGrabberVisible = true
+        let sheetHeight = parentHeight * UX.sheetHeightRatio
+        controller.sheetPresentationController?.detents = [
+            .custom(identifier: Self.sheetDetentIdentifier) { _ in sheetHeight },
+            .large()
+        ]
 
         // Only runs on swipe down, dismissing through the router drops the completion.
         router.present(controller, animated: true) { [weak self] in

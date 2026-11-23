@@ -1690,6 +1690,7 @@ final class BrowserCoordinatorTests: XCTestCase,
         let vpnOnboardingCoordinator = VPNOnboardingCoordinator(
             router: mockRouter,
             windowUUID: windowUUID,
+            parentHeight: 900,
             tabManager: tabManager,
             prefs: profile.prefs,
             onOpenURL: { _ in }

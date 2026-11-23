@@ -236,6 +236,7 @@ final class BrowserCoordinator: BaseCoordinator,
         return VPNOnboardingCoordinator(
             router: router,
             windowUUID: windowUUID,
+            parentHeight: browserViewController.view.frame.height,
             tabManager: tabManager,
             prefs: profile.prefs,
             onOpenURL: { [weak self] url in
