@@ -192,6 +192,99 @@ final class ProxyLeakGuardHelperTests: XCTestCase {
         return ["api": api, "kind": kind, "token": UserScriptManager.appIdToken]
     }
 
+    func test_page_rpIdGetterChangingAfterCheck_onlyCheckedValueReachesWebKit() async throws {
+        let (webView, _) = try await makeLoadedTabWebView(spyOnCredentialsGet: true)
+
+        let received = try await rpIdsReceivedByWebKit(in: webView, js: """
+            let reads = 0;
+            await navigator.credentials.get({ publicKey: {
+              challenge: new Uint8Array(32),
+              get rpId() { return reads++ === 0 ? "example.com" : "other.example"; }
+            }});
+            """)
+
+        XCTAssertEqual(received, ["example.com"])
+    }
+
+    func test_page_rpIdToStringChangingAfterCheck_onlyCheckedValueReachesWebKit() async throws {
+        let (webView, _) = try await makeLoadedTabWebView(spyOnCredentialsGet: true)
+
+        let received = try await rpIdsReceivedByWebKit(in: webView, js: """
+            let calls = 0;
+            await navigator.credentials.get({ publicKey: {
+              challenge: new Uint8Array(32),
+              rpId: { toString() { return calls++ === 0 ? "example.com" : "other.example"; } }
+            }});
+            """)
+
+        XCTAssertEqual(received, ["example.com"])
+    }
+
+    func test_page_rpIdFromPollutedObjectPrototype_neverReachesWebKit() async throws {
+        let (webView, _) = try await makeLoadedTabWebView(spyOnCredentialsGet: true)
+
+        let received = try await rpIdsReceivedByWebKit(in: webView, js: """
+            let reads = 0;
+            Object.defineProperty(Object.prototype, "rpId", {
+              get() { return reads++ === 0 ? "example.com" : "other.example"; },
+              configurable: true
+            });
+            try {
+              await navigator.credentials.get({ publicKey: { challenge: new Uint8Array(32) } });
+            } finally {
+              delete Object.prototype.rpId;
+            }
+            """)
+
+        XCTAssertEqual(received, ["undefined"])
+    }
+
+    func test_page_replacedFunctionApply_doesNotExposeOriginalMethod() async throws {
+        let (webView, _) = try await makeLoadedTabWebView(spyOnCredentialsGet: true)
+
+        let received = try await rpIdsReceivedByWebKit(in: webView, js: """
+            const realApply = Function.prototype.apply;
+            let stolen;
+            Function.prototype.apply = function (thisArg, args) {
+              stolen = this;
+              return Reflect.apply(this, thisArg, args);
+            };
+            try {
+              await navigator.credentials.get({ publicKey: { rpId: "example.com", challenge: new Uint8Array(32) } });
+            } finally {
+              Function.prototype.apply = realApply;
+            }
+            if (stolen) {
+              await stolen.call(navigator.credentials, {
+                publicKey: { rpId: "other.example", challenge: new Uint8Array(32) }
+              });
+            }
+            """)
+
+        XCTAssertEqual(received, ["example.com"])
+    }
+
+    func test_page_replacedStringEndsWith_crossSiteRpIdIsStillRejected() async throws {
+        let (webView, reported) = try await makeLoadedTabWebView(spyOnCredentialsGet: true)
+        let fired = expectation(description: "handler fired")
+        reported.onReport = { fired.fulfill() }
+
+        let received = try await rpIdsReceivedByWebKit(in: webView, js: """
+            const realEndsWith = String.prototype.endsWith;
+            String.prototype.endsWith = () => true;
+            try {
+              await navigator.credentials.get({ publicKey: { rpId: "other.example", challenge: new Uint8Array(32) } });
+            } catch (e) {
+            } finally {
+              String.prototype.endsWith = realEndsWith;
+            }
+            """)
+
+        XCTAssertEqual(received, [])
+        await fulfillment(of: [fired], timeout: 2)
+        XCTAssertEqual(reported.values, [.init(api: .webAuthnRelatedOrigin, origin: "https://example.com")])
+    }
+
     private func makeSubject() -> (ProxyLeakGuardHelper, ReportedOrigins) {
         let subject = ProxyLeakGuardHelper()
         let reported = ReportedOrigins()
@@ -213,13 +306,27 @@ final class ProxyLeakGuardHelperTests: XCTestCase {
         }
     }
 
-    private func makeLoadedTabWebView() async throws -> (WKWebView, ReportedOrigins) {
+    /// With `spyOnCredentialsGet`, `credentials.get` is replaced before the guard is injected, so the
+    /// guard wraps the spy. The spy records the RP ID it receives, the way WebKit would read it.
+    private func makeLoadedTabWebView(
+        spyOnCredentialsGet: Bool = false
+    ) async throws -> (WKWebView, ReportedOrigins) {
         let tab = Tab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tab.createWebview(configuration: WKWebViewConfiguration())
         let webView = try XCTUnwrap(tab.webView)
         let (helper, reported) = makeSubject()
         tab.addContentScriptToPage(helper, name: ProxyLeakGuardHelper.name())
         inject(into: webView, isProxyEnabled: true)
+        if spyOnCredentialsGet {
+            let controller = webView.configuration.userContentController
+            let injected = controller.userScripts
+            controller.removeAllUserScripts()
+            controller.addUserScript(WKUserScript(source: Self.credentialsGetSpy,
+                                                  injectionTime: .atDocumentStart,
+                                                  forMainFrameOnly: false,
+                                                  in: .page))
+            injected.forEach(controller.addUserScript)
+        }
         self.tab = tab
 
         let delegate = LoadFinishedDelegate()
@@ -231,6 +338,22 @@ final class ProxyLeakGuardHelperTests: XCTestCase {
         webView.navigationDelegate = nil
         return (webView, reported)
     }
+
+    /// Runs `js` in the page, then returns the RP IDs the credentials spy received.
+    private func rpIdsReceivedByWebKit(in webView: WKWebView, js: String) async throws -> [String]? {
+        return try await webView.callAsyncJavaScript(
+            js + "\nreturn window.__receivedRpIds;",
+            contentWorld: .page
+        ) as? [String]
+    }
+
+    private static let credentialsGetSpy = """
+        window.__receivedRpIds = [];
+        CredentialsContainer.prototype.get = function (options) {
+          window.__receivedRpIds.push(String(options.publicKey.rpId));
+          return Promise.resolve(null);
+        };
+        """
 
     /// Uses a pre-aborted signal so a call the shim lets through settles immediately instead of
     /// showing system sign-in UI.
