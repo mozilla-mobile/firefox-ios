@@ -82,6 +82,7 @@ final class VPNManager: VPNRunnable {
     private let windowManager: WindowManager
     private let proxyApplier: ProxyConfigurator
     private let prefs: Prefs
+    private let leakNoticeTracker: ProxyLeakGuardNoticeTracker
     private let eventsContinuation: AsyncStream<VPNEvent>.Continuation
     let events: AsyncStream<VPNEvent>
 
@@ -140,7 +141,8 @@ final class VPNManager: VPNRunnable {
         guardian: VPNGuardianProviding? = nil,
         authCreator: VPNAuthCreating = VPNAuthCreator(telemetry: DefaultVPNTelemetry()),
         serverManager: VPNServerManaging? = nil,
-        proxyApplier: ProxyConfigurator = DefaultProxyConfigurator()
+        proxyApplier: ProxyConfigurator = DefaultProxyConfigurator(),
+        leakNoticeTracker: ProxyLeakGuardNoticeTracker = .shared
     ) {
         self.logger = logger
         self.environment = VPNEnvironment(prefs: profile.prefs)
@@ -152,6 +154,7 @@ final class VPNManager: VPNRunnable {
         self.windowManager = windowManager
         self.proxyApplier = proxyApplier
         self.prefs = profile.prefs
+        self.leakNoticeTracker = leakNoticeTracker
         let (events, eventsContinuation) = AsyncStream<VPNEvent>.makeStream()
         self.events = events
         self.eventsContinuation = eventsContinuation
@@ -224,6 +227,7 @@ final class VPNManager: VPNRunnable {
         await self.applyProxyAndRebuildWebViews(configs: [])
         self.activeServer = nil
         self.isUsingFallback = false
+        self.leakNoticeTracker.vpnSessionDidEnd()
     }
 
     func listCountries() async -> [VPNServerManager.Country] {

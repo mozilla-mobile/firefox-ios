@@ -4492,7 +4492,11 @@ extension BrowserViewController: LegacyTabDelegate {
         if DefaultWKEngineConfigurationProvider.isProxyEnabled {
             let proxyLeakGuardHelper = ProxyLeakGuardHelper()
             proxyLeakGuardHelper.onBlockedRequest = { [weak self, weak tab] _, _ in
-                guard let self, let tab, tab === self.tabManager.selectedTab else { return }
+                guard let self,
+                      let tab,
+                      tab === self.tabManager.selectedTab,
+                      ProxyLeakGuardNoticeTracker.shared.shouldShowNotice()
+                else { return }
                 self.showProxyLeakGuardToast(isPrivate: tab.isPrivate)
             }
             tab.addContentScriptToPage(proxyLeakGuardHelper, name: ProxyLeakGuardHelper.name())

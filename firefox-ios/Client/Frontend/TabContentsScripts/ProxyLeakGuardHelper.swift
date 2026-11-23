@@ -70,3 +70,22 @@ final class ProxyLeakGuardHelper: TabContentScript {
         return origin.port == 0 ? base : "\(base):\(origin.port)"
     }
 }
+
+/// Limits the proxy leak notice to once per VPN session, across all tabs and windows.
+@MainActor
+final class ProxyLeakGuardNoticeTracker {
+    static let shared = ProxyLeakGuardNoticeTracker()
+
+    private var hasShownNotice = false
+
+    /// Returns `true` the first time it is called in a VPN session, and `false` afterwards.
+    func shouldShowNotice() -> Bool {
+        guard !hasShownNotice else { return false }
+        hasShownNotice = true
+        return true
+    }
+
+    func vpnSessionDidEnd() {
+        hasShownNotice = false
+    }
+}

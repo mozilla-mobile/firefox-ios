@@ -119,6 +119,22 @@ final class ProxyLeakGuardHelperTests: XCTestCase {
         XCTAssertEqual(url.fragment, "note_about_leaks")
     }
 
+    func test_noticeTracker_showsOncePerSession() {
+        let tracker = ProxyLeakGuardNoticeTracker()
+
+        XCTAssertTrue(tracker.shouldShowNotice())
+        XCTAssertFalse(tracker.shouldShowNotice())
+    }
+
+    func test_noticeTracker_afterSessionEnds_showsAgain() {
+        let tracker = ProxyLeakGuardNoticeTracker()
+        _ = tracker.shouldShowNotice()
+
+        tracker.vpnSessionDidEnd()
+
+        XCTAssertTrue(tracker.shouldShowNotice())
+    }
+
     func test_inject_withProxyOff_doesNotAddGuardScript() {
         let webView = WKWebView(frame: .zero, configuration: WKWebViewConfiguration())
 
