@@ -15,6 +15,10 @@ protocol VPNOnboardingCoordinatorDelegate: AnyObject {
 @available(iOS 27.2, *)
 @MainActor
 final class VPNOnboardingCoordinator: BaseCoordinator {
+    private enum UX {
+        static let sheetHeightRatio: CGFloat = 2.0 / 3.0
+    }
+
     weak var parentCoordinator: ParentCoordinatorDelegate?
     weak var delegate: VPNOnboardingCoordinatorDelegate?
 
@@ -76,7 +80,9 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
             }
         )
         controller.modalPresentationStyle = .pageSheet
-        controller.useFittingDetent()
+        controller.sheetPresentationController?.detents = [
+            .custom { context in context.maximumDetentValue * UX.sheetHeightRatio }
+        ]
 
         // Only runs on swipe down, dismissing through the router drops the completion.
         router.present(controller, animated: true) { [weak self] in
