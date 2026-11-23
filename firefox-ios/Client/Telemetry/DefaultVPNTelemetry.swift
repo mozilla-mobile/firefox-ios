@@ -95,6 +95,10 @@ protocol VPNClientTelemetry {
     /// `isUsingFallback` is only known when the VPN was connected and reconnected successfully.
     func recordLocationSelected(countryCode: String, isVPNConnected: Bool, isUsingFallback: Bool?)
     func recordAlertOptionSelected(_ option: VPNAlertOption, alertType: VPNAlertType)
+    func recordOnboardingShown()
+    func recordOnboardingCancelled()
+    func recordOnboardingCTATapped()
+    func recordOnboardingLearnMoreLinkTapped()
 }
 
 struct DefaultVPNTelemetry: VPNTelemetry, VPNClientTelemetry {
@@ -160,5 +164,21 @@ struct DefaultVPNTelemetry: VPNTelemetry, VPNClientTelemetry {
             option: option.rawValue
         )
         gleanWrapper.recordEvent(for: GleanMetrics.VpnSessionErrorAlert.optionSelected, extras: extras)
+    }
+
+    func recordOnboardingShown() {
+        gleanWrapper.recordEvent(for: GleanMetrics.Vpn.onboardingShown)
+    }
+
+    func recordOnboardingCancelled() {
+        gleanWrapper.recordEvent(for: GleanMetrics.Vpn.onboardingCancelled)
+    }
+
+    func recordOnboardingCTATapped() {
+        gleanWrapper.recordEvent(for: GleanMetrics.Vpn.onboardingCtaTapped)
+    }
+
+    func recordOnboardingLearnMoreLinkTapped() {
+        gleanWrapper.recordEvent(for: GleanMetrics.Vpn.onboardingLearnMoreLinkTapped)
     }
 }

@@ -1257,6 +1257,7 @@
 		8AAAB05B2C1B7268008830B3 /* ClientTabsSearchWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AAAB05A2C1B7268008830B3 /* ClientTabsSearchWrapper.swift */; };
 		8AABBCFC2A0010900089941E /* GleanWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AABBCFB2A0010900089941E /* GleanWrapper.swift */; };
 		8AABBCFF2A0017960089941E /* MockGleanWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AABBCFD2A0017560089941E /* MockGleanWrapper.swift */; };
+		D476BDF23804075148F75709 /* MockVPNClientTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = B601B4C9A2DD66E97EFF7D7A /* MockVPNClientTelemetry.swift */; };
 		8AABBD012A001ADF0089941E /* ApplicationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AABBD002A001ADF0089941E /* ApplicationHelper.swift */; };
 		8AABBD032A001CBC0089941E /* MockApplicationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AABBD022A001CBC0089941E /* MockApplicationHelper.swift */; };
 		8AABBD052A0041380089941E /* MockCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AABBD042A0041380089941E /* MockCoordinator.swift */; };
@@ -10651,6 +10652,7 @@
 		8AABB92C2C64F77000F1FE51 /* LoginProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginProvider.swift; sourceTree = "<group>"; };
 		8AABBCFB2A0010900089941E /* GleanWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanWrapper.swift; sourceTree = "<group>"; };
 		8AABBCFD2A0017560089941E /* MockGleanWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockGleanWrapper.swift; sourceTree = "<group>"; };
+		B601B4C9A2DD66E97EFF7D7A /* MockVPNClientTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockVPNClientTelemetry.swift; sourceTree = "<group>"; };
 		8AABBD002A001ADF0089941E /* ApplicationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationHelper.swift; sourceTree = "<group>"; };
 		8AABBD022A001CBC0089941E /* MockApplicationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockApplicationHelper.swift; sourceTree = "<group>"; };
 		8AABBD042A0041380089941E /* MockCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCoordinator.swift; sourceTree = "<group>"; };
@@ -17005,6 +17007,7 @@
 				0AC659282BF493CE005C614A /* MockFxAWebViewModel.swift */,
 				8A9D31632D1355E900171502 /* MockFxBookmarkNode.swift */,
 				8AABBCFD2A0017560089941E /* MockGleanWrapper.swift */,
+				B601B4C9A2DD66E97EFF7D7A /* MockVPNClientTelemetry.swift */,
 				8A5604F529DF09FA00035CA3 /* MockLaunchCoordinatorDelegate.swift */,
 				8AFCE50829DE136300B1B253 /* MockLaunchFinishedLoadingDelegate.swift */,
 				8AF10D9029D776190086351D /* MockLaunchScreenManager.swift */,
@@ -22456,6 +22459,7 @@
 				FB16062100000000000000D6 /* GoogleLensServiceTests.swift in Sources */,
 				8A4880882E68D41F00AD43D5 /* MockGleanPingUploadRequest.swift in Sources */,
 				8AABBCFF2A0017960089941E /* MockGleanWrapper.swift in Sources */,
+				D476BDF23804075148F75709 /* MockVPNClientTelemetry.swift in Sources */,
 				21FA8FAE2AE856460013B815 /* TabsCoordinatorTests.swift in Sources */,
 				E1D8BC7A21FF7A0000B100BD /* TPStatsBlocklistsTests.swift in Sources */,
 				8A552AC82CB43AB400564C98 /* HeaderStateTests.swift in Sources */,

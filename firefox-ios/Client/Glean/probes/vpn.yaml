@@ -80,6 +80,52 @@ vpn:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
+  onboarding_shown:
+    type: event
+    description: |
+      Recorded when the VPN onboarding sheet is presented.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/TODO
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  onboarding_cancelled:
+    type: event
+    description: |
+      Recorded when the user dismisses the VPN onboarding sheet with the close
+      button or by swiping it down.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/TODO
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  onboarding_cta_tapped:
+    type: event
+    description: |
+      Recorded when the user taps "Turn On VPN" on the VPN onboarding sheet.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/TODO
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  onboarding_learn_more_link_tapped:
+    type: event
+    description: |
+      Recorded when the user taps the "Learn more" link on the VPN onboarding
+      sheet.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/TODO
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
 
 vpn.session_error_alert:
   option_selected:
