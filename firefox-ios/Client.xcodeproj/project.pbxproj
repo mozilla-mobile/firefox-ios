@@ -1795,7 +1795,9 @@
 		C2DFB1452ECE62EE004E20AB /* MockTranslationsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DFB1442ECE62E8004E20AB /* MockTranslationsService.swift */; };
 		C2DFB1472ECE686E004E20AB /* TranslationsServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DFB1462ECE6866004E20AB /* TranslationsServiceTests.swift */; };
 		C2E100A22FC0000100AABB01 /* WallpaperEngagementCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E100A12FC0000100AABB01 /* WallpaperEngagementCoordinator.swift */; };
+		501A4D18ADFC188B244724BC /* VPNOnboardingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72E257DDD87408B4CF54A5D /* VPNOnboardingCoordinator.swift */; };
 		C2E100A52FC0000100AABB01 /* WallpaperEngagementCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E100A42FC0000100AABB01 /* WallpaperEngagementCoordinatorTests.swift */; };
+		C5A6F2F480DDD3DD8DA5F155 /* VPNOnboardingCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9AA72B36A47474A429D099 /* VPNOnboardingCoordinatorTests.swift */; };
 		C2E4F4C62F62F959002A8524 /* MockMainMenuCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E4F4C52F62F959002A8524 /* MockMainMenuCoordinatorDelegate.swift */; };
 		C2EBB68F2E8181F20029E82C /* DismissableNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2EBB68E2E8181EF0029E82C /* DismissableNavigationViewController.swift */; };
 		C2F2C19B30044C9600F9B916 /* MockAdBlockerListFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F2C19A30044C8700F9B916 /* MockAdBlockerListFetcher.swift */; };
@@ -2890,6 +2892,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E72E257DDD87408B4CF54A5D /* VPNOnboardingCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNOnboardingCoordinator.swift; sourceTree = "<group>"; };
 		001348F79CA80B94DCD3E535 /* km */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = km; path = km.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		00218A431FC749D7BC8EC05D /* homepageStoryCategoriesOn.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = homepageStoryCategoriesOn.json; sourceTree = "<group>"; };
 		003141C6B19507C79B6C399C /* ga */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ga; path = ga.lproj/Menu.strings; sourceTree = "<group>"; };
@@ -11591,6 +11594,7 @@
 		C2DFB1462ECE6866004E20AB /* TranslationsServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsServiceTests.swift; sourceTree = "<group>"; };
 		C2E100A12FC0000100AABB01 /* WallpaperEngagementCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperEngagementCoordinator.swift; sourceTree = "<group>"; };
 		C2E100A42FC0000100AABB01 /* WallpaperEngagementCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperEngagementCoordinatorTests.swift; sourceTree = "<group>"; };
+		8B9AA72B36A47474A429D099 /* VPNOnboardingCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNOnboardingCoordinatorTests.swift; sourceTree = "<group>"; };
 		C2E4F4C52F62F959002A8524 /* MockMainMenuCoordinatorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMainMenuCoordinatorDelegate.swift; sourceTree = "<group>"; };
 		C2E645149EB18AD0BDBB9696 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/Search.strings"; sourceTree = "<group>"; };
 		C2EBB68E2E8181EF0029E82C /* DismissableNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissableNavigationViewController.swift; sourceTree = "<group>"; };
@@ -13291,6 +13295,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A874ED2427431BDF172B74F3 /* VPN */ = {
+			isa = PBXGroup;
+			children = (
+				92671F521592B0B85309D68A /* Onboarding */,
+			);
+			path = VPN;
+			sourceTree = "<group>";
+		};
+		92671F521592B0B85309D68A /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				E72E257DDD87408B4CF54A5D /* VPNOnboardingCoordinator.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
 		033C94F32E2F839900C2382F /* TermsOfUse */ = {
 			isa = PBXGroup;
 			children = (
@@ -15623,6 +15643,7 @@
 				0B6153E12E24ECCA000D2FBD /* SummarizeCoordinatorTests.swift */,
 				C20931712F3CAB0100F0B05C /* QuickAnswersCoordinatorTests.swift */,
 				C2E100A42FC0000100AABB01 /* WallpaperEngagementCoordinatorTests.swift */,
+				8B9AA72B36A47474A429D099 /* VPNOnboardingCoordinatorTests.swift */,
 				8C76F014302344B700D4BC87 /* WebCompatReportCoordinatorTests.swift */,
 				8CE71B443025C459006C7828 /* WebCompatReportPreviewCoordinatorTests.swift */,
 				FB16062100000000000000B1 /* PhotoPickerCoordinatorTests.swift */,
@@ -18640,6 +18661,7 @@
 		F84B21F11A0910F600AAB793 /* Frontend */ = {
 			isa = PBXGroup;
 			children = (
+				A874ED2427431BDF172B74F3 /* VPN */,
 				BD7A00000000000000000001 /* BrowserDataTransfer */,
 				ECD8E56A2FF7EB5B002092C6 /* Wayback */,
 				0B78DC6C2E3C9CDA00804872 /* Summarizer */,
@@ -21783,6 +21805,7 @@
 				F85C7EDD27109241004BDBA4 /* PasswordManagerOnboardingViewController.swift in Sources */,
 				612194E32CE507CF001664BB /* WallpaperBackgroundView.swift in Sources */,
 				C2E100A22FC0000100AABB01 /* WallpaperEngagementCoordinator.swift in Sources */,
+				501A4D18ADFC188B244724BC /* VPNOnboardingCoordinator.swift in Sources */,
 				D8FDEB57220CFE970069A582 /* UIImage+ImageEffects.m in Sources */,
 				0BDDB3462CA6E43A00D501DF /* BookmarksSaver.swift in Sources */,
 				EBB89506219398E500EB91A0 /* TabContentBlocker.swift in Sources */,
@@ -22448,6 +22471,7 @@
 				8AABBD052A0041380089941E /* MockCoordinator.swift in Sources */,
 				C20931722F3CAB0100F0B05C /* QuickAnswersCoordinatorTests.swift in Sources */,
 				C2E100A52FC0000100AABB01 /* WallpaperEngagementCoordinatorTests.swift in Sources */,
+				C5A6F2F480DDD3DD8DA5F155 /* VPNOnboardingCoordinatorTests.swift in Sources */,
 				8C76F015302344B700D4BC87 /* WebCompatReportCoordinatorTests.swift in Sources */,
 				8CE71B453025C459006C7828 /* WebCompatReportPreviewCoordinatorTests.swift in Sources */,
 				FB16062100000000000000B2 /* PhotoPickerCoordinatorTests.swift in Sources */,

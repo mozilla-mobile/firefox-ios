@@ -516,6 +516,12 @@ enum AccessibilityIdentifiers {
         }
     }
 
+    enum VPNOnboardingSheet {
+        static let closeButton = "VPNOnboardingSheet.closeButton"
+        static let ctaButton = "VPNOnboardingSheet.ctaButton"
+        static let learnMoreButton = "VPNOnboardingSheet.learnMoreButton"
+    }
+
     enum WallpaperEngagementSheet {
         static let closeButton = "WallpaperEngagementSheet.closeButton"
         static let ctaButton = "WallpaperEngagementSheet.ctaButton"
