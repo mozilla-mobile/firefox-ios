@@ -6,7 +6,8 @@ import WebKit
 
 /// Receives reports from the proxy leak guard user script when it blocks an API that would
 /// bypass the proxy. Message bodies are untrusted page input, so the origin always comes from
-/// the sending frame, and each API is reported at most once per origin per tab.
+/// the sending frame, messages without the app ID token are dropped, and each API is reported at most
+/// once per origin per tab.
 @MainActor
 final class ProxyLeakGuardHelper: TabContentScript {
     enum BlockedAPI: String {
@@ -45,6 +46,7 @@ final class ProxyLeakGuardHelper: TabContentScript {
 
     func handle(body: Any, origin: String) {
         guard let body = body as? [String: Any],
+              body["token"] as? String == UserScriptManager.appIdToken,
               let api = (body["api"] as? String).flatMap(BlockedAPI.init(rawValue:)),
               let kind = body["kind"] as? String,
               api.allowedKinds.contains(kind),

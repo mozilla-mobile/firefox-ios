@@ -7,8 +7,9 @@
 // Touching an API the browser supports is reported to ProxyLeakGuardHelper.
 // For more context, See https://docs.google.com/document/d/1oiTzWFyga97VnNnCED5AdYavJnBr7RtsNauysbVcfO4
 const handler = window.webkit?.messageHandlers?.proxyLeakGuard;
+const post = handler?.postMessage.bind(handler);
 const report = (api, kind) => {
-  try { handler?.postMessage({ api, kind }); } catch (e) {}
+  try { post?.({ api, kind, token: APP_ID_TOKEN }); } catch (e) {}
 };
 
 ["RTCPeerConnection", "webkitRTCPeerConnection"].forEach(name => {
