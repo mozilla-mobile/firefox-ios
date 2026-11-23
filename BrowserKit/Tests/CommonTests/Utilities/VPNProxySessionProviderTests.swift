@@ -36,6 +36,31 @@ final class VPNProxySessionProviderTests: XCTestCase {
         XCTAssertEqual(subject.proxyConfigurations.count, 2)
     }
 
+    // MARK: - isProxyActive
+
+    func test_isProxyActive_byDefault_isFalse() {
+        let subject = createSubject()
+
+        XCTAssertFalse(subject.isProxyActive)
+    }
+
+    func test_isProxyActive_withProxy_isTrue() {
+        let subject = createSubject()
+
+        subject.update([makeProxyConfiguration()])
+
+        XCTAssertTrue(subject.isProxyActive)
+    }
+
+    func test_isProxyActive_afterProxyDisabled_isFalse() {
+        let subject = createSubject()
+        subject.update([makeProxyConfiguration()])
+
+        subject.update([])
+
+        XCTAssertFalse(subject.isProxyActive)
+    }
+
     // MARK: - session
 
     func test_session_withoutProxy_returnsSharedSession() {
