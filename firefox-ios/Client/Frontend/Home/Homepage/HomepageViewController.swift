@@ -81,7 +81,7 @@ final class HomepageViewController: UIViewController,
         return view.frame.size.width
     }
 
-    private lazy var nativeMenuHelper = NativeMenuHelper(windowUUID: windowUUID, toastContainer: toastContainer)
+    private lazy var nativeMenuHelper = HomeNativeMenuHelper(windowUUID: windowUUID, toastContainer: toastContainer)
 
     // MARK: - Private constants
     private let profile: Profile
@@ -1471,10 +1471,7 @@ final class HomepageViewController: UIViewController,
 
         let view = topSiteCell.rootContainer
         let parameters = UIPreviewParameters()
-        parameters.backgroundColor = .clear
         parameters.visiblePath = topSiteCell.contextMenuPreviewPath
-        parameters.shadowPath = UIBezierPath(roundedRect: view.bounds,
-                                             cornerRadius: TopSiteCell.UX.faviconCornerRadius)
         return UITargetedPreview(view: view, parameters: parameters)
     }
 

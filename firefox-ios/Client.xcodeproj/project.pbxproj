@@ -409,6 +409,8 @@
 		253648E12B2111C100D5C2C5 /* SearchViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 253648E02B2111C100D5C2C5 /* SearchViewControllerTests.swift */; };
 		254B760A2B7B44EE00AB8526 /* NimbusFirefoxSuggestFeatureLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 254B76092B7B44EE00AB8526 /* NimbusFirefoxSuggestFeatureLayer.swift */; };
 		26CC5468CF3075C7FDB5E4E1 /* TabGroupsFeatureFlag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6490D091AB3E3ED2BDDF36EF /* TabGroupsFeatureFlag.swift */; };
+		2703CEDB30ADFBB700831691 /* ReaderNativeMenuHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2703CEDA30ADFBA900831691 /* ReaderNativeMenuHelper.swift */; };
+		2703CEDD30AE1F5100831691 /* ReaderNativeMenuHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2703CEDC30AE1F4700831691 /* ReaderNativeMenuHelperTests.swift */; };
 		2731333C3087B0BA00C904B2 /* WallpaperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2731333B3087B0AF00C904B2 /* WallpaperTests.swift */; };
 		274A36CC239EB99400A21587 /* LibraryPanelContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274A36CB239EB99400A21587 /* LibraryPanelContextMenu.swift */; };
 		274A36CE239EB9EC00A21587 /* LibraryViewController+LibraryPanelDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274A36CD239EB9EC00A21587 /* LibraryViewController+LibraryPanelDelegate.swift */; };
@@ -416,8 +418,8 @@
 		27BD010D30645F330015306B /* WallpaperBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BD010630645F330015306B /* WallpaperBaseViewController.swift */; };
 		27BD010E30645F330015306B /* WallpaperSettingsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BD010930645F330015306B /* WallpaperSettingsHeaderView.swift */; };
 		27BD010F30645F330015306B /* WallpaperSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BD010830645F330015306B /* WallpaperSettingsViewModel.swift */; };
-		27C45C9130A0FD8000E1E4E3 /* NativeMenuHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C45C9030A0FD7900E1E4E3 /* NativeMenuHelper.swift */; };
-		27C4644630A211B300E1E4E3 /* NativeMenuHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C4644530A211AD00E1E4E3 /* NativeMenuHelperTests.swift */; };
+		27C45C9130A0FD8000E1E4E3 /* HomeNativeMenuHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C45C9030A0FD7900E1E4E3 /* HomeNativeMenuHelper.swift */; };
+		27C4644630A211B300E1E4E3 /* HomeNativeMenuHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C4644530A211AD00E1E4E3 /* HomeNativeMenuHelperTests.swift */; };
 		2816F0001B33E05400522243 /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2816EFFF1B33E05400522243 /* UIConstants.swift */; };
 		281B029A1C037C1F005202C3 /* TestBrowserDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 281B02991C037C1F005202C3 /* TestBrowserDB.swift */; };
 		281B2BEA1ADF4D90002917DC /* MockProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 281B2BE91ADF4D90002917DC /* MockProfile.swift */; };
@@ -3475,6 +3477,8 @@
 		26D949CD898A3BEA490ECF12 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		26E54FFEAC16F93DEDBBE166 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		26F9438EAC1F1D7449D42BB2 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/LoginManager.strings"; sourceTree = "<group>"; };
+		2703CEDA30ADFBA900831691 /* ReaderNativeMenuHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderNativeMenuHelper.swift; sourceTree = "<group>"; };
+		2703CEDC30AE1F4700831691 /* ReaderNativeMenuHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderNativeMenuHelperTests.swift; sourceTree = "<group>"; };
 		272F476F88D45C79446A586A /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		2731333B3087B0AF00C904B2 /* WallpaperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperTests.swift; sourceTree = "<group>"; };
 		274A36CB239EB99400A21587 /* LibraryPanelContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryPanelContextMenu.swift; sourceTree = "<group>"; };
@@ -3484,8 +3488,8 @@
 		27BD010730645F330015306B /* WallpaperSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperSettingsViewController.swift; sourceTree = "<group>"; };
 		27BD010830645F330015306B /* WallpaperSettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperSettingsViewModel.swift; sourceTree = "<group>"; };
 		27BD010930645F330015306B /* WallpaperSettingsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperSettingsHeaderView.swift; sourceTree = "<group>"; };
-		27C45C9030A0FD7900E1E4E3 /* NativeMenuHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeMenuHelper.swift; sourceTree = "<group>"; };
-		27C4644530A211AD00E1E4E3 /* NativeMenuHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeMenuHelperTests.swift; sourceTree = "<group>"; };
+		27C45C9030A0FD7900E1E4E3 /* HomeNativeMenuHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeNativeMenuHelper.swift; sourceTree = "<group>"; };
+		27C4644530A211AD00E1E4E3 /* HomeNativeMenuHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeNativeMenuHelperTests.swift; sourceTree = "<group>"; };
 		2816EFFF1B33E05400522243 /* UIConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIConstants.swift; sourceTree = "<group>"; };
 		281B02991C037C1F005202C3 /* TestBrowserDB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestBrowserDB.swift; sourceTree = "<group>"; };
 		281B2BE91ADF4D90002917DC /* MockProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MockProfile.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -13365,6 +13369,7 @@
 		0B7CF8852CAC1BFB00DC02F8 /* Bookmarks */ = {
 			isa = PBXGroup;
 			children = (
+				2703CEDC30AE1F4700831691 /* ReaderNativeMenuHelperTests.swift */,
 				38BF9253302A3087008582D5 /* GroupedEditBookmarkViewControllerTests.swift */,
 				38BF9251302A3064008582D5 /* GroupedEditBookmarkDataSourceTests.swift */,
 				ECF75D3D30193E8A008183CA /* GroupedEditBookmarkViewModelTests.swift */,
@@ -14750,6 +14755,7 @@
 		7AC7E04E2C160EB600051D4D /* Reader */ = {
 			isa = PBXGroup;
 			children = (
+				2703CEDA30ADFBA900831691 /* ReaderNativeMenuHelper.swift */,
 				59A685F4EAD19EDEC854BCA4 /* ReaderPanel.swift */,
 				7AC7E04F2C160FF800051D4D /* ReaderPanelEmptyStateView.swift */,
 			);
@@ -14951,7 +14957,7 @@
 		8A09BCC12D22F1A500CFDF60 /* ContextMenu */ = {
 			isa = PBXGroup;
 			children = (
-				27C4644530A211AD00E1E4E3 /* NativeMenuHelperTests.swift */,
+				27C4644530A211AD00E1E4E3 /* HomeNativeMenuHelperTests.swift */,
 				8A4B66412D1DC962008C5B64 /* ContextMenuConfigurationTests.swift */,
 				8A09BCC22D22F1BE00CFDF60 /* ContextMenuCoordinatorTests.swift */,
 			);
@@ -15391,7 +15397,7 @@
 		8A62B15B2CED40800045F46E /* ContextMenu */ = {
 			isa = PBXGroup;
 			children = (
-				27C45C9030A0FD7900E1E4E3 /* NativeMenuHelper.swift */,
+				27C45C9030A0FD7900E1E4E3 /* HomeNativeMenuHelper.swift */,
 				8AC0B1BF2D1D9356004237FD /* ContextMenuConfiguration.swift */,
 				8A62B15C2CED408B0045F46E /* ContextMenuState.swift */,
 				8A5564012D23317100028CA7 /* ContextMenuAction.swift */,
@@ -20898,6 +20904,7 @@
 				C7CDBEFD2CE6926900826A92 /* BookmarksFolderEmptyStateView.swift in Sources */,
 				8A48807E2E68923200AD43D5 /* GleanHttpUploader.swift in Sources */,
 				C7F051562D9EF87D00EC52C0 /* ContextMenuTelemetry.swift in Sources */,
+				2703CEDB30ADFBB700831691 /* ReaderNativeMenuHelper.swift in Sources */,
 				A1B2C3D40000000000000002 /* GoogleLensTelemetry.swift in Sources */,
 				B4588BA31C3B41B0A4564FDE /* InstallationHistoryStore.swift in Sources */,
 				30FCD8FF0BB79BB6A12B5F11 /* DefaultVPNTelemetry.swift in Sources */,
@@ -21557,7 +21564,7 @@
 				4347B398298D6D7B0045F677 /* CreditCardTableViewModel.swift in Sources */,
 				D3A9949D1A3686BD008AD1AC /* Tab.swift in Sources */,
 				EDADF77A2D70BD3E00C39295 /* AppIconSelectionTelemetry.swift in Sources */,
-				27C45C9130A0FD8000E1E4E3 /* NativeMenuHelper.swift in Sources */,
+				27C45C9130A0FD8000E1E4E3 /* HomeNativeMenuHelper.swift in Sources */,
 				EC0FBD1F300530E9005CCA62 /* FolderSectionHeaderView.swift in Sources */,
 				A93067E81D0FE18E00C49C6E /* NightModeHelper.swift in Sources */,
 				742BD99E2A13AC9000BA6B15 /* OnboardingInstructionPopupViewController.swift in Sources */,
@@ -21962,6 +21969,7 @@
 				D3EF586827F3488BB522F2FF /* PDFDocumentExtensionTests.swift in Sources */,
 				C7F538D52E5E66120089DEC7 /* ShortcutsLibraryMiddlewareTests.swift in Sources */,
 				C27484E22F558DDD00920313 /* MockSummarizerConfigProvider.swift in Sources */,
+				2703CEDD30AE1F5100831691 /* ReaderNativeMenuHelperTests.swift in Sources */,
 				3B39EDBA1E16E18900EF029F /* CustomSearchEnginesTest.swift in Sources */,
 				8A44D3612DB7DFD700B7D80B /* MockThrottler.swift in Sources */,
 				8A7892072CF9228700490CA4 /* UnifiedAdsCallbackTelemetryTests.swift in Sources */,
@@ -22124,7 +22132,7 @@
 				215360652D9475DA00D9B8E6 /* BrowsingSettingsViewControllerTests.swift in Sources */,
 				C7F5684BA329455783CCB300 /* AdBlockerSettingTests.swift in Sources */,
 				BGA100010000000100000001 /* BackgroundAudioHelperTests.swift in Sources */,
-				27C4644630A211B300E1E4E3 /* NativeMenuHelperTests.swift in Sources */,
+				27C4644630A211B300E1E4E3 /* HomeNativeMenuHelperTests.swift in Sources */,
 				BGA100010000000100000003 /* BackgroundAudioSettingTests.swift in Sources */,
 				BEEF00012F00000200000001 /* SearchSettingsTableViewControllerTests.swift in Sources */,
 				EEFBE6DA3091115100522F96 /* VPNSettingsViewControllerTests.swift in Sources */,

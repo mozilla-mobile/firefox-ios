@@ -9,8 +9,12 @@ protocol TopSitesSelectorsSet {
     var TOP_SITE_ITEM_CELL: Selector { get }
     var COLLECTION_VIEW: Selector { get }
     var TOPSITE_YOUTUBE: Selector { get }
+    var PIN_ICON: Selector { get }
     var PIN: Selector { get }
     var UNPIN: Selector { get }
+    var OPEN_IN_NEW_TAB: Selector { get }
+    var OPEN_IN_PRIVATE_TAB: Selector { get }
+    var REMOVE: Selector { get }
     var SHARE: Selector { get }
     var all: [Selector] { get }
 }
@@ -20,9 +24,13 @@ struct TopSitesSelectors: TopSitesSelectorsSet {
         static let collectionView = AccessibilityIdentifiers.FirefoxHomepage.collectionView
         static let itemCell = AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell
         static let youtube = "YouTube"
-        static let pin = StandardImageIdentifiers.ExtraSmall.pin
-        static let unpin = "Unpin"
-        static let share = "Share"
+        static let pinIcon = StandardImageIdentifiers.ExtraSmall.pin
+        static let pin = AccessibilityIdentifiers.FirefoxHomepage.TopSites.ContextMenu.pin
+        static let unpin = AccessibilityIdentifiers.FirefoxHomepage.TopSites.ContextMenu.unpin
+        static let openInNewTab = AccessibilityIdentifiers.FirefoxHomepage.TopSites.ContextMenu.openInNewTab
+        static let openInPrivateTab = AccessibilityIdentifiers.FirefoxHomepage.TopSites.ContextMenu.openInPrivateTab
+        static let remove = AccessibilityIdentifiers.FirefoxHomepage.TopSites.ContextMenu.remove
+        static let share = AccessibilityIdentifiers.FirefoxHomepage.TopSites.ContextMenu.share
     }
 
     let TOP_SITE_ITEM_CELL = Selector.linkById(
@@ -43,19 +51,43 @@ struct TopSitesSelectors: TopSitesSelectorsSet {
         groups: ["homepage", "topsites"]
     )
 
-    let PIN = Selector.imageId(
-        IDs.pin,
+    let PIN_ICON = Selector.imageId(
+        IDs.pinIcon,
         description: "Pin icon image",
         groups: ["homepage", "topsites"]
     )
 
-    let UNPIN = Selector.buttonByLabel(
+    let PIN = Selector.buttonId(
+        IDs.pin,
+        description: "Pin option in the top site context menu",
+        groups: ["homepage", "topsites"]
+    )
+
+    let UNPIN = Selector.buttonId(
         IDs.unpin,
         description: "Unpin option in the top site context menu",
         groups: ["homepage", "topsites"]
     )
 
-    let SHARE = Selector.buttonByLabel(
+    let OPEN_IN_NEW_TAB = Selector.buttonId(
+        IDs.openInNewTab,
+        description: "Open in New Tab option in the top site context menu",
+        groups: ["homepage", "topsites"]
+    )
+
+    let OPEN_IN_PRIVATE_TAB = Selector.buttonId(
+        IDs.openInPrivateTab,
+        description: "Open in Private Tab option in the top site context menu",
+        groups: ["homepage", "topsites"]
+    )
+
+    let REMOVE = Selector.buttonId(
+        IDs.remove,
+        description: "Remove option in the top site context menu",
+        groups: ["homepage", "topsites"]
+    )
+
+    let SHARE = Selector.buttonId(
         IDs.share,
         description: "Share option in the top site context menu",
         groups: ["homepage", "topsites"]
@@ -66,7 +98,9 @@ struct TopSitesSelectors: TopSitesSelectorsSet {
             TOP_SITE_ITEM_CELL,
             COLLECTION_VIEW,
             TOPSITE_YOUTUBE,
-            PIN, UNPIN, SHARE
+            PIN_ICON, PIN, UNPIN,
+            OPEN_IN_NEW_TAB, OPEN_IN_PRIVATE_TAB,
+            REMOVE, SHARE
         ]
     }
 }

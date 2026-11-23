@@ -166,7 +166,6 @@ class ReadingListTableViewCell: UITableViewCell, ThemeApplicable {
 
 class ReadingListPanel: UITableViewController,
                         LibraryPanel,
-                        LibraryPanelContextMenu,
                         Themeable,
                         Notifiable {
     weak var libraryPanelDelegate: LibraryPanelDelegate?
@@ -181,10 +180,10 @@ class ReadingListPanel: UITableViewController,
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
     private let logger: Logger
-
-    private lazy var longPressRecognizer: UILongPressGestureRecognizer = {
-        return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
-    }()
+    private lazy var nativeMenuHelper = ReaderNativeMenuHelper(
+        libraryPanelDelegate: libraryPanelDelegate,
+        navigationHandler: navigationHandler
+    )
 
     private var records: [ReadingListItem]?
 
@@ -229,7 +228,6 @@ class ReadingListPanel: UITableViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.addGestureRecognizer(longPressRecognizer)
         tableView.estimatedRowHeight = ReadingListTableViewCellUX.RowHeight
         tableView.rowHeight = UITableView.automaticDimension
         tableView.cellLayoutMarginsFollowReadableWidth = false
@@ -341,14 +339,6 @@ class ReadingListPanel: UITableViewController,
         return ReaderPanelEmptyStateView(windowUUID: self.windowUUID)
     }()
 
-    @objc
-    fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
-        guard longPressGestureRecognizer.state == .began else { return }
-        let touchPoint = longPressGestureRecognizer.location(in: tableView)
-        guard let indexPath = tableView.indexPathForRow(at: touchPoint) else { return }
-        presentContextMenu(for: indexPath)
-    }
-
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -431,6 +421,40 @@ class ReadingListPanel: UITableViewController,
         }
     }
 
+    override func tableView(
+        _ tableView: UITableView,
+        previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration
+    ) -> UITargetedPreview? {
+        guard let indexPath = configuration.identifier as? IndexPath else { return nil }
+        return targetedPreview(for: indexPath)
+    }
+
+    override func tableView(
+        _ tableView: UITableView,
+        previewForDismissingContextMenuWithConfiguration configuration: UIContextMenuConfiguration
+    ) -> UITargetedPreview? {
+        guard let indexPath = configuration.identifier as? IndexPath else { return nil }
+        return targetedPreview(for: indexPath)
+    }
+
+    private func targetedPreview(for indexPath: IndexPath) -> UITargetedPreview? {
+        guard let cell = tableView.cellForRow(at: indexPath) else { return nil }
+        return UITargetedPreview(view: cell)
+    }
+
+    override func tableView(_ tableView: UITableView,
+                            contextMenuConfigurationForRowAt indexPath: IndexPath,
+                            point: CGPoint) -> UIContextMenuConfiguration? {
+        guard let site = getSiteDetails(for: indexPath),
+              let cell = tableView.cellForRow(at: indexPath),
+              let menu = nativeMenuHelper.menu(for: site, sourceView: cell, onRemove: { [weak self] in
+                  self?.deleteItem(atIndex: indexPath)
+              })
+        else { return nil }
+
+        return UIContextMenuConfiguration(identifier: indexPath as NSCopying, previewProvider: nil) { _ in menu }
+    }
+
     fileprivate func deleteItem(atIndex indexPath: IndexPath) {
         if let record = records?[indexPath.row] {
             TelemetryWrapper.recordEvent(
@@ -480,39 +504,11 @@ class ReadingListPanel: UITableViewController,
         refreshReadingList()
     }
 
-    // MARK: - LibraryPanelContextMenu
-
-    func presentContextMenu(
-        for site: Site,
-        with indexPath: IndexPath,
-        completionHandler: @escaping () -> PhotonActionSheet?
-    ) {
-        guard let contextMenu = completionHandler() else { return }
-        self.present(contextMenu, animated: true, completion: nil)
-    }
+    // MARK: - Helpers
 
     func getSiteDetails(for indexPath: IndexPath) -> Site? {
         guard let record = records?[indexPath.row] else { return nil }
         return Site.createBasicSite(url: record.url, title: record.title)
-    }
-
-    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowActions]? {
-        guard var actions = getDefaultContextMenuActions(
-            for: site,
-            libraryPanelDelegate: libraryPanelDelegate
-        ) else { return nil }
-
-        let removeAction = SingleActionViewModel(title: .RemoveContextMenuTitle,
-                                                 iconString: StandardImageIdentifiers.Large.cross,
-                                                 tapHandler: { _ in
-            self.deleteItem(atIndex: indexPath)
-        }).items
-
-        actions.append(removeAction)
-
-        let cell = tableView.cellForRow(at: indexPath)
-        actions.append(getShareAction(site: site, sourceView: cell ?? self.view, delegate: navigationHandler))
-        return actions
     }
 }
 
