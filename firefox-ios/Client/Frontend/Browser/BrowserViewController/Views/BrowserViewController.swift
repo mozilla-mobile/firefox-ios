@@ -4491,9 +4491,9 @@ extension BrowserViewController: LegacyTabDelegate {
 
         if DefaultWKEngineConfigurationProvider.isProxyEnabled {
             let proxyLeakGuardHelper = ProxyLeakGuardHelper()
-            proxyLeakGuardHelper.onBlockedRequest = { [weak self, weak tab] api, _ in
+            proxyLeakGuardHelper.onBlockedRequest = { [weak self, weak tab] _, _ in
                 guard let self, let tab, tab === self.tabManager.selectedTab else { return }
-                self.showProxyLeakGuardToast(for: api, isPrivate: tab.isPrivate)
+                self.showProxyLeakGuardToast(isPrivate: tab.isPrivate)
             }
             tab.addContentScriptToPage(proxyLeakGuardHelper, name: ProxyLeakGuardHelper.name())
         }
@@ -4981,12 +4981,8 @@ extension BrowserViewController: TabManagerDelegate {
         updateTabCountUsingTabManager(tabManager)
     }
 
-    private func showProxyLeakGuardToast(for api: ProxyLeakGuardHelper.BlockedAPI, isPrivate: Bool) {
-        let message: String = switch api {
-        case .webAuthnRelatedOrigin: .VPN.ProxyLeakGuard.BlockedSignInRequestToast
-        case .directConnection: .VPN.ProxyLeakGuard.BlockedConnectionToast
-        }
-        let viewModel = ButtonToastViewModel(labelText: message,
+    private func showProxyLeakGuardToast(isPrivate: Bool) {
+        let viewModel = ButtonToastViewModel(labelText: .VPN.ProxyLeakGuard.BlockedContentToast,
                                              buttonText: .VPN.ProxyLeakGuard.LearnMoreButton)
         let toast = ButtonToast(viewModel: viewModel,
                                 theme: currentTheme(),

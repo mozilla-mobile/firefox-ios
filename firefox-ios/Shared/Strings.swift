@@ -3322,25 +3322,18 @@ extension String {
 extension String {
     public enum VPN {
         public enum ProxyLeakGuard {
-            public static let BlockedSignInRequestToast = MZLocalizedString(
-                key: "VPN.ProxyLeakGuard.BlockedSignInRequestToast.v162",
+            public static let BlockedContentToast = MZLocalizedString(
+                key: "VPN.ProxyLeakGuard.BlockedContentToast.v163",
                 tableName: "VPN",
-                value: "Sign-in blocked to protect your IP address. Turn off VPN to use it.",
-                comment: "Short message shown at the bottom of the screen while the VPN is on, when a website tries to start a passkey sign-in that would connect to another website directly, without the VPN. Firefox blocks it because it could reveal the user’s real IP address. Turning off the VPN lets the sign-in work."
-            )
-
-            public static let BlockedConnectionToast = MZLocalizedString(
-                key: "VPN.ProxyLeakGuard.BlockedConnectionToast.v162",
-                tableName: "VPN",
-                value: "Calls and live features blocked to protect your IP address. Turn off VPN to use them.",
-                comment: "Short message shown at the bottom of the screen while the VPN is on, when a website tries to use a feature that connects directly without the VPN, such as video or voice calls, live streaming, or multiplayer games. Firefox blocks these features because they could reveal the user’s real IP address. Turning off the VPN lets them work."
+                value: "VPN Blocked Part of This Page To Protect Your Location",
+                comment: "Short notification (toast) shown at the bottom of the screen while the VPN is on, when a website tries to use a feature that would connect directly without the VPN, such as video or voice calls, live features, or some sign-in requests. Firefox blocks that part of the page because it could reveal the user’s real location."
             )
 
             public static let LearnMoreButton = MZLocalizedString(
-                key: "VPN.ProxyLeakGuard.LearnMoreButton.v162",
+                key: "VPN.ProxyLeakGuard.LearnMoreButton.v163",
                 tableName: "VPN",
                 value: "Learn More",
-                comment: "Button on the short message shown when Firefox blocks a sign-in request that could reveal the user’s real IP address while the VPN is on. Tapping it opens a support article explaining why the request was blocked."
+                comment: "Button on the short notification (toast) displayed when the VPN is on and Firefox blocks a website feature that would bypass the VPN and could reveal the user’s real location. Tapping it opens a support article explaining why the feature was blocked."
             )
         }
 
