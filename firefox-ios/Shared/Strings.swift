@@ -4992,22 +4992,22 @@ extension String {
             key: "TabGroups.NewTabGroupTitle.v163",
             tableName: "TabGroups",
             value: "New Tab Group",
-            comment: "Title of the sheet for creating a new tab group.")
+            comment: "Title of the panel for creating a new tab group.")
         public static let EditTabGroupTitle = MZLocalizedString(
             key: "TabGroups.EditTabGroupTitle.v163",
             tableName: "TabGroups",
             value: "Edit Tab Group",
-            comment: "Title of the sheet for editing an existing tab group.")
+            comment: "Title of the panel for editing an existing tab group.")
         public static let GroupName = MZLocalizedString(
             key: "TabGroups.GroupName.v163",
             tableName: "TabGroups",
             value: "Group Name",
-            comment: "Placeholder for the required name field in the new or edit tab group sheet.")
+            comment: "Placeholder for the required name field in the new or edit tab group panel.")
         public static let NewTabGroupMenu = MZLocalizedString(
             key: "TabGroups.NewTabGroupMenu.v163",
             tableName: "TabGroups",
             value: "New Tab Group…",
-            comment: "Menu action that opens the sheet for creating a tab group. The ellipsis indicates that another step is required.")
+            comment: "Menu action that opens the panel for creating a tab group. The ellipsis indicates that another step is required.")
         public static let SwitchTabGroups = MZLocalizedString(
             key: "TabGroups.SwitchTabGroups.v163",
             tableName: "TabGroups",
@@ -5057,7 +5057,7 @@ extension String {
             key: "TabGroups.EditGroup.v163",
             tableName: "TabGroups",
             value: "Edit",
-            comment: "Quick action in a tab group management menu that opens the group editing sheet.")
+            comment: "Quick action in a tab group management menu that opens the group editing panel.")
         public static let ShareGroup = MZLocalizedString(
             key: "TabGroups.ShareGroup.v163",
             tableName: "TabGroups",
@@ -5137,12 +5137,12 @@ extension String {
             key: "TabGroups.ShowSelections.v163",
             tableName: "TabGroups",
             value: "Show Selections (%@)",
-            comment: "Button that opens a sheet containing the selected tabs. %@ is the number of selected tabs; it can be 1.")
+            comment: "Button that opens a panel containing the selected tabs. %@ is the number of selected tabs; it can be 1.")
         public static let SelectedTabsTitle = MZLocalizedString(
             key: "TabGroups.SelectedTabsTitle.v163",
             tableName: "TabGroups",
             value: "Selected Tabs (%@)",
-            comment: "Title of the sheet containing selected tabs. %@ is the number of selected tabs; it can be 1.")
+            comment: "Title of the panel containing selected tabs. %@ is the number of selected tabs; it can be 1.")
         public static let MoveTabsToTitle = MZLocalizedString(
             key: "TabGroups.MoveTabsToTitle.v163",
             tableName: "TabGroups",
