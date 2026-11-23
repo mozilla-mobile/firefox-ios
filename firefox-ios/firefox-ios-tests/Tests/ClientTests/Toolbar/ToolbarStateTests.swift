@@ -133,6 +133,28 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
     }
 
+    func test_didStartEditingUrlAction_whenAddressBarMinimized_restoresAddressBar() {
+        let initialState = createSubject()
+        let reducer = toolbarReducer()
+
+        let minimizedState = reducer.modernReducer(
+            initialState,
+            ToolbarModernAction.userDidScroll(minimizeAddressBar: true),
+            windowUUID
+        )
+        XCTAssertTrue(minimizedState.isAddressBarMinimized)
+
+        let newState = reducer.legacyReducer(
+            minimizedState,
+            ToolbarAction(
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.didStartEditingUrl)
+        )
+
+        XCTAssertTrue(newState.addressToolbar.isEditing)
+        XCTAssertFalse(newState.isAddressBarMinimized)
+    }
+
     func test_cancelEditAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = toolbarReducer()

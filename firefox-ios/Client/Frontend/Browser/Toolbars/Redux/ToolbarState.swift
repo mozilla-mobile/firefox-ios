@@ -227,8 +227,10 @@ struct ToolbarState: ScreenState, Sendable {
         case ToolbarActionType.didLoadToolbars:
             return handleDidLoadToolbars(state: state, action: action)
 
+        case ToolbarActionType.didStartEditingUrl:
+            return handleDidStartEditingUrl(state: state, action: action)
+
         case ToolbarActionType.urlDidChange,
-            ToolbarActionType.didStartEditingUrl,
             ToolbarMiddlewareActionType.googleLensAvailabilityDidChange,
             ToolbarActionType.didStartTyping,
             ToolbarActionType.readerModeStateChanged,
@@ -307,6 +309,12 @@ struct ToolbarState: ScreenState, Sendable {
             .copy(canGoBack: toolbarAction?.canGoBack ?? state.canGoBack)
             .copy(canGoForward: toolbarAction?.canGoForward ?? state.canGoForward)
             .copy(isTranslationsEnabled: actionIsTranslationsEnabled ?? state.isTranslationsEnabled)
+    }
+
+    @MainActor
+    private static func handleDidStartEditingUrl(state: Self, action: Action) -> ToolbarState {
+        return handleToolbarUpdates(state: state, action: action)
+            .copy(isAddressBarMinimized: false)
     }
 
     @MainActor
