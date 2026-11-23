@@ -88,11 +88,18 @@ struct VPNLocationsView: ThemeableView {
                     }
                 }
                 Spacer()
-                Image(StandardImageIdentifiers.Large.checkmark)
-                    .renderingMode(.template)
-                    .foregroundStyle(theme.colors.iconAccent.color)
-                    .opacity(isSelected ? 1 : 0)
-                    .accessibilityHidden(true)
+                ZStack {
+                    // These two are in a ZStack so that row size is always constant
+                    ProgressView()
+                        .opacity(
+                            (viewModel.isVPNConnecting) ? 1 : 0)
+                    Image(StandardImageIdentifiers.Large.checkmark)
+                        .renderingMode(.template)
+                        .foregroundStyle(theme.colors.iconAccent.color)
+                        .opacity(viewModel.isVPNConnecting ? 0 : 1)
+                }
+                .opacity(isSelected ? 1 : 0)
+                .accessibilityHidden(true)
             }
             .padding(.horizontal, VPNHelpers.UX.horizontalPadding)
             .padding(.vertical, VPNHelpers.UX.rowVerticalPadding)

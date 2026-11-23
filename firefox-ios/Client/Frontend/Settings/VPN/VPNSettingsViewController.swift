@@ -8,8 +8,7 @@ import SwiftUI
 
 @available(iOS 27.2, *)
 final class VPNSettingsViewController: UIViewController {
-    // TODO: replace this with the actual URL eventually
-    static let learnMoreURL = SupportUtils.URLForTopic("vpn")
+    static let learnMoreURL = SupportUtils.URLForTopic("mobile-ios-vpn")
 
     private let windowUUID: WindowUUID
     private let themeManager: ThemeManager
