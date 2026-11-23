@@ -30,6 +30,7 @@ public enum VPNEnvironment: String, Sendable {
 
 /// HTTP constants and endpoint builders for the VPN App Attest (IPN) auth flow.
 public enum VPNConstants {
+    public static let freeMonthlyDataLimitInGB: Int64 = 5
     static let authorizationHeader = "Authorization"
     static let bearerPrefix = "Bearer "
     static let contentTypeHeader = "Content-Type"
