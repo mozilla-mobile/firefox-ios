@@ -10,9 +10,11 @@ import Common
 
 final class TabManagerRestoreTabsTests: TabManagerTestsBase {
     override func setUp() async throws {
-        // A run killed before its teardown block leaks this key and would skip restore for every test here.
-        UserDefaults.standard.removeObject(forKey: Self.skipSessionRestoreDefaultsKey)
         try await super.setUp()
+
+        // Only needed for the temporary skip session diagnostic tests. A run killed before its teardown block leaks this key
+        // and would skip restore for every test here.
+        UserDefaults.standard.removeObject(forKey: DebugSettingsBundleOptions.skipSessionRestoreKey)
     }
 
     @MainActor
@@ -265,16 +267,67 @@ final class TabManagerRestoreTabsTests: TabManagerTestsBase {
         wait(for: [expectation], timeout: skippedRestoreTimeout)
     }
 
-    // MARK: - Helpers
+    // MARK: - Skip session restore diagnostics
 
-    private static let skipSessionRestoreDefaultsKey = "SettingsBundleSkipSessionRestore"
+    func testSkipSessionRestoreDiagnostics_whenKeyIsUnset_reportsNoDomains() {
+        let (defaults, suiteName) = makeIsolatedDefaults()
+
+        let result = DebugSettingsBundleOptions.skipSessionRestoreDiagnostics(userDefaults: defaults,
+                                                                              appDomain: suiteName)
+
+        XCTAssertEqual(result, "type: nil, val: nil, dom: none")
+    }
+
+    func testSkipSessionRestoreDiagnostics_whenBoolIsStored_reportsBoolInAppDomain() {
+        let (defaults, suiteName) = makeIsolatedDefaults()
+        defaults.set(true, forKey: DebugSettingsBundleOptions.skipSessionRestoreKey)
+
+        let result = DebugSettingsBundleOptions.skipSessionRestoreDiagnostics(userDefaults: defaults,
+                                                                              appDomain: suiteName)
+
+        XCTAssertEqual(result, "type: bool, val: 1, dom: app")
+    }
+
+    func testSkipSessionRestoreDiagnostics_whenStringIsStored_reportsStringInAppDomain() {
+        let (defaults, suiteName) = makeIsolatedDefaults()
+        defaults.set("YES", forKey: DebugSettingsBundleOptions.skipSessionRestoreKey)
+
+        let result = DebugSettingsBundleOptions.skipSessionRestoreDiagnostics(userDefaults: defaults,
+                                                                              appDomain: suiteName)
+
+        XCTAssertEqual(result, "type: string, val: YES, dom: app")
+    }
+
+    func testSkipSessionRestoreDiagnostics_whenNumberIsStored_reportsNumberInAppDomain() {
+        let (defaults, suiteName) = makeIsolatedDefaults()
+        defaults.set(1, forKey: DebugSettingsBundleOptions.skipSessionRestoreKey)
+
+        let result = DebugSettingsBundleOptions.skipSessionRestoreDiagnostics(userDefaults: defaults,
+                                                                              appDomain: suiteName)
+
+        XCTAssertEqual(result, "type: number, val: 1, dom: app")
+    }
+
+    // MARK: - Helpers
 
     private let skippedRestoreTimeout: TimeInterval = 5
 
     private func setSkipSessionRestore(_ skip: Bool) {
-        UserDefaults.standard.set(skip, forKey: Self.skipSessionRestoreDefaultsKey)
+        UserDefaults.standard.set(skip, forKey: DebugSettingsBundleOptions.skipSessionRestoreKey)
+
         addTeardownBlock {
-            UserDefaults.standard.removeObject(forKey: Self.skipSessionRestoreDefaultsKey)
+            UserDefaults.standard.removeObject(forKey: DebugSettingsBundleOptions.skipSessionRestoreKey)
         }
+    }
+
+    private func makeIsolatedDefaults() -> (UserDefaults, String) {
+        let suiteName = "TabManagerRestoreTabsTests.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suiteName)!
+
+        addTeardownBlock {
+            defaults.removePersistentDomain(forName: suiteName)
+        }
+
+        return (defaults, suiteName)
     }
 }

@@ -462,7 +462,7 @@ final class TabManagerImplementation: NSObject,
             signalTabRestorationSkipped()
 
             // swiftlint:disable line_length
-            logger.log("Skipping legacy tab restore; isRunningUITests: \(AppConstants.isRunningUITests), isSessionRestoreEnabledForTests: \(AppConstants.isSessionRestoreEnabledForTests), skipSessionRestore: \(DebugSettingsBundleOptions.skipSessionRestore)",
+            logger.log("Skipping legacy tab restore; isTest: \(AppConstants.isRunningUITests), launchTest: \(AppConstants.isSessionRestoreEnabledForTests), debug: \(DebugSettingsBundleOptions.skipSessionRestore):  (\(DebugSettingsBundleOptions.skipSessionRestoreDiagnostics()))",
                        level: .warning,
                        category: .tabs)
             // swiftlint:enable line_length
@@ -499,7 +499,7 @@ final class TabManagerImplementation: NSObject,
             signalTabRestorationSkipped()
 
             // swiftlint:disable line_length
-            logger.log("Skipping tab restore; isRunningUITests: \(AppConstants.isRunningUITests), isSessionRestoreEnabledForTests: \(AppConstants.isSessionRestoreEnabledForTests), skipSessionRestore: \(DebugSettingsBundleOptions.skipSessionRestore)",
+            logger.log("Skipping tab restore; isTest: \(AppConstants.isRunningUITests), launchTest: \(AppConstants.isSessionRestoreEnabledForTests), debug: \(DebugSettingsBundleOptions.skipSessionRestore), \(DebugSettingsBundleOptions.skipSessionRestoreDiagnostics())",
                        level: .warning,
                        category: .tabs)
             // swiftlint:enable line_length
