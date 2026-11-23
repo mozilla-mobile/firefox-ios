@@ -18,43 +18,6 @@ protocol SiteImageDownloader: Sendable, AnyObject {
     func downloadImage(with url: URL) async throws -> SiteImageLoadingResult
 }
 
-extension SiteImageDownloader {
-    /// Downloads an image at the given URL. Throws `SiteImageError` errors.
-    func downloadImage(with url: URL) async throws -> SiteImageLoadingResult {
-        // Override Kingfisher's default timeout (which is 15s)
-        let modifier = AnyModifier { [weak self] request in
-            var modifiedRequest = request
-            modifiedRequest.timeoutInterval = self?.timeoutDelay ?? 15
-            return modifiedRequest
-        }
-
-        do {
-            let result = try await ImageDownloader.default.downloadImage(
-                with: url,
-                options: [
-                    .processor(SVGImageProcessor()),
-                    .requestModifier(modifier)
-                ]
-            )
-            return result
-        } catch let error as KingfisherError {
-            // Log telemetry for Kingfisher timeout errors
-            if case .responseError(let reason) = error,
-               case .URLSessionError(let sessionError) = reason,
-               let error = sessionError as? URLError,
-               error.code == .timedOut {
-                self.logger.log("Timeout when downloading image reached",
-                                level: .warning,
-                                category: .images)
-            }
-
-            throw SiteImageError.unableToDownloadImage(error.errorDescription ?? "No description")
-        } catch {
-            throw SiteImageError.unableToDownloadImage(error.localizedDescription)
-        }
-    }
-}
-
 /// Image loading result wrapper for Kingfisher type so we have control when testing
 /// Used in FaviconFetcher
 protocol SiteImageLoadingResult {

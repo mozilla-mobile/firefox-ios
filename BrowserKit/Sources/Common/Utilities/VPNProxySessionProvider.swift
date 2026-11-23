@@ -7,19 +7,25 @@ import Foundation
 
 /// Mirrors the proxy stack applied to WebKit so app-side `URLSession`s route through it too.
 @available(iOS 17.0, *)
-final class VPNProxySessionProvider: @unchecked Sendable {
-    static let shared = VPNProxySessionProvider()
+public final class VPNProxySessionProvider: @unchecked Sendable {
+    public static let shared = VPNProxySessionProvider()
 
     private let lock = NSLock()
     private var configs: [ProxyConfiguration] = []
     private var proxiedSession: URLSession?
 
-    var proxyConfigurations: [ProxyConfiguration] {
+    init() {}
+
+    public var proxyConfigurations: [ProxyConfiguration] {
         lock.withLock { configs }
     }
 
+    public var isProxyActive: Bool {
+        lock.withLock { !configs.isEmpty }
+    }
+
     /// `URLSession.shared` while the proxy is off, otherwise a shared session using the current stack.
-    var session: URLSession {
+    public var session: URLSession {
         lock.withLock {
             guard !configs.isEmpty else { return .shared }
             if let proxiedSession { return proxiedSession }
@@ -31,12 +37,22 @@ final class VPNProxySessionProvider: @unchecked Sendable {
         }
     }
 
-    func update(_ configs: [ProxyConfiguration]) {
+    public func update(_ configs: [ProxyConfiguration]) {
         let oldSession: URLSession? = lock.withLock {
             self.configs = configs
             defer { proxiedSession = nil }
             return proxiedSession
         }
         oldSession?.finishTasksAndInvalidate()
+    }
+}
+
+public extension URLSessionConfiguration {
+    /// Applies the current VPN proxy stack, if any, so requests match the webview's routing.
+    func withVPNProxy() -> URLSessionConfiguration {
+        if #available(iOS 17.0, *) {
+            proxyConfigurations = VPNProxySessionProvider.shared.proxyConfigurations
+        }
+        return self
     }
 }
