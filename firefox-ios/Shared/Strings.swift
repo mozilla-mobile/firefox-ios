@@ -3321,6 +3321,22 @@ extension String {
 // MARK: - VPN
 extension String {
     public enum VPN {
+        public enum ProxyLeakGuard {
+            public static let BlockedContentToast = MZLocalizedString(
+                key: "VPN.ProxyLeakGuard.BlockedContentToast.v163",
+                tableName: "VPN",
+                value: "VPN Blocked Part of This Page To Protect Your Location",
+                comment: "Short notification (toast) shown at the bottom of the screen while the VPN is on, when a website tries to use a feature that would connect directly without the VPN, such as video or voice calls, live features, or some sign-in requests. Firefox blocks that part of the page because it could reveal the user’s real location."
+            )
+
+            public static let LearnMoreButton = MZLocalizedString(
+                key: "VPN.ProxyLeakGuard.LearnMoreButton.v163",
+                tableName: "VPN",
+                value: "Learn More",
+                comment: "Button on the short notification (toast) displayed when the VPN is on and Firefox blocks a website feature that would bypass the VPN and could reveal the user’s real location. Tapping it opens a support article explaining why the feature was blocked."
+            )
+        }
+
         public enum Settings {
             public static let Title = MZLocalizedString(
                 key: "VPN.Settings.Title.v160",

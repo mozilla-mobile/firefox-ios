@@ -4491,8 +4491,14 @@ extension BrowserViewController: LegacyTabDelegate {
 
         if DefaultWKEngineConfigurationProvider.isProxyEnabled {
             let proxyLeakGuardHelper = ProxyLeakGuardHelper()
-            // TODO: FXIOS-17437 - Show a notice when a request is blocked
-            proxyLeakGuardHelper.onBlockedRequest = { _, _ in }
+            proxyLeakGuardHelper.onBlockedRequest = { [weak self, weak tab] _, _ in
+                guard let self,
+                      let tab,
+                      tab === self.tabManager.selectedTab,
+                      ProxyLeakGuardNoticeTracker.shared.shouldShowNotice()
+                else { return }
+                self.showProxyLeakGuardToast(isPrivate: tab.isPrivate)
+            }
             tab.addContentScriptToPage(proxyLeakGuardHelper, name: ProxyLeakGuardHelper.name())
         }
 
@@ -4977,6 +4983,18 @@ extension BrowserViewController: TabManagerDelegate {
             }
         }
         updateTabCountUsingTabManager(tabManager)
+    }
+
+    private func showProxyLeakGuardToast(isPrivate: Bool) {
+        let viewModel = ButtonToastViewModel(labelText: .VPN.ProxyLeakGuard.BlockedContentToast,
+                                             buttonText: .VPN.ProxyLeakGuard.LearnMoreButton)
+        let toast = ButtonToast(viewModel: viewModel,
+                                theme: currentTheme(),
+                                completion: { [weak self] buttonPressed in
+            guard buttonPressed else { return }
+            self?.openURLInNewTab(ProxyLeakGuardHelper.learnMoreURL, isPrivate: isPrivate)
+        })
+        show(toast: toast)
     }
 
     func showPlainToast(message: String) {
