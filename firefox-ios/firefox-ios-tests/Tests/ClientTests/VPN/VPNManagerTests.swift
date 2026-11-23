@@ -9,7 +9,7 @@ import VPNKit
 import XCTest
 @testable import Client
 
-@available(iOS 27.2, *)
+@available(iOS 17.0, *)
 @MainActor
 final class VPNManagerTests: XCTestCase {
     private var mockLogger: MockLogger!
@@ -449,7 +449,7 @@ final class VPNManagerTests: XCTestCase {
     }
 }
 
-@available(iOS 27.2, *)
+@available(iOS 17.0, *)
 private final class MockProxyConfigurator: ProxyConfigurator {
     var params: [(configs: [ProxyConfiguration], forcingSessionReset: Bool)] = []
     var onApply: (() -> Void)?
