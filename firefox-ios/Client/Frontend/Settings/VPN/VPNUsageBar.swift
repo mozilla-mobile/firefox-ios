@@ -6,7 +6,7 @@ import SwiftUI
 import Common
 import Shared
 
-@available(iOS 27.2, *)
+@available(iOS 17.0, *)
 struct VPNUsageBar: View {
     let viewModel: VPNSettingsViewModel
     let theme: Theme

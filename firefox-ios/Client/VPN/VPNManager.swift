@@ -59,20 +59,20 @@ enum VPNError: Error {
     case tokenProviderUnavailable
 }
 
-@available(iOS 27.2, *)
+@available(iOS 17.0, *)
 @MainActor
 protocol ProxyConfigurator {
     func applyProxyConfigurations(_ configs: [ProxyConfiguration], forcingSessionReset: Bool)
 }
 
-@available(iOS 27.2, *)
+@available(iOS 17.0, *)
 struct DefaultProxyConfigurator: ProxyConfigurator {
     func applyProxyConfigurations(_ configs: [ProxyConfiguration], forcingSessionReset: Bool) {
         DefaultWKEngineConfigurationProvider.applyProxyConfigurations(configs, forcingSessionReset: forcingSessionReset)
     }
 }
 
-@available(iOS 27.2, *)
+@available(iOS 17.0, *)
 @Observable
 final class VPNManager: VPNRunnable {
     private let logger: Logger

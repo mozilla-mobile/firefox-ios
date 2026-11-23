@@ -6,7 +6,7 @@ import SwiftUI
 import Common
 import Shared
 
-@available(iOS 27.2, *)
+@available(iOS 17.0, *)
 struct VPNLocationsRow: View {
     let windowUUID: WindowUUID
     let themeManager: ThemeManager
