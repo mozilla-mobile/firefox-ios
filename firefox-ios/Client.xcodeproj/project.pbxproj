@@ -845,7 +845,6 @@
 		61DD72D52F5937A6002BFEA6 /* AIControlsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DD72D42F5937A0002BFEA6 /* AIControlsSettingsView.swift */; };
 		61E637852D03615D00E95B63 /* LabelButtonHeaderViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E637842D03615D00E95B63 /* LabelButtonHeaderViewTests.swift */; };
 		61E637872D03615D00E95B63 /* StoryCategoryPickerViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E637862D03615D00E95B63 /* StoryCategoryPickerViewTests.swift */; };
-		61F1BFB730B092A600700569 /* VPNProxySessionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F1BFB630B0929B00700569 /* VPNProxySessionProvider.swift */; };
 		61F7A4332D136C3A00F7317B /* RouteBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F7A4322D136C3A00F7317B /* RouteBuilderTests.swift */; };
 		630EBE4D301109A30046E9BC /* GradientProgressBarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630EBE4C301109A10046E9BC /* GradientProgressBarTests.swift */; };
 		630FE1352C7FB42500D9D6B2 /* NativeErrorPageViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630FE1322C7FB42500D9D6B2 /* NativeErrorPageViewControllerTests.swift */; };
@@ -9984,7 +9983,6 @@
 		61DD72D42F5937A0002BFEA6 /* AIControlsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIControlsSettingsView.swift; sourceTree = "<group>"; };
 		61E637842D03615D00E95B63 /* LabelButtonHeaderViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelButtonHeaderViewTests.swift; sourceTree = "<group>"; };
 		61E637862D03615D00E95B63 /* StoryCategoryPickerViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCategoryPickerViewTests.swift; sourceTree = "<group>"; };
-		61F1BFB630B0929B00700569 /* VPNProxySessionProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNProxySessionProvider.swift; sourceTree = "<group>"; };
 		61F7A4322D136C3A00F7317B /* RouteBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteBuilderTests.swift; sourceTree = "<group>"; };
 		623648C2A7D09ECA31155208 /* ka */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ka; path = ka.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		625D4575B4794C49451D6990 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
@@ -14646,7 +14644,6 @@
 		6114442B306F51CB000A7343 /* VPN */ = {
 			isa = PBXGroup;
 			children = (
-				61F1BFB630B0929B00700569 /* VPNProxySessionProvider.swift */,
 				61144430306F5571000A7343 /* VPNServerManager.swift */,
 				A1F0C0DE3100000000000003 /* VPNMiddleware.swift */,
 				A1F0C0DE3100000000000001 /* VPNAction.swift */,
@@ -21172,7 +21169,6 @@
 				39A359E41BFCCE94006B9E87 /* UserActivityHandler.swift in Sources */,
 				4331A9BD271D267E005E8080 /* ContextualHintViewProvider.swift in Sources */,
 				392D80542F901D2600B10BDC /* UserFeaturePreferenceManager.swift in Sources */,
-				61F1BFB730B092A600700569 /* VPNProxySessionProvider.swift in Sources */,
 				8A093D7F2A4B3E7D0099ABA5 /* GeneralSettingsDelegate.swift in Sources */,
 				0B0ED7292D5B46B6001515CB /* TemporaryDocumentLoadingView.swift in Sources */,
 				D88FDAAF1F4E2BA000FD9709 /* PhotonActionSheetAnimator.swift in Sources */,
