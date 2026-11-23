@@ -16,7 +16,7 @@ protocol VPNOnboardingCoordinatorDelegate: AnyObject {
 @MainActor
 final class VPNOnboardingCoordinator: BaseCoordinator {
     private enum UX {
-        static let sheetHeightRatio: CGFloat = 2.0 / 3.0
+        static let sheetHeightRatio: CGFloat = 0.75
         static let dataLimitInGB: Double = 5
     }
 
@@ -29,6 +29,7 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
     private let telemetry: VPNClientTelemetry
     private let themeManager: ThemeManager
     private let featureFlagsProvider: FeatureFlagProviding
+    private let traitCollectionProvider: () -> UITraitCollection
     private let onOpenURL: (URL) -> Void
 
     init(
@@ -39,6 +40,7 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
         telemetry: VPNClientTelemetry = DefaultVPNTelemetry(),
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         featureFlagsProvider: FeatureFlagProviding = AppContainer.shared.resolve(),
+        traitCollectionProvider: @escaping () -> UITraitCollection = { .current },
         onOpenURL: @escaping (URL) -> Void
     ) {
         self.windowUUID = windowUUID
@@ -47,6 +49,7 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
         self.telemetry = telemetry
         self.themeManager = themeManager
         self.featureFlagsProvider = featureFlagsProvider
+        self.traitCollectionProvider = traitCollectionProvider
         self.onOpenURL = onOpenURL
         super.init(router: router)
     }
@@ -75,10 +78,13 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
                 self?.didTapClose()
             }
         )
-        controller.modalPresentationStyle = .pageSheet
-        controller.sheetPresentationController?.detents = [
-            .custom { context in context.maximumDetentValue * UX.sheetHeightRatio }
-        ]
+        controller.modalPresentationStyle = .formSheet
+        if traitCollectionProvider().horizontalSizeClass != .regular {
+            controller.sheetPresentationController?.detents = [
+                .custom { context in context.maximumDetentValue * UX.sheetHeightRatio },
+                .large()
+            ]
+        }
 
         // Only runs on swipe down, dismissing through the router drops the completion.
         router.present(controller, animated: true) { [weak self] in
@@ -114,7 +120,6 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
 
     private func makeViewModel() -> OnboardingSheetViewModel {
         let appName = AppName.shortName.rawValue
-        let dataLimit = VPNHelpers.formatted(gigabytes: UX.dataLimitInGB)
         return OnboardingSheetViewModel(
             heroImageName: StandardImageIdentifiers.Large.globe,
             heroGradient: .accent,
@@ -128,7 +133,7 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
                 ),
                 OnboardingSheetRow(
                     imageName: StandardImageIdentifiers.ExtraLarge.checkmarkBadge,
-                    title: String(format: .VPN.Onboarding.LimitSubheading, dataLimit),
+                    title: String(format: .VPN.Onboarding.LimitSubheading, UX.dataLimitInGB),
                     subtitle: .VPN.Onboarding.LimitBody
                 )
             ],

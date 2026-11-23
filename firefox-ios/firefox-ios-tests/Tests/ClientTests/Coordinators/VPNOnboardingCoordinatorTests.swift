@@ -22,6 +22,7 @@ final class VPNOnboardingCoordinatorTests: XCTestCase {
     private var delegate: MockVPNOnboardingCoordinatorDelegate!
     private var tabManager: MockTabManager!
     private var openedURLs: [URL] = []
+    private var horizontalSizeClass: UIUserInterfaceSizeClass = .compact
 
     override func setUp() async throws {
         try await super.setUp()
@@ -47,6 +48,7 @@ final class VPNOnboardingCoordinatorTests: XCTestCase {
         delegate = nil
         tabManager = nil
         openedURLs = []
+        horizontalSizeClass = .compact
         DependencyHelperMock().reset()
         try await super.tearDown()
     }
@@ -103,17 +105,29 @@ final class VPNOnboardingCoordinatorTests: XCTestCase {
 
     // MARK: - start
 
-    func test_start_presentsPageSheetWithASingleCustomDetent() throws {
+    func test_start_whenHorizontalSizeClassIsCompact_presentsFormSheetWithCustomAndLargeDetents() throws {
+        horizontalSizeClass = .compact
         let subject = createSubject()
 
         subject.start()
 
         XCTAssertEqual(router.presentCalled, 1)
-        let sheet = try XCTUnwrap(router.presentedViewController as? OnboardingSheetViewController)
-        XCTAssertEqual(sheet.modalPresentationStyle, .pageSheet)
+        let sheet = try presentedSheet()
+        XCTAssertEqual(sheet.modalPresentationStyle, .formSheet)
         let detents = try XCTUnwrap(sheet.sheetPresentationController?.detents.map(\.identifier))
-        XCTAssertEqual(detents.count, 1)
-        XCTAssertFalse([.medium, .large].contains(detents.first))
+        XCTAssertEqual(detents.count, 2)
+        XCTAssertEqual(detents.last, .large)
+    }
+
+    func test_start_whenHorizontalSizeClassIsRegular_keepsDefaultDetents() throws {
+        horizontalSizeClass = .regular
+        let subject = createSubject()
+
+        subject.start()
+
+        let sheet = try presentedSheet()
+        let detents = try XCTUnwrap(sheet.sheetPresentationController?.detents.map(\.identifier))
+        XCTAssertEqual(detents, [.large])
     }
 
     func test_start_setsShownPref() {
@@ -197,6 +211,9 @@ final class VPNOnboardingCoordinatorTests: XCTestCase {
             prefs: prefs,
             telemetry: telemetry,
             featureFlagsProvider: featureFlagsProvider,
+            traitCollectionProvider: { [horizontalSizeClass] in
+                UITraitCollection(horizontalSizeClass: horizontalSizeClass)
+            },
             onOpenURL: { [weak self] url in
                 self?.openedURLs.append(url)
             }

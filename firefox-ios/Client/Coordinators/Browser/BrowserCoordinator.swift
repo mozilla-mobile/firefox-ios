@@ -234,6 +234,7 @@ final class BrowserCoordinator: BaseCoordinator,
             windowUUID: windowUUID,
             tabManager: tabManager,
             prefs: profile.prefs,
+            traitCollectionProvider: { [weak self] in self?.browserViewController.traitCollection ?? .current },
             onOpenURL: { [weak self] url in
                 self?.navigateFromHomePanel(to: url, visitType: .link, isGoogleTopSite: false)
             }
