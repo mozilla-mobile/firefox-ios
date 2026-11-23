@@ -13,6 +13,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
     var mockThemeManager: MockThemeManager?
     var mockStore: MockStoreForMiddleware<AppState>!
     var mockThrottler: MockThrottler!
+    var mockOverlayManager: MockOverlayModeManager!
     var homepageTabStateStore: HomepageTabStateStore!
 
     override func setUp() async throws {
@@ -24,6 +25,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
     override func tearDown() async throws {
         homepageTabStateStore = nil
+        mockOverlayManager = nil
         mockThrottler = nil
         mockNotificationCenter = nil
         mockThemeManager = nil
@@ -156,6 +158,26 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
             }) as? ToolbarModernAction
         )
         XCTAssertEqual(actionCalled.description, ToolbarModernAction.cancelEdit(url: nil).description)
+    }
+
+    func test_dismissKeyboard_whenInOverlayMode_cancelsEditing() {
+        let homepageVC = createSubject()
+        mockOverlayManager.stubbedInOverlayMode = true
+
+        homepageVC.dismissKeyboard()
+
+        XCTAssertEqual(mockOverlayManager.cancelEditingCallCount, 1)
+    }
+
+    func test_dismissKeyboard_whenNotInOverlayMode_doesNothing() {
+        let homepageVC = createSubject()
+        mockOverlayManager.stubbedInOverlayMode = false
+        mockStore.dispatchedModernActions.removeAll()
+
+        homepageVC.dismissKeyboard()
+
+        XCTAssertEqual(mockOverlayManager.cancelEditingCallCount, 0)
+        XCTAssertTrue(mockStore.dispatchedModernActions.isEmpty)
     }
 
     func test_traitCollectionDidChange_triggersHomepageAction() throws {
@@ -616,8 +638,9 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
     ) -> HomepageViewController {
         let notificationCenter = MockNotificationCenter()
         let themeManager = MockThemeManager()
-        let mockOverlayManager = MockOverlayModeManager()
+        let overlayManager = MockOverlayModeManager()
         let throttler = MockThrottler()
+        mockOverlayManager = overlayManager
         mockNotificationCenter = notificationCenter
         mockThemeManager = themeManager
         mockThrottler = throttler
@@ -626,7 +649,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
             themeManager: themeManager,
             tabManager: tabManager,
             homepageTabStateStore: homepageTabStateStore,
-            overlayManager: mockOverlayManager,
+            overlayManager: overlayManager,
             statusBarScrollDelegate: statusBarScrollDelegate,
             toastContainer: UIView(),
             notificationCenter: notificationCenter,
