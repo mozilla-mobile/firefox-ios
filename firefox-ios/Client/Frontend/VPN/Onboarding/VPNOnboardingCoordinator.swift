@@ -10,9 +10,10 @@ import VPNKit
 
 @MainActor
 protocol VPNOnboardingCoordinatorDelegate: AnyObject {
-    func vpnOnboardingDidTapCTA(from coordinator: VPNOnboardingCoordinator)
+    func vpnOnboardingDidTapCTA(from coordinator: Coordinator)
 }
 
+@available(iOS 27.2, *)
 @MainActor
 final class VPNOnboardingCoordinator: BaseCoordinator {
     private enum UX {
@@ -57,8 +58,7 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
 
     /// Whether the user still has to see the onboarding, wherever they are in the app.
     var isOnboardingPending: Bool {
-        guard #available(iOS 27.2, *),
-              featureFlagsProvider.isEnabled(.vpnFeature),
+        guard featureFlagsProvider.isEnabled(.vpnFeature),
               featureFlagsProvider.isEnabled(.vpnOnboardingSheet)
         else { return false }
         return prefs.boolForKey(PrefsKeys.VPNSettings.onboardingSheetShown) != true
@@ -70,7 +70,6 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
     }
 
     func start() {
-        guard #available(iOS 27.2, *) else { return }
         let controller = OnboardingSheetViewController(
             windowUUID: windowUUID,
             themeManager: themeManager,
@@ -111,7 +110,7 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
 
     private func didTapLearnMore() {
         telemetry.recordOnboardingLearnMoreLinkTapped()
-        if #available(iOS 27.2, *), let url = VPNSettingsViewController.learnMoreURL {
+        if let url = VPNSettingsViewController.learnMoreURL {
             onOpenURL(url)
         }
         router.dismiss(animated: true)

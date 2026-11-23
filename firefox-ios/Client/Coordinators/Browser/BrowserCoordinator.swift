@@ -77,8 +77,9 @@ final class BrowserCoordinator: BaseCoordinator,
     private let quickAnswersPillTelemetry: QuickAnswersReturnPillTelemetry
     /// Whether a child owns a sheet that is on screen or about to be, so no other sheet is shown over it.
     private var isShowingBlockingSheet: Bool {
-        return childCoordinators.contains {
-            $0 is TermsOfUseCoordinator || $0 is WallpaperEngagementCoordinator || $0 is VPNOnboardingCoordinator
+        return childCoordinators.contains { child in
+            if #available(iOS 27.2, *), child is VPNOnboardingCoordinator { return true }
+            return child is TermsOfUseCoordinator || child is WallpaperEngagementCoordinator
         }
     }
 
@@ -227,11 +228,13 @@ final class BrowserCoordinator: BaseCoordinator,
         guard !isShowingBlockingSheet,
               !router.isPresenting else { return }
 
+        guard #available(iOS 27.2, *) else { return }
         let coordinator = makeVPNOnboardingCoordinator()
         guard coordinator.shouldShow() else { return }
         startVPNOnboarding(coordinator)
     }
 
+    @available(iOS 27.2, *)
     private func makeVPNOnboardingCoordinator() -> VPNOnboardingCoordinator {
         return VPNOnboardingCoordinator(
             router: router,
@@ -245,6 +248,7 @@ final class BrowserCoordinator: BaseCoordinator,
         )
     }
 
+    @available(iOS 27.2, *)
     private func startVPNOnboarding(_ coordinator: VPNOnboardingCoordinator) {
         coordinator.parentCoordinator = self
         coordinator.delegate = self
@@ -812,6 +816,7 @@ final class BrowserCoordinator: BaseCoordinator,
 
     /// Shows the VPN onboarding instead when the user hasn't seen it yet, its CTA then leads to the settings.
     func presentVPNSettings() {
+        guard #available(iOS 27.2, *) else { return }
         let onboardingCoordinator = makeVPNOnboardingCoordinator()
         guard !onboardingCoordinator.isOnboardingPending else {
             startVPNOnboarding(onboardingCoordinator)
@@ -820,8 +825,8 @@ final class BrowserCoordinator: BaseCoordinator,
         presentVPNSettingsSheet()
     }
 
+    @available(iOS 27.2, *)
     private func presentVPNSettingsSheet() {
-        guard #available(iOS 27.2, *) else { return }
         let vpnSettings = VPNSettingsViewController(windowUUID: windowUUID)
         let navigationController = DismissableNavigationViewController(rootViewController: vpnSettings)
         setupSettingsSheetDetents(for: navigationController)
@@ -1807,8 +1812,9 @@ final class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - VPNOnboardingCoordinatorDelegate
 
-    func vpnOnboardingDidTapCTA(from coordinator: VPNOnboardingCoordinator) {
+    func vpnOnboardingDidTapCTA(from coordinator: Coordinator) {
         remove(child: coordinator)
+        guard #available(iOS 27.2, *) else { return }
         presentVPNSettingsSheet()
     }
 

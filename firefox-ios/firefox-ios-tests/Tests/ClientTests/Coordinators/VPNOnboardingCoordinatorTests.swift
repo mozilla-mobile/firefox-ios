@@ -249,7 +249,7 @@ final class VPNOnboardingCoordinatorTests: XCTestCase {
 private final class MockVPNOnboardingCoordinatorDelegate: VPNOnboardingCoordinatorDelegate {
     var didTapCTACalled = 0
 
-    func vpnOnboardingDidTapCTA(from coordinator: VPNOnboardingCoordinator) {
+    func vpnOnboardingDidTapCTA(from coordinator: Coordinator) {
         didTapCTACalled += 1
     }
 }
