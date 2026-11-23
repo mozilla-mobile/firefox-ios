@@ -70,8 +70,12 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
         return vpnManager.dataLimitInGB
     }
 
+    /// False until the VPN usage has been fetched, so the sheet shown on websites never uses the fallback data limit.
     func shouldShow() -> Bool {
-        guard let selectedTab = tabManager.selectedTab, !selectedTab.isFxHomeTab else { return false }
+        guard let selectedTab = tabManager.selectedTab,
+              !selectedTab.isFxHomeTab,
+              vpnManager.dataLimitInGB > 0
+        else { return false }
         return isOnboardingPending
     }
 

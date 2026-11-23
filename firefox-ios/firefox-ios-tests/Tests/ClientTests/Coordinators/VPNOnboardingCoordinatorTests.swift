@@ -34,6 +34,7 @@ final class VPNOnboardingCoordinatorTests: XCTestCase {
         featureFlagsProvider.enabledFlags = [.vpnFeature, .vpnOnboardingSheet]
         telemetry = MockVPNClientTelemetry()
         vpnManager = MockVPNManager()
+        vpnManager.dataLimitInGB = 5
         parentCoordinator = MockParentCoordinator()
         delegate = MockVPNOnboardingCoordinatorDelegate()
         tabManager = MockTabManager()
@@ -100,6 +101,13 @@ final class VPNOnboardingCoordinatorTests: XCTestCase {
 
     func test_shouldShow_whenSheetAlreadyShown_returnsFalse() {
         prefs.setBool(true, forKey: PrefsKeys.VPNSettings.onboardingSheetShown)
+        let subject = createSubject()
+
+        XCTAssertFalse(subject.shouldShow())
+    }
+
+    func test_shouldShow_whenDataLimitIsZero_returnsFalse() {
+        vpnManager.dataLimitInGB = 0
         let subject = createSubject()
 
         XCTAssertFalse(subject.shouldShow())
