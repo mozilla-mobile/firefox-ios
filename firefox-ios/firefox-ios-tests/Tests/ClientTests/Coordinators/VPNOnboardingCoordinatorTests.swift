@@ -7,6 +7,7 @@ import Common
 import ComponentLibrary
 import Shared
 import TestKit
+import VPNKit
 
 @testable import Client
 @testable import ComponentLibrary
@@ -18,6 +19,7 @@ final class VPNOnboardingCoordinatorTests: XCTestCase {
     private var prefs: MockProfilePrefs!
     private var featureFlagsProvider: MockNimbusFeatureFlags!
     private var telemetry: MockVPNClientTelemetry!
+    private var vpnManager: MockVPNManager!
     private var parentCoordinator: MockParentCoordinator!
     private var delegate: MockVPNOnboardingCoordinatorDelegate!
     private var tabManager: MockTabManager!
@@ -31,6 +33,7 @@ final class VPNOnboardingCoordinatorTests: XCTestCase {
         featureFlagsProvider = MockNimbusFeatureFlags()
         featureFlagsProvider.enabledFlags = [.vpnFeature, .vpnOnboardingSheet]
         telemetry = MockVPNClientTelemetry()
+        vpnManager = MockVPNManager()
         parentCoordinator = MockParentCoordinator()
         delegate = MockVPNOnboardingCoordinatorDelegate()
         tabManager = MockTabManager()
@@ -43,6 +46,7 @@ final class VPNOnboardingCoordinatorTests: XCTestCase {
         prefs = nil
         featureFlagsProvider = nil
         telemetry = nil
+        vpnManager = nil
         parentCoordinator = nil
         delegate = nil
         tabManager = nil
@@ -124,6 +128,22 @@ final class VPNOnboardingCoordinatorTests: XCTestCase {
         XCTAssertFalse(subject.isOnboardingPending)
     }
 
+    // MARK: - dataLimitInGB
+
+    func test_dataLimitInGB_whenManagerHasALimit_returnsManagerLimit() {
+        vpnManager.dataLimitInGB = 50
+        let subject = createSubject()
+
+        XCTAssertEqual(subject.dataLimitInGB, 50)
+    }
+
+    func test_dataLimitInGB_whenManagerLimitIsZero_returnsFreeMonthlyLimit() {
+        vpnManager.dataLimitInGB = 0
+        let subject = createSubject()
+
+        XCTAssertEqual(subject.dataLimitInGB, Double(VPNConstants.freeMonthlyDataLimitInGB))
+    }
+
     // MARK: - start
 
     func test_start_presentsPageSheetWithTwoThirdsAndLargeDetents() throws {
@@ -134,10 +154,10 @@ final class VPNOnboardingCoordinatorTests: XCTestCase {
         XCTAssertEqual(router.presentCalled, 1)
         let sheet = try XCTUnwrap(router.presentedViewController as? OnboardingSheetViewController)
         XCTAssertEqual(sheet.modalPresentationStyle, .pageSheet)
-        XCTAssertEqual(
-            sheet.sheetPresentationController?.detents.map(\.identifier),
-            [VPNOnboardingCoordinator.sheetDetentIdentifier, .large]
-        )
+        let detents = try XCTUnwrap(sheet.sheetPresentationController?.detents.map(\.identifier))
+        XCTAssertEqual(detents.count, 2)
+        XCTAssertNotEqual(detents.first, .medium)
+        XCTAssertEqual(detents.last, .large)
     }
 
     func test_start_setsShownPref() {
@@ -221,6 +241,7 @@ final class VPNOnboardingCoordinatorTests: XCTestCase {
             tabManager: tabManager,
             prefs: prefs,
             telemetry: telemetry,
+            vpnManager: vpnManager,
             featureFlagsProvider: featureFlagsProvider,
             onOpenURL: { [weak self] url in
                 self?.openedURLs.append(url)

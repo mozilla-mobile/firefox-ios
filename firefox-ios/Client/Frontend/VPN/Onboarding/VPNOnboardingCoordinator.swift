@@ -19,9 +19,6 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
     private enum UX {
         static let sheetHeightRatio: CGFloat = 2.0 / 3.0
     }
-
-    static let sheetDetentIdentifier = UISheetPresentationController.Detent.Identifier("vpnOnboardingTwoThirds")
-
     weak var parentCoordinator: ParentCoordinatorDelegate?
     weak var delegate: VPNOnboardingCoordinatorDelegate?
 
@@ -30,6 +27,7 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
     private let tabManager: TabManager
     private let prefs: Prefs
     private let telemetry: VPNClientTelemetry
+    private let vpnManager: VPNRunnable
     private let themeManager: ThemeManager
     private let featureFlagsProvider: FeatureFlagProviding
     private let onOpenURL: (URL) -> Void
@@ -41,6 +39,7 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
         tabManager: TabManager,
         prefs: Prefs,
         telemetry: VPNClientTelemetry = DefaultVPNTelemetry(),
+        vpnManager: VPNRunnable = AppContainer.shared.resolve(),
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         featureFlagsProvider: FeatureFlagProviding = AppContainer.shared.resolve(),
         onOpenURL: @escaping (URL) -> Void
@@ -50,6 +49,7 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
         self.tabManager = tabManager
         self.prefs = prefs
         self.telemetry = telemetry
+        self.vpnManager = vpnManager
         self.themeManager = themeManager
         self.featureFlagsProvider = featureFlagsProvider
         self.onOpenURL = onOpenURL
@@ -62,6 +62,12 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
               featureFlagsProvider.isEnabled(.vpnOnboardingSheet)
         else { return false }
         return prefs.boolForKey(PrefsKeys.VPNSettings.onboardingSheetShown) != true
+    }
+
+    /// The account's monthly data limit, or the free plan's one while no usage has been fetched yet.
+    var dataLimitInGB: Double {
+        guard vpnManager.dataLimitInGB > 0 else { return Double(VPNConstants.freeMonthlyDataLimitInGB) }
+        return vpnManager.dataLimitInGB
     }
 
     func shouldShow() -> Bool {
@@ -87,7 +93,7 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
         controller.modalPresentationStyle = .pageSheet
         let sheetHeight = parentHeight * UX.sheetHeightRatio
         controller.sheetPresentationController?.detents = [
-            .custom(identifier: Self.sheetDetentIdentifier) { _ in sheetHeight },
+            .custom { _ in sheetHeight },
             .large()
         ]
 
@@ -125,7 +131,7 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
 
     private func makeViewModel() -> OnboardingSheetViewModel {
         let appName = AppName.shortName.rawValue
-        let dataLimit = VPNHelpers.formatted(gigabytes: Double(VPNConstants.freeMonthlyDataLimitInGB))
+        let dataLimit = VPNHelpers.formatted(gigabytes: dataLimitInGB)
         return OnboardingSheetViewModel(
             heroImageName: StandardImageIdentifiers.Large.globe,
             heroGradient: .accent,
