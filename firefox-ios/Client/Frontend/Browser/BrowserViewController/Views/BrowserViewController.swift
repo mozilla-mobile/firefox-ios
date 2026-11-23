@@ -4489,6 +4489,13 @@ extension BrowserViewController: LegacyTabDelegate {
         let printHelper = PrintHelper(tab: tab)
         tab.addContentScriptToPage(printHelper, name: PrintHelper.name())
 
+        if DefaultWKEngineConfigurationProvider.isProxyEnabled {
+            let proxyLeakGuardHelper = ProxyLeakGuardHelper()
+            // TODO: FXIOS-17437 - Show a notice when a request is blocked
+            proxyLeakGuardHelper.onBlockedRequest = { _, _ in }
+            tab.addContentScriptToPage(proxyLeakGuardHelper, name: ProxyLeakGuardHelper.name())
+        }
+
         let nightModeHelper = NightModeHelper()
         tab.addContentScriptToCustomWorld(nightModeHelper, name: NightModeHelper.name())
 
