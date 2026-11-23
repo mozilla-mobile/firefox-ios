@@ -120,6 +120,7 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
 
     private func makeViewModel() -> OnboardingSheetViewModel {
         let appName = AppName.shortName.rawValue
+        let dataLimit = VPNHelpers.formatted(gigabytes: UX.dataLimitInGB)
         return OnboardingSheetViewModel(
             heroImageName: StandardImageIdentifiers.Large.globe,
             heroGradient: .accent,
@@ -133,7 +134,7 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
                 ),
                 OnboardingSheetRow(
                     imageName: StandardImageIdentifiers.ExtraLarge.checkmarkBadge,
-                    title: String(format: .VPN.Onboarding.LimitSubheading, UX.dataLimitInGB),
+                    title: String(format: .VPN.Onboarding.LimitSubheading, dataLimit),
                     subtitle: .VPN.Onboarding.LimitBody
                 )
             ],
