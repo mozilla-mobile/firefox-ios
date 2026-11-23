@@ -127,8 +127,8 @@ final class VPNGuardian: VPNGuardianProviding {
             prefs.removeObjectForKey(key)
             return nil
         }
-        let dataLimitInBytes = VPNConstants.freeMonthlyDataLimitInGB * 1024 * 1024 * 1024
-        return VPNProxyUsage(max: dataLimitInBytes, remaining: 0, reset: reset, unlimited: false)
+        let fiveGiB: Int64 = 5 * 1024 * 1024 * 1024
+        return VPNProxyUsage(max: fiveGiB, remaining: 0, reset: reset, unlimited: false)
     }
     #endif
 
