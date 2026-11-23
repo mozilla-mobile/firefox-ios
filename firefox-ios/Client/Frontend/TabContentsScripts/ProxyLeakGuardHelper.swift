@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Shared
 import WebKit
 
 /// Receives reports from the proxy leak guard user script when it blocks an API that would
@@ -22,6 +23,15 @@ final class ProxyLeakGuardHelper: TabContentScript {
     }
 
     nonisolated static let handlerName = "proxyLeakGuard"
+
+    /// SUMO VPN article, scrolled to the section explaining why these requests are blocked.
+    static var learnMoreURL: URL? {
+        guard let url = SupportUtils.URLForTopic("mobile-ios-vpn"),
+              var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        else { return nil }
+        components.fragment = "note_about_leaks"
+        return components.url
+    }
 
     private var reported = Set<String>()
 
