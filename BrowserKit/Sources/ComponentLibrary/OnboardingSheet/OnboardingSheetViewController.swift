@@ -10,9 +10,9 @@ import UIKit
 /// the presenter owns the presentation style and the dismissal.
 public final class OnboardingSheetViewController: UIViewController {
     private let hostingController: UIHostingController<OnboardingSheetView>
-    let onCTA: () -> Void
-    let onLearnMore: () -> Void
-    let onDismiss: () -> Void
+    private let onCTA: () -> Void
+    private let onLearnMore: () -> Void
+    private let onDismiss: () -> Void
 
     public init(
         windowUUID: WindowUUID,
