@@ -270,7 +270,7 @@ final class BrowserCoordinatorTests: XCTestCase,
     }
 
     func testShowWebview_whenVPNOnboardingIsEligible_addsVPNOnboardingChild() throws {
-        guard #available(iOS 17.0, *) else { throw XCTSkip("The VPN onboarding sheet requires iOS 17") }
+        guard #available(iOS 27.2, *) else { throw XCTSkip("The VPN onboarding sheet requires iOS 27.2") }
         featureFlags.enabledFlags = [.vpnFeature, .vpnOnboardingSheet]
         tabManager.selectedTab = MockTab(profile: profile, windowUUID: windowUUID, isHomePage: false)
         let subject = createSubject()
@@ -1658,7 +1658,7 @@ final class BrowserCoordinatorTests: XCTestCase,
     // MARK: - presentVPNSettings
 
     func testPresentVPNSettings_whenOnboardingIsPending_addsVPNOnboardingChildInsteadOfSettings() throws {
-        guard #available(iOS 17.0, *) else { throw XCTSkip("The VPN onboarding sheet requires iOS 17") }
+        guard #available(iOS 27.2, *) else { throw XCTSkip("The VPN onboarding sheet requires iOS 27.2") }
         featureFlags.enabledFlags = [.vpnFeature, .vpnOnboardingSheet]
         let subject = createSubject()
 
@@ -1685,7 +1685,7 @@ final class BrowserCoordinatorTests: XCTestCase,
     // MARK: - VPNOnboardingCoordinatorDelegate
 
     func testVPNOnboardingDidTapCTA_removesChildAndPresentsVPNSettings() throws {
-        guard #available(iOS 17.0, *) else { throw XCTSkip("VPN settings require iOS 17") }
+        guard #available(iOS 27.2, *) else { throw XCTSkip("VPN settings require iOS 27.2") }
         let subject = createSubject()
         let vpnOnboardingCoordinator = VPNOnboardingCoordinator(
             router: mockRouter,

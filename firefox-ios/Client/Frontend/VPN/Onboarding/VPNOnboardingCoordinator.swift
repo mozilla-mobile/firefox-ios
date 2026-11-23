@@ -48,7 +48,7 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
 
     /// Whether the user still has to see the onboarding, wherever they are in the app.
     var isOnboardingPending: Bool {
-        guard #available(iOS 17.0, *),
+        guard #available(iOS 27.2, *),
               featureFlagsProvider.isEnabled(.vpnFeature),
               featureFlagsProvider.isEnabled(.vpnOnboardingSheet)
         else { return false }
@@ -98,7 +98,7 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
 
     private func didTapLearnMore() {
         telemetry.recordOnboardingLearnMoreLinkTapped()
-        if #available(iOS 17.0, *), let url = VPNSettingsViewController.learnMoreURL {
+        if #available(iOS 27.2, *), let url = VPNSettingsViewController.learnMoreURL {
             onOpenURL(url)
         }
         router.dismiss(animated: true)
