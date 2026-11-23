@@ -3321,6 +3321,29 @@ extension String {
 // MARK: - VPN
 extension String {
     public enum VPN {
+        public enum ProxyLeakGuard {
+            public static let BlockedSignInRequestToast = MZLocalizedString(
+                key: "VPN.ProxyLeakGuard.BlockedSignInRequestToast.v162",
+                tableName: "VPN",
+                value: "Sign-in blocked to protect your IP address. Turn off VPN to use it.",
+                comment: "Short message shown at the bottom of the screen while the VPN is on, when a website tries to start a passkey sign-in that would connect to another website directly, without the VPN. Firefox blocks it because it could reveal the user’s real IP address. Turning off the VPN lets the sign-in work."
+            )
+
+            public static let BlockedConnectionToast = MZLocalizedString(
+                key: "VPN.ProxyLeakGuard.BlockedConnectionToast.v162",
+                tableName: "VPN",
+                value: "Calls and live features blocked to protect your IP address. Turn off VPN to use them.",
+                comment: "Short message shown at the bottom of the screen while the VPN is on, when a website tries to use a feature that connects directly without the VPN, such as video or voice calls, live streaming, or multiplayer games. Firefox blocks these features because they could reveal the user’s real IP address. Turning off the VPN lets them work."
+            )
+
+            public static let LearnMoreButton = MZLocalizedString(
+                key: "VPN.ProxyLeakGuard.LearnMoreButton.v162",
+                tableName: "VPN",
+                value: "Learn More",
+                comment: "Button on the short message shown when Firefox blocks a sign-in request that could reveal the user’s real IP address while the VPN is on. Tapping it opens a support article explaining why the request was blocked."
+            )
+        }
+
         public enum Settings {
             public static let Title = MZLocalizedString(
                 key: "VPN.Settings.Title.v160",
