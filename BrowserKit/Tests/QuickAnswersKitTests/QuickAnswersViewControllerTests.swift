@@ -5,6 +5,7 @@
 @testable import QuickAnswersKit
 import XCTest
 import Common
+import ComponentLibrary
 import Shared
 import TestKit
 
@@ -98,6 +99,16 @@ final class QuickAnswersViewControllerTests: XCTestCase {
         let dismissal = transitionDelegate.animationController?(forDismissed: subject)
 
         XCTAssertTrue(dismissal is ReturnToBrowserTransitionAnimator)
+    }
+
+    // MARK: - makeOptInController
+    func test_makeOptInController_isPresentedAsNonDismissableFormSheet() {
+        let subject = createSubject()
+
+        let controller = subject.makeOptInController()
+
+        XCTAssertEqual(controller.modalPresentationStyle, .formSheet)
+        XCTAssertTrue(controller.isModalInPresentation)
     }
 
     // MARK: - Helper
