@@ -32,6 +32,7 @@ public enum StandardImageIdentifiers {
         public static let arrowClockwise = "arrowClockwiseMedium"
         public static let bookmarkBadgeFillViolet50 = "bookmarkBadgeFillMediumViolet50"
         public static let cross = "crossMedium"
+        public static let globe = "globeMedium"
         public static let lightning = "lightningMedium"
         public static let logoGoogleLens = "logoGoogleLensMedium"
         public static let privateModeCircleFillPurple = "privateModeCircleFillMediumPurple"
@@ -139,10 +140,13 @@ public enum StandardImageIdentifiers {
 
     // Icon size 30x30
     public enum ExtraLarge {
+        public static let checkmarkBadge = "checkmarkBadgeExtraLarge"
         public static let crossCircleFill = "crossCircleFillExtraLarge"
         public static let database = "databaseExtraLarge"
+        public static let globeMap = "globeMapExtraLarge"
         public static let personSpeaking = "personSpeakingExtraLarge"
         public static let saveArrow = "saveArrowExtraLarge"
+        public static let wifi = "wifiExtraLarge"
     }
 
     // Icon size 72x72
