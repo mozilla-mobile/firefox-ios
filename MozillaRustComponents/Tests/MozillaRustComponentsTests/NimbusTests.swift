@@ -579,12 +579,12 @@ class NimbusTests: XCTestCase {
         let databasePath = createDatabasePath()
         _ = try Nimbus.create(server: nil, appSettings: appSettings, dbPath: databasePath) as! Nimbus
 
-        let calculatedAttributes = try getCalculatedAttributes(installationDate: Int64(Date().timeIntervalSince1970 * 1000) - (86_400_000 * 5), dbPath: databasePath, locale: getLocaleTag())
+        let calculatedAttributes = try getCalculatedAttributes(installationDate: Int64(Date().timeIntervalSince1970 * 1000) - (86_400_000 * 5), dbPath: databasePath, locale: "en-CA")
 
         XCTAssertEqual(5, calculatedAttributes.daysSinceInstall)
         XCTAssertEqual(0, calculatedAttributes.daysSinceUpdate)
         XCTAssertEqual("en", calculatedAttributes.language)
-        XCTAssertEqual("US", calculatedAttributes.region)
+        XCTAssertEqual("CA", calculatedAttributes.region)
     }
 
     func testRecordEnrollmentStatuses() throws {
