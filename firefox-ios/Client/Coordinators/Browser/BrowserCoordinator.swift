@@ -40,6 +40,7 @@ final class BrowserCoordinator: BaseCoordinator,
                           WebCompatReportCoordinatorNavigationDelegate,
                           BrowsingSettingsDelegate,
                           WallpaperEngagementCoordinatorDelegate,
+                          VPNOnboardingCoordinatorDelegate,
                           FeatureFlaggable {
     private enum UX {
         static let searchEnginePopoverSize = CGSize(width: 250, height: 536)
@@ -197,9 +198,6 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     private func showWallpaperEngagementIfNeeded() {
-        let hasBlockingChild = childCoordinators.contains {
-            $0 is TermsOfUseCoordinator || $0 is WallpaperEngagementCoordinator
-        }
         guard !hasBlockingChild,
               !router.isPresenting else { return }
 
@@ -216,6 +214,35 @@ final class BrowserCoordinator: BaseCoordinator,
         browserViewController.view.endEditing(true)
         DispatchQueue.main.async {
             coordinator.start()
+        }
+    }
+
+    private func showVPNOnboardingIfNeeded() {
+        guard !hasBlockingChild,
+              !router.isPresenting else { return }
+
+        let coordinator = VPNOnboardingCoordinator(
+            router: router,
+            windowUUID: windowUUID,
+            tabManager: tabManager,
+            prefs: profile.prefs,
+            onOpenURL: { [weak self] url in
+                self?.navigateFromHomePanel(to: url, visitType: .link, isGoogleTopSite: false)
+            }
+        )
+        guard coordinator.shouldShow() else { return }
+        coordinator.parentCoordinator = self
+        coordinator.delegate = self
+        add(child: coordinator)
+        browserViewController.view.endEditing(true)
+        DispatchQueue.main.async {
+            coordinator.start()
+        }
+    }
+
+    private var hasBlockingChild: Bool {
+        return childCoordinators.contains {
+            $0 is TermsOfUseCoordinator || $0 is WallpaperEngagementCoordinator || $0 is VPNOnboardingCoordinator
         }
     }
 
@@ -314,6 +341,7 @@ final class BrowserCoordinator: BaseCoordinator,
         homepageViewController?.view.accessibilityElementsHidden = true
         UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
         screenshotService.screenshotableView = webviewController
+        showVPNOnboardingIfNeeded()
     }
 
     func browserHasLoaded() {
@@ -1756,6 +1784,13 @@ final class BrowserCoordinator: BaseCoordinator,
     func wallpaperEngagementDidTapCTA(from coordinator: WallpaperEngagementCoordinator) {
         remove(child: coordinator)
         show(settings: .wallpaper)
+    }
+
+    // MARK: - VPNOnboardingCoordinatorDelegate
+
+    func vpnOnboardingDidTapCTA(from coordinator: VPNOnboardingCoordinator) {
+        remove(child: coordinator)
+        presentVPNSettings()
     }
 
     // MARK: - ParentCoordinatorDelegate
