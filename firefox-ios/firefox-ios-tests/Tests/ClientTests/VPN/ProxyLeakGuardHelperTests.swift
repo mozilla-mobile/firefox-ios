@@ -97,6 +97,15 @@ final class ProxyLeakGuardHelperTests: XCTestCase {
         XCTAssertEqual(reported.values, [.init(api: .webAuthnRelatedOrigin, origin: "https://frame.example")])
     }
 
+    func test_learnMoreURL_pointsToLeaksSectionOfVPNArticle() throws {
+        let url = try XCTUnwrap(ProxyLeakGuardHelper.learnMoreURL)
+        let locale = try XCTUnwrap(Locale.preferredLanguages.first)
+
+        XCTAssertEqual(url.host, "support.mozilla.org")
+        XCTAssertTrue(url.path.hasSuffix("/iOS/\(locale)/mobile-ios-vpn"))
+        XCTAssertEqual(url.fragment, "note_about_leaks")
+    }
+
     func test_inject_withProxyOff_doesNotAddGuardScript() {
         let webView = WKWebView(frame: .zero, configuration: WKWebViewConfiguration())
 
