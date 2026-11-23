@@ -110,7 +110,7 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
         let appName = AppName.shortName.rawValue
         let dataLimit = VPNHelpers.formatted(gigabytes: Double(VPNConstants.freeMonthlyDataLimitInGB))
         return OnboardingSheetViewModel(
-            heroImageName: StandardImageIdentifiers.Medium.globe,
+            heroImageName: StandardImageIdentifiers.Large.globe,
             heroGradient: .accent,
             title: String(format: .VPN.Onboarding.Title, appName),
             description: .VPN.Onboarding.Subheading,
