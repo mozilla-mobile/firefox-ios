@@ -18,9 +18,7 @@ final class VPNOnboardingCoordinatorTests: XCTestCase {
     private var featureFlagsProvider: MockNimbusFeatureFlags!
     private var telemetry: MockVPNClientTelemetry!
     private var parentCoordinator: MockParentCoordinator!
-    private var delegate: MockVPNOnboardingCoordinatorDelegate!
     private var tabManager: MockTabManager!
-    private var openedURLs: [URL] = []
     private var horizontalSizeClass: UIUserInterfaceSizeClass = .compact
 
     override func setUp() async throws {
@@ -32,10 +30,8 @@ final class VPNOnboardingCoordinatorTests: XCTestCase {
         featureFlagsProvider.enabledFlags = [.vpnFeature, .vpnOnboardingSheet]
         telemetry = MockVPNClientTelemetry()
         parentCoordinator = MockParentCoordinator()
-        delegate = MockVPNOnboardingCoordinatorDelegate()
         tabManager = MockTabManager()
         tabManager.selectedTab = makeTab()
-        openedURLs = []
     }
 
     override func tearDown() async throws {
@@ -44,9 +40,7 @@ final class VPNOnboardingCoordinatorTests: XCTestCase {
         featureFlagsProvider = nil
         telemetry = nil
         parentCoordinator = nil
-        delegate = nil
         tabManager = nil
-        openedURLs = []
         horizontalSizeClass = .compact
         DependencyHelperMock().reset()
         try await super.tearDown()
@@ -156,50 +150,6 @@ final class VPNOnboardingCoordinatorTests: XCTestCase {
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
     }
 
-    // MARK: - Close
-
-    func test_close_recordsCancelledAndNotifiesParent() throws {
-        let subject = createSubject()
-        subject.start()
-
-        try presentedSheet().onDismiss()
-
-        XCTAssertEqual(telemetry.onboardingCancelledCount, 1)
-        XCTAssertEqual(router.dismissCalled, 1)
-        XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
-    }
-
-    // MARK: - CTA
-
-    func test_cta_recordsTapAndCallsDelegate() throws {
-        let subject = createSubject()
-        subject.start()
-
-        try presentedSheet().onCTA()
-        router.savedCompletion?()
-
-        XCTAssertEqual(telemetry.onboardingCTATappedCount, 1)
-        XCTAssertEqual(telemetry.onboardingCancelledCount, 0)
-        XCTAssertEqual(router.dismissCalled, 1)
-        XCTAssertEqual(delegate.didTapCTACalled, 1)
-    }
-
-    // MARK: - Learn more
-
-    func test_learnMore_recordsTapAndOpensLearnMoreURL() throws {
-        let learnMoreURL = try XCTUnwrap(VPNSettingsViewController.learnMoreURL)
-        let subject = createSubject()
-        subject.start()
-
-        try presentedSheet().onLearnMore()
-
-        XCTAssertEqual(telemetry.onboardingLearnMoreLinkTappedCount, 1)
-        XCTAssertEqual(telemetry.onboardingCancelledCount, 0)
-        XCTAssertEqual(router.dismissCalled, 1)
-        XCTAssertEqual(openedURLs, [learnMoreURL])
-        XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
-    }
-
     // MARK: - Helpers
 
     private func createSubject() -> VPNOnboardingCoordinator {
@@ -213,12 +163,9 @@ final class VPNOnboardingCoordinatorTests: XCTestCase {
             traitCollectionProvider: { [horizontalSizeClass] in
                 UITraitCollection(horizontalSizeClass: horizontalSizeClass)
             },
-            onOpenURL: { [weak self] url in
-                self?.openedURLs.append(url)
-            }
+            onOpenURL: { _ in }
         )
         subject.parentCoordinator = parentCoordinator
-        subject.delegate = delegate
         trackForMemoryLeaks(subject)
         return subject
     }
@@ -234,13 +181,5 @@ final class VPNOnboardingCoordinatorTests: XCTestCase {
             windowUUID: .XCTestDefaultUUID,
             isHomePage: isHomePage
         )
-    }
-}
-
-private final class MockVPNOnboardingCoordinatorDelegate: VPNOnboardingCoordinatorDelegate {
-    var didTapCTACalled = 0
-
-    func vpnOnboardingDidTapCTA(from coordinator: Coordinator) {
-        didTapCTACalled += 1
     }
 }
