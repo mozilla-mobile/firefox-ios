@@ -177,6 +177,7 @@ public enum PrefsKeys {
     public enum VPNSettings {
         public static let endpointEnvironment = "vpnEndpointEnvironment"
         public static let lastUsedEnvironment = "vpnLastUsedEnvironment"
+        public static let onboardingSheetShown = "vpnOnboardingSheetShown"
         public static let selectedCountryCode = "vpnSelectedCountryCode"
         // TODO: FXIOS-17399 Remove these four debug hooks after testing
         public static let simulateQuotaExceeded = "vpnSimulateQuotaExceeded"

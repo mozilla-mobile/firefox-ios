@@ -10,10 +10,17 @@ features:
           Whether or not this feature is enabled
         type: Boolean
         default: false
+      onboarding-sheet:
+        description: >
+          Shows the VPN onboarding sheet the first time a website is opened.
+        type: Boolean
+        default: false
     defaults:
       - channel: beta
         value:
           enabled: false
+          onboarding-sheet: false
       - channel: developer
         value:
           enabled: true
+          onboarding-sheet: true
