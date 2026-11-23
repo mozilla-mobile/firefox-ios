@@ -172,6 +172,11 @@ extension QuickAnswersViewConfiguration {
             continueButton: "Continue"
         ),
         optInRedesign: .mock,
+        optInAccessibilityIdentifiers: .init(
+            continueButton: "continueButton",
+            learnMoreButton: "learnMoreButton",
+            closeButton: "closeButton"
+        ),
         contentView: .init(
             placeholder: "Listening, ask anything",
             followUpPlaceholder: "Listening, ask a follow-up",

@@ -19,12 +19,6 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         static let resultBlobsFadeDelay: TimeInterval = 0.2
     }
 
-    private enum AccessibilityIdentifiers {
-        static let optInContinueButton = "QuickAnswers.OptIn.continueButton"
-        static let optInLearnMoreButton = "QuickAnswers.OptIn.learnMoreButton"
-        static let optInCloseButton = "QuickAnswers.OptIn.closeButton"
-    }
-
     // MARK: - Properties
     private lazy var backgroundEffectView = AIBackgroundEffectView(parentController: self)
     private lazy var closeButton: UIButton = .build { [weak self] in
@@ -311,6 +305,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
 
     func makeOptInController() -> OnboardingSheetViewController {
         let strings = stringsConfiguration.optInRedesign
+        let accessibilityIdentifiers = stringsConfiguration.optInAccessibilityIdentifiers
         let sheetViewModel = OnboardingSheetViewModel(
             heroImageName: StandardImageIdentifiers.Large.audioWave,
             heroGradient: .aiStrong,
@@ -336,9 +331,9 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
             learnMoreTitle: strings.learnMore,
             ctaTitle: strings.continueButton,
             closeAccessibilityLabel: stringsConfiguration.closeAccessibilityLabel,
-            ctaAccessibilityIdentifier: AccessibilityIdentifiers.optInContinueButton,
-            learnMoreAccessibilityIdentifier: AccessibilityIdentifiers.optInLearnMoreButton,
-            closeAccessibilityIdentifier: AccessibilityIdentifiers.optInCloseButton
+            ctaAccessibilityIdentifier: accessibilityIdentifiers.continueButton,
+            learnMoreAccessibilityIdentifier: accessibilityIdentifiers.learnMoreButton,
+            closeAccessibilityIdentifier: accessibilityIdentifiers.closeButton
         )
         let controller = OnboardingSheetViewController(
             windowUUID: windowUUID,

@@ -93,6 +93,11 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
                 learnMore: .QuickAnswers.LearnMore,
                 continueButton: .QuickAnswers.OptIn.ContinueButton
             ),
+            optInAccessibilityIdentifiers: .init(
+                continueButton: AccessibilityIdentifiers.QuickAnswers.OptIn.continueButton,
+                learnMoreButton: AccessibilityIdentifiers.QuickAnswers.OptIn.learnMoreButton,
+                closeButton: AccessibilityIdentifiers.QuickAnswers.OptIn.closeButton
+            ),
             contentView: .init(
                 placeholder: .QuickAnswers.ContentView.Listening,
                 followUpPlaceholder: .QuickAnswers.ContentView.ListeningFollowUp,

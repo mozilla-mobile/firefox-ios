@@ -129,6 +129,7 @@ struct QuickAnswersViewConfigurationTests {
                 learnMore: "",
                 continueButton: ""
             ),
+            optInAccessibilityIdentifiers: .init(continueButton: "ci", learnMoreButton: "li", closeButton: "cli"),
             contentView: .init(
                 placeholder: "p",
                 followUpPlaceholder: "fp",
@@ -159,6 +160,7 @@ struct QuickAnswersViewConfigurationTests {
 
         #expect(subject.optIn.title == "t")
         #expect(subject.optInRedesign.title == "rt")
+        #expect(subject.optInAccessibilityIdentifiers.continueButton == "ci")
         #expect(subject.contentView.placeholder == "p")
         #expect(subject.privacyBanner.title == "pt")
         #expect(subject.closeAccessibilityLabel == "close")
