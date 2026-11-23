@@ -18,6 +18,9 @@ const MainFrameAtDocumentEnd = glob.sync(
 const WebcompatAllFramesAtDocumentStart = glob.sync(
   "./firefox-ios/Client/Frontend/UserContent/UserScripts/AllFrames/WebcompatAtDocumentStart/*.{js,mjs}"
 );
+const ProxyLeakGuardAllFramesAtDocumentStart = glob.sync(
+  "./firefox-ios/Client/Frontend/UserContent/UserScripts/AllFrames/ProxyLeakGuardAtDocumentStart/*.{js,mjs}"
+);
 const AutofillAllFramesAtDocumentStart = glob.sync(
   "./firefox-ios/Client/Frontend/UserContent/UserScripts/AllFrames/AutofillAtDocumentStart/*.{js,mjs}"
 );
@@ -78,6 +81,7 @@ module.exports = {
     MainFrameAtDocumentStart,
     MainFrameAtDocumentEnd,
     WebcompatAllFramesAtDocumentStart,
+    ProxyLeakGuardAllFramesAtDocumentStart,
     NightModeAllFramesAtDocumentStart,
     AutofillAllFramesAtDocumentStart,
     AddressFormManager,
