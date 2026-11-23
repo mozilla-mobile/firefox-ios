@@ -32,7 +32,6 @@ public enum StandardImageIdentifiers {
         public static let arrowClockwise = "arrowClockwiseMedium"
         public static let bookmarkBadgeFillViolet50 = "bookmarkBadgeFillMediumViolet50"
         public static let cross = "crossMedium"
-        public static let globe = "globeMedium"
         public static let lightning = "lightningMedium"
         public static let logoGoogleLens = "logoGoogleLensMedium"
         public static let privateModeCircleFillPurple = "privateModeCircleFillMediumPurple"
