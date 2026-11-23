@@ -142,7 +142,6 @@ public enum StandardImageIdentifiers {
         public static let checkmarkBadge = "checkmarkBadgeExtraLarge"
         public static let crossCircleFill = "crossCircleFillExtraLarge"
         public static let database = "databaseExtraLarge"
-        public static let globeMap = "globeMapExtraLarge"
         public static let personSpeaking = "personSpeakingExtraLarge"
         public static let saveArrow = "saveArrowExtraLarge"
         public static let wifi = "wifiExtraLarge"
