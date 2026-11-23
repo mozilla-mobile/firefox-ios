@@ -114,7 +114,7 @@ final class VPNOnboardingCoordinatorTests: XCTestCase {
 
     // MARK: - start
 
-    func test_start_presentsPageSheetWithTwoThirdsAndLargeDetents() throws {
+    func test_start_presentsPageSheetWithFittingAndLargeDetents() throws {
         let subject = createSubject()
 
         subject.start()
@@ -122,10 +122,10 @@ final class VPNOnboardingCoordinatorTests: XCTestCase {
         XCTAssertEqual(router.presentCalled, 1)
         let sheet = try XCTUnwrap(router.presentedViewController as? OnboardingSheetViewController)
         XCTAssertEqual(sheet.modalPresentationStyle, .pageSheet)
-        let detents = try XCTUnwrap(sheet.sheetPresentationController?.detents.map(\.identifier))
-        XCTAssertEqual(detents.count, 2)
-        XCTAssertNotEqual(detents.first, .medium)
-        XCTAssertEqual(detents.last, .large)
+        XCTAssertEqual(
+            sheet.sheetPresentationController?.detents.map(\.identifier),
+            [OnboardingSheetViewController.fittingDetentIdentifier, .large]
+        )
     }
 
     func test_start_setsShownPref() {
@@ -205,7 +205,6 @@ final class VPNOnboardingCoordinatorTests: XCTestCase {
         let subject = VPNOnboardingCoordinator(
             router: router,
             windowUUID: .XCTestDefaultUUID,
-            parentHeight: 900,
             tabManager: tabManager,
             prefs: prefs,
             telemetry: telemetry,

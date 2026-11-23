@@ -15,14 +15,10 @@ protocol VPNOnboardingCoordinatorDelegate: AnyObject {
 @available(iOS 27.2, *)
 @MainActor
 final class VPNOnboardingCoordinator: BaseCoordinator {
-    private enum UX {
-        static let sheetHeightRatio: CGFloat = 2.0 / 3.0
-    }
     weak var parentCoordinator: ParentCoordinatorDelegate?
     weak var delegate: VPNOnboardingCoordinatorDelegate?
 
     private let windowUUID: WindowUUID
-    private let parentHeight: CGFloat
     private let tabManager: TabManager
     private let prefs: Prefs
     private let telemetry: VPNClientTelemetry
@@ -34,7 +30,6 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
     init(
         router: Router,
         windowUUID: WindowUUID,
-        parentHeight: CGFloat,
         tabManager: TabManager,
         prefs: Prefs,
         telemetry: VPNClientTelemetry = DefaultVPNTelemetry(),
@@ -44,7 +39,6 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
         onOpenURL: @escaping (URL) -> Void
     ) {
         self.windowUUID = windowUUID
-        self.parentHeight = parentHeight
         self.tabManager = tabManager
         self.prefs = prefs
         self.telemetry = telemetry
@@ -82,11 +76,7 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
             }
         )
         controller.modalPresentationStyle = .pageSheet
-        let sheetHeight = parentHeight * UX.sheetHeightRatio
-        controller.sheetPresentationController?.detents = [
-            .custom { _ in sheetHeight },
-            .large()
-        ]
+        controller.useFittingDetent()
 
         // Only runs on swipe down, dismissing through the router drops the completion.
         router.present(controller, animated: true) { [weak self] in
@@ -133,11 +123,6 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
                     imageName: StandardImageIdentifiers.ExtraLarge.wifi,
                     title: .VPN.Onboarding.WifiSubheading,
                     subtitle: String(format: .VPN.Onboarding.WifiBody, appName)
-                ),
-                OnboardingSheetRow(
-                    imageName: StandardImageIdentifiers.ExtraLarge.globeMap,
-                    title: .VPN.Onboarding.LocationsSubheading,
-                    subtitle: .VPN.Onboarding.LocationsBody
                 ),
                 OnboardingSheetRow(
                     imageName: StandardImageIdentifiers.ExtraLarge.checkmarkBadge,
