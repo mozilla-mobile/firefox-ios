@@ -1428,10 +1428,18 @@ final class BrowserCoordinator: BaseCoordinator,
             to: alert,
             title: .VPN.ErrorBrowsingPopup.Continue,
             style: .destructive,
-            action: .continueWithoutVPN
+            action: .continueWithoutVPN(alertType: .sessionError)
         )
-        addVPNAlertAction(to: alert, title: .VPN.ErrorBrowsingPopup.CloseAllTabs, action: .closeAllTabs)
-        addVPNAlertAction(to: alert, title: .VPN.ErrorBrowsingPopup.CloseThisTab, action: .closeThisTab)
+        addVPNAlertAction(
+            to: alert,
+            title: .VPN.ErrorBrowsingPopup.CloseAllTabs,
+            action: .closeAllTabs(alertType: .sessionError)
+        )
+        addVPNAlertAction(
+            to: alert,
+            title: .VPN.ErrorBrowsingPopup.CloseThisTab,
+            action: .closeThisTab(alertType: .sessionError)
+        )
         presentVPNAlert(alert)
     }
 
@@ -1451,10 +1459,18 @@ final class BrowserCoordinator: BaseCoordinator,
             to: alert,
             title: .VPN.ErrorBrowsingPopup.Continue,
             style: .destructive,
-            action: .continueWithoutVPN
+            action: .continueWithoutVPN(alertType: .monthlyLimit)
         )
-        addVPNAlertAction(to: alert, title: .VPN.ReachedDataLimitPopup.CloseAllTabs, action: .closeAllTabs)
-        addVPNAlertAction(to: alert, title: .VPN.ReachedDataLimitPopup.CloseThisTab, action: .closeThisTab)
+        addVPNAlertAction(
+            to: alert,
+            title: .VPN.ReachedDataLimitPopup.CloseAllTabs,
+            action: .closeAllTabs(alertType: .monthlyLimit)
+        )
+        addVPNAlertAction(
+            to: alert,
+            title: .VPN.ReachedDataLimitPopup.CloseThisTab,
+            action: .closeThisTab(alertType: .monthlyLimit)
+        )
         presentVPNAlert(alert)
     }
 
