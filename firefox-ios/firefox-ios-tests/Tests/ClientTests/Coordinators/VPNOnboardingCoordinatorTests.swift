@@ -9,6 +9,7 @@ import Shared
 import TestKit
 
 @testable import Client
+@testable import ComponentLibrary
 
 @available(iOS 17.0, *)
 @MainActor
@@ -100,6 +101,29 @@ final class VPNOnboardingCoordinatorTests: XCTestCase {
         XCTAssertFalse(subject.shouldShow())
     }
 
+    // MARK: - isOnboardingPending
+
+    func test_isOnboardingPending_whenSelectedTabIsHomepage_returnsTrue() {
+        tabManager.selectedTab = makeTab(isHomePage: true)
+        let subject = createSubject()
+
+        XCTAssertTrue(subject.isOnboardingPending)
+    }
+
+    func test_isOnboardingPending_whenSheetAlreadyShown_returnsFalse() {
+        prefs.setBool(true, forKey: PrefsKeys.VPNSettings.onboardingSheetShown)
+        let subject = createSubject()
+
+        XCTAssertFalse(subject.isOnboardingPending)
+    }
+
+    func test_isOnboardingPending_whenOnboardingSheetFlagDisabled_returnsFalse() {
+        featureFlagsProvider.enabledFlags = [.vpnFeature]
+        let subject = createSubject()
+
+        XCTAssertFalse(subject.isOnboardingPending)
+    }
+
     // MARK: - start
 
     func test_start_presentsPageSheetWithMediumAndLargeDetents() throws {
@@ -111,6 +135,15 @@ final class VPNOnboardingCoordinatorTests: XCTestCase {
         let sheet = try XCTUnwrap(router.presentedViewController as? OnboardingSheetViewController)
         XCTAssertEqual(sheet.modalPresentationStyle, .pageSheet)
         XCTAssertEqual(sheet.sheetPresentationController?.detents.map(\.identifier), [.medium, .large])
+    }
+
+    func test_start_showsSheetGrabber() throws {
+        let subject = createSubject()
+
+        subject.start()
+
+        let sheet = try XCTUnwrap(router.presentedViewController as? OnboardingSheetViewController)
+        XCTAssertEqual(sheet.sheetPresentationController?.prefersGrabberVisible, true)
     }
 
     func test_start_setsShownPref() {
@@ -140,26 +173,26 @@ final class VPNOnboardingCoordinatorTests: XCTestCase {
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
     }
 
-    // MARK: - didTapClose
+    // MARK: - Close
 
-    func test_didTapClose_recordsCancelledAndNotifiesParent() {
+    func test_close_recordsCancelledAndNotifiesParent() throws {
         let subject = createSubject()
         subject.start()
 
-        subject.didTapClose()
+        try presentedSheet().onDismiss()
 
         XCTAssertEqual(telemetry.onboardingCancelledCount, 1)
         XCTAssertEqual(router.dismissCalled, 1)
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
     }
 
-    // MARK: - didTapCTA
+    // MARK: - CTA
 
-    func test_didTapCTA_recordsTapAndCallsDelegate() {
+    func test_cta_recordsTapAndCallsDelegate() throws {
         let subject = createSubject()
         subject.start()
 
-        subject.didTapCTA()
+        try presentedSheet().onCTA()
         router.savedCompletion?()
 
         XCTAssertEqual(telemetry.onboardingCTATappedCount, 1)
@@ -168,14 +201,14 @@ final class VPNOnboardingCoordinatorTests: XCTestCase {
         XCTAssertEqual(delegate.didTapCTACalled, 1)
     }
 
-    // MARK: - didTapLearnMore
+    // MARK: - Learn more
 
-    func test_didTapLearnMore_recordsTapAndOpensLearnMoreURL() throws {
+    func test_learnMore_recordsTapAndOpensLearnMoreURL() throws {
         let learnMoreURL = try XCTUnwrap(VPNSettingsViewController.learnMoreURL)
         let subject = createSubject()
         subject.start()
 
-        subject.didTapLearnMore()
+        try presentedSheet().onLearnMore()
 
         XCTAssertEqual(telemetry.onboardingLearnMoreLinkTappedCount, 1)
         XCTAssertEqual(telemetry.onboardingCancelledCount, 0)
@@ -202,6 +235,10 @@ final class VPNOnboardingCoordinatorTests: XCTestCase {
         subject.delegate = delegate
         trackForMemoryLeaks(subject)
         return subject
+    }
+
+    private func presentedSheet() throws -> OnboardingSheetViewController {
+        return try XCTUnwrap(router.presentedViewController as? OnboardingSheetViewController)
     }
 
     private func makeTab(isPrivate: Bool = false, isHomePage: Bool = false) -> Tab {

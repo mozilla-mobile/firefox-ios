@@ -75,6 +75,12 @@ final class BrowserCoordinator: BaseCoordinator,
     private var pendingOnboardingCardAction: OnboardingCardButtonAction = .none
     private let quickAnswersSessionStorage: QuickAnswersSessionStorage
     private let quickAnswersPillTelemetry: QuickAnswersReturnPillTelemetry
+    /// Whether a child owns a sheet that is on screen or about to be, so no other sheet is shown over it.
+    private var isShowingBlockingSheet: Bool {
+        return childCoordinators.contains {
+            $0 is TermsOfUseCoordinator || $0 is WallpaperEngagementCoordinator || $0 is VPNOnboardingCoordinator
+        }
+    }
 
     override var isDismissible: Bool { false }
 
@@ -198,7 +204,7 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     private func showWallpaperEngagementIfNeeded() {
-        guard !hasBlockingChild,
+        guard !isShowingBlockingSheet,
               !router.isPresenting else { return }
 
         let coordinator = WallpaperEngagementCoordinator(
@@ -218,10 +224,16 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     private func showVPNOnboardingIfNeeded() {
-        guard !hasBlockingChild,
+        guard !isShowingBlockingSheet,
               !router.isPresenting else { return }
 
-        let coordinator = VPNOnboardingCoordinator(
+        let coordinator = makeVPNOnboardingCoordinator()
+        guard coordinator.shouldShow() else { return }
+        startVPNOnboarding(coordinator)
+    }
+
+    private func makeVPNOnboardingCoordinator() -> VPNOnboardingCoordinator {
+        return VPNOnboardingCoordinator(
             router: router,
             windowUUID: windowUUID,
             tabManager: tabManager,
@@ -230,19 +242,15 @@ final class BrowserCoordinator: BaseCoordinator,
                 self?.navigateFromHomePanel(to: url, visitType: .link, isGoogleTopSite: false)
             }
         )
-        guard coordinator.shouldShow() else { return }
+    }
+
+    private func startVPNOnboarding(_ coordinator: VPNOnboardingCoordinator) {
         coordinator.parentCoordinator = self
         coordinator.delegate = self
         add(child: coordinator)
         browserViewController.view.endEditing(true)
         DispatchQueue.main.async {
             coordinator.start()
-        }
-    }
-
-    private var hasBlockingChild: Bool {
-        return childCoordinators.contains {
-            $0 is TermsOfUseCoordinator || $0 is WallpaperEngagementCoordinator || $0 is VPNOnboardingCoordinator
         }
     }
 
@@ -801,8 +809,18 @@ final class BrowserCoordinator: BaseCoordinator,
         router.present(navigationController, animated: true)
     }
 
+    /// Shows the VPN onboarding instead when the user hasn't seen it yet, its CTA then leads to the settings.
     func presentVPNSettings() {
-        guard #available(iOS 17.0, *) else { return }
+        let onboardingCoordinator = makeVPNOnboardingCoordinator()
+        guard !onboardingCoordinator.isOnboardingPending else {
+            startVPNOnboarding(onboardingCoordinator)
+            return
+        }
+        presentVPNSettingsSheet()
+    }
+
+    private func presentVPNSettingsSheet() {
+        guard #available(iOS 27.2, *) else { return }
         let vpnSettings = VPNSettingsViewController(windowUUID: windowUUID)
         let navigationController = DismissableNavigationViewController(rootViewController: vpnSettings)
         setupSettingsSheetDetents(for: navigationController)
@@ -1790,7 +1808,7 @@ final class BrowserCoordinator: BaseCoordinator,
 
     func vpnOnboardingDidTapCTA(from coordinator: VPNOnboardingCoordinator) {
         remove(child: coordinator)
-        presentVPNSettings()
+        presentVPNSettingsSheet()
     }
 
     // MARK: - ParentCoordinatorDelegate

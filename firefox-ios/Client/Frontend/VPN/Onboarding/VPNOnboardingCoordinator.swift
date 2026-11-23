@@ -46,14 +46,18 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
         super.init(router: router)
     }
 
-    func shouldShow() -> Bool {
+    /// Whether the user still has to see the onboarding, wherever they are in the app.
+    var isOnboardingPending: Bool {
         guard #available(iOS 17.0, *),
-              let selectedTab = tabManager.selectedTab,
-              !selectedTab.isFxHomeTab,
               featureFlagsProvider.isEnabled(.vpnFeature),
               featureFlagsProvider.isEnabled(.vpnOnboardingSheet)
         else { return false }
         return prefs.boolForKey(PrefsKeys.VPNSettings.onboardingSheetShown) != true
+    }
+
+    func shouldShow() -> Bool {
+        guard let selectedTab = tabManager.selectedTab, !selectedTab.isFxHomeTab else { return false }
+        return isOnboardingPending
     }
 
     func start() {
@@ -73,6 +77,7 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
         )
         controller.modalPresentationStyle = .pageSheet
         controller.sheetPresentationController?.detents = [.medium(), .large()]
+        controller.sheetPresentationController?.prefersGrabberVisible = true
 
         // Only runs on swipe down, dismissing through the router drops the completion.
         router.present(controller, animated: true) { [weak self] in
@@ -83,7 +88,7 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
         telemetry.recordOnboardingShown()
     }
 
-    func didTapCTA() {
+    private func didTapCTA() {
         telemetry.recordOnboardingCTATapped()
         router.dismiss(animated: true) { [weak self] in
             guard let self else { return }
@@ -91,7 +96,7 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
         }
     }
 
-    func didTapLearnMore() {
+    private func didTapLearnMore() {
         telemetry.recordOnboardingLearnMoreLinkTapped()
         if #available(iOS 17.0, *), let url = VPNSettingsViewController.learnMoreURL {
             onOpenURL(url)
@@ -100,7 +105,7 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
         finish()
     }
 
-    func didTapClose() {
+    private func didTapClose() {
         telemetry.recordOnboardingCancelled()
         router.dismiss(animated: true)
         finish()
