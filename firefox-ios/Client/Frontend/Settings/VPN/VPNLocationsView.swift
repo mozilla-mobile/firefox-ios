@@ -6,7 +6,7 @@ import Common
 import Shared
 import SwiftUI
 
-@available(iOS 27.2, *)
+@available(iOS 17.0, *)
 struct VPNLocationsView: ThemeableView {
     private enum UX {
         static let outerPadding: CGFloat = 16

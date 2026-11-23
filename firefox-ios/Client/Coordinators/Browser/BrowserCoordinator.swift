@@ -774,7 +774,7 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     func presentVPNSettings() {
-        guard #available(iOS 27.2, *) else { return }
+        guard #available(iOS 17.0, *) else { return }
         let vpnSettings = VPNSettingsViewController(windowUUID: windowUUID)
         let navigationController = DismissableNavigationViewController(rootViewController: vpnSettings)
         setupSettingsSheetDetents(for: navigationController)
