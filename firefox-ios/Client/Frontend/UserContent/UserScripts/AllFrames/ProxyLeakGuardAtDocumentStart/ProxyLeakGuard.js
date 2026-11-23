@@ -11,7 +11,7 @@ const report = (api, kind) => {
   try { handler?.postMessage({ api, kind }); } catch (e) {}
 };
 
-["RTCPeerConnection", "webkitRTCPeerConnection"].forEach(name => {
+["RTCPeerConnection", "webkitRTCPeerConnection", "WebTransport"].forEach(name => {
   if (!(name in window)) return;
   let reported = false;
   const get = () => {
