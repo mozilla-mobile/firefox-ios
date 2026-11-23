@@ -37,8 +37,8 @@ struct BrowserDataTransferAvailability {
     static let implementedDirections: Set<BrowserDataTransferDirection> = []
 
     /// Standard developer and Beta builds, matched by bundle identifier because enterprise shares the developer channel.
-    /// FirefoxStaging shares the FirefoxBeta bundle identifier; its archives strip the activities, so the
-    /// registration check excludes it.
+    /// FirefoxStaging shares the FirefoxBeta bundle identifier; its configuration never adds the activities, so
+    /// the registration check excludes it.
     static let eligibleSchemes: Set<String> = ["Fennec", "FirefoxBeta"]
 
     static var isSupportedOS: Bool {
