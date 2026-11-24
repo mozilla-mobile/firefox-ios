@@ -6,7 +6,7 @@ the rules are parsed and validated by bugbug's schema module, rules run in
 priority order, and each file is loaded once however many rules match it. Only
 the matched guidance reaches Claude, so Claude never reads the rules itself.
 
-The guidance comes from the base branch commit the workflow runs on, never
+The guidance comes from the default branch commit the workflow runs on, never
 from the pull request. Bugzilla, review and patch predicates never match here:
 a GitHub pull request has no Bugzilla bug or Phabricator metadata.
 
@@ -101,7 +101,7 @@ def render(loaded: list[tuple[Guidance, str]], missing: list[Guidance], ref: str
     parts = [
         "# Review guidance",
         "",
-        f"Loaded from the base branch at {ref[:12]} because review-context.toml rules "
+        f"Loaded from the main branch at {ref[:12]} because review-context.toml rules "
         "matched the changed files.",
         "",
     ]

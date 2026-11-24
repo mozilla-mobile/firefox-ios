@@ -8,7 +8,9 @@ name: AI code review
 # pull_request_target, so that pull requests from forks get the API key. That
 # makes the pull request's code untrusted here: it is checked out only for
 # Claude to read, never built or run, and Claude can only read files. Only
-# people with write access can add the label and start a run.
+# people with write access can add the label and start a run. The workflow
+# and its scripts always come from the default branch, whatever branch the
+# pull request targets.
 #
 # Everything is reviewed at the head commit in the event, so the diff and the
 # checked-out code agree even if someone pushes during the run. If the head
@@ -33,7 +35,7 @@ jobs:
     outputs:
       reviewed: ${{ steps.check.outputs.reviewed }}
     steps:
-      - name: Check out the review setup from the base branch
+      - name: Check out the review setup from the default branch
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           persist-credentials: false
@@ -69,7 +71,7 @@ jobs:
       NUMBER: ${{ github.event.pull_request.number }}
       COMMIT: ${{ github.event.pull_request.head.sha }}
     steps:
-      - name: Check out the review setup from the base branch
+      - name: Check out the review setup from the default branch
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           persist-credentials: false
@@ -107,10 +109,11 @@ jobs:
       - name: Load the matching review guidance
         env:
           PYTHONPATH: scripts/ci/ai-review:.bugbug/bugbug/tools/code_review
-          BASE_SHA: ${{ github.sha }}
+          # pull_request_target runs on the default branch's latest commit.
+          MAIN_SHA: ${{ github.sha }}
         run: >-
           python3 scripts/ci/ai-review/load_guidance.py
-          --repo "$REPO" --ref "$BASE_SHA" --config review-context.toml
+          --repo "$REPO" --ref "$MAIN_SHA" --config review-context.toml
           --files pr-context/files.json --out review-guidance.md
 
       - name: Review
@@ -171,7 +174,7 @@ jobs:
     timeout-minutes: 5
     # contents: write is only for resolving the threads of fixed findings, which
     # GitHub doesn't allow with pull-requests: write alone. This job runs only
-    # scripts from the base branch, never the pull request's code.
+    # scripts from the default branch, never the pull request's code.
     permissions:
       contents: write
       pull-requests: write
@@ -182,7 +185,7 @@ jobs:
       COMMIT: ${{ github.event.pull_request.head.sha }}
       RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
     steps:
-      - name: Check out the posting script from the base branch
+      - name: Check out the posting script from the default branch
         if: needs.review.result == 'success'
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:

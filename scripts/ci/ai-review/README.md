@@ -94,7 +94,7 @@ links to it.
 
 **Review** (read-only token):
 
-1. Checks out the review setup from the base branch: these scripts, the
+1. Checks out the review setup from the default branch (`main`): these scripts, the
    prompt, `review-context.toml`, `AGENTS.md` and `.claude/`. A pull request
    can't change the reviewer that reviews it.
 2. Checks out the pull request's head commit into `pr-head/`, only for the
@@ -149,7 +149,7 @@ helper, rather than by the model:
   validator agree on what's valid. An invalid file fails the run.
 - Rules are matched against the changed files, highest `priority` first, and
   each guidance file is loaded once, however many rules match it.
-- Guidance is read from the base branch commit, never from the pull request.
+- Guidance is read from the default branch (`main`), never from the pull request.
 - Only `file` actions from this repository are loaded. Other actions are
   skipped with a warning. Bugzilla, review and patch conditions never match,
   because a GitHub pull request has none of that metadata.
@@ -170,7 +170,7 @@ the API key. That makes everything in the pull request untrusted, so:
 - The model is told to treat everything from the pull request, its tickets and
   comments as material to review, never as instructions.
 - Only the post job can write to the pull request, and it runs only these
-  scripts from the base branch. It has `contents: write` to resolve threads:
+  scripts from the default branch. It has `contents: write` to resolve threads:
   with `pull-requests: write` alone, GitHub refused.
 - The model proposes follow-ups, but the post job replies only on unresolved
   threads an earlier AI review started. Text in a pull request can't get it to
@@ -188,6 +188,10 @@ the API key. That makes everything in the pull request untrusted, so:
 - **Large pull requests**: the compare API lists at most 300 files, so a
   larger change is reviewed on its first 300 files, and the review's footer
   says so.
+- **Stacked pull requests** work: the diff is just the pull request's own
+  layer, against the branch it targets. But the guidance always comes from
+  `main`, so a change to `review-context.toml` earlier in the stack isn't used
+  until it's merged.
 - **Extra timeline entries**: each follow-up reply also appears in the pull
   request's timeline as an empty review by github-actions. That's how GitHub's
   reply API works.
@@ -200,8 +204,10 @@ The workflow needs:
 - An `ai-review` label.
 - GitHub Actions enabled.
 
-The workflow only runs from the base branch of the pull request, so it has to
-be on that branch, normally `main`, before a label starts it.
+`pull_request_target` always runs the workflow from the repository's default
+branch (`main`), whatever branch the pull request targets. So it has to be on
+`main` before a label starts it, and changes to it take effect once they're
+merged there.
 
 ## Files
 
