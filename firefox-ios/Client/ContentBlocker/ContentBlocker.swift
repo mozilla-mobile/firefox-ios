@@ -6,6 +6,7 @@ import WebKit
 import Shared
 import Common
 import CryptoKit
+import WebEngine
 
 enum BlocklistCategory: CaseIterable {
     case advertising
@@ -130,11 +131,22 @@ enum NoImageModeDefaults {
     static let ScriptName = "images"
 }
 
+/// Only added while the VPN proxy is on. WebKit checks DNS prefetch against `ping` rules, and before
+/// iOS 27.2 DNS prefetch resolves outside the proxy. Also blocks preconnect hints and `<a ping>`.
+enum ProxyLeakGuardRuleDefaults {
+    static let Script =
+    """
+    [{"trigger":{"url-filter":".*","resource-type":["ping"]},"action":{"type":"block"}}]
+    """
+    static let ScriptName = "proxy-leak-guard"
+}
+
 @MainActor
 class ContentBlocker: Notifiable {
     var safelistedDomains = SafelistedDomains()
     let ruleStore = WKContentRuleListStore.default()
     var blockImagesRule: WKContentRuleList?
+    var proxyLeakGuardRule: WKContentRuleList?
     var setupCompleted = false
     let logger: Logger
     var adBlockerListFetcher: AdBlockerListFetcherProtocol = ASAdBlockerListFetcher()
@@ -146,6 +158,7 @@ class ContentBlocker: Notifiable {
 
         // Compile No Image Mode script
         compileNoImageModeScript()
+        compileProxyLeakGuardRule()
 
         // Read the safelist at startup
         if let list = readSafelistFile() {
@@ -203,9 +216,10 @@ class ContentBlocker: Notifiable {
         forTab tab: ContentBlockerTab,
         isEnabled: Bool,
         rules: [String],
+        isProxyEnabled: Bool = DefaultWKEngineConfigurationProvider.isProxyEnabled,
         completion: (() -> Void)?
     ) {
-        removeTrackingProtection(forTab: tab)
+        removeTrackingProtection(forTab: tab, isProxyEnabled: isProxyEnabled)
 
         guard isEnabled else {
             completion?()
@@ -229,11 +243,15 @@ class ContentBlocker: Notifiable {
         }
     }
 
-    private func removeTrackingProtection(forTab tab: ContentBlockerTab) {
+    private func removeTrackingProtection(forTab tab: ContentBlockerTab, isProxyEnabled: Bool) {
         tab.currentWebView()?.configuration.userContentController.removeAllContentRuleLists()
 
         // Add back the block images rule (if needed) after having removed all rules.
         if let rule = blockImagesRule, tab.imageContentBlockingEnabled() {
+            add(contentRuleList: rule, toTab: tab)
+        }
+
+        if let rule = proxyLeakGuardRule, isProxyEnabled {
             add(contentRuleList: rule, toTab: tab)
         }
     }
@@ -261,6 +279,22 @@ class ContentBlocker: Notifiable {
                 }
 
                 self.blockImagesRule = rule
+        }
+    }
+
+    func compileProxyLeakGuardRule(completion: (() -> Void)? = nil) {
+        let logger = self.logger
+        ruleStore?.compileContentRuleList(
+            forIdentifier: ProxyLeakGuardRuleDefaults.ScriptName,
+            encodedContentRuleList: ProxyLeakGuardRuleDefaults.Script) { rule, error in
+                if let error {
+                    logger.log("Proxy leak guard rule failed compilation: \(error)",
+                               level: .warning,
+                               category: .adblock)
+                    assertionFailure()
+                }
+                self.proxyLeakGuardRule = rule
+                completion?()
         }
     }
 

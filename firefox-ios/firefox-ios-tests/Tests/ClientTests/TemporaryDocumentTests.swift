@@ -283,7 +283,7 @@ final class TemporaryDocumentTests: XCTestCase, @unchecked Sendable {
             request: request,
             mimeType: mimeType,
             cookies: cookies,
-            session: session
+            sessionProvider: { session }
         )
         await trackForMemoryLeaks(subject)
         return subject
@@ -299,7 +299,7 @@ final class TemporaryDocumentTests: XCTestCase, @unchecked Sendable {
             preflightResponse: response,
             request: request,
             mimeType: mimeType,
-            session: session
+            sessionProvider: { session }
         )
         await trackForMemoryLeaks(subject)
         return subject

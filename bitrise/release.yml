@@ -22,7 +22,7 @@ workflows:
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@6: {}
+    - git-clone@8: {}
     - certificate-and-profile-installer@1: {}
     - script@1:
         is_always_run: true
@@ -305,7 +305,7 @@ workflows:
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@6: {}
+    - git-clone@8: {}
     - certificate-and-profile-installer@1: {}
     - script@1:
         inputs:
@@ -423,7 +423,7 @@ workflows:
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@6: {}
+    - git-clone@8: {}
     - certificate-and-profile-installer@1: {}
     - script@1:
         inputs:
@@ -1140,7 +1140,7 @@ workflows:
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@6: {}
+    - git-clone@8: {}
     - certificate-and-profile-installer@1: {}
     - restore-spm-cache@3:
         is_always_run: true
@@ -1208,7 +1208,7 @@ workflows:
     # - skip_macro_validation # TODO check if needed here
     steps:
     - pull-intermediate-files@1: {}
-    - xcode-test-without-building@0:
+    - xcode-test-without-building@1:
         inputs:
         - only_testing: $BITRISE_TEST_SHARDS_PATH_FIREFOX_SCHEME/$BITRISE_IO_PARALLEL_INDEX
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
@@ -1222,7 +1222,7 @@ workflows:
     - firefox_scheme_build_for_test
     steps:
     - pull-intermediate-files@1: {}
-    - xcode-test-without-building@0:
+    - xcode-test-without-building@1:
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -collect-test-diagnostics never'
@@ -1243,7 +1243,7 @@ workflows:
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@6: {}
+    - git-clone@8: {}
     - certificate-and-profile-installer@1: {}
     - restore-spm-cache@3:
         is_always_run: true
@@ -1311,7 +1311,7 @@ workflows:
     # - skip_macro_validation # TODO test if needed here
     steps:
     - pull-intermediate-files@1: {}
-    - xcode-test-without-building@0:
+    - xcode-test-without-building@1:
         inputs:
         - only_testing: $BITRISE_TEST_SHARDS_PATH_FIREFOX_BETA_SCHEME/$BITRISE_IO_PARALLEL_INDEX
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
@@ -1325,7 +1325,7 @@ workflows:
     - firefox_beta_scheme_build_for_test
     steps:
     - pull-intermediate-files@1: {}
-    - xcode-test-without-building@0:
+    - xcode-test-without-building@1:
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -collect-test-diagnostics never'

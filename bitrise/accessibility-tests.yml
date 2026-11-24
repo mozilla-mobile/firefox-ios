@@ -26,7 +26,7 @@ workflows:
 
             ls /Users/vagrant/git/DerivedData/Build/Products
             ls /Users/vagrant/git/DerivedData
-    - xcode-test-without-building@0:
+    - xcode-test-without-building@1:
         continue_on_fail: true
         timeout: 1200
         inputs:

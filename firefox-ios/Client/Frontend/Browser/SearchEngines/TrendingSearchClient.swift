@@ -41,7 +41,7 @@ final class TrendingSearchClient: TrendingSearchClientProvider, Sendable {
         session: URLSession = makeURLSession(
             userAgent: UserAgent
                 .mobileUserAgent(),
-            configuration: URLSessionConfiguration.ephemeralMPTCP
+            configuration: URLSessionConfiguration.ephemeralMPTCP.withVPNProxy()
         ),
         nimbus: FxNimbus = FxNimbus.shared
     ) {

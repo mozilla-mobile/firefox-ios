@@ -9,7 +9,7 @@ import VPNKit
 import XCTest
 @testable import Client
 
-@available(iOS 27.2, *)
+@available(iOS 17.0, *)
 @MainActor
 final class VPNManagerTests: XCTestCase {
     private var mockLogger: MockLogger!
@@ -20,6 +20,7 @@ final class VPNManagerTests: XCTestCase {
     private var mockServerManager: MockVPNServerManager!
     private var mockProxyConfigurator: MockProxyConfigurator!
     private var mockAuthCreator: MockVPNAuthCreator!
+    private var leakNoticeTracker: ProxyLeakGuardNoticeTracker!
 
     override func setUp() async throws {
         try await super.setUp()
@@ -35,6 +36,7 @@ final class VPNManagerTests: XCTestCase {
         mockServerManager = MockVPNServerManager()
         mockProxyConfigurator = MockProxyConfigurator()
         mockAuthCreator = MockVPNAuthCreator()
+        leakNoticeTracker = ProxyLeakGuardNoticeTracker()
         DependencyHelperMock().bootstrapDependencies(
             injectedProfile: mockProfile,
             injectedWindowManager: mockWindowManager
@@ -51,6 +53,7 @@ final class VPNManagerTests: XCTestCase {
         mockServerManager = nil
         mockProxyConfigurator = nil
         mockAuthCreator = nil
+        leakNoticeTracker = nil
         try await super.tearDown()
     }
 
@@ -330,6 +333,26 @@ final class VPNManagerTests: XCTestCase {
         XCTAssertTrue(stopCall.forcingSessionReset)
     }
 
+    func testStop_resetsLeakNoticeForNextSession() async throws {
+        let subject = createSubject()
+        try await subject.start(countryCode: nil)
+        XCTAssertTrue(leakNoticeTracker.shouldShowNotice())
+
+        await subject.stop()
+
+        XCTAssertTrue(leakNoticeTracker.shouldShowNotice())
+    }
+
+    func testStart_whenRunning_keepsLeakNoticeShown() async throws {
+        let subject = createSubject()
+        try await subject.start(countryCode: nil)
+        XCTAssertTrue(leakNoticeTracker.shouldShowNotice())
+
+        try await subject.start(countryCode: "DE")
+
+        XCTAssertFalse(leakNoticeTracker.shouldShowNotice())
+    }
+
     // MARK: - refreshUsage
 
     func testRefreshUsage_updatesUsageValues() async throws {
@@ -419,7 +442,8 @@ final class VPNManagerTests: XCTestCase {
             guardian: injectGuardian ? mockGuardian : nil,
             authCreator: mockAuthCreator,
             serverManager: mockServerManager,
-            proxyApplier: mockProxyConfigurator
+            proxyApplier: mockProxyConfigurator,
+            leakNoticeTracker: leakNoticeTracker
         )
         trackForMemoryLeaks(subject)
         return subject
@@ -449,7 +473,7 @@ final class VPNManagerTests: XCTestCase {
     }
 }
 
-@available(iOS 27.2, *)
+@available(iOS 17.0, *)
 private final class MockProxyConfigurator: ProxyConfigurator {
     var params: [(configs: [ProxyConfiguration], forcingSessionReset: Bool)] = []
     var onApply: (() -> Void)?

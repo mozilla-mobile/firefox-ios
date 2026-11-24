@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import WebKit
+import WebEngine
 
 @MainActor
 class UserScriptManager {
@@ -89,6 +90,17 @@ class UserScriptManager {
             scripts[autofillName] = userScript
         }
 
+        // Only injected while the VPN proxy is on. See `ProxyLeakGuardHelper`.
+        let proxyLeakGuardName = "ProxyLeakGuard\(name)"
+        if let source = UserScriptManager.getScriptSource(proxyLeakGuardName) {
+            let wrappedSource = "(function() { const APP_ID_TOKEN = '\(UserScriptManager.appIdToken)'; \(source) })()"
+            scripts[proxyLeakGuardName] = WKUserScript.createInPageContentWorld(
+                source: wrappedSource,
+                injectionTime: injectionTime,
+                forMainFrameOnly: mainFrameOnly
+            )
+        }
+
         let webcompatName = "Webcompat\(name)"
         if let source = UserScriptManager.getScriptSource(webcompatName) {
             let wrappedSource = "(function() { const APP_ID_TOKEN = '\(UserScriptManager.appIdToken)'; \(source) })()"
@@ -111,7 +123,8 @@ class UserScriptManager {
     public func injectUserScriptsIntoWebView(_ webView: WKWebView?,
                                              nightMode: Bool,
                                              noImageMode: Bool,
-                                             backgroundAudio: Bool) {
+                                             backgroundAudio: Bool,
+                                             isProxyEnabled: Bool = DefaultWKEngineConfigurationProvider.isProxyEnabled) {
         // Start off by ensuring that any previously-added user scripts are
         // removed to prevent the same script from being injected twice.
         webView?.configuration.userContentController.removeAllUserScripts()
@@ -142,6 +155,10 @@ class UserScriptManager {
             let webcompatName = "Webcompat\(name)"
             if let webcompatUserScript = compiledUserScripts[webcompatName] {
                 webView?.configuration.userContentController.addUserScript(webcompatUserScript)
+            }
+
+            if isProxyEnabled, let proxyLeakGuardScript = compiledUserScripts["ProxyLeakGuard\(name)"] {
+                webView?.configuration.userContentController.addUserScript(proxyLeakGuardScript)
             }
         }
         // Inject the Print Helper. This needs to be in the `page` content world in order to hook `window.print()`.

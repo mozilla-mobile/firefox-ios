@@ -102,7 +102,7 @@ final class DefaultTemporaryDocument: NSObject,
                                       TemporaryDocument,
                                       URLSessionDownloadDelegate,
                                       @unchecked Sendable {
-    private let session: URLSession
+    private let sessionProvider: () -> URLSession
     private let request: URLRequest?
     private let cookies: [HTTPCookie]
     private let credential: URLCredential?
@@ -131,7 +131,7 @@ final class DefaultTemporaryDocument: NSObject,
         mimeType: String? = nil,
         cookies: [HTTPCookie] = [],
         credential: URLCredential? = nil,
-        session: URLSession = .shared,
+        sessionProvider: @escaping () -> URLSession = { .sharedWithVPNProxy },
         logger: Logger = DefaultLogger.shared
     ) {
         self.request = Self.applyCookiesToRequest(request, cookies: cookies)
@@ -139,7 +139,7 @@ final class DefaultTemporaryDocument: NSObject,
         self.credential = credential
         self.filename = FilenameSanitizer.sanitize(filename)
         self.mimeType = mimeType
-        self.session = session
+        self.sessionProvider = sessionProvider
         self.logger = logger
 
         super.init()
@@ -149,7 +149,7 @@ final class DefaultTemporaryDocument: NSObject,
         preflightResponse: URLResponse,
         request: URLRequest? = nil,
         mimeType: String? = nil,
-        session: URLSession = .shared,
+        sessionProvider: @escaping () -> URLSession = { .sharedWithVPNProxy },
         logger: Logger = DefaultLogger.shared
     ) {
         self.request = request
@@ -157,7 +157,7 @@ final class DefaultTemporaryDocument: NSObject,
         self.credential = nil
         self.filename = FilenameSanitizer.sanitize(preflightResponse.suggestedFilename)
         self.mimeType = mimeType
-        self.session = session
+        self.sessionProvider = sessionProvider
         self.logger = logger
 
         super.init()
@@ -208,7 +208,7 @@ final class DefaultTemporaryDocument: NSObject,
             return tempFile
         }
         guard let request else { return nil }
-        let response = try? await session.download(for: request)
+        let response = try? await sessionProvider().download(for: request)
         guard let location = response?.0, let tempFileURL = storeTempDownloadFile(at: location) else { return nil }
 
         return tempFileURL
@@ -228,7 +228,7 @@ final class DefaultTemporaryDocument: NSObject,
             return
         }
         onDownload = completion
-        currentDownloadTask = session.downloadTask(with: request)
+        currentDownloadTask = sessionProvider().downloadTask(with: request)
         currentDownloadTask?.delegate = WeakURLSessionDelegate(delegate: self)
         currentDownloadTask?.resume()
     }

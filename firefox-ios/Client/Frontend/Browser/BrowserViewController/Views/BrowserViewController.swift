@@ -4489,6 +4489,19 @@ extension BrowserViewController: LegacyTabDelegate {
         let printHelper = PrintHelper(tab: tab)
         tab.addContentScriptToPage(printHelper, name: PrintHelper.name())
 
+        if DefaultWKEngineConfigurationProvider.isProxyEnabled {
+            let proxyLeakGuardHelper = ProxyLeakGuardHelper()
+            proxyLeakGuardHelper.onBlockedRequest = { [weak self, weak tab] _, _ in
+                guard let self,
+                      let tab,
+                      tab === self.tabManager.selectedTab,
+                      ProxyLeakGuardNoticeTracker.shared.shouldShowNotice()
+                else { return }
+                self.showProxyLeakGuardToast(isPrivate: tab.isPrivate)
+            }
+            tab.addContentScriptToPage(proxyLeakGuardHelper, name: ProxyLeakGuardHelper.name())
+        }
+
         let nightModeHelper = NightModeHelper()
         tab.addContentScriptToCustomWorld(nightModeHelper, name: NightModeHelper.name())
 
@@ -4972,6 +4985,18 @@ extension BrowserViewController: TabManagerDelegate {
         updateTabCountUsingTabManager(tabManager)
     }
 
+    private func showProxyLeakGuardToast(isPrivate: Bool) {
+        let viewModel = ButtonToastViewModel(labelText: .VPN.ProxyLeakGuard.BlockedContentToast,
+                                             buttonText: .VPN.ProxyLeakGuard.LearnMoreButton)
+        let toast = ButtonToast(viewModel: viewModel,
+                                theme: currentTheme(),
+                                completion: { [weak self] buttonPressed in
+            guard buttonPressed else { return }
+            self?.openURLInNewTab(ProxyLeakGuardHelper.learnMoreURL, isPrivate: isPrivate)
+        })
+        show(toast: toast)
+    }
+
     func showPlainToast(message: String) {
         let viewModel = PlainToastViewModel(labelText: message)
         let toast = PlainToast(viewModel: viewModel, theme: currentTheme(), completion: nil)
@@ -5070,7 +5095,7 @@ extension BrowserViewController {
                       failure: @escaping @MainActor @Sendable () -> Void) {
         makeURLSession(
             userAgent: UserAgent.fxaUserAgent,
-            configuration: URLSessionConfiguration.defaultMPTCP).dataTask(with: url
+            configuration: URLSessionConfiguration.defaultMPTCP.withVPNProxy()).dataTask(with: url
             ) { (data, response, error) in
             if validatedHTTPResponse(response, statusCode: 200..<300) != nil,
                let data = data {
