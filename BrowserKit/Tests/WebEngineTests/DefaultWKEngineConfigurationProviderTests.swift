@@ -2,6 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
+import TestKit
 import XCTest
 import WebKit
 @testable import WebEngine
@@ -98,6 +100,29 @@ final class DefaultWKEngineConfigurationProviderTests: XCTestCase {
         XCTAssertEqual(try webTransportEnabled(on: preferences), try webTransportEnabled(on: WKPreferences()))
     }
 
+    func testDisableWebTransport_logsWhenTheFeatureKeyIsMissing() {
+        let logger = MockLogger()
+        let subject = createSubject(logger: logger)
+
+        subject.disableWebTransport(on: WKPreferences(), featureKey: "NotARealWebKitFeature")
+
+        XCTAssertEqual(logger.savedLevel, .warning)
+        XCTAssertEqual(logger.savedCategory, .webview)
+        XCTAssertTrue(logger.savedMessage?.contains("NotARealWebKitFeature") ?? false)
+    }
+
+    func testDisableWebTransport_doesNotLogWhenTheFlagIsSet() throws {
+        let logger = MockLogger()
+        let subject = createSubject(logger: logger)
+        let preferences = WKPreferences()
+        _ = try webTransportEnabled(on: preferences)
+
+        subject.disableWebTransport(on: preferences)
+
+        XCTAssertNil(logger.savedMessage)
+        XCTAssertEqual(try webTransportEnabled(on: preferences), false)
+    }
+
     // MARK: - Helpers
 
     private func webTransportEnabled(on preferences: WKPreferences) throws -> Bool {
@@ -111,8 +136,8 @@ final class DefaultWKEngineConfigurationProviderTests: XCTestCase {
         return isEnabled(preferences, isEnabledSelector, webTransport)
     }
 
-    private func createSubject() -> DefaultWKEngineConfigurationProvider {
-        return DefaultWKEngineConfigurationProvider()
+    private func createSubject(logger: Logger = MockLogger()) -> DefaultWKEngineConfigurationProvider {
+        return DefaultWKEngineConfigurationProvider(logger: logger)
     }
 
     private func privateParams() -> WKWebViewParameters {
