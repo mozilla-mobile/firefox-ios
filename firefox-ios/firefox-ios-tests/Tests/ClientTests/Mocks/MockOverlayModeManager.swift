@@ -9,6 +9,12 @@ import XCTest
 class MockOverlayModeManager: DefaultOverlayModeManager {
     var leaveOverlayModeCallCount = 0
     var enterOverlayModeCallCount = 0
+    var cancelEditingCallCount = 0
+    var stubbedInOverlayMode: Bool?
+
+    override var inOverlayMode: Bool {
+        return stubbedInOverlayMode ?? super.inOverlayMode
+    }
 
     override func openSearch(with pasteContent: String) {
         enterOverlayModeCallCount += 1
@@ -23,6 +29,11 @@ class MockOverlayModeManager: DefaultOverlayModeManager {
     override func finishEditing(shouldCancelLoading: Bool) {
         leaveOverlayModeCallCount += 1
         super.finishEditing(shouldCancelLoading: shouldCancelLoading)
+    }
+
+    override func cancelEditing(shouldCancelLoading: Bool) {
+        cancelEditingCallCount += 1
+        super.cancelEditing(shouldCancelLoading: shouldCancelLoading)
     }
 
     override func switchTab(shouldCancelLoading: Bool) {
