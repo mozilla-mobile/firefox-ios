@@ -375,7 +375,7 @@ workflows:
     - 1_git_clone_and_post_clone
     steps:
     - pull-intermediate-files@1: {}
-    - xcode-test-without-building@0:
+    - xcode-test-without-building@1:
         title: Run smoke tests
         inputs:
         - destination: $DESTINATION
