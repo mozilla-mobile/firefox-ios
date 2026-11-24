@@ -89,6 +89,7 @@
 
   // Sound: short synthesized blips, so there are no audio files to load.
   let audio = null;
+  let output = null;
   let noiseBuffer = null;
   let muted = false;
 
@@ -98,6 +99,17 @@
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
       if (!AudioCtx) return;
       audio = new AudioCtx();
+      // Overlapping blips (a shield, a near miss and a jump in the same beat)
+      // add up past full scale, so everything goes through one limiter.
+      output = audio.createDynamicsCompressor();
+      output.threshold.value = -12;
+      output.knee.value = 6;
+      output.ratio.value = 12;
+      output.attack.value = 0.002;
+      output.release.value = 0.1;
+      const volume = audio.createGain();
+      volume.gain.value = 0.25;
+      output.connect(volume).connect(audio.destination);
     }
     if (audio.state === 'suspended') audio.resume();
   }
@@ -114,7 +126,7 @@
     if (to !== freq) osc.frequency.exponentialRampToValueAtTime(to, t0 + dur);
     gain.gain.setValueAtTime(vol, t0);
     gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
-    osc.connect(gain).connect(audio.destination);
+    osc.connect(gain).connect(output);
     osc.start(t0);
     osc.stop(t0 + dur + 0.02);
   }
@@ -136,7 +148,7 @@
     src.buffer = noiseBuffer;
     gain.gain.setValueAtTime(vol, t0);
     gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
-    src.connect(gain).connect(audio.destination);
+    src.connect(gain).connect(output);
     src.start(t0);
     src.stop(t0 + dur);
   }
