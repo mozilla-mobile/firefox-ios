@@ -439,12 +439,24 @@ extension BrowserViewController: WKUIDelegate {
                        title: String?,
                        image: URL?,
                        currentTab: Tab,
-                       webView: WKWebView) -> [UIAction] {
+                       webView: WKWebView) -> [UIMenuElement] {
         let actionBuilder = WebContextMenuActionsProvider(menuType: image != nil ? .image : .web)
         let isJavascriptScheme = (url.scheme?.caseInsensitiveCompare("javascript") == .orderedSame)
 
         if !isPrivate && !isJavascriptScheme {
             actionBuilder.addOpenInNewTab(url: url, currentTab: currentTab, addTab: addTab)
+            if TabGroupsFeatureFlag.isEnabled {
+                let groups = TabGroupsSessionStore.controller(for: windowUUID, tabManager: tabManager).state.groups
+                actionBuilder.addOpenInTabGroup(url: url,
+                                                currentTab: currentTab,
+                                                groups: groups,
+                                                ungroupedTabCount: tabManager.normalTabs.filter { $0.groupID == nil }.count,
+                                                openInGroup: { [weak self] url, groupID in
+                    self?.openLinkInTabGroup(url: url, groupID: groupID)
+                }, openInNewGroup: { [weak self] url in
+                    self?.showNewTabGroupEditor(url: url)
+                })
+            }
         }
 
         if !isJavascriptScheme {
