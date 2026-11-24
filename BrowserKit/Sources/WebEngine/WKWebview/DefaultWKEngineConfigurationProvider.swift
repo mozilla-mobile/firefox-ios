@@ -105,6 +105,26 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
         isProxyEnabled = !configs.isEmpty
     }
 
+    /// Before iOS 27.2 WebTransport bypasses the built-in relay proxy. The guard in user scripts hides it from pages,
+    /// but (raw, shared and service) workers can still use it, and user scripts never run there.
+    /// WebKit has no public API to turn it off, so this uses the private feature flag. This is the only switch that
+    /// covers every context. It is off from launch rather than only while the VPN is on, because a service or shared
+    /// worker started earlier might keep the preferences it started with.
+    ///
+    /// Turning it off costs little: WebKit only supports WebTransport from iOS 26.4+, its usage on the web is still
+    /// very low (Chrome usage stats: https://chromestatus.com/metrics/feature/timeline/popularity/3472), 
+    /// and few sites serve HTTP/3 over QUIC at all. Users who need the API can update to iOS 27.2+.
+    private static func disableWebTransport(on preferences: WKPreferences) {
+        let featuresSelector = NSSelectorFromString("_features")
+        let setEnabledSelector = NSSelectorFromString("_setEnabled:forFeature:")
+        guard (WKPreferences.self as AnyObject).responds(to: featuresSelector),
+              preferences.responds(to: setEnabledSelector),
+              let features = (WKPreferences.self as AnyObject).value(forKey: "_features") as? [NSObject],
+              let webTransport = features.first(where: { $0.value(forKey: "key") as? String == "WebTransportEnabled" })
+        else { return }
+        preferences.perform(setEnabledSelector, with: nil, with: webTransport)
+    }
+
     public func endPrivateBrowsingSession() {
         if #available(iOS 17.0, *) {
             let currentProxyConfigs = Self.nonPersistentStore.proxyConfigurations
@@ -122,6 +142,9 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
         configuration.userContentController = WKUserContentController()
         configuration.allowsInlineMediaPlayback = true
         configuration.dataDetectorTypes = DefaultWKEngineConfigurationProvider.defaultDataDetectorTypes
+        if #unavailable(iOS 27.2) {
+            Self.disableWebTransport(on: configuration.preferences)
+        }
 
         // TODO: FXIOS-8086 - Evaluate if ignoresViewportScaleLimits is still needed
         // We do this to go against the configuration of the <meta name="viewport">
