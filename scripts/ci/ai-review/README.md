@@ -170,8 +170,7 @@ the API key. That makes everything in the pull request untrusted, so:
 - The model is told to treat everything from the pull request, its tickets and
   comments as material to review, never as instructions.
 - Only the post job can write to the pull request, and it runs only these
-  scripts from the default branch. It has `contents: write` to resolve threads:
-  with `pull-requests: write` alone, GitHub refused.
+  scripts from the default branch. It has `contents: write` to resolve threads.
 - The model proposes follow-ups, but the post job replies only on unresolved
   threads an earlier AI review started. Text in a pull request can't get it to
   reply on or resolve anyone else's thread.
@@ -213,7 +212,7 @@ merged there.
 
 | File | What it does |
 |---|---|
-| `.github/workflows/ai-code-review.yml` | The workflow, its permissions and the model and tool settings |
+| `.github/workflows/ai-code-review.yml` | The Github Action's workflow, its permissions and the model and tool settings |
 | `prompt.md` | The model's review instructions: what to look for and the output format |
 | `gather_context.py` | Collects the pull request's context for the model |
 | `load_guidance.py` | Matches `review-context.toml` and loads the guidance |
