@@ -129,12 +129,9 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
                 searchEngines: [makeSearchEngine(engineID: OpenSearchEngine.googleEngineID)]
             )
         )
-        let action = ToolbarAction(
-            windowUUID: windowUUID,
-            actionType: ToolbarActionType.searchEngineDidChange
-        )
+        let action = SearchSettingsModernAction.searchEngineDidChange
 
-        subject.toolbarProvider.legacyMiddleware(mockStore.state, action)
+        subject.toolbarProvider.modernMiddleware(mockStore.state, action, windowUUID)
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
         XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,
@@ -151,12 +148,9 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
                 searchEngines: [makeSearchEngine(engineID: "\(OpenSearchEngine.googleEngineID)-b-1-m")]
             )
         )
-        let action = ToolbarAction(
-            windowUUID: windowUUID,
-            actionType: ToolbarActionType.searchEngineDidChange
-        )
+        let action = SearchSettingsModernAction.searchEngineDidChange
 
-        subject.toolbarProvider.legacyMiddleware(mockStore.state, action)
+        subject.toolbarProvider.modernMiddleware(mockStore.state, action, windowUUID)
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
         XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,
@@ -171,12 +165,9 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
             featureFlagsProvider: featureFlagsProvider,
             searchEnginesManager: MockSearchEnginesManager(searchEngines: [makeSearchEngine(engineID: "bing")])
         )
-        let action = ToolbarAction(
-            windowUUID: windowUUID,
-            actionType: ToolbarActionType.searchEngineDidChange
-        )
+        let action = SearchSettingsModernAction.searchEngineDidChange
 
-        subject.toolbarProvider.legacyMiddleware(mockStore.state, action)
+        subject.toolbarProvider.modernMiddleware(mockStore.state, action, windowUUID)
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
         XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,
@@ -193,12 +184,9 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
                 searchEngines: [makeSearchEngine(engineID: OpenSearchEngine.googleEngineID, isCustomEngine: true)]
             )
         )
-        let action = ToolbarAction(
-            windowUUID: windowUUID,
-            actionType: ToolbarActionType.searchEngineDidChange
-        )
+        let action = SearchSettingsModernAction.searchEngineDidChange
 
-        subject.toolbarProvider.legacyMiddleware(mockStore.state, action)
+        subject.toolbarProvider.modernMiddleware(mockStore.state, action, windowUUID)
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
         XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,
@@ -212,12 +200,9 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
                 searchEngines: [makeSearchEngine(engineID: OpenSearchEngine.googleEngineID)]
             )
         )
-        let action = ToolbarAction(
-            windowUUID: windowUUID,
-            actionType: ToolbarActionType.searchEngineDidChange
-        )
+        let action = SearchSettingsModernAction.searchEngineDidChange
 
-        subject.toolbarProvider.legacyMiddleware(mockStore.state, action)
+        subject.toolbarProvider.modernMiddleware(mockStore.state, action, windowUUID)
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
         XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,
@@ -235,9 +220,9 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
                 searchEngines: [makeSearchEngine(engineID: OpenSearchEngine.googleEngineID)]
             )
         )
-        let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.googleLensSettingDidChange)
+        let action = SearchSettingsModernAction.googleLensSettingDidChange
 
-        subject.toolbarProvider.legacyMiddleware(mockStore.state, action)
+        subject.toolbarProvider.modernMiddleware(mockStore.state, action, windowUUID)
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
         XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,
@@ -255,9 +240,9 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
                 searchEngines: [makeSearchEngine(engineID: OpenSearchEngine.googleEngineID)]
             )
         )
-        let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.googleLensSettingDidChange)
+        let action = SearchSettingsModernAction.googleLensSettingDidChange
 
-        subject.toolbarProvider.legacyMiddleware(mockStore.state, action)
+        subject.toolbarProvider.modernMiddleware(mockStore.state, action, windowUUID)
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
         XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,

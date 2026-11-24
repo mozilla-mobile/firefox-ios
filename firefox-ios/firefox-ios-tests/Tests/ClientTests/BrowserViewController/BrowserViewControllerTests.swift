@@ -165,8 +165,8 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
         subject.searchEnginesDidUpdate()
 
-        let action = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
-        XCTAssertEqual(action.actionType as? ToolbarActionType, ToolbarActionType.searchEngineDidChange)
+        let action = try XCTUnwrap(mockStore.dispatchedModernActions.first as? SearchSettingsModernAction)
+        XCTAssertEqual(action, .searchEngineDidChange)
     }
 
     // TODO(FXIOS-13126): Fix and uncomment this test
