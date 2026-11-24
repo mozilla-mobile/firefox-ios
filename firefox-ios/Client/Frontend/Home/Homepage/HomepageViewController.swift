@@ -598,6 +598,34 @@ final class HomepageViewController: UIViewController,
         view.addSubview(collectionView)
     }
 
+    private func animateCenterSearchBarToTop() {
+        guard !embeddedAddressBarView.isHidden,
+              !UIAccessibility.isReduceMotionEnabled,
+              let window = view.window,
+              let snapshot = embeddedAddressBarView.snapshotView(afterScreenUpdates: false)
+        else { return }
+
+        snapshot.frame = embeddedAddressBarView.convert(embeddedAddressBarView.bounds, to: window)
+        window.addSubview(snapshot)
+
+        UIView.animate(
+            withDuration: HomepageUX.centerSearchBarTapAnimationDuration,
+            delay: 0,
+            options: .curveEaseInOut
+        ) {
+            snapshot.frame.origin.y = window.safeAreaInsets.top
+        }
+
+        UIView.animate(
+            withDuration: HomepageUX.centerSearchBarSwapFadeDuration,
+            delay: HomepageUX.centerSearchBarTapAnimationDuration - HomepageUX.centerSearchBarSwapFadeDuration
+        ) {
+            snapshot.alpha = 0
+        } completion: { _ in
+            snapshot.removeFromSuperview()
+        }
+    }
+
     private func updateCollectionViewContentInset() {
         guard let collectionView else { return }
 
@@ -1403,6 +1431,7 @@ final class HomepageViewController: UIViewController,
                 actionType: TopSitesActionType.tapOnHomepageTopSitesCell
             )
         case .searchBar:
+            animateCenterSearchBarToTop()
             dispatchDidSelectCardItemAction(with: item)
             dispatchNavigationBrowserAction(
                 with: NavigationDestination(.homepageZeroSearch),
