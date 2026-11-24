@@ -1,6 +1,7 @@
 # The configuration for the microsurveyFeature feature
 features:
   microsurvey-feature:
+    no-lint: [MISSING_CONTACTS]
     description: >
         A feature that shows the microsurvey for users to interact with and submit responses.
     variables:

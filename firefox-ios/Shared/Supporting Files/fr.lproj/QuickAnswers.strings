@@ -22,6 +22,9 @@
 /* Placeholder text shown in the Quick Answers view while the microphone is active and waiting for the user to ask a follow-up question about the previous answer. */
 "QuickAnswers.ContentView.ListeningFollowUp.v160" = "Écoute en cours, posez votre question complémentaire…";
 
+/* Button shown below a Quick Answers result that the user taps to ask a new, unrelated question. */
+"QuickAnswers.ContentView.NewQuestionButton.v161" = "Poser une nouvelle question";
+
 /* Placeholder text shown in the Quick Answers view before the user starts speaking. */
 "QuickAnswers.ContentView.Placeholder.v158" = "Posez n’importe quelle question…";
 
@@ -101,7 +104,7 @@
 "QuickAnswers.OptInRedesign.PrivateByDesignDescription.v158" = "Nous n’utilisons pas votre voix pour vous identifier.";
 
 /* Title of the second privacy row on the Quick Answers opt-in screen, explaining that the user's voice is not used to identify them. */
-"QuickAnswers.OptInRedesign.PrivateByDesignTitle.v158" = "Conçu pour protéger votre vie privé";
+"QuickAnswers.OptInRedesign.PrivateByDesignTitle.v158" = "Conçu pour protéger votre vie privée";
 
 /* Title displayed on the Quick Answers opt-in screen that introduces the voice feature. */
 "QuickAnswers.OptInRedesign.Title.v158" = "Essayez les réponses rapides";
@@ -110,7 +113,7 @@
 "QuickAnswers.PrivacyBanner.Description.v158" = "%@ ne conserve ni vos enregistrements audio ni vos questions, n’utilise pas vos données pour entraîner des modèles d’IA et ne se sert pas de votre voix pour vous identifier.";
 
 /* Title of the privacy banner shown on the Quick Answers screen. */
-"QuickAnswers.PrivacyBanner.Title.v158" = "Conçu pour protéger votre vie privé";
+"QuickAnswers.PrivacyBanner.Title.v158" = "Conçu pour protéger votre vie privée";
 
 /* Feature name as displayed in the iOS Quick Action menu (contextual menu displayed when long-pressing the browser app icon) */
 "QuickAnswers.QuickActions.Title.v158" = "Réponses rapides";

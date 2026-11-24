@@ -62,6 +62,38 @@ final class MainMenuScreen {
         BaseTestCase().mozWaitForElementToExist(settings)
     }
 
+    /// The badge icon is a green checkmark when Block Ads is on, a yellow to orange cross when off.
+    /// Green and yellow pixels are compared since the background can be saturated (purple in private mode).
+    func assertAdBlockerBadgeIsOn(timeout: TimeInterval = TIMEOUT) {
+        assertAdBlockerBadge(isOn: true, timeout: timeout)
+    }
+
+    func assertAdBlockerBadgeIsOff(timeout: TimeInterval = TIMEOUT) {
+        assertAdBlockerBadge(isOn: false, timeout: timeout)
+    }
+
+    private func assertAdBlockerBadge(isOn: Bool, timeout: TimeInterval) {
+        let badge = sel.AD_BLOCKER_BADGE.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(badge, timeout: timeout)
+        let greenHues = 100.0...200.0
+        let yellowHues = 15.0...70.0
+        let minimumIconShare = 0.005
+        let predicate = NSPredicate { _, _ in
+            let green = badge.shareOfPixels(inHueRange: greenHues)
+            let yellow = badge.shareOfPixels(inHueRange: yellowHues)
+            let (expected, other) = isOn ? (green, yellow) : (yellow, green)
+            return expected > minimumIconShare && expected > other
+        }
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: nil)
+        guard XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed else {
+            let green = String(format: "%.3f", badge.shareOfPixels(inHueRange: greenHues))
+            let yellow = String(format: "%.3f", badge.shareOfPixels(inHueRange: yellowHues))
+            let state = isOn ? "green (ON)" : "yellow (OFF)"
+            XCTFail("Expected the Ad Blocker badge icon to be \(state), green share \(green), yellow share \(yellow)")
+            return
+        }
+    }
+
     func tapSettings() {
         let settings = sel.SETTINGS_CELL.element(in: app)
         BaseTestCase().mozWaitForElementToExist(settings)
@@ -72,6 +104,27 @@ final class MainMenuScreen {
         let bookmarks = sel.BOOKMARKS_BUTTON.element(in: app)
         BaseTestCase().mozWaitForElementToExist(bookmarks)
         bookmarks.waitAndTap()
+    }
+
+    /// Taps "More" to show the expanded options; iOS 16 reopens the menu already expanded.
+    func expandMenuIfNeeded() {
+        expandTabMenuIfNeeded(in: app)
+    }
+
+    func tapFindInPage() {
+        sel.FIND_IN_PAGE.element(in: app).waitAndTap()
+    }
+
+    func tapAddToShortcuts() {
+        sel.ADD_TO_SHORTCUTS.element(in: app).waitAndTap()
+    }
+
+    func assertRemoveFromShortcutsExists(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(sel.REMOVE_FROM_SHORTCUTS.element(in: app), timeout: timeout)
+    }
+
+    func tapRemoveFromShortcuts() {
+        sel.REMOVE_FROM_SHORTCUTS.element(in: app).waitAndTap()
     }
 
     func tapBookmarkPage() {
@@ -119,10 +172,30 @@ final class MainMenuScreen {
     }
 
     func assertReaderViewIs(on isOn: Bool, timeout: TimeInterval = TIMEOUT) {
-        let readerView = sel.READER_VIEW.element(in: app)
-        let status = isOn ? sel.READER_VIEW_STATUS_ON : sel.READER_VIEW_STATUS_OFF
-        BaseTestCase().mozWaitForElementToExist(readerView, timeout: timeout)
-        BaseTestCase().mozWaitForElementToExist(readerView.staticTexts[status.value], timeout: timeout)
+        assertStatus(of: sel.READER_VIEW, isOn: isOn, timeout: timeout)
+    }
+
+    func assertWebsiteDarkModeIs(on isOn: Bool, timeout: TimeInterval = TIMEOUT) {
+        assertStatus(of: sel.WEBSITE_DARK_MODE, isOn: isOn, timeout: timeout)
+    }
+
+    func tapWebsiteDarkMode() {
+        sel.WEBSITE_DARK_MODE.element(in: app).waitAndTap()
+    }
+
+    func assertDesktopSiteIs(on isOn: Bool, timeout: TimeInterval = TIMEOUT) {
+        assertStatus(of: sel.DESKTOP_SITE, isOn: isOn, timeout: timeout)
+    }
+
+    private func assertStatus(of item: Selector, isOn: Bool, timeout: TimeInterval) {
+        let cell = item.element(in: app)
+        let status = isOn ? sel.MENU_ITEM_STATUS_ON : sel.MENU_ITEM_STATUS_OFF
+        BaseTestCase().mozWaitForElementToExist(cell, timeout: timeout)
+        BaseTestCase().mozWaitForElementToExist(cell.staticTexts[status.value], timeout: timeout)
+    }
+
+    func tapDesktopSite() {
+        sel.DESKTOP_SITE.element(in: app).waitAndTap()
     }
 
     func tapReaderView() {

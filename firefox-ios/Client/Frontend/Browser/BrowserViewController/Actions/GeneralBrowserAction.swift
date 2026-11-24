@@ -80,7 +80,6 @@ enum GeneralBrowserActionType: ActionType {
     case showPasswordGenerator
     case didSelectedTabChangeToHomepage
     case enteredZeroSearchScreen
-    case didUnhideToolbar
     case didCloseTabFromToolbar
     case didTapReaderModeBarSummarizerButton
     case shakeMotionEnded
@@ -108,6 +107,5 @@ struct GeneralBrowserMiddlewareAction: Action {
 
 enum GeneralBrowserMiddlewareActionType: ActionType {
     case browserDidLoad
-    case toolbarPositionChanged
     case websiteDidScroll
 }

@@ -4,8 +4,8 @@
 
 import UIKit
 
-struct UIConstants {
-    struct layout {
+enum UIConstants {
+    enum layout {
         static let browserToolbarDisabledOpacity: CGFloat = 0.4
         static let browserToolbarHeight: CGFloat = 44
         static let deleteAnimationDuration: TimeInterval = 0.25
@@ -153,7 +153,7 @@ struct UIConstants {
         static let toastLabelOffset: CGFloat = 20
     }
 
-    struct strings {
+    enum strings {
         static let aboutLearnMoreButton = NSLocalizedString("About.learnMoreButton", value: "Learn more", comment: "Button on About screen")
         static let aboutMissionLabel = NSLocalizedString("About.missionLabel", value: "%@ is produced by Mozilla. Our mission is to foster a healthy, open Internet.", comment: "Label on About screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”).")
         static let aboutPrivateBulletHeader = NSLocalizedString("About.privateBulletHeader", value: "Use it as a private browser:", comment: "Label on About screen")

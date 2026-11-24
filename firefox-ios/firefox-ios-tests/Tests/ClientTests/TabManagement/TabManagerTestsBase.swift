@@ -71,13 +71,13 @@ class TabManagerTestsBase: XCTestCase {
     }
 
     func setIsDeeplinkOptimizationRefactorEnabled(_ enabled: Bool) {
-        FxNimbus.shared.features.deeplinkOptimizationRefactorFeature.with { _, _ in
+        FxNimbus.shared.features.deeplinkOptimizationRefactorFeature.with { _ in
             return DeeplinkOptimizationRefactorFeature(enabled: enabled)
         }
     }
 
     func setupNimbusTabTrayUIExperimentTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.tabTrayUiExperiments.with { _, _ in
+        FxNimbus.shared.features.tabTrayUiExperiments.with { _ in
             return TabTrayUiExperiments(enabled: isEnabled)
         }
     }

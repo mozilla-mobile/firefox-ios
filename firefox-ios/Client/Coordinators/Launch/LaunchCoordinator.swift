@@ -26,6 +26,7 @@ final class LaunchCoordinator: BaseCoordinator,
                                OnboardingServiceDelegate {
     private let profile: Profile
     private let isIphone: Bool
+    private let installationTelemetryService: InstallationTelemetryService
     let windowUUID: WindowUUID
     let themeManager: ThemeManager = AppContainer.shared.resolve()
     weak var parentCoordinator: LaunchCoordinatorDelegate?
@@ -34,9 +35,11 @@ final class LaunchCoordinator: BaseCoordinator,
     init(router: Router,
          windowUUID: WindowUUID,
          profile: Profile = AppContainer.shared.resolve(),
-         isIphone: Bool = UIDevice.current.userInterfaceIdiom == .phone) {
+         isIphone: Bool = UIDevice.current.userInterfaceIdiom == .phone,
+         installationTelemetryService: InstallationTelemetryService = AppContainer.shared.resolve()) {
         self.profile = profile
         self.isIphone = isIphone
+        self.installationTelemetryService = installationTelemetryService
         self.windowUUID = windowUUID
         super.init(router: router)
     }
@@ -122,6 +125,7 @@ final class LaunchCoordinator: BaseCoordinator,
                 self.logger.setup(sendCrashReports: sendCrashReports)
 
                 TelemetryWrapper.shared.setup(profile: profile)
+                self.installationTelemetryService.update()
                 TelemetryWrapper.shared.recordStartUpTelemetry()
 
                 self.parentCoordinator?.didFinishTermsOfService(from: self)

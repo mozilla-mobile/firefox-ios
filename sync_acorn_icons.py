@@ -179,7 +179,7 @@ import Foundation
 /// This struct defines all the standard image identifiers of icons used in the app.
 /// When adding new identifiers, please respect alphabetical order.
 /// Sing the song if you must.
-public struct StandardImageIdentifiers {
+public enum StandardImageIdentifiers {
 """
     size_struct_map = {}
     for image_size, image_size_title in TARGET_SIZES:
@@ -189,7 +189,7 @@ public struct StandardImageIdentifiers {
     for size, struct_name in size_struct_map.items():
         if sorted_icons[size]:
             block = f"    // Icon size {struct_name}\n"
-            block += f"    public struct {size} {{\n"
+            block += f"    public enum {size} {{\n"
 
             # Sort icons alphabetically and add them to the struct
             for icon_info in sorted(sorted_icons[size], key=lambda x: x[0].lower()):

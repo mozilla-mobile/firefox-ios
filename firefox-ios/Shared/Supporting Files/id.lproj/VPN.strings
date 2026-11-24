@@ -1,0 +1,60 @@
+/* Body text of the system notification telling the user their free monthly VPN data has reset. */
+"VPN.DataLimitRefreshNotification.Body.v160" = "Data VPN bulanan gratis Anda telah disegarkan.";
+
+/* Title of a system notification telling the user their free monthly VPN data has reset and is ready to use again. %1$@ is the monthly data limit in gigabytes (for example, 5). “GB” stands for gigabytes. */
+"VPN.DataLimitRefreshNotification.Title.v160" = "%1$@ GB data VPN sudah siap";
+
+/* Body text of the popup shown when the VPN stops working while the user is browsing. Warns that if they keep browsing, websites and other third parties may be able to see their location. */
+"VPN.ErrorBrowsingPopup.Body.v160" = "VPN tidak berfungsi saat ini. Jika Anda melanjutkan penjelajahan, lokasi Anda mungkin terlihat.";
+
+/* Button on the popup shown when the VPN stops working while the user is browsing. Tapping it closes all of the user's open tabs. */
+"VPN.ErrorBrowsingPopup.CloseAllTabs.v160" = "Tutup Semua Tab";
+
+/* Confirmation shown after the user closes a single tab from the popup that appears when the VPN stops working while browsing. */
+"VPN.ErrorBrowsingPopup.ClosedOneTab.v160" = "1 Tab Ditutup";
+
+/* Confirmation shown after the user closes more than one tab from the popup that appears when the VPN stops working while browsing. %1$@ is the number of tabs that were closed (for example, 3). */
+"VPN.ErrorBrowsingPopup.ClosedXTabs.v160" = "%1$@ Tab Ditutup";
+
+/* Button on the popup shown when the VPN stops working while the user is browsing. Tapping it closes only the tab the user is currently viewing. */
+"VPN.ErrorBrowsingPopup.CloseThisTab.v160" = "Tutup Tab Ini";
+
+/* Button on the popups shown when the VPN stops working while the user is browsing, or when the user runs out of free monthly VPN data. Tapping it closes the popup so the user can keep browsing without the VPN. */
+"VPN.ErrorBrowsingPopup.Continue.v160" = "Lanjutkan Tanpa VPN";
+
+/* Title of a popup shown when the VPN stops working while the user is browsing with it on. Asks if the user wants to keep browsing without the VPN. */
+"VPN.ErrorBrowsingPopup.Title.v160" = "Lanjutkan Tanpa VPN?";
+
+/* Body text of the popup shown when the app fails to connect to the VPN. “Try again” means try connecting to the VPN again. */
+"VPN.ErrorConnectingPopup.Body.v160" = "Coba lagi dalam beberapa menit.";
+
+/* Button on the popup shown when the app fails to connect to the VPN. Tapping it closes the popup. */
+"VPN.ErrorConnectingPopup.CloseButtonText.v160" = "Tutup";
+
+/* Button on the popup shown when the app fails to connect to the VPN. Tapping it tries to connect to the VPN again. */
+"VPN.ErrorConnectingPopup.RetryButtonText.v160" = "Coba Lagi";
+
+/* Title of a popup shown when the app fails to connect to the VPN. */
+"VPN.ErrorConnectingPopup.Title.v160" = "Tidak Dapat Terhubung ke VPN";
+
+/* Alternative body text for the popup shown when the user has used all of their free monthly VPN data. Explains that their VPN data resets at the start of next month. %1$@ is the monthly data limit in gigabytes (for example, 5). “GB” stands for gigabytes. */
+"VPN.ReachedDataLimitPopup.AltPopupBody.v160" = "Semua %1$@ GB data VPN telah digunakan. Akses diatur ulang bulan depan.";
+
+/* Body text of the popup shown when the user has used all of their free monthly VPN data. Explains that the VPN has turned off, so websites may be able to see their location if they keep browsing. %1$@ is the monthly data limit in gigabytes (for example, 5). “GB” stands for gigabytes. */
+"VPN.ReachedDataLimitPopup.Body.v160" = "Anda telah menggunakan seluruh %1$@ GB data VPN. VPN tidak aktif, jadi lokasi Anda mungkin terlihat jika Anda terus menjelajah.";
+
+/* Button on the popup shown when the user runs out of free monthly VPN data. Tapping it closes all of the user's open tabs. */
+"VPN.ReachedDataLimitPopup.CloseAllTabs.v160" = "Tutup Semua Tab";
+
+/* Confirmation shown after the user closes a single tab from the popup that appears when they run out of free monthly VPN data. */
+"VPN.ReachedDataLimitPopup.ClosedOneTab.v160" = "1 Tab Ditutup";
+
+/* Confirmation shown after the user closes more than one tab from the popup that appears when they run out of free monthly VPN data. %1$@ is the number of tabs that were closed (for example, 3). */
+"VPN.ReachedDataLimitPopup.ClosedXTabs.v160" = "%1$@ Tab Ditutup";
+
+/* Button on the popup shown when the user runs out of free monthly VPN data. Tapping it closes only the tab the user is currently viewing. */
+"VPN.ReachedDataLimitPopup.CloseThisTab.v160" = "Tutup Tab Ini";
+
+/* Title of a popup shown when the user has used all of their free monthly VPN data. */
+"VPN.ReachedDataLimitPopup.Title.v160" = "Batas Data VPN Tercapai";
+

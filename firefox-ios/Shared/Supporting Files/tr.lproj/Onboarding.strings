@@ -521,3 +521,9 @@ Secondary button on the onboarding card that prompts users to enable syncing for
 /* Title of an onboarding card that introduces the built-in VPN. %1$@ is the app name (for example, Firefox). */
 "VPN.Onboarding.Title.v160" = "%1$@’un yerleşik VPN’ini deneyin";
 
+/* Body text below the “More Privacy On Public Wi-Fi” (VPN.Onboarding.WifiSubheading.v160) subheading on the VPN onboarding card. %1$@ is the app name (for example, Firefox). */
+"VPN.Onboarding.WifiBody.v160" = "Dışarıda olduğunuz zamanlarda %1$@ tarayıcınızın korumasını güçlendirin.";
+
+/* Subheading on the VPN onboarding card. Explains that the VPN gives the user more privacy when they use public Wi-Fi networks. */
+"VPN.Onboarding.WifiSubheading.v160" = "Açık Wi-Fi ağlarında daha fazla gizlilik";
+

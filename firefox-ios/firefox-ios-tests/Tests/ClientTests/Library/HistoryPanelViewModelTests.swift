@@ -191,6 +191,25 @@ class HistoryPanelViewModelTests: XCTestCase {
         XCTAssertTrue(result.value.isSuccess, "History cleared.")
     }
 
+    func testRemoveHistoryItems_ForSearchResultSite_RemovesEveryListRowForThatURL() {
+        let subject = createSubject()
+        let url = "https://example.com/page"
+        let now = Date().toMillisecondsSince1970()
+        [now - 120_000, now - 60_000].forEach { timestamp in
+            let observation = VisitObservation(url: url, title: "Page", visitType: .link, at: timestamp)
+            XCTAssertTrue(profile.places.applyObservation(visitObservation: observation).value.isSuccess)
+        }
+
+        fetchHistory(from: subject) { _ in
+            XCTAssertEqual(subject.dateGroupedSites.allItems().map(\.url), [url, url])
+
+            let searchResultSite = Site.createBasicSite(url: url, title: "Page")
+            subject.removeHistoryItems(item: [.site(searchResultSite)], at: 0)
+
+            XCTAssertTrue(subject.dateGroupedSites.isEmpty)
+        }
+    }
+
     // MARK: - Setup
     private func createSubject() -> HistoryPanelViewModel {
         let subject = HistoryPanelViewModel(profile: profile)

@@ -1982,7 +1982,9 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {
         // Hardware keyboards can fire spurious keyboardDidHide while the text field still has focus.
-        if UIDevice.current.userInterfaceIdiom == .pad && !orientationWillChange && !urlBar.isUrlTextFieldFirstResponder {
+        // A presented modal (e.g. Settings) hides the keyboard for real even if the field kept focus.
+        let spuriousHide = urlBar.isUrlTextFieldFirstResponder && presentedViewController == nil
+        if UIDevice.current.userInterfaceIdiom == .pad && !orientationWillChange && !spuriousHide {
             urlBar.dismiss()
         }
         orientationWillChange = false

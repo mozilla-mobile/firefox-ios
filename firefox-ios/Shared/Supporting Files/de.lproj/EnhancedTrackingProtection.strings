@@ -83,7 +83,7 @@
 "Menu.EnhancedTrackingProtection.Details.Trackers.v128" = "Blockierte Tracker: %@";
 
 /* Text to let users know how standard mode for Tracking Protection work. %@ is a tappable text which contains a link with more information about current Tracking Protection mode. e.g Learn more */
-"Menu.EnhancedTrackingProtection.Details.TrackersStandardModeFooterText.v150" = "Standard blockiert gängige Skripte zur Aktivitätenverfolgung, nachdem eine Seite geladen wurde, sodass die Anzahl der Tracker möglicherweise höher ist. %@";
+"Menu.EnhancedTrackingProtection.Details.TrackersStandardModeFooterText.v150" = "Standard blockiert gängige Skripte zur Aktivitätenverfolgung, nachdem eine Seite mit dem Laden begonnen hat, sodass die Anzahl der Tracker möglicherweise höher ist. %@";
 
 /* Text to let users know how strict mode for Tracking Protection work. %@ is a tappable text which contains a link with more information about current Tracking Protection mode. e.g Learn more */
 "Menu.EnhancedTrackingProtection.Details.TrackersStrictModeFooterText.v150" = "Streng blockiert weitere Elemente zur Aktivitätenverfolgung, indem diese vor dem Laden einer Seite gestoppt werden, sodass es möglicherweise weniger Tracker gibt. %@";
@@ -104,7 +104,7 @@
 "Menu.EnhancedTrackingProtection.Off.Title.v128" = "Sie haben die Schutzmaßnahmen deaktiviert";
 
 /* Header for the enhanced tracking protection screen when the user has selected to be protected. */
-"Menu.EnhancedTrackingProtection.On.Header.v128" = "Sie sind geschützt. Wenn wir etwas entdecken, sagen wir Ihnen es.";
+"Menu.EnhancedTrackingProtection.On.Header.v128" = "Sie sind geschützt. Wenn wir etwas entdecken, sagen wir es Ihnen.";
 
 /* Header for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
 "Menu.EnhancedTrackingProtection.On.NotSecure.Header.v128" = "Ihre Verbindung ist nicht sicher.";
@@ -125,5 +125,5 @@
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "Der Schutz ist DEAKTIVIERT. Wir empfehlen Ihnen, ihn wieder zu aktivieren.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOn.Text.v128" = "Wenn etwas auf dieser Website beschädigt aussieht, deaktivieren Sie ihn.";
+"Menu.EnhancedTrackingProtection.SwitchOn.Text.v128" = "Wenn auf dieser Website etwas nicht richtig funktioniert, deaktivieren Sie ihn.";
 

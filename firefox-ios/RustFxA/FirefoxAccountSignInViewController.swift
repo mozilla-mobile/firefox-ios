@@ -29,7 +29,7 @@ public enum NotificationPermissionRequestBehavior {
 
 /// ViewController handling Sign In through QR Code or Email address
 class FirefoxAccountSignInViewController: UIViewController, Themeable {
-    struct UX {
+    enum UX {
         static let horizontalPadding: CGFloat = 16
         static let buttonCornerRadius: CGFloat = 8
         static let buttonVerticalInset: CGFloat = 12
@@ -325,10 +325,17 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
                     // password
                     scopes: [OAuthScope.profile, OAuthScope.oldSync, OAuthScope.session]
                 ) { [weak self] result in
-                    guard self != nil else { return }
+                    guard let self else { return }
 
-                    if case .success(let url) = result {
+                    switch result {
+                    case .success(let url):
                         completion(url)
+                    case .failure(let error):
+                        logger.log(
+                                "Failed to begin pairing authentication: \(error).",
+                                level: .warning,
+                                category: .sync
+                            )
                     }
                 }
             }

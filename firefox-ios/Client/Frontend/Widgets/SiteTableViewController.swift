@@ -6,7 +6,7 @@ import UIKit
 import Storage
 import Common
 
-struct SiteTableViewControllerUX {
+enum SiteTableViewControllerUX {
     static let RowHeight: CGFloat = 44
 }
 

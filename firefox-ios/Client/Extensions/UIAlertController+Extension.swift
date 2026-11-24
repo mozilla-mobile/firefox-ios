@@ -69,24 +69,31 @@ extension UIAlertController {
      */
     class func deleteLoginAlertWithDeleteCallback(
         _ deleteCallback: @escaping UIAlertActionCallback,
-        hasSyncedLogins: Bool) -> UIAlertController {
+        hasSyncedLogins: Bool,
+        usesUpdatedSyncStrings: Bool
+    ) -> UIAlertController {
+        let title: String = usesUpdatedSyncStrings ? .DeleteLoginAlert.Title : .DeleteLoginAlertTitle
         let deleteAlert: UIAlertController
         if hasSyncedLogins {
+            let message: String = usesUpdatedSyncStrings
+                ? String(format: .DeleteLoginAlert.SyncedMessage, AppName.shortName.rawValue)
+                : .DeleteLoginAlertSyncedMessage
             deleteAlert = UIAlertController(
-                title: .DeleteLoginAlertTitle,
-                message: .DeleteLoginAlertSyncedMessage,
+                title: title,
+                message: message,
                 preferredStyle: .alert
             )
         } else {
             deleteAlert = UIAlertController(
-                title: .DeleteLoginAlertTitle,
+                title: title,
                 message: .DeleteLoginAlertLocalMessage,
                 preferredStyle: .alert
             )
         }
 
         let cancelAction = UIAlertAction(title: .DeleteLoginAlertCancel, style: .default, handler: nil)
-        let deleteAction = UIAlertAction(title: .DeleteLoginAlertDelete, style: .destructive, handler: deleteCallback)
+        let deleteTitle: String = usesUpdatedSyncStrings ? .DeleteLoginAlert.DeleteButtonTitle : .DeleteLoginAlertDelete
+        let deleteAction = UIAlertAction(title: deleteTitle, style: .destructive, handler: deleteCallback)
 
         deleteAlert.addAction(cancelAction)
         deleteAlert.addAction(deleteAction)

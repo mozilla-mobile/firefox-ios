@@ -1,6 +1,7 @@
 # The configuration for the quickAnswersFeature feature
 features:
   quick-answers-feature:
+    no-lint: [MISSING_CONTACTS]
     description: >
       The feature flag to manage the roll out of the quick answers feature.
     variables:
@@ -18,10 +19,15 @@ features:
         description: >
           Shows the redesigned opt-in as a sheet over the browser.
         type: Boolean
-        default: false
+        default: true
       follow-up-enabled:
         description: >
           Enables asking follow up questions after an answer is shown.
+        type: Boolean
+        default: true
+      return-to-answer-enabled:
+        description: >
+          Keeps the Quick Answers session alive when a citation is tapped and shows a pill to return to it.
         type: Boolean
         default: false
     defaults:
@@ -29,14 +35,16 @@ features:
         value:
           enabled: false
           model: exa
-          optInRedesign: false
-          follow-up-enabled: false
+          optInRedesign: true
+          follow-up-enabled: true
+          return-to-answer-enabled: false
       - channel: developer
         value:
           enabled: false
           model: exa
           optInRedesign: true
-          follow-up-enabled: false
+          follow-up-enabled: true
+          return-to-answer-enabled: false
 
 enums:
   QuickAnswersModel:

@@ -4,7 +4,7 @@
 
 import Foundation
 
-class GlobalTabEventHandlers {
+enum GlobalTabEventHandlers {
     // TODO: FXIOS-12592 This global property is not concurrency safe
     nonisolated(unsafe) private static var globalHandlers: [TabEventHandler] = []
 

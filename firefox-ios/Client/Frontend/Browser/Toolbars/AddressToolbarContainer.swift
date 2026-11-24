@@ -226,6 +226,11 @@ final class AddressToolbarContainer: UIView,
         subscribeToRedux()
     }
 
+    func locationCapsuleFrame(in view: UIView) -> CGRect? {
+        guard toolbar.isDescendant(of: view) else { return nil }
+        return toolbar.locationCapsuleFrame(in: view)
+    }
+
     func updateProgressBar(progress: Double) {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
@@ -658,12 +663,11 @@ final class AddressToolbarContainer: UIView,
     func searchSuggestions(searchTerm: String) {
         if let windowUUID,
            let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID) {
-            if searchTerm.isEmpty, !toolbarState.addressToolbar.isEmptySearch {
-                let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didDeleteSearchTerm)
-                store.dispatch(action)
-            } else if !searchTerm.isEmpty, toolbarState.addressToolbar.isEmptySearch {
-                let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didEnterSearchTerm)
-                store.dispatch(action)
+            if searchTerm.isEmpty != toolbarState.addressToolbar.isEmptySearch {
+                store.dispatch(
+                    ToolbarModernAction.searchTermDidChange(isEmpty: searchTerm.isEmpty),
+                    forWindowUUID: windowUUID
+                )
             } else if !toolbarState.addressToolbar.didStartTyping {
                 let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didStartTyping)
                 store.dispatch(action)
@@ -770,12 +774,12 @@ final class AddressToolbarContainer: UIView,
         delegate?.addressToolbarDidEnterOverlayMode(self)
 
         if pasted {
-            store.dispatch(ToolbarModernAction.didPasteSearchTerm(searchTerm: locationText), forWindowUUID: windowUUID)
+            store.dispatch(ToolbarModernAction.searchTermDidSet(searchTerm: locationText), forWindowUUID: windowUUID)
 
             delegate?.openSuggestions(searchTerm: locationText ?? "")
         } else {
+            store.dispatch(ToolbarModernAction.animationStateChanged(shouldAnimate: true), forWindowUUID: windowUUID)
             let action = ToolbarAction(searchTerm: locationText,
-                                       shouldAnimate: true,
                                        windowUUID: windowUUID,
                                        actionType: ToolbarActionType.didStartEditingUrl)
             store.dispatch(action)
@@ -792,8 +796,7 @@ final class AddressToolbarContainer: UIView,
         delegate?.addressToolbar(self, didLeaveOverlayModeForReason: reason)
 
         if toolbarState.addressToolbar.isEditing {
-            let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
-            store.dispatch(action)
+            store.dispatch(ToolbarModernAction.cancelEdit(url: nil), forWindowUUID: windowUUID)
         }
     }
 

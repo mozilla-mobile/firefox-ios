@@ -9,6 +9,8 @@ protocol PrivacyNoticeHelperProtocol {
 }
 
 struct PrivacyNoticeHelper: PrivacyNoticeHelperProtocol {
+    private let nimbus: FxNimbus
+
     // Date of the last privacy notice update in milliseconds since epoch
     // Update this value to the latest privacy notice release date when you want to show users the
     // homepage privacy notice card
@@ -16,16 +18,14 @@ struct PrivacyNoticeHelper: PrivacyNoticeHelperProtocol {
         let isDebugOverride = prefs.boolForKey(PrefsKeys.PrivacyNotice.privacyNoticeUpdateDebugOverride) ?? false
         if isDebugOverride { return UInt64(Date().timeIntervalSince1970 * 1000) }
 
-        let components = DateComponents(timeZone: TimeZone(secondsFromGMT: 0), year: 2025, month: 12, day: 17)
-        let calendar = Calendar(identifier: .gregorian)
-        let date = calendar.date(from: components) ?? .distantPast
-        return UInt64(date.timeIntervalSince1970 * 1000)
+        return UInt64(nimbus.features.touFeature.value().notificationTimestamp)
     }
 
     private let prefs: Prefs
 
-    init(prefs: Prefs) {
+    init(prefs: Prefs, nimbus: FxNimbus = FxNimbus.shared) {
         self.prefs = prefs
+        self.nimbus = nimbus
     }
 
     func shouldShowPrivacyNotice() -> Bool {
@@ -35,10 +35,12 @@ struct PrivacyNoticeHelper: PrivacyNoticeHelperProtocol {
 
         // 2. User has accepted ToS (via onboarding or bottom sheet) before the last privacy notice update
         //    AND has not since seen the homepage privacy notice card since the privacy notice was updated
+        //    AND the privacy notice date is in the past
+        let hasPrivacyNoticeUpdateTimePassed = UInt64(Date().toTimestamp()) >= privacyNoticeUpdateInMilliseconds
         let isAcceptanceOutdated = acceptedDate < privacyNoticeUpdateInMilliseconds
         let privacyNoticeNotifiedDate = prefs.timestampForKey(PrefsKeys.PrivacyNotice.notifiedDate)
         let isPrivacyNoticeOutdated = privacyNoticeNotifiedDate.map { $0 < privacyNoticeUpdateInMilliseconds } ?? true
-        guard isPrivacyNoticeOutdated, isAcceptanceOutdated else { return false }
+        guard hasPrivacyNoticeUpdateTimePassed, isPrivacyNoticeOutdated, isAcceptanceOutdated else { return false }
 
         prefs.setTimestamp(Date().toTimestamp(), forKey: PrefsKeys.PrivacyNotice.notifiedDate)
         prefs.setBool(false, forKey: PrefsKeys.PrivacyNotice.privacyNoticeUpdateDebugOverride)

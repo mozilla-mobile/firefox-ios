@@ -430,7 +430,7 @@ final class BrowserViewControllerLayoutManagerTests: XCTestCase {
         subject.setupOverKeyboardContainerConstraints()
         subject.setupBottomContentStackViewConstraints()
 
-        subject.updateBottomContentStackViewConstraints(isBottomSearchBar: true, keyboardState: nil)
+        subject.updateBottomContentStackViewConstraints(shouldPushAboveKeyboardContainer: true, keyboardState: nil)
 
         // the bottom anchor should be pin to overkeyboard top
         let activeMaxConstraints = parentView.constraints.filter {
@@ -448,7 +448,7 @@ final class BrowserViewControllerLayoutManagerTests: XCTestCase {
         subject.setupBottomContentStackViewConstraints()
         navigationToolbarContainer.isHidden = true
 
-        subject.updateBottomContentStackViewConstraints(isBottomSearchBar: false,
+        subject.updateBottomContentStackViewConstraints(shouldPushAboveKeyboardContainer: false,
                                                         keyboardState: nil)
 
         // Basic constraint (equalTo safeArea bottom) should be active

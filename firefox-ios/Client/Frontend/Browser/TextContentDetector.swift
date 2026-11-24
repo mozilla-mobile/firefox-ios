@@ -4,7 +4,7 @@
 
 import Foundation
 
-class TextContentDetector {
+enum TextContentDetector {
     enum DetectedType {
         case phoneNumber(String)
         case link(URL)

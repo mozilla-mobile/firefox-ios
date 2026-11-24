@@ -11,7 +11,7 @@ final class RelayMaskSettingsViewController: SettingsTableViewController {
     private lazy var linkButton: LinkButton = .build()
     private let relayController: RelayControllerProtocol
 
-    private struct UX {
+    private enum UX {
         static let buttonContentInsets = NSDirectionalEdgeInsets(top: 12, leading: 0, bottom: 12, trailing: 0)
     }
 

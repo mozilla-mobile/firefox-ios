@@ -54,10 +54,17 @@ class DependencyHelper {
         appDelegate.gleanUsageReportingMetricsService
         AppContainer.shared.register(service: gleanUsageReportingMetricsService)
 
+        AppContainer.shared.register(service: appDelegate.installationTelemetryService)
+
         AppContainer.shared.register(service: appDelegate.shareTelemetry)
 
         let userFeaturePreferenceManager = UserFeaturePreferenceManager(prefs: profile.prefs)
         AppContainer.shared.register(service: userFeaturePreferenceManager as UserFeaturePreferring)
+
+        if #available(iOS 17.0, *) {
+            let vpnManager = VPNManager(profile: profile, windowManager: windowManager)
+            AppContainer.shared.register(service: vpnManager as VPNRunnable)
+        }
 
         // Tell the container we are done registering
         AppContainer.shared.bootstrap()

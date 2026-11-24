@@ -19,7 +19,7 @@ protocol NativeErrorBadCertContentViewDelegate: AnyObject {
 /// a go-back button, and (optionally) a proceed-at-your-own-risk button.
 /// The parent view controller swaps this view in when the error is a bad-cert error.
 final class NativeErrorBadCertContentView: UIView, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let borderWidth: CGFloat = 1
         static let cornerRadius: CGFloat = 12
         static let sectionPaddingTop: CGFloat = 11

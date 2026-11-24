@@ -8,7 +8,7 @@ import Shared
 import ComponentLibrary
 
 final class ContentBlockerSettingViewController: SettingsTableViewController {
-    private struct UX {
+    private enum UX {
         static let buttonContentInsets = NSDirectionalEdgeInsets(top: 12, leading: 0, bottom: 12, trailing: 0)
     }
 

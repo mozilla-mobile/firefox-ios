@@ -39,7 +39,8 @@ class O_AddressesTests: BaseTestCase {
 
     override func tearDown() async throws {
         if name.contains("testAddressOptionIsAvailableInSettingsMenu") {
-            switchThemeToDarkOrLight(theme: "Light")
+            settingsScreen.navigateToDisplaySettings()
+            settingsScreen.selectLightTheme()
             XCUIDevice.shared.orientation = .portrait
         }
         app.terminate()

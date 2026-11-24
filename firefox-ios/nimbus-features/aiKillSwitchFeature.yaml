@@ -1,6 +1,7 @@
 # The configuration for the aiKillSwitchFeature feature
 features:
   ai-kill-switch-feature:
+    no-lint: [MISSING_CONTACTS]
     description: >
       Configuration feature for AI features
     variables:

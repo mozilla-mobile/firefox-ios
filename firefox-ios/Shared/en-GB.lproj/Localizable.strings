@@ -1555,6 +1555,9 @@
 /* Footer information for tracker protection level. */
 "Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "If a site doesn’t work as expected, tap the lock in the address bar and turn off Enhanced Tracking Protection for that page.";
 
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Strict.v161" = "If a site isn’t working, open the menu and try turning Enhanced Tracking Protection off.";
+
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Allows some ad tracking so web sites function properly.";
 

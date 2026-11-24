@@ -9,6 +9,7 @@ protocol SearchSelectorsSet {
     var RECENT_SEARCHES_SECTION_TITLE: Selector { get }
     func searchSectionTitle(with text: String) -> Selector
     func trendingSearchesSectionTitle(with text: String) -> Selector
+    func suggestion(containing text: String) -> Selector
     var all: [Selector] { get }
 }
 
@@ -43,6 +44,17 @@ struct SearchSelectors: SearchSelectorsSet {
             "Trending on \(engineName)",
             description: "Search screen trending searches section title",
             groups: ["browser", "search", "trending searches"]
+        )
+    }
+
+    func suggestion(containing text: String) -> Selector {
+        Selector.element(
+            .staticText,
+            in: SEARCH_TABLE,
+            matching: NSPredicate(format: "label CONTAINS[c] %@", text),
+            value: text,
+            description: "Search suggestion whose text contains the query",
+            groups: ["browser", "search"]
         )
     }
 

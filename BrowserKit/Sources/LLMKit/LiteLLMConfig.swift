@@ -5,7 +5,7 @@
 import Foundation
 
 /// A simple wrapper for fetching LiteLLM configuration values from Info.plist.
-public struct LiteLLMConfig {
+public enum LiteLLMConfig {
     private enum InfoKey: String {
         case apiKey      = "LiteLLMAPIKey"
         case apiEndpoint = "LiteLLMAPIEndpoint"

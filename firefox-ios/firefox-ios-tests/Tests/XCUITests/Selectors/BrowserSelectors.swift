@@ -49,10 +49,12 @@ protocol BrowserSelectorsSet {
     var TEXT_SELECTION_MENU_MORE: Selector { get }
     var ADDRESS_BAR_LEADING_SKELETON: Selector { get }
     var ADDRESS_BAR_TRAILING_SKELETON: Selector { get }
+    var WEB_VIEW: Selector { get }
     func linkElement(named name: String) -> Selector
     func linkPreview(named preview: String) -> Selector
     func webPageElement(with text: String) -> Selector
     func suggestionRow(titled title: String) -> Selector
+    func webViewText(_ text: String) -> Selector
     var all: [Selector] { get }
 }
 
@@ -346,6 +348,11 @@ struct BrowserSelectors: BrowserSelectorsSet {
         groups: ["browser", "swipingTabs"]
     )
 
+    let WEB_VIEW = Selector.webView(
+        description: "Web view showing the current page",
+        groups: ["browser"]
+    )
+
     func linkElement(named name: String) -> Selector {
         Selector.linkById(
             name,
@@ -366,6 +373,16 @@ struct BrowserSelectors: BrowserSelectorsSet {
         Selector.staticTextByExactLabel(
             text,
             description: "Web page text",
+            groups: ["browser", "webview"]
+        )
+    }
+
+    /// Unlike `webPageElement(with:)`, only matches inside the web view, as iPad tab titles can repeat page text.
+    func webViewText(_ text: String) -> Selector {
+        Selector.staticTextByExactLabel(
+            text,
+            in: WEB_VIEW,
+            description: "Text '\(text)' in the web view",
             groups: ["browser", "webview"]
         )
     }
@@ -391,6 +408,6 @@ struct BrowserSelectors: BrowserSelectorsSet {
                            CONTEXT_MENU_PASTE_AND_GO, CONTEXT_MENU_PASTE,
                            CONTEXT_MENU_COPY_ADDRESS, TEXT_SELECTION_MENU_COPY, TEXT_SELECTION_MENU_SHARE,
                            TEXT_SELECTION_MENU_MORE, ADDRESS_BAR_LEADING_SKELETON,
-                           ADDRESS_BAR_TRAILING_SKELETON]
+                           ADDRESS_BAR_TRAILING_SKELETON, WEB_VIEW]
     }
 }

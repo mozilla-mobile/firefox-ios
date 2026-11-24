@@ -9,7 +9,7 @@ import UIKit
 
 /// Homepage card prompting the user to enable notifications
 struct NotificationCardView: View, ThemeableView {
-    private struct UX {
+    private enum UX {
         static let cardSpacing: CGFloat = 8
         static let cardPadding: CGFloat = 16
         static let cardCornerRadius: CGFloat = 24

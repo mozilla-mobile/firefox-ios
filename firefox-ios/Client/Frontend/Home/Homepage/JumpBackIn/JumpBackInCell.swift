@@ -10,7 +10,7 @@ final class JumpBackInCell: UICollectionViewCell,
                             ReusableCell,
                             ThemeApplicable,
                             Blurrable {
-    struct UX {
+    enum UX {
         static let generalCornerRadius: CGFloat = 16
         static let cellSpacing: CGFloat = 16
         static let heroImageInsets: CGFloat = 4

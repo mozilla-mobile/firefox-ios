@@ -1,6 +1,9 @@
 # The configuration for the searchConfigV3Feature feature
 features:
   search-config-v3-feature:
+    contacts:
+      - mreagan@mozilla.com
+      - nfurlan@mozilla.com
     description: >
       Feature flag to manage rollout of search-config-v3, the new search engine configuration with per-access-point partner codes
     variables:
@@ -12,7 +15,7 @@ features:
     defaults:
       - channel: beta
         value:
-          enabled: false
+          enabled: true
       - channel: developer
         value:
           enabled: false

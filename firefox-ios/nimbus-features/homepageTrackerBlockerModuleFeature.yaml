@@ -3,6 +3,9 @@ features:
   homepage-tracker-blocker-module-feature:
     description: >
       Controls the Tracker Blocker module feature
+    contacts:
+      - gbuciu@mozilla.com
+      - jhall@mozilla.com
     variables:
       enabled:
         description: >

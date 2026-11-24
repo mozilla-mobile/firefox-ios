@@ -12,7 +12,7 @@ import CryptoKit
 import X509
 import SwiftASN1
 
-struct CertificateKeys {
+enum CertificateKeys {
     static let commonName = "CN"
     static let country = "C"
     static let organization = "O"
@@ -32,7 +32,7 @@ class CertificatesViewController: UIViewController,
     }
 
     // MARK: - UI
-    struct UX {
+    enum UX {
         static let titleLabelMargin = 8.0
         static let titleLabelTopMargin = 2.0
         static let titleLabelMinHeight = 60.0

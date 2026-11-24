@@ -5,20 +5,22 @@
 import UIKit
 import Common
 import Shared
+import ComponentLibrary
 
 // TODO: - FXIOS-16295 improve VoiceOver by adding notification announcement before and after recording.
 public final class QuickAnswersViewController: UIViewController, Themeable {
-    private struct UX {
+    private enum UX {
         static let titleFadeDuration: TimeInterval = 0.1
         static let presentationNavigationBarOffset: CGFloat = -20.0
         static let backdropFadeDuration: TimeInterval = 0.2
         static let followUpButtonSize: CGFloat = 62.0
         static let followUpFadeOutDuration: TimeInterval = 0.3
         static let followUpFadeInDuration: TimeInterval = 0.2
+        static let resultBlobsFadeDelay: TimeInterval = 0.2
     }
 
     // MARK: - Properties
-    private lazy var backgroundEffectView = BackgroundEffectView(parentController: self)
+    private lazy var backgroundEffectView = AIBackgroundEffectView(parentController: self)
     private lazy var closeButton: UIButton = .build { [weak self] in
         $0.setImage(
             UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate),
@@ -75,6 +77,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         navigationHandler: QuickAnswersNavigationHandler?,
         transitionType: QuickAnswersTransitionType,
         prefs: Prefs,
+        sessionStorage: QuickAnswersSessionStorage,
         windowUUID: WindowUUID,
         themeManager: any ThemeManager,
         telemetry: QuickAnswersTelemetry,
@@ -85,7 +88,13 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
     ) {
         self.init(
             navigationHandler: navigationHandler,
-            viewModel: QuickAnswersViewModel(prefs: prefs, telemetry: telemetry, configFetcher: configFetcher),
+            viewModel: QuickAnswersViewModel(
+                prefs: prefs,
+                sessionStorage: sessionStorage,
+                isReturningToAnswer: transitionType == .returnToAnswer,
+                telemetry: telemetry,
+                configFetcher: configFetcher
+            ),
             transitionType: transitionType,
             windowUUID: windowUUID,
             themeManager: themeManager,
@@ -111,15 +120,22 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.stringsConfiguration = stringsConfiguration
-        let sourceRevealAnimator: SourceRevealTransitionAnimator = switch transitionType {
+        let returnAnimator = switch transitionType {
         case let .sourceReveal(sourceRect):
-            SourceRevealTransitionAnimator(sourceRect: sourceRect, isOptInVisible: viewModel.isOptInRequired)
+            ReturnToBrowserTransitionAnimator(
+                isActive: { [weak viewModel] in
+                    viewModel?.hasParkedSession ?? false
+                },
+                fallback: SourceRevealTransitionAnimator(sourceRect: sourceRect, isOptInVisible: viewModel.isOptInRequired)
+            )
+        case .returnToAnswer:
+            ReturnToBrowserTransitionAnimator(isActive: { true }, fallback: nil)
         }
         self.transitionDelegate = OptInTransitionAnimator(
             isOptInSheetPending: { [weak viewModel] in
                 viewModel?.isOptInSheetRequired ?? false
             },
-            fallback: sourceRevealAnimator
+            fallback: returnAnimator
         )
         self.viewModel = viewModel
         self.learnMoreURL = learnMoreURL
@@ -139,10 +155,14 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         applyTheme()
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         registerCallbacks()
+        if let session = viewModel.restoredSession {
+            UIView.performWithoutAnimation { showRestoredSession(session) }
+        }
     }
 
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        guard viewModel.restoredSession == nil else { return }
         viewModel.startFlow()
     }
 
@@ -220,16 +240,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
                     self?.errorHandler.handleSearchError(error)
                 } else {
                     self?.triggerHaptic()
-                    self?.backgroundEffectView.showResult()
-                    self?.showFollowUpButton()
-                    self?.contentView.configureResult(
-                        result.resultText,
-                        modelName: self?.viewModel.modelDisplayName ?? "",
-                        sources: result.sources
-                    ) { [weak self] url in
-                        self?.viewModel.recordCitationTapped()
-                        self?.dismiss(with: url)
-                    }
+                    self?.showResult(result)
                 }
             }
         }
@@ -245,6 +256,32 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
                 self?.dismiss(with: url)
             }
         )
+    }
+
+    private func showResult(_ result: SearchResult) {
+        backgroundEffectView.showResult(blobsRevealDelay: UX.resultBlobsFadeDelay)
+        showFollowUpButton()
+        contentView.configureResult(
+            result.resultText,
+            modelName: viewModel.modelDisplayName,
+            sources: result.sources
+        ) { [weak self] url in
+            self?.openCitation(url)
+        }
+    }
+
+    private func showRestoredSession(_ session: QuickAnswersSessionSnapshot) {
+        contentView.configureTranscript(session.question)
+        showResult(session.result)
+    }
+
+    private func openCitation(_ url: URL) {
+        triggerHaptic()
+        if viewModel.handleCitationTap() {
+            navigationHandler?.parkQuickAnswers(with: .url(url))
+        } else {
+            navigationHandler?.dismissQuickAnswers(with: .url(url))
+        }
     }
 
     @available(iOS 17.0, *)
@@ -293,6 +330,9 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
     }
 
     // MARK: - Presentation transition
+    /// Scaled by the return to browser transition in place of the whole view.
+    var transitionContentView: UIView { contentView }
+
     func prepareForPresentationTransition(sourceRect: CGRect, isOptInVisible: Bool) {
         contentView.prepareForPresentationTransition(
             sourceRect: sourceRect,

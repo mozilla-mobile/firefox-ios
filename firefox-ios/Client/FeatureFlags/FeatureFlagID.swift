@@ -21,6 +21,7 @@ enum FeatureFlagID: String, CaseIterable {
     case browserDataExport
     case browserDataImport
     case cellularDataRestrictedErrorPage
+    case checkForReinstalls
     case configurationProfile
     case customReaderModeScheme
     case deeplinkOptimizationRefactor
@@ -54,6 +55,7 @@ enum FeatureFlagID: String, CaseIterable {
     case quickAnswers
     case quickAnswersOptInRedesign
     case quickAnswersFollowUp
+    case quickAnswersReturnToAnswer
     case recentSearches
     case relayIntegration
     case reportBrokenSite
@@ -67,6 +69,8 @@ enum FeatureFlagID: String, CaseIterable {
     case summarizerAppAttestAuth
     case summarizerLanguageExpansion
     case summarizerPermissiveGuardrails
+    case syncStringUpdates
+    case tabGroups
     case tabScrollRefactorFeature
     case tabTrayiPadUIExperiments
     case tabTrayScreenshotButtonStyle
@@ -74,12 +78,14 @@ enum FeatureFlagID: String, CaseIterable {
     case tabTrayUIExperiments
     case tosFeature
     case touFeature
+    case touNotificationRedesign
     case translation
     case translationLanguagePicker
     case trendingSearches
     case unifiedSearch
     case videoIntroOnboarding
     case vpnFeature
+    case wallpaperEngagementSheet
     case waybackMachine
     case webViewDocumentFetchRefactor
 
@@ -121,6 +127,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .bookmarksSearchFeature,
                 .browserDataExport,
                 .browserDataImport,
+                .checkForReinstalls,
                 .configurationProfile,
                 .customReaderModeScheme,
                 .deeplinkOptimizationRefactor,
@@ -145,14 +152,18 @@ enum FeatureFlagID: String, CaseIterable {
                 .quickAnswers,
                 .quickAnswersOptInRedesign,
                 .quickAnswersFollowUp,
+                .quickAnswersReturnToAnswer,
                 .recentSearches,
                 .relayIntegration,
                 .reportBrokenSite,
+                .searchConfigV3,
                 .searchTermInAddressBar,
                 .sentFromFirefox,
                 .summarizerAppAttestAuth,
                 .summarizerLanguageExpansion,
                 .summarizerPermissiveGuardrails,
+                .syncStringUpdates,
+                .tabGroups,
                 .tabScrollRefactorFeature,
                 .tabTrayScreenshotButtonStyle,
                 .tabTrayUIExperiments,

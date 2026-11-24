@@ -118,6 +118,11 @@ struct CreditCardInputField: View {
             guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
             applyTheme(theme: themeManager.resolveTheme(for: windowUUID, privateOverride: false))
         }
+        .onReceive(NotificationCenter.default.publisher(
+            for: UIResponder.keyboardWillHideNotification)
+        ) { _ in
+            viewModel.isEditing = false
+        }
     }
 
     // MARK: Theming
@@ -181,6 +186,9 @@ struct CreditCardInputField: View {
     private func getTextField(editMode: Bool) -> some View {
         // TODO: FXIOS-6984 - use FocusState when iOS 14 is dropped
         TextField(text, text: $text, onEditingChanged: { (changed) in
+            if changed {
+                viewModel.isEditing = true
+            }
             if !changed {
                 _ = self.updateInputValidity(fieldChanged: !changed)
             }
@@ -190,7 +198,7 @@ struct CreditCardInputField: View {
         .padding(.vertical, 7.5)
         .foregroundColor(textFieldColor)
         .multilineTextAlignment(.leading)
-        .keyboardType(keyboardType)
+        .keyboardType(effectiveKeyboardType)
         .lineLimit(1)
         .frame(maxWidth: .infinity, alignment: .leading)
         .focused($isFocused)
@@ -207,6 +215,13 @@ struct CreditCardInputField: View {
         .accessibilityLabel(fieldHeadline)
         .accessibilityIdentifier(inputType.rawValue)
         .accessibility(addTraits: .isButton)
+    }
+
+    private var effectiveKeyboardType: UIKeyboardType {
+        guard keyboardType == .numberPad,
+              UIDevice.current.userInterfaceIdiom == .pad,
+              viewModel.isEditing else { return keyboardType }
+        return .numbersAndPunctuation
     }
 
     // MARK: Helper

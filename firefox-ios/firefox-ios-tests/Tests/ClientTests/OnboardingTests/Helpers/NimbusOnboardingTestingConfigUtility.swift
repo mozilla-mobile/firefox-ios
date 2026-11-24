@@ -5,7 +5,7 @@
 import MozillaAppServices
 
 struct NimbusOnboardingTestingConfigUtility {
-    struct CardElementNames {
+    enum CardElementNames {
         static let name = "Name"
         static let title = "Title"
         static let body = "Body"
@@ -41,7 +41,7 @@ struct NimbusOnboardingTestingConfigUtility {
             dictionary[item.rawValue] = createCard(withID: item, andOrder: index, uiVariant: uiVariant)
         }
 
-        FxNimbus.shared.features.onboardingFrameworkFeature.with(initializer: { _, _ in
+        FxNimbus.shared.features.onboardingFrameworkFeature.with(initializer: { _ in
             OnboardingFrameworkFeature(
                 cards: dictionary,
                 dismissable: true)
@@ -73,7 +73,7 @@ struct NimbusOnboardingTestingConfigUtility {
             disqualifiers: disqualifiers,
             uiVariant: uiVariant)
 
-        FxNimbus.shared.features.onboardingFrameworkFeature.with(initializer: { _, _ in
+        FxNimbus.shared.features.onboardingFrameworkFeature.with(initializer: { _ in
             OnboardingFrameworkFeature(
                 cards: cards,
                 dismissable: dismissable)

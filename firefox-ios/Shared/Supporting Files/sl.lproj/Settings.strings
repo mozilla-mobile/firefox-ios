@@ -314,7 +314,7 @@
 "Settings.Search.Suggest.PrivateSession.Description.v125" = "Prikazuj Firefoxove predloge v zasebnih sejah";
 
 /* In the Search page of the Settings menu, the title for the setting to enable search browsing history. */
-"Settings.Search.Suggest.SearchBrowsingHistory.Title.v124" = "Iskanje po zgodovini iskanja";
+"Settings.Search.Suggest.SearchBrowsingHistory.Title.v124" = "Iskanje po zgodovini brskanja";
 
 /* In the Search page of the Settings menu, the title for the setting to enable search bookmarks. */
 "Settings.Search.Suggest.SearchSearchBookmarks.Title.v124" = "Iskanje po zaznamkih";

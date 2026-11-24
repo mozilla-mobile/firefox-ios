@@ -163,7 +163,7 @@ class RelayControllerTests: XCTestCase {
     }
 }
 
-struct MockRelayAddress {
+enum MockRelayAddress {
     static let mockAddress1 = RelayAddress(
         maskType: "",
         enabled: true,

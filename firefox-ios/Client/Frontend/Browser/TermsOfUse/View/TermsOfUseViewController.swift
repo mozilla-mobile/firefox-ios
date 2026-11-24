@@ -12,7 +12,7 @@ final class TermsOfUseViewController: UIViewController,
                                       UITextViewDelegate,
                                       StoreSubscriber,
                                       PreventsDismissal {
-    private struct UX {
+    private enum UX {
         static let cornerRadius: CGFloat = 20
         static let stackSpacing: CGFloat = 16
         static let stackSidePadding: CGFloat = 24

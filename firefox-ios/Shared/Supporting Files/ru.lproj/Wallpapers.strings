@@ -1,0 +1,6 @@
+/* New wallpapers bottom banner: Primary button - tapping it opens the wallpaper settings screen. */
+"Wallpapers.EngagementSheet.Button.v161" = "Посмотреть обои";
+
+/* New wallpapers bottom banner: Title of the banner announcing new designs so users can personalize their experience. %@ is the app name (e.g. Firefox). */
+"Wallpapers.EngagementSheet.Title.v161" = "Попробуйте новые обои, чтобы сделать %@ своим";
+

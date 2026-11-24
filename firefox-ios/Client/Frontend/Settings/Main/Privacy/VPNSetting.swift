@@ -5,8 +5,11 @@
 import Common
 import Shared
 
+@available(iOS 17.0, *)
 final class VPNSetting: Setting {
     private weak var settingsDelegate: PrivacySettingsDelegate?
+    // TODO: FXIOS-17388 redux-ify VPN state so we don't have to hold a VPNManager
+    private let vpnManager: VPNRunnable
 
     override var accessoryView: UIImageView? {
         guard let theme else { return nil }
@@ -20,16 +23,22 @@ final class VPNSetting: Setting {
     override var style: UITableViewCell.CellStyle { return .value1 }
 
     override var status: NSAttributedString? {
-        // TODO: - Figure out how we tell if the VPN is on, for now default to off
-        let statusString = String.VPN.Settings.StatusOff
+        let statusString: String
+        if vpnManager.isLimitReached {
+            statusString = .VPN.Settings.StatusPaused
+        } else {
+            statusString = vpnManager.isRunning ? .VPN.Settings.StatusOn : .VPN.Settings.StatusOff
+        }
         return NSAttributedString(string: statusString)
     }
 
     init(
         settings: SettingsTableViewController,
         settingsDelegate: PrivacySettingsDelegate?,
+        vpnManager: VPNRunnable = AppContainer.shared.resolve()
     ) {
         self.settingsDelegate = settingsDelegate
+        self.vpnManager = vpnManager
         let theme = settings.themeManager.getCurrentTheme(for: settings.windowUUID)
         super.init(
             title: NSAttributedString(

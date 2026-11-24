@@ -6,7 +6,7 @@ import MozillaAppServices
 
 /// General purpose utilities for translating between Remote Settings models and our
 /// existing OpenSearch model objects.
-struct ASSearchEngineUtilities {
+enum ASSearchEngineUtilities {
     /// How `{partnerCode}` param is handled when converting a URL template.
     enum PartnerCodeInsertion {
         /// Insert the value as-is (v2 behavior, no change).

@@ -1,5 +1,6 @@
 features:
   firefox-suggest-feature:
+    no-lint: [MISSING_CONTACTS]
     description: Configuration for the Firefox Suggest feature.
     variables:
       status:
@@ -21,7 +22,7 @@ features:
           amp: true
           ampMobile: false
           wikipedia: true
-        
+
     defaults:
       - channel: developer
         value:

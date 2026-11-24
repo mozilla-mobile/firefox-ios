@@ -9,8 +9,9 @@ import Common
 import struct MozillaAppServices.LoginEntry
 
 class PasswordManagerListViewController: SensitiveViewController,
+                                         FeatureFlaggable,
                                          Themeable {
-    private struct UX {
+    private enum UX {
         static let separatorInset: CGFloat = 20
         static let selectAllButtonMargin: CGFloat = 16
     }
@@ -32,6 +33,10 @@ class PasswordManagerListViewController: SensitiveViewController,
 
     var shouldUsePrivateOverride: Bool { return true }
     var shouldBeInPrivateTheme: Bool { return false }
+
+    private var usesUpdatedSyncStrings: Bool {
+        featureFlagsProvider.isEnabled(.syncStringUpdates)
+    }
 
     private func currentTheme() -> Theme {
         return themeManager.resolveTheme(for: windowUUID,
@@ -380,7 +385,8 @@ private extension PasswordManagerListViewController {
                                 self?.sendLoginsDeletedTelemetry()
                             }
                         }
-                    }, hasSyncedLogins: yes.successValue ?? true)
+                    }, hasSyncedLogins: yes.successValue ?? true,
+                       usesUpdatedSyncStrings: self.usesUpdatedSyncStrings)
 
                     self.present(self.deleteAlert!, animated: true, completion: nil)
                 }

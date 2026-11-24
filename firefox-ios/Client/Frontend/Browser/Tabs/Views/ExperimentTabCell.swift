@@ -10,7 +10,7 @@ import SiteImageView
 
 /// Tab cell used in the tab tray under the .tabTrayUIExperiments Nimbus experiment
 final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
-    struct UX {
+    enum UX {
         static let selectedBorderWidth: CGFloat = 3.0
         static let unselectedBorderWidth: CGFloat = 1
         static let zeroBorderWidth: CGFloat = 0
@@ -325,7 +325,7 @@ final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCe
 
         if theme.isNova {
             let gradientColor = UIColor(patternImage: gradientBorderImage(size: backgroundHolder.bounds.size,
-                                                                          colors: theme.colors.gradientBorder.cgColors))
+                                                                          colors: theme.colors.gradientAccent.cgColors))
             addExternalBorder(to: backgroundHolder, color: gradientColor, width: UX.selectedBorderWidth)
             return
         }

@@ -20,7 +20,7 @@ class SaveLoginAlert: UIView, ThemeApplicable {
     var shouldPersist = false
     private var glassEffectView: UIVisualEffectView?
 
-    private struct UX {
+    private enum UX {
         static let cornerRadius: CGFloat = 8
         static let buttonSpacing: CGFloat = 12
         static let headerSpacing: CGFloat = 12

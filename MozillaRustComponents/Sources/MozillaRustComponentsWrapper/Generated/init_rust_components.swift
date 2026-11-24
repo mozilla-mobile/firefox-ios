@@ -521,6 +521,18 @@ public func initialize()  {try! rustCall() {
     )
 }
 }
+/**
+ * Initialize Glean telemetry
+ *
+ * This is called in [initialize], but it's also split out so that you can call it separately if
+ * you want. It's safe to call both `initialize_glean()` and `initialize()` during startup.
+ */
+public func initializeGlean()  {try! rustCall() {
+        uniffiCallStatus in
+    uniffi_init_rust_components_fn_func_initialize_glean(uniffiCallStatus
+    )
+}
+}
 
 private enum InitializationResult {
     case ok
@@ -538,6 +550,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.contractVersionMismatch
     }
     if (uniffi_init_rust_components_checksum_func_initialize() != 59834) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_init_rust_components_checksum_func_initialize_glean() != 23577) {
         return InitializationResult.apiChecksumMismatch
     }
 

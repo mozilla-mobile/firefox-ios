@@ -125,7 +125,7 @@
 "Settings.AIControls.BlockAIEnhancementsTitle.v151" = "KI-Verbesserungen blockieren";
 
 /* In the AI Controls settings, this is the text that appears when you have turned on the Block AI Enhancements toggle */
-"Settings.AIControls.BlockedInformation.v151" = "Neue und aktuelle KI-Verbesserungen werden standardmäßig blockiert. Blockieren Sie im Folgenden bestimmte Funktionen.";
+"Settings.AIControls.BlockedInformation.v151" = "Neue und aktuelle KI-Verbesserungen werden standardmäßig blockiert. Heben Sie im Folgenden die Blockierung bestimmter Funktionen auf.";
 
 /* This is the text for the link in the Header Card under the AI Controls settings section that links to more information. */
 "Settings.AIControls.HeaderCard.Link.v151" = "Weitere Informationen";
@@ -191,7 +191,7 @@
 "Settings.BoolSetting.LearnMoreAction.v157" = "Weitere Informationen";
 
 /* Description text for the Ad Blocker toggle in the Browsing settings page, explaining its purpose and a tip for troubleshooting broken sites. */
-"Settings.Browsing.AdBlocker.Description.v155" = "Reduziert Werbung und werbebezogene Tracker. Wenn eine Website beschädigt aussieht, versuchen Sie, dies zu deaktivieren.";
+"Settings.Browsing.AdBlocker.Description.v155" = "Reduziert Werbung und werbebezogene Tracker. Wenn eine Website fehlerhaft aussieht, versuchen Sie, dies zu deaktivieren.";
 
 /* Link text below the Ad Blocker toggle description that opens a support page with more information. */
 "Settings.Browsing.AdBlocker.LearnMore.v155" = "Weitere Informationen";
@@ -344,7 +344,7 @@
 "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124.v2" = "Vorschläge aus dem Internet";
 
 /* In the Search page of the Settings menu, the description for the setting to enable Suggestions from sponsors. %@ is the app name (e.g. Firefox). - Firefox. */
-"Settings.Search.Suggest.ShowSponsoredSuggestions.Description.v124" = "Unterstützen Sie %@ mit gelegentlich gesponserten Vorschlägen";
+"Settings.Search.Suggest.ShowSponsoredSuggestions.Description.v124" = "Unterstützen Sie %@ mit gelegentlichen gesponserten Vorschlägen";
 
 /* In the Search page of the Settings menu, the title for the setting to enable Suggestions from sponsors. */
 "Settings.Search.Suggest.ShowSponsoredSuggestions.Title.v124" = "Vorschläge von Sponsoren";
@@ -368,7 +368,7 @@
 "Settings.Studies.Title.v148" = "Funktionsstudien erlauben";
 
 /* This is the footer text for the setting that toggles the Summarize feature under the Summarize settings section. */
-"Settings.Summarize.FooterTitle.v142" = "Bietet Zugriff auf Zusammenfassungsseiten.";
+"Settings.Summarize.FooterTitle.v142" = "Bietet Zugriff auf das Zusammenfassen von Seiten.";
 
 /* This is the footer text for the gestures features under the Summarize settings section. */
 "Settings.Summarize.GesturesSection.FooterTitle.v142" = "Schütteln Sie Ihr Gerät von einer Seite zur anderen, um eine Seite zusammenzufassen.";
@@ -463,8 +463,14 @@
 /* Description below the Recommended option in the VPN server location list. %1$@ is the app name (for example, Firefox). */
 "VPN.LocationPicker.RecommendedSubText.v160" = "%1$@ ermittelt den schnellsten Standort.";
 
+/* Announced by VoiceOver on the VPN settings screen when the VPN finishes connecting after the user turns on the VPN switch. */
+"VPN.Settings.Connected.v161" = "VPN verbunden";
+
 /* Shown next to the VPN switch on the VPN settings screen while the VPN is connecting, right after the user turns it on. */
 "VPN.Settings.Connecting.v160" = "Verbindung wird hergestellt…";
+
+/* Read aloud by VoiceOver for the Data Limit section on the VPN settings screen. %1$@ is the amount of VPN data used this month and %2$@ is the monthly limit, both in gigabytes (for example, “1.0 of 5.0 gigabytes used”). The second sentence explains that the user’s free monthly VPN data resets on the first day of each month. */
+"VPN.Settings.DataLimit.AccessibilityValue.v161" = "%1$@ von %2$@ Gigabyte verbraucht. Wird am ersten Tag jedes Monats zurückgesetzt.";
 
 /* Footer below the Data Limit section on the VPN settings screen. Explains when the user's free VPN data resets. %1$@ is the monthly limit in gigabytes (for example, 5.0). “GB” stands for gigabytes. */
 "VPN.Settings.DataLimitResetFooter.v160" = "Wird am Ersten jedes Monats auf %1$@ GB zurückgesetzt";

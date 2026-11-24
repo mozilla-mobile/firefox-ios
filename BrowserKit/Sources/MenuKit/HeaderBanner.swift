@@ -8,7 +8,7 @@ import SiteImageView
 import ComponentLibrary
 
 public final class HeaderBanner: UIView, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let headerLabelDistance: CGFloat = 4
         static let horizontalMargin: CGFloat = 16
         static let verticalMargin: CGFloat = 2

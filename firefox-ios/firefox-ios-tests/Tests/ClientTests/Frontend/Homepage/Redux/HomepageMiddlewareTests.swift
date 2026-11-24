@@ -279,7 +279,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(configuredSearchBarActionCount, 1)
         XCTAssertEqual(configuredSearchBarActionType, .configuredSearchBar)
-        XCTAssertEqual(configuredSearchBarAction.isSearchBarEnabled, true)
+        XCTAssertEqual(configuredSearchBarAction.isCenterSearchEnabled, true)
     }
 
     func test_initializeAction_doesNotConfigureSearchBar() throws {
@@ -308,7 +308,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(configuredSearchBarActionCount, 1)
         XCTAssertEqual(configuredSearchBarActionType, .configuredSearchBar)
-        XCTAssertEqual(configuredSearchBarAction.isSearchBarEnabled, false)
+        XCTAssertEqual(configuredSearchBarAction.isCenterSearchEnabled, false)
     }
 
     func test_initializeAction_withBottomAddressBar_doesNotConfigureSearchBar() throws {
@@ -331,7 +331,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let (configuredSearchBarAction, _) = try getActionInfo(for: .configuredSearchBar)
 
-        XCTAssertEqual(configuredSearchBarAction.isSearchBarEnabled, false)
+        XCTAssertEqual(configuredSearchBarAction.isCenterSearchEnabled, false)
     }
 
     func test_viewWillTransitionAction_configuresSearchBar() throws {
@@ -360,7 +360,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(configuredSearchBarActionCount, 1)
         XCTAssertEqual(configuredSearchBarActionType, .configuredSearchBar)
-        XCTAssertEqual(configuredSearchBarAction.isSearchBarEnabled, true)
+        XCTAssertEqual(configuredSearchBarAction.isCenterSearchEnabled, true)
     }
 
     func test_viewWillTransitionAction_doesNotConfigureSearchBar() throws {
@@ -389,16 +389,12 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(configuredSearchBarActionCount, 1)
         XCTAssertEqual(configuredSearchBarActionType, .configuredSearchBar)
-        XCTAssertEqual(configuredSearchBarAction.isSearchBarEnabled, false)
+        XCTAssertEqual(configuredSearchBarAction.isCenterSearchEnabled, false)
     }
 
     func test_toolbarCancelEditAction_configuresSearchBar() throws {
         setupNimbusAnimatedCenterSearchBarTesting(isEnabled: true)
         let subject = createSubject()
-        let action = ToolbarAction(
-            windowUUID: .XCTestDefaultUUID,
-            actionType: ToolbarActionType.cancelEdit
-        )
 
         let dispatchExpectation = XCTestExpectation(description: "Search bar configured middleware action dispatched")
 
@@ -406,7 +402,11 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
             dispatchExpectation.fulfill()
         }
 
-        subject.homepageProvider.legacyMiddleware(AppState(), action)
+        subject.homepageProvider.modernMiddleware(
+            AppState(),
+            ToolbarModernAction.cancelEdit(url: nil),
+            .XCTestDefaultUUID
+        )
 
         wait(for: [dispatchExpectation], timeout: 1)
 
@@ -418,16 +418,69 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(configuredSearchBarActionCount, 1)
         XCTAssertEqual(configuredSearchBarActionType, .configuredSearchBar)
-        XCTAssertEqual(configuredSearchBarAction.isSearchBarEnabled, true)
+        XCTAssertEqual(configuredSearchBarAction.isCenterSearchEnabled, true)
     }
 
     func test_toolbarCancelEditAction_doesNotConfigureSearchBar() throws {
         setupNimbusAnimatedCenterSearchBarTesting(isEnabled: false)
         let subject = createSubject()
-        let action = ToolbarAction(
-            windowUUID: .XCTestDefaultUUID,
-            actionType: ToolbarActionType.cancelEdit
+        let dispatchExpectation = XCTestExpectation(description: "Search bar configured middleware action dispatched")
+
+        mockStore.dispatchCalled = {
+            dispatchExpectation.fulfill()
+        }
+
+        subject.homepageProvider.modernMiddleware(
+            AppState(),
+            ToolbarModernAction.cancelEdit(url: nil),
+            .XCTestDefaultUUID
         )
+
+        wait(for: [dispatchExpectation], timeout: 1)
+
+        let (configuredSearchBarAction, configuredSearchBarActionCount) = try getActionInfo(for: .configuredSearchBar)
+
+        let configuredSearchBarActionType = try XCTUnwrap(
+            configuredSearchBarAction.actionType as? HomepageMiddlewareActionType
+        )
+
+        XCTAssertEqual(configuredSearchBarActionCount, 1)
+        XCTAssertEqual(configuredSearchBarActionType, .configuredSearchBar)
+        XCTAssertEqual(configuredSearchBarAction.isCenterSearchEnabled, false)
+    }
+
+    func test_toolbarPositionChangedAction_configuresSearchBar() throws {
+        setupNimbusAnimatedCenterSearchBarTesting(isEnabled: true)
+        let subject = createSubject()
+
+        let dispatchExpectation = XCTestExpectation(description: "Search bar configured middleware action dispatched")
+
+        mockStore.dispatchCalled = {
+            dispatchExpectation.fulfill()
+        }
+
+        subject.homepageProvider.modernMiddleware(
+            AppState(),
+            ToolbarModernAction.toolbarPositionChanged(position: .top),
+            .XCTestDefaultUUID
+        )
+
+        wait(for: [dispatchExpectation], timeout: 1)
+
+        let (configuredSearchBarAction, configuredSearchBarActionCount) = try getActionInfo(for: .configuredSearchBar)
+
+        XCTAssertEqual(configuredSearchBarActionCount, 1)
+        XCTAssertEqual(configuredSearchBarAction.isCenterSearchEnabled, true)
+    }
+
+    func test_viewWillAppearAction_configuresSearchBar() throws {
+        setupNimbusAnimatedCenterSearchBarTesting(isEnabled: true)
+        let subject = createSubject()
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageActionType.viewWillAppear
+        )
+
         let dispatchExpectation = XCTestExpectation(description: "Search bar configured middleware action dispatched")
 
         mockStore.dispatchCalled = {
@@ -440,13 +493,8 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let (configuredSearchBarAction, configuredSearchBarActionCount) = try getActionInfo(for: .configuredSearchBar)
 
-        let configuredSearchBarActionType = try XCTUnwrap(
-            configuredSearchBarAction.actionType as? HomepageMiddlewareActionType
-        )
-
         XCTAssertEqual(configuredSearchBarActionCount, 1)
-        XCTAssertEqual(configuredSearchBarActionType, .configuredSearchBar)
-        XCTAssertEqual(configuredSearchBarAction.isSearchBarEnabled, false)
+        XCTAssertEqual(configuredSearchBarAction.isCenterSearchEnabled, true)
     }
 
     func test_navigateBackAction_configuresSearchBar() throws {
@@ -475,7 +523,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(configuredSearchBarActionCount, 1)
         XCTAssertEqual(configuredSearchBarActionType, .configuredSearchBar)
-        XCTAssertEqual(configuredSearchBarAction.isSearchBarEnabled, true)
+        XCTAssertEqual(configuredSearchBarAction.isCenterSearchEnabled, true)
     }
 
     func test_navigateBackAction_doesNotConfigureSearchBar() throws {
@@ -503,7 +551,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(configuredSearchBarActionCount, 1)
         XCTAssertEqual(configuredSearchBarActionType, .configuredSearchBar)
-        XCTAssertEqual(configuredSearchBarAction.isSearchBarEnabled, false)
+        XCTAssertEqual(configuredSearchBarAction.isCenterSearchEnabled, false)
     }
 
     func test_didCloseTabAction_configuresSearchBar() throws {
@@ -532,7 +580,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(configuredSearchBarActionCount, 1)
         XCTAssertEqual(configuredSearchBarActionType, .configuredSearchBar)
-        XCTAssertEqual(configuredSearchBarAction.isSearchBarEnabled, true)
+        XCTAssertEqual(configuredSearchBarAction.isCenterSearchEnabled, true)
     }
 
     func test_didCloseTabAction_doesNotConfigureSearchBar() throws {
@@ -560,7 +608,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(configuredSearchBarActionCount, 1)
         XCTAssertEqual(configuredSearchBarActionType, .configuredSearchBar)
-        XCTAssertEqual(configuredSearchBarAction.isSearchBarEnabled, false)
+        XCTAssertEqual(configuredSearchBarAction.isCenterSearchEnabled, false)
     }
 
     func test_initializeAction_dispatchesConfiguresPrivacyNotice_withTrueValue() throws {
@@ -633,7 +681,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     private func setupNimbusAnimatedCenterSearchBarTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
+        FxNimbus.shared.features.homepageRedesignFeature.with { _ in
             return HomepageRedesignFeature(animatedCenterSearchBar: isEnabled)
         }
     }

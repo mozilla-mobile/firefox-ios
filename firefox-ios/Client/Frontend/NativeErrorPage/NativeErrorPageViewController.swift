@@ -33,7 +33,7 @@ final class NativeErrorPageViewController: UIViewController,
     private var model: ErrorPageModel?
 
     // MARK: UI Elements
-    private struct UX {
+    private enum UX {
         static let logoSizeWidth: CGFloat = 221
         static let logoSizeWidthiPad: CGFloat = 240
         static let mainStackSpacing: CGFloat = 24

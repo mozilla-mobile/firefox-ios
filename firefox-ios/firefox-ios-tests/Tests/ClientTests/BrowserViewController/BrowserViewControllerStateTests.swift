@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Redux
 import XCTest
 import SummarizeKit
@@ -11,7 +12,6 @@ import QuickAnswersKit
 
 final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
     var mockStore: MockStoreForMiddleware<AppState>!
-    let storeUtilityHelper = StoreTestUtilityHelper()
 
     override func setUp() async throws {
         try await super.setUp()
@@ -59,6 +59,63 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.displayView, .googleLensCamera)
+    }
+
+    func testShowVPNFailureAlertAction() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        let newState = reducer.modernReducer(initialState, VPNAlertModernAction.showFailureAlert, .XCTestDefaultUUID)
+
+        XCTAssertEqual(newState.displayView, .vpnFailureAlert)
+    }
+
+    func testShowVPNDataLimitAlertAction_setsDisplayViewWithDataLimit() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        let newState = reducer.modernReducer(
+            initialState,
+            VPNAlertModernAction.showDataLimitAlert(dataLimitBytes: 5_000_000_000),
+            .XCTestDefaultUUID
+        )
+
+        XCTAssertEqual(newState.displayView, .vpnDataLimitAlert(dataLimitBytes: 5_000_000_000))
+    }
+
+    func testShowVPNLocationUnavailableAlertAction() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        let newState = reducer.modernReducer(
+            initialState,
+            VPNAlertModernAction.showLocationUnavailableAlert,
+            .XCTestDefaultUUID
+        )
+
+        XCTAssertEqual(newState.displayView, .vpnLocationUnavailableAlert)
+    }
+
+    func testShowVPNConnectionFailedAlertAction() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        let newState = reducer.modernReducer(
+            initialState,
+            VPNAlertModernAction.showConnectionFailedAlert,
+            .XCTestDefaultUUID
+        )
+
+        XCTAssertEqual(newState.displayView, .vpnConnectionFailedAlert)
+    }
+
+    func testShowVPNFailureAlertAction_forAnotherWindow_doesNotSetDisplayView() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        let newState = reducer.modernReducer(initialState, VPNAlertModernAction.showFailureAlert, WindowUUID())
+
+        XCTAssertNil(newState.displayView)
     }
 
     func testShowPasswordGeneratorAction() {
@@ -641,14 +698,14 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
                 HomepageState(windowUUID: .XCTestDefaultUUID),
                 HomepageAction(
                     windowUUID: .XCTestDefaultUUID,
-                    actionType: HomepageActionType.initialize
+                    actionType: HomepageActionType.viewWillAppear
                 )
             )
         let newHomepageState = HomepageState
             .reducer.legacyReducer(
                 initialHomepageState,
                 HomepageAction(
-                    isSearchBarEnabled: true,
+                    isCenterSearchEnabled: true,
                     windowUUID: .XCTestDefaultUUID,
                     actionType: HomepageMiddlewareActionType.configuredSearchBar
                 )

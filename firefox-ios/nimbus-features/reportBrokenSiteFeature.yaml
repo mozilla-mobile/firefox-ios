@@ -1,6 +1,7 @@
 # The configuration for the reportBrokenSiteFeature feature
 features:
   report-broken-site-feature:
+    no-lint: [MISSING_CONTACTS]
     description: >
       In-app Report Broken Site (WebCompat) reporter
     variables:

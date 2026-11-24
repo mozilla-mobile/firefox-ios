@@ -27,7 +27,7 @@ final class MenuSiteProtectionsHeaderTests: XCTestCase {
             state: "On",
             stateImage: "",
             shouldUseRenderMode: false,
-            adBlocker: MenuSiteAdBlockerBadgeData(title: "Ad Blocker", image: "", shouldUseRenderMode: false)
+            adBlocker: MenuSiteBadgeData(title: "Ad Blocker", image: "", shouldUseRenderMode: false)
         )
 
         let badgesStack = firstStackView(in: header, axis: .horizontal)
@@ -42,7 +42,7 @@ final class MenuSiteProtectionsHeaderTests: XCTestCase {
             state: "On",
             stateImage: "",
             shouldUseRenderMode: false,
-            adBlocker: MenuSiteAdBlockerBadgeData(title: "Ad Blocker", image: "", shouldUseRenderMode: false)
+            adBlocker: MenuSiteBadgeData(title: "Ad Blocker", image: "", shouldUseRenderMode: false)
         )
 
         header.setupDetails(
@@ -59,7 +59,47 @@ final class MenuSiteProtectionsHeaderTests: XCTestCase {
         XCTAssertEqual(badgesStack?.arrangedSubviews.count, 1)
     }
 
+    func testVPNBadge_addedWhenDataProvided() {
+        header.setupDetails(
+            title: "example.com",
+            subtitle: "Connection is secure",
+            image: nil,
+            state: "On",
+            stateImage: "",
+            shouldUseRenderMode: false,
+            vpn: MenuSiteBadgeData(title: "VPN", image: "", shouldUseRenderMode: false)
+        )
+
+        let badgesStack = firstStackView(in: header, axis: .horizontal)
+        XCTAssertEqual(badgesStack?.arrangedSubviews.count, 2)
+    }
+
+    func testBadges_orderedProtectionsAdBlockerVPN() {
+        header.setupDetails(
+            title: "example.com",
+            subtitle: "Connection is secure",
+            image: nil,
+            state: "Protections",
+            stateImage: "",
+            shouldUseRenderMode: false,
+            adBlocker: MenuSiteBadgeData(title: "Ad Blocker", image: "", shouldUseRenderMode: false),
+            vpn: MenuSiteBadgeData(title: "VPN", image: "", shouldUseRenderMode: false)
+        )
+
+        let badgesStack = firstStackView(in: header, axis: .horizontal)
+        let titles = badgesStack?.arrangedSubviews.map { badgeTitle(in: $0) }
+        XCTAssertEqual(titles, ["Protections", "Ad Blocker", "VPN"])
+    }
+
     // MARK: - Helpers
+
+    private func badgeTitle(in view: UIView) -> String? {
+        if let label = view as? UILabel { return label.text }
+        for subview in view.subviews {
+            if let title = badgeTitle(in: subview) { return title }
+        }
+        return nil
+    }
 
     private func firstStackView(in view: UIView, axis: NSLayoutConstraint.Axis) -> UIStackView? {
         for subview in view.subviews {

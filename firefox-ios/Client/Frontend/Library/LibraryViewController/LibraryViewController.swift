@@ -7,8 +7,8 @@ import Shared
 import UIKit
 
 class LibraryViewController: UIViewController, Themeable {
-    struct UX {
-        struct NavigationMenu {
+    enum UX {
+        enum NavigationMenu {
             static let height: CGFloat = 40
             static let horizontalPadding: CGFloat = 15
             static let bottomPadding: CGFloat = 12

@@ -21,7 +21,7 @@ protocol TopTabsDelegate: AnyObject {
 }
 
 class TopTabsViewController: UIViewController, Themeable, Notifiable {
-    private struct UX {
+    private enum UX {
         static let trailingEdgeSpace: CGFloat = 10
         static let topTabsViewHeight: CGFloat = 44
         static let topTabsBackgroundShadowWidth: CGFloat = 12
@@ -378,7 +378,7 @@ extension TopTabsViewController: TabDisplayerDelegate {
 extension TopTabsViewController: TopTabCellDelegate {
     @MainActor
     func tabCellDidClose(_ cell: UICollectionViewCell) {
-        store.dispatch(ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit))
+        store.dispatch(ToolbarModernAction.cancelEdit(url: nil), forWindowUUID: windowUUID)
         topTabDisplayManager.closeActionPerformed(forCell: cell)
         NotificationCenter.default.post(name: .TopTabsTabClosed, object: nil, userInfo: windowUUID.userInfo)
         store.dispatch(TopTabsAction(windowUUID: windowUUID, actionType: TopTabsActionType.didTapCloseTab))

@@ -10,9 +10,10 @@ final class MockContentBlockerTab: ContentBlockerTab {
     var hasUncommittedNavigation = false
     var reloadCalled = 0
     var onReload: (() -> Void)?
+    var webView: WKWebView?
 
     func currentURL() -> URL? { return nil }
-    func currentWebView() -> WKWebView? { return nil }
+    func currentWebView() -> WKWebView? { return webView }
     func imageContentBlockingEnabled() -> Bool { return false }
 
     func reload(bypassCache: Bool) {

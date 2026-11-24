@@ -6,7 +6,7 @@ import Shared
 import Common
 
 class StartAtHomeHelper: UserFeaturePreferenceProvider {
-    private struct Constants {
+    private enum Constants {
         static let hoursToTriggerStartAtHome = 4
         static let secondsToTriggerStartAtHome = 5
         static let secondsPerHour = 3600

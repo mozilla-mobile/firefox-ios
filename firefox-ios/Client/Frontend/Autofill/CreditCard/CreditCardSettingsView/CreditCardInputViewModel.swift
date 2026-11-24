@@ -123,6 +123,7 @@ final class CreditCardInputViewModel: ObservableObject, @unchecked Sendable {
     @Published var numberIsValid = true
     @Published var showExpirationError = false
     @Published var nameOnCard = ""
+    @Published var isEditing = false
 
     @Published var expirationDate = "" {
         didSet {

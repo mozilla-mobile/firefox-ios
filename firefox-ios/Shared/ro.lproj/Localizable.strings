@@ -1555,6 +1555,9 @@
 /* Footer information for tracker protection level. */
 "Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Dacă un site nu funcționează cum era de așteptat, atinge lacătul din bara de adrese și dezactivează protecția îmbunătățită împotriva urmăririi pentru pagina respectivă.";
 
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Strict.v161" = "Dacă un site nu funcționează, deschide meniul și încearcă să dezactivezi protecția îmbunătățită împotriva urmăririi.";
+
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Permite unele elemente de urmărire pentru ca site-urile web să funcționeze corespunzător.";
 

@@ -59,7 +59,8 @@ final class HomepageViewController: UIViewController,
     private var didFinishFirstLayout = false
     private var wallpaperTopConstraint: NSLayoutConstraint?
     private var wallpaperHeightConstraint: NSLayoutConstraint?
-    private lazy var embeddedAddressBarView: UIView = .build { view in
+    private lazy var embeddedAddressBarView: EmbeddedAddressBarView = .build { view in
+        view.isHidden = true
         view.isUserInteractionEnabled = false
         view.layer.zPosition = 1
         view.accessibilityIdentifier = a11y.EmbeddedAddressBar.view
@@ -72,11 +73,6 @@ final class HomepageViewController: UIViewController,
         return homepageTabStateStore.state(for: activeTabUUID)
     }
 
-    private var shouldShowEmbeddedAddressBar: Bool {
-        featureFlagsProvider.isEnabled(.homepageAnimatedCenterSearchBar)
-        && userPreferences.searchBarPosition == .top
-    }
-
     private var currentTheme: Theme {
         themeManager.getCurrentTheme(for: windowUUID)
     }
@@ -85,13 +81,14 @@ final class HomepageViewController: UIViewController,
         return view.frame.size.width
     }
 
+    private lazy var nativeMenuHelper = HomeNativeMenuHelper(windowUUID: windowUUID, toastContainer: toastContainer)
+
     // MARK: - Private constants
     private let profile: Profile
     private let tabManager: TabManager
     private let homepageTabStateStore: HomepageTabStateStoring
     private let overlayManager: OverlayModeManager
     private let logger: Logger
-    private let userPreferences: UserFeaturePreferring
     private let toastContainer: UIView
 
     // Telemetry related
@@ -110,7 +107,6 @@ final class HomepageViewController: UIViewController,
          toastContainer: UIView,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared,
-         userPreferences: UserFeaturePreferring = AppContainer.shared.resolve(),
          throttler: MainThreadThrottlerProtocol = MainThreadThrottler(seconds: 0.5)
     ) {
         self.windowUUID = windowUUID
@@ -123,7 +119,6 @@ final class HomepageViewController: UIViewController,
         self.statusBarScrollDelegate = statusBarScrollDelegate
         self.toastContainer = toastContainer
         self.logger = logger
-        self.userPreferences = userPreferences
         self.trackingImpressionsThrottler = throttler
 
         // FXIOS-11490: This should be refactored when we refactor CFR to adhere to Redux
@@ -399,7 +394,7 @@ final class HomepageViewController: UIViewController,
 
     private func handleToolbarStateOnScroll() {
         // When the user scrolls the homepage (not overlaid on a webpage when searching) we cancel edit mode
-        store.dispatch(ToolbarModernAction.cancelEditOnHomepage, forWindowUUID: windowUUID)
+        store.dispatch(ToolbarModernAction.cancelEdit(url: nil), forWindowUUID: windowUUID)
     }
 
     /// Calculates the number of tiles that can fit in a single row based on the available width.
@@ -454,6 +449,8 @@ final class HomepageViewController: UIViewController,
                                         == homepageState.wallpaperState.availableContentHeight
             self.homepageState = state
 
+            embeddedAddressBarView.isHidden = !state.searchBarState.shouldShowSearchBar
+
             refreshHomepageDataSourceSnapshot(
                 animatingDifferences: animatingDifferences
             ) { [weak self] in
@@ -483,7 +480,7 @@ final class HomepageViewController: UIViewController,
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer1
-        embeddedAddressBarView.backgroundColor = theme.colors.actionCritical
+        embeddedAddressBarView.applyTheme(theme: theme)
     }
 
     // MARK: - Layout
@@ -542,16 +539,17 @@ final class HomepageViewController: UIViewController,
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
 
-        guard shouldShowEmbeddedAddressBar else { return }
-
         view.addSubview(embeddedAddressBarView)
 
         NSLayoutConstraint.activate(
             [
-                embeddedAddressBarView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                embeddedAddressBarView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-                embeddedAddressBarView.heightAnchor.constraint(
-                    equalToConstant: HomepageSectionLayoutProvider.UX.embeddedAddressBarHeight
+                embeddedAddressBarView.leadingAnchor.constraint(
+                    equalTo: view.leadingAnchor,
+                    constant: HomepageSectionLayoutProvider.UX.standardInset
+                ),
+                view.trailingAnchor.constraint(
+                    equalTo: embeddedAddressBarView.trailingAnchor,
+                    constant: HomepageSectionLayoutProvider.UX.standardInset
                 ),
                 embeddedAddressBarView.topAnchor.constraint(
                     greaterThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor
@@ -564,7 +562,7 @@ final class HomepageViewController: UIViewController,
         guard embeddedAddressBarView.superview != nil else { return }
         embeddedAddressBarViewTopCellConstraint?.isActive = false
 
-        let constraint = embeddedAddressBarView.topAnchor.constraint(equalTo: cell.topAnchor)
+        let constraint = embeddedAddressBarView.centerYAnchor.constraint(equalTo: cell.centerYAnchor)
         constraint.priority = UILayoutPriority(999)
         embeddedAddressBarViewTopCellConstraint = constraint
         constraint.isActive = true
@@ -676,8 +674,14 @@ final class HomepageViewController: UIViewController,
                 cell.applyTheme(theme: currentTheme)
             }
         case .privacyNotice:
-            return configuredCell(cellType: PrivacyNoticeCell.self, at: indexPath) { cell in
-                configurePrivacyNoticeCell(cell: cell)
+            if featureFlagsProvider.isEnabled(.touNotificationRedesign) {
+                return configuredCell(cellType: PrivacyNoticeCell.self, at: indexPath) { cell in
+                    configurePrivacyNoticeCell(cell: cell)
+                }
+            } else {
+                return configuredCell(cellType: LegacyPrivacyNoticeCell.self, at: indexPath) { cell in
+                    configureLegacyPrivacyNoticeCell(cell: cell)
+                }
             }
         case .notificationCard:
             return configuredCell(cellType: NotificationCardCell.self, at: indexPath) { cell in
@@ -747,6 +751,17 @@ final class HomepageViewController: UIViewController,
     }
 
     private func configurePrivacyNoticeCell(cell: PrivacyNoticeCell) {
+        cell.configure(theme: currentTheme,
+                       closeButtonAction: { [weak self] in
+                           self?.dispatchPrivacyNoticeCloseButtonTapped()
+                       },
+                       linkAction: { [weak self] url in
+                           self?.dispatchPrivacyNoticeLinkTapped(url: url)
+                       }
+        )
+    }
+
+    private func configureLegacyPrivacyNoticeCell(cell: LegacyPrivacyNoticeCell) {
         cell.configure(theme: currentTheme,
                        closeButtonAction: { [weak self] in
                            self?.dispatchPrivacyNoticeCloseButtonTapped()
@@ -1058,8 +1073,7 @@ final class HomepageViewController: UIViewController,
 
     @objc
     private func dismissKeyboard() {
-        let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
-        store.dispatch(action)
+        store.dispatch(ToolbarModernAction.cancelEdit(url: nil), forWindowUUID: windowUUID)
     }
 
     // MARK: Long Press (Photon Action Sheet)
@@ -1081,6 +1095,11 @@ final class HomepageViewController: UIViewController,
                 level: .debug,
                 category: .homepage
             )
+            return
+        }
+
+        // Skip top sites since it uses native UIMenu
+        if case .topSites = section {
             return
         }
         if section.canHandleLongPress && item.canHandleLongPress {
@@ -1427,6 +1446,47 @@ final class HomepageViewController: UIViewController,
         default:
             return
         }
+    }
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration
+    ) -> UITargetedPreview? {
+        guard let indexPath = configuration.identifier as? IndexPath else { return nil }
+        return targetedPreview(for: indexPath)
+    }
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        previewForDismissingContextMenuWithConfiguration configuration: UIContextMenuConfiguration
+    ) -> UITargetedPreview? {
+        guard let indexPath = configuration.identifier as? IndexPath else { return nil }
+        return targetedPreview(for: indexPath)
+    }
+
+    private func targetedPreview(for indexPath: IndexPath) -> UITargetedPreview? {
+        guard let topSiteCell = collectionView?.cellForItem(at: indexPath) as? TopSiteCell else {
+            return nil
+        }
+
+        let view = topSiteCell.rootContainer
+        let parameters = UIPreviewParameters()
+        parameters.visiblePath = topSiteCell.contextMenuPreviewPath
+        return UITargetedPreview(view: view, parameters: parameters)
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        contextMenuConfigurationForItemAt indexPath: IndexPath,
+                        point: CGPoint) -> UIContextMenuConfiguration? {
+        guard let dataSource,
+              let section = dataSource.sectionIdentifier(for: indexPath.section),
+              section.canHandleLongPress,
+              let item = dataSource.itemIdentifier(for: indexPath),
+              item.canHandleLongPress,
+              let menu = nativeMenuHelper.menu(for: item, sourceView: collectionView.cellForItem(at: indexPath))
+        else { return nil }
+
+        return UIContextMenuConfiguration(identifier: indexPath as NSCopying, previewProvider: nil) { _ in menu }
     }
 
     private func presentAddShortcutAlert() {

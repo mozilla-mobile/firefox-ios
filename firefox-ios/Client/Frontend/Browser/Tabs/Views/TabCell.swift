@@ -16,7 +16,7 @@ protocol TabCellDelegate: AnyObject {
 final class TabCell: UICollectionViewCell,
                      ThemeApplicable,
                      ReusableCell {
-    struct UX {
+    enum UX {
         static let borderWidth: CGFloat = 3.0
         static let cornerRadius: CGFloat = 16
         static let subviewDefaultPadding: CGFloat = 6.0
@@ -181,7 +181,7 @@ final class TabCell: UICollectionViewCell,
         }
 
         if theme.isNova {
-            borderGradientColors = theme.colors.gradientBorder.cgColors
+            borderGradientColors = theme.colors.gradientAccent.cgColors
             setNeedsLayout()
         } else {
             layer.borderColor = (isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent).cgColor

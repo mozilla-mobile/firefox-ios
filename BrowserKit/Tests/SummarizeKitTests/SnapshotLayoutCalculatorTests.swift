@@ -12,7 +12,8 @@ struct SnapshotLayoutCalculatorTests {
     private let configuration = DefaultSnapshotLayoutCalculator.Configuration(
         summaryTransformBottomPaddingPortrait: 110.0,
         transformPercentagePortrait: 0.5,
-        transformPercentageLandscape: 1.0
+        transformPercentageLandscape: 1.0,
+        tabSnapshotCornerRadius: 32.0
     )
     private let portraitContext = LayoutContext(
         viewSize: CGSize(width: 375, height: 667),
@@ -156,6 +157,29 @@ struct SnapshotLayoutCalculatorTests {
         let expectedY = rotatedContext.viewSize.height
         #expect(transform.tx == 0)
         #expect(transform.ty == expectedY)
+    }
+
+    // MARK: - Blobs Transform
+    @Test
+    func test_calculateBlobsTransform_whenPortraitOrientation() {
+        let subject = createSubject()
+
+        let transform = subject.calculateBlobsTransform(context: portraitContext)
+
+        let expectedY = -portraitContext.viewSize.height * configuration.transformPercentagePortrait
+            + configuration.tabSnapshotCornerRadius
+            + portraitContext.tabSnapshotTopOffset
+        #expect(transform.tx == 0)
+        #expect(transform.ty == expectedY)
+    }
+
+    @Test
+    func test_calculateBlobsTransform_whenLandscapeOrientation() {
+        let subject = createSubject()
+
+        let transform = subject.calculateBlobsTransform(context: landscapeContext)
+
+        #expect(transform == .identity)
     }
 
     // MARK: - Helper Methods

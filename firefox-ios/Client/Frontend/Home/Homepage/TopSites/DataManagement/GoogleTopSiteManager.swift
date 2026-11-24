@@ -14,7 +14,7 @@ public protocol GoogleTopSiteManagerProvider: Sendable {
 }
 // Manage the specific Google top site case
 final class GoogleTopSiteManager: GoogleTopSiteManagerProvider {
-    struct Constants {
+    enum Constants {
         // US and rest of the world google urls
         static let usUrl = "https://www.google.com/webhp?client=firefox-b-1-m&channel=ts"
         static let rowUrl = "https://www.google.com/webhp?client=firefox-b-m&channel=ts"

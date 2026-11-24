@@ -8,19 +8,13 @@ import ComponentLibrary
 public struct BrandViewConfiguration {
     let brandLabel: String
     let brandLabelA11yId: String
-    let brandImage: UIImage?
-    let brandImageA11yId: String
 
     public init(
         brandLabel: String,
-        brandLabelA11yId: String,
-        brandImage: UIImage?,
-        brandImageA11yId: String
+        brandLabelA11yId: String
     ) {
         self.brandLabel = brandLabel
         self.brandLabelA11yId = brandLabelA11yId
-        self.brandImage = brandImage
-        self.brandImageA11yId = brandImageA11yId
     }
 }
 

@@ -20,7 +20,7 @@ extension View {
 /// Wraps the label in a `.glassProminent` button, which already adds its own insets around the label.
 @available(iOS 26.0, *)
 private struct GlassPrimaryButtonStyle: PrimitiveButtonStyle {
-    private struct UX {
+    private enum UX {
         static let verticalPadding: CGFloat = 6
         static let horizontalPadding: CGFloat = 12
     }
@@ -43,7 +43,7 @@ private struct GlassPrimaryButtonStyle: PrimitiveButtonStyle {
 
 /// Mirrors the configuration of `PrimaryRoundedButton`.
 private struct LegacyPrimaryButtonStyle: ButtonStyle {
-    private struct UX {
+    private enum UX {
         static let verticalPadding: CGFloat = 12
         static let horizontalPadding: CGFloat = 16
         static let cornerRadius: CGFloat = 12

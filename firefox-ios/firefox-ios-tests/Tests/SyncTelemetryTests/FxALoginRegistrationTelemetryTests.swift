@@ -6,7 +6,7 @@ import Foundation
 import XCTest
 @testable import Client
 
-struct MockFxAUrls {
+enum MockFxAUrls {
     static let mockSigInUrl = URL(string: "https://accounts.firefox.com/oauth/signin?action=email")!
     static let mockSignUpUrl = URL(string: "https://accounts.firefox.com/oauth/signup?action=email")!
     static let mockConfirmSignUpCodeUrl = URL(string: "https://accounts.firefox.com/oauth/confirm_signup_code")!

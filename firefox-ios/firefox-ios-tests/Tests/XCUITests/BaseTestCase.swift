@@ -65,7 +65,14 @@ class BaseTestCase: XCTestCase {
     /// that need a minimum amount of inactivity to elapse.
     func restartInBackground(inactiveFor seconds: TimeInterval = 0) {
         // Send app to background, and re-enter
-        XCUIDevice.shared.press(.home)
+        if iPhoneDuo() {
+            iOS_Settings.activate()
+            XCTAssertTrue(iOS_Settings.wait(for: .runningForeground, timeout: TIMEOUT))
+            iOS_Settings.terminate()
+        } else {
+            XCUIDevice.shared.press(.home)
+            mozWaitForElementToExist(springboard.icons["XCUITests-Runner"])
+        }
         // Let's be sure the app is backgrounded
         _ = app.wait(for: XCUIApplication.State.runningBackgroundSuspended, timeout: TIMEOUT)
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
@@ -505,11 +512,6 @@ class BaseTestCase: XCTestCase {
         app.buttons["Remove"].waitAndTap()
     }
 
-     func selectOptionFromContextMenu(option: String) {
-       app.tables["Context Menu"].cells.buttons[option].waitAndTap()
-        mozWaitForElementToNotExist(app.tables["Context Menu"])
-    }
-
     func loadWebPage(_ url: String, waitForLoadToFinish: Bool = true) {
         let app = XCUIApplication()
         UIPasteboard.general.string = url
@@ -528,6 +530,10 @@ class BaseTestCase: XCTestCase {
             return true
         }
         return false
+    }
+
+    func iPhoneDuo() -> Bool {
+        return isIPhoneDuo()
     }
 
     /// - Parameter timeout: how long the loading indicator may stay up. Raise it for slow resources.
@@ -552,12 +558,12 @@ class BaseTestCase: XCTestCase {
 
     /// Launches the app straight into a Settings screen by using a deeplink as the launch, which skips
     /// the menu taps. A deeplink sent to an already running app costs more than the taps it replaces,
-    /// so this only pays off as the launch. Falls back to `app.launch()` and the menu below iOS 16.4.
+    /// so this only pays off as the launch. Falls back to `app.launch()` and the menu below iOS 16.4 and on devices.
     /// With `.general` the navigator ends at `SettingsScreen` and can route anywhere from there.
     /// With `.theme` it ends at `DisplaySettings` with no route out: go back with
     /// `SettingScreen.tapBackToSettings()`, then call `settingsRootReachedByDeeplink()`.
     func launchIntoSettings(_ section: SettingsDeeplink = .general) {
-        guard #available(iOS 16.4, *) else {
+        guard #available(iOS 16.4, *), launchesWithDeeplink else {
             app.launch()
             waitForTabsButton()
             navigator.nowAt(NewTabScreen)
@@ -585,9 +591,9 @@ class BaseTestCase: XCTestCase {
 
     /// Launches the app with `url` already loaded through an `open-url` deeplink, instead of launching
     /// and typing it. The URL opens in a new tab next to the start page, so there is one more regular
-    /// tab than when typing it. Below iOS 16.4 it opens a new tab and types the URL, keeping that count.
+    /// tab than when typing it. Below iOS 16.4 and on devices it opens a new tab and types the URL, keeping that count.
     func launchOpening(_ url: String, isPrivate: Bool = false) {
-        guard #available(iOS 16.4, *) else {
+        guard #available(iOS 16.4, *), launchesWithDeeplink else {
             app.launch()
             waitForTabsButton()
             navigator.nowAt(NewTabScreen)
@@ -625,7 +631,7 @@ class BaseTestCase: XCTestCase {
     /// Launches the app straight into the Reading List panel through a deeplink, which skips the menu taps,
     /// and waits for the empty panel that a cleared profile shows.
     func launchIntoReadingList() {
-        guard #available(iOS 16.4, *) else {
+        guard #available(iOS 16.4, *), launchesWithDeeplink else {
             app.launch()
             waitForTabsButton()
             navigator.nowAt(NewTabScreen)
@@ -635,6 +641,16 @@ class BaseTestCase: XCTestCase {
         launchWithDeeplink(.homepanel(.readingList))
         ReadingListScreen(app: app).waitForReadingListsPanel()
         navigator.nowAt(LibraryPanel_ReadingList)
+    }
+
+    /// Deeplink launches are a simulator-only shortcut. On a real device iOS asks to confirm opening the app,
+    /// and the tests follow the taps a user would make, so the helpers above fall back to them there.
+    private var launchesWithDeeplink: Bool {
+        #if targetEnvironment(simulator)
+        return true
+        #else
+        return false
+        #endif
     }
 
     /// `deeplink` with the internal scheme of the build under test.

@@ -8,6 +8,7 @@ import Storage
 import XCTest
 import Glean
 import Common
+import Redux
 import Shared
 
 @testable import Client
@@ -763,24 +764,23 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
         subject.startNavigationButtonDoubleTapTimer()
 
-        XCTAssertNil(
-            mockStore.dispatchedActions.compactMap { $0 as? ToolbarAction }.first {
-                ($0.actionType as? ToolbarActionType) == .navigationButtonDoubleTapped
-            }
-        )
+        XCTAssertFalse(mockStore.dispatchedModernActions.contains(where: isNavigationButtonDoubleTapped))
     }
 
     @MainActor
-    func testStartNavigationButtonDoubleTapTimer_doubleTap_dispatchesDoubleTap() throws {
+    func testStartNavigationButtonDoubleTapTimer_doubleTap_dispatchesDoubleTap() {
         let subject = createSubject()
         subject.startNavigationButtonDoubleTapTimer()
         let firstScheduledTimer = subject.navigationHintDoubleTapTimer
         subject.startNavigationButtonDoubleTapTimer()
         firstScheduledTimer?.invalidate()
 
-        let action = try XCTUnwrap(mockStore.dispatchedActions.compactMap { $0 as? ToolbarAction }.last)
-        let actionType = try XCTUnwrap(action.actionType as? ToolbarActionType)
-        XCTAssertEqual(actionType, .navigationButtonDoubleTapped)
+        XCTAssertTrue(mockStore.dispatchedModernActions.contains(where: isNavigationButtonDoubleTapped))
+    }
+
+    private func isNavigationButtonDoubleTapped(_ action: ModernAction) -> Bool {
+        guard case .navigationHintAvailabilityChanged(let canShow) = action as? ToolbarModernAction else { return false }
+        return canShow
     }
 
     // MARK: - Key commands
@@ -841,37 +841,37 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     }
 
     private func setupNimbusToolbarRefactorTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
+        FxNimbus.shared.features.toolbarRefactorFeature.with { _ in
             return ToolbarRefactorFeature()
         }
     }
 
     private func setIsSwipingTabsEnabled(_ isEnabled: Bool) {
-        FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
+        FxNimbus.shared.features.toolbarRefactorFeature.with { _ in
             return ToolbarRefactorFeature()
         }
     }
 
     private func setIsHostedSummarizerEnabled(_ isEnabled: Bool) {
-        FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
+        FxNimbus.shared.features.hostedSummarizerFeature.with { _ in
             return HostedSummarizerFeature()
         }
     }
 
     private func setIsDeeplinkOptimizationRefactorEnabled(_ isEnabled: Bool) {
-        FxNimbus.shared.features.deeplinkOptimizationRefactorFeature.with { _, _ in
+        FxNimbus.shared.features.deeplinkOptimizationRefactorFeature.with { _ in
             return DeeplinkOptimizationRefactorFeature(enabled: isEnabled)
         }
     }
 
     private func setupSummarizedShakeGestureForTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
+        FxNimbus.shared.features.hostedSummarizerFeature.with { _ in
             return HostedSummarizerFeature(enabled: isEnabled, shakeGesture: isEnabled)
         }
     }
 
     private func setupNimbusNativeErrorPageTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.nativeErrorPageFeature.with { _, _ in
+        FxNimbus.shared.features.nativeErrorPageFeature.with { _ in
             return NativeErrorPageFeature(enabled: isEnabled)
         }
     }
@@ -883,14 +883,14 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
                 HomepageState(windowUUID: .XCTestDefaultUUID),
                 HomepageAction(
                     windowUUID: .XCTestDefaultUUID,
-                    actionType: HomepageActionType.initialize
+                    actionType: HomepageActionType.viewWillAppear
                 )
             )
         let newHomepageState = HomepageState
             .reducer.legacyReducer(
                 initialHomepageState,
                 HomepageAction(
-                    isSearchBarEnabled: true,
+                    isCenterSearchEnabled: true,
                     windowUUID: .XCTestDefaultUUID,
                     actionType: HomepageMiddlewareActionType.configuredSearchBar
                 )

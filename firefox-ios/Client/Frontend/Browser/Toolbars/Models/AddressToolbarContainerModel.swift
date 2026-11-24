@@ -40,6 +40,7 @@ final class AddressToolbarContainerModel: Equatable {
     let hasAlternativeLocationColor: Bool
     let isAddressBarMinimized: Bool
     let isAccessoryViewVisible: Bool
+    let isTranslucent: Bool
     let isSearchTermInAddressBarEnabled: Bool
 
     let windowUUID: UUID
@@ -214,7 +215,7 @@ final class AddressToolbarContainerModel: Equatable {
         windowUUID: UUID
     ) {
         self.longPressMenuProvider = longPressMenuProvider
-        self.borderPosition = state.addressToolbar.borderPosition
+        self.borderPosition = addressToolbarContainerLens.addressBorderPosition
         self.navigationActions = Self.mapActions(addressToolbarContainerLens.navigationActions,
                                                  longPressMenuProvider: longPressMenuProvider,
                                                  windowUUID: windowUUID)
@@ -248,9 +249,9 @@ final class AddressToolbarContainerModel: Equatable {
         self.searchEngineName = searchEngineModel?.name ?? ""
         self.searchEngineImage = searchEngineModel?.image ?? UIImage()
         self.searchEnginesManager = searchEnginesManager
-        self.lockIconButtonA11yId = state.addressToolbar.lockIconButtonA11yId
-        self.lockIconImageName = state.addressToolbar.lockIconImageName
-        self.lockIconNeedsTheming = state.addressToolbar.lockIconNeedsTheming
+        self.lockIconButtonA11yId = addressToolbarContainerLens.lockIconState.a11yId
+        self.lockIconImageName = addressToolbarContainerLens.lockIconState.imageName
+        self.lockIconNeedsTheming = addressToolbarContainerLens.lockIconState.needsTheming
         self.safeListedURLImageName = state.addressToolbar.safeListedURLImageName
         self.url = state.addressToolbar.url
         self.isEmptySearch = state.addressToolbar.isEmptySearch
@@ -265,6 +266,7 @@ final class AddressToolbarContainerModel: Equatable {
         self.shouldAnimate = state.shouldAnimate
         self.isAddressBarMinimized = state.isAddressBarMinimized
         self.isAccessoryViewVisible = state.isAccessoryViewVisible
+        self.isTranslucent = state.isTranslucent
         self.hasAlternativeLocationColor = hasAlternativeLocationColor
         self.toolbarLayoutStyle = state.toolbarLayout
         self.toolbarHelper = toolbarHelper
@@ -424,6 +426,7 @@ final class AddressToolbarContainerModel: Equatable {
         lhs.shouldAnimate == rhs.shouldAnimate &&
         lhs.isAddressBarMinimized == rhs.isAddressBarMinimized &&
         lhs.isAccessoryViewVisible == rhs.isAccessoryViewVisible &&
+        lhs.isTranslucent == rhs.isTranslucent &&
         lhs.hasAlternativeLocationColor == rhs.hasAlternativeLocationColor &&
 
         lhs.windowUUID == rhs.windowUUID

@@ -9,7 +9,7 @@ struct SettingsTelemetry {
     private let gleanWrapper: GleanWrapper
 
     /// Standard fallback values to use in telemetry when needed (e.g. missing data).
-    struct Placeholders {
+    enum Placeholders {
         /// Used when a value is not available to send (e.g. settings.changed changedFrom value missing)
         static let missingValue = "unavailable"
     }
@@ -20,6 +20,8 @@ struct SettingsTelemetry {
     /// Note that the `option` identifies the __row tapped__, not necessarily the screen shown.
     enum OptionIdentifiers: String {
         case AppIconSelection = "app_icon_selection" // Tapping "App Icon >" to show the App Icon Selection screen
+        case VPN = "vpn" // Tapping "VPN >" to show the VPN settings screen
+        case VPNLocationList = "vpn_location_list" // Tapping "Location >" in VPN settings to show the location list
     }
 
     init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {

@@ -14,7 +14,7 @@ class EditAddressViewController: UIViewController,
                                  WKScriptMessageHandler,
                                  Themeable,
                                  KeyboardHelperDelegate {
-    private struct UX {
+    private enum UX {
         static let stackViewInset: CGFloat = 16
         static let stackViewSpacing: CGFloat = 16
         static let removeButtonHeight: CGFloat = 44

@@ -21,7 +21,7 @@ protocol ETPCoordinatorSSLStatusDelegate: AnyObject {
 class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
                                              TrackingProtectionMenuDelegate,
                                              FeatureFlaggable {
-    private struct UX {
+    private enum UX {
         static let popoverPreferredSize = CGSize(width: 480, height: 540)
     }
 

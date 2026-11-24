@@ -7,7 +7,7 @@ import Shared
 import WebKit
 
 /// Accessors to find what should happen when the user opens a web page with media that will autoplay.
-struct AutoplayAccessors {
+enum AutoplayAccessors {
     static let autoplayPrefKey = PrefsKeys.AutoplayMediaKey
     static let defaultSetting = AutoplayAction.allowAudioAndVideo
 

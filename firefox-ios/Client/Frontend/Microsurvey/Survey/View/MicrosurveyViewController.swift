@@ -30,7 +30,7 @@ final class MicrosurveyViewController: UIViewController,
     private var selectedOption: String?
 
     // MARK: UI Elements
-    private struct UX {
+    private enum UX {
         static let headerStackSpacing: CGFloat = 8
         static let scrollStackSpacing: CGFloat = 22
         static let logoSize: CGFloat = 24

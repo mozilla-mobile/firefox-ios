@@ -167,7 +167,7 @@ final class SummarizeCoordinatorTests: XCTestCase {
     }
 
     private func setIsHostedSummarizerEnabled(_ isEnabled: Bool) {
-        FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
+        FxNimbus.shared.features.hostedSummarizerFeature.with { _ in
             return HostedSummarizerFeature(enabled: isEnabled)
         }
     }

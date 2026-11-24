@@ -31,7 +31,7 @@ private enum QRCodeViewControllerState {
 }
 
 class QRCodeViewController: UIViewController {
-    private struct UX {
+    private enum UX {
         static let navigationBarBackgroundColor = UIColor.black
         static let navigationBarTitleColor = UIColor.white
         static let maskViewBackgroundColor = UIColor.black.withAlphaComponent(0.5)

@@ -7,7 +7,7 @@ import Common
 import Shared
 import Storage
 
-struct SearchEngineFlags {
+enum SearchEngineFlags {
     static var isSearchConfigV3Enabled: Bool {
         let flagProvider: FeatureFlagProviding = AppContainer.shared.resolve()
         let flag = flagProvider.isEnabled(.searchConfigV3)
@@ -33,7 +33,7 @@ protocol SearchEngineDelegate: AnyObject {
     func searchEnginesDidUpdate()
 }
 
-struct SearchEngineProviderFactory {
+enum SearchEngineProviderFactory {
     static let defaultSearchEngineProvider: SearchEngineProvider = ASSearchEngineProvider()
 }
 

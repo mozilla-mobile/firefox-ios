@@ -9,7 +9,7 @@ import TipKit
 /// and owns the lifecycle quirks of `TipUIPopoverViewController`.
 @MainActor
 final class QuickAnswersPrivacyTipPresenter {
-    private struct UX {
+    private enum UX {
         /// The natural size of the acorn icon, which TipKit would otherwise scale up.
         static let imageSize = CGSize(width: 26.0, height: 26.0)
     }

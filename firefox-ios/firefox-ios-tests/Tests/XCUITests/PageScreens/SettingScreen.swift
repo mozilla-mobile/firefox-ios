@@ -34,8 +34,17 @@ final class SettingScreen {
 
     func closeSettingsWithDoneButton() {
         let doneButton = sel.DONE_BUTTON.element(in: app)
+        BaseTestCase().scrollToElement(doneButton, swipe: "down")
         BaseTestCase().mozWaitElementHittable(element: doneButton, timeout: TIMEOUT)
         doneButton.waitAndTap()
+    }
+
+    /// Asserts the native settings table renders with the light app theme, judged by its average luminance.
+    func assertSettingsTableIsLight(timeout: TimeInterval = TIMEOUT) {
+        let table = sel.MAIN_SETTINGS_TABLE.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(table, timeout: timeout)
+        let isLight = table.waitForLuminance(timeout: timeout) { $0 > 0.65 }
+        XCTAssertTrue(isLight, "The app theme should stay light, settings luminance: \(table.averageLuminance())")
     }
 
     func rotateDevice(to orientation: UIDeviceOrientation) {
@@ -72,6 +81,15 @@ final class SettingScreen {
 
         BaseTestCase().mozWaitForElementToExist(okButton)
         okButton.waitAndTap()
+    }
+
+    /// From the Settings root, opens Data Management and then Website Data.
+    func openWebsiteData() {
+        let settingsTable = sel.SETTINGS_TABLE.element(in: app)
+        let dataManagementCell = settingsTable.cells[sel.CLEAR_DATA_CELL.value]
+        BaseTestCase().scrollToElement(dataManagementCell, swipeableElement: settingsTable)
+        dataManagementCell.waitAndTap()
+        sel.WEBSITE_DATA_CELL.element(in: app).waitAndTap()
     }
 
     func tryTapClearPrivateDataButton() {
@@ -169,6 +187,10 @@ final class SettingScreen {
         BaseTestCase().mozWaitForElementToExist(table)
     }
 
+    func assertSettingsScreenDismissed(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToNotExist(sel.MAIN_SETTINGS_TABLE.element(in: app), timeout: timeout)
+    }
+
     func assertLayout() {
         let title = sel.SETTINGS_TITLE.element(in: app)
         let done = sel.DONE_BUTTON.element(in: app)
@@ -187,8 +209,13 @@ final class SettingScreen {
         // Toolbar check only on iPhone
         if !BaseTestCase().iPad() {
             let toolbar = sel.TOOLBAR_CELL.element(in: app)
+            let doneButton = sel.DONE_BUTTON.element(in: app)
             BaseTestCase().mozWaitForElementToExist(toolbar)
+            BaseTestCase().scrollToElement(toolbar)
             XCTAssertTrue(toolbar.isVisible())
+
+            // Ensure we start from the very top
+            BaseTestCase().scrollToElement(doneButton, swipe: "down")
         }
 
         // Iterate over all expected cells
@@ -206,6 +233,10 @@ final class SettingScreen {
         cell.waitAndTap()
     }
 
+    func openHomepageSettings() {
+        sel.HOMEPAGE_CELL.element(in: app).waitAndTap()
+    }
+
     func navigateToToolbarSettings() {
         BaseTestCase().mozWaitForElementToExist(toolbarCell)
         toolbarCell.waitAndTap()
@@ -219,6 +250,18 @@ final class SettingScreen {
     func selectTopToolbar() {
         BaseTestCase().mozWaitForElementToExist(topToolbarButton)
         topToolbarButton.waitAndTap()
+    }
+
+    /// From the Settings root, places the address bar at the top or the bottom, then closes Settings.
+    func setAddressBarPosition(atTop: Bool) {
+        navigateToToolbarSettings()
+        if atTop {
+            selectTopToolbar()
+        } else {
+            selectBottomToolbar()
+        }
+        tapBackToSettings()
+        closeSettingsWithDoneButton()
     }
 
     /// Picks which button sits in the middle of the navigation toolbar. The Home option is what makes
@@ -288,10 +331,14 @@ final class SettingScreen {
 
     func tapBackToSettings() {
         guard !app.navigationBars["Settings"].exists else { return }
-        let backButton = app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0)
+        // On iPhone Duo the back button lives in a toolbar, not the navigation bar.
+        let backButton = BaseTestCase().iPhoneDuo()
+            ? app.buttons["BackButton"].firstMatch
+            : app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0)
         BaseTestCase().mozWaitElementHittable(element: backButton, timeout: TIMEOUT)
         backButton.tap()
         BaseTestCase().mozWaitForElementToExist(app.navigationBars["Settings"])
+        BaseTestCase().mozWaitForElementToExist(app.buttons["Done"])
     }
 
     func navigateToAutofillPasswordSettings() {
@@ -334,9 +381,21 @@ final class SettingScreen {
         cell.waitAndTap()
     }
 
-    func assertSummarizeSettingsIsInGeneralSection() {
+    func assertSummarizeSettingsIsInGeneralSection(timeout: TimeInterval = TIMEOUT) {
+        let cell = summarizeCell
+        let header = sel.GENERAL_SECTION_HEADER.element(in: app)
         BaseTestCase().mozWaitForElementToExist(sel.SETTINGS_TABLE.element(in: app))
-        XCTAssertTrue(summarizeCell.isBelow(element: sel.GENERAL_SECTION_HEADER.element(in: app)))
+        BaseTestCase().mozWaitForElementToExist(cell)
+        BaseTestCase().mozWaitForElementToExist(header)
+
+        // Each frame comes from its own snapshot, so poll until the table stops moving after launch
+        let isBelowHeader = NSPredicate { _, _ in cell.isBelow(element: header) }
+        let expectation = XCTNSPredicateExpectation(predicate: isBelowHeader, object: nil)
+        XCTAssertEqual(
+            XCTWaiter().wait(for: [expectation], timeout: timeout),
+            .completed,
+            "'\(sel.SUMMARIZE_CELL.description)' (\(cell.frame)) is not below the General header (\(header.frame))"
+        )
     }
 
     func openSummarizeSettings() {
@@ -382,10 +441,18 @@ final class SettingScreen {
         setClosePrivateTabs(on: true)
     }
 
+    private func setClosePrivateTabs(on: Bool) {
+        setSwitch(closePrivateTabsSwitch, on: on, name: "Close Private Tabs")
+    }
+
+    /// Turns on Block Ads from the Browsing settings page.
+    func enableAdBlocker() {
+        setSwitch(sel.AD_BLOCKER_SWITCH.element(in: app), on: true, name: "Ad Blocker")
+    }
+
     /// XCUITest can retry a tap that already registered, which toggles the switch straight back, so
     /// the value is re-checked and corrected rather than toggled once.
-    private func setClosePrivateTabs(on: Bool, attempts: Int = 3) {
-        let switchElement = closePrivateTabsSwitch
+    private func setSwitch(_ switchElement: XCUIElement, on: Bool, name: String, attempts: Int = 3) {
         let expected = on ? "1" : "0"
         BaseTestCase().mozWaitForElementToExist(switchElement)
         BaseTestCase().scrollToElement(switchElement)
@@ -395,7 +462,7 @@ final class SettingScreen {
             _ = switchValueSettles(switchElement, to: expected)
         }
         XCTAssertTrue(switchValueSettles(switchElement, to: expected),
-                      "The Close Private Tabs switch did not settle on \(expected)")
+                      "The \(name) switch did not settle on \(expected)")
     }
 
     private func switchValueSettles(_ element: XCUIElement, to expected: String, timeout: TimeInterval = 2) -> Bool {

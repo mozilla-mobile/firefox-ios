@@ -309,6 +309,20 @@
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "WebDataTransferTests"
+               BuildableName = "WebDataTransferTests"
+               BlueprintName = "WebDataTransferTests"
+               ReferencedContainer = "container:../BrowserKit">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "E6F9650B1B2F1CF20034B023"
                BuildableName = "SharedTests.xctest"
                BlueprintName = "SharedTests"
@@ -495,6 +509,13 @@
             BlueprintIdentifier = "QuickAnswersKit"
             BuildableName = "QuickAnswersKit"
             BlueprintName = "QuickAnswersKit"
+            ReferencedContainer = "container:../BrowserKit">
+         </BuildableReference>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "WebDataTransfer"
+            BuildableName = "WebDataTransfer"
+            BlueprintName = "WebDataTransfer"
             ReferencedContainer = "container:../BrowserKit">
          </BuildableReference>
          <BuildableReference
@@ -824,6 +845,16 @@
                BlueprintIdentifier = "QuickAnswersKitTests"
                BuildableName = "QuickAnswersKitTests"
                BlueprintName = "QuickAnswersKitTests"
+               ReferencedContainer = "container:../BrowserKit">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "WebDataTransferTests"
+               BuildableName = "WebDataTransferTests"
+               BlueprintName = "WebDataTransferTests"
                ReferencedContainer = "container:../BrowserKit">
             </BuildableReference>
          </TestableReference>

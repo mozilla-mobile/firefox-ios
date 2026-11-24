@@ -22,6 +22,7 @@ include:
   - nimbus-features/bookmarksSearchFeature.yaml
   - nimbus-features/browserDataTransferFeature.yaml
   - nimbus-features/cellularDataRestrictedErrorPageFeature.yaml
+  - nimbus-features/checkForReinstallsFeature.yaml
   - nimbus-features/configurationProfileFeature.yaml
   - nimbus-features/customReaderModeSchemeFeature.yaml
   - nimbus-features/deeplinkOptimizationRefactorFeature.yaml
@@ -56,6 +57,8 @@ include:
   - nimbus-features/summarizerAppAttestAuthFeature.yaml
   - nimbus-features/summarizerLanguageExpansionFeature.yaml
   - nimbus-features/summarizerPermissiveGuardrailsFeature.yaml
+  - nimbus-features/syncStringUpdatesFeature.yaml
+  - nimbus-features/tabGroupsFeature.yaml
   - nimbus-features/tabScrollRefactorFeature.yaml
   - nimbus-features/tabTrayUIExperiments.yaml
   - nimbus-features/toolbarRefactorFeature.yaml
@@ -64,5 +67,6 @@ include:
   - nimbus-features/translationsFeature.yaml
   - nimbus-features/trendingSearchesFeature.yaml
   - nimbus-features/vpnFeature.yaml
+  - nimbus-features/wallpaperEngagementSheetFeature.yaml
   - nimbus-features/waybackMachineFeature.yaml
   - nimbus-features/webViewDocumentFetchRefactorFeature.yaml

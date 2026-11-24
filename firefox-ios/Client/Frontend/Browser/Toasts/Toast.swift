@@ -7,7 +7,7 @@ import Foundation
 import UIKit
 
 class Toast: UIView, ThemeApplicable, Notifiable {
-    struct UX {
+    enum UX {
         static let toastHeightWithoutShadow: CGFloat = 56
         static let toastHeightWithShadow: CGFloat = 68
         static let toastDismissAfter = DispatchTimeInterval.milliseconds(4500) // 4.5 seconds.
@@ -28,6 +28,7 @@ class Toast: UIView, ThemeApplicable, Notifiable {
     public var notificationCenter: NotificationProtocol = NotificationCenter.default
     var animationConstraint: NSLayoutConstraint?
     var completionHandler: (@MainActor (Bool) -> Void)?
+    final var onPresentationChange: (@MainActor () -> Void)?
 
     weak var viewController: UIViewController?
 
@@ -89,6 +90,7 @@ class Toast: UIView, ThemeApplicable, Notifiable {
                 guard viewController != nil else { return }
                 NSLayoutConstraint.activate(updateConstraintsOn(self))
                 self.layoutIfNeeded()
+                self.onPresentationChange?()
             }
 
             UIView.animate(
@@ -121,6 +123,7 @@ class Toast: UIView, ThemeApplicable, Notifiable {
             }
         ) { finished in
             self.removeFromSuperview()
+            self.onPresentationChange?()
             if !buttonPressed {
                 self.completionHandler?(false)
             }

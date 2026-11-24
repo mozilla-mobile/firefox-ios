@@ -1555,6 +1555,9 @@
 /* Footer information for tracker protection level. */
 "Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Егер сайт күткендей жұмыс істемесе, адрес жолағындағы құлыпты шертіп, сол бет үшін бақылаудан кеңейтілген қорғанысты сөндіріңіз.";
 
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Strict.v161" = "Егер сайт жұмыс істемесе, мәзірді ашып, Бақылаудан жақсартылған қорғанысты өшіріп көріңіз.";
+
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Веб сайттар дұрыс жұмыс істейтіндей кейбір жарнамалық трекерлерді рұқсат етеді.";
 

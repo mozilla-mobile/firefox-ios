@@ -1282,6 +1282,10 @@ public struct RemoteSettingsContext: Equatable, Hashable {
      * for example `Region` on Desktop and `RegionMiddleware` on Android.
      */
     public var country: String?
+    /**
+     * Exposed as `env.distribution`.  When unset, the env value is `"default"`, matching the
+     * Gecko client which reads the `distribution.id` pref with that fallback.
+     */
     public var distribution: String?
     /**
      * Extra attributes to add to the env for JEXL filtering.
@@ -1323,7 +1327,11 @@ public struct RemoteSettingsContext: Equatable, Hashable {
          * - By using a geolocation service, which determines country via the user's IP.
          * Firefox apps usually have a module that integrates with these services,
          * for example `Region` on Desktop and `RegionMiddleware` on Android.
-         */country: String? = nil, distribution: String? = nil, 
+         */country: String? = nil, 
+        /**
+         * Exposed as `env.distribution`.  When unset, the env value is `"default"`, matching the
+         * Gecko client which reads the `distribution.id` pref with that fallback.
+         */distribution: String? = nil, 
         /**
          * Extra attributes to add to the env for JEXL filtering.
          *
@@ -1810,6 +1818,10 @@ public enum SyncStatus: Equatable, Hashable {
      */
     case signatureError
     /**
+     * The certificate chain URL is unreachable or has invalid content-type.
+     */
+    case certificateError
+    /**
      * Server error (5xx status)
      */
     case serverError
@@ -1848,9 +1860,11 @@ public struct FfiConverterTypeSyncStatus: FfiConverterRustBuffer {
         
         case 5: return .signatureError
         
-        case 6: return .serverError
+        case 6: return .certificateError
         
-        case 7: return .unknownError
+        case 7: return .serverError
+        
+        case 8: return .unknownError
         
         default: throw UniffiInternalError.unexpectedEnumCase
         }
@@ -1880,12 +1894,16 @@ public struct FfiConverterTypeSyncStatus: FfiConverterRustBuffer {
             writeInt(&buf, Int32(5))
         
         
-        case .serverError:
+        case .certificateError:
             writeInt(&buf, Int32(6))
         
         
-        case .unknownError:
+        case .serverError:
             writeInt(&buf, Int32(7))
+        
+        
+        case .unknownError:
+            writeInt(&buf, Int32(8))
         
         }
     }

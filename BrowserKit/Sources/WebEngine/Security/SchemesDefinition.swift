@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct SchemesDefinition {
+enum SchemesDefinition {
     enum standardSchemes: String {
         case http, https, javascript, data, about, sms, tel, facetime, mailto, blob, file
         case facetimeAudio = "facetime-audio"

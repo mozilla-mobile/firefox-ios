@@ -16,26 +16,17 @@ struct ToolbarAction: Action {
     let url: URL?
     let searchTerm: String?
     let isPrivate: Bool?
-    let showMenuWarningBadge: Bool?
     let isShowingNavigationToolbar: Bool?
-    let isShowingTopTabs: Bool?
     let canGoBack: Bool?
     let canGoForward: Bool?
     let canSummarize: Bool
     let readerModeState: ReaderModeState?
-    let addressBorderPosition: AddressToolbarBorderPosition?
-    let displayNavBorder: Bool?
-    let lockIconButtonA11yId: String?
-    let lockIconImageName: String?
-    let lockIconNeedsTheming: Bool?
+    let hasOnlySecureContent: Bool?
+    let isWebsiteMode: Bool?
     let safeListedURLImageName: String?
-    let isLoading: Bool?
-    let shouldAnimate: Bool?
     let middleButton: NavigationBarMiddleButtonType?
     let isTranslationsEnabled: Bool?
     let translationConfiguration: TranslationConfiguration?
-    let previousTabScreenshot: UIImage?
-    let nextTabScreenshot: UIImage?
     let isNovaDesignEnabled: Bool?
 
     init(toolbarPosition: SearchBarPosition? = nil,
@@ -45,27 +36,18 @@ struct ToolbarAction: Action {
          url: URL? = nil,
          searchTerm: String? = nil,
          isPrivate: Bool? = nil,
-         showMenuWarningBadge: Bool? = nil,
          isShowingNavigationToolbar: Bool? = nil,
-         isShowingTopTabs: Bool? = nil,
          canGoBack: Bool? = nil,
          canGoForward: Bool? = nil,
          canSummarize: Bool = false,
          readerModeState: ReaderModeState? = nil,
-         addressBorderPosition: AddressToolbarBorderPosition = .none,
-         displayNavBorder: Bool? = nil,
-         lockIconButtonA11yId: String? = nil,
-         lockIconImageName: String? = nil,
-         lockIconNeedsTheming: Bool? = nil,
+         hasOnlySecureContent: Bool? = nil,
+         isWebsiteMode: Bool? = nil,
          safeListedURLImageName: String? = nil,
-         isLoading: Bool? = nil,
          shouldShowKeyboard: Bool? = nil,
-         shouldAnimate: Bool? = nil,
          middleButton: NavigationBarMiddleButtonType? = nil,
          isTranslationsEnabled: Bool? = nil,
          translationConfiguration: TranslationConfiguration? = nil,
-         previousTabScreenshot: UIImage? = nil,
-         nextTabScreenshot: UIImage? = nil,
          isNovaDesignEnabled: Bool? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
@@ -78,26 +60,17 @@ struct ToolbarAction: Action {
         self.url = url
         self.searchTerm = searchTerm
         self.isPrivate = isPrivate
-        self.showMenuWarningBadge = showMenuWarningBadge
         self.isShowingNavigationToolbar = isShowingNavigationToolbar
-        self.isShowingTopTabs = isShowingTopTabs
         self.canGoBack = canGoBack
         self.canGoForward = canGoForward
         self.readerModeState = readerModeState
-        self.addressBorderPosition = addressBorderPosition
-        self.displayNavBorder = displayNavBorder
-        self.lockIconButtonA11yId = lockIconButtonA11yId
-        self.lockIconImageName = lockIconImageName
-        self.lockIconNeedsTheming = lockIconNeedsTheming
+        self.hasOnlySecureContent = hasOnlySecureContent
+        self.isWebsiteMode = isWebsiteMode
         self.safeListedURLImageName = safeListedURLImageName
-        self.isLoading = isLoading
-        self.shouldAnimate = shouldAnimate
         self.canSummarize = canSummarize
         self.middleButton = middleButton
         self.isTranslationsEnabled = isTranslationsEnabled
         self.translationConfiguration = translationConfiguration
-        self.previousTabScreenshot = previousTabScreenshot
-        self.nextTabScreenshot = nextTabScreenshot
         self.isNovaDesignEnabled = isNovaDesignEnabled
     }
 }
@@ -119,50 +92,73 @@ enum ToolbarModernAction: ModernAction {
     /// the address bar's keyboard should be shown while editing. shouldShow is `false` when the
     /// keyboard hides (or a search engine is selected) while isEditing. `true` when the keyboard
     /// genuinely finishes presenting while still editing. Also restores `shouldShowKeyboard` after it
-    /// was set to `false` by a path that doesn't fully leave overlay mode (like scrolling the
-    /// homepage mid-edit via `cancelEditOnHomepage`)
+    /// was set to `false` by a path that doesn't fully leave overlay mode
     case didKeyboardRequestChange(shouldShow: Bool)
 
-    /// The user scrolled while editing. Cancels editing only if there's no committed website (Homepage),
-    /// otherwise just hides the keyboard (visually still looks like homepage but is zero search state)
-    case cancelEditOnHomepage
+    /// The user left address bar editing. `url` is the committed website to restore,
+    /// or `nil` to keep the address bar's current URL.
+    case cancelEdit(url: URL?)
 
-    /// The user pasted text into the address bar, entering editing mode with the pasted term.
-    case didPasteSearchTerm(searchTerm: String?)
+    /// Sets the address bar's search term and puts it into editing mode with the keyboard shown. Sent when
+    /// the user pastes into the address bar, and when search suggestions highlight or append a row's text.
+    case searchTermDidSet(searchTerm: String?)
 
     /// The number of tabs in the window changed.
     case numberOfTabsChanged(count: Int)
+
+    /// Enables or disables address bar animations. Disabled by the tab tray and tab swipes, and stays
+    /// disabled until a non-homepage URL change or the next edit session re-enables it.
+    case animationStateChanged(shouldAnimate: Bool)
+
+    /// The toolbar blur preference changed, for example when Reduce Transparency is toggled.
+    case translucencyDidChange(isTranslucent: Bool)
+
+    /// The page's secure content status changed. `isWebsiteMode` is `false` for reader mode pages,
+    /// where the lock icon isn't shown. The lock icon itself is derived from these in the Lens.
+    case lockIconChanged(hasOnlySecureContent: Bool, isWebsiteMode: Bool)
+
+    /// The page's loading state changed. Drives the reload/stop button and the share and translate
+    /// icons' enabled state. Also sent with `false` when the user taps stop, since stopping doesn't
+    /// always update the web view's own loading state.
+    case websiteLoadingStateDidChange(isLoading: Bool)
+
+    /// The address bar was moved to the top or bottom of the screen.
+    case toolbarPositionChanged(position: SearchBarPosition)
+
+    /// The trait collection changed, which can change whether the navigation toolbar and the top tabs are shown.
+    case traitCollectionDidChange(isShowingNavigationToolbar: Bool, isShowingTopTabs: Bool)
+
+    /// The menu button's warning badge changed, for example when the account needs the user's attention.
+    case showMenuWarningBadge(isShown: Bool)
+
+    /// Whether the navigation contextual hint can be shown. Enabled by a double tap on a navigation button,
+    /// and disabled once the hint is dismissed.
+    case navigationHintAvailabilityChanged(canShow: Bool)
+
+    /// The screenshots of the tabs next to the selected tab were loaded, used for the tab swipe preview.
+    case didSetTabScreenshot(previousTabScreenshot: UIImage?, nextTabScreenshot: UIImage?)
+
+    /// The text in the address bar changed between empty and non-empty while editing. Only sent when
+    /// `isEmpty` differs from the current state, not on every keystroke.
+    case searchTermDidChange(isEmpty: Bool)
+
+    /// The user tapped the address bar's clear button. Clears the stored search term and leaves the
+    /// address bar editing with an empty search.
+    case searchTermDidClear
 }
 
 enum ToolbarActionType: ActionType {
     case didLoadToolbars
     case urlDidChange
-    case lockIconChanged
-    case didSetTextInLocationView
-    case borderPositionChanged
-    case toolbarPositionChanged
-    case showMenuWarningBadge
     case didStartEditingUrl
-    case cancelEdit
-    case animationStateChanged
     case readerModeStateChanged
     case backForwardButtonStateChanged
-    case traitCollectionDidChange
-    case websiteLoadingStateDidChange
     case searchEngineDidChange
     case googleLensSettingDidChange
-    case navigationButtonDoubleTapped
-    case navigationHintFinishedPresenting
-    case clearSearch
-    case didDeleteSearchTerm
-    case didEnterSearchTerm
     case didSummarizeSettingsChange
-    case didSetTabScreenshot
     // User submitted a search term to load the search request
     case didSubmitSearchTerm
-    case didSetSearchTerm
     case didStartTyping
-    case translucencyDidChange
     case navigationMiddleButtonDidChange
 }
 

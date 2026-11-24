@@ -19,8 +19,8 @@ extension BrowserViewController {
             }
         } else {
             navigationHintDoubleTapTimer = nil
-            let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.navigationButtonDoubleTapped)
-            store.dispatch(action)
+            // After a navigation double tap is detected we dispatch the action to show the hint
+            store.dispatch(ToolbarModernAction.navigationHintAvailabilityChanged(canShow: true), forWindowUUID: windowUUID)
         }
     }
 
@@ -33,9 +33,9 @@ extension BrowserViewController {
                 self?.presentContextualHint(for: .navigation)
             },
             actionOnDismiss: { [windowUUID] in
-                let action = ToolbarAction(windowUUID: windowUUID,
-                                           actionType: ToolbarActionType.navigationHintFinishedPresenting)
-                store.dispatch(action)
+                // After the hint is dismissed reset the hint to false
+                store.dispatch(ToolbarModernAction.navigationHintAvailabilityChanged(canShow: false),
+                               forWindowUUID: windowUUID)
             },
             andActionForButton: { },
             overlayState: overlayManager,
@@ -47,7 +47,7 @@ extension BrowserViewController {
         // 1. The tab webpage is loaded OR we are on the home page, and the
         // 2. Microsurvey prompt is not being displayed
         // If the hint does not show,
-        // ToolbarActionType.navigationButtonDoubleTapped will have to be dispatched again through user action
+        // ToolbarModernAction.navigationHintAvailabilityChanged will have to be dispatched again through user action
         guard let state = store.state.componentState(BrowserViewControllerState.self,
                                                      for: .browserViewController,
                                                      window: windowUUID)
@@ -59,9 +59,8 @@ extension BrowserViewController {
             present(navigationContextHintVC, animated: true)
             UIAccessibility.post(notification: .layoutChanged, argument: navigationContextHintVC)
         } else {
-            let action = ToolbarAction(windowUUID: self.windowUUID,
-                                       actionType: ToolbarActionType.navigationHintFinishedPresenting)
-            store.dispatch(action)
+            store.dispatch(ToolbarModernAction.navigationHintAvailabilityChanged(canShow: false),
+                           forWindowUUID: windowUUID)
         }
     }
 

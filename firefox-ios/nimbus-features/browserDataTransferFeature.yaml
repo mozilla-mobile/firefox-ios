@@ -1,6 +1,7 @@
 # The configuration for the browser data transfer feature
 features:
   browser-data-transfer-feature:
+    no-lint: [MISSING_CONTACTS]
     description: >
       Controls importing browsing data from, and exporting it to, another browser on the device.
     variables:

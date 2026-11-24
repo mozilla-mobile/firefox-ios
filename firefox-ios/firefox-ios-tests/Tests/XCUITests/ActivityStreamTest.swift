@@ -17,11 +17,11 @@ let tabsTray = AccessibilityIdentifiers.TabTray.tabsTray
 
 class ActivityStreamTest: FeatureFlaggedTestBase {
     private var topSites: TopSitesScreen!
-    private var contextMenu: ContextMenuScreen!
     private var tabTray: TabTrayScreen!
     private var browser: BrowserScreen!
     private var toolbar: ToolbarScreen!
     private var homePage: HomePageScreen!
+    private var mainMenu: MainMenuScreen!
 
     typealias TopSites = AccessibilityIdentifiers.FirefoxHomepage.TopSites
     let TopSiteCellgroup = XCUIApplication().links[TopSites.itemCell]
@@ -45,11 +45,11 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         launchArguments.append(LaunchArguments.SkipSponsoredShortcuts)
         try await super.setUp()
         topSites = TopSitesScreen(app: app)
-        contextMenu = ContextMenuScreen(app: app)
         tabTray = TabTrayScreen(app: app)
         browser = BrowserScreen(app: app)
         toolbar = ToolbarScreen(app: app)
         homePage = HomePageScreen(app: app)
+        mainMenu = MainMenuScreen(app: app)
     }
 
     override func tearDown() async throws {
@@ -145,7 +145,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
             topSitesCells.staticTexts["Mozilla — Internet for people, not profit"].press(forDuration: 1)
         }
 
-        selectOptionFromContextMenu(option: "Pin")
+        topSites.tapPin()
         if #available(iOS 15, *) {
             mozWaitForElementToExist(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
         } else {
@@ -173,7 +173,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2272514
     func testTopSitesShiftAfterRemovingOne() {
         app.launch()
-        // Check top site in first and second cell
+        // Check top site in first and second cell3
         let allTopSites = app.collectionViews.links.matching(identifier: "TopSitesCell")
         let topSiteFirstCell = allTopSites.element(boundBy: 0).label
         let topSiteSecondCell = allTopSites.element(boundBy: 1).label
@@ -183,7 +183,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         // Remove facebook top sites, first cell
         mozWaitForElementToExist(allTopSites.element(boundBy: 0))
         allTopSites.element(boundBy: 0).press(forDuration: 1)
-        selectOptionFromContextMenu(option: "Remove")
+        topSites.tapRemove()
         if #unavailable(iOS 16) {
             mozWaitForElementToNotExist(app.staticTexts[topSiteFirstCell])
         }
@@ -216,7 +216,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         // Long press on the Wikipedia top site using the screen object
         topSites.longPressOnSite(named: "Wikipedia")
         // Open the private tab using the context menu screen object
-        contextMenu.openInPrivateTab()
+        topSites.tapOpenInPrivateTab()
         // Assert the homepage is visible again after the context menu action
         topSites.assertVisible()
         // Toggle private mode and navigate to the Tab Tray
@@ -244,7 +244,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         // Long tap on the default Top Site
         let siteName = defaultTopSite["bookmarkLabel"]!
         topSites.longPressOnSite(named: siteName)
-        contextMenu.openInPrivateTab()
+        topSites.tapOpenInPrivateTab()
         navigator.nowAt(HomePanelsScreen)
         BaseTestCase().waitForTabsButton()
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
@@ -269,15 +269,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
             XCUIDevice.shared.orientation = .landscapeLeft
             mozWaitForElementToExist(TopSiteCellgroup)
             app.collectionViews.links.staticTexts["Wikipedia"].press(forDuration: 1)
-            waitForElementsToExist(
-                [
-                    app.tables["Context Menu"],
-                    app.otherElements["Action Sheet"]
-                ]
-            )
-            let contextMenuHeight = app.tables["Context Menu"].frame.size.height
-            let parentViewHeight = app.otherElements["Action Sheet"].frame.size.height
-            XCTAssertLessThanOrEqual(contextMenuHeight, parentViewHeight)
+            topSites.assertOpenInTabContextMenuOptionsExist()
             // Go back to portrait mode
             XCUIDevice.shared.orientation = .portrait
         }
@@ -289,16 +281,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.links[TopSites.itemCell])
         app.collectionViews.links.element(boundBy: 3).press(forDuration: 1)
         // Verify options given
-        let contextMenuTable = app.tables["Context Menu"]
-        waitForElementsToExist(
-            [
-                contextMenuTable,
-                contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.pin],
-                contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.plus],
-                contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.privateMode],
-                contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.cross]
-            ]
-        )
+        topSites.assertUnpinnedSiteContextMenuOptionsExist()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2855325
@@ -310,7 +293,41 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         mozWaitForElementToExist(cell)
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2861436
+    // https://mozilla.testrail.io/index.php?/cases/view/3167644
+    // Regression
+    func testAddToShortcutsOpensSavedWebsite() {
+        app.launch()
+        pinExampleDomainFromMainMenu()
+        topSites.assertTopSitePinned(named: TestLabels.exampleDomain)
+
+        topSites.tapOnPinnedSite(named: TestLabels.exampleDomain)
+        waitUntilPageLoad()
+        browser.assertAddressBarContains(value: "localhost")
+        browser.assertExampleDomainTextExists()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3167645
+    // Regression
+    func testRemoveFromShortcutsOption() {
+        app.launch()
+        pinExampleDomainFromMainMenu()
+        topSites.tapOnPinnedSite(named: TestLabels.exampleDomain)
+        waitUntilPageLoad()
+        browser.assertExampleDomainTextExists()
+
+        toolbar.tapSettingsMenuButton()
+        mainMenu.expandMenuIfNeeded()
+        mainMenu.assertRemoveFromShortcutsExists()
+        mainMenu.tapRemoveFromShortcuts()
+        mainMenu.assertMenuIsDismissed()
+        browser.assertAddressBarContains(value: "localhost")
+        browser.assertExampleDomainTextExists()
+
+        toolbar.tapOnNewTabButton()
+        topSites.assertVisible()
+        topSites.assertTopSiteDoesNotExist(named: TestLabels.exampleDomain)
+    }
+
     func testShortcutsToggle() {
         launchIntoSettings()
         //  Go to customize homepage
@@ -372,6 +389,16 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleExperimentRegularMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         homePage.validateHomePageLogo(isPrivate: false)
+    }
+
+    /// Opens the Example Domain page, pins it with the main menu's Add to Shortcuts, then opens a new tab.
+    private func pinExampleDomainFromMainMenu() {
+        browser.navigateToURLAndAssertExampleDomain(url_3)
+        waitUntilPageLoad()
+        toolbar.tapSettingsMenuButton()
+        mainMenu.expandMenuIfNeeded()
+        mainMenu.tapAddToShortcuts()
+        toolbar.tapOnNewTabButton()
     }
 
     private func addWebsiteToShortcut(website: String) {

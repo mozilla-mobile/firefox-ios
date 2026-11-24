@@ -179,6 +179,37 @@ class FxAWebViewModelTests: XCTestCase {
         XCTAssertNil(viewModel.messageID(from: nil))
     }
 
+    func testPairingV2RequestMarksModalAndPreservesPairingParameters() throws {
+        for query in ["", "?utm_source=desktop", "?embed=other&embed=customtab&utm_source=desktop"] {
+            let url = try XCTUnwrap(URL(string:
+                "https://accounts.firefox.com/pair\(query)#channel_id=channel&channel_key=key%2Bvalue&v=2"
+            ))
+            let subject = FxAWebViewModel(pageType: .pairingV2(url: url),
+                                          profile: makeProfile(),
+                                          deepLinkParams: deeplinkParams)
+
+            let requestURL = try XCTUnwrap(subject.makeRequest(url).url)
+            let components = try XCTUnwrap(URLComponents(url: requestURL, resolvingAgainstBaseURL: false))
+            XCTAssertEqual(components.queryItems?.filter { $0.name == "embed" },
+                           [URLQueryItem(name: "embed", value: "customtab")])
+            XCTAssertEqual(components.percentEncodedFragment, "channel_id=channel&channel_key=key%2Bvalue&v=2")
+            if !query.isEmpty {
+                XCTAssertTrue(components.queryItems?.contains(URLQueryItem(name: "utm_source", value: "desktop")) == true)
+            }
+        }
+    }
+
+    func testOtherPageRequestsDoNotAddModalMarker() throws {
+        let url = try XCTUnwrap(URL(string: "https://accounts.firefox.com/pair#channel_id=channel&channel_key=key"))
+        for pageType in [FxAPageType.qrCode(url: url), .emailLoginFlow, .settingsPage] {
+            let subject = FxAWebViewModel(pageType: pageType,
+                                          profile: makeProfile(),
+                                          deepLinkParams: deeplinkParams)
+
+            XCTAssertEqual(subject.makeRequest(url).url, url)
+        }
+    }
+
     // MARK: - Pair OAuth page-type gate
 
     func testOnlyThePairingV2PageMayStartAPairOAuthFlow() {

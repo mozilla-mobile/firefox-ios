@@ -7,6 +7,8 @@ import Foundation
 public protocol VPNTokenProviding: Sendable {
     /// A valid proxy pass, will re-attest as needed.
     func proxyToken() async throws -> VPNProxyPass
+    /// Current bandwidth usage, will re-attest as needed. Use to detect a quota reset.
+    func proxyUsage() async throws -> VPNProxyUsage
 }
 
 /// The single entry point for callers that just need a proxy credential.
@@ -27,5 +29,10 @@ public struct VPNTokenProvider: VPNTokenProviding {
         // `fetchProxyPass()` already refreshes and retries once on a rejected session; retrying
         // here as well would square that.
         return try await tokenService.fetchProxyPass()
+    }
+
+    public func proxyUsage() async throws -> VPNProxyUsage {
+        _ = try await authService.authenticate()
+        return try await tokenService.fetchEntitlement()
     }
 }

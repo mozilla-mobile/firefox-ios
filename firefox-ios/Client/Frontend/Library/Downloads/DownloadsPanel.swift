@@ -12,7 +12,7 @@ class DownloadsPanel: UIViewController,
                       LibraryPanel,
                       Themeable,
                       Notifiable {
-    private struct UX {
+    private enum UX {
         static let welcomeScreenTopPadding: CGFloat = 120
         static let welcomeScreenPadding: CGFloat = 15
         static let welcomeScreenItemWidth: CGFloat = 170

@@ -10,7 +10,7 @@ class StoryCell: UICollectionViewCell,
                       ReusableCell,
                       Notifiable,
                       ThemeApplicable {
-    struct UX {
+    enum UX {
         static let cellCornerRadius: CGFloat = 16
         static let thumbnailSize = CGSize(width: 345, height: 180)
         static let thumbnailHoritonztalInsets: CGFloat = 8

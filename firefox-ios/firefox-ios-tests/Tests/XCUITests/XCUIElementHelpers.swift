@@ -325,4 +325,96 @@ extension XCUIElement {
         self.typeText(text)
         return true
     }
+
+    /// Mean relative luminance of the element's on-screen pixels, from 0 (black) to 1 (white).
+    func averageLuminance() -> Double {
+        let pixels = sampledRGBAPixels()
+        guard !pixels.isEmpty else { return 0 }
+        var total = 0.0
+        for offset in stride(from: 0, to: pixels.count, by: 4) {
+            total += 0.2126 * Double(pixels[offset])
+                + 0.7152 * Double(pixels[offset + 1])
+                + 0.0722 * Double(pixels[offset + 2])
+        }
+        return total / Double(pixels.count / 4) / 255
+    }
+
+    /// Share of the element's on-screen pixels whose HSV saturation is above `threshold`, from 0 to 1.
+    /// Near 0 means the element is drawn in grays or pale tints only.
+    func saturatedPixelRatio(threshold: Double = 0.3) -> Double {
+        shareOfPixels { _, saturation in saturation > threshold }
+    }
+
+    /// Share of the element's on-screen pixels, from 0 to 1, whose HSV hue in degrees falls in `hueRange`
+    /// and whose saturation is above `minimumSaturation`.
+    func shareOfPixels(inHueRange hueRange: ClosedRange<Double>, minimumSaturation: Double = 0.2) -> Double {
+        shareOfPixels { hue, saturation in saturation > minimumSaturation && hueRange.contains(hue) }
+    }
+
+    /// Share of the sampled pixels for which `matches(hue, saturation)` holds; black pixels never match.
+    private func shareOfPixels(matching matches: (Double, Double) -> Bool) -> Double {
+        let pixels = sampledRGBAPixels()
+        guard !pixels.isEmpty else { return 0 }
+        var matching = 0
+        for offset in stride(from: 0, to: pixels.count, by: 4) {
+            let red = Double(pixels[offset]), green = Double(pixels[offset + 1]), blue = Double(pixels[offset + 2])
+            let maximum = max(red, green, blue), minimum = min(red, green, blue)
+            guard maximum > 0 else { continue }
+            let delta = maximum - minimum
+            var hue = 0.0
+            if delta > 0 {
+                if maximum == red {
+                    hue = 60 * ((green - blue) / delta)
+                } else if maximum == green {
+                    hue = 60 * ((blue - red) / delta + 2)
+                } else {
+                    hue = 60 * ((red - green) / delta + 4)
+                }
+                if hue < 0 { hue += 360 }
+            }
+            if matches(hue, delta / maximum) { matching += 1 }
+        }
+        return Double(matching) / Double(pixels.count / 4)
+    }
+
+    /// The element's screenshot scaled down to `side` x `side` RGBA bytes, or empty if it can't be drawn.
+    private func sampledRGBAPixels(side: Int = 32) -> [UInt8] {
+        guard let image = screenshot().image.cgImage else { return [] }
+        var pixels = [UInt8](repeating: 0, count: side * side * 4)
+        let drawn = pixels.withUnsafeMutableBytes { buffer -> Bool in
+            guard let context = CGContext(
+                data: buffer.baseAddress,
+                width: side,
+                height: side,
+                bitsPerComponent: 8,
+                bytesPerRow: side * 4,
+                space: CGColorSpaceCreateDeviceRGB(),
+                bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
+            ) else { return false }
+            context.draw(image, in: CGRect(x: 0, y: 0, width: side, height: side))
+            return true
+        }
+        return drawn ? pixels : []
+    }
+
+    /// Waits until `averageLuminance()` satisfies `condition`. Returns false on timeout instead of failing.
+    @discardableResult
+    func waitForLuminance(timeout: TimeInterval = TIMEOUT, _ condition: @escaping (Double) -> Bool) -> Bool {
+        let predicate = NSPredicate { _, _ in condition(self.averageLuminance()) }
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: nil)
+        return XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed
+    }
+
+    /// Waits for the label to start with `prefix` and returns the whole number right after it, ignoring
+    /// grouping separators ("5,305"). Returns nil on timeout or when no number follows the prefix.
+    func wholeNumberInLabel(after prefix: String = "", timeout: TimeInterval = TIMEOUT) -> Int? {
+        // BEGINSWITH never matches an empty string, so with no prefix any non-empty label will do
+        let hasPrefix = prefix.isEmpty
+            ? NSPredicate(format: "label != ''")
+            : NSPredicate(format: "label BEGINSWITH %@", prefix)
+        let expectation = XCTNSPredicateExpectation(predicate: hasPrefix, object: self)
+        guard XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed else { return nil }
+        let number = label.dropFirst(prefix.count).prefix { $0.isNumber || $0.isPunctuation || $0.isWhitespace }
+        return Int(String(number.filter(\.isNumber)))
+    }
 }

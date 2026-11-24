@@ -1,3 +1,9 @@
+/* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Firefox-u standart brauzeriniz kimi seçmək açıq və əlçatan İnternet üçün səs verməkdir.";
+
+/* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Title.v108" = "Daha yaxşı İnternet üçün standart";
+
 /* Button string to learn how to set your default browser. */
 "DefaultBrowserCard.Button.v2" = "Necə ediləcəyini öyrən";
 
@@ -18,6 +24,9 @@
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Əsas Səyyah Tətbiqi";
+
+/* Button title for deferring the default browser onboarding (skip setting Firefox as default for now). */
+"DefaultBrowserOnboarding.SkipButton" = "Daha sonra edəcəm";
 
 /* Menu option for setting Firefox as default browser. */
 "Settings.DefaultBrowserMenuItem" = "Əsas səyyah tətbiqi olaraq qur";

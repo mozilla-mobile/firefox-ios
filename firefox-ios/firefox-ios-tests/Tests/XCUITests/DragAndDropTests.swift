@@ -47,8 +47,12 @@ class DragAndDropTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2390210
     // Regression
     func testRearrangeMoreThan3TabsTabTraytab() {
+        let tabTrayScreen = TabTrayScreen(app: app)
         // Arranging more than 3 to check that it works moving tabs between lines
-        let thirdWebsite = (url: "example.com", tabName: "Example Domain. Currently selected tab.")
+        let thirdWebsite = (
+            url: path(forTestPage: TestPages.exampleHTML),
+            tabName: "Example Domain. Currently selected tab."
+        )
 
         // Open three websites and home tab
         openTwoWebsites()
@@ -64,13 +68,9 @@ class DragAndDropTests: BaseTestCase {
         waitForTabsButton()
         navigator.goto(TabTray)
 
-        let fourthWebsitePosition = app.collectionViews[tabTrayCollectionView].cells.element(boundBy: 3).label
-        checkTabsOrder(
-            dragAndDropTab: false,
-            firstTab: firstWebsite.tabName,
-            secondTab: secondWebsiteUnselected.tabName
+        tabTrayScreen.assertTabTitles(
+            inOrder: [firstWebsite.tabName, secondWebsiteUnselected.tabName, homeTabName, TestLabels.exampleDomain]
         )
-        XCTAssertEqual(fourthWebsitePosition, thirdWebsite.tabName, "last tab before is not correct")
 
         if #available(iOS 17, *) {
             dragAndDrop(
@@ -78,13 +78,10 @@ class DragAndDropTests: BaseTestCase {
                 dropOnElement: app.collectionViews.cells[thirdWebsite.tabName].firstMatch
             )
 
-            let thirdWebsitePosition = app.collectionViews[tabTrayCollectionView].cells.element(boundBy: 2).label
-            // Disabling validation on iPad. Dragging and dropping action for the first and last tab is not working.
-            // This is just automation related, manually the action performs successfully.
-            if !iPad() {
-                checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsiteUnselected.tabName, secondTab: homeTabName)
-                XCTAssertEqual(thirdWebsitePosition, thirdWebsite.tabName, "last tab after is not correct")
-            }
+            // The dragged tab moves to the end and the others shift left
+            tabTrayScreen.assertTabTitles(
+                inOrder: [secondWebsiteUnselected.tabName, homeTabName, TestLabels.exampleDomain, firstWebsite.tabName]
+            )
         }
     }
 
@@ -266,6 +263,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2361413
+    // Regression
     func testRearrangeTabsTabTrayIsKeptinTopTabs() {
         if skipPlatform { return }
         openTwoWebsites()

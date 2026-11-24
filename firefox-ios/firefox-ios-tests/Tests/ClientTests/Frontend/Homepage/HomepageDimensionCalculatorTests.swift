@@ -8,7 +8,7 @@ import XCTest
 
 @MainActor
 class HomepageDimensionCalculatorTests: XCTestCase {
-    struct DeviceSize {
+    enum DeviceSize {
         static let iPhone14 = CGSize(width: 390, height: 844)
         static let iPadAir = CGSize(width: 820, height: 1180)
         static let iPadAirCompactSplit = CGSize(width: 320, height: 375)
@@ -23,7 +23,7 @@ class HomepageDimensionCalculatorTests: XCTestCase {
         static let iPadPro13InLandscape: CGFloat = 1376
     }
 
-    struct Insets {
+    enum Insets {
         static let iPhoneInset = HomepageSectionLayoutProvider.UX.standardInset
         static let ipadInset = HomepageSectionLayoutProvider.UX.iPadInset
     }

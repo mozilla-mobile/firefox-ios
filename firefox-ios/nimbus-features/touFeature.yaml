@@ -1,6 +1,7 @@
 # The configuration for the touFeature feature
 features:
   tou-feature:
+    no-lint: [MISSING_CONTACTS]
     description: >
       This feature is for managing the rollout of the Terms of Use (ToU) implementation.
     variables:
@@ -24,6 +25,16 @@ features:
           Determines which predefined title and "learn more" strings are used for the Terms of Use prompt.
         type: TermsOfUsePromptContentOption
         default: value-0
+      notification-timestamp:
+        description: >
+          The Unix timestamp in seconds when the notification banner should start appearing. 0 means the banner is not shown.
+        type: Int
+        default: 1765929600000
+      enable-notification-redesign:
+        description: >
+          Whether to display the notification banner redesign. If false the previous design will be displayed.
+        type: Boolean
+        default: false
     defaults:
       - channel: beta
         value:
@@ -31,12 +42,16 @@ features:
           max-reminders-count: 2
           enable-drag-to-dismiss: true
           content-option: value-0
+          notification-timestamp: 1765929600000
+          enable-notification-redesign: false
       - channel: developer
         value:
-          status: false
+          status: true
           max-reminders-count: 2
           enable-drag-to-dismiss: true
           content-option: value-0
+          notification-timestamp: 1765929600000
+          enable-notification-redesign: false
 
 enums:
   TermsOfUsePromptContentOption:

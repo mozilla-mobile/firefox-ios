@@ -135,7 +135,7 @@ final class TermsOfUseCoordinatorTests: XCTestCase {
         enableDragToDismiss: Bool = true,
         contentOption: TermsOfUsePromptContentOption = .value0
     ) {
-        FxNimbus.shared.features.touFeature.with { _, _ in
+        FxNimbus.shared.features.touFeature.with { _ in
             return TouFeature(
                 contentOption: contentOption,
                 enableDragToDismiss: enableDragToDismiss,

@@ -15,7 +15,7 @@ class CreditCardBottomSheetViewController: UIViewController,
                                            Themeable {
     // MARK: UX
     @MainActor
-    struct UX {
+    enum UX {
         static let containerPadding: CGFloat = 18.0
         static let tableMargin: CGFloat = 0
         static let distanceBetweenHeaderAndTop: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 8 : 18

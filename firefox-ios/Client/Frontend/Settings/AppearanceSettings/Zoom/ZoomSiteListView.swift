@@ -13,7 +13,7 @@ struct ZoomSiteListView: View {
     private let onDelete: (IndexSet) -> Void
     private let resetDomain: () -> Void
 
-    private struct UX {
+    private enum UX {
         static let sectionPadding: CGFloat = 16
         static let footerBottomPadding: CGFloat = 32
         static let footerTopPadding: CGFloat = 8

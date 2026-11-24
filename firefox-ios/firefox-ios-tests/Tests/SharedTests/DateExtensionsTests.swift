@@ -23,6 +23,30 @@ class DateExtensionsTests: XCTestCase {
         }
     }
 
+    func testDateToISO8601DateString() throws {
+        let formatter = ISO8601DateFormatter()
+        let dates = [
+            ("2000-01-09T00:00:00Z", "2000-01-09"),
+            ("2024-02-29T12:34:56Z", "2024-02-29")
+        ]
+        for (timestamp, expected) in dates {
+            let date = try XCTUnwrap(formatter.date(from: timestamp))
+            XCTAssertEqual(date.toISO8601DateString(), expected)
+        }
+    }
+
+    func testDateToISO8601DateStringUsesUTC() throws {
+        let formatter = ISO8601DateFormatter()
+        let dates = [
+            ("2026-10-20T00:30:00+02:00", "2026-10-19"),
+            ("2026-10-20T23:30:00-02:00", "2026-10-21")
+        ]
+        for (timestamp, expected) in dates {
+            let date = try XCTUnwrap(formatter.date(from: timestamp))
+            XCTAssertEqual(date.toISO8601DateString(), expected)
+        }
+    }
+
     private func createMillisecondAndDateDictionary() -> [KnownDate]? {
         guard let beginUnixTime = createDateFrom(year: 1970, month: 1, day: 1, hour: 0, minute: 0, second: 0),
               let millenium = createDateFrom(year: 2000, month: 1, day: 1, hour: 0, minute: 0, second: 0),

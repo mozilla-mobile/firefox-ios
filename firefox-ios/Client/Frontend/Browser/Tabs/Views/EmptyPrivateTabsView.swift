@@ -16,7 +16,7 @@ protocol EmptyPrivateTabsViewDelegate: AnyObject {
 // View we display when there are no private tabs created
 class EmptyPrivateTabsView: UIView,
                             EmptyPrivateTabView {
-    struct UX {
+    enum UX {
         static let paddingInBetweenItems: CGFloat = 15
         static let verticalPadding: CGFloat = 20
         static let horizontalPadding: CGFloat = 24

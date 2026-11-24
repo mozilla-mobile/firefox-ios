@@ -7,7 +7,7 @@ import Common
 import UIKit
 
 final class MenuInfoCell: UITableViewCell, ReusableCell, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let contentMargin: CGFloat = 16
         static let horizontalMargin: CGFloat = 24
         static let infoLabelHorizontalMargin: CGFloat = 8

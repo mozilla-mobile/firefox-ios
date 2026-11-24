@@ -255,6 +255,38 @@ settings.app_icon:
       tags:
         - AppIconSelection
         
+# VPN Settings
+settings.vpn.location_list:
+  location_selected:
+    type: event
+    description: |
+      Recorded after the user picks a new location from the VPN location list
+      and the change is applied. If the VPN is connected, recorded after it
+      reconnects to the new location.
+    extra_keys:
+      country_code:
+        type: string
+        description: |
+          The location the user selected, as an ISO 3166-1 alpha-2 country
+          code, or `REC` when the recommended location is selected.
+      is_using_fallback:
+        type: boolean
+        description: |
+          Set only when the VPN was connected and reconnected successfully.
+          True when the selected location had no usable server, so a
+          different location is used.
+      is_vpn_connected:
+        type: boolean
+        description: |
+          Whether the VPN was connected when the user changed location.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/VPN-7852
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/36694
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+
 # Default Zoom Settings
 settings.zoom_bar:
   domain_list_item_swiped_to_delete:

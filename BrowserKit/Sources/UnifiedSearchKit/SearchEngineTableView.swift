@@ -12,7 +12,7 @@ public final class SearchEngineTableView: UIView,
                              UITableViewDelegate,
                              UITableViewDataSource,
                              ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let topPadding: CGFloat = 10
     }
 

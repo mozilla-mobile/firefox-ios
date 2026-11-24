@@ -26,7 +26,7 @@ struct AIControlsSettingsView: ThemeableView {
         self.theme = themeManager.resolveTheme(for: aiControlsModel.windowUUID, privateOverride: false)
     }
 
-    private struct UX {
+    private enum UX {
         static let cornerRadius: CGFloat = 32
         static let cardSpacing: CGFloat = 24
         static let rowSpacing: CGFloat = 8
@@ -130,11 +130,11 @@ struct AIControlsSettingsView: ThemeableView {
         ) {
             HStack(alignment: .top) {
                 if isNova {
-                    Image(StandardImageIdentifiers.Large.information)
+                    Image(decorative: StandardImageIdentifiers.Large.information)
                         .renderingMode(.template)
                         .foregroundStyle(themeColors.iconPrimary.color)
                 } else {
-                    Image(StandardImageIdentifiers.Large.information)
+                    Image(decorative: StandardImageIdentifiers.Large.information)
                 }
                 Text(verbatim: .Settings.AIControls.BlockedInformation)
                     .font(FXFontStyles.Regular.body.scaledSwiftUIFont())

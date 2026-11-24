@@ -8,7 +8,7 @@
 "QuickAnswers.ContentView.AboutYourPrivacy.v158" = "Über Ihre Privatsphäre";
 
 /* Loading label shown in the Quick Answers view while an answer is being fetched. */
-"QuickAnswers.ContentView.Answering.v158" = "Antworten…";
+"QuickAnswers.ContentView.Answering.v158" = "Antwort wird erstellt…";
 
 /* Button shown below a Quick Answers result that the user taps to ask a follow-up question about the answer. */
 "QuickAnswers.ContentView.FollowUpButton.v160" = "Nachfrage stellen";
@@ -22,11 +22,14 @@
 /* Placeholder text shown in the Quick Answers view while the microphone is active and waiting for the user to ask a follow-up question about the previous answer. */
 "QuickAnswers.ContentView.ListeningFollowUp.v160" = "Ich höre zu, stellen Sie eine Nachfrage…";
 
+/* Button shown below a Quick Answers result that the user taps to ask a new, unrelated question. */
+"QuickAnswers.ContentView.NewQuestionButton.v161" = "Stellen Sie eine neue Frage";
+
 /* Placeholder text shown in the Quick Answers view before the user starts speaking. */
 "QuickAnswers.ContentView.Placeholder.v158" = "Einfach fragen…";
 
 /* Header label shown above the body of a Quick Answers result, labeling the text below it as a short answer to the user's question. */
-"QuickAnswers.ContentView.ResultHeader.v160" = "SCHNELLE ANTWORTEN";
+"QuickAnswers.ContentView.ResultHeader.v160" = "SCHNELLE ANTWORT";
 
 /* Loading label shown in the Quick Answers view while the feature searches for sources to construct an answer. */
 "QuickAnswers.ContentView.SearchingSources.v158" = "Quellen werden gesucht…";

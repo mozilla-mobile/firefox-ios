@@ -161,6 +161,29 @@ class DesktopModeTestsIphone: BaseTestCase {
         browserScreen.assertMobileUserAgentIsDisplayed()
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3167640
+    // Regression
+    func testDesktopSiteOptionTogglesState() {
+        if skipPlatform { return }
+        browserScreen.navigateToURLAndAssertMobileUserAgent(path(forTestPage: "test-user-agent.html"))
+
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenuScreen.assertDesktopSiteIs(on: false)
+        mainMenuScreen.tapDesktopSite()
+        waitUntilPageLoad()
+        browserScreen.assertDesktopUserAgentIsDisplayed()
+
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenuScreen.assertDesktopSiteIs(on: true)
+        mainMenuScreen.tapDesktopSite()
+        waitUntilPageLoad()
+        browserScreen.assertMobileUserAgentIsDisplayed()
+
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenuScreen.assertDesktopSiteIs(on: false)
+        mainMenuScreen.closeMenu()
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2306856
     func testPrivateModeOffAlsoRemovesFromNormalMode() {
         if skipPlatform { return }

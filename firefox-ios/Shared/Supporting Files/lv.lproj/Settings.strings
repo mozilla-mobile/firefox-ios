@@ -25,6 +25,9 @@
 /* This is the text for the link in the Header Card under the AI Controls settings section that links to more information. */
 "Settings.AIControls.HeaderCard.Link.v151" = "Uzzināt vairāk";
 
+/* In the settings menu, in the General section, this is the title for Autofills & Passwords customization section. */
+"Settings.AutofillAndPassword.Title.v137" = "Automātiskā aizpilde un paroles";
+
 /* In the settings menu, in the Autoplay customization section, this label indicates that selecting this will block audio from autoplaying. */
 "Settings.Autoplay.BlockAudio.v137" = "Liegt skaņu";
 
@@ -51,6 +54,9 @@
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the brand title for the section containing the Wrexham AFC wallpapers. */
 "Settings.Home.Option.Wallpaper.WrexhamBrandTitle.v155" = "Wrexham A.F.C.";
+
+/* This is the description for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
+"Settings.Notifications.SyncNotificationsStatus.v112" = "Šim ir jābūt ieslēgtam, lai saņemtu cilnes un paziņojumus par pieteikšanos citā ierīcē.";
 
 /* This is the title for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. */
 "Settings.Notifications.TipsAndFeaturesNotificationsTitle.v112" = "Padomi un iespējas";
@@ -94,6 +100,9 @@
 /* In the Search page of the Settings menu, the title for the setting to enable synced tabs. */
 "Settings.Search.Suggest.SearchSyncedTabs.Title.v124" = "Meklēt vienādotajās cilnēs";
 
+/* In the Search page of the Settings menu, the description for the setting to enable Suggestions from sponsors. %@ is the app name (e.g. Firefox). - Firefox. */
+"Settings.Search.Suggest.ShowSponsoredSuggestions.Description.v124" = "Atbalsti %@ ar apmaksātiem ieteikumiem, kas parādās laiku pa laikam";
+
 /* Title for a link that explains what Mozilla means by Studies */
 "Settings.Studies.Link.v136" = "Uzzināt vairāk";
 
@@ -112,6 +121,9 @@
 /* Section header for the preferred languages list in the Translation settings screen. */
 "Settings.Translation.PreferredLanguages.SectionTitle.v151" = "Vēlamās valodas";
 
+/* This is the title for the setting that toggles the Translation feature that allows users to translate web pages under the Translation settings section. */
+"Settings.Translation.ToggleTitle.v145" = "Iespējot tulkojumus";
+
 /* Text displayed on the locations screen when the app loads a list of locations for the user to pick from. “Locations” here means the locations of VPN servers the user can connect to. */
 "VPN.LocationPicker.FindingLocationsText.v160" = "Meklē atrašanās vietas…";
 
@@ -121,8 +133,14 @@
 /* Description below the Recommended option in the VPN server location list. %1$@ is the app name (for example, Firefox). */
 "VPN.LocationPicker.RecommendedSubText.v160" = "%1$@ atrod ātrāko atrašanās vietu.";
 
+/* Announced by VoiceOver on the VPN settings screen when the VPN finishes connecting after the user turns on the VPN switch. */
+"VPN.Settings.Connected.v161" = "Izveidots VPN savienojums";
+
 /* Shown next to the VPN switch on the VPN settings screen while the VPN is connecting, right after the user turns it on. */
 "VPN.Settings.Connecting.v160" = "Savienojas…";
+
+/* Read aloud by VoiceOver for the Data Limit section on the VPN settings screen. %1$@ is the amount of VPN data used this month and %2$@ is the monthly limit, both in gigabytes (for example, “1.0 of 5.0 gigabytes used”). The second sentence explains that the user’s free monthly VPN data resets on the first day of each month. */
+"VPN.Settings.DataLimit.AccessibilityValue.v161" = "Izmantoti %1$@ no %2$@ gigabaitiem. Atjaunojas katra mēneša pirmajā dienā.";
 
 /* Footer below the Data Limit section on the VPN settings screen. Explains when the user's free VPN data resets. %1$@ is the monthly limit in gigabytes (for example, 5.0). “GB” stands for gigabytes. */
 "VPN.Settings.DataLimitResetFooter.v160" = "Tiek atiestatīts uz %1$@ GB katra mēneša pirmajā dienā";

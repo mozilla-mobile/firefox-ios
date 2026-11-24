@@ -31,9 +31,6 @@
 /* Accessibility hint spoken on the Preview and Send Report buttons when they are disabled because no specific problem has been selected yet, in the Report a Website Issue form. */
 "WebCompatReporter.Fields.ChooseSubOptionAccessibilityHint.v156" = "Wählen Sie ein konkretes Problem für den ausgewählten Problemtyp aus";
 
-/* Accessibility label for the multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form. */
-"WebCompatReporter.Fields.DetailsAccessibilityLabel.v154" = "Beschreiben Sie das Problem ausführlich";
-
 /* Placeholder shown in the optional multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form. */
 "WebCompatReporter.Fields.DetailsPlaceholder.v154" = "Beschreiben Sie das Problem ausführlich (freiwillig)";
 
@@ -42,9 +39,6 @@
 
 /* Leading label of the editable row showing the web address being reported, in the Report a Website Issue form. */
 "WebCompatReporter.Fields.URLLabel.v154" = "URL";
-
-/* Placeholder shown in the URL field when no web address has been entered, in the Report a Website Issue form. */
-"WebCompatReporter.Fields.URLPlaceholder.v154" = "URL";
 
 /* Placeholder shown in the issue-type pull-down before the user has picked a website problem category, in the Report a Website Issue form. */
 "WebCompatReporter.IssueSection.CategoryPlaceholder.v154" = "Problemtyp auswählen…";
@@ -80,7 +74,7 @@
 "WebCompatReporter.Preview.Data.PageURL.v155" = "URL der Seite";
 
 /* Bullet on the Report Preview screen, for the screen's physical pixels per layout point. */
-"WebCompatReporter.Preview.Data.PixelDensity.v155" = "Pixelgröße Ihres Bildschirms";
+"WebCompatReporter.Preview.Data.PixelDensity.v155" = "Pixeldichte Ihres Bildschirms";
 
 /* Bullet on the Report Preview screen, for whether the page was open in private browsing. */
 "WebCompatReporter.Preview.Data.PrivateBrowsingStatus.v155" = "Status des privaten Modus: An oder aus";
@@ -119,7 +113,7 @@
 "WebCompatReporter.SubOption.ButtonsNotWorking.v154" = "Schaltflächen oder Links funktionieren nicht";
 
 /* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
-"WebCompatReporter.SubOption.CaptionsMissing.v154" = "Bildunterschriften fehlen";
+"WebCompatReporter.SubOption.CaptionsMissing.v154" = "Untertitel fehlen";
 
 /* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
 "WebCompatReporter.SubOption.ImagesNotLoaded.v154" = "Grafiken werden nicht geladen";

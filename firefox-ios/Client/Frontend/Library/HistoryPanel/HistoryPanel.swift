@@ -16,7 +16,7 @@ class HistoryPanel: UIViewController,
                     LibraryPanelContextMenu,
                     Themeable,
                     Notifiable {
-    struct UX {
+    enum UX {
         static let WelcomeScreenItemWidth = 170
         static let IconSize = 23
         static let IconBorderWidth: CGFloat = 0.5

@@ -1532,7 +1532,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
     }
 
     private func setTranslationsFeatureEnabled(enabled: Bool, languagePickerEnabled: Bool = false) {
-        FxNimbus.shared.features.translationsFeature.with { _, _ in
+        FxNimbus.shared.features.translationsFeature.with { _ in
             return TranslationsFeature(enabled: enabled, languagePickerEnabled: languagePickerEnabled)
         }
     }
@@ -1549,12 +1549,10 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         let addressToolbar = AddressBarState(
             windowUUID: .XCTestDefaultUUID,
             editingAccessoryAction: nil,
-            borderPosition: nil,
             url: nil,
             searchTerm: nil,
-            lockIconButtonA11yId: nil,
-            lockIconImageName: nil,
-            lockIconNeedsTheming: true,
+            hasOnlySecureContent: nil,
+            isWebsiteMode: false,
             safeListedURLImageName: nil,
             isEditing: false,
             shouldShowKeyboard: false,
@@ -1598,7 +1596,8 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
                             previousTabScreenshot: nil,
                             nextTabScreenshot: nil,
                             isAddressBarMinimized: false,
-                            isAccessoryViewVisible: false
+                            isAccessoryViewVisible: false,
+                            isScrolled: false
                         )
                     )
                 ]

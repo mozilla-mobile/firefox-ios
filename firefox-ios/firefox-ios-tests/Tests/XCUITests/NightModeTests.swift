@@ -4,6 +4,19 @@
 
 import XCTest
 class NightModeTests: BaseTestCase {
+    private var browserScreen: BrowserScreen!
+    private var toolbarScreen: ToolbarScreen!
+    private var mainMenuScreen: MainMenuScreen!
+    private var settingScreen: SettingScreen!
+
+    override func setUp() async throws {
+        try await super.setUp()
+        browserScreen = BrowserScreen(app: app)
+        toolbarScreen = ToolbarScreen(app: app)
+        mainMenuScreen = MainMenuScreen(app: app)
+        settingScreen = SettingScreen(app: app)
+    }
+
     var nightModeOnCell: XCUIElement {
         app.tables.cells["MainMenu.NightModeOn"]
     }
@@ -28,6 +41,38 @@ class NightModeTests: BaseTestCase {
         } else {
             mozWaitForElementToExist(app.tables.staticTexts["Off"])
         }
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3167643
+    // Regression
+    func testWebsiteDarkModeOption() {
+        browserScreen.navigateToURLAndAssertExampleDomain(path(forTestPage: TestPages.exampleHTML))
+        waitUntilPageLoad()
+        browserScreen.assertWebContentIs(dark: false)
+
+        openExpandedMainMenu()
+        mainMenuScreen.assertWebsiteDarkModeIs(on: false)
+        mainMenuScreen.tapWebsiteDarkMode()
+        browserScreen.assertWebContentIs(dark: true)
+
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenuScreen.tapSettings()
+        settingScreen.assertSettingsTableIsLight()
+        settingScreen.closeSettingsWithDoneButton()
+
+        openExpandedMainMenu()
+        mainMenuScreen.assertWebsiteDarkModeIs(on: true)
+        mainMenuScreen.tapWebsiteDarkMode()
+        browserScreen.assertWebContentIs(dark: false)
+
+        openExpandedMainMenu()
+        mainMenuScreen.assertWebsiteDarkModeIs(on: false)
+        mainMenuScreen.closeMenu()
+    }
+
+    private func openExpandedMainMenu() {
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenuScreen.expandMenuIfNeeded()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307056

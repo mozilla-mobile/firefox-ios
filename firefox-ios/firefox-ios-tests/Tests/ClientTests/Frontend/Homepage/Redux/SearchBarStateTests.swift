@@ -17,21 +17,64 @@ final class SearchBarStateTests: XCTestCase {
     }
 
     @MainActor
-    func test_configuredSearchBarAction_withTrue_returnsExpectedState() {
-        let initialState = createSubject()
+    func test_configuredSearchBarAction_withTrueAndHomepageVisible_returnsExpectedState() {
         let reducer = searchBarReducer()
+        let visibleState = reducer.legacyReducer(
+            createSubject(),
+            HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.viewWillAppear)
+        )
 
         let newState = reducer.legacyReducer(
-            initialState,
+            visibleState,
             HomepageAction(
-                isSearchBarEnabled: true,
+                isCenterSearchEnabled: true,
                 windowUUID: .XCTestDefaultUUID,
                 actionType: HomepageMiddlewareActionType.configuredSearchBar
             )
         )
 
-        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
         XCTAssertTrue(newState.shouldShowSearchBar)
+    }
+
+    @MainActor
+    func test_configuredSearchBarAction_withTrueAndHomepageNotVisible_returnsExpectedState() {
+        let reducer = searchBarReducer()
+
+        let newState = reducer.legacyReducer(
+            createSubject(),
+            HomepageAction(
+                isCenterSearchEnabled: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: HomepageMiddlewareActionType.configuredSearchBar
+            )
+        )
+
+        XCTAssertFalse(newState.shouldShowSearchBar)
+    }
+
+    @MainActor
+    func test_viewWillDisappear_hidesSearchBar() {
+        let reducer = searchBarReducer()
+        let visibleState = reducer.legacyReducer(
+            createSubject(),
+            HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.viewWillAppear)
+        )
+        let shownState = reducer.legacyReducer(
+            visibleState,
+            HomepageAction(
+                isCenterSearchEnabled: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: HomepageMiddlewareActionType.configuredSearchBar
+            )
+        )
+
+        let newState = reducer.legacyReducer(
+            shownState,
+            HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.viewWillDisappear)
+        )
+
+        XCTAssertFalse(newState.shouldShowSearchBar)
+        XCTAssertFalse(newState.isHomepageVisible)
     }
 
     @MainActor
@@ -42,7 +85,7 @@ final class SearchBarStateTests: XCTestCase {
         let newState = reducer.legacyReducer(
             initialState,
             HomepageAction(
-                isSearchBarEnabled: false,
+                isCenterSearchEnabled: false,
                 windowUUID: .XCTestDefaultUUID,
                 actionType: HomepageMiddlewareActionType.configuredSearchBar
             )
@@ -62,23 +105,6 @@ final class SearchBarStateTests: XCTestCase {
             GeneralBrowserAction(
                 windowUUID: .XCTestDefaultUUID,
                 actionType: GeneralBrowserActionType.enteredZeroSearchScreen
-            )
-        )
-
-        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertFalse(newState.shouldShowSearchBar)
-    }
-
-    @MainActor
-    func test_didUnhideToolbar_withGeneralBrowserAction_returnsExpectedState() {
-        let initialState = createSubject()
-        let reducer = searchBarReducer()
-
-        let newState = reducer.legacyReducer(
-            initialState,
-            GeneralBrowserAction(
-                windowUUID: .XCTestDefaultUUID,
-                actionType: GeneralBrowserActionType.didUnhideToolbar
             )
         )
 

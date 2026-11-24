@@ -8,7 +8,7 @@ import Common
 class BlockedTrackerCell: UITableViewCell,
                           ReusableCell,
                           ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let imageMargins: CGFloat = 10
         static let textVerticalDistance: CGFloat = 11
         static let cornerRadius: CGFloat = 5

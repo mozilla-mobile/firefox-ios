@@ -70,6 +70,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
     private var applicationHelper: ApplicationHelper
     private let logger: Logger
     private let gleanUsageReportingMetricsService: GleanUsageReportingMetricsService
+    private let installationTelemetryService: InstallationTelemetryService
     private var hasAppearedBefore = false
     private let searchEnginesManager: SearchEnginesManagerProvider
     private let summarizerNimbusUtils: SummarizerNimbusUtils
@@ -94,13 +95,15 @@ class AppSettingsTableViewController: SettingsTableViewController,
         applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
         summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
         logger: Logger = DefaultLogger.shared,
-        searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve()
+        searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
+        installationTelemetryService: InstallationTelemetryService = AppContainer.shared.resolve()
     ) {
         self.summarizerNimbusUtils = summarizerNimbusUtils
         self.appAuthenticator = appAuthenticator
         self.applicationHelper = applicationHelper
         self.logger = logger
         self.gleanUsageReportingMetricsService = gleanUsageReportingMetricsService
+        self.installationTelemetryService = installationTelemetryService
         self.searchEnginesManager = searchEnginesManager
 
         super.init(windowUUID: tabManager.windowUUID)
@@ -271,10 +274,11 @@ class AppSettingsTableViewController: SettingsTableViewController,
             settingsDelegate: parentCoordinator
         )
 
-        sendTechnicalDataSettings.settingDidChange = { value in
+        sendTechnicalDataSettings.settingDidChange = { [weak self] value in
             DefaultGleanWrapper().setUpload(isEnabled: value)
             Experiments.setTelemetrySetting(value)
             studiesSetting.updateSetting(for: value)
+            self?.installationTelemetryService.update()
         }
         sendTechnicalDataSetting = sendTechnicalDataSettings
 
@@ -562,7 +566,18 @@ class AppSettingsTableViewController: SettingsTableViewController,
         hiddenDebugOptions.append(RefreshVPNSessionSetting(settings: self))
         hiddenDebugOptions.append(FetchVPNProxyTokenSetting(settings: self))
         hiddenDebugOptions.append(ClearVPNSessionSetting(settings: self))
+        hiddenDebugOptions.append(ShowVPNFailureAlertSetting(settings: self))
+        hiddenDebugOptions.append(ShowVPNDataLimitAlertSetting(settings: self))
+        // TODO: FXIOS-17399 Remove simulateQuotaExceeded debug hook after testing
+        hiddenDebugOptions.append(SimulateVPNQuotaExceededSetting(settings: self))
+        hiddenDebugOptions.append(ShowVPNLocationUnavailableAlertSetting(settings: self))
+        hiddenDebugOptions.append(ShowVPNConnectionFailedAlertSetting(settings: self))
+        // TODO: FXIOS-17399 Remove simulated VPN failure debug hooks after testing
+        hiddenDebugOptions.append(SimulateVPNConnectionFailureSetting(settings: self))
+        hiddenDebugOptions.append(SimulateVPNLocationFallbackSetting(settings: self))
         hiddenDebugOptions.append(DeleteAppAttestKeySetting(settings: self))
+        hiddenDebugOptions.append(InstallationDetailsSetting(settings: self))
+        hiddenDebugOptions.append(ResetInstallationHistorySetting(settings: self))
         hiddenDebugOptions.append(PrivacyNoticeUpdate(settings: self))
         if featureFlagsProvider.isEnabled(.multiDayOnboarding) {
             hiddenDebugOptions.append(AdvanceOnboardingDripSetting(settings: self, settingsDelegate: self))

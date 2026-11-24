@@ -95,11 +95,13 @@ final class BrowserViewControllerLayoutManager {
     func updateHeaderBarLayout(isBottomSearchBar: Bool, addressToolbar: UIView) -> UILayoutGuide? {
         var guide: UILayoutGuide?
         #if compiler(>=6.4)
+        let traits = parentView.traitCollection
         if #available(iOS 27.1, *),
            !isBottomSearchBar,
            !addressToolbar.isHidden,
            addressToolbar.isDescendant(of: parentView),
-           parentView.traitCollection.userInterfaceIdiom == .phone {
+           traits.userInterfaceIdiom == .phone,
+           traits.hasVerticalSystemBar || traits.duoExpanded {
             // Use the iOS 27.1 bar layout API to keep address controls clear of iPhone Duo's status area.
             // Only the region's center is used. The region is at least the height the status bar items are
             // centered in, and a larger extent grows it downward, moving the center away from them.
@@ -208,26 +210,26 @@ final class BrowserViewControllerLayoutManager {
     /// Must be called on keyboard and toolbar changes. Bottom search bar relies on `overKeyboardContainer`
     /// growing with the keyboard spacer. Top search bar needs an explicit keyboard constraint because
     /// `overKeyboardContainer` collapses to `height = 0`, leaving its top below the keyboard frame.
-    func updateBottomContentStackViewConstraints(isBottomSearchBar: Bool,
+    func updateBottomContentStackViewConstraints(shouldPushAboveKeyboardContainer: Bool,
                                                  keyboardState: KeyboardState?) {
         // Deactivate all mutually exclusive constraints before activating the appropriate one.
         bottomContentStackViewOverKeyboardConstraint?.isActive = false
         bottomContentStackViewKeyboardConstraint?.isActive = false
         bottomContentStackViewBasicConstraint?.isActive = false
 
-        guard !isBottomSearchBar else {
-            updateBottomContentStackViewBottomSearchBar()
+        guard !shouldPushAboveKeyboardContainer else {
+            pinBottomContentAboveOverKeyboardContainer()
             return
         }
 
-        updateBottomContentStackViewTopSearchBar(keyboardState: keyboardState)
+        pinBottomContentAboveKeyboardOrToolbar(keyboardState: keyboardState)
     }
 
-    private func updateBottomContentStackViewBottomSearchBar() {
+    private func pinBottomContentAboveOverKeyboardContainer() {
         bottomContentStackViewOverKeyboardConstraint?.isActive = true
     }
 
-    private func updateBottomContentStackViewTopSearchBar(keyboardState: KeyboardState?) {
+    private func pinBottomContentAboveKeyboardOrToolbar(keyboardState: KeyboardState?) {
         let keyboardHeight = keyboardState?.intersectionHeightForView(parentView) ?? 0
         let isKeyboardVisible = keyboardHeight > 0
 

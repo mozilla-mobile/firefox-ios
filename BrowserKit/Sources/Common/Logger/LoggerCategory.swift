@@ -54,11 +54,17 @@ public enum LoggerCategory: String {
     /// Related to onboarding
     case onboarding
 
-    /// Related to Relay email mask
-    case relay
+    /// Password Generator
+    case passwordGenerator
 
     /// Related to redux library or integration
     case redux
+
+    /// Related to Relay email mask
+    case relay
+
+    /// Remote settings
+    case remoteSettings
 
     /// Related to the search engines
     case searchEngines
@@ -96,18 +102,12 @@ public enum LoggerCategory: String {
     /// Related to VPN feature
     case vpn
 
+    /// Related to wallpaper functionality, like fetching metadata, images, etc
+    case wallpaper
+
     /// Webview scripts, webview delegate, webserver like GCDWebserver, showing webview alerts, webview navigation
     case webview
 
     /// Multi-window management on iPad devices
     case window
-
-    /// Remote settings
-    case remoteSettings
-
-    /// Password Generator
-    case passwordGenerator
-
-    /// Related to wallpaper functionality, like fetching metadata, images, etc
-    case wallpaper
 }

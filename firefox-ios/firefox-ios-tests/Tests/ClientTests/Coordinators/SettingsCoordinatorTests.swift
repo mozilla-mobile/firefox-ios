@@ -550,6 +550,7 @@ final class SettingsCoordinatorTests: XCTestCase {
     }
 
     func testPrivacySettingsDelegate_pushedVPN() {
+        guard #available(iOS 17.0, *) else { return }
         let subject = createSubject()
 
         subject.pressedVPN()
@@ -705,7 +706,7 @@ final class SettingsCoordinatorTests: XCTestCase {
     }
 
     private func setLanguagePickerEnabled(_ enabled: Bool) {
-        FxNimbus.shared.features.translationsFeature.with { _, _ in
+        FxNimbus.shared.features.translationsFeature.with { _ in
             TranslationsFeature(languagePickerEnabled: enabled)
         }
     }

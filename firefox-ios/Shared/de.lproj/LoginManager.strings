@@ -50,7 +50,7 @@
 "Logins will be removed from all connected devices." = "Zugangsdaten werden von allen verbundenen Geräten entfernt.";
 
 /* Label describing when the current login was last modified. %@ is the timestamp. */
-"Modified %@" = "Verändert: %@";
+"Modified %@" = "Geändert: %@";
 
 /* Label displayed when no logins are found after searching. */
 "No logins found" = "Keine Zugangsdaten gefunden";

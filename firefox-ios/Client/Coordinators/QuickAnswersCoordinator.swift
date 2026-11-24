@@ -8,14 +8,21 @@ import Common
 import Shared
 import UIKit
 
+enum QuickAnswersReturnPillDismissReason: String {
+    case swipe
+    case newSession = "new_session"
+}
+
 final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHandler {
     private weak var parentCoordinatorDelegate: ParentCoordinatorDelegate?
     private let prefs: Prefs
+    private let sessionStorage: QuickAnswersSessionStorage
     private let windowUUID: WindowUUID
     private let themeManager: ThemeManager
     private let transitionType: QuickAnswersTransitionType
     private let featureFlagsProvider: FeatureFlagProviding
     private let onNavigate: (QuickAnswersNavigationType) -> Void
+    private let onPark: () -> Void
     private var shouldAnimateTransition: Bool {
         return !UIAccessibility.isReduceMotionEnabled
     }
@@ -25,20 +32,24 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
     init(
         parentCoordinatorDelegate: ParentCoordinatorDelegate?,
         prefs: Prefs,
+        sessionStorage: QuickAnswersSessionStorage,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
         router: Router,
         transitionType: QuickAnswersTransitionType,
         featureFlagsProvider: FeatureFlagProviding = AppContainer.shared.resolve(),
         onNavigate: @escaping (QuickAnswersNavigationType) -> Void,
+        onPark: @escaping () -> Void
     ) {
         self.parentCoordinatorDelegate = parentCoordinatorDelegate
         self.prefs = prefs
+        self.sessionStorage = sessionStorage
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.transitionType = transitionType
         self.featureFlagsProvider = featureFlagsProvider
         self.onNavigate = onNavigate
+        self.onPark = onPark
         super.init(router: router)
     }
 
@@ -47,6 +58,7 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
             navigationHandler: self,
             transitionType: transitionType,
             prefs: prefs,
+            sessionStorage: sessionStorage,
             windowUUID: windowUUID,
             themeManager: themeManager,
             telemetry: DefaultQuickAnswersTelemetry(),
@@ -120,7 +132,8 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
         return QuickAnswersKit.QuickAnswersFeature(
             model: resolvedModel(),
             isOptInRedesignEnabled: featureFlagsProvider.isEnabled(.quickAnswersOptInRedesign),
-            isFollowUpEnabled: featureFlagsProvider.isEnabled(.quickAnswersFollowUp)
+            isFollowUpEnabled: featureFlagsProvider.isEnabled(.quickAnswersFollowUp),
+            isReturnToAnswerEnabled: featureFlagsProvider.isEnabled(.quickAnswersReturnToAnswer)
         )
     }
 
@@ -146,6 +159,13 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
         if let navigationType {
             onNavigate(navigationType)
         }
+        router.dismiss(animated: shouldAnimateTransition)
+        parentCoordinatorDelegate?.didFinish(from: self)
+    }
+
+    func parkQuickAnswers(with navigationType: QuickAnswersNavigationType) {
+        onNavigate(navigationType)
+        onPark()
         router.dismiss(animated: shouldAnimateTransition)
         parentCoordinatorDelegate?.didFinish(from: self)
     }

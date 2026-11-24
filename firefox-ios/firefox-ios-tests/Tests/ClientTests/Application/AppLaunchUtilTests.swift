@@ -61,7 +61,7 @@ final class AppLaunchUtilTests: XCTestCase {
     }
 
     private func setupNimbusToSForTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.tosFeature.with { _, _ in
+        FxNimbus.shared.features.tosFeature.with { _ in
             return TosFeature(
                 status: isEnabled
             )

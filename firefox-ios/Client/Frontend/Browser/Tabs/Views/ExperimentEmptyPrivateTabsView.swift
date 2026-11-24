@@ -17,7 +17,7 @@ protocol EmptyPrivateTabView: UIView, ThemeApplicable, InsetUpdatable {
 // View we display when there are no private tabs created
 class ExperimentEmptyPrivateTabsView: UIView,
                                       EmptyPrivateTabView {
-    struct UX {
+    enum UX {
         static let paddingInBetweenItems: CGFloat = 15
         static let buttonTopPadding: CGFloat = 24
         static let topPadding: CGFloat = 55

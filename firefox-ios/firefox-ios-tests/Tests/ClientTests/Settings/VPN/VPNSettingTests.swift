@@ -3,18 +3,22 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import Shared
 import XCTest
 @testable import Client
 
+@available(iOS 17.0, *)
 @MainActor
 final class VPNSettingTests: XCTestCase {
     private var delegate: MockSettingsFlowDelegate!
     private var settings: SettingsTableViewController!
+    private var vpnManager: MockVPNManager!
 
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         delegate = MockSettingsFlowDelegate()
+        vpnManager = MockVPNManager()
         settings = SettingsTableViewController(
             style: .plain,
             windowUUID: .XCTestDefaultUUID,
@@ -25,6 +29,7 @@ final class VPNSettingTests: XCTestCase {
     override func tearDown() async throws {
         delegate = nil
         settings = nil
+        vpnManager = nil
         DependencyHelperMock().reset()
         try await super.tearDown()
     }
@@ -39,6 +44,26 @@ final class VPNSettingTests: XCTestCase {
     func test_init_setsStyleToValue1() {
         let subject = createSubject()
         XCTAssertEqual(subject.style, .value1)
+    }
+
+    // MARK: - Status
+
+    func test_status_whenVPNLimitReached_isPaused() {
+        vpnManager.isLimitReached = true
+        let subject = createSubject()
+        XCTAssertEqual(subject.status?.string, .VPN.Settings.StatusPaused)
+    }
+
+    func test_status_whenVPNEnabledAndUnderLimit_isOn() {
+        vpnManager.isRunning = true
+        let subject = createSubject()
+        XCTAssertEqual(subject.status?.string, .VPN.Settings.StatusOn)
+    }
+
+    func test_status_whenVPNOffAndUnderLimit_isOff() {
+        vpnManager.isRunning = false
+        let subject = createSubject()
+        XCTAssertEqual(subject.status?.string, .VPN.Settings.StatusOff)
     }
 
     // MARK: - Accessory
@@ -73,7 +98,8 @@ final class VPNSettingTests: XCTestCase {
     private func createSubject() -> VPNSetting {
         let subject = VPNSetting(
             settings: settings,
-            settingsDelegate: delegate
+            settingsDelegate: delegate,
+            vpnManager: vpnManager
         )
         trackForMemoryLeaks(subject)
         return subject

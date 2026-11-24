@@ -1,0 +1,19 @@
+# The configuration for the checkForReinstallsFeature feature
+features:
+  check-for-reinstalls-feature:
+    no-lint: [MISSING_CONTACTS]
+    description: >
+      Controls app reinstallation checks.
+    variables:
+      enabled:
+        description: >
+          Whether app reinstallation checks are enabled.
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: false

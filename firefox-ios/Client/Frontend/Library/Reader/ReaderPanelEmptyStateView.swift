@@ -6,7 +6,7 @@ import UIKit
 import Common
 
 final class ReaderPanelEmptyStateView: UIView, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let WelcomeScreenPadding: CGFloat = 15
         static let WelcomeScreenHorizontalMinPadding: CGFloat = 40
 

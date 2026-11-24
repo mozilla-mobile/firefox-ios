@@ -6,6 +6,7 @@ import XCTest
 
 protocol SettingsSelectorsSet {
     var SETTINGS_TABLE: Selector { get }
+    var MAIN_SETTINGS_TABLE: Selector { get }
     var DONE_BUTTON: Selector { get }
     var SETTINGS_TITLE: Selector { get }
 
@@ -22,6 +23,7 @@ protocol SettingsSelectorsSet {
     var CREDIT_CARDS_CELL: Selector { get }
     var ADDRESS_CELL: Selector { get }
     var CLEAR_PRIVATE_DATA_CELL: Selector { get }
+    var WEBSITE_DATA_CELL: Selector { get }
     var ALERT_OK_BUTTON: Selector { get }
 
     // Display / Theme
@@ -42,6 +44,7 @@ protocol SettingsSelectorsSet {
     var BROWSING_LINKS_SECTION: Selector { get }
     var BLOCK_POPUPS_SWITCH: Selector { get }
     var TOOLBAR_CELL: Selector { get }
+    var HOMEPAGE_CELL: Selector { get }
     var BOTTOM_TOOLBAR_BUTTON: Selector { get }
     var TOP_TOOLBAR_BUTTON: Selector { get }
     var NAVIGATION_TOOLBAR_HOME_BUTTON: Selector { get }
@@ -50,6 +53,7 @@ protocol SettingsSelectorsSet {
     var SEARCH_CELL: Selector { get }
     var BROWSING_CELL_TITLE: Selector { get }
     var BLOCK_IMAGES_SWITCH_TITLE: Selector { get }
+    var AD_BLOCKER_SWITCH: Selector { get }
 
     // Send Data
     var SEND_DATA_CELL: Selector { get }
@@ -86,7 +90,9 @@ struct SettingsSelectors: SettingsSelectorsSet {
         static let navigationBarItem = AccessibilityIdentifiers.Settings.navigationBarItem
         static let connectSetting = AccessibilityIdentifiers.Settings.ConnectSetting.title
         static let settingTitle = "Settings"
+        static let mainSettingsTable = AccessibilityIdentifiers.Settings.tableViewController
         static let toolbarCellSettings = AccessibilityIdentifiers.Settings.SearchBar.searchBarSetting
+        static let homepageCell = AccessibilityIdentifiers.Settings.Homepage.homeSettings
         static let bottomToolbarButton = AccessibilityIdentifiers.Settings.SearchBar.bottomSetting
         static let topToolbarButton = AccessibilityIdentifiers.Settings.SearchBar.topSetting
         static let navigationToolbarHomeButton = AccessibilityIdentifiers.Settings.NavigationToolbar.homeButton
@@ -95,6 +101,8 @@ struct SettingsSelectors: SettingsSelectorsSet {
         static let searchCellTitle = AccessibilityIdentifiers.Settings.Search.title
         static let browsingCellTitle = AccessibilityIdentifiers.Settings.Browsing.title
         static let blockImages = AccessibilityIdentifiers.Settings.BlockImages.title
+        // Mirrors PrefsKeys.BlockAds, used as the switch identifier
+        static let adBlockerSwitch = "blockAds"
         static let noImageModeStatus = "NoImageModeStatus"
         static let translationCellTitle = AccessibilityIdentifiers.Settings.Translation.title
         static let summarizeCell = AccessibilityIdentifiers.Settings.Summarize.title
@@ -106,6 +114,12 @@ struct SettingsSelectors: SettingsSelectorsSet {
     // Core Element Selector
     let SETTINGS_TABLE = Selector.firstTable(
         description: "Main settings table view (first table in hierarchy)",
+        groups: ["settings"]
+    )
+
+    let MAIN_SETTINGS_TABLE = Selector.tableIdOrLabel(
+        IDs.mainSettingsTable,
+        description: "Main settings table, matched by its identifier",
         groups: ["settings"]
     )
 
@@ -180,6 +194,12 @@ struct SettingsSelectors: SettingsSelectorsSet {
     let CLEAR_PRIVATE_DATA_CELL = Selector.tableCellById(
         "ClearPrivateData",
         description: "Cell to initiate clearing private data",
+        groups: ["settings", "privacy"]
+    )
+
+    let WEBSITE_DATA_CELL = Selector.tableCellById(
+        AccessibilityIdentifiers.Settings.ClearData.websiteDataSection,
+        description: "Data Management cell that opens Website Data",
         groups: ["settings", "privacy"]
     )
 
@@ -261,6 +281,12 @@ struct SettingsSelectors: SettingsSelectorsSet {
         groups: ["settings", "browsing"]
     )
 
+    let HOMEPAGE_CELL = Selector.tableCellById(
+        IDs.homepageCell,
+        description: "Homepage setting",
+        groups: ["settings"]
+    )
+
     let TOOLBAR_CELL = Selector.tableCellById(
         IDs.toolbarCellSettings,
         description: "Toolbar Search Bar Setting",
@@ -312,6 +338,12 @@ struct SettingsSelectors: SettingsSelectorsSet {
     let BLOCK_IMAGES_SWITCH_TITLE = Selector.anyId(
         IDs.blockImages,
         description: "Block Images switch in Browsing settings",
+        groups: ["settings", "browsing"]
+    )
+
+    let AD_BLOCKER_SWITCH = Selector.switchById(
+        IDs.adBlockerSwitch,
+        description: "Ad Blocker switch in Browsing settings",
         groups: ["settings", "browsing"]
     )
 
@@ -436,13 +468,13 @@ struct SettingsSelectors: SettingsSelectorsSet {
     }
 
     var all: [Selector] {
-        [SETTINGS_TABLE, DONE_BUTTON, SETTINGS_TITLE, AUTOFILLS_PASSWORDS_CELL, CLEAR_DATA_CELL,
+        [SETTINGS_TABLE, MAIN_SETTINGS_TABLE, DONE_BUTTON, SETTINGS_TITLE, AUTOFILLS_PASSWORDS_CELL, CLEAR_DATA_CELL,
          CLOSE_PRIVATE_TABS_SWITCH, CONTENT_BLOCKER_CELL, NOTIFICATIONS_CELL,
          PRIVACY_POLICY_CELL, LOGINS_CELL, CREDIT_CARDS_CELL, ADDRESS_CELL,
-         CLEAR_PRIVATE_DATA_CELL, ALERT_OK_BUTTON, NEW_TAB_CELL, TITLE, TABLE, BROWSING_LINKS_SECTION,
+         CLEAR_PRIVATE_DATA_CELL, WEBSITE_DATA_CELL, ALERT_OK_BUTTON, NEW_TAB_CELL, TITLE, TABLE, BROWSING_LINKS_SECTION,
          NAVIGATIONBAR, CONNECT_SETTING, BLOCK_POPUPS_SWITCH, TOOLBAR_CELL, BOTTOM_TOOLBAR_BUTTON, TOP_TOOLBAR_BUTTON,
-         NAVIGATION_TOOLBAR_HOME_BUTTON, NAVIGATION_TOOLBAR_NEW_TAB_BUTTON, DEFAULT_BROWSER_CELL,
-         SEARCH_CELL, BROWSING_CELL_TITLE, BLOCK_IMAGES_SWITCH_TITLE, NO_IMAGE_MODE_STATUS_SWITCH,
+         HOMEPAGE_CELL, NAVIGATION_TOOLBAR_HOME_BUTTON, NAVIGATION_TOOLBAR_NEW_TAB_BUTTON, DEFAULT_BROWSER_CELL,
+         SEARCH_CELL, BROWSING_CELL_TITLE, BLOCK_IMAGES_SWITCH_TITLE, AD_BLOCKER_SWITCH, NO_IMAGE_MODE_STATUS_SWITCH,
          TRANSLATION_CELL_TITLE, SUMMARIZE_CELL, GENERAL_SECTION_HEADER, SEND_DATA_CELL, SEND_CRASH_REPORTS_CELL,
          APPEARANCE_NAVIGATION_BAR]
     }

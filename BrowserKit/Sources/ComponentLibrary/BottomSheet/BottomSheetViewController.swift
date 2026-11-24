@@ -25,7 +25,7 @@ public class BottomSheetViewController: UIViewController,
                                         BottomSheetDelegate,
                                         Themeable,
                                         UIGestureRecognizerDelegate {
-    private struct UX {
+    private enum UX {
         static let minVisibleTopSpace: CGFloat = 40
         static let closeButtonTopTrailingSpace: CGFloat = 16
         static let initialSpringVelocity: CGFloat = 1

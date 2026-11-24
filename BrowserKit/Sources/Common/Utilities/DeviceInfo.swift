@@ -4,8 +4,8 @@
 
 import Foundation
 
-open class DeviceInfo {
-    open class func isSimulator() -> Bool {
+public enum DeviceInfo {
+    public static func isSimulator() -> Bool {
         return ProcessInfo.processInfo.environment["SIMULATOR_ROOT"] != nil
     }
 }

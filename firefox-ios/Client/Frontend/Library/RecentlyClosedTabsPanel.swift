@@ -10,7 +10,7 @@ import Common
 
 import enum MozillaAppServices.VisitType
 
-private struct RecentlyClosedPanelUX {
+private enum RecentlyClosedPanelUX {
     static let IconSize = CGSize(width: 23, height: 23)
     static let IconBorderWidth: CGFloat = 0.5
 }

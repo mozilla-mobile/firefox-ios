@@ -20,4 +20,7 @@ public protocol QuickAnswersNavigationHandler: AnyObject {
     /// - Parameter navigationType: The navigation action to perform after dismissal.
     ///   Pass `nil` when dismissing via the close button without navigation.
     func dismissQuickAnswers(with navigationType: QuickAnswersNavigationType?)
+
+    /// Called instead of `dismissQuickAnswers(with:)` when a snapshot was saved so the user can return to the answer.
+    func parkQuickAnswers(with navigationType: QuickAnswersNavigationType)
 }

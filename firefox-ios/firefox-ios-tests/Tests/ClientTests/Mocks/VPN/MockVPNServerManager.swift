@@ -12,10 +12,17 @@ final class MockVPNServerManager: VPNServerManaging, @unchecked Sendable {
         city: "NYC",
         countryCode: "US"
     )
+    var didFallBack = false
     var selectServerCalled = 0
+    var selectServerCountryCodes: [String?] = []
 
-    func selectServer(countryCode: String?, environment: VPNEnvironment) async -> VPNGuardian.Server? {
+    func selectServer(countryCode: String?, environment: VPNEnvironment) async -> VPNServerSelection? {
         selectServerCalled += 1
-        return server
+        selectServerCountryCodes.append(countryCode)
+        return server.map { VPNServerSelection(server: $0, didFallBack: didFallBack) }
+    }
+
+    func listCountries() async -> [VPNServerManager.Country] {
+        return []
     }
 }

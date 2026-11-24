@@ -5,8 +5,8 @@
 import Foundation
 
 // This class contains the Firefox iOS type styles as part of our design system
-public struct FXFontStyles {
-    public struct Regular {
+public enum FXFontStyles {
+    public enum Regular {
         public static let largeTitle = TextStyling(for: .largeTitle, size: 34, weight: .regular)
         public static let title1 = TextStyling(for: .title1, size: 28, weight: .regular)
         public static let title2 = TextStyling(for: .title2, size: 22, weight: .regular)
@@ -20,7 +20,7 @@ public struct FXFontStyles {
         public static let caption2 = TextStyling(for: .caption2, size: 11, weight: .regular)
     }
 
-    public struct Bold {
+    public enum Bold {
         public static let largeTitle = TextStyling(for: .largeTitle, size: 34, weight: .bold)
         public static let title1 = TextStyling(for: .title1, size: 28, weight: .bold)
         public static let title2 = TextStyling(for: .title2, size: 22, weight: .bold)

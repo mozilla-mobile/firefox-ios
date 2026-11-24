@@ -107,7 +107,7 @@
 "Onboarding.Modern.BrandRefresh.Customization.Toolbar.Title.v148" = "Izberite, kje želite imeti naslovno vrstico";
 
 /* Description for the marketing data sharing card in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla). */
-"Onboarding.Modern.BrandRefresh.Marketing.Description.v148" = "Sporočite tehnološkim partnerjem organizacije %2$@ za trženje, kako ste odkrili %1$@ in da ga uporabljate. Ti podatki se nikoli ne bodo prodali.";
+"Onboarding.Modern.BrandRefresh.Marketing.Description.v148" = "Sporočite partnerjem organizacije %2$@ za trženje, kako ste odkrili %1$@ in da ga uporabljate. Ti podatki se nikoli ne bodo prodali.";
 
 /* Link text for learning more about how marketing data is used in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Marketing.LearnMoreLink.v148" = "Kako uporabljamo te podatke";
@@ -272,7 +272,7 @@
 "Onboarding.Modern.TermsOfService.ManageLink.v140" = "Upravljaj";
 
 /* The text for the Manage settings link button. */
-"Onboarding.Modern.TermsOfService.ManageLink.v145" = "Nastavitve";
+"Onboarding.Modern.TermsOfService.ManageLink.v145" = "Upravljanje nastavitev";
 
 /* Agreement text for sending diagnostic and interaction data to Mozilla in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is company name (e.g. Mozilla), %3$@ is a Manage link button which redirect the user to another screen in order to manage the data collection preferences. */
 "Onboarding.Modern.TermsOfService.ManagePreferenceAgreement.v140" = "Za pomoč pri izboljšavah brskalnika %1$@ organizaciji %2$@ pošilja diagnostične podatke in podatke o uporabi. %3$@";
@@ -302,7 +302,7 @@
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v140" = "Samodejno pošiljaj poročila o sesutjih";
 
 /* Description for the technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %1$@ is the app name (e.g. Firefox), %2$@ is for the Learn more button link, to open a link where user can find more information about this send technical and interaction data option. */
-"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v140" = "Podatki o vaši napravi, nastavitvi strojne opreme in načinu uporabe brskalnika %1$@ pomagajo izboljšati funkcionalnost, zmogljivost in zanesljivost za uporabnike po vsem svetu. %2$@";
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v140" = "Podatki o vaši napravi, nastavitvi strojne opreme in načinu uporabe brskalnika %1$@ pomagajo izboljšati funkcionalnost, zmogljivost in zanesljivost za vse. %2$@";
 
 /* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is the company name (e.g. Mozilla). */
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v140" = "Pošiljaj tehnične podatke in podatke o uporabi organizaciji %@";
@@ -441,7 +441,7 @@ Secondary button on the onboarding card that prompts users to enable syncing for
 "Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v135" = "Samodejno pošlji poročila o sesutjih";
 
 /* Description for the technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %1$@ is the app name (e.g. Firefox), %2$@ is for the Learn more button link, to open a link where user can find more information about this send technical and interaction data option. */
-"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v135" = "Podatki o vaši napravi, nastavitvi strojne opreme in načinu uporabe brskalnika %1$@ pomagajo izboljšati funkcionalnost, zmogljivost in zanesljivost za uporabnike po vsem svetu. %2$@";
+"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v135" = "Podatki o vaši napravi, nastavitvi strojne opreme in načinu uporabe brskalnika %1$@ pomagajo izboljšati funkcionalnost, zmogljivost in zanesljivost za vse. %2$@";
 
 /* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is the company name (e.g. Mozilla). */
 "Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v135" = "Pošiljaj tehnične podatke in podatke o uporabi organizaciji %@";
@@ -465,7 +465,7 @@ Secondary button on the onboarding card that prompts users to enable syncing for
 "Onboarding.Wallpaper.Accessibility.Classic.v114" = "Klasično ozadje";
 
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
-"Onboarding.Wallpaper.Accessibility.LimitedEdition.v114" = "Omejena izdaja";
+"Onboarding.Wallpaper.Accessibility.LimitedEdition.v114" = "Ozadje omejene izdaje";
 
 /* Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper. */
 "Onboarding.Wallpaper.Action.v114" = "Nastavi ozadje";
@@ -505,4 +505,7 @@ Secondary button on the onboarding card that prompts users to enable syncing for
 
 /* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Title.v114" = "Dobrodošli na neodvisnem internetu";
+
+/* Title of an onboarding card that introduces the built-in VPN. %1$@ is the app name (for example, Firefox). */
+"VPN.Onboarding.Title.v160" = "Preizkusite %1$@ov vgrajeni VPN";
 

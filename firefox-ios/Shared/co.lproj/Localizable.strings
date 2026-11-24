@@ -1555,6 +1555,9 @@
 /* Footer information for tracker protection level. */
 "Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "S’è un situ ùn funziona micca cum’è previstu, appughjate nant’à u lucchettu in a barra d’indirizzu è disattivate a prutezzione rinfurzata contr’à u spiunagiu per sta pagina.";
 
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Strict.v161" = "S’è un situ ùn funziuneghja micca, aprite u listinu è pruvate di disattivà a prutezzione rinfurzata contr’à u spiunagiu.";
+
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Permette qualchì elementu di spiunagiu da e publicità per chì i siti funziuneghjinu currettamente.";
 

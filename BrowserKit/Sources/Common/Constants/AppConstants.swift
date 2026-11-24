@@ -4,7 +4,7 @@
 
 import UIKit
 
-public final class AppConstants {
+public enum AppConstants {
     // Any type of tests (UI and Unit)
     public static let isRunningTest = NSClassFromString("XCTestCase") != nil
     || AppConstants.isRunningUITests

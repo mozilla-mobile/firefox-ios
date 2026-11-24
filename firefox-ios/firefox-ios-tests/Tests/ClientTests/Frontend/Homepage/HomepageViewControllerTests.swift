@@ -155,7 +155,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
                 $0 is ToolbarModernAction
             }) as? ToolbarModernAction
         )
-        XCTAssertEqual(actionCalled.description, ToolbarModernAction.cancelEditOnHomepage.description)
+        XCTAssertEqual(actionCalled.description, ToolbarModernAction.cancelEdit(url: nil).description)
     }
 
     func test_traitCollectionDidChange_triggersHomepageAction() throws {
@@ -641,7 +641,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
     }
 
     private func setupNimbusToolbarRefactorTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
+        FxNimbus.shared.features.toolbarRefactorFeature.with { _ in
             return ToolbarRefactorFeature()
         }
     }
@@ -678,16 +678,16 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertNotNil(embeddedAddressBar)
     }
 
-    func test_viewDidLoad_withFlagEnabledAndBottomPosition_doesNotAddEmbeddedAddressBar() {
+    func test_viewDidLoad_withFlagEnabled_embeddedAddressBarStartsHidden() {
         let embeddedAddressBar = loadEmbeddedAddressBar(isFlagEnabled: true, position: .bottom)
 
-        XCTAssertNil(embeddedAddressBar)
+        XCTAssertEqual(embeddedAddressBar?.isHidden, true)
     }
 
-    func test_viewDidLoad_withFlagDisabledAndTopPosition_doesNotAddEmbeddedAddressBar() {
+    func test_viewDidLoad_withFlagDisabled_embeddedAddressBarStartsHidden() {
         let embeddedAddressBar = loadEmbeddedAddressBar(isFlagEnabled: false, position: .top)
 
-        XCTAssertNil(embeddedAddressBar)
+        XCTAssertEqual(embeddedAddressBar?.isHidden, true)
     }
 
     private func loadEmbeddedAddressBar(isFlagEnabled: Bool, position: SearchBarPosition) -> UIView? {

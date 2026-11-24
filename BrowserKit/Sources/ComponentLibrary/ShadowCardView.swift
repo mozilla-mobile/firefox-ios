@@ -19,7 +19,7 @@ public struct ShadowCardViewModel {
 }
 
 public class ShadowCardView: UIView, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let verticalPadding: CGFloat = 8
         static let horizontalPadding: CGFloat = 8
         static let cornerRadius: CGFloat = 8

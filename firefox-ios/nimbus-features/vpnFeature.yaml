@@ -1,6 +1,7 @@
 # The configuration for the vpnFeature feature
 features:
   vpn-feature:
+    no-lint: [MISSING_CONTACTS]
     description: >
       Configuration feature for VPN
     variables:

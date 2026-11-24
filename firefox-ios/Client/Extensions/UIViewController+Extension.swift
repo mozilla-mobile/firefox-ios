@@ -24,14 +24,23 @@ enum NavigationItemText {
     }
 }
 
-struct ViewControllerConsts {
-    struct PreferredSize {
+enum ViewControllerConsts {
+    enum PreferredSize {
         static let IntroViewController = CGSize(width: 570, height: 755)
         static let DBOnboardingViewController = CGSize(width: 624, height: 680)
     }
 }
 
 extension UIViewController {
+    /// The last controller in this controller's presentation chain that isn't being dismissed.
+    var topmostPresentedViewController: UIViewController {
+        var top = self
+        while let next = top.presentedViewController, !next.isBeingDismissed {
+            top = next
+        }
+        return top
+    }
+
     /// Determines whether, based on size class, the particular view controller should
     /// use iPad setup, as defined by design requirements. All iPad devices use a
     /// combination of either (.compact, .regular) or (.regular, .regular) size class

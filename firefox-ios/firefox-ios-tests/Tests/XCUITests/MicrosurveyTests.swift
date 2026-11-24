@@ -69,16 +69,14 @@ final class MicrosurveyTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2776932
+    // [Config] nav:bottombar
     func testURLBorderHiddenWhenMicrosurveyPromptShown() throws {
         guard !iPad() else {
             throw XCTSkip("Toolbar option not available for iPad")
         }
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
-        settingScreen.navigateToToolbarSettings()
-        settingScreen.selectBottomToolbar()
-        settingScreen.tapBackToSettings()
-        settingScreen.closeSettingsWithDoneButton()
+        settingScreen.setAddressBarPosition(atTop: false)
         generateTriggerForMicrosurvey()
 
         microsurveyScreen.assertTopBorderHidden()

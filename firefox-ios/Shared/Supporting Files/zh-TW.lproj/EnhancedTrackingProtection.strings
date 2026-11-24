@@ -86,7 +86,7 @@
 "Menu.EnhancedTrackingProtection.Details.TrackersStandardModeFooterText.v150" = "標準模式會在頁面開始載入後，才自動封鎖常見的追蹤器，所以您看到的追蹤器數量可能較多。%@";
 
 /* Text to let users know how strict mode for Tracking Protection work. %@ is a tappable text which contains a link with more information about current Tracking Protection mode. e.g Learn more */
-"Menu.EnhancedTrackingProtection.Details.TrackersStrictModeFooterText.v150" = "嚴格模式會在頁面開始載入前就自動封鎖，所以您看到的追蹤器數量可能較少。%@";
+"Menu.EnhancedTrackingProtection.Details.TrackersStrictModeFooterText.v150" = "嚴格模式會在頁面開始載入前就封鎖更多追蹤器，所以您看到的追蹤器數量可能較少。%@";
 
 /* Text to let users know the site verifier, where %@ represents the SSL certificate signer which is on the enhanced tracking protection screen after the user taps on the connection details. */
 "Menu.EnhancedTrackingProtection.Details.Verifier.v128" = "由 %@ 驗證";

@@ -39,8 +39,9 @@ final class BrowserCoordinator: BaseCoordinator,
                           ShareSheetCoordinatorDelegate,
                           WebCompatReportCoordinatorNavigationDelegate,
                           BrowsingSettingsDelegate,
+                          WallpaperEngagementCoordinatorDelegate,
                           FeatureFlaggable {
-    private struct UX {
+    private enum UX {
         static let searchEnginePopoverSize = CGSize(width: 250, height: 536)
     }
 
@@ -49,6 +50,7 @@ final class BrowserCoordinator: BaseCoordinator,
     var homepageViewController: HomepageViewController?
     private weak var nativeErrorPageViewController: NativeErrorPageViewController?
     private weak var privateHomepageViewController: PrivateHomepageViewController?
+    private weak var vpnAlert: UIAlertController?
 
     private var profile: Profile
     private let tabManager: TabManager
@@ -70,6 +72,8 @@ final class BrowserCoordinator: BaseCoordinator,
         return summarizerNimbusUtils.isSummarizeFeatureToggledOn
     }
     private var pendingOnboardingCardAction: OnboardingCardButtonAction = .none
+    private let quickAnswersSessionStorage: QuickAnswersSessionStorage
+    private let quickAnswersPillTelemetry: QuickAnswersReturnPillTelemetry
 
     override var isDismissible: Bool { false }
 
@@ -85,6 +89,8 @@ final class BrowserCoordinator: BaseCoordinator,
          applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
          windowMerger: WindowMerging = MergeWindowsManager(),
          googleLensService: GoogleLensServicing = GoogleLensService(),
+         quickAnswersSessionStorage: QuickAnswersSessionStorage = QuickAnswersSessionStorage(),
+         quickAnswersPillTelemetry: QuickAnswersReturnPillTelemetry = DefaultQuickAnswersTelemetry(),
          isCameraAvailable: @escaping @MainActor () -> Bool = {
              UIImagePickerController.isSourceTypeAvailable(.camera)
          }) {
@@ -103,6 +109,8 @@ final class BrowserCoordinator: BaseCoordinator,
         self.applicationHelper = applicationHelper
         self.glean = glean
         self.googleLensService = googleLensService
+        self.quickAnswersSessionStorage = quickAnswersSessionStorage
+        self.quickAnswersPillTelemetry = quickAnswersPillTelemetry
         self.isCameraAvailable = isCameraAvailable
         super.init(router: router)
 
@@ -183,6 +191,31 @@ final class BrowserCoordinator: BaseCoordinator,
         if didEmbed {
             // [FXIOS-13651] Fix for WKWebView memory leak. (See comments on related PR.)
             webviewController?.update(webView: nil)
+        }
+
+        showWallpaperEngagementIfNeeded()
+    }
+
+    private func showWallpaperEngagementIfNeeded() {
+        let hasBlockingChild = childCoordinators.contains {
+            $0 is TermsOfUseCoordinator || $0 is WallpaperEngagementCoordinator
+        }
+        guard !hasBlockingChild,
+              !router.isPresenting else { return }
+
+        let coordinator = WallpaperEngagementCoordinator(
+            router: router,
+            windowUUID: windowUUID,
+            tabManager: tabManager,
+            prefs: profile.prefs
+        )
+        guard coordinator.shouldShow() else { return }
+        coordinator.parentCoordinator = self
+        coordinator.delegate = self
+        add(child: coordinator)
+        browserViewController.view.endEditing(true)
+        DispatchQueue.main.async {
+            coordinator.start()
         }
     }
 
@@ -429,11 +462,6 @@ final class BrowserCoordinator: BaseCoordinator,
             case .tutorial:
                 startLaunch(with: .defaultBrowser)
             }
-        }
-
-        if route.willSelectTabOnHandling,
-           AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(windowUUID)) {
-            AppEventQueue.completed(.pendingDeeplinkTab(windowUUID))
         }
     }
 
@@ -740,12 +768,21 @@ final class BrowserCoordinator: BaseCoordinator,
                                                               shouldUsePrivateOverride: false)
         browsingSettings.parentCoordinator = self
         let navigationController = DismissableNavigationViewController(rootViewController: browsingSettings)
-        setupAdBlockerSettingsDetents(for: navigationController)
+        setupSettingsSheetDetents(for: navigationController)
         navigationController.sheetPresentationController?.prefersGrabberVisible = true
         router.present(navigationController, animated: true)
     }
 
-    private func setupAdBlockerSettingsDetents(for controller: UIViewController) {
+    func presentVPNSettings() {
+        guard #available(iOS 17.0, *) else { return }
+        let vpnSettings = VPNSettingsViewController(windowUUID: windowUUID)
+        let navigationController = DismissableNavigationViewController(rootViewController: vpnSettings)
+        setupSettingsSheetDetents(for: navigationController)
+        navigationController.sheetPresentationController?.prefersGrabberVisible = true
+        router.present(navigationController, animated: true)
+    }
+
+    private func setupSettingsSheetDetents(for controller: UIViewController) {
         if #available(iOS 16.0, *) {
             let customDetent = UISheetPresentationController.Detent.custom(
                 identifier: .init("threeQuarter")
@@ -1290,23 +1327,60 @@ final class BrowserCoordinator: BaseCoordinator,
 
     func showQuickAnswers(transitionType: QuickAnswersTransitionType) {
         guard !childCoordinators.contains(where: { $0 is QuickAnswersCoordinator }) else { return }
+        switch transitionType {
+        case .sourceReveal:
+            discardParkedQuickAnswers(reason: .newSession)
+        case .returnToAnswer:
+            browserViewController.hideQuickAnswersReturnPill()
+        }
         let coordinator = QuickAnswersCoordinator(
             parentCoordinatorDelegate: self,
             prefs: profile.prefs,
+            sessionStorage: quickAnswersSessionStorage,
             windowUUID: windowUUID,
             themeManager: themeManager,
             router: router,
             transitionType: transitionType,
-        ) { [weak self] navigationType in
-            switch navigationType {
-            case .url(let url):
-                self?.navigateFromHomePanel(to: url, visitType: .link, isGoogleTopSite: false)
-            case .searchResult(let query):
-                self?.browserViewController.openSearchNewTab(query)
+            onNavigate: { [weak self] navigationType in
+                switch navigationType {
+                case .url(let url):
+                    self?.navigateFromHomePanel(to: url, visitType: .link, isGoogleTopSite: false)
+                case .searchResult(let query):
+                    self?.browserViewController.openSearchNewTab(query)
+                }
+            },
+            onPark: { [weak self] in
+                self?.showQuickAnswersReturnPill()
             }
-        }
+        )
         add(child: coordinator)
         coordinator.start()
+    }
+
+    private func showQuickAnswersReturnPill() {
+        guard let question = quickAnswersSessionStorage.latestSession?.question else { return }
+        quickAnswersPillTelemetry.returnPillShown()
+        browserViewController.showQuickAnswersReturnPill(
+            question: question,
+            onTap: { [weak self] isMinimized in
+                self?.resumeParkedQuickAnswers(isMinimized: isMinimized)
+            },
+            onSwipeAway: { [weak self] in self?.discardParkedQuickAnswers(reason: .swipe) }
+        )
+    }
+
+    private func resumeParkedQuickAnswers(isMinimized: Bool) {
+        guard quickAnswersSessionStorage.latestSession != nil,
+              router.navigationController.presentedViewController == nil else { return }
+        quickAnswersPillTelemetry.returnPillTapped(isMinimized: isMinimized)
+        showQuickAnswers(transitionType: .returnToAnswer)
+    }
+
+    private func discardParkedQuickAnswers(reason: QuickAnswersReturnPillDismissReason) {
+        guard quickAnswersSessionStorage.latestSession != nil else { return }
+        quickAnswersPillTelemetry.returnPillDismissed(reason: reason)
+        quickAnswersSessionStorage.removeAll()
+        browserViewController.hideQuickAnswersReturnPill()
     }
 
     func showGoogleLensPhotoPicker() {
@@ -1341,6 +1415,106 @@ final class BrowserCoordinator: BaseCoordinator,
         store.dispatch(GeneralBrowserAction(showOverlay: false,
                                             windowUUID: self.windowUUID,
                                             actionType: GeneralBrowserActionType.leaveOverlay))
+    }
+
+    func showVPNFailureAlert() {
+        guard vpnAlert == nil else { return }
+        let alert = UIAlertController(
+            title: .VPN.ErrorBrowsingPopup.Title,
+            message: .VPN.ErrorBrowsingPopup.Body,
+            preferredStyle: .alert
+        )
+        addVPNAlertAction(
+            to: alert,
+            title: .VPN.ErrorBrowsingPopup.Continue,
+            style: .destructive,
+            action: .continueWithoutVPN(alertType: .sessionError)
+        )
+        addVPNAlertAction(
+            to: alert,
+            title: .VPN.ErrorBrowsingPopup.CloseAllTabs,
+            action: .closeAllTabs(alertType: .sessionError)
+        )
+        addVPNAlertAction(
+            to: alert,
+            title: .VPN.ErrorBrowsingPopup.CloseThisTab,
+            action: .closeThisTab(alertType: .sessionError)
+        )
+        presentVPNAlert(alert)
+    }
+
+    func showVPNDataLimitAlert(dataLimitBytes: Int64) {
+        guard vpnAlert == nil else { return }
+        let dataLimitGB = Measurement(value: Double(dataLimitBytes), unit: UnitInformationStorage.bytes)
+            .converted(to: .gigabytes).value
+        let alert = UIAlertController(
+            title: .VPN.ReachedDataLimitPopup.Title,
+            message: String(
+                format: .VPN.ReachedDataLimitPopup.Body,
+                dataLimitGB.formatted(.number.precision(.fractionLength(0...1)))
+            ),
+            preferredStyle: .alert
+        )
+        addVPNAlertAction(
+            to: alert,
+            title: .VPN.ErrorBrowsingPopup.Continue,
+            style: .destructive,
+            action: .continueWithoutVPN(alertType: .monthlyLimit)
+        )
+        addVPNAlertAction(
+            to: alert,
+            title: .VPN.ReachedDataLimitPopup.CloseAllTabs,
+            action: .closeAllTabs(alertType: .monthlyLimit)
+        )
+        addVPNAlertAction(
+            to: alert,
+            title: .VPN.ReachedDataLimitPopup.CloseThisTab,
+            action: .closeThisTab(alertType: .monthlyLimit)
+        )
+        presentVPNAlert(alert)
+    }
+
+    func showVPNLocationUnavailableAlert() {
+        guard vpnAlert == nil else { return }
+        let alert = UIAlertController(
+            title: .VPN.LocationPicker.LocationUnavailableTitle,
+            message: .VPN.LocationPicker.LocationUnavailableBody,
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: .VPN.LocationPicker.LocationUnavailableButtonText, style: .default))
+        presentVPNAlert(alert)
+    }
+
+    func showVPNConnectionFailedAlert() {
+        guard vpnAlert == nil else { return }
+        let alert = UIAlertController(
+            title: .VPN.ErrorConnectingPopup.Title,
+            message: .VPN.ErrorConnectingPopup.Body,
+            preferredStyle: .alert
+        )
+        let closeAction = UIAlertAction(title: .VPN.ErrorConnectingPopup.CloseButtonText, style: .default)
+        alert.addAction(closeAction)
+        alert.preferredAction = closeAction
+        addVPNAlertAction(to: alert, title: .VPN.ErrorConnectingPopup.RetryButtonText, action: .start)
+        alert.view.tintColor = themeManager.getCurrentTheme(for: windowUUID).colors.actionPrimary
+        presentVPNAlert(alert)
+    }
+
+    private func addVPNAlertAction(
+        to alert: UIAlertController,
+        title: String,
+        style: UIAlertAction.Style = .default,
+        action: VPNModernAction
+    ) {
+        alert.addAction(UIAlertAction(title: title, style: style) { [weak self] _ in
+            guard let self else { return }
+            store.dispatch(action, forWindowUUID: self.windowUUID)
+        })
+    }
+
+    private func presentVPNAlert(_ alert: UIAlertController) {
+        vpnAlert = alert
+        browserViewController.topmostPresentedViewController.present(alert, animated: true)
     }
 
     func searchGoogleLens(with image: UIImage, source: GoogleLensTelemetry.Source, searchTimerId: GleanTimerId? = nil) {
@@ -1575,6 +1749,13 @@ final class BrowserCoordinator: BaseCoordinator,
             windowUUID: windowUUID
         )
         present(bottomSheetVC)
+    }
+
+    // MARK: - WallpaperEngagementCoordinatorDelegate
+
+    func wallpaperEngagementDidTapCTA(from coordinator: WallpaperEngagementCoordinator) {
+        remove(child: coordinator)
+        show(settings: .wallpaper)
     }
 
     // MARK: - ParentCoordinatorDelegate

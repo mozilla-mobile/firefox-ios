@@ -27,10 +27,10 @@ open class LoginsStorage {
         }
     }
 
-    /// Delete the record with the given ID. Returns false if no such record existed.
-    open func delete(id: String) throws -> Bool {
-        return try queue.sync {
-            try self.store.delete(id: id)
+    /// Delete the record with the given ID. Does nothing if no such record exists.
+    open func delete(id: String) throws {
+        try queue.sync {
+            _ = try self.store.delete(id: id)
         }
     }
 

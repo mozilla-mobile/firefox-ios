@@ -21,6 +21,7 @@ final class DefaultQuickAnswersService: QuickAnswersService {
 
     private let engine: TranscriptionEngine
     private let resultsService: ResultsService
+    let conversation: QuickAnswersConversation
     private var state: RecordingState = .idle
     private var recordingTask: Task<Void, Error>?
     private var continuation: AsyncThrowingStream<SpeechResult, any Error>.Continuation?
@@ -32,10 +33,16 @@ final class DefaultQuickAnswersService: QuickAnswersService {
         resultsServiceFactory: ResultsServiceFactory = DefaultResultsServiceFactory(
             liteLLMCreator: LiteLLMCreator()
         ),
-        prefs: Prefs
+        prefs: Prefs,
+        conversation: QuickAnswersConversation
     ) throws {
         self.engine = engine ?? Self.makeDefaultEngine()
-        self.resultsService = try resultsServiceFactory.make(prefs: prefs, configFetcher: configFetcher)
+        self.conversation = conversation
+        self.resultsService = try resultsServiceFactory.make(
+            prefs: prefs,
+            configFetcher: configFetcher,
+            conversation: conversation
+        )
     }
 
     // MARK: Speech Service

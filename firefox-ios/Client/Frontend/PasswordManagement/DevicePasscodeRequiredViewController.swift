@@ -13,7 +13,7 @@ enum ParentControllerType {
 }
 
 class DevicePasscodeRequiredViewController: SettingsViewController {
-    private struct UX {
+    private enum UX {
         static let maxLabelLines = 0
         static let standardSpacing: CGFloat = 20
     }

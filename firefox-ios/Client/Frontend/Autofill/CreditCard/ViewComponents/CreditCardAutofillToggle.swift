@@ -25,7 +25,7 @@ class ToggleModel: ObservableObject {
 }
 
 struct CreditCardAutofillToggle: View {
-    private struct UX {
+    private enum UX {
         static let paddingSize: CGFloat = 4
         static let dividerHeight: CGFloat = 0.7
         static let padding: CGFloat = 16

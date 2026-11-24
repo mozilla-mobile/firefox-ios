@@ -23,12 +23,12 @@ final class SwipeUpTabPreviewGestureHandlerTests: XCTestCase, StoreTestUtility {
 
     override func setUp() async throws {
         try await super.setUp()
-        DependencyHelperMock().bootstrapDependencies()
+        mockFlags = MockNimbusFeatureFlags()
+        DependencyHelperMock().bootstrapDependencies(injectedFeatureFlagProvider: mockFlags)
         profile = makeProfile()
         tabManager = MockTabManager()
         mockVC = MockBrowserViewController(profile: profile, tabManager: tabManager)
         themeManager = MockThemeManager()
-        mockFlags = MockNimbusFeatureFlags()
         mockGleanWrapper = MockGleanWrapper()
         setupStore()
     }
@@ -215,10 +215,6 @@ final class SwipeUpTabPreviewGestureHandlerTests: XCTestCase, StoreTestUtility {
         let action = mockStore.dispatchedActions.first { $0 is GeneralBrowserAction } as? GeneralBrowserAction
         XCTAssertEqual(action?.actionType as? GeneralBrowserActionType, .showTabTray)
         assertRecordedEvent(outcome: .tabTrayOpened)
-
-        // The open tab tray path schedules a delayed dismiss that captures self,
-        // do this so the memory leak check doesn't yell at me
-        drainDismissDelay()
     }
 
     func testHandlePanGesture_whenEndedInTopThirdAndCloseTabEnabled_tossesPreviewCard() {
@@ -231,11 +227,22 @@ final class SwipeUpTabPreviewGestureHandlerTests: XCTestCase, StoreTestUtility {
         let gesture = MockSwipeUpPanGestureRecognizer()
         gesture.state = .ended
         gesture.gestureLocation = CGPoint(x: 150, y: 100)
+        let closeTabDispatched = expectation(description: "closeTab dispatched")
+        closeTabDispatched.assertForOverFulfill = false
+        mockStore.dispatchCalled = { [weak self] in
+            guard self?.mockStore.dispatchedActions.contains(where: { $0 is TabPanelViewAction }) == true else { return }
+            closeTabDispatched.fulfill()
+        }
 
         subject.handlePanGestureForTesting(gesture)
 
         XCTAssertLessThan(tabPreview.previewCardFrame.midY, previewFrame.midY)
         assertRecordedEvent(outcome: .tabClosed)
+
+        // The toss animation dispatches closeTab on completion, wait for it so it can't leak into the next test
+        wait(for: [closeTabDispatched], timeout: 2.0)
+        let action = mockStore.dispatchedActions.first { $0 is TabPanelViewAction } as? TabPanelViewAction
+        XCTAssertEqual(action?.actionType as? TabPanelViewActionType, .closeTab)
     }
 
     // MARK: - handleSwipeGesture
@@ -286,16 +293,6 @@ final class SwipeUpTabPreviewGestureHandlerTests: XCTestCase, StoreTestUtility {
                   line: line)
         let savedExtras = mockGleanWrapper.savedExtras.last as? GleanMetrics.ToolbarAddressBar.DraggedExtra
         XCTAssertEqual(savedExtras?.outcome, outcome.rawValue, file: file, line: line)
-    }
-
-    /// Spins the run loop long enough for the open-tab-tray dismiss delay (0.4s) to fire,
-    /// releasing the strong self capture before the memory leak teardown check runs.
-    private func drainDismissDelay() {
-        let expectation = XCTestExpectation(description: "dismiss delay elapsed")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            expectation.fulfill()
-        }
-        wait(for: [expectation], timeout: 1.0)
     }
 
     func setupAppState() -> AppState {

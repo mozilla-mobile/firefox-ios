@@ -14,7 +14,7 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
 
     private var homeTopSite: TopSiteConfiguration?
 
-    struct UX {
+    enum UX {
         static let imageBackgroundSize = CGSize(width: 60, height: 60)
         static let addShortcutIconSize = CGSize(width: 24, height: 24)
         static let pinIconSize = CGSize(width: 8, height: 8)
@@ -24,7 +24,7 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
         static let transparencyThreshold: CGFloat = 15
     }
 
-    private var rootContainer: UIView = .build { view in
+    private(set) var rootContainer: UIView = .build { view in
         view.backgroundColor = .clear
         view.layer.cornerRadius = UX.faviconCornerRadius
     }
@@ -90,6 +90,15 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
     private var textColor: UIColor?
     private var imageViewConstraints: [NSLayoutConstraint] = []
     private var theme: Theme?
+
+    var contextMenuPreviewPath: UIBezierPath {
+        let path = UIBezierPath(roundedRect: rootContainer.bounds,
+                                cornerRadius: UX.faviconCornerRadius)
+        if !pinImageView.isHidden {
+            path.append(UIBezierPath(ovalIn: pinImageView.frame))
+        }
+        return path
+    }
 
     // MARK: - Inits
 

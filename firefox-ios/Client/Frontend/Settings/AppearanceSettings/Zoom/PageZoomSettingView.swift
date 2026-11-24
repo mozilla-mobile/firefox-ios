@@ -16,7 +16,7 @@ struct PageZoomSettingsView: ThemeableView {
 
     private var themeColors: ThemeColourPalette { return theme.colors }
 
-    private struct UX {
+    private enum UX {
         static let dividerHeight: CGFloat = 0.7
         static let sectionPadding: CGFloat = 16
         static let spacing: CGFloat = 24

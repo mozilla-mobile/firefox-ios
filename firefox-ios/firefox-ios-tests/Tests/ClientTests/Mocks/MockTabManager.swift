@@ -37,6 +37,8 @@ class MockTabManager: TabManager {
     var addTabsURLs: [URL] = []
 
     var removeTabsByURLCalled = 0
+    var removeTabCalledWith: [TabUUID] = []
+    var removeAllTabsCalledWith: [Bool] = []
 
     var addTabWasCalled = false
     var notifyCurrentTabDidFinishLoadingCalled = 0
@@ -87,9 +89,13 @@ class MockTabManager: TabManager {
 
     func removeTabs(_ tabs: [Tab]) {}
 
-    func removeTab(_ tabUUID: TabUUID) {}
+    func removeTab(_ tabUUID: TabUUID) {
+        removeTabCalledWith.append(tabUUID)
+    }
 
-    func removeAllTabs(isPrivateMode: Bool) {}
+    func removeAllTabs(isPrivateMode: Bool) {
+        removeAllTabsCalledWith.append(isPrivateMode)
+    }
 
     func removeTabs(by urls: [URL]) {
         removeTabsByURLCalled += 1

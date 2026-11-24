@@ -41,6 +41,7 @@ class ScreenGraphTest: XCTestCase {
                                LaunchArguments.SkipIntro,
                                LaunchArguments.SkipWhatsNew,
                                LaunchArguments.SkipETPCoverSheet,
+                               LaunchArguments.SkipTermsOfUse,
                                LaunchArguments.SkipContextualHints,
                                LaunchArguments.DisableAnimations]
         app.activate()
@@ -117,7 +118,7 @@ class TestUserState: MMUserState {
 
 let WebPageLoading = "WebPageLoading"
 
-private class TestActions {
+private enum TestActions {
     static let ToggleNightMode = "ToggleNightMode"
     static let ToggleNighModeOff = "ToggleNightModeOff"
     static let LoadURL = "LoadURL"

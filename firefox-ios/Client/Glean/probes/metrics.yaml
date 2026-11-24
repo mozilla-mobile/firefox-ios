@@ -2409,6 +2409,23 @@ app_errors:
     type: event
     description: |
       Recorded when we detect potential major tab loss
+    extra_keys: &tab_loss_extra_keys
+      expected:
+        type: quantity
+        description: |
+          The expected number of tabs.
+      actual:
+          type: quantity
+          description: |
+            The actual number of tabs.
+      missing:
+          type: quantity
+          description: |
+            The missing number of tabs.
+      windows:
+          type: quantity
+          description: |
+            The number of windows.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/22180
     data_reviews:
@@ -2420,6 +2437,7 @@ app_errors:
     type: event
     description: |
       Recorded when we detect a minor discrepancy in tab count between backgrounding and foregrounding
+    extra_keys: *tab_loss_extra_keys
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/34546
     data_reviews:
@@ -2774,6 +2792,8 @@ nimbus_system:
       - nimbus
       - nimbus-targeting-context
     lifetime: application
+    no_lint:
+      - UNKNOWN_PING_REFERENCED # nimbus-targeting-context is defined in appservices
 
 remote_settings:
   uptake_remotesettings:
@@ -2818,4 +2838,53 @@ remote_settings:
       - acottner@mozilla.com
     data_sensitivity:
       - technical
+    expires: never
+
+installation:
+  original_app_version:
+    type: string
+    description: |
+      App version associated with the original acquisition.
+    lifetime: ping
+    send_in_pings:
+      - installation
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-17053
+    data_reviews: []
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  install_counter:
+    type: quantity
+    unit: installations
+    description: |
+      Number of app installations observed on this device.
+    lifetime: ping
+    send_in_pings:
+      - installation
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-17053
+    data_reviews: []
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  last_seen_date:
+    type: datetime
+    time_unit: second
+    description: |
+      Last recorded activity date from the previous installation.
+    lifetime: ping
+    send_in_pings:
+      - installation
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-17053
+    data_reviews: []
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
     expires: never

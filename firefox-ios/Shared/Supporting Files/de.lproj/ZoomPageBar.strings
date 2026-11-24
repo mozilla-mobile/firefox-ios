@@ -5,8 +5,8 @@
 "Menu.ZoomPage.CurrentZoomLevel.AccessibilityLabel.v113" = "Aktuelle Zoomstufe: %@";
 
 /* Accessibility label for decreasing the zoom level in Zoom Page Bar */
-"Menu.ZoomPage.DecreaseZoom.AccessibilityLabel.v113" = "Zoomfaktor verringern";
+"Menu.ZoomPage.DecreaseZoom.AccessibilityLabel.v113" = "Zoomstufe verringern";
 
 /* Accessibility label for increasing the zoom level in Zoom Page Bar */
-"Menu.ZoomPage.IncreaseZoom.AccessibilityLabel.v113" = "Zoomfaktor erhöhen";
+"Menu.ZoomPage.IncreaseZoom.AccessibilityLabel.v113" = "Zoomstufe erhöhen";
 

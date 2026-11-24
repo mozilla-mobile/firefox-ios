@@ -39,8 +39,7 @@ public final class DefaultCrashManager: CrashManager, @unchecked Sendable {
         case production = "Production"
     }
 
-    static let featureFlagsContextKey = "flags"
-    /// Sentry keeps at most 100 flags per event
+    /// Matches Sentry's default `Options.maxFeatureFlags`, above which it drops the oldest flags
     static let maxFeatureFlags = 100
 
     // MARK: - Properties
@@ -185,17 +184,14 @@ public final class DefaultCrashManager: CrashManager, @unchecked Sendable {
         configureFeatureFlagsScope()
     }
 
-    /// Converts feature branches to Sentry's feature flag context format. Sentry flags only support boolean
-    /// results, so each enrollment is encoded as a `feature:branch` flag that evaluated to `true`.
-    static func featureFlagsContext(from featureBranches: [String: String]) -> [String: Any]? {
-        guard !featureBranches.isEmpty else { return nil }
-
-        let values = featureBranches
+    /// Converts feature branches to Sentry feature flag names. Sentry flags only support boolean results, so each
+    /// enrollment is encoded as a `feature:branch` flag that evaluated to `true`.
+    static func featureFlagNames(from featureBranches: [String: String]) -> [String] {
+        let names = featureBranches
             .map { "\($0.key):\($0.value)" }
             .sorted()
             .prefix(maxFeatureFlags)
-            .map { ["flag": $0, "result": true] as [String: Any] }
-        return ["values": Array(values)]
+        return Array(names)
     }
 
     private func alterEventForCustomCrash(event: Sentry.Event, crash: CustomCrashReport) {
@@ -291,27 +287,26 @@ public final class DefaultCrashManager: CrashManager, @unchecked Sendable {
     private func configureScope() {
         let deviceAppHash = UserDefaults(suiteName: appInfo.sharedContainerIdentifier)?
             .string(forKey: self.deviceAppHashKey)
-        let featureFlagsContext = Self.featureFlagsContext(from: featureBranches)
+        let featureFlagNames = Self.featureFlagNames(from: featureBranches)
         sentryWrapper.configureScope(scope: { scope in
             scope.setContext(value: [
                 "device_app_hash": deviceAppHash ?? self.defaultDeviceAppHash
             ], key: "appContext")
-            Self.apply(featureFlagsContext: featureFlagsContext, to: scope)
+            Self.apply(featureFlagNames: featureFlagNames, to: scope)
         })
     }
 
     private func configureFeatureFlagsScope() {
-        let featureFlagsContext = Self.featureFlagsContext(from: featureBranches)
+        let featureFlagNames = Self.featureFlagNames(from: featureBranches)
         sentryWrapper.configureScope(scope: { scope in
-            Self.apply(featureFlagsContext: featureFlagsContext, to: scope)
+            Self.apply(featureFlagNames: featureFlagNames, to: scope)
         })
     }
 
-    private static func apply(featureFlagsContext: [String: Any]?, to scope: Scope) {
-        if let featureFlagsContext {
-            scope.setContext(value: featureFlagsContext, key: featureFlagsContextKey)
-        } else {
-            scope.removeContext(key: featureFlagsContextKey)
+    private static func apply(featureFlagNames: [String], to scope: Scope) {
+        scope.clearFeatureFlags()
+        for name in featureFlagNames {
+            scope.addFeatureFlag(name: name, result: true)
         }
     }
 

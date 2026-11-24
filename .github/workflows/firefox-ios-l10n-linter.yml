@@ -15,10 +15,10 @@ on:
 
 jobs:
   check:
-    runs-on: macos-26
+    runs-on: xcode-27
     strategy:
       matrix:
-        xcode: ["26.5"]
+        xcode: ["27.1"]
         python-version: ["3.12"]
         node-version: ["24"]
     steps:

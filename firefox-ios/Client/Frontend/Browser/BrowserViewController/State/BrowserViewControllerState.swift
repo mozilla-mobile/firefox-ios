@@ -40,6 +40,10 @@ struct BrowserViewControllerState: ScreenState {
         case translationLanguagePicker(TranslationLanguagePickerData)
         case googleLensPhotoPicker
         case googleLensCamera
+        case vpnFailureAlert
+        case vpnDataLimitAlert(dataLimitBytes: Int64)
+        case vpnLocationUnavailableAlert
+        case vpnConnectionFailedAlert
     }
 
     let windowUUID: WindowUUID
@@ -57,6 +61,7 @@ struct BrowserViewControllerState: ScreenState {
     var microsurveyState: MicrosurveyPromptState
     var autoTranslatePromptState: AutoTranslatePromptState
     var navigationDestination: NavigationDestination?
+    var isCenterSearchBarShowing: Bool
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let bvcState = appState.componentState(
@@ -82,7 +87,12 @@ struct BrowserViewControllerState: ScreenState {
                   frameContext: bvcState.frameContext,
                   microsurveyState: bvcState.microsurveyState,
                   autoTranslatePromptState: bvcState.autoTranslatePromptState,
-                  navigationDestination: bvcState.navigationDestination)
+                  navigationDestination: bvcState.navigationDestination,
+                  isCenterSearchBarShowing: appState.componentState(
+                      HomepageState.self,
+                      for: .homepage,
+                      window: uuid
+                  )?.searchBarState.shouldShowSearchBar ?? false)
     }
 
     init(windowUUID: WindowUUID) {
@@ -119,7 +129,8 @@ struct BrowserViewControllerState: ScreenState {
         frameContext: PasswordGeneratorFrameContext?,
         microsurveyState: MicrosurveyPromptState,
         autoTranslatePromptState: AutoTranslatePromptState,
-        navigationDestination: NavigationDestination?
+        navigationDestination: NavigationDestination?,
+        isCenterSearchBarShowing: Bool = false
     ) {
         self.searchScreenState = searchScreenState
         self.toast = toast
@@ -136,13 +147,26 @@ struct BrowserViewControllerState: ScreenState {
         self.microsurveyState = microsurveyState
         self.autoTranslatePromptState = autoTranslatePromptState
         self.navigationDestination = navigationDestination
+        self.isCenterSearchBarShowing = isCenterSearchBarShowing
     }
 
     static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
 
     static let modernReducer: ReducerMethod<Self> = { state, action, actionWindowUUID in
-        // Does not handle any modern actions
-        return defaultState(from: state)
+        guard let action = action as? VPNAlertModernAction,
+              actionWindowUUID == .unavailable || actionWindowUUID == state.windowUUID
+        else { return defaultState(from: state) }
+
+        switch action {
+        case .showFailureAlert:
+            return state.resetTransientState().copy(displayView: .vpnFailureAlert)
+        case .showDataLimitAlert(let dataLimitBytes):
+            return state.resetTransientState().copy(displayView: .vpnDataLimitAlert(dataLimitBytes: dataLimitBytes))
+        case .showLocationUnavailableAlert:
+            return state.resetTransientState().copy(displayView: .vpnLocationUnavailableAlert)
+        case .showConnectionFailedAlert:
+            return state.resetTransientState().copy(displayView: .vpnConnectionFailedAlert)
+        }
     }
 
     static let legacyReducer: LegacyReducerMethod<Self> = { state, action in
@@ -290,9 +314,6 @@ struct BrowserViewControllerState: ScreenState {
         state: BrowserViewControllerState
     ) -> BrowserViewControllerState {
         switch action.actionType {
-        case ToolbarActionType.didDeleteSearchTerm:
-            guard case .webview = state.browserViewType else { return passthroughState(from: state, action: action) }
-            return stateForToolbarAction(action, state)
         case ToolbarActionType.didStartEditingUrl:
             return stateForToolbarAction(action, state)
         default:
@@ -704,7 +725,8 @@ struct BrowserViewControllerState: ScreenState {
             frameContext: nil,
             microsurveyState: microsurveyState,
             autoTranslatePromptState: AutoTranslatePromptState.defaultState(from: state.autoTranslatePromptState),
-            navigationDestination: nil
+            navigationDestination: nil,
+            isCenterSearchBarShowing: state.isCenterSearchBarShowing
         )
     }
 }

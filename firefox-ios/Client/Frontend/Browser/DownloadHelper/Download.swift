@@ -153,9 +153,6 @@ final class HTTPDownload: Download, URLSessionTaskDelegate, URLSessionDownloadDe
         } else {
             self.hasContentEncoding = false
         }
-
-        self.session = URLSession(configuration: .ephemeralMPTCP, delegate: self, delegateQueue: .main)
-        self.task = session?.downloadTask(with: self.request)
     }
 
     override func cancel() {
@@ -170,16 +167,31 @@ final class HTTPDownload: Download, URLSessionTaskDelegate, URLSessionDownloadDe
 
     override func resume() {
         cookieStore.getAllCookies { [self] cookies in
+            // A paused download gets a fresh session so it picks up the current VPN proxy stack.
+            if self.resumeData != nil {
+                session?.finishTasksAndInvalidate()
+                session = nil
+            }
+            // Create the session lazily: URLSession strongly retains its delegate until
+            // invalidated, so creating it in init would leak the download when it is never
+            // started (e.g. the user cancels the download prompt).
+            if session == nil {
+                session = URLSession(configuration: .ephemeralMPTCP.withVPNProxy(), delegate: self, delegateQueue: .main)
+            }
             cookies.forEach { cookie in
                 session?.configuration.httpCookieStorage?.setCookie(cookie)
             }
 
             guard let resumeData = self.resumeData else {
+                if task == nil {
+                    task = session?.downloadTask(with: self.request)
+                }
                 self.task?.resume()
                 return
             }
 
             self.task = session?.downloadTask(withResumeData: resumeData)
+            self.resumeData = nil
             self.task?.resume()
         }
     }

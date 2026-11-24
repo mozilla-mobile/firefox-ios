@@ -7,7 +7,7 @@ import WebKit
 import Shared
 import Common
 
-struct NoImageModePrefsKey {
+enum NoImageModePrefsKey {
     static let NoImageModeStatus = PrefsKeys.KeyNoImageModeStatus
 }
 

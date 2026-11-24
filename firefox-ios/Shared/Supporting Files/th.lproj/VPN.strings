@@ -1,0 +1,33 @@
+/* Button on the popup shown when the VPN stops working while the user is browsing. Tapping it closes all of the user's open tabs. */
+"VPN.ErrorBrowsingPopup.CloseAllTabs.v160" = "ปิดแท็บทั้งหมด";
+
+/* Confirmation shown after the user closes a single tab from the popup that appears when the VPN stops working while browsing. */
+"VPN.ErrorBrowsingPopup.ClosedOneTab.v160" = "ปิด 1 แท็บ";
+
+/* Confirmation shown after the user closes more than one tab from the popup that appears when the VPN stops working while browsing. %1$@ is the number of tabs that were closed (for example, 3). */
+"VPN.ErrorBrowsingPopup.ClosedXTabs.v160" = "ปิด %1$@ แท็บ";
+
+/* Button on the popup shown when the VPN stops working while the user is browsing. Tapping it closes only the tab the user is currently viewing. */
+"VPN.ErrorBrowsingPopup.CloseThisTab.v160" = "ปิดแท็บนี้";
+
+/* Button on the popup shown when the app fails to connect to the VPN. Tapping it closes the popup. */
+"VPN.ErrorConnectingPopup.CloseButtonText.v160" = "ปิด";
+
+/* Button on the popup shown when the app fails to connect to the VPN. Tapping it tries to connect to the VPN again. */
+"VPN.ErrorConnectingPopup.RetryButtonText.v160" = "ลองใหม่";
+
+/* Title of a popup shown when the app fails to connect to the VPN. */
+"VPN.ErrorConnectingPopup.Title.v160" = "ไม่สามารถเชื่อมต่อกับ VPN ได้";
+
+/* Button on the popup shown when the user runs out of free monthly VPN data. Tapping it closes all of the user's open tabs. */
+"VPN.ReachedDataLimitPopup.CloseAllTabs.v160" = "ปิดแท็บทั้งหมด";
+
+/* Confirmation shown after the user closes a single tab from the popup that appears when they run out of free monthly VPN data. */
+"VPN.ReachedDataLimitPopup.ClosedOneTab.v160" = "ปิด 1 แท็บ";
+
+/* Confirmation shown after the user closes more than one tab from the popup that appears when they run out of free monthly VPN data. %1$@ is the number of tabs that were closed (for example, 3). */
+"VPN.ReachedDataLimitPopup.ClosedXTabs.v160" = "ปิด %1$@ แท็บ";
+
+/* Button on the popup shown when the user runs out of free monthly VPN data. Tapping it closes only the tab the user is currently viewing. */
+"VPN.ReachedDataLimitPopup.CloseThisTab.v160" = "ปิดแท็บนี้";
+

@@ -17,7 +17,7 @@ protocol ZoomPageBarDelegate: AnyObject {
 final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable, FeatureFlaggable {
     // MARK: - Constants
 
-    private struct UX {
+    private enum UX {
         static let padding: CGFloat = 20
         static let buttonInsets = NSDirectionalEdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16)
         static let stepperHeight: CGFloat = 36

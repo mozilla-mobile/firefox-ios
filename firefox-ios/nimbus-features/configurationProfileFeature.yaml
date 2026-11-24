@@ -1,6 +1,7 @@
 # The configuration for the configurationProfileFeature feature
 features:
   configuration-profile-feature:
+    no-lint: [MISSING_CONTACTS]
     description: >
       Offers to open configuration profiles (.mobileconfig) in Safari so iOS can install them
     variables:

@@ -4,26 +4,36 @@
 
 import Common
 import Shared
+import ComponentLibrary
 
 /// The privacy notice cell used in the homepage collection view
 final class PrivacyNoticeCell: UICollectionViewCell,
                                UITextViewDelegate,
                                ReusableCell,
                                ThemeApplicable {
-    struct UX {
+    enum UX {
         static let cellCornerRadius: CGFloat = 16
         static let cellBorderWidth: CGFloat = 1
         static let bodyLabelVerticalInset: CGFloat = 10
         static let contentHorizontalInset: CGFloat = 16
-        static let contentSpacing: CGFloat = 4
+        static let contentSpacing: CGFloat = 16
         static let closeButtonSize = CGSize(width: 30, height: 30)
         static let closeButtonImageSize = CGSize(width: 20, height: 20)
     }
+
+    var logger: Logger = DefaultLogger.shared
 
     private var closeButtonAction: (() -> Void)?
     private var linkAction: ((URL) -> Void)?
 
     // MARK: - UI Elements
+    private let titleLabel: UILabel = .build { label in
+        label.adjustsFontForContentSizeCategory = true
+        label.font = FXFontStyles.Bold.body.scaledFont()
+        label.numberOfLines = 0
+        label.text = .FirefoxHomepage.PrivacyNotice.Headline
+        label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.PrivacyNotice.title
+    }
 
     private lazy var bodyTextView: UITextView = .build { textView in
         textView.backgroundColor = .clear
@@ -36,6 +46,7 @@ final class PrivacyNoticeCell: UICollectionViewCell,
         textView.textContainerInset = .zero
         textView.textContainer.lineFragmentPadding = 0
         textView.delegate = self
+        textView.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.PrivacyNotice.description
     }
 
     private lazy var closeButton: UIButton = .build { button in
@@ -47,7 +58,17 @@ final class PrivacyNoticeCell: UICollectionViewCell,
         config.image = scaledAndTemplatedImage
         button.configuration = config
 
+        button.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.PrivacyNotice.close
         button.addTarget(self, action: #selector(self.closeButtonTapped), for: .touchUpInside)
+    }
+
+    private lazy var learnMoreButton: PrimaryRoundedButton = .build { button in
+        let viewModel = PrimaryRoundedButtonViewModel(
+            title: .FirefoxHomepage.PrivacyNotice.LearnMoreLink,
+            a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.PrivacyNotice.learnMore
+        )
+        button.configure(viewModel: viewModel)
+        button.addTarget(self, action: #selector(self.learnMoreButtonTapped), for: .touchUpInside)
     }
 
     override init(frame: CGRect) {
@@ -73,49 +94,80 @@ final class PrivacyNoticeCell: UICollectionViewCell,
     }
 
     private func setupLayout() {
-        contentView.addSubview(bodyTextView)
+        contentView.addSubview(titleLabel)
         contentView.addSubview(closeButton)
+        contentView.addSubview(bodyTextView)
+        contentView.addSubview(learnMoreButton)
 
         NSLayoutConstraint.activate([
-            bodyTextView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: UX.bodyLabelVerticalInset),
-            bodyTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.contentHorizontalInset),
-            bodyTextView.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor, constant: -UX.contentSpacing),
-            bodyTextView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -UX.bodyLabelVerticalInset),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor,
+                                            constant: UX.contentHorizontalInset),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                constant: UX.contentHorizontalInset),
+            titleLabel.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor,
+                                                 constant: -UX.contentSpacing),
+            titleLabel.bottomAnchor.constraint(equalTo: bodyTextView.topAnchor,
+                                               constant: -UX.bodyLabelVerticalInset),
 
-            closeButton.centerYAnchor.constraint(equalTo: bodyTextView.centerYAnchor),
+            bodyTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                  constant: UX.contentHorizontalInset),
+            bodyTextView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                   constant: -UX.contentHorizontalInset),
+            bodyTextView.bottomAnchor.constraint(equalTo: learnMoreButton.topAnchor,
+                                                 constant: -UX.contentHorizontalInset),
+
+            closeButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
             closeButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
                                                   constant: -UX.contentHorizontalInset),
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize.width),
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize.height),
+
+            learnMoreButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                     constant: UX.contentHorizontalInset),
+            learnMoreButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                      constant: -UX.contentHorizontalInset),
+            learnMoreButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
+                                                    constant: -UX.contentHorizontalInset),
         ])
     }
 
     private func setupBodyTextViewAttributedString() {
-        let bodyString = String.FirefoxHomepage.PrivacyNotice.Body
-        let privacyNoticeString = String.FirefoxHomepage.PrivacyNotice.PrivacyNoticeLink
-        let learnMoreString = String.FirefoxHomepage.PrivacyNotice.LearnMoreLink
-        let fullText = String(format: bodyString, privacyNoticeString, AppName.shortName.rawValue, learnMoreString)
-        let attributedString = NSMutableAttributedString(string: fullText)
+        let bodyString = String.FirefoxHomepage.PrivacyNotice.MarkdownBody
+        let markdown = String(format: bodyString, AppName.shortName.rawValue)
+            .replacingOccurrences(
+                of: "PRIVACY_NOTICE_URL",
+                with: SupportUtils.URLForUpdatedPrivacyNotice?.absoluteString ?? "#"
+            )
 
-        attributedString.addAttributes([
-            .font: FXFontStyles.Regular.footnote.scaledFont(),
-        ], range: NSRange(location: 0, length: attributedString.length))
-
-        if let updatedPrivacyNoticeUrl = SupportUtils.URLForUpdatedPrivacyNotice,
-           let updatedPrivacyNoticeDiffUrl = SupportUtils.URLForUpdatedPrivacyNoticeDiff {
-            let privacyNoticeLinkRange = (fullText as NSString).range(of: .FirefoxHomepage.PrivacyNotice.PrivacyNoticeLink)
-            attributedString.addAttribute(.link, value: updatedPrivacyNoticeUrl, range: privacyNoticeLinkRange)
-
-            let learnMoreLinkRange = (fullText as NSString).range(of: .FirefoxHomepage.PrivacyNotice.LearnMoreLink)
-            attributedString.addAttribute(.link, value: updatedPrivacyNoticeDiffUrl, range: learnMoreLinkRange)
+        do {
+            let attributedString = try NSMutableAttributedString(
+                markdown: markdown,
+                options: .init(
+                    interpretedSyntax: .inlineOnlyPreservingWhitespace
+                )
+            )
+            attributedString.addAttributes([ .font: FXFontStyles.Regular.footnote.scaledFont() ],
+                                           range: NSRange(location: 0, length: attributedString.length))
+            bodyTextView.attributedText = attributedString
+        } catch {
+            logger.log(
+                "Failed to create attributed string from markdown",
+                level: .warning,
+                category: .homepage,
+                description: "Failed to create attributed string with error: \(error.localizedDescription)"
+            )
         }
-
-        bodyTextView.attributedText = attributedString
     }
 
     @objc
     func closeButtonTapped(_ sender: Any) {
         closeButtonAction?()
+    }
+
+    @objc
+    func learnMoreButtonTapped(_ sender: Any) {
+        guard let url = SupportUtils.URLForUpdatedPrivacyNoticeDiff else { return }
+        linkAction?(url)
     }
 
     // MARK: - ThemeApplicable
@@ -130,6 +182,7 @@ final class PrivacyNoticeCell: UICollectionViewCell,
         var config = closeButton.configuration
         config?.baseForegroundColor = theme.colors.iconPrimary
         closeButton.configuration = config
+        learnMoreButton.applyTheme(theme: theme)
     }
 
     // MARK: TextView Delegate

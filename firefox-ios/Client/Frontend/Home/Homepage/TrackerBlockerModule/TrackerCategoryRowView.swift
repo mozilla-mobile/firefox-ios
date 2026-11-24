@@ -9,7 +9,7 @@ import UIKit
 /// underneath, a progress bar with the blocked count inline at its trailing edge. The bar and count are hidden
 /// in the sheet's empty state, where there is no count to show.
 final class TrackerCategoryRowView: UIView, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         /// Matches `TPMenuUX.UX.iconSize`, so the categories are drawn at the same size here as in the
         /// enhanced tracking protection panel.
         static let iconSize: CGFloat = 24

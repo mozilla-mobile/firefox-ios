@@ -5,7 +5,7 @@
 import Common
 
 class TemporaryDocumentLoadingView: UIView, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let loadingBackgroundViewCornerRadius: CGFloat = 12.0
         static let loadingContainerViewSpacing: CGFloat = 8.0
         static let loadingContainerViewSidePadding: CGFloat = 20.0

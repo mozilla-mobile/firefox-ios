@@ -7,7 +7,7 @@ import XCTest
 
 @MainActor
 final class TabsSectionManagerTests: XCTestCase {
-    struct DeviceSize {
+    enum DeviceSize {
         static let iPhoneDuoExpandedPortrait = CGSize(width: 669, height: 951)
         static let iPhoneDuoExpandedLandscape = CGSize(width: 951, height: 669)
         static let iPhoneProMaxPortrait = CGSize(width: 440, height: 956)

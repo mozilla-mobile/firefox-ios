@@ -49,6 +49,7 @@ class AppDelegate: UIResponder,
     }()
     lazy var shareTelemetry = ShareTelemetry()
     lazy var gleanUsageReportingMetricsService = GleanUsageReportingMetricsService(profile: profile)
+    lazy var installationTelemetryService = InstallationTelemetryService(profilePrefs: profile.prefs)
     private var isLoadingBackgroundTabs = false
 
     private var shutdownWebServer: DispatchSourceTimer?
@@ -160,6 +161,8 @@ class AppDelegate: UIResponder,
             }
         }
 
+        resetVPNAtLaunch()
+
         if #available(iOS 17.0, *) {
             ResetTipsSetting.resetDatastoreIfNeeded(prefs: profile.prefs)
             do {
@@ -194,13 +197,18 @@ class AppDelegate: UIResponder,
             profile.removeAccount()
         }
 
+        installationTelemetryService.update()
+
         profile.syncManager?.applicationDidBecomeActive()
         webServerUtil?.setUpWebServer()
+        dispatchVPNAction(.appDidBecomeActive)
 
         // Process any pending app extension telemetry events (e.g., from Share Extension)
         TelemetryWrapper.shared.processPendingAppExtensionTelemetry(profile: profile)
 
         TelemetryWrapper.recordEvent(category: .action, method: .foreground, object: .app)
+
+        refreshVPNUsageIfResetDue()
 
         ConversionActivityLogger().recordActiveToday()
         ConversionEventTracker().recordActivityEvents()
@@ -240,6 +248,7 @@ class AppDelegate: UIResponder,
         TelemetryWrapper.recordEvent(category: .action, method: .background, object: .app)
 
         profile.syncManager?.applicationDidEnterBackground()
+        dispatchVPNAction(.appDidEnterBackground)
 
         let singleShotTimer = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
         // 2 seconds is ample for a localhost request to be completed by GCDWebServer.
@@ -385,6 +394,23 @@ class AppDelegate: UIResponder,
             let wallpaperManager = WallpaperManager()
             wallpaperManager.checkForUpdates()
         }
+    }
+
+    // makes sure VPN doesn't connect at launch
+    private func resetVPNAtLaunch() {
+        dispatchVPNAction(.resetVPNAtLaunch)
+    }
+
+    private func dispatchVPNAction(_ action: VPNModernAction) {
+        guard #available(iOS 17.0, *),
+              featureFlagsProvider.isEnabled(.vpnFeature) else { return }
+        store.dispatch(action, forWindowUUID: .unavailable)
+    }
+
+    private func refreshVPNUsageIfResetDue() {
+        guard #available(iOS 17.0, *),
+              featureFlagsProvider.isEnabled(.vpnFeature) else { return }
+        store.dispatch(VPNModernAction.refreshUsageIfResetDue, forWindowUUID: .unavailable)
     }
 
     private func fixSimulatorDevBuild(_ application: UIApplication) {

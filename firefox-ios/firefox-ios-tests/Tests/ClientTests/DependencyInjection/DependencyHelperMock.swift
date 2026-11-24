@@ -75,10 +75,19 @@ final class DependencyHelperMock {
         let featureFlagProvider = injectedFeatureFlagProvider ?? FeatureFlagsProvider(prefs: profile.prefs)
         AppContainer.shared.register(service: featureFlagProvider as FeatureFlagProviding)
 
+        let installationTelemetryService = InstallationTelemetryService(
+            profilePrefs: profile.prefs,
+            installationPrefs: profile.prefs,
+            featureFlagsProvider: featureFlagProvider
+        )
+        AppContainer.shared.register(service: installationTelemetryService)
+
         let userFeatureProvider = injectedUserFeaturePreferences ?? UserFeaturePreferenceManager(
             prefs: profile.prefs
         )
         AppContainer.shared.register(service: userFeatureProvider as UserFeaturePreferring)
+
+        AppContainer.shared.register(service: MockVPNManager() as VPNRunnable)
 
         // Tell the container we are done registering
         AppContainer.shared.bootstrap()

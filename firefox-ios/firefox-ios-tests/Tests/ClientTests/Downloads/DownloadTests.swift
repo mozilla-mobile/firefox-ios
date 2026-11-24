@@ -118,6 +118,37 @@ final class DownloadTests: XCTestCase {
 final class HTTPDownloadTests: XCTestCase {
     private let testURL = URL(string: "https://example.com/file.pdf")!
 
+    func testInit_doesNotCreateSession() throws {
+        let download = try createSubject()
+
+        XCTAssertNil(download.session)
+        XCTAssertNil(download.task)
+    }
+
+    func testInitWithoutResume_releasesDownload() throws {
+        weak var weakDownload: HTTPDownload?
+        try autoreleasepool {
+            let download = try createSubject()
+            weakDownload = download
+        }
+
+        waitForDeallocation({ weakDownload })
+    }
+
+    func testResume_createsSessionLazily() throws {
+        let download = try createSubject()
+        XCTAssertNil(download.session)
+
+        download.resume()
+
+        let session = try waitForSession(afterResuming: download)
+        XCTAssertNotNil(download.task)
+
+        let task = try XCTUnwrap(download.task)
+        task.cancel()
+        download.urlSession(session, task: task, didCompleteWithError: nil)
+    }
+
     func testCancel_releasesDownload() throws {
         weak var weakDownload: HTTPDownload?
         try autoreleasepool {
@@ -134,9 +165,12 @@ final class HTTPDownloadTests: XCTestCase {
         try autoreleasepool {
             let download = try createSubject()
             weakDownload = download
-            let session = try XCTUnwrap(download.session)
+            download.resume()
+            // resume() creates the session lazily and asynchronously
+            // (after the cookie store round-trip).
+            let session = try waitForSession(afterResuming: download)
             let task = try XCTUnwrap(download.task)
-            // Cancel the never-resumed task so the session has no outstanding work,
+            // Cancel the task so the session has no outstanding work,
             // matching a real download whose task already reached a terminal state.
             task.cancel()
             download.urlSession(session, task: task, didCompleteWithError: nil)
@@ -167,6 +201,21 @@ final class HTTPDownloadTests: XCTestCase {
                                           cookieStore: WKWebsiteDataStore.default().httpCookieStore,
                                           preflightResponse: response,
                                           request: URLRequest(url: testURL)))
+    }
+
+    private func waitForSession(afterResuming download: HTTPDownload,
+                                timeout: TimeInterval = 10,
+                                file: StaticString = #filePath,
+                                line: UInt = #line) throws -> URLSession {
+        let created = XCTNSPredicateExpectation(
+            predicate: NSPredicate { _, _ in download.session != nil },
+            object: nil
+        )
+        wait(for: [created], timeout: timeout)
+        return try XCTUnwrap(download.session,
+                             "resume() should lazily create the session",
+                             file: file,
+                             line: line)
     }
 
     /// The session releases its delegate asynchronously on its delegate queue (main),

@@ -50,8 +50,4 @@ class MockToolbarHelper: ToolbarHelperInterface, FeatureFlaggable {
     func shouldBlur() -> Bool {
         return !isReduceTransparencyEnabled
     }
-
-    func getLockIconState(hasOnlySecureContent: Bool, isWebsiteMode: Bool) -> LockIconState {
-        return ToolbarHelper.computeLockIconState(hasOnlySecureContent: hasOnlySecureContent, isWebsiteMode: isWebsiteMode)
-    }
 }

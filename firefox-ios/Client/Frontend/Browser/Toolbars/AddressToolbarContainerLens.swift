@@ -15,7 +15,7 @@ protocol StateLens: Equatable {
 }
 
 ///  Computes the toolbar derived action lists (`leadingPageActions`, `trailingPageActions`,
-///  `navigationActions`, `browserActions`, `navigationToolbarActions`) from `ToolbarState`
+///  `navigationActions`, `browserActions`, `navigationToolbarActions`) and the toolbar borders from `ToolbarState`
 struct AddressToolbarContainerLens: StateLens {
     let toolbarState: ToolbarState
     let leadingPageActions: [ToolbarActionConfiguration]
@@ -23,6 +23,9 @@ struct AddressToolbarContainerLens: StateLens {
     let navigationActions: [ToolbarActionConfiguration]
     let browserActions: [ToolbarActionConfiguration]
     let navigationToolbarActions: [ToolbarActionConfiguration]
+    let lockIconState: LockIconState
+    let addressBorderPosition: AddressToolbarBorderPosition
+    let displayNavBorder: Bool
 
     // MARK: - Private initializers
     private init(toolbarState: ToolbarState,
@@ -30,13 +33,19 @@ struct AddressToolbarContainerLens: StateLens {
                  trailingPageActions: [ToolbarActionConfiguration],
                  navigationActions: [ToolbarActionConfiguration],
                  browserActions: [ToolbarActionConfiguration],
-                 navigationToolbarActions: [ToolbarActionConfiguration]) {
+                 navigationToolbarActions: [ToolbarActionConfiguration],
+                 lockIconState: LockIconState,
+                 addressBorderPosition: AddressToolbarBorderPosition,
+                 displayNavBorder: Bool) {
         self.toolbarState = toolbarState
         self.leadingPageActions = leadingPageActions
         self.trailingPageActions = trailingPageActions
         self.navigationActions = navigationActions
         self.browserActions = browserActions
         self.navigationToolbarActions = navigationToolbarActions
+        self.lockIconState = lockIconState
+        self.addressBorderPosition = addressBorderPosition
+        self.displayNavBorder = displayNavBorder
     }
 
     private init(windowUUID: WindowUUID) {
@@ -45,11 +54,18 @@ struct AddressToolbarContainerLens: StateLens {
                   trailingPageActions: [],
                   navigationActions: [],
                   browserActions: [],
-                  navigationToolbarActions: [])
+                  navigationToolbarActions: [],
+                  lockIconState: .none,
+                  addressBorderPosition: .none,
+                  displayNavBorder: false)
     }
 
     // MARK: - Lens initialization
     init(appState: AppState, uuid: WindowUUID) {
+        self.init(appState: appState, uuid: uuid, manager: DefaultToolbarManager())
+    }
+
+    init(appState: AppState, uuid: WindowUUID, manager: ToolbarManager) {
         guard let toolbarState = appState.componentState(ToolbarState.self, for: .toolbar, window: uuid) else {
             self.init(windowUUID: uuid)
             return
@@ -108,12 +124,30 @@ struct AddressToolbarContainerLens: StateLens {
             isPrivateMode: toolbarState.isPrivateMode,
             isNovaDesignEnabled: toolbarState.navigationToolbar.isNovaDesignEnabled)
 
+        let lockIconState = LockIconState(
+            hasOnlySecureContent: addressToolbar.hasOnlySecureContent,
+            isWebsiteMode: addressToolbar.isWebsiteMode && addressToolbar.readerModeState != .active)
+
+        // The microsurvey lives in another component state, which is why the border is computed here
+        let isMicrosurveyShown = appState.componentState(BrowserViewControllerState.self,
+                                                         for: .browserViewController,
+                                                         window: uuid)?.microsurveyState.showPrompt ?? false
+        let addressBorderPosition = manager.getAddressBorderPosition(for: toolbarState.toolbarPosition,
+                                                                     isPrivate: toolbarState.isPrivateMode,
+                                                                     isScrolled: toolbarState.isScrolled,
+                                                                     isMicrosurveyShown: isMicrosurveyShown)
+        let displayNavBorder = manager.shouldDisplayNavigationBorder(toolbarPosition: toolbarState.toolbarPosition,
+                                                                     isMicrosurveyShown: isMicrosurveyShown)
+
         self.init(toolbarState: toolbarState,
                   leadingPageActions: leadingPageActions,
                   trailingPageActions: trailingPageActions,
                   navigationActions: navigationActions,
                   browserActions: browserActions,
-                  navigationToolbarActions: navigationToolbarActions)
+                  navigationToolbarActions: navigationToolbarActions,
+                  lockIconState: lockIconState,
+                  addressBorderPosition: addressBorderPosition,
+                  displayNavBorder: displayNavBorder)
     }
 
     private static func shouldHaveAlternativeLocationColor(toolbarState: ToolbarState) -> Bool {
