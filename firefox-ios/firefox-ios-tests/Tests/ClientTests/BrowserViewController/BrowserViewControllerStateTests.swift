@@ -651,6 +651,38 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         XCTAssertNil(handledState.navigationDestination)
     }
 
+    // MARK: - Address Bar Minimized
+
+    func test_initWithAppState_readsIsAddressBarMinimizedFromToolbarState() {
+        let toolbarState = ToolbarState(windowUUID: .XCTestDefaultUUID).copy(isAddressBarMinimized: true)
+        let appState = AppState(presentedComponents: PresentedComponentsState(components: [
+            .browserViewController(createSubject()),
+            .toolbar(toolbarState)
+        ]))
+
+        let subject = BrowserViewControllerState(appState: appState, uuid: .XCTestDefaultUUID)
+
+        XCTAssertTrue(subject.isAddressBarMinimized)
+    }
+
+    func test_initWithAppState_withoutToolbarState_isNotAddressBarMinimized() {
+        let appState = AppState(presentedComponents: PresentedComponentsState(components: [
+            .browserViewController(createSubject())
+        ]))
+
+        let subject = BrowserViewControllerState(appState: appState, uuid: .XCTestDefaultUUID)
+
+        XCTAssertFalse(subject.isAddressBarMinimized)
+    }
+
+    func test_defaultState_keepsIsAddressBarMinimized() {
+        let initialState = createSubject().copy(isAddressBarMinimized: true)
+
+        let newState = BrowserViewControllerState.defaultState(from: initialState)
+
+        XCTAssertTrue(newState.isAddressBarMinimized)
+    }
+
     // MARK: - Private
     private func createSubject() -> BrowserViewControllerState {
         return BrowserViewControllerState(windowUUID: .XCTestDefaultUUID)

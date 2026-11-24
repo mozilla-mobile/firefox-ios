@@ -62,6 +62,7 @@ struct BrowserViewControllerState: ScreenState {
     var autoTranslatePromptState: AutoTranslatePromptState
     var navigationDestination: NavigationDestination?
     var isCenterSearchBarShowing: Bool
+    var isAddressBarMinimized: Bool
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let bvcState = appState.componentState(
@@ -92,7 +93,12 @@ struct BrowserViewControllerState: ScreenState {
                       HomepageState.self,
                       for: .homepage,
                       window: uuid
-                  )?.searchBarState.shouldShowSearchBar ?? false)
+                  )?.searchBarState.shouldShowSearchBar ?? false,
+                  isAddressBarMinimized: appState.componentState(
+                      ToolbarState.self,
+                      for: .toolbar,
+                      window: uuid
+                  )?.isAddressBarMinimized ?? false)
     }
 
     init(windowUUID: WindowUUID) {
@@ -130,7 +136,8 @@ struct BrowserViewControllerState: ScreenState {
         microsurveyState: MicrosurveyPromptState,
         autoTranslatePromptState: AutoTranslatePromptState,
         navigationDestination: NavigationDestination?,
-        isCenterSearchBarShowing: Bool = false
+        isCenterSearchBarShowing: Bool = false,
+        isAddressBarMinimized: Bool = false
     ) {
         self.searchScreenState = searchScreenState
         self.toast = toast
@@ -148,6 +155,7 @@ struct BrowserViewControllerState: ScreenState {
         self.autoTranslatePromptState = autoTranslatePromptState
         self.navigationDestination = navigationDestination
         self.isCenterSearchBarShowing = isCenterSearchBarShowing
+        self.isAddressBarMinimized = isAddressBarMinimized
     }
 
     static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
@@ -726,7 +734,8 @@ struct BrowserViewControllerState: ScreenState {
             microsurveyState: microsurveyState,
             autoTranslatePromptState: AutoTranslatePromptState.defaultState(from: state.autoTranslatePromptState),
             navigationDestination: nil,
-            isCenterSearchBarShowing: state.isCenterSearchBarShowing
+            isCenterSearchBarShowing: state.isCenterSearchBarShowing,
+            isAddressBarMinimized: state.isAddressBarMinimized
         )
     }
 }

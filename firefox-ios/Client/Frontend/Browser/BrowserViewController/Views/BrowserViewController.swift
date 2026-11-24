@@ -1073,7 +1073,12 @@ class BrowserViewController: UIViewController,
     }
 
     func newState(state: BrowserViewControllerState) {
+        let previousState = browserViewControllerState
         browserViewControllerState = state
+
+        if let previousState, previousState.isAddressBarMinimized != state.isAddressBarMinimized {
+            updateBlurViews()
+        }
 
         if state.reloadWebView {
             updateContentInHomePanel(state.browserViewType)
@@ -4248,10 +4253,6 @@ class BrowserViewController: UIViewController,
 
     func addressToolbarDidTapSearchEngine(_ searchEngineView: UIView) {
         navigationHandler?.showSearchEngineSelection(forSourceView: searchEngineView)
-    }
-
-    func addressToolbarDidChangeMinimizedState() {
-        updateBlurViews()
     }
 
     // MARK: - Relay Additions

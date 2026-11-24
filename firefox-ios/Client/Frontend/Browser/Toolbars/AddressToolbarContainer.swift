@@ -49,8 +49,6 @@ protocol AddressToolbarContainerDelegate: AnyObject {
     @MainActor
     func addressToolbarDidTapSearchEngine(_ searchEngineView: UIView)
     @MainActor
-    func addressToolbarDidChangeMinimizedState()
-    @MainActor
     func contextMenu(for actionType: ToolbarActionConfiguration.ActionType) -> UIMenu?
 }
 
@@ -470,7 +468,6 @@ final class AddressToolbarContainer: UIView,
         shouldDisplayCompact = newModel.shouldDisplayCompact
 
         guard self.model != newModel else { return }
-        let didChangeMinimizedState = model?.isAddressBarMinimized != newModel.isAddressBarMinimized
         updateSkeletonAddressBarsAlpha(forMinimizedAddressBar: newModel.isAddressBarMinimized)
         // in case we are in edit mode but overlay is not active yet we have to activate it
         // so that `inOverlayMode` is set to true so we avoid getting stuck in overlay mode
@@ -503,10 +500,6 @@ final class AddressToolbarContainer: UIView,
         // Replace the old model after we are done using it for comparison
         // All functionality that depends on the new model should come after this
         self.model = newModel
-
-        if didChangeMinimizedState {
-            delegate?.addressToolbarDidChangeMinimizedState()
-        }
 
         self.maximumContentSizeCategory = .extraExtraExtraLarge
     }
