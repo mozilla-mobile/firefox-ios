@@ -8,7 +8,9 @@ Report only issues worth an engineer's time.
 
 - `pr-context/pr.md`: title, author, branches and description.
 - `pr-context/diff.patch`: the changes.
-- `pr-context/tickets.md`: the linked GitHub issues.
+- `pr-context/tickets.md`: the GitHub issues the pull request is linked to,
+  then other issues and pull requests its title or description mentions. The
+  others are context only.
 - `pr-context/comments.md`: the discussion and reviews so far, including
   earlier AI reviews of this pull request and their findings, each with its
   comment id and whether its thread is resolved.
@@ -102,8 +104,9 @@ few seconds to read:
   users will notice, changed APIs or shared components, and anything risky,
   such as migrations, threading or persisted state. Skip mechanical changes.
 - One line starting with **Ticket:** met, partly met, not met, or can't tell,
-  with a few words on why. Judge it against the linked GitHub issues, or, if
-  there are none, against the description, and say which.
+  with a few words on why. Judge it against the linked issues in `tickets.md`,
+  never the other referenced ones, or, if there are none, against the
+  description, and say which.
 
 Don't repeat the findings in the summary.
 

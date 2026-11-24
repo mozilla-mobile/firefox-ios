@@ -129,6 +129,7 @@ jobs:
           path: |
             pr-context/review.json
             pr-context/files.json
+            pr-context/notes.json
           retention-days: 7
 
   # A separate job, so the token that can comment is never in the job running Claude.
@@ -171,7 +172,7 @@ jobs:
           python3 scripts/ci/ai-review/post_review.py
           --repo "$REPO" --pr "$NUMBER" --commit "$COMMIT"
           --review review/review.json --files review/files.json
-          --run-url "$RUN_URL"
+          --notes review/notes.json --run-url "$RUN_URL"
 
       - name: Report a failed review
         if: needs.review.result == 'failure' || failure()

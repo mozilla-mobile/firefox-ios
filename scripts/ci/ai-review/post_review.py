@@ -128,7 +128,7 @@ def followup_line(followup: dict, finding: dict) -> str:
 
 def review_body(
     summary: str, unplaced: list[dict], followups: list[tuple[dict, dict]], commit: str,
-    run_url: str | None,
+    run_url: str | None, notes: list[str] = (),
 ) -> str:
     parts = [HEADER, "", summary.strip()]
     if followups:
@@ -142,13 +142,16 @@ def review_body(
     footer = f"Reviewed commit {commit}. Findings can be wrong; treat them as suggestions."
     if run_url:
         footer += f" [Workflow run]({run_url})"
-    parts += ["", "---", f"<sub>{footer}</sub>"]
+    parts += ["", "---"]
+    if notes:
+        parts += [f"<sub>Left out for size: {' '.join(notes)}</sub>", ""]
+    parts.append(f"<sub>{footer}</sub>")
     return "\n".join(parts)
 
 
 def build_review(
     review: dict, files: list[dict], followups: list[tuple[dict, dict]], repo: str, pr: int,
-    commit: str, run_url: str | None,
+    commit: str, run_url: str | None, notes: list[str] = (),
 ) -> dict:
     lines = commentable_lines(files)
     findings = sorted(review["findings"], key=lambda f: _SEVERITY_ORDER[f["severity"]])
@@ -158,7 +161,8 @@ def build_review(
         "commit_id": commit,
         "event": "COMMENT",
         "body": review_body(
-            review["summary"], unplaced, followups, commit_link(repo, pr, commit), run_url
+            review["summary"], unplaced, followups, commit_link(repo, pr, commit), run_url,
+            notes,
         ),
         "comments": [inline_comment(f) for f in inline],
     }
@@ -254,6 +258,7 @@ def main() -> None:
     parser.add_argument("--commit", required=True)
     parser.add_argument("--review", required=True, type=Path)
     parser.add_argument("--files", required=True, type=Path)
+    parser.add_argument("--notes", type=Path, help="notes.json from gather_context.py")
     parser.add_argument("--run-url")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
@@ -261,7 +266,10 @@ def main() -> None:
     review = json.loads(args.review.read_text())
     files = json.loads(args.files.read_text())
     followups = open_followups(args.repo, args.pr, review.get("followups", []))
-    payload = build_review(review, files, followups, args.repo, args.pr, args.commit, args.run_url)
+    notes = json.loads(args.notes.read_text()) if args.notes else []
+    payload = build_review(
+        review, files, followups, args.repo, args.pr, args.commit, args.run_url, notes
+    )
 
     if args.dry_run:
         print(json.dumps(payload, indent=2))
@@ -287,7 +295,9 @@ def main() -> None:
         # GitHub rejects the whole review over one bad comment position. Fall
         # back to listing every finding in the body.
         print(f"Inline review failed, posting without inline comments:\n{result.stderr}")
-        payload = build_review(review, [], followups, args.repo, args.pr, args.commit, args.run_url)
+        payload = build_review(
+            review, [], followups, args.repo, args.pr, args.commit, args.run_url, notes
+        )
         result = post(args.repo, args.pr, payload)
     if result.returncode != 0:
         sys.exit(f"Could not post the review:\n{result.stderr}")

@@ -36,7 +36,10 @@ The review opens with:
   the new commits tried to fix, and whether they did.
 - **Other findings**, for findings on lines outside the diff, which GitHub
   can't take as inline comments.
-- A footer linking to the reviewed commit and to the workflow run.
+- A footer linking to the reviewed commit and to the workflow run. If
+  anything was left out for size, such as linked issues past the first 5,
+  issue comments past the first 20 or changed files past the first 300, the
+  footer says so.
 
 ### Inline comments
 
@@ -98,7 +101,10 @@ The model, effort and turn limit are set in `claude_args` in the workflow.
    - `since-last-review.md`: how the pull request's changes differ from the
      last AI review's. It compares the pull request's diff then and now, so
      changes from rebasing onto or merging the base branch drop out.
-   - `tickets.md`: linked GitHub issues and their comments.
+   - `tickets.md`: the GitHub issues the pull request is linked to, then
+     other issues and pull requests its title or description mentions, such
+     as `#123`, as context. At most 5 in all, linked ones first, each with its
+     first 20 comments.
 4. `load_guidance.py` matches `review-context.toml` against the changed files
    and writes the matching guidance to `review-guidance.md` (see
    [Review guidance](#review-guidance)).
@@ -168,10 +174,14 @@ the API key. That makes everything in the pull request untrusted, so:
 ## Limitations
 
 - **Jira tickets are ignored for now**: they aren't public, so they can't be
-  read. Only linked GitHub issues are read. Without one, the **Ticket:** line
-  judges the change against the pull request's description.
+  read. The **Ticket:** line is judged against linked GitHub issues, or, if
+  there are none, against the pull request's description. An issue is linked
+  if GitHub links it to the pull request (a closing keyword such as
+  `fixes #123`, or the Development sidebar). Other issues the description
+  mentions are only context.
 - **Large pull requests**: the compare API lists at most 300 files, so a
-  larger change is reviewed on its first 300 files, and the diff says so.
+  larger change is reviewed on its first 300 files, and the review's footer
+  says so.
 - **Reviews of an unchanged commit**: adding the label again without new
   commits still runs the model, and costs about as much as a full review.
 - **Extra timeline entries**: each follow-up reply also appears in the pull

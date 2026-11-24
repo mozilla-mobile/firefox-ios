@@ -14,7 +14,10 @@ matches the code checked out for Claude even if someone pushes during the run.
                   how the pull request's diff changed since the last AI review,
                   without the base branch's changes, so a follow-up review can
                   cover only the author's
-    tickets.md    the linked GitHub issues (Jira tickets are ignored for now)
+    tickets.md    the issues the pull request is linked to, then other issues and
+                  pull requests its title or description mentions, as context
+                  (Jira tickets are ignored for now)
+    notes.json    what was left out for size, for the review's footer
 
 Usage: gather_context.py --repo OWNER/NAME --pr NUMBER --commit SHA --out DIR
 """
@@ -34,9 +37,22 @@ MAX_ISSUES = 5
 MAX_COMPARE_FILES = 300
 MAX_ISSUE_COMMENTS = 20
 
+# "#123" on its own, not part of a word, an HTML entity like "&#123;", or a URL.
+_NUMBER_RE = re.compile(r"(?<![\w&/])#(\d+)\b")
 _KEYWORD_RE = re.compile(
     r"\b(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?)\s+#(\d+)\b", re.IGNORECASE
 )
+_CLOSING_QUERY = """
+query($owner: String!, $name: String!, $number: Int!) {
+  repository(owner: $owner, name: $name) {
+    pullRequest(number: $number) {
+      closingIssuesReferences(first: 10) {
+        nodes { number repository { nameWithOwner } }
+      }
+    }
+  }
+}
+"""
 
 
 def changed_files(repo: str, base_ref: str, commit: str) -> list[dict]:
@@ -50,10 +66,34 @@ def changed_files(repo: str, base_ref: str, commit: str) -> list[dict]:
     return compare["files"]
 
 
-def linked_issues(repo: str, text: str) -> list[int]:
-    url_re = re.compile(rf"github\.com/{re.escape(repo)}/issues/(\d+)", re.IGNORECASE)
-    numbers = [int(n) for n in url_re.findall(text) + _KEYWORD_RE.findall(text)]
-    return list(dict.fromkeys(numbers))[:MAX_ISSUES]
+def linked_issues(repo: str, pr: dict, text: str) -> list[int]:
+    """The issues the pull request is linked to: the ones it says it fixes.
+
+    GitHub's own links, from closing keywords or the Development sidebar, plus
+    closing keywords GitHub didn't link, as it only does for the default branch.
+    """
+    owner, name = repo.split("/")
+    out = subprocess.run(
+        [
+            "gh", "api", "graphql", "-f", f"query={_CLOSING_QUERY}",
+            "-f", f"owner={owner}", "-f", f"name={name}", "-F", f"number={pr['number']}",
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout
+    nodes = json.loads(out)["data"]["repository"]["pullRequest"]["closingIssuesReferences"]["nodes"]
+    numbers = [n["number"] for n in nodes if n["repository"]["nameWithOwner"].lower() == repo.lower()]
+    numbers += [int(n) for n in _KEYWORD_RE.findall(text)]
+    return list(dict.fromkeys(numbers))
+
+
+def referenced_issues(repo: str, pr: int, text: str) -> list[int]:
+    """Every issue or pull request the text links to or mentions as #123, in order."""
+    url_re = re.compile(rf"github\.com/{re.escape(repo)}/(?:issues|pull)/(\d+)", re.IGNORECASE)
+    found = [(m.start(), int(m[1])) for r in (url_re, _NUMBER_RE) for m in r.finditer(text)]
+    numbers = [n for _, n in sorted(found)]
+    return [n for n in dict.fromkeys(numbers) if n != pr]
 
 
 def write_pr(out: Path, pr: dict, commit: str, files: list[dict]) -> None:
@@ -193,32 +233,77 @@ def write_since_last_review(
     path.write_text("\n".join(lines) + "\n")
 
 
-def write_tickets(out: Path, repo: str, pr: dict) -> None:
+def issue_section(repo: str, number: int, notes: list[str]) -> list[str]:
+    try:
+        issue = gh_api(f"repos/{repo}/issues/{number}")
+    except subprocess.CalledProcessError:
+        return [f"## #{number}", "", "(could not be read)", ""]
+    kind = "Pull request" if "pull_request" in issue else "GitHub issue"
+    labels = ", ".join(label["name"] for label in issue["labels"]) or "none"
+    lines = [
+        f"## {kind} #{number}: {issue['title']}",
+        "",
+        f"- State: {issue['state']}",
+        f"- Labels: {labels}",
+        "",
+        issue["body"] or "(empty)",
+        "",
+    ]
+    if issue["comments"]:
+        comments = gh_api(f"repos/{repo}/issues/{number}/comments?per_page={MAX_ISSUE_COMMENTS}")
+        for c in comments:
+            lines += [f"### Comment by {c['user']['login']}", "", c["body"] or "", ""]
+        if issue["comments"] > MAX_ISSUE_COMMENTS:
+            note = f"Read the first {MAX_ISSUE_COMMENTS} of {issue['comments']} comments on #{number}."
+            notes.append(note)
+            lines += [f"({note})", ""]
+    return lines
+
+
+def write_tickets(out: Path, repo: str, pr: dict) -> list[str]:
+    """Write tickets.md, and return notes on what was left out, for the review's footer.
+
+    Linked issues come first: the change is judged against them. Other issues
+    and pull requests the title or description mentions are context only. The
+    notes hold only numbers, never text from the issues.
+    """
     text = f"{pr['title']}\n{pr['body'] or ''}"
-    lines = ["# Linked tickets", ""]
-    for number in linked_issues(repo, text):
-        try:
-            issue = gh_api(f"repos/{repo}/issues/{number}")
-        except subprocess.CalledProcessError:
-            lines += [f"## GitHub issue #{number}", "", "(could not be read)", ""]
-            continue
-        labels = ", ".join(label["name"] for label in issue["labels"]) or "none"
-        lines += [
-            f"## GitHub issue #{number}: {issue['title']}",
-            "",
-            f"- State: {issue['state']}",
-            f"- Labels: {labels}",
-            "",
-            issue["body"] or "(empty)",
-            "",
-        ]
-        if issue["comments"]:
-            comments = gh_api(f"repos/{repo}/issues/{number}/comments?per_page={MAX_ISSUE_COMMENTS}")
-            for c in comments:
-                lines += [f"### Comment by {c['user']['login']}", "", c["body"] or "", ""]
-    if len(lines) == 2:
-        lines.append("(no GitHub issues linked in the title or description)")
-    out.joinpath("tickets.md").write_text("\n".join(lines))
+    linked = linked_issues(repo, pr, text)
+    mentioned = [n for n in referenced_issues(repo, pr["number"], text) if n not in linked]
+    read = (linked + mentioned)[:MAX_ISSUES]
+    notes: list[str] = []
+    lines = [
+        "# Linked issues",
+        "",
+        "The issues this pull request is linked to. Judge the change against these.",
+        "",
+    ]
+    for number in linked:
+        if number in read:
+            lines += issue_section(repo, number, notes)
+    if not linked:
+        lines += ["(none)", ""]
+    lines += [
+        "# Other referenced issues and pull requests",
+        "",
+        "Mentioned in the title or description. Context only: don't judge the change against these.",
+        "",
+    ]
+    for number in mentioned:
+        if number in read:
+            lines += issue_section(repo, number, notes)
+    if not mentioned:
+        lines += ["(none)", ""]
+    skipped = [n for n in linked + mentioned if n not in read]
+    if skipped:
+        note = (
+            f"Read the first {MAX_ISSUES} of {len(linked) + len(mentioned)} referenced issues; "
+            f"skipped {', '.join(f'#{n}' for n in skipped)}."
+        )
+        notes.insert(0, note)
+        lines.append(f"({note})")
+    out.joinpath("tickets.md").write_text("\n".join(lines) + "\n")
+    return notes
 
 
 def main() -> None:
@@ -245,7 +330,10 @@ def main() -> None:
         review_threads(repo, number),
     )
     write_since_last_review(out, repo, reviews, base_ref, files, commit)
-    write_tickets(out, repo, pr)
+    notes = write_tickets(out, repo, pr)
+    if len(files) >= MAX_COMPARE_FILES:
+        notes.append(f"Reviewed only the first {MAX_COMPARE_FILES} changed files.")
+    out.joinpath("notes.json").write_text(json.dumps(notes))
 
 
 if __name__ == "__main__":
