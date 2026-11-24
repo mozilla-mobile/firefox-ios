@@ -56,9 +56,13 @@ Each finding is one issue at one place in the diff:
 There are at most 10 findings, the most important first. A review with none is
 a normal outcome for a sound change.
 
-There is specific guidance to not report style that SwiftLint enforces, personal
-preferences, problems the change didn't introduce or make worse, issues people
-have already raised, or anything it can't support from the code.
+What to look for, and what not to report, comes from the repository's review
+guidance (see [Review guidance](#review-guidance)). For every pull request that
+includes `.claude/review/change-correctness.md`, which says not to report style
+that SwiftLint enforces, personal preferences, problems the change didn't
+introduce or make worse, or anything it can't support from the code. The prompt
+adds one rule of its own: don't report issues people or an earlier AI review
+have already raised.
 
 ## Follow-up reviews
 

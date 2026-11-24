@@ -34,24 +34,10 @@ can't be read from here. Don't mention them in the review.
 
 ## How to review
 
-1. Work out what the change is for, from the ticket where there is one, and
-   otherwise from the description. Don't take the description's word that the
-   code does what it says.
-2. Check that the change does it: trace the affected behavior end to end,
-   including failure paths, edge cases and state that outlives the change.
-3. Look for regressions the change introduces in Firefox, Focus, BrowserKit and
-   shared components it touches.
-4. Check that tests cover the intended behavior and would fail on a wrong
-   implementation.
-5. Apply `review-guidance.md`.
-
-Don't report:
-
-- Style already enforced by SwiftLint, or personal preferences.
-- Problems that existed before this change, unless the change makes them worse.
-- Issues already raised in `pr-context/comments.md`, by people or by an
-  earlier AI review, unless a later change made them worse.
-- Anything you can't support from the code you read.
+Review the change as `review-guidance.md` says: it holds what to look for and
+what not to report. In addition, don't report issues already raised in
+`pr-context/comments.md`, by people or by an earlier AI review, unless a later
+change made them worse.
 
 ## Findings
 
