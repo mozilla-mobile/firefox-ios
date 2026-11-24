@@ -56,6 +56,29 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
         XCTAssertEqual(delegate.didTapCloseCallCount, 0)
     }
 
+    // On iOS 26 the .done-style bar button renders as a filled capsule in the tint
+    // color; the default white label fails contrast on light action tints (#36789).
+    func testApplyTheme_setsPreviewTitleColorForEveryTheme() {
+        let themes: [any Theme] = [LightTheme(), DarkTheme(), PrivateModeTheme()]
+        for theme in themes {
+            let subject = createSubject(isPreviewEnabled: true)
+            subject.loadViewIfNeeded()
+
+            subject.applyTheme(theme: theme)
+
+            if #available(iOS 26.0, *) {
+                let titleAttributes = subject.navigationItem.rightBarButtonItem?
+                    .titleTextAttributes(for: .normal) ?? [:]
+                let foregroundColor = titleAttributes[.foregroundColor] as? UIColor
+                XCTAssertEqual(
+                    foregroundColor,
+                    theme.colors.textInverted,
+                    "Preview label must use textInverted on \(String(describing: type(of: theme)))"
+                )
+            }
+        }
+    }
+
     func testSelectingSubOptionRow_notifiesDelegateWithRowID() {
         let delegate = MockWebCompatReportSheetDelegate()
         let subject = createSubject()

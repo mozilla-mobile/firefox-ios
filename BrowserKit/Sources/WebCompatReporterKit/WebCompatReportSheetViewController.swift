@@ -451,9 +451,11 @@ public final class WebCompatReportSheetViewController: UIViewController,
         navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
         if theme.isNova {
             previewButton.tintColor = theme.colors.actionPrimary
-            if #available(iOS 26.0, *) {
-                previewButton.setTitleTextAttributes([.foregroundColor: theme.colors.textInverted], for: .normal)
-            }
+        }
+        if #available(iOS 26.0, *) {
+            // iOS 26 renders the .done-style bar button as a filled capsule in the tint
+            // color, so the default white label fails contrast on light action tints.
+            previewButton.setTitleTextAttributes([.foregroundColor: theme.colors.textInverted], for: .normal)
         }
         if hasAppliedThemeOnce {
             reconfigureAllItems()
