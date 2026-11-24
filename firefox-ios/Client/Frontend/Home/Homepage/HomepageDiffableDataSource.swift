@@ -140,7 +140,7 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
             snapshot.appendItems([.messageCard(configuration)], toSection: .messageCard)
         }
 
-        if state.searchBarState.shouldShowSearchBar {
+        if state.searchBarState.isShowingCenterSearchBar {
             snapshot.appendSections([.searchBar])
             snapshot.appendItems([.searchBar], toSection: .searchBar)
         }

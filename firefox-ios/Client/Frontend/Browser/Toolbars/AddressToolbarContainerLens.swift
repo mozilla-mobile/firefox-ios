@@ -6,14 +6,6 @@ import Common
 import Redux
 import ToolbarKit
 
-/// A Lens builds itself directly from the full `AppState`, so it can combine fields from more than
-/// one component state (e.g. `ToolbarState` and `AddressBarState`) without either state needing to
-/// know about the other.
-@MainActor
-protocol StateLens: Equatable {
-    init(appState: AppState, uuid: WindowUUID)
-}
-
 ///  Computes the toolbar derived action lists (`leadingPageActions`, `trailingPageActions`,
 ///  `navigationActions`, `browserActions`, `navigationToolbarActions`) and the toolbar borders from `ToolbarState`
 struct AddressToolbarContainerLens: StateLens {
