@@ -11,14 +11,16 @@ matches the code checked out for Claude even if someone pushes during the run.
     comments.md   the conversation, reviews and inline review comments so far,
                   with earlier AI reviews and their findings marked as such
     since-last-review.md
-                  what changed since the last AI review, so a follow-up
-                  review can cover only that
+                  how the pull request's diff changed since the last AI review,
+                  without the base branch's changes, so a follow-up review can
+                  cover only the author's
     tickets.md    the linked GitHub issues (Jira tickets are ignored for now)
 
 Usage: gather_context.py --repo OWNER/NAME --pr NUMBER --commit SHA --out DIR
 """
 
 import argparse
+import difflib
 import json
 import re
 import subprocess
@@ -113,7 +115,27 @@ def write_comments(out: Path, conversation, reviews, inline, threads) -> None:
     out.joinpath("comments.md").write_text("\n".join(lines))
 
 
-def write_since_last_review(out: Path, repo: str, reviews: list[dict], commit: str) -> None:
+_HUNK_RE = re.compile(r"^@@ [^@]* @@", re.MULTILINE)
+
+
+def _patch_lines(f: dict) -> list[str]:
+    """A file's patch without hunk line numbers, which shift when the base moves."""
+    if "patch" not in f:
+        return ["(no diff: binary or too large)"]
+    return _HUNK_RE.sub("@@", f["patch"]).splitlines()
+
+
+def write_since_last_review(
+    out: Path, repo: str, reviews: list[dict], base_ref: str, files: list[dict], commit: str
+) -> None:
+    """What the author changed since the last AI review, without the base branch's changes.
+
+    Diffing the last reviewed commit against this one would also pick up
+    everything the base branch gained if the branch was rebased or merged with
+    it, and after a rebase the whole pull request again. So compare the pull
+    request's diff then with its diff now: the base branch's changes are in
+    neither, and only what the author changed differs.
+    """
     earlier = [r for r in reviews if is_ai_review(r)]
     path = out.joinpath("since-last-review.md")
     if not earlier:
@@ -123,25 +145,51 @@ def write_since_last_review(out: Path, repo: str, reviews: list[dict], commit: s
     lines = ["# Since the last AI review", "", f"The last AI review was of commit {last}.", ""]
     if last == commit:
         lines.append("That is the commit being reviewed now: nothing has changed since.")
-    else:
-        try:
-            files = gh_api(f"repos/{repo}/compare/{last}...{commit}?per_page=1")["files"]
-        except subprocess.CalledProcessError:
-            lines.append(
-                "It can't be compared with the commit being reviewed now, probably "
-                "because the branch was force-pushed. Treat every change as new."
-            )
-        else:
-            lines += [
-                f"Changes from it to the commit being reviewed now ({commit}). If the "
-                "branch was rebased, these include changes from the base branch.",
-                "",
-            ]
-            for f in files:
-                lines += [f"diff --git a/{f['filename']} b/{f['filename']}", f"({f['status']})"]
-                lines += [f.get("patch", "(no diff: binary or too large)"), ""]
-            if not files:
-                lines.append("(no file changes)")
+        path.write_text("\n".join(lines) + "\n")
+        return
+    try:
+        before = changed_files(repo, base_ref, last)
+    except subprocess.CalledProcessError:
+        lines.append(
+            "Its diff can no longer be read, so treat every change in the pull "
+            "request as new."
+        )
+        path.write_text("\n".join(lines) + "\n")
+        return
+
+    lines += [
+        f"How the pull request's diff changed from that commit to {commit}. Changes "
+        "the base branch gained, from a rebase or merge, are already left out.",
+        "",
+        "For a file whose diff changed, this is a diff of its diff: the first "
+        "character says whether a line was dropped (-) or added (+) since the last "
+        "review, and the rest is the line as it appears in the pull request's diff.",
+        "",
+    ]
+    old = {f["filename"]: f for f in before}
+    new = {f["filename"]: f for f in files}
+    changed = False
+    for name, f in new.items():
+        if name not in old:
+            changed = True
+            lines += [f"## {name}: newly changed by the pull request ({f['status']})", ""]
+            lines += _patch_lines(f) + [""]
+        elif _patch_lines(old[name]) != _patch_lines(f):
+            changed = True
+            lines += [f"## {name}: its changes are different", ""]
+            lines += list(
+                difflib.unified_diff(
+                    _patch_lines(old[name]), _patch_lines(f), lineterm="", n=2
+                )
+            )[2:]
+            lines.append("")
+    for name in old.keys() - new.keys():
+        changed = True
+        lines += [f"## {name}: no longer changed by the pull request", ""]
+    if not changed:
+        lines.append("(the pull request's changes are the same)")
+    if max(len(before), len(files)) >= MAX_COMPARE_FILES:
+        lines.append(f"(Only the first {MAX_COMPARE_FILES} files of each diff are compared.)")
     path.write_text("\n".join(lines) + "\n")
 
 
@@ -184,7 +232,8 @@ def main() -> None:
     out.mkdir(parents=True, exist_ok=True)
 
     pr = gh_api(f"repos/{repo}/pulls/{number}")
-    files = changed_files(repo, pr["base"]["ref"], commit)
+    base_ref = pr["base"]["ref"]
+    files = changed_files(repo, base_ref, commit)
     write_pr(out, pr, commit, files)
     write_diff(out, files)
     reviews = gh_api(f"repos/{repo}/pulls/{number}/reviews?per_page=100", paginate=True)
@@ -195,7 +244,7 @@ def main() -> None:
         gh_api(f"repos/{repo}/pulls/{number}/comments?per_page=100", paginate=True),
         review_threads(repo, number),
     )
-    write_since_last_review(out, repo, reviews, commit)
+    write_since_last_review(out, repo, reviews, base_ref, files, commit)
     write_tickets(out, repo, pr)
 
 

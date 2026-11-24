@@ -95,7 +95,9 @@ The model, effort and turn limit are set in `claude_args` in the workflow.
    - `diff.patch` and `files.json`: the diff.
    - `comments.md`: the discussion, reviews and inline comments, with earlier
      AI reviews and their findings marked.
-   - `since-last-review.md`: the changes since the last AI review.
+   - `since-last-review.md`: how the pull request's changes differ from the
+     last AI review's. It compares the pull request's diff then and now, so
+     changes from rebasing onto or merging the base branch drop out.
    - `tickets.md`: linked GitHub issues and their comments.
 4. `load_guidance.py` matches `review-context.toml` against the changed files
    and writes the matching guidance to `review-guidance.md` (see

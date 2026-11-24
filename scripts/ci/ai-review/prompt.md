@@ -12,8 +12,9 @@ Report only issues worth an engineer's time.
 - `pr-context/comments.md`: the discussion and reviews so far, including
   earlier AI reviews of this pull request and their findings, each with its
   comment id and whether its thread is resolved.
-- `pr-context/since-last-review.md`: what changed since the last AI review, if
-  there was one.
+- `pr-context/since-last-review.md`: how the pull request's changes differ
+  from the last AI review's, if there was one, with the base branch's changes
+  already left out.
 - `pr-head/`: the repository at the pull request's head commit. Read the
   changed files in full there, and their callers, related types and tests.
 - `review-guidance.md`: the project's review guidance for the files this pull
@@ -116,9 +117,8 @@ its summary covers only what's new since then:
 
 - The bullets describe the author's changes since that review's commit, not
   the whole pull request. Don't restate what the earlier review's summary said.
-- If the branch was rebased or merged with the base branch, the diff since the
-  last review also has the base branch's changes. Leave those out, and don't
-  mention the rebase.
+- `since-last-review.md` already leaves out what came from rebasing onto or
+  merging the base branch. Don't mention a rebase or merge.
 - Don't mention earlier findings, whether fixed, still open or untouched, and
   don't describe changes that only address one. The review links to the
   follow-up replies, which cover those changes.
