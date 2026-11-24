@@ -13,15 +13,17 @@ private struct TabGroupsTrayBarPreviewHost: View {
     @State private var isGroupSelected: Bool
     @State private var selectedPanel: TabTrayPanelType = .tabs
     @State private var tabCount: Int
+    @State private var selectedTabCount: Int?
 
     private var theme: any Theme {
         if colorScheme == .dark { return NovaDarkTheme() }
         return NovaLightTheme()
     }
 
-    init(isGroupSelected: Bool = false, tabCount: Int = 3) {
+    init(isGroupSelected: Bool = false, tabCount: Int = 3, selectedTabCount: Int? = nil) {
         _isGroupSelected = State(initialValue: isGroupSelected)
         _tabCount = State(initialValue: tabCount)
+        _selectedTabCount = State(initialValue: selectedTabCount)
     }
 
     var body: some View {
@@ -33,18 +35,20 @@ private struct TabGroupsTrayBarPreviewHost: View {
             selectedPanel: selectedPanel,
             doneAccessibilityLabel: String.TabGroups.Accessibility.DoneButton,
             addTabAccessibilityLabel: String.TabGroups.Accessibility.NewTabButton,
+            finishSelectionAccessibilityLabel: "Done selecting tabs",
             colors: .themed(theme),
             groupIcon: isGroupSelected ? .sfSymbol("house.fill") : nil,
-            groupColor: isGroupSelected ? Color(theme.colors.tabGroupOrange) : nil
+            groupColor: isGroupSelected ? Color(theme.colors.tabGroupOrange) : nil,
+            selectedTabCount: selectedTabCount
         )
 
         VStack(spacing: 0) {
             header(viewModel: viewModel)
 
             HStack(alignment: .top, spacing: 12) {
-                tabCard
+                tabCard(isSelected: (selectedTabCount ?? 0) > 0)
                 if tabCount > 1 {
-                    tabCard
+                    tabCard(isSelected: (selectedTabCount ?? 0) > 1)
                 }
             }
             .padding(.horizontal, 20)
@@ -66,17 +70,45 @@ private struct TabGroupsTrayBarPreviewHost: View {
             .buttonStyle(.plain)
         } moreControl: {
             Menu {
-                Button(String.TabGroups.NewTabGroupMenu) { isGroupSelected = true }
+                Button(String.TabGroups.SelectTabs) { selectedTabCount = 0 }
             } label: {
                 TabGroupsMoreControlLabel(color: viewModel.colors.primaryText, glassTint: viewModel.colors.glassTint)
             }
             .accessibilityLabel(String.TabGroups.Accessibility.OptionsButton)
+        } selectionControls: {
+            HStack(spacing: 0) {
+                Menu {
+                    Button(String.TabGroups.CloseSelectionButton, role: .destructive) {
+                        tabCount -= selectedTabCount ?? 0
+                        selectedTabCount = nil
+                    }
+                } label: {
+                    TabGroupsSelectionActionLabel(title: String.TabGroups.CloseSelectionButton,
+                                                  color: viewModel.colors.primaryText)
+                }
+                Menu {
+                    Button(String.TabGroups.NewTabGroupMenu) {
+                        selectedTabCount = nil
+                        isGroupSelected = true
+                    }
+                } label: {
+                    TabGroupsSelectionActionLabel(title: String.TabGroups.MoveSelectionButton,
+                                                  color: viewModel.colors.primaryText)
+                }
+            }
         }
     }
 
-    private var tabCard: some View {
+    private func tabCard(isSelected: Bool) -> some View {
         RoundedRectangle(cornerRadius: 14)
             .fill(Color(theme.colors.layer2))
+            .overlay {
+                if isSelected {
+                    RoundedRectangle(cornerRadius: 11)
+                        .stroke(Color(theme.colors.tabGroupOrange), lineWidth: 2)
+                        .padding(4)
+                }
+            }
             .overlay(alignment: .topLeading) {
                 Text("Firefox")
                     .font(.system(size: 13, weight: .semibold))
@@ -93,7 +125,14 @@ private struct TabGroupsTrayBarPreviewHost: View {
             tabCount += 1
         case .selectPanel(let panel):
             selectedPanel = panel
-        case .done:
+        case .finishSelection:
+            selectedTabCount = nil
+        case .toggleSelectAll:
+            selectedTabCount = (selectedTabCount ?? 0) > 0 ? 0 : tabCount
+        case .createGroupFromSelection:
+            selectedTabCount = nil
+            isGroupSelected = true
+        case .done, .showSelections:
             break
         }
     }
@@ -143,6 +182,10 @@ struct TabGroupsNativeToolbarPreview: UIViewRepresentable {
 
 #Preview("Selected group") {
     TabGroupsTrayBarPreviewHost(isGroupSelected: true, tabCount: 1)
+}
+
+#Preview("Selecting tabs") {
+    TabGroupsTrayBarPreviewHost(selectedTabCount: 2)
 }
 
 #Preview("Dark") {

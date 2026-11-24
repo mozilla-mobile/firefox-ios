@@ -24,6 +24,7 @@ private struct TabGroupsContextMenuPreviewHost: View {
             selectedPanel: .tabs,
             doneAccessibilityLabel: String.TabGroups.Accessibility.DoneButton,
             addTabAccessibilityLabel: String.TabGroups.Accessibility.NewTabButton,
+            finishSelectionAccessibilityLabel: "Done selecting tabs",
             colors: .themed(theme)
         )
         let menuModel = TabGroupsContextMenuViewModel(
@@ -40,6 +41,8 @@ private struct TabGroupsContextMenuPreviewHost: View {
                     .buttonStyle(.plain)
             } moreControl: {
                 TabGroupsContextMenuView(viewModel: menuModel) { _ in }
+            } selectionControls: {
+                EmptyView()
             }
 
             RoundedRectangle(cornerRadius: 14)

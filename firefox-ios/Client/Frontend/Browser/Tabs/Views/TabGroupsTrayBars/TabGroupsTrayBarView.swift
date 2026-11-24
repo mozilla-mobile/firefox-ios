@@ -5,33 +5,70 @@
 import Common
 import SwiftUI
 
-struct TabGroupsTrayTopBar<DestinationControl: View, MoreControl: View>: View {
+struct TabGroupsTrayTopBar<DestinationControl: View, MoreControl: View, SelectionControls: View>: View {
     let viewModel: TabGroupsTrayBarViewModel
     let onAction: (TabGroupsTrayBarAction) -> Void
     private let destinationControl: DestinationControl
     private let moreControl: MoreControl
+    private let selectionControls: SelectionControls
 
     init(viewModel: TabGroupsTrayBarViewModel,
          onAction: @escaping (TabGroupsTrayBarAction) -> Void,
          @ViewBuilder destinationControl: () -> DestinationControl,
-         @ViewBuilder moreControl: () -> MoreControl) {
+         @ViewBuilder moreControl: () -> MoreControl,
+         @ViewBuilder selectionControls: () -> SelectionControls) {
         self.viewModel = viewModel
         self.onAction = onAction
         self.destinationControl = destinationControl()
         self.moreControl = moreControl()
+        self.selectionControls = selectionControls()
     }
 
     var body: some View {
-        ZStack {
-            HStack {
-                Spacer()
-                moreControl
+        Group {
+            if viewModel.selectedTabCount != nil {
+                selectionHeader
+            } else {
+                ZStack {
+                    HStack {
+                        Spacer()
+                        moreControl
+                    }
+                    destinationControl
+                        .padding(.horizontal, 50)
+                }
             }
-            destinationControl
-                .padding(.horizontal, 50)
         }
         .padding(.horizontal, 16)
         .frame(minHeight: TabGroupsTrayBarMetrics.topHeight)
+    }
+
+    private var selectionHeader: some View {
+        HStack(spacing: 10) {
+            Button(viewModel.selectionToggleTitle) {
+                onAction(.toggleSelectAll)
+            }
+            .font(.subheadline.weight(.semibold))
+            .foregroundStyle(viewModel.colors.primaryText)
+            .padding(.horizontal, 12)
+            .frame(minHeight: TabGroupsTrayBarMetrics.buttonSize)
+            .tabGroupsGlass(in: Capsule(), fallbackTint: viewModel.colors.glassTint)
+            .accessibilityIdentifier("tabGroupsTray.toggleSelectAll")
+
+            Spacer(minLength: 0)
+
+            selectionControls
+                .disabled(!viewModel.hasSelectedTabs)
+                .opacity(viewModel.hasSelectedTabs ? 1 : 0.5)
+                .tabGroupsGlass(in: Capsule(), fallbackTint: viewModel.colors.glassTint)
+
+            TabGroupsTrayDoneButton(viewModel: viewModel,
+                                    accessibilityLabel: viewModel.finishSelectionAccessibilityLabel,
+                                    identifier: "tabGroupsTray.finishSelection") {
+                onAction(.finishSelection)
+            }
+        }
+        .buttonStyle(.plain)
     }
 }
 
@@ -87,6 +124,20 @@ struct TabGroupsMoreControlLabel: View {
             .frame(width: TabGroupsTrayBarMetrics.buttonSize, height: TabGroupsTrayBarMetrics.buttonSize)
             .tabGroupsGlass(in: Circle(), fallbackTint: glassTint)
             .accessibilityHidden(true)
+    }
+}
+
+struct TabGroupsSelectionActionLabel: View {
+    let title: String
+    var color = Color(uiColor: .label)
+
+    var body: some View {
+        Text(title)
+            .font(.subheadline.weight(.semibold))
+            .foregroundStyle(color)
+            .padding(.horizontal, 12)
+            .frame(minHeight: TabGroupsTrayBarMetrics.buttonSize)
+            .contentShape(Rectangle())
     }
 }
 
