@@ -14,7 +14,7 @@ pipelines:
         should_always_run: workflow
 
 workflows:
-  Firefox_Nightly_SmokeTest_Iphone:
+  firefox_nightly_smoketest_iphone:
     envs:
     - SMOKETEST_SCHEME: Fennec
     - SMOKETEST_DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
@@ -22,7 +22,7 @@ workflows:
     after_run:
     - _firefox_smoketest
 
-  Firefox_SmokeTest_Iphone:
+  firefox_smoketest_iphone:
     envs:
     - SMOKETEST_SCHEME: Firefox
     - SMOKETEST_DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
@@ -30,7 +30,7 @@ workflows:
     after_run:
     - _firefox_smoketest
 
-  Firefox_SmokeTest_Ipad:
+  firefox_smoketest_ipad:
     envs:
     - SMOKETEST_SCHEME: Firefox
     - SMOKETEST_DESTINATION: platform=iOS Simulator,name=iPad (A16),OS=27.0
@@ -38,7 +38,7 @@ workflows:
     after_run:
     - _firefox_smoketest
 
-  Firefox_SmokeTest_IphoneDuo:
+  firefox_smoketest_iphoneduo:
     envs:
     - SMOKETEST_SCHEME: Firefox
     - SMOKETEST_DESTINATION: platform=iOS Simulator,name=iPhone Duo,OS=27.1
@@ -111,7 +111,7 @@ workflows:
             Build Log|${BITRISE_BUILD_URL}
             Test Report|${BITRISE_BUILD_URL}?tab=tests
 
-  Focus_Nightly_Tests_iOS18:
+  focus_tests_ios18:
     envs:
     - FOCUS_IOS_VERSION: "18.6"
     - FOCUS_IPHONE_DESTINATION: platform=iOS Simulator,name=iPhone 16,OS=18.6
@@ -119,7 +119,7 @@ workflows:
     after_run:
     - _focus_nightly_uitests
 
-  Focus_Nightly_Tests_iOS26:
+  focus_tests_ios26:
     envs:
     - FOCUS_IOS_VERSION: "26.5"
     - FOCUS_IPHONE_DESTINATION: platform=iOS Simulator,name=iPhone 17,OS=26.5
@@ -127,7 +127,7 @@ workflows:
     after_run:
     - _focus_nightly_uitests
 
-  Focus_Nightly_Tests_iOS27:
+  focus_tests_ios27:
     envs:
     - FOCUS_IOS_VERSION: "27.0"
     - FOCUS_IPHONE_DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
