@@ -42,13 +42,18 @@ public struct KeyboardState: Sendable {
     /// height will be zero. (Even if the height of the *invisible* keyboard will look normal!)
     @MainActor
     public func intersectionHeightForView(_ view: UIView) -> CGFloat {
+        return intersectionForView(view).size.height
+    }
+
+    /// Return the part of the keyboard that overlaps with the specified view, in the view's coordinates.
+    @MainActor
+    public func intersectionForView(_ view: UIView) -> CGRect {
         guard let keyboardEndFrame = keyboardEndFrame else {
-            return 0
+            return .zero
         }
 
         let convertedKeyboardFrame = view.convert(keyboardEndFrame, from: nil)
-        let intersection = convertedKeyboardFrame.intersection(view.bounds)
-        return intersection.size.height
+        return convertedKeyboardFrame.intersection(view.bounds)
     }
 }
 
