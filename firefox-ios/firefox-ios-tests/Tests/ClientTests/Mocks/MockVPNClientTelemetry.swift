@@ -22,7 +22,7 @@ final class MockVPNClientTelemetry: VPNClientTelemetry {
     var stops: [VPNConnectionStopSource] = []
     var onboardingShownCount = 0
     var onboardingCancelledCount = 0
-    var onboardingCTATappedCount = 0
+    var onboardingPrimaryButtonTappedCount = 0
     var onboardingLearnMoreLinkTappedCount = 0
     var onRecord: (() -> Void)?
 
@@ -55,8 +55,8 @@ final class MockVPNClientTelemetry: VPNClientTelemetry {
         onboardingCancelledCount += 1
     }
 
-    func recordOnboardingCTATapped() {
-        onboardingCTATappedCount += 1
+    func recordOnboardingPrimaryButtonTapped() {
+        onboardingPrimaryButtonTappedCount += 1
     }
 
     func recordOnboardingLearnMoreLinkTapped() {

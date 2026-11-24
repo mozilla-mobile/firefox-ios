@@ -97,7 +97,7 @@ protocol VPNClientTelemetry {
     func recordAlertOptionSelected(_ option: VPNAlertOption, alertType: VPNAlertType)
     func recordOnboardingShown()
     func recordOnboardingCancelled()
-    func recordOnboardingCTATapped()
+    func recordOnboardingPrimaryButtonTapped()
     func recordOnboardingLearnMoreLinkTapped()
 }
 
@@ -174,8 +174,8 @@ struct DefaultVPNTelemetry: VPNTelemetry, VPNClientTelemetry {
         gleanWrapper.recordEvent(for: GleanMetrics.Vpn.onboardingCancelled)
     }
 
-    func recordOnboardingCTATapped() {
-        gleanWrapper.recordEvent(for: GleanMetrics.Vpn.onboardingCtaTapped)
+    func recordOnboardingPrimaryButtonTapped() {
+        gleanWrapper.recordEvent(for: GleanMetrics.Vpn.onboardingPrimaryButtonTapped)
     }
 
     func recordOnboardingLearnMoreLinkTapped() {

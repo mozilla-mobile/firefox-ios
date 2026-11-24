@@ -121,11 +121,11 @@ final class DefaultVPNTelemetryTests: XCTestCase {
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
-    func test_recordOnboardingCTATapped_recordsEvent() throws {
+    func test_recordOnboardingPrimaryButtonTapped_recordsEvent() throws {
         let subject = createSubject()
-        let event = GleanMetrics.Vpn.onboardingCtaTapped
+        let event = GleanMetrics.Vpn.onboardingPrimaryButtonTapped
 
-        subject.recordOnboardingCTATapped()
+        subject.recordOnboardingPrimaryButtonTapped()
 
         let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
         XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)

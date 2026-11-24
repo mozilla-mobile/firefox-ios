@@ -103,7 +103,7 @@ vpn:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
-  onboarding_cta_tapped:
+  onboarding_primary_button_tapped:
     type: event
     description: |
       Recorded when the user taps "Turn On VPN" on the VPN onboarding sheet.
