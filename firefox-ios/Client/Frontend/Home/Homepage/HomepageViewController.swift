@@ -449,7 +449,12 @@ final class HomepageViewController: UIViewController,
                                         == homepageState.wallpaperState.availableContentHeight
             self.homepageState = state
 
+            let isCenterSearchBarReturning = embeddedAddressBarView.isHidden
+                                             && state.searchBarState.isShowingCenterSearchBar
             embeddedAddressBarView.isHidden = !state.searchBarState.isShowingCenterSearchBar
+            if isCenterSearchBarReturning {
+                animateCenterSearchBarBackDown()
+            }
 
             refreshHomepageDataSourceSnapshot(
                 animatingDifferences: animatingDifferences
@@ -464,6 +469,29 @@ final class HomepageViewController: UIViewController,
         if state.telemetryState.shouldTriggerImpression {
             resetTrackedObjects()
             trackVisibleItemImpressions()
+        }
+    }
+
+    private func animateCenterSearchBarBackDown() {
+        guard !UIAccessibility.isReduceMotionEnabled, let window = view.window else { return }
+
+        let frameInWindow = embeddedAddressBarView.convert(embeddedAddressBarView.bounds, to: window)
+        embeddedAddressBarView.transform = CGAffineTransform(
+            translationX: 0,
+            y: window.safeAreaInsets.top - frameInWindow.minY
+        )
+        embeddedAddressBarView.alpha = 0
+
+        UIView.animate(
+            withDuration: HomepageUX.centerSearchBarTapAnimationDuration,
+            delay: 0,
+            options: .curveEaseInOut
+        ) {
+            self.embeddedAddressBarView.transform = .identity
+        }
+
+        UIView.animate(withDuration: HomepageUX.centerSearchBarSwapFadeDuration) {
+            self.embeddedAddressBarView.alpha = 1
         }
     }
 
