@@ -5007,132 +5007,142 @@ extension String {
             key: "TabGroups.NewTabGroupMenu.v163",
             tableName: "TabGroups",
             value: "New Tab Group…",
-            comment: "Menu action that opens the panel for creating a tab group. The ellipsis indicates that another step is required.")
-        public static let SwitchTabGroups = MZLocalizedString(
-            key: "TabGroups.SwitchTabGroups.v163",
-            tableName: "TabGroups",
-            value: "Switch Tab Groups",
-            comment: "Toolbar menu item that opens the submenu for switching between tab groups.")
-        public static let MoveToTabGroup = MZLocalizedString(
-            key: "TabGroups.MoveToTabGroup.v163",
-            tableName: "TabGroups",
-            value: "Move to Tab Group",
-            comment: "Toolbar menu item that opens the submenu for moving the current tab into another group.")
-        public static let MoveToNewTabGroup = MZLocalizedString(
-            key: "TabGroups.MoveToNewTabGroup.v163",
-            tableName: "TabGroups",
-            value: "Move to New Tab Group…",
-            comment: "Toolbar menu action that creates a new group and moves the current tab into it.")
+            comment: "Menu action that opens the panel for creating a tab group. The ellipsis indicates that the user needs to name and save the group.")
         public static let CloseAllTabs = MZLocalizedString(
             key: "TabGroups.CloseAllTabs.v163",
             tableName: "TabGroups",
             value: "Close All Tabs (%@)",
-            comment: "Menu action in the tab tray and toolbar that closes all tabs in the current group or ungrouped tab list. %@ is the number of tabs; it can be 1.")
+            comment: "Menu action in the open tabs screen and the browser toolbar. Closes all tabs in the current group, or all ungrouped tabs when viewing that list. %@ is the number of tabs. It can be 1.")
         public static let OpenInNewTabGroup = MZLocalizedString(
             key: "TabGroups.OpenInNewTabGroup.v163",
             tableName: "TabGroups",
             value: "Open in New Tab Group…",
-            comment: "Web link context menu action that opens the link in a newly created tab group.")
+            comment: "Context menu item for a web link. Opens the panel to create a new tab group, then opens the link in a new tab in the newly created group.")
         public static let OpenInTabGroup = MZLocalizedString(
             key: "TabGroups.OpenInTabGroup.v163",
             tableName: "TabGroups",
             value: "Open in Tab Group",
-            comment: "Web link context menu item that opens the submenu for choosing the tab group in which to open the link.")
+            comment: "Context menu item for a web link. Opens a secondary menu that allows the user to choose the tab group in which to open the link.")
         public static let MoveTabToNewGroup = MZLocalizedString(
             key: "TabGroups.MoveTabToNewGroup.v163",
             tableName: "TabGroups",
             value: "Move Tab to New Group…",
-            comment: "Tab card context menu action that creates a new group and moves the tab into it.")
+            comment: "Tab context menu item. Displayed when no tab groups exist. Opens the panel to create a new group, and moves the tab into it.")
         public static let MoveTab = MZLocalizedString(
             key: "TabGroups.MoveTab.v163",
             tableName: "TabGroups",
             value: "Move Tab",
-            comment: "Tab card context menu item that opens the submenu for moving the tab into another group.")
-        public static let ManageTitle = MZLocalizedString(
-            key: "TabGroups.ManageTitle.v163",
-            tableName: "TabGroups",
-            value: "Manage “%@”",
-            comment: "Heading of the management menu for the current tab group or ungrouped tab list. %@ is a user-created group name or the localized name of the ungrouped tab list, such as “All Tabs (20)”.")
-        public static let EditGroup = MZLocalizedString(
-            key: "TabGroups.EditGroup.v163",
-            tableName: "TabGroups",
-            value: "Edit",
-            comment: "Quick action in a tab group management menu that opens the group editing panel.")
-        public static let ShareGroup = MZLocalizedString(
-            key: "TabGroups.ShareGroup.v163",
-            tableName: "TabGroups",
-            value: "Share Group",
-            comment: "Menu action that shares the current tab group.")
-        public static let CloseTabsOlderThan = MZLocalizedString(
-            key: "TabGroups.CloseTabsOlderThan.v163",
-            tableName: "TabGroups",
-            value: "Close Tabs Older Than…",
-            comment: "Submenu heading for closing older tabs. Options such as “1 Day Ago” are separate menu items, not inserted into this text.")
-        public static let DeleteGroup = MZLocalizedString(
-            key: "TabGroups.DeleteGroup.v163",
-            tableName: "TabGroups",
-            value: "Delete",
-            comment: "Destructive action that deletes a tab group and closes its tabs. Used in the management menu and deletion confirmation alert.")
-        public static let DeleteGroupTitle = MZLocalizedString(
-            key: "TabGroups.DeleteGroupTitle.v163",
-            tableName: "TabGroups",
-            value: "Delete “%@”?",
-            comment: "Title of the alert confirming deletion of a tab group and its tabs. %@ is the user-created group name.")
-        public static let DeleteGroupMessage = MZLocalizedString(
-            key: "TabGroups.DeleteGroupMessage.v163",
-            tableName: "TabGroups",
-            value: "This closes all tabs (%@) in the group and permanently deletes the group.",
-            comment: "Message in the tab group deletion alert. %@ is the number of tabs that will be closed when the group is deleted; it can be 1.")
-        public static let Ungroup = MZLocalizedString(
-            key: "TabGroups.Ungroup.v163",
-            tableName: "TabGroups",
-            value: "Ungroup",
-            comment: "Action that removes a tab group while keeping its tabs open. Used in the management menu and ungrouping confirmation alert.")
-        public static let UngroupTitle = MZLocalizedString(
-            key: "TabGroups.UngroupTitle.v163",
-            tableName: "TabGroups",
-            value: "Ungroup “%@”?",
-            comment: "Title of the alert confirming removal of a tab group while keeping its tabs open. %@ is the user-created group name.")
-        public static let UngroupMessage = MZLocalizedString(
-            key: "TabGroups.UngroupMessage.v163",
-            tableName: "TabGroups",
-            value: "This keeps all tabs (%@) open, but permanently deletes the group.",
-            comment: "Message in the ungrouping confirmation alert. %@ is the number of tabs that will remain open after the group is removed; it can be 1.")
+            comment: "Tab context menu item. Opens a secondary menu that allows the user to choose the tab group to which the selected tab will be moved.")
+
+        public enum ManagementMenu {
+            public static let ManageTitle = MZLocalizedString(
+                key: "TabGroups.ManageTitle.v163",
+                tableName: "TabGroups",
+                value: "Manage “%@”",
+                comment: "Heading in the tab group management menu, which contains options such as ungrouping tabs or deleting the group. %@ is the group name entered by the user.")
+            public static let ManageUngroupedTabsTitle = MZLocalizedString(
+                key: "TabGroups.ManageUngroupedTabsTitle.v163",
+                tableName: "TabGroups",
+                value: "Manage “Ungrouped (%@)”",
+                comment: "Heading of the management menu for tabs outside any group. %@ is the formatted number of ungrouped tabs. It can be 0, 1, or more.")
+            public static let EditGroup = MZLocalizedString(
+                key: "TabGroups.EditGroup.v163",
+                tableName: "TabGroups",
+                value: "Edit",
+                comment: "Quick action in tab group management menu. Opens the tab group editing panel.")
+            public static let ShareGroup = MZLocalizedString(
+                key: "TabGroups.ShareGroup.v163",
+                tableName: "TabGroups",
+                value: "Share Group",
+                comment: "Item in tab group management menu. Allows user to share links to all tabs in the current tab group.")
+            public static let CloseTabsOlderThan = MZLocalizedString(
+                key: "TabGroups.CloseTabsOlderThan.v163",
+                tableName: "TabGroups",
+                value: "Close Tabs Older Than…",
+                comment: "Item in the tab group management menu. Opens a secondary menu to close tabs older than a given time. Time options such as “1 Day Ago” are separate menu items.")
+            public static let DeleteGroup = MZLocalizedString(
+                key: "TabGroups.DeleteGroup.v163",
+                tableName: "TabGroups",
+                value: "Delete",
+                comment: "Item in tab group management menu. Destructive action that deletes the tab group and closes its tabs.")
+            public static let Ungroup = MZLocalizedString(
+                key: "TabGroups.Ungroup.v163",
+                tableName: "TabGroups",
+                value: "Ungroup",
+                comment: "Item in the tab group management menu. Deletes a tab group but keeps its tabs open.")
+            public static let SelectTabs = MZLocalizedString(
+                key: "TabGroups.SelectTabs.v163",
+                tableName: "TabGroups",
+                value: "Select Tabs",
+                comment: "Item in tab group management menu. Switches the interface to tab selection mode (tapping a tab marks it as selected instead of opening it). Batch actions (like Close or Move) can then be applied to selected tabs.")
+        }
+
+        public enum DeleteConfirmation {
+            public static let DeleteGroupTitle = MZLocalizedString(
+                key: "TabGroups.DeleteGroupTitle.v163",
+                tableName: "TabGroups",
+                value: "Delete “%@”?",
+                comment: "Title of the dialogue window to confirm deleting a tab group. %@ is the name of the tab group as defined by the user.")
+            public static let DeleteGroupMessage = MZLocalizedString(
+                key: "TabGroups.DeleteGroupMessage.v163",
+                tableName: "TabGroups",
+                value: "This closes all tabs (%@) in the group and permanently deletes the group.",
+                comment: "Message of the dialogue window to confirm deleting a tab group. %@ is the number of tabs that will be closed when the group is deleted; it can be 1.")
+            public static let ConfirmButton = MZLocalizedString(
+                key: "TabGroups.DeleteConfirmation.ConfirmButton.v163",
+                tableName: "TabGroups",
+                value: "Delete",
+                comment: "Button in the confirmation dialogue that deletes the tab group and closes its tabs.")
+        }
+
+        public enum UngroupConfirmation {
+            public static let UngroupTitle = MZLocalizedString(
+                key: "TabGroups.UngroupTitle.v163",
+                tableName: "TabGroups",
+                value: "Ungroup “%@”?",
+                comment: "Title of the dialogue window to confirm deleting a tab group while keeping its tabs open. %@ is the name of the group as defined by the user.")
+            public static let UngroupMessage = MZLocalizedString(
+                key: "TabGroups.UngroupMessage.v163",
+                tableName: "TabGroups",
+                value: "This keeps all tabs (%@) open, but permanently deletes the group.",
+                comment: "Message of the dialogue window to confirm deleting a tab group while keeping its tabs open. %@ is the number of tabs that will remain open after the group is removed; it can be 1.")
+            public static let ConfirmButton = MZLocalizedString(
+                key: "TabGroups.UngroupConfirmation.ConfirmButton.v163",
+                tableName: "TabGroups",
+                value: "Ungroup",
+                comment: "Button in the confirmation dialogue that removes the tab group and keeps its tabs open.")
+        }
+
         public static let Cancel = MZLocalizedString(
             key: "TabGroups.Cancel.v163",
             tableName: "TabGroups",
             value: "Cancel",
-            comment: "Button that cancels deleting or ungrouping a tab group and dismisses the confirmation alert.")
-        public static let SelectTabs = MZLocalizedString(
-            key: "TabGroups.SelectTabs.v163",
-            tableName: "TabGroups",
-            value: "Select Tabs",
-            comment: "Menu action that enters tab selection mode.")
+            comment: "Button that cancels deleting or ungrouping a tab group and dismisses the dialogue window.")
         public static let SelectTabsPrompt = MZLocalizedString(
             key: "TabGroups.SelectTabsPrompt.v163",
             tableName: "TabGroups",
             value: "Select Tabs",
-            comment: "Label of the selection button in tab selection mode while no tabs are selected. Once tabs are selected, it shows their count instead.")
+            comment: "Tab selection mode - Label of the selection button when it is disabled because no tabs have been selected yet, so no batch actions can be performed.")
         public static let SelectAll = MZLocalizedString(
             key: "TabGroups.SelectAll.v163",
             tableName: "TabGroups",
             value: "Select All",
-            comment: "Button that selects all tabs in the current group or ungrouped tab list.")
+            comment: "Tab selection mode - Button that selects all the tabs in the current group (or in the list of ungrouped tabs).")
         public static let DeselectAll = MZLocalizedString(
             key: "TabGroups.DeselectAll.v163",
             tableName: "TabGroups",
             value: "Deselect All",
-            comment: "Button that clears the current tab selection.")
+            comment: "Tab selection mode - Button that clears the current tab selection.")
         public static let CloseSelectionButton = MZLocalizedString(
             key: "TabGroups.CloseSelectionButton.v163",
             tableName: "TabGroups",
             value: "Close",
-            comment: "Button in tab selection mode that opens the confirmation menu for closing the selected tabs.")
+            comment: "Tab selection mode. Button that opens a menu with an action to close all selected tabs.")
         public static let MoveSelectionButton = MZLocalizedString(
             key: "TabGroups.MoveSelectionButton.v163",
             tableName: "TabGroups",
             value: "Move",
-            comment: "Button in tab selection mode that opens the destination menu for moving the selected tabs.")
+            comment: "Tab selection mode - Button to batch move the selected tabs to another group. When tapped, opens the group selection menu.")
         public static let ShowSelections = MZLocalizedString(
             key: "TabGroups.ShowSelections.v163",
             tableName: "TabGroups",
@@ -5142,34 +5152,34 @@ extension String {
             key: "TabGroups.SelectedTabsTitle.v163",
             tableName: "TabGroups",
             value: "Selected Tabs (%@)",
-            comment: "Title of the panel containing selected tabs. %@ is the number of selected tabs; it can be 1.")
+            comment: "Tab selection mode - Title of the panel containing selected tabs. %@ is the number of selected tabs; it can be 1.")
         public static let MoveTabsToTitle = MZLocalizedString(
             key: "TabGroups.MoveTabsToTitle.v163",
             tableName: "TabGroups",
             value: "Move Tabs (%@) to…",
-            comment: "Heading of the destination menu for moving selected tabs. %@ is the number of selected tabs; it can be 1. Destinations are listed separately by their user-created group names.")
+            comment: "Tab selection mode. Heading of the menu for choosing where to move the selected tabs. The menu lists available tab groups and the ungrouped tab list. %@ is the number of selected tabs. It can be 1. Keep the heading short, for example “Destination for tabs (3)…”.")
 
         public enum Accessibility {
             public static let MenuButton = MZLocalizedString(
                 key: "TabGroups.Accessibility.MenuButton.v163",
                 tableName: "TabGroups",
                 value: "Tab groups menu",
-                comment: "VoiceOver label for the tab tray button that opens the tab groups menu.")
+                comment: "VoiceOver label for the button above the grid of open tabs. Opens a menu for switching between tab groups and ungrouped tabs.")
             public static let OptionsButton = MZLocalizedString(
                 key: "TabGroups.Accessibility.OptionsButton.v163",
                 tableName: "TabGroups",
                 value: "Tab group options",
-                comment: "VoiceOver label for the button that opens options for the current tab group.")
+                comment: "VoiceOver label for the options button above the grid of open tabs. Opens the management menu for the current group or ungrouped tabs.")
             public static let NewTabButton = MZLocalizedString(
                 key: "TabGroups.Accessibility.NewTabButton.v163",
                 tableName: "TabGroups",
                 value: "New tab",
-                comment: "VoiceOver label for the tab tray button that opens a new tab.")
+                comment: "VoiceOver label for the plus button in the toolbar below the grid of open tabs. Opens a new tab.")
             public static let DoneButton = MZLocalizedString(
                 key: "TabGroups.Accessibility.DoneButton.v163",
                 tableName: "TabGroups",
                 value: "Done",
-                comment: "VoiceOver label for the button that closes the tab tray.")
+                comment: "VoiceOver label for a checkmark button. It returns to browsing from the open tabs screen, finishes tab selection, closes the selected tabs panel, or saves changes in the tab group editor.")
             public static let GroupNameRequired = MZLocalizedString(
                 key: "TabGroups.Accessibility.GroupNameRequired.v163",
                 tableName: "TabGroups",
@@ -9456,6 +9466,22 @@ extension String {
                 value: "Close This Tab",
                 comment: "Label for button on action sheet, accessed via long pressing tab toolbar button, that closes the current tab when pressed"
             )
+
+            public static let SwitchTabGroups = MZLocalizedString(
+                key: "TabGroups.SwitchTabGroups.v163",
+                tableName: "TabGroups",
+                value: "Switch Tab Groups",
+                comment: "Toolbar menu item. Opens a secondary menu that allows the user to quickly navigate and switch between tab groups.")
+            public static let MoveToTabGroup = MZLocalizedString(
+                key: "TabGroups.MoveToTabGroup.v163",
+                tableName: "TabGroups",
+                value: "Move to Tab Group",
+                comment: "Toolbar menu item. Opens a secondary menu that allows the user to move the current tab into another tab group.")
+            public static let MoveToNewTabGroup = MZLocalizedString(
+                key: "TabGroups.MoveToNewTabGroup.v163",
+                tableName: "TabGroups",
+                value: "Move to New Tab Group…",
+                comment: "Toolbar menu item. Displayed when there are no existing tab groups. Opens the panel to create a new group and moves the current tab into it.")
         }
     }
 
