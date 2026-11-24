@@ -5,7 +5,7 @@
 import Common
 
 /// A Lens allows our UI layers (e.g. a `UIViewController`) to subscribe to multiple pieces of Redux state
-/// (e.g. `ToolbarState` and `TranslationsState`). This is helpful because is is unnecessary to duplicate state across
+/// (e.g. `ToolbarState` and `TranslationsState`). This is helpful because it is unnecessary to duplicate state across
 /// multiple Redux `State`s and update that duplicate same state in multiple `Reducer`s.
 ///
 /// A Lens builds itself directly from the full `AppState`. This allows the Lens to combine fields from multiple component
