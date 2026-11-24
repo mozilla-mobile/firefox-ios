@@ -336,6 +336,7 @@
         "PrivateBrowsingTestIphone",
         "PrivateBrowsingTestIphone\/testSwitchBetweenPrivateTabsToastButton_tabTrayExperimentOff()",
         "PrivateBrowsingTestIphone\/testSwitchBetweenPrivateTabsToastButton_tabTrayExperimentOn()",
+        "QuickAnswersTests",
         "ReadingListTests",
         "ReadingListTests\/testAddToReaderListOptions()",
         "ReadingListTests\/testAddToReadingList()",

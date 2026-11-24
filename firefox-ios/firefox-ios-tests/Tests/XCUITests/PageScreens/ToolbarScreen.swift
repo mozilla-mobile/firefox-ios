@@ -269,16 +269,23 @@ final class ToolbarScreen {
     /// Returns whether the tip was dismissed.
     @discardableResult
     func dismissGoogleLensTipIfPresented() -> Bool {
-        guard googleLensTipTitle.mozWaitForElementToExist(timeout: TIMEOUT_PICKER_PROBE, failOnTimeout: false) else {
+        return dismissTipIfPresented(titled: googleLensTipTitle)
+    }
+
+    /// Closes the TipKit tip whose title is `title` with its "x", if it shows within a short probe.
+    /// Returns whether the tip was dismissed.
+    @discardableResult
+    func dismissTipIfPresented(titled title: XCUIElement) -> Bool {
+        guard title.mozWaitForElementToExist(timeout: TIMEOUT_PICKER_PROBE, failOnTimeout: false) else {
             return false
         }
         // The iPad popover ignores taps on its "x", so fall back to tapping outside the tip
-        closeButton(nextTo: googleLensTipTitle)?.tap()
-        if !BaseTestCase().mozWaitForElementToNotExist(googleLensTipTitle,
+        closeButton(nextTo: title)?.tap()
+        if !BaseTestCase().mozWaitForElementToNotExist(title,
                                                        timeout: TIMEOUT_PICKER_PROBE,
                                                        failOnTimeout: false) {
             app.coordinate(withNormalizedOffset: CGVector(dx: 0.02, dy: 0.5)).tap()
-            BaseTestCase().mozWaitForElementToNotExist(googleLensTipTitle)
+            BaseTestCase().mozWaitForElementToNotExist(title)
         }
         return true
     }
