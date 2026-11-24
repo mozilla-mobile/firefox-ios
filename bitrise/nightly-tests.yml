@@ -410,6 +410,7 @@ workflows:
     - pull-intermediate-files@1: {}
     - xcode-test-without-building@0:
         title: Run full functional tests shard
+        timeout: 7200
         inputs:
         - only_testing: $BITRISE_TEST_SHARDS_PATH/$BITRISE_IO_PARALLEL_INDEX
         - destination: $DESTINATION
