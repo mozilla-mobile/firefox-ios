@@ -7,6 +7,10 @@
 import XCTest
 
 class NimbusFeatureVariablesTests: XCTestCase {
+    func testFails() throws {
+        XCTAssert(false)
+    }
+
     func testScalarTypeCoercion() throws {
         let variables = JSONVariables(with: [
             "intVariable": 3,

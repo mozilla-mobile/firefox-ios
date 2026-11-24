@@ -11,6 +11,10 @@ final class NimbusArgumentProcessorTests: XCTestCase {
         {"data": []}
     """
 
+    func testFails() throws {
+        XCTAssert(false)
+    }
+
     func testCommandLineArgs() throws {
         XCTAssertNil(ArgumentProcessor.createCommandLineArgs(args: []))
         // No --nimbus-cli or --version 1

@@ -7,6 +7,10 @@
 import XCTest
 
 final class EventStoreTests: XCTestCase {
+    func testFails() throws {
+        XCTAssert(false)
+    }
+
     var nimbus: NimbusInterface!
 
     var events: NimbusEventStore {

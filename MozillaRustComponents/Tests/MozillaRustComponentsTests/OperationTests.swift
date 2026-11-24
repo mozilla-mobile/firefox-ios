@@ -6,6 +6,10 @@ import XCTest
 @testable import MozillaAppServices
 
 final class OperationTests: XCTestCase {
+    func testFails() throws {
+        XCTAssert(false)
+    }
+
     lazy var queue: OperationQueue = {
         let operationQueue = OperationQueue()
         operationQueue.maxConcurrentOperationCount = 1

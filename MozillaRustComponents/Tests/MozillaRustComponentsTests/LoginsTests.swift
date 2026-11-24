@@ -12,6 +12,10 @@ import MozillaAppServices
 class LoginsTests: XCTestCase {
     var storage: LoginsStorage!
 
+    func testFails() throws {
+        XCTAssert(false)
+    }
+
     override func setUp() {
         super.setUp()
         Glean.shared.resetGlean(clearStores: true)

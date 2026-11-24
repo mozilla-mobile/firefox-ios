@@ -9,6 +9,10 @@ import UIKit
 import XCTest
 
 class NimbusTests: XCTestCase {
+    func testFails() throws {
+        XCTAssert(false)
+    }
+
     override func setUp() {
         // Due to recent changes in how upload enabled works, we need to register the custom
         // Sync pings before they can collect data in tests, even here in Nimbus unfortunately.

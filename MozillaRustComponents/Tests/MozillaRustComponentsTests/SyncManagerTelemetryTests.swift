@@ -9,6 +9,10 @@ import Glean
 import XCTest
 
 class SyncManagerTelemetryTests: XCTestCase {
+    func testFails() throws {
+        XCTAssert(false)
+    }
+
     private var now: Int64 = 0
 
     override func setUp() {

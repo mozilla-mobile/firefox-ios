@@ -173,6 +173,10 @@ let DummyTree0: [String: Any] = [
 ]
 
 class PlacesTests: XCTestCase {
+    func testFails() throws {
+        XCTAssert(false)
+    }
+
     // XXX: We don't clean up PlacesAPIs properly (issue 749), so
     // it's not great that we create a new one of these for each test!
     var api: PlacesAPI!

@@ -7,6 +7,10 @@
 import XCTest
 
 class NimbusMessagingTests: XCTestCase {
+    func testFails() throws {
+        XCTAssert(false)
+    }
+
     func createDatabasePath() -> String {
         // For whatever reason, we cannot send a file:// because it'll fail
         // to make the DB both locally and on CI, so we just send the path

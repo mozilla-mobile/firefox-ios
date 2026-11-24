@@ -7,6 +7,10 @@
 import XCTest
 
 class CrashTestTests: XCTestCase {
+    func testFails() throws {
+        XCTAssert(false)
+    }
+
     override func setUp() {
         // This method is called before the invocation of each test method in the class.
     }

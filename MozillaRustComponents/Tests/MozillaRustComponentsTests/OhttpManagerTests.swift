@@ -7,6 +7,10 @@ import Foundation
 import XCTest
 
 final class OhttpManagerTests: XCTestCase {
+    func testFails() throws {
+        XCTAssert(false)
+    }
+
     private let configUrl = URL(string: "https://example.com/ohttp-configs")!
     private let otherConfigUrl = URL(string: "https://other.example.com/ohttp-configs")!
     private let relayUrl = URL(string: "https://relay.example.com/")!

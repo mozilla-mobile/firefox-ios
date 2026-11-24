@@ -7,6 +7,10 @@
 import XCTest
 
 class FxAccountManagerTests: XCTestCase {
+    func testFails() throws {
+        XCTAssert(false)
+    }
+
     func testAccountNotFound() {
         let mgr = mockFxAManager()
 

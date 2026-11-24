@@ -7,6 +7,10 @@
 import XCTest
 
 class RustSyncTelemetryPingTests: XCTestCase {
+    func testFails() throws {
+        XCTAssert(false)
+    }
+
     func testValidJSON() {
         let json = """
         {"version":1,"uid":"b01a6f3d11cbb0f2ae2c940ab458b30a","syncs":[ {"when":1676416271.0,"took":837,"engines":[{"name":"passwords","when":167641627.0,"took":116,"incoming":{"applied":1},"outgoing":[{}]}]}]}
