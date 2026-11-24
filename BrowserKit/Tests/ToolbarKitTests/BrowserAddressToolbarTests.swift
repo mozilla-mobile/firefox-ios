@@ -130,7 +130,85 @@ final class BrowserAddressToolbarTests: XCTestCase {
         XCTAssertTrue(button is TabNumberButton, "Should create TabNumberButton when numberOfTabs is provided.")
     }
 
+    @MainActor
+    func testGetToolbarButton_whenTabStyleChanges_replacesCachedButton() throws {
+        let subject = createSubject()
+        let numberElement = try XCTUnwrap(tabToolbarElement)
+        let screenshotElement = createScreenshotTabElement()
+        let numberButton = subject.getToolbarButton(for: numberElement)
+        XCTAssertTrue(subject.hasCachedButton(for: numberElement))
+        XCTAssertTrue(subject.getToolbarButton(for: numberElement) === numberButton)
+
+        XCTAssertFalse(subject.hasCachedButton(for: screenshotElement))
+        let screenshotButton = subject.getToolbarButton(for: screenshotElement)
+
+        XCTAssertTrue(screenshotButton is StackedTabButton)
+        XCTAssertFalse(screenshotButton === numberButton)
+        XCTAssertTrue(subject.hasCachedButton(for: screenshotElement))
+        XCTAssertTrue(subject.getToolbarButton(for: screenshotElement) === screenshotButton)
+
+        XCTAssertFalse(subject.hasCachedButton(for: numberElement))
+        let restoredNumberButton = subject.getToolbarButton(for: numberElement)
+
+        XCTAssertTrue(restoredNumberButton is TabNumberButton)
+        XCTAssertFalse(restoredNumberButton === screenshotButton)
+        XCTAssertTrue(subject.hasCachedButton(for: numberElement))
+        XCTAssertTrue(subject.getToolbarButton(for: numberElement) === restoredNumberButton)
+        XCTAssertEqual(subject.cachedButtonReferences.count, 1)
+    }
+
+    @MainActor
+    func testGetToolbarButton_whenTabCountIsRemoved_replacesTabButton() throws {
+        let subject = createSubject()
+        let numberElement = try XCTUnwrap(tabToolbarElement)
+        let numberButton = subject.getToolbarButton(for: numberElement)
+        let plainElement = ToolbarElement(iconName: "icon",
+                                          isEnabled: true,
+                                          a11yLabel: "Button",
+                                          a11yHint: nil,
+                                          a11yId: numberElement.a11yId,
+                                          onSelected: nil)
+
+        XCTAssertFalse(subject.hasCachedButton(for: plainElement))
+        let plainButton = subject.getToolbarButton(for: plainElement)
+
+        XCTAssertTrue(type(of: plainButton) == ToolbarButton.self)
+        XCTAssertFalse(plainButton === numberButton)
+        XCTAssertTrue(subject.hasCachedButton(for: plainElement))
+        XCTAssertTrue(subject.getToolbarButton(for: plainElement) === plainButton)
+    }
+
     // MARK: - updateActionStack
+    @MainActor
+    func testUpdateActionStack_whenTabStyleChanges_replacesAndSizesButton() throws {
+        let subject = createSubject()
+        let stackView = UIStackView()
+        let numberElement = try XCTUnwrap(tabToolbarElement)
+        let elements = [numberElement, createScreenshotTabElement(), numberElement]
+        var previousButton: UIView?
+
+        for element in elements {
+            subject.updateActionStack(stackView: stackView, toolbarElements: [element])
+            let button = try XCTUnwrap(stackView.arrangedSubviews.first)
+
+            XCTAssertEqual(stackView.arrangedSubviews.count, 1)
+            XCTAssertFalse(button === previousButton)
+            for attribute in [NSLayoutConstraint.Attribute.width, .height] {
+                XCTAssertTrue(button.constraints.contains {
+                    $0.firstAttribute == attribute && $0.secondItem == nil && $0.relation == .equal
+                        && $0.constant == 44 && $0.isActive
+                })
+            }
+            let constraintCount = button.constraints.count
+
+            subject.updateActionStack(stackView: stackView, toolbarElements: [element])
+
+            XCTAssertTrue(stackView.arrangedSubviews.first === button)
+            XCTAssertEqual(button.constraints.count, constraintCount)
+            previousButton = button
+        }
+    }
+
     @MainActor
     func testUpdateActionStack_KeepsSameArrangementWhenElementsUnchanged() {
         let sut = createSubject()
@@ -246,6 +324,15 @@ final class BrowserAddressToolbarTests: XCTestCase {
     }
 
     // MARK: Test helper
+    private func createScreenshotTabElement() -> ToolbarElement {
+        ToolbarElement(numberOfTabs: 5,
+                       isEnabled: true,
+                       a11yLabel: "Tab Button",
+                       a11yHint: nil,
+                       a11yId: "a11yID-3",
+                       onSelected: nil)
+    }
+
     @MainActor
     func createSubject(file: StaticString = #filePath, line: UInt = #line) -> BrowserAddressToolbar {
         let subject = BrowserAddressToolbar()

@@ -26,15 +26,14 @@ protocol ToolbarButtonCaching: AnyObject {
 // MARK: - Default Implementation
 extension ToolbarButtonCaching {
     func hasCachedButton(for toolbarElement: ToolbarElement) -> Bool {
-        let cacheKey = toolbarElement.cacheId ?? toolbarElement.a11yId
-        return cachedButtonReferences[cacheKey] != nil
+        compatibleCachedButton(for: toolbarElement) != nil
     }
 
     func getToolbarButton(for toolbarElement: ToolbarElement) -> ToolbarButton {
         let cacheKey = toolbarElement.cacheId ?? toolbarElement.a11yId
         let button: ToolbarButton
 
-        if let cachedButton = cachedButtonReferences[cacheKey] {
+        if let cachedButton = compatibleCachedButton(for: toolbarElement) {
             button = cachedButton
         } else {
             if toolbarElement.iconName == nil &&
@@ -49,5 +48,19 @@ extension ToolbarButtonCaching {
         }
 
         return button
+    }
+
+    private func compatibleCachedButton(for toolbarElement: ToolbarElement) -> ToolbarButton? {
+        let cacheKey = toolbarElement.cacheId ?? toolbarElement.a11yId
+        guard let button = cachedButtonReferences[cacheKey] else { return nil }
+        let buttonType: ToolbarButton.Type
+        if toolbarElement.numberOfTabs == nil {
+            buttonType = ToolbarButton.self
+        } else if toolbarElement.iconName == nil {
+            buttonType = StackedTabButton.self
+        } else {
+            buttonType = TabNumberButton.self
+        }
+        return type(of: button) == buttonType ? button : nil
     }
 }

@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Common
 @testable import ToolbarKit
 
 @MainActor
@@ -20,6 +21,84 @@ final class ToolbarButtonTests: XCTestCase {
     }
 
     // MARK: - Configuration Caching Tests
+    func testConfigure_withGroupBadge_keepsShadowUnclippedAndUpdatesForTheme() throws {
+        let image = createBadgeImage()
+        let color = UIColor { $0.userInterfaceStyle == .dark ? .cyan : .blue }
+        button.frame = CGRect(x: 0, y: 0, width: 44, height: 44)
+        let element = ToolbarElement(bottomLeadingBadgeImage: image,
+                                     bottomLeadingBadgeShadowColor: color,
+                                     isEnabled: true,
+                                     a11yLabel: "Work",
+                                     a11yHint: nil,
+                                     a11yId: "tabs",
+                                     onSelected: nil)
+        button.configure(element: element)
+        button.layoutIfNeeded()
+        let badge = try XCTUnwrap(button.subviews.compactMap { $0 as? UIImageView }.first { $0.image === image })
+
+        XCTAssertFalse(badge.clipsToBounds)
+        XCTAssertEqual(badge.bounds.size, CGSize(width: 18, height: 18))
+        XCTAssertEqual(badge.layer.shadowOpacity, 0.5)
+        XCTAssertNotNil(badge.layer.shadowPath)
+
+        let themes: [any Theme] = [NovaLightTheme(), NovaDarkTheme()]
+        for theme in themes {
+            button.applyTheme(theme: theme)
+
+            let traits = UITraitCollection(userInterfaceStyle: theme.type.getInterfaceStyle())
+            XCTAssertEqual(badge.layer.shadowColor, color.resolvedColor(with: traits).cgColor)
+        }
+    }
+
+    func testConfigure_whenOnlyGroupBadgeColorChanges_updatesShadow() throws {
+        let image = createBadgeImage()
+        for color in [UIColor.blue, .red] {
+            let element = ToolbarElement(bottomLeadingBadgeImage: image,
+                                         bottomLeadingBadgeShadowColor: color,
+                                         isEnabled: true,
+                                         a11yLabel: "Work",
+                                         a11yHint: nil,
+                                         a11yId: "tabs",
+                                         onSelected: nil)
+
+            button.configure(element: element)
+
+            let badge = try XCTUnwrap(button.subviews.compactMap { $0 as? UIImageView }.first { $0.image === image })
+            XCTAssertEqual(badge.layer.shadowColor, color.cgColor)
+        }
+    }
+
+    func testConfigureWithBottomLeadingBadge_preservesNumberAndScreenshotButtons() throws {
+        let badge = try XCTUnwrap(UIImage(systemName: "house.fill"))
+        let buttons: [ToolbarButton] = [TabNumberButton(), StackedTabButton()]
+
+        for button in buttons {
+            let iconName = button is StackedTabButton ? nil : "rectangle"
+            let grouped = ToolbarElement(iconName: iconName,
+                                         bottomLeadingBadgeImage: badge,
+                                         numberOfTabs: 2,
+                                         isEnabled: true,
+                                         a11yLabel: "Work",
+                                         a11yHint: nil,
+                                         a11yId: "tabs",
+                                         onSelected: nil)
+            button.configure(element: grouped)
+
+            XCTAssertTrue(button.subviews.compactMap { $0 as? UIImageView }.contains { $0.image === badge })
+
+            let ungrouped = ToolbarElement(iconName: iconName,
+                                           numberOfTabs: 2,
+                                           isEnabled: true,
+                                           a11yLabel: "Tabs",
+                                           a11yHint: nil,
+                                           a11yId: "tabs",
+                                           onSelected: nil)
+            button.configure(element: ungrouped)
+
+            XCTAssertFalse(button.subviews.compactMap { $0 as? UIImageView }.contains { $0.image === badge })
+        }
+    }
+
     func testConfigureWithSameElement_SkipsReconfiguration() {
         let element = createToolbarElement(iconName: "icon1", a11yLabel: "Test")
 
@@ -197,6 +276,13 @@ final class ToolbarButtonTests: XCTestCase {
     }
 
     // MARK: - Helper Methods
+    private func createBadgeImage() -> UIImage {
+        UIGraphicsImageRenderer(size: CGSize(width: 20, height: 20)).image { context in
+            UIColor.blue.setFill()
+            context.fill(CGRect(x: 0, y: 0, width: 20, height: 20))
+        }
+    }
+
     private func createToolbarElement(
         iconName: String? = nil,
         title: String? = nil,

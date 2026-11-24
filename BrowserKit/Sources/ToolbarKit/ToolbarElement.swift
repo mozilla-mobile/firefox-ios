@@ -38,6 +38,9 @@ public struct ToolbarElement: Equatable {
     /// The image for the bottom badge of the toolbar element
     let bottomBadgeImage: UIImage?
 
+    let bottomLeadingBadgeImage: UIImage?
+    let bottomLeadingBadgeShadowColor: UIColor?
+
     /// Indicated whether to use template mode or not for an image
     let templateModeForImage: Bool
 
@@ -108,6 +111,8 @@ public struct ToolbarElement: Equatable {
                 title: String? = nil,
                 badgeImageName: String? = nil,
                 bottomBadgeImage: UIImage? = nil,
+                bottomLeadingBadgeImage: UIImage? = nil,
+                bottomLeadingBadgeShadowColor: UIColor? = nil,
                 maskImageName: String? = nil,
                 templateModeForImage: Bool = true,
                 loadingConfig: LoadingConfig? = nil,
@@ -134,6 +139,8 @@ public struct ToolbarElement: Equatable {
         self.title = title
         self.badgeImageName = badgeImageName
         self.bottomBadgeImage = bottomBadgeImage
+        self.bottomLeadingBadgeImage = bottomLeadingBadgeImage
+        self.bottomLeadingBadgeShadowColor = bottomLeadingBadgeShadowColor
         self.maskImageName = maskImageName
         self.templateModeForImage = templateModeForImage
         self.loadingConfig = loadingConfig
@@ -163,6 +170,8 @@ public struct ToolbarElement: Equatable {
         lhs.title == rhs.title &&
         lhs.badgeImageName == rhs.badgeImageName &&
         lhs.bottomBadgeImage == rhs.bottomBadgeImage &&
+        lhs.bottomLeadingBadgeImage == rhs.bottomLeadingBadgeImage &&
+        lhs.bottomLeadingBadgeShadowColor == rhs.bottomLeadingBadgeShadowColor &&
         lhs.maskImageName == rhs.maskImageName &&
         lhs.templateModeForImage == rhs.templateModeForImage &&
         lhs.loadingConfig == rhs.loadingConfig &&

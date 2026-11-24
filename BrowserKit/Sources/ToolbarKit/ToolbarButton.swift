@@ -19,6 +19,11 @@ class ToolbarButton: UIButton,
         static let horizontalInset: CGFloat = 10
         static let horizontalTextInset: CGFloat = 5
         static let badgeIconSize = CGSize(width: 20, height: 20)
+        static let bottomLeadingBadgeSize: CGFloat = 18
+        static let bottomLeadingBadgeInset: CGFloat = 5
+        static let bottomLeadingBadgeAngle: CGFloat = 2 * .pi / 180
+        static let bottomLeadingBadgeShadowOffset = CGSize(width: 2, height: 2)
+        static let bottomLeadingBadgeShadowRadius: CGFloat = 2.25
         static let bottomBadgeIconSize = CGSize(width: 10, height: 10)
         static let defaultMinimumPressDuration: TimeInterval = 0.5
         static let minimumPressDurationWithLargeContentViewer: TimeInterval = 1.5
@@ -34,6 +39,7 @@ class ToolbarButton: UIButton,
     private var badgeImageView: UIImageView?
     private var maskImageView: UIImageView?
     private var bottomBadgeImageView: UIImageView?
+    private var bottomLeadingBadgeImageView: UIImageView?
 
     private var longPressRecognizer: UILongPressGestureRecognizer?
     private var onLongPress: ((UIButton) -> Void)?
@@ -148,11 +154,21 @@ class ToolbarButton: UIButton,
             }
         }
 
+        if let image = element.bottomLeadingBadgeImage {
+            addBottomLeadingBadge(image, shadowColor: element.bottomLeadingBadgeShadowColor)
+        }
         layoutIfNeeded()
     }
 
     public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if let badge = bottomLeadingBadgeImageView {
+            badge.layer.shadowPath = UIBezierPath(ovalIn: badge.bounds).cgPath
+        }
     }
 
     override public func updateConfiguration() {
@@ -191,6 +207,27 @@ class ToolbarButton: UIButton,
             badgeImageView.topAnchor.constraint(equalTo: centerYAnchor),
             badgeImageView.widthAnchor.constraint(equalToConstant: UX.bottomBadgeIconSize.width),
             badgeImageView.heightAnchor.constraint(equalToConstant: UX.bottomBadgeIconSize.height)
+        ])
+    }
+
+    private func addBottomLeadingBadge(_ image: UIImage, shadowColor: UIColor?) {
+        let badge = UIImageView(image: image)
+        badge.translatesAutoresizingMaskIntoConstraints = false
+        badge.contentMode = .scaleAspectFit
+        badge.isAccessibilityElement = false
+        badge.clipsToBounds = false
+        badge.transform = CGAffineTransform(rotationAngle: UX.bottomLeadingBadgeAngle)
+        badge.layer.shadowColor = shadowColor?.resolvedColor(with: traitCollection).cgColor
+        badge.layer.shadowOffset = UX.bottomLeadingBadgeShadowOffset
+        badge.layer.shadowRadius = UX.bottomLeadingBadgeShadowRadius
+        badge.layer.shadowOpacity = shadowColor == nil ? 0 : 0.5
+        addSubview(badge)
+        bottomLeadingBadgeImageView = badge
+        NSLayoutConstraint.activate([
+            badge.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.bottomLeadingBadgeInset),
+            badge.bottomAnchor.constraint(equalTo: bottomAnchor),
+            badge.widthAnchor.constraint(equalToConstant: UX.bottomLeadingBadgeSize),
+            badge.heightAnchor.constraint(equalToConstant: UX.bottomLeadingBadgeSize)
         ])
     }
 
@@ -328,7 +365,8 @@ class ToolbarButton: UIButton,
             return existingImage
         }
 
-        guard let iconName = element.iconName, let baseImage = UIImage(named: iconName) else {
+        guard let iconName = element.iconName,
+              let baseImage = UIImage(named: iconName) else {
             return nil
         }
         let image = element.templateModeForImage
@@ -347,10 +385,12 @@ class ToolbarButton: UIButton,
 
     private func removeBadgeAndMaskFromSuperview() {
         bottomBadgeImageView?.removeFromSuperview()
+        bottomLeadingBadgeImageView?.removeFromSuperview()
         badgeImageView?.removeFromSuperview()
         maskImageView?.removeFromSuperview()
         badgeImageView = nil
         bottomBadgeImageView = nil
+        bottomLeadingBadgeImageView = nil
         maskImageView = nil
     }
 
@@ -446,6 +486,9 @@ class ToolbarButton: UIButton,
         badgeImageView?.tintColor = maskImageView == nil ?
                                     .clear : (theme.isNova ? colors.iconPrivate : colors.actionInformation)
         maskImageView?.tintColor = colors.layer1
+        let traits = UITraitCollection(userInterfaceStyle: theme.type.getInterfaceStyle())
+        bottomLeadingBadgeImageView?.layer.shadowColor = currentElement?.bottomLeadingBadgeShadowColor?
+            .resolvedColor(with: traits).cgColor
         setNeedsUpdateConfiguration()
     }
 
