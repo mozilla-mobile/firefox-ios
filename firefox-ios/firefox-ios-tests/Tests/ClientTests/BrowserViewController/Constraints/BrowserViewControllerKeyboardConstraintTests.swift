@@ -209,6 +209,41 @@ final class BrowserViewControllerKeyboardConstraintTests: BrowserViewControllerC
         XCTAssertNotNil(keyboardSpacerHeightConstant(in: subject.overKeyboardContainer))
     }
 
+    // MARK: - Keyboard frames that aren't a docked keyboard
+
+    /// Returning from the background while rotating, iOS 26 can send a show notification whose end frame
+    /// is rotated for the other orientation. It overlaps the view but no keyboard is on screen there.
+    func test_keyboardWillShow_rotatedFrameFromBackground_doesNotAddKeyboardSpacer() {
+        let subject = createSubject()
+        selectTabWithFindInPage()
+        subject.view.frame = CGRect(x: 0, y: 0, width: 874, height: 402)
+        subject.view.layoutIfNeeded()
+        let rotatedState = KeyboardState(keyboardEndFrame: CGRect(x: 238, y: -472, width: 164, height: 874),
+                                         keyboardAnimationDuration: 0,
+                                         keyboardAnimationCurveValue: 0)
+
+        subject.keyboardHelper(createKeyboardHelper(), keyboardWillShowWithState: rotatedState)
+        subject.view.setNeedsUpdateConstraints()
+        subject.view.updateConstraintsIfNeeded()
+
+        XCTAssertNil(keyboardSpacerHeightConstant(in: subject.overKeyboardContainer))
+        XCTAssertEqual(subject.overKeyboardContainer.subviews.count, 1)
+    }
+
+    func test_keyboardWillShow_landscapeKeyboard_addsKeyboardSpacer() {
+        let subject = createSubject()
+        selectTabWithFindInPage()
+        subject.view.frame = CGRect(x: 0, y: 0, width: 874, height: 402)
+        subject.view.layoutIfNeeded()
+        let landscapeState = KeyboardState(keyboardEndFrame: CGRect(x: 0, y: 94, width: 874, height: 308),
+                                           keyboardAnimationDuration: 0,
+                                           keyboardAnimationCurveValue: 0)
+
+        subject.keyboardHelper(createKeyboardHelper(), keyboardWillShowWithState: landscapeState)
+
+        XCTAssertNotNil(keyboardSpacerHeightConstant(in: subject.overKeyboardContainer))
+    }
+
     // MARK: - bottomContentStackView Position Tests
 
     func test_keyboardWillShow_TopToolbar_bottomContentNoUpdate() {
