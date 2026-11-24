@@ -32,8 +32,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         }
 
         enum CenterSearchBarConstants {
-            static let spacingBelowHeader: CGFloat = 14
-            static let spacingAboveShortcuts: CGFloat = 23
+            static let spacingBelowHeader: CGFloat = 24
+            static let spacingAboveShortcuts: CGFloat = 32
         }
 
         enum PrivacyNoticeConstants {

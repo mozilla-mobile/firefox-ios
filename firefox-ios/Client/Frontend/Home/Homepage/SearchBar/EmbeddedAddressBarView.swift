@@ -8,7 +8,7 @@ import UIKit
 final class EmbeddedAddressBarView: UIView, ThemeApplicable {
     private enum UX {
         static let horizontalPadding: CGFloat = 16
-        static let verticalPadding: CGFloat = 14
+        static let verticalPadding: CGFloat = 17
         static let contentSpacing: CGFloat = 8
         static let searchIconSize = CGSize(width: 20, height: 20)
         static let shadowRadius: CGFloat = 14
