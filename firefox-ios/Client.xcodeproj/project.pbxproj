@@ -503,6 +503,7 @@
 		392D791A2F8FCE1A00B10BDC /* FeatureFlagID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 392D79192F8FCE0E00B10BDC /* FeatureFlagID.swift */; };
 		F1E1A9C90EED44D28BBEE901 /* TabGroupEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E1A9C90EED44D28BBEE902 /* TabGroupEditorView.swift */; };
 		C010A110B200C300D4000001 /* TabGroupColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = C010A110B200C300D4000002 /* TabGroupColorPalette.swift */; };
+		69D292EF051E4389AF6ECF3C /* TabGroupsPickerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCD66A505174674B87656EE /* TabGroupsPickerViewModel.swift */; };
 		392D80542F901D2600B10BDC /* UserFeaturePreferenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 392D80532F901D1500B10BDC /* UserFeaturePreferenceManager.swift */; };
 		392ED7E41D0AEF56009D9B62 /* NewTabAccessors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 392ED7E31D0AEF56009D9B62 /* NewTabAccessors.swift */; };
 		392ED7E61D0AEFEF009D9B62 /* HomePageAccessors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 392ED7E51D0AEFEF009D9B62 /* HomePageAccessors.swift */; };
@@ -2577,8 +2578,10 @@
 		C38C7F7C1F1A42D8937CCF25 /* TabGroupsSessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C38C7F7C1F1A42D8937CCF26 /* TabGroupsSessionStore.swift */; };
 		55EBB7718ABDD8B91B668150 /* TabGroupsTabActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE9110B09488F42C4FE72C6 /* TabGroupsTabActions.swift */; };
 		F044C1BE7A3F4BF0B2B1034A /* TabGroupIconImageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D034D885E9764642A0E80188 /* TabGroupIconImageTests.swift */; };
+		7C9A1EA8F1BF4ECE2AE232A5 /* TabGroupsDestinationMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF2D69EEB18F80D4F4993F8 /* TabGroupsDestinationMenuView.swift */; };
 		F891DE8A307711D8C141383D /* TabGroupEditorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AC0C871A5511CA2BD071B69 /* TabGroupEditorTests.swift */; };
 		C010A110B200C300D4000003 /* TabGroupColorPaletteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C010A110B200C300D4000004 /* TabGroupColorPaletteTests.swift */; };
+		531E4338D69953C61A8853F6 /* TabGroupsDestinationMenuTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A4C59D1413A28D31ED777C9 /* TabGroupsDestinationMenuTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -3730,6 +3733,7 @@
 		392D79192F8FCE0E00B10BDC /* FeatureFlagID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagID.swift; sourceTree = "<group>"; };
 		F1E1A9C90EED44D28BBEE902 /* TabGroupEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupEditorView.swift; sourceTree = "<group>"; };
 		C010A110B200C300D4000002 /* TabGroupColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupColorPalette.swift; sourceTree = "<group>"; };
+		8BCD66A505174674B87656EE /* TabGroupsPickerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsPickerViewModel.swift; sourceTree = "<group>"; };
 		392D80532F901D1500B10BDC /* UserFeaturePreferenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFeaturePreferenceManager.swift; sourceTree = "<group>"; };
 		392ED7E31D0AEF56009D9B62 /* NewTabAccessors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewTabAccessors.swift; path = Accessors/NewTabAccessors.swift; sourceTree = "<group>"; };
 		392ED7E51D0AEFEF009D9B62 /* HomePageAccessors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HomePageAccessors.swift; path = Accessors/HomePageAccessors.swift; sourceTree = "<group>"; };
@@ -13038,8 +13042,10 @@
 		C38C7F7C1F1A42D8937CCF26 /* TabGroupsSessionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsSessionStore.swift; sourceTree = "<group>"; };
 		6EE9110B09488F42C4FE72C6 /* TabGroupsTabActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsTabActions.swift; sourceTree = "<group>"; };
 		D034D885E9764642A0E80188 /* TabGroupIconImageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupIconImageTests.swift; sourceTree = "<group>"; };
+		4AF2D69EEB18F80D4F4993F8 /* TabGroupsDestinationMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsDestinationMenuView.swift; sourceTree = "<group>"; };
 		6AC0C871A5511CA2BD071B69 /* TabGroupEditorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupEditorTests.swift; sourceTree = "<group>"; };
 		C010A110B200C300D4000004 /* TabGroupColorPaletteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupColorPaletteTests.swift; sourceTree = "<group>"; };
+		9A4C59D1413A28D31ED777C9 /* TabGroupsDestinationMenuTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsDestinationMenuTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -13819,6 +13825,8 @@
 			children = (
 				F1E1A9C90EED44D28BBEE902 /* TabGroupEditorView.swift */,
 				C010A110B200C300D4000002 /* TabGroupColorPalette.swift */,
+				8BCD66A505174674B87656EE /* TabGroupsPickerViewModel.swift */,
+				4AF2D69EEB18F80D4F4993F8 /* TabGroupsDestinationMenuView.swift */,
 			);
 			path = TabGroupsPicker;
 			sourceTree = "<group>";
@@ -16057,6 +16065,7 @@
 				6AD09DA3FE794078AA98D479 /* TabGroupStorageTests.swift */,
 				823EC3631F034311A05488D7 /* TabGroupIconTests.swift */,
 				D034D885E9764642A0E80188 /* TabGroupIconImageTests.swift */,
+				9A4C59D1413A28D31ED777C9 /* TabGroupsDestinationMenuTests.swift */,
 				6AC0C871A5511CA2BD071B69 /* TabGroupEditorTests.swift */,
 				C010A110B200C300D4000004 /* TabGroupColorPaletteTests.swift */,
 				8A3FD28D2FABB9BA001F5DE9 /* TabManagerClearHistoryTests.swift */,
@@ -20835,6 +20844,8 @@
 				26CC5468CF3075C7FDB5E4E1 /* TabGroupsFeatureFlag.swift in Sources */,
 				F1E1A9C90EED44D28BBEE901 /* TabGroupEditorView.swift in Sources */,
 				C010A110B200C300D4000001 /* TabGroupColorPalette.swift in Sources */,
+				69D292EF051E4389AF6ECF3C /* TabGroupsPickerViewModel.swift in Sources */,
+				7C9A1EA8F1BF4ECE2AE232A5 /* TabGroupsDestinationMenuView.swift in Sources */,
 				8C1953322B85EAB500761B20 /* AutofillHeaderView.swift in Sources */,
 				8A7AE4442BAB510B0072DAEC /* LibraryPanelCoordinatorDelegate.swift in Sources */,
 				8C19532E2B85E7AE00761B20 /* SelfSizingHostingController.swift in Sources */,
@@ -22576,6 +22587,7 @@
 				B42E21CA8C8C4FBAA1D93406 /* TabGroupStorageTests.swift in Sources */,
 				341B6248236A4DF68FFC8E7F /* TabGroupIconTests.swift in Sources */,
 				F044C1BE7A3F4BF0B2B1034A /* TabGroupIconImageTests.swift in Sources */,
+				531E4338D69953C61A8853F6 /* TabGroupsDestinationMenuTests.swift in Sources */,
 				F891DE8A307711D8C141383D /* TabGroupEditorTests.swift in Sources */,
 				C010A110B200C300D4000003 /* TabGroupColorPaletteTests.swift in Sources */,
 				8A3F08AE2FB40BD0001F5DE9 /* TabRestorerTests.swift in Sources */,
