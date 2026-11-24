@@ -75,6 +75,8 @@ final class OpenSearchEngine: NSObject, NSSecureCoding, Sendable, TrendingSearch
         case engineID
         case telemetrySuffix
         case partners
+        case suggestTemplate
+        case trendingTemplate
     }
 
     override var debugDescription: String {
@@ -140,8 +142,10 @@ final class OpenSearchEngine: NSObject, NSSecureCoding, Sendable, TrendingSearch
         } else {
             self.partners = nil
         }
-        self.suggestTemplate = nil
-        self.trendingTemplate = nil
+        self.suggestTemplate = aDecoder.decodeObject(of: NSString.self,
+                                                     forKey: CodingKeys.suggestTemplate.rawValue) as String?
+        self.trendingTemplate = aDecoder.decodeObject(of: NSString.self,
+                                                      forKey: CodingKeys.trendingTemplate.rawValue) as String?
 
         self.searchQueryComponentKey = OpenSearchEngine.getQueryArgFromTemplate(
             searchTemplate: self.searchTemplate,
@@ -158,6 +162,8 @@ final class OpenSearchEngine: NSObject, NSSecureCoding, Sendable, TrendingSearch
         if let partners, let partnersData = try? JSONEncoder().encode(partners) {
             aCoder.encode(partnersData as NSData, forKey: CodingKeys.partners.rawValue)
         }
+        aCoder.encode(suggestTemplate, forKey: CodingKeys.suggestTemplate.rawValue)
+        aCoder.encode(trendingTemplate, forKey: CodingKeys.trendingTemplate.rawValue)
 
         // Images loaded from the BrowserKit bundle will not directly contain image data to encode. Here we force the UIImage
         // to contain PNG data prior to encoding (especially for when writing to a file). [FXIOS-10216]

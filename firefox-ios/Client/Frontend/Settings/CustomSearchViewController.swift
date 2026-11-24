@@ -126,8 +126,9 @@ final class CustomSearchViewController: SettingsTableViewController {
                                       telemetrySuffix: nil,
                                       image: image,
                                       searchTemplate: template,
-                                      suggestTemplate: nil,
-                                      trendingTemplate: nil,
+                                      // TODO: DO NOT COMMIT - VPN proxy test override
+                                      suggestTemplate: url.origin.map { "\($0)/suggest?q={searchTerms}" },
+                                      trendingTemplate: url.origin.map { "\($0)/trending" },
                                       isCustomEngine: true)
 
         // Make sure a valid scheme is used
