@@ -8,6 +8,7 @@ import Shared
 protocol QuickAnswersSettingsSelectorsSet {
     var NAVBAR: Selector { get }
     var QUICK_ANSWERS_SWITCH: Selector { get }
+    var QUICK_ANSWERS_SWITCH_TITLE: Selector { get }
     var FOOTER: Selector { get }
     var LEARN_MORE_BUTTON: Selector { get }
     var SUMO_LOGO_LINK: Selector { get }
@@ -22,7 +23,7 @@ struct QuickAnswersSettingsSelectors: QuickAnswersSettingsSelectorsSet {
         static let footer = String.QuickAnswers.Settings.Footer
         static let learnMoreButton = AccessibilityIdentifiers.Settings.QuickAnswers.learnMoreButton
         static let sumoLogoLink = "Mozilla Support Logo"
-        static let sumoArticleTopic = "Quick Answers"
+        static let sumoArticleHeading = "Use Quick Answers in Firefox for iOS"
     }
 
     // The table also lists the footer's text and link again outside it, so both are matched inside the footer.
@@ -43,6 +44,26 @@ struct QuickAnswersSettingsSelectors: QuickAnswersSettingsSelectorsSet {
         description: "'Quick Answers' switch in Settings → Quick Answers",
         groups: ["settings", "quick_answers"]
     )
+
+    private var switchCell: Selector {
+        Selector.element(
+            .cell,
+            in: Selector.firstTable(description: "Settings → Quick Answers table", groups: ["settings", "quick_answers"]),
+            containing: NSPredicate(format: "identifier == %@", IDs.quickAnswersSwitch),
+            value: IDs.quickAnswersSwitch,
+            description: "Cell holding the 'Quick Answers' switch in Settings → Quick Answers",
+            groups: ["settings", "quick_answers"]
+        )
+    }
+
+    var QUICK_ANSWERS_SWITCH_TITLE: Selector {
+        Selector.staticTextByExactLabel(
+            IDs.title,
+            in: switchCell,
+            description: "'Quick Answers' title next to the switch in Settings → Quick Answers",
+            groups: ["settings", "quick_answers"]
+        )
+    }
 
     var FOOTER: Selector {
         Selector.staticTextByExactLabel(
@@ -79,17 +100,16 @@ struct QuickAnswersSettingsSelectors: QuickAnswersSettingsSelectorsSet {
     }
 
     var SUMO_ARTICLE_HEADING: Selector {
-        Selector.element(
-            .staticText,
+        Selector.staticTextByExactLabel(
+            IDs.sumoArticleHeading,
             in: sumoWebView,
-            matching: NSPredicate(format: "label CONTAINS %@", IDs.sumoArticleTopic),
-            value: IDs.sumoArticleTopic,
-            description: "Heading of the Quick Answers SUMO article, e.g. 'Use Quick Answers in Firefox for iOS'",
+            description: "Heading of the Quick Answers SUMO article",
             groups: ["settings", "quick_answers"]
         )
     }
 
     var all: [Selector] {
-        [NAVBAR, QUICK_ANSWERS_SWITCH, FOOTER, LEARN_MORE_BUTTON, SUMO_LOGO_LINK, SUMO_ARTICLE_HEADING]
+        [NAVBAR, QUICK_ANSWERS_SWITCH, QUICK_ANSWERS_SWITCH_TITLE, FOOTER, LEARN_MORE_BUTTON, SUMO_LOGO_LINK,
+         SUMO_ARTICLE_HEADING]
     }
 }

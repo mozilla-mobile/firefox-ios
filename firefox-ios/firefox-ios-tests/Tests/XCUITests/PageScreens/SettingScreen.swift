@@ -390,7 +390,7 @@ final class SettingScreen {
     func assertQuickAnswersSettingsIsInGeneralSection(isOn: Bool, timeout: TimeInterval = TIMEOUT) {
         assertCellIsInGeneralSection(sel.QUICK_ANSWERS_CELL, timeout: timeout)
         let status: String = isOn ? .QuickAnswers.Settings.StatusOn : .QuickAnswers.Settings.StatusOff
-        BaseTestCase().mozWaitForElementToExist(quickAnswersCell.staticTexts[status])
+        BaseTestCase().mozWaitForElementToExist(sel.quickAnswersCellStatus(status).element(in: app))
     }
 
     func openQuickAnswersSettings() {

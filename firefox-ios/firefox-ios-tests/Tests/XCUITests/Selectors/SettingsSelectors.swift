@@ -65,6 +65,7 @@ protocol SettingsSelectorsSet {
     // Page Summaries
     var SUMMARIZE_CELL: Selector { get }
     var QUICK_ANSWERS_CELL: Selector { get }
+    func quickAnswersCellStatus(_ status: String) -> Selector
     var GENERAL_SECTION_HEADER: Selector { get }
 
     var NO_IMAGE_MODE_STATUS_SWITCH: Selector { get }
@@ -372,6 +373,15 @@ struct SettingsSelectors: SettingsSelectorsSet {
         description: "Quick Answers settings cell",
         groups: ["settings", "quick_answers"]
     )
+
+    func quickAnswersCellStatus(_ status: String) -> Selector {
+        Selector.staticTextByExactLabel(
+            status,
+            in: QUICK_ANSWERS_CELL,
+            description: "'\(status)' status on the right of the Quick Answers settings cell",
+            groups: ["settings", "quick_answers"]
+        )
+    }
 
     let GENERAL_SECTION_HEADER = Selector.staticTextInTablesByLabel(
         IDs.generalSectionHeader,

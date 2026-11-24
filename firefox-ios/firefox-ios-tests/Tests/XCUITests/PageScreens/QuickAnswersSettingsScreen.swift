@@ -15,10 +15,7 @@ final class QuickAnswersSettingsScreen {
     private var quickAnswersSwitch: XCUIElement { sel.QUICK_ANSWERS_SWITCH.element(in: app) }
     private var footer: XCUIElement { sel.FOOTER.element(in: app) }
     private var learnMoreButton: XCUIElement { sel.LEARN_MORE_BUTTON.element(in: app) }
-    private var switchTitle: XCUIElement {
-        app.tables.cells.containing(.switch, identifier: sel.QUICK_ANSWERS_SWITCH.value)
-            .staticTexts[String.QuickAnswers.Settings.Title]
-    }
+    private var switchTitle: XCUIElement { sel.QUICK_ANSWERS_SWITCH_TITLE.element(in: app) }
 
     init(app: XCUIApplication, selectors: QuickAnswersSettingsSelectorsSet = QuickAnswersSettingsSelectors()) {
         self.app = app

@@ -14,13 +14,11 @@ final class QuickAnswersScreen {
     private var optInSheetTitle: XCUIElement { sel.OPT_IN_SHEET_TITLE.element(in: app) }
 
     /// The sheet's close button is the nearest "Close" above its title, since the Quick Answers
-    /// screen faded in behind the sheet has a "Close" button too.
-    private var optInSheetCloseButton: XCUIElement {
-        let closeButtons = sel.CLOSE_BUTTON.query(in: app).allElementsBoundByIndex
-        let sheetCloseButton = closeButtons
+    /// screen faded in behind the sheet has a "Close" button too. Nil if none is above the title.
+    private var optInSheetCloseButton: XCUIElement? {
+        return sel.CLOSE_BUTTON.query(in: app).allElementsBoundByIndex
             .filter { $0.isAbove(element: optInSheetTitle) }
             .max { $0.frame.minY < $1.frame.minY }
-        return sheetCloseButton ?? sel.CLOSE_BUTTON.element(in: app)
     }
 
     init(app: XCUIApplication, selectors: QuickAnswersSelectorsSet = QuickAnswersSelectors()) {
@@ -31,11 +29,16 @@ final class QuickAnswersScreen {
     func assertOptInSheetShown(timeout: TimeInterval = TIMEOUT) {
         BaseTestCase().mozWaitForElementToExist(optInSheetTitle, timeout: timeout)
         XCTAssertTrue(optInSheetTitle.waitForFrameToSettle(), "The Quick Answers opt-in sheet kept moving")
-        BaseTestCase().mozWaitForElementToExist(optInSheetCloseButton)
+        XCTAssertNotNil(optInSheetCloseButton, "The Quick Answers opt-in sheet has no \"Close\" button above its title")
     }
 
+    /// Fails rather than tapping another "Close", whose X would also end the flow and hide a wrong tap.
     func closeOptInSheet() {
-        optInSheetCloseButton.waitAndTap()
+        guard let closeButton = optInSheetCloseButton else {
+            XCTFail("The Quick Answers opt-in sheet has no \"Close\" button above its title")
+            return
+        }
+        closeButton.waitAndTap()
     }
 
     func assertOptInSheetDismissed(timeout: TimeInterval = TIMEOUT) {
