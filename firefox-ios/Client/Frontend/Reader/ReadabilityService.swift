@@ -40,7 +40,15 @@ class ReadabilityOperation: Operation, @unchecked Sendable {
         // and WebKit are not safe from other threads.
 
         DispatchQueue.main.async(execute: { () in
-            let configuration = WKWebViewConfiguration()
+            let parameters = WKWebViewParameters(
+                blockPopups: true,
+                isPrivate: false,
+                autoPlay: .all,
+                schemeHandler: InternalSchemeHandler()
+            )
+            let configuration = DefaultWKEngineConfigurationProvider()
+                .createConfiguration(parameters: parameters)
+                .webViewConfiguration
             let windowManager: WindowManager = AppContainer.shared.resolve()
             let defaultUUID = windowManager.windows.first?.key ?? .unavailable
             let tab = Tab(profile: self.profile, windowUUID: defaultUUID)
