@@ -148,6 +148,67 @@ final class BrowserViewControllerKeyboardConstraintTests: BrowserViewControllerC
         subject.keyboardHelper(keyboardHelper, keyboardWillHideWithState: hideState)
     }
 
+    // MARK: - Missed keyboard hide
+
+    func test_keyboardDidHide_withoutWillHide_removesKeyboardSpacer() {
+        let subject = createSubject()
+        selectTabWithFindInPage()
+        let keyboardHelper = createKeyboardHelper()
+        subject.keyboardHelper(keyboardHelper, keyboardWillShowWithState: createKeyboardState())
+        XCTAssertNotNil(keyboardSpacerHeightConstant(in: subject.overKeyboardContainer))
+
+        subject.keyboardHelper(keyboardHelper, keyboardDidHideWithState: createKeyboardState(keyboardHeight: 0))
+
+        XCTAssertNil(keyboardSpacerHeightConstant(in: subject.overKeyboardContainer))
+        XCTAssertEqual(subject.overKeyboardContainer.subviews.count, 1)
+    }
+
+    func test_keyboardDidHide_afterFrameChangeInterruptsHide_removesKeyboardSpacer() {
+        let subject = createSubject()
+        selectTabWithFindInPage()
+        let keyboardHelper = createKeyboardHelper()
+        subject.keyboardHelper(keyboardHelper, keyboardWillShowWithState: createKeyboardState())
+        subject.keyboardHelper(keyboardHelper, keyboardWillHideWithState: createKeyboardState(keyboardHeight: 0))
+        subject.keyboardHelper(keyboardHelper, keyboardWillChangeWithState: createKeyboardState())
+        XCTAssertNotNil(keyboardSpacerHeightConstant(in: subject.overKeyboardContainer))
+
+        subject.keyboardHelper(keyboardHelper, keyboardDidHideWithState: createKeyboardState(keyboardHeight: 0))
+
+        XCTAssertNil(keyboardSpacerHeightConstant(in: subject.overKeyboardContainer))
+        XCTAssertEqual(subject.overKeyboardContainer.subviews.count, 1)
+    }
+
+    /// The keyboard can go away while the app is in the background (e.g. the page blurs its input)
+    /// without a hide notification reaching us, so nothing is first responder when the scene returns.
+    func test_sceneDidActivate_keyboardGoneWithoutHideNotification_removesKeyboardSpacer() {
+        let subject = createSubject()
+        selectTabWithFindInPage()
+        let keyboardHelper = createKeyboardHelper()
+        subject.keyboardHelper(keyboardHelper, keyboardWillShowWithState: createKeyboardState())
+        XCTAssertNotNil(keyboardSpacerHeightConstant(in: subject.overKeyboardContainer))
+
+        subject.sceneDidActivateNotification()
+        subject.view.setNeedsUpdateConstraints()
+        subject.view.updateConstraintsIfNeeded()
+
+        XCTAssertNil(keyboardSpacerHeightConstant(in: subject.overKeyboardContainer))
+        XCTAssertEqual(subject.overKeyboardContainer.subviews.count, 1)
+    }
+
+    func test_sceneDidActivate_inputStillFocused_keepsKeyboardSpacer() {
+        let subject = createSubject()
+        selectTabWithFindInPage()
+        let keyboardHelper = createKeyboardHelper()
+        subject.view.addSubview(FirstResponderView())
+        subject.keyboardHelper(keyboardHelper, keyboardWillShowWithState: createKeyboardState())
+
+        subject.sceneDidActivateNotification()
+        subject.view.setNeedsUpdateConstraints()
+        subject.view.updateConstraintsIfNeeded()
+
+        XCTAssertNotNil(keyboardSpacerHeightConstant(in: subject.overKeyboardContainer))
+    }
+
     // MARK: - bottomContentStackView Position Tests
 
     func test_keyboardWillShow_TopToolbar_bottomContentNoUpdate() {
@@ -324,4 +385,9 @@ final class BrowserViewControllerKeyboardConstraintTests: BrowserViewControllerC
                              keyboardAnimationDuration: 0,
                              keyboardAnimationCurveValue: 0)
     }
+}
+
+/// Stands in for a focused input, since a real view can only become first responder inside a window.
+private final class FirstResponderView: UIView {
+    override var isFirstResponder: Bool { true }
 }
