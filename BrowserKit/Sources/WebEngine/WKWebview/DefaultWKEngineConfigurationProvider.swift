@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import WebKit
 
@@ -60,9 +61,12 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
     private static let defaultDataDetectorTypes: WKDataDetectorTypes = [.phoneNumber]
     public private(set) static var isProxyEnabled = false
     private let configuration: WKWebViewConfiguration
+    private let logger: Logger
 
-    public init(configuration: WKWebViewConfiguration = WKWebViewConfiguration()) {
+    public init(configuration: WKWebViewConfiguration = WKWebViewConfiguration(),
+                logger: Logger = DefaultLogger.shared) {
         self.configuration = configuration
+        self.logger = logger
     }
 
     /// Inert OHTTP config appended to every stack, to make WebKit drop its existing sessions
@@ -114,14 +118,21 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
     /// Turning it off costs little: WebKit only supports WebTransport from iOS 26.4+, its usage on the web is still
     /// very low (Chrome usage stats: https://chromestatus.com/metrics/feature/timeline/popularity/3472), 
     /// and few sites serve HTTP/3 over QUIC at all. Users who need the API can update to iOS 27.2+.
-    private static func disableWebTransport(on preferences: WKPreferences) {
+    ///
+    /// If Apple renames the key or removes interface, WebTransport silently stays on, so that case is logged.
+    func disableWebTransport(on preferences: WKPreferences, featureKey: String = "WebTransportEnabled") {
         let featuresSelector = NSSelectorFromString("_features")
         let setEnabledSelector = NSSelectorFromString("_setEnabled:forFeature:")
         guard (WKPreferences.self as AnyObject).responds(to: featuresSelector),
               preferences.responds(to: setEnabledSelector),
               let features = (WKPreferences.self as AnyObject).value(forKey: "_features") as? [NSObject],
-              let webTransport = features.first(where: { $0.value(forKey: "key") as? String == "WebTransportEnabled" })
-        else { return }
+              let webTransport = features.first(where: { $0.value(forKey: "key") as? String == featureKey })
+        else {
+            logger.log("Couldn't disable WebTransport: WebKit's feature flag or the \(featureKey) key is missing",
+                       level: .warning,
+                       category: .webview)
+            return
+        }
         preferences.perform(setEnabledSelector, with: nil, with: webTransport)
     }
 
@@ -143,7 +154,7 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
         configuration.allowsInlineMediaPlayback = true
         configuration.dataDetectorTypes = DefaultWKEngineConfigurationProvider.defaultDataDetectorTypes
         if #unavailable(iOS 27.2) {
-            Self.disableWebTransport(on: configuration.preferences)
+            disableWebTransport(on: configuration.preferences)
         }
 
         // TODO: FXIOS-8086 - Evaluate if ignoresViewportScaleLimits is still needed
