@@ -9,7 +9,7 @@ import Shared
 enum VPNHelpers {
     enum UX {
         static let horizontalPadding: CGFloat = 16
-        static let rowVerticalPadding: CGFloat = 12
+        static let rowVerticalPadding: CGFloat = 16
         static let cardCornerRadius: CGFloat = 26
         static let loadingSpacing: CGFloat = 8
         static let warningUsageThreshold = 0.75
