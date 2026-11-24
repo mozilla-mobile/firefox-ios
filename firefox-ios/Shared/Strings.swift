@@ -5007,7 +5007,12 @@ extension String {
             key: "TabGroups.NewTabGroupMenu.v163",
             tableName: "TabGroups",
             value: "New Tab Group…",
-            comment: "Menu action that opens the panel for creating a tab group. The ellipsis indicates that the user needs to name and save the group.")
+            comment: "Menu item for creating a group as part of another action, such as moving tabs or opening a link. The ellipsis indicates that the user creates the group before the original action is completed.")
+        public static let NewTabGroupSwitcherMenu = MZLocalizedString(
+            key: "TabGroups.NewTabGroupSwitcherMenu.v163",
+            tableName: "TabGroups",
+            value: "New Tab Group",
+            comment: "Menu item in the tab group switcher that starts creating an empty tab group.")
         public static let CloseAllTabs = MZLocalizedString(
             key: "TabGroups.CloseAllTabs.v163",
             tableName: "TabGroups",
@@ -5039,12 +5044,7 @@ extension String {
                 key: "TabGroups.ManageTitle.v163",
                 tableName: "TabGroups",
                 value: "Manage “%@”",
-                comment: "Heading in the tab group management menu, which contains options such as ungrouping tabs or deleting the group. %@ is the group name entered by the user.")
-            public static let ManageUngroupedTabsTitle = MZLocalizedString(
-                key: "TabGroups.ManageUngroupedTabsTitle.v163",
-                tableName: "TabGroups",
-                value: "Manage “Ungrouped (%@)”",
-                comment: "Heading of the management menu for tabs outside any group. %@ is the formatted number of ungrouped tabs. It can be 0, 1, or more.")
+                comment: "Heading of the management menu. %@ is the group name entered by the user, or the localized label for the default tab list, such as “All Tabs (20)”.")
             public static let EditGroup = MZLocalizedString(
                 key: "TabGroups.EditGroup.v163",
                 tableName: "TabGroups",
