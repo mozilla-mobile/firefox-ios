@@ -314,6 +314,7 @@
 		213B67A827CE721E000542F5 /* StartAtHomeHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213B67A727CE721E000542F5 /* StartAtHomeHelperTests.swift */; };
 		213B7AF02D779D2400DF0123 /* Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213B7AEF2D779D2400DF0123 /* Download.swift */; };
 		213BF7532AC21D1B00C53A64 /* TabDisplayPanelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213BF7522AC21D1B00C53A64 /* TabDisplayPanelViewController.swift */; };
+		213D4DAB30B63E9000111860 /* SearchSettingsModernAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213D4DAA30B63E9000111860 /* SearchSettingsModernAction.swift */; };
 		2140995F2DCBEC32004881E1 /* PageZoomSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2140995E2DCBEC2B004881E1 /* PageZoomSettingView.swift */; };
 		214099622DCE57A4004881E1 /* GenericSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214099612DCE579D004881E1 /* GenericSectionHeaderView.swift */; };
 		214099652DD295F5004881E1 /* ZoomLevelPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214099642DD295F5004881E1 /* ZoomLevelPickerView.swift */; };
@@ -3362,6 +3363,7 @@
 		213B67A727CE721E000542F5 /* StartAtHomeHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartAtHomeHelperTests.swift; sourceTree = "<group>"; };
 		213B7AEF2D779D2400DF0123 /* Download.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Download.swift; sourceTree = "<group>"; };
 		213BF7522AC21D1B00C53A64 /* TabDisplayPanelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabDisplayPanelViewController.swift; sourceTree = "<group>"; };
+		213D4DAA30B63E9000111860 /* SearchSettingsModernAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSettingsModernAction.swift; sourceTree = "<group>"; };
 		2140995E2DCBEC2B004881E1 /* PageZoomSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageZoomSettingView.swift; sourceTree = "<group>"; };
 		214099612DCE579D004881E1 /* GenericSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericSectionHeaderView.swift; sourceTree = "<group>"; };
 		214099642DD295F5004881E1 /* ZoomLevelPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomLevelPickerView.swift; sourceTree = "<group>"; };
@@ -14025,6 +14027,7 @@
 				8AE1E1CE27B191160024C45E /* SearchBar */,
 				2F44FCCA1A9E972E00FD20CC /* SearchEnginePicker.swift */,
 				2F44FCC61A9E8CF500FD20CC /* SearchSettingsTableViewController.swift */,
+				213D4DAA30B63E9000111860 /* SearchSettingsModernAction.swift */,
 				74E36D771B71323500D69DA1 /* SettingsContentViewController.swift */,
 				D04CD717215EBD85004FF5B0 /* SettingsLoadingView.swift */,
 				C234BFBF2EBB82E1004BF5A8 /* SettingsNavigationController.swift */,
@@ -20928,6 +20931,7 @@
 				6114442D306F51F1000A7343 /* VPNGuardian.swift in Sources */,
 				1D0BA05C24F46A0400D731B5 /* TopSitesProvider.swift in Sources */,
 				A093CD292F35408E0017774C /* MozAdsClientFactory.swift in Sources */,
+				213D4DAB30B63E9000111860 /* SearchSettingsModernAction.swift in Sources */,
 				A093CD2A2F35408E0017774C /* Site+MozAdsTile.swift in Sources */,
 				8A7D08E32CAAF7C30035999C /* HomepageViewController.swift in Sources */,
 				8A7D08E52FBE2EBC0035999C /* HomepageTabStateStore.swift in Sources */,

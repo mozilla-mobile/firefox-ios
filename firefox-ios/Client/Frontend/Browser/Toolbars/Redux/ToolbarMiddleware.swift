@@ -58,8 +58,28 @@ final class ToolbarMiddleware {
     lazy var toolbarProvider: Middleware<AppState> = (legacyProvider, modernProvider)
 
     lazy var modernProvider: MiddlewareClosure<AppState> = { [self] state, action, windowUUID in
-        guard let action = action as? ToolbarModernAction else { return }
+        switch action {
+        case let action as ToolbarModernAction:
+            handleToolbarModernAction(action, windowUUID: windowUUID)
+        case let action as SearchSettingsModernAction:
+            handleSearchSettingsAction(action, windowUUID: windowUUID)
+        default:
+            break
+        }
+    }
 
+    lazy var legacyProvider: LegacyMiddlewareClosure<AppState> = { [self] state, action in
+        if let action = action as? GeneralBrowserMiddlewareAction {
+            self.resolveGeneralBrowserMiddlewareActions(action: action)
+        } else if let action = action as? ToolbarMiddlewareAction {
+            self.resolveToolbarMiddlewareActions(action: action, state: state)
+        } else if let action = action as? ToolbarAction {
+            self.resolveToolbarActions(action: action, state: state)
+        }
+    }
+
+    @MainActor
+    private func handleToolbarModernAction(_ action: ToolbarModernAction, windowUUID: WindowUUID) {
         switch action {
         case .cancelEdit:
             // When editing ends, we need to also clear the address bar's search engine selection (if not default)
@@ -74,13 +94,11 @@ final class ToolbarMiddleware {
         }
     }
 
-    lazy var legacyProvider: LegacyMiddlewareClosure<AppState> = { [self] state, action in
-        if let action = action as? GeneralBrowserMiddlewareAction {
-            self.resolveGeneralBrowserMiddlewareActions(action: action)
-        } else if let action = action as? ToolbarMiddlewareAction {
-            self.resolveToolbarMiddlewareActions(action: action, state: state)
-        } else if let action = action as? ToolbarAction {
-            self.resolveToolbarActions(action: action, state: state)
+    @MainActor
+    private func handleSearchSettingsAction(_ action: SearchSettingsModernAction, windowUUID: WindowUUID) {
+        switch action {
+        case .searchEngineDidChange, .googleLensSettingDidChange:
+            dispatchGoogleLensAvailability(for: windowUUID)
         }
     }
 
@@ -160,9 +178,6 @@ final class ToolbarMiddleware {
 
     private func resolveToolbarActions(action: ToolbarAction, state: AppState) {
         switch action.actionType {
-        case ToolbarActionType.searchEngineDidChange, ToolbarActionType.googleLensSettingDidChange:
-            dispatchGoogleLensAvailability(for: action.windowUUID)
-
         case ToolbarActionType.urlDidChange:
             updateGoogleLensAvailabilityIfBrowsingModeChanged(windowUUID: action.windowUUID, state: state)
 
