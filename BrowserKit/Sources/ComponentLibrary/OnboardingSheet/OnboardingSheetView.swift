@@ -41,7 +41,7 @@ struct OnboardingSheetView: ThemeableView {
     @State var theme: Theme
     let windowUUID: WindowUUID
     let themeManager: ThemeManager
-    private let viewModel: OnboardingSheetViewModel
+    private let configuration: OnboardingSheetConfiguration
     private let onCTA: () -> Void
     private let onLearnMore: () -> Void
     private let onDismiss: () -> Void
@@ -57,14 +57,14 @@ struct OnboardingSheetView: ThemeableView {
     init(
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
-        viewModel: OnboardingSheetViewModel,
+        configuration: OnboardingSheetConfiguration,
         onCTA: @escaping () -> Void,
         onLearnMore: @escaping () -> Void,
         onDismiss: @escaping () -> Void
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
-        self.viewModel = viewModel
+        self.configuration = configuration
         self.onCTA = onCTA
         self.onLearnMore = onLearnMore
         self.onDismiss = onDismiss
@@ -159,12 +159,12 @@ struct OnboardingSheetView: ThemeableView {
         VStack(alignment: .leading, spacing: isCompact ? UX.Compact.introSpacing : UX.contentSpacing) {
             heroImage
             VStack(alignment: .leading, spacing: 0) {
-                Text(viewModel.title)
+                Text(configuration.title)
                     .font(FXFontStyles.Bold.title2.scaledSwiftUIFont())
                     .foregroundStyle(theme.colors.textPrimary.color)
                     .accessibilityAddTraits(.isHeader)
                     .accessibilityFocused($isTitleFocused)
-                Text(viewModel.description)
+                Text(configuration.description)
                     .font(FXFontStyles.Regular.title2.scaledSwiftUIFont())
                     .foregroundStyle(theme.colors.textSecondary.color)
             }
@@ -173,11 +173,11 @@ struct OnboardingSheetView: ThemeableView {
     }
 
     private var heroImage: some View {
-        Image(viewModel.heroImageName)
+        Image(configuration.heroImageName)
             .resizable()
             .renderingMode(.template)
             .aspectRatio(contentMode: .fit)
-            .foregroundStyle(viewModel.heroGradient.linearGradient(for: theme))
+            .foregroundStyle(configuration.heroGradient.linearGradient(for: theme))
             .frame(height: isCompact ? UX.Compact.heroImageSize : UX.heroImageSize)
             .frame(maxWidth: .infinity)
             .accessibilityHidden(true)
@@ -186,21 +186,21 @@ struct OnboardingSheetView: ThemeableView {
     private var rows: some View {
         VStack(alignment: .leading, spacing: rowsSpacing) {
             VStack(alignment: .leading, spacing: rowsSpacing) {
-                ForEach(viewModel.rows, id: \.title) { row in
+                ForEach(configuration.rows, id: \.title) { row in
                     rowView(row)
                 }
             }
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(
-                viewModel.rows.map { "\($0.title), \($0.subtitle)" }.joined(separator: ", ")
+                configuration.rows.map { "\($0.title), \($0.subtitle)" }.joined(separator: ", ")
             )
-            Button(viewModel.learnMoreTitle, action: onLearnMore)
+            Button(configuration.learnMoreTitle, action: onLearnMore)
                 .buttonStyle(.plain)
                 .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
                 .foregroundStyle(theme.colors.iconAccent.color)
                 .padding(.leading, UX.learnMoreLeadingPadding)
                 .accessibilityAddTraits(.isLink)
-                .accessibilityIdentifier(viewModel.learnMoreAccessibilityIdentifier)
+                .accessibilityIdentifier(configuration.learnMoreAccessibilityIdentifier)
         }
         .padding(.leading, isCompact ? 0.0 : UX.rowsLeadingPadding)
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -231,15 +231,15 @@ struct OnboardingSheetView: ThemeableView {
                 .renderingMode(.template)
         }
         .tint(theme.colors.iconPrimary.color)
-        .accessibilityLabel(viewModel.closeAccessibilityLabel)
-        .accessibilityIdentifier(viewModel.closeAccessibilityIdentifier)
+        .accessibilityLabel(configuration.closeAccessibilityLabel)
+        .accessibilityIdentifier(configuration.closeAccessibilityIdentifier)
     }
 
     private var ctaButton: some View {
-        Button(viewModel.ctaTitle, action: onCTA)
+        Button(configuration.ctaTitle, action: onCTA)
             .primaryButtonStyle(theme: theme)
             .frame(maxWidth: UX.ctaButtonMaxWidth)
-            .accessibilityIdentifier(viewModel.ctaAccessibilityIdentifier)
+            .accessibilityIdentifier(configuration.ctaAccessibilityIdentifier)
     }
 }
 

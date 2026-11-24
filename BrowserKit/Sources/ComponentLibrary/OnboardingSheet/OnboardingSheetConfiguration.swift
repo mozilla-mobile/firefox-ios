@@ -16,7 +16,7 @@ public struct OnboardingSheetRow: Equatable {
     }
 }
 
-public struct OnboardingSheetViewModel: Equatable {
+public struct OnboardingSheetConfiguration: Equatable {
     public let heroImageName: String
     public let heroGradient: OnboardingSheetHeroGradient
     public let title: String

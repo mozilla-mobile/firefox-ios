@@ -17,7 +17,7 @@ public final class OnboardingSheetViewController: UIViewController {
     public init(
         windowUUID: WindowUUID,
         themeManager: any ThemeManager,
-        viewModel: OnboardingSheetViewModel,
+        configuration: OnboardingSheetConfiguration,
         onCTA: @escaping () -> Void,
         onLearnMore: @escaping () -> Void,
         onDismiss: @escaping () -> Void
@@ -28,7 +28,7 @@ public final class OnboardingSheetViewController: UIViewController {
         hostingController = UIHostingController(rootView: OnboardingSheetView(
             windowUUID: windowUUID,
             themeManager: themeManager,
-            viewModel: viewModel,
+            configuration: configuration,
             onCTA: onCTA,
             onLearnMore: onLearnMore,
             onDismiss: onDismiss

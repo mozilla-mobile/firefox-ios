@@ -306,7 +306,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
     func makeOptInController() -> OnboardingSheetViewController {
         let strings = stringsConfiguration.optInRedesign
         let accessibilityIdentifiers = stringsConfiguration.optInAccessibilityIdentifiers
-        let sheetViewModel = OnboardingSheetViewModel(
+        let sheetConfiguration = OnboardingSheetConfiguration(
             heroImageName: StandardImageIdentifiers.Large.audioWave,
             heroGradient: .aiStrong,
             title: strings.title,
@@ -338,7 +338,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         let controller = OnboardingSheetViewController(
             windowUUID: windowUUID,
             themeManager: themeManager,
-            viewModel: sheetViewModel,
+            configuration: sheetConfiguration,
             onCTA: { [weak self] in
                 self?.presentedViewController?.dismiss(animated: true)
                 self?.viewModel.completeOptIn()
