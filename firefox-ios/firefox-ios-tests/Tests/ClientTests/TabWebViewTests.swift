@@ -13,6 +13,7 @@ class TabWebViewTests: XCTestCaseRootViewController, UIGestureRecognizerDelegate
     private var navigationDelegate: MockNavigationDelegate!
     private var tabWebViewDelegate: MockTabWebViewDelegate!
     private let sleepTime: UInt64 = 1 * NSEC_PER_SEC
+    private let inputViewsReloadWaitTime: UInt64 = 300 * NSEC_PER_MSEC
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() async throws {
@@ -130,6 +131,35 @@ class TabWebViewTests: XCTestCaseRootViewController, UIGestureRecognizerDelegate
         XCTAssertIdentical(subject.inputAccessoryView, accessoryView)
     }
 
+    func testContentAvailabilityChange_onPad_reloadsInputViewsOnFirstResponder() async throws {
+        guard #available(iOS 26.0, *) else { throw XCTSkip("Only iOS 26+ drops the iPad navigation buttons") }
+        let accessoryView = AccessoryViewProvider(windowUUID: windowUUID, userInterfaceIdiom: .pad)
+        let subject = try await createSubject(accessoryView: accessoryView)
+        let contentView = FirstResponderSpyView()
+        subject.scrollView.addSubview(contentView)
+
+        subject.accessoryView.reloadViewFor(.login)
+        try await Task.sleep(nanoseconds: inputViewsReloadWaitTime)
+
+        XCTAssertEqual(contentView.reloadInputViewsCallCount, 1)
+    }
+
+    func testContentAvailabilityChange_onPad_backToBackChangesReloadOnce() async throws {
+        guard #available(iOS 26.0, *) else { throw XCTSkip("Only iOS 26+ drops the iPad navigation buttons") }
+        let accessoryView = AccessoryViewProvider(windowUUID: windowUUID, userInterfaceIdiom: .pad)
+        let subject = try await createSubject(accessoryView: accessoryView)
+        subject.accessoryView.reloadViewFor(.passwordGenerator)
+        try await Task.sleep(nanoseconds: inputViewsReloadWaitTime)
+        let contentView = FirstResponderSpyView()
+        subject.scrollView.addSubview(contentView)
+
+        subject.accessoryView.reloadViewFor(.standard)
+        subject.accessoryView.reloadViewFor(.passwordGenerator)
+        try await Task.sleep(nanoseconds: inputViewsReloadWaitTime)
+
+        XCTAssertEqual(contentView.reloadInputViewsCallCount, 1)
+    }
+
     // MARK: - Helper methods
 
     func createSubject(accessoryView: AccessoryViewProvider? = nil,
@@ -162,3 +192,14 @@ class MockTabWebViewDelegate: TabWebViewDelegate {
 
 // MARK: - MockNavigationDelegate
 class MockNavigationDelegate: NSObject, WKNavigationDelegate {}
+
+// MARK: - FirstResponderSpyView
+class FirstResponderSpyView: UIView {
+    var reloadInputViewsCallCount = 0
+
+    override var isFirstResponder: Bool { true }
+
+    override func reloadInputViews() {
+        reloadInputViewsCallCount += 1
+    }
+}

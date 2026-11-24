@@ -31,6 +31,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Notifi
     private var theme: Theme?
     private var uiTestLeakView: UIView? // Used for automation
     private var certStore: CertStore
+    private var inputViewsReloadTask: Task<Void, Never>?
     var notificationCenter: any NotificationProtocol
 
     deinit {
@@ -71,6 +72,19 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Notifi
         return accessoryView
     }
 
+    /// The logins script clears the accessory view right before setting a new item, and the keyboard ignores
+    /// a second reload that comes that quickly, so back to back changes are merged into one reload.
+    private func scheduleInputViewsReload() {
+        inputViewsReloadTask?.cancel()
+        inputViewsReloadTask = Task { @MainActor [weak self] in
+            try? await Task.sleep(nanoseconds: NSEC_PER_MSEC * 100)
+            guard !Task.isCancelled, let self else { return }
+            // While typing, WebKit's content view is the first responder, so reloading the web view itself is ignored.
+            let responder = scrollView.subviews.first { $0.isFirstResponder } ?? self
+            responder.reloadInputViews()
+        }
+    }
+
     private var shouldSuppressAccessoryViewOniPad: Bool {
         guard #available(iOS 26.0, *), UIDevice.current.userInterfaceIdiom == .pad else { return false }
         let isHardwareKeyboardConnected = GCKeyboard.coalesced != nil
@@ -84,7 +98,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Notifi
         self.navigationDelegate = navigationDelegate
 
         accessoryView.contentAvailabilityChanged = { [weak self] in
-            self?.reloadInputViews()
+            self?.scheduleInputViewsReload()
         }
 
         accessoryView.previousClosure = { [weak self] in
