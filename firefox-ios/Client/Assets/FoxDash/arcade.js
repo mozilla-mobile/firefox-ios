@@ -63,14 +63,25 @@
     return view;
   }
 
-  // Calls step(dt) every animation frame. dt is capped so a slow frame or a
-  // backgrounded tab can't make things tunnel through each other.
+  // Calls step(dt) every animation frame. dt is the typical frame interval
+  // (median of recent frames), not the time since the last frame, so a frame
+  // that runs late doesn't make the world lurch forward to catch up. Only a
+  // long stall, like a backgrounded tab, uses real time, capped so nothing
+  // tunnels through.
   function loop(step) {
+    const recent = new Float64Array(15).fill(1 / 60);
+    const sorted = new Float64Array(recent.length);
+    let next = 0;
     let last = performance.now();
     function frame(now) {
-      const dt = Math.min((now - last) / 1000, 1 / 20);
+      const elapsed = (now - last) / 1000;
       last = now;
-      step(dt);
+      recent[next] = elapsed;
+      next = (next + 1) % recent.length;
+      sorted.set(recent);
+      sorted.sort();
+      const interval = sorted[sorted.length >> 1];
+      step(elapsed > interval * 4 ? Math.min(elapsed, 1 / 20) : interval);
       requestAnimationFrame(frame);
     }
     requestAnimationFrame(frame);
