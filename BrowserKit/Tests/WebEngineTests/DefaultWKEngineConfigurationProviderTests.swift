@@ -71,7 +71,45 @@ final class DefaultWKEngineConfigurationProviderTests: XCTestCase {
         XCTAssertFalse(afterStore.isPersistent)
     }
 
+    func testWebTransport_isDisabledBeforeiOS27_2() throws {
+        guard #unavailable(iOS 27.2) else { throw XCTSkip("WebTransport stays on from iOS 27.2") }
+        let subject = createSubject()
+
+        let preferences = subject.createConfiguration(parameters: normalParams()).webViewConfiguration.preferences
+
+        XCTAssertEqual(try webTransportEnabled(on: preferences), false)
+    }
+
+    func testWebTransport_isDisabledForPrivateTabsBeforeiOS27_2() throws {
+        guard #unavailable(iOS 27.2) else { throw XCTSkip("WebTransport stays on from iOS 27.2") }
+        let subject = createSubject()
+
+        let preferences = subject.createConfiguration(parameters: privateParams()).webViewConfiguration.preferences
+
+        XCTAssertEqual(try webTransportEnabled(on: preferences), false)
+    }
+
+    func testWebTransport_keepsWebKitDefaultFromiOS27_2() throws {
+        guard #available(iOS 27.2, *) else { throw XCTSkip("WebTransport is disabled before iOS 27.2") }
+        let subject = createSubject()
+
+        let preferences = subject.createConfiguration(parameters: normalParams()).webViewConfiguration.preferences
+
+        XCTAssertEqual(try webTransportEnabled(on: preferences), try webTransportEnabled(on: WKPreferences()))
+    }
+
     // MARK: - Helpers
+
+    private func webTransportEnabled(on preferences: WKPreferences) throws -> Bool {
+        let isEnabledSelector = NSSelectorFromString("_isEnabledForFeature:")
+        guard preferences.responds(to: isEnabledSelector),
+              let features = (WKPreferences.self as AnyObject).value(forKey: "_features") as? [NSObject],
+              let webTransport = features.first(where: { $0.value(forKey: "key") as? String == "WebTransportEnabled" })
+        else { throw XCTSkip("This WebKit has no WebTransport feature flag") }
+        typealias IsEnabled = @convention(c) (AnyObject, Selector, AnyObject) -> Bool
+        let isEnabled = unsafeBitCast(preferences.method(for: isEnabledSelector), to: IsEnabled.self)
+        return isEnabled(preferences, isEnabledSelector, webTransport)
+    }
 
     private func createSubject() -> DefaultWKEngineConfigurationProvider {
         return DefaultWKEngineConfigurationProvider()
