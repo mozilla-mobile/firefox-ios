@@ -18,6 +18,8 @@ findings can be wrong.
 
 To review again, for example after pushing fixes, add the label again. A later
 review should not repeat itself or it's findings: see [Follow-up reviews](#follow-up-reviews).
+If the latest AI review is already of the head commit, the model isn't run
+again: a short comment links to that review instead.
 
 Pull requests from forks are reviewed the same way.
 
@@ -84,7 +86,11 @@ The model, effort and turn limit are set in `claude_args` in the workflow.
 
 ## How it works
 
-`.github/workflows/ai-code-review.yml` runs two jobs when the label is added.
+`.github/workflows/ai-code-review.yml` runs three jobs when the label is added.
+
+**Check** (read-only token): `check_reviewed.py` looks for an AI review of the
+head commit. If there is one, the review job is skipped, and the post job only
+links to it.
 
 **Review** (read-only token):
 
@@ -182,8 +188,6 @@ the API key. That makes everything in the pull request untrusted, so:
 - **Large pull requests**: the compare API lists at most 300 files, so a
   larger change is reviewed on its first 300 files, and the review's footer
   says so.
-- **Reviews of an unchanged commit**: adding the label again without new
-  commits still runs the model, and costs about as much as a full review.
 - **Extra timeline entries**: each follow-up reply also appears in the pull
   request's timeline as an empty review by github-actions. That's how GitHub's
   reply API works.
@@ -207,6 +211,7 @@ be on that branch, normally `main`, before a label starts it.
 | `prompt.md` | The model's review instructions: what to look for and the output format |
 | `gather_context.py` | Collects the pull request's context for the model |
 | `load_guidance.py` | Matches `review-context.toml` and loads the guidance |
+| `check_reviewed.py` | Finds an AI review of the head commit, so it isn't reviewed twice |
 | `post_review.py` | Posts the review, the follow-ups and stale or failure notices |
 | `common.py` | GitHub helpers shared by the scripts |
 

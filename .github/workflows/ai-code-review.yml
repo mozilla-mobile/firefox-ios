@@ -21,8 +21,39 @@ on:
 permissions: {}
 
 jobs:
-  review:
+  # Skips the review if the latest AI review is already of this commit: the
+  # model would only say the same again.
+  check:
     if: github.event.label.name == 'ai-review'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      reviewed: ${{ steps.check.outputs.reviewed }}
+    steps:
+      - name: Check out the review setup from the base branch
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+          sparse-checkout: scripts/ci/ai-review
+          sparse-checkout-cone-mode: false
+
+      - name: Check for an AI review of this commit
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.pull_request.number }}
+          COMMIT: ${{ github.event.pull_request.head.sha }}
+        run: |
+          url=$(python3 scripts/ci/ai-review/check_reviewed.py --repo "$REPO" --pr "$NUMBER" --commit "$COMMIT")
+          echo "reviewed=$url" >> "$GITHUB_OUTPUT"
+
+  review:
+    needs: check
+    if: needs.check.outputs.reviewed == ''
     runs-on: ubuntu-latest
     timeout-minutes: 30
     concurrency:
@@ -134,7 +165,7 @@ jobs:
 
   # A separate job, so the token that can comment is never in the job running Claude.
   post:
-    needs: review
+    needs: [check, review]
     if: always() && github.event.label.name == 'ai-review'
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -174,8 +205,16 @@ jobs:
           --review review/review.json --files review/files.json
           --notes review/notes.json --run-url "$RUN_URL"
 
+      - name: Point to the earlier review of this commit
+        if: needs.check.outputs.reviewed != ''
+        env:
+          REVIEWED: ${{ needs.check.outputs.reviewed }}
+        run: >-
+          gh api --method POST "repos/$REPO/issues/$NUMBER/comments"
+          -f body="The [AI review]($REVIEWED) already covers this commit, so it wasn't run again. Push new commits, then add the label again."
+
       - name: Report a failed review
-        if: needs.review.result == 'failure' || failure()
+        if: needs.check.result == 'failure' || needs.review.result == 'failure' || failure()
         run: >-
           gh api --method POST "repos/$REPO/issues/$NUMBER/comments"
           -f body="The AI code review didn't finish. [Workflow run]($RUN_URL)"
