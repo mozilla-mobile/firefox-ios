@@ -21662,7 +21662,6 @@
 				C8656D75270F834600E199EA /* FlaggableFeatureOptions.swift in Sources */,
 				1BE7A4922C636AEA00460798 /* URLSessionConfiguration+Extension.swift in Sources */,
 				2703E69630B09A9F00831691 /* HistoryNativeMenuHelper.swift in Sources */,
-				1BE7A4922C636AEA00460798 /* URLSessionConfiguration+defaultMPTCP.swift in Sources */,
 				C8CD80D82A1E31C20097C3AE /* NimbusOnboardingTestingConfigUtility.swift in Sources */,
 				033A62002E77FE9900A84E8A /* ResetTermsOfServiceAcceptancePage.swift in Sources */,
 				D3C744CD1A687D6C004CE85D /* URIFixup.swift in Sources */,
