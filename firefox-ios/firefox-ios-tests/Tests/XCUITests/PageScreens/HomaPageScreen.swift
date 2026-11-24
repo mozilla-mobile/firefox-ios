@@ -26,6 +26,8 @@ final class HomePageScreen {
     private var homeLogo: XCUIElement { sel.HOME_LOGO.element(in: app) }
     private var privHomepageTitle: XCUIElement { sel.PRIVATE_HOME_TITLE.element(in: app) }
     private var trackerBlockerPill: XCUIElement { sel.TRACKER_BLOCKER_PILL.element(in: app) }
+    private var quickAnswersButton: XCUIElement { sel.QUICK_ANSWERS_BUTTON.element(in: app) }
+    private var quickAnswersTipTitle: XCUIElement { sel.QUICK_ANSWERS_TIP_TITLE.element(in: app) }
 
     init(
         app: XCUIApplication,
@@ -57,6 +59,21 @@ final class HomePageScreen {
 
     func assertHomepageIsDisplayed() {
         BaseTestCase().waitForElementsToExist([collection, homeLogo])
+    }
+
+    /// Hittable rather than existing, so it also proves nothing is presented over Firefox Home.
+    func assertQuickAnswersButtonIsHittable(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitElementHittable(element: quickAnswersButton, timeout: timeout)
+    }
+
+    /// The tip shows once, on iOS 17+, and its popover keeps the button from being hit until closed.
+    func dismissQuickAnswersTipIfPresented() {
+        ToolbarScreen(app: app).dismissTipIfPresented(titled: quickAnswersTipTitle)
+    }
+
+    func tapQuickAnswersButton() {
+        BaseTestCase().mozWaitElementHittable(element: quickAnswersButton, timeout: TIMEOUT)
+        quickAnswersButton.tap()
     }
 
     func assertHomeLogoExists() {

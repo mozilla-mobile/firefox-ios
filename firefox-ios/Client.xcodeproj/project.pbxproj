@@ -1592,6 +1592,7 @@
 		ADDE0E48932B4A3AAED26477 /* InstallationHistoryStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC719121FA324FF09EDF9A8E /* InstallationHistoryStoreTests.swift */; };
 		AE33D4D2A3E444FD9DCBA2E8 /* TrackingProtectionViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6741EF98F0E46D595EE4FA9 /* TrackingProtectionViewControllerTests.swift */; };
 		AEC0FF0100000000000000A2 /* AIControlsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC0FF0100000000000000A1 /* AIControlsTests.swift */; };
+		AEC0FF0100000000000000B2 /* QuickAnswersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC0FF0100000000000000B1 /* QuickAnswersTests.swift */; };
 		AEC0FF0300000000000000C2 /* HTTPSFirstModeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC0FF0300000000000000C1 /* HTTPSFirstModeTests.swift */; };
 		AEC0FF0400000000000000D2 /* HTTPSTimeoutServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC0FF0400000000000000D1 /* HTTPSTimeoutServer.swift */; };
 		AEC0FF0500000000000000E2 /* UntrustedHTTPSServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC0FF0500000000000000E1 /* UntrustedHTTPSServer.swift */; };
@@ -11257,6 +11258,7 @@
 		AEB946A0984D10378CFCF88F /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AEBC42E8A9FC00D675AFEB5B /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		AEC0FF0100000000000000A1 /* AIControlsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIControlsTests.swift; sourceTree = "<group>"; };
+		AEC0FF0100000000000000B1 /* QuickAnswersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickAnswersTests.swift; sourceTree = "<group>"; };
 		AEC0FF0300000000000000C1 /* HTTPSFirstModeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPSFirstModeTests.swift; sourceTree = "<group>"; };
 		AEC0FF0400000000000000D1 /* HTTPSTimeoutServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPSTimeoutServer.swift; sourceTree = "<group>"; };
 		AEC0FF0500000000000000E1 /* UntrustedHTTPSServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UntrustedHTTPSServer.swift; sourceTree = "<group>"; };
@@ -14345,6 +14347,7 @@
 				2C4B6BF220349EB800A009C2 /* LegacyOnboardingTests.swift */,
 				EDDC4F722F68697E00E0B8FA /* ModernKitOnboardingTests.swift */,
 				AEC0FF0100000000000000A1 /* AIControlsTests.swift */,
+				AEC0FF0100000000000000B1 /* QuickAnswersTests.swift */,
 				AEC0FF0300000000000000C1 /* HTTPSFirstModeTests.swift */,
 				B15058802AA0A878008B7382 /* OpeningScreenTests.swift */,
 				D4C35390283500A600F7DC7D /* PerformanceTests.swift */,
@@ -20447,6 +20450,7 @@
 				8A9F0B5827C59E1800FE09AE /* ImageIdentifiers.swift in Sources */,
 				EDDC4F732F68697E00E0B8FA /* ModernKitOnboardingTests.swift in Sources */,
 				AEC0FF0100000000000000A2 /* AIControlsTests.swift in Sources */,
+				AEC0FF0100000000000000B2 /* QuickAnswersTests.swift in Sources */,
 				AEC0FF0300000000000000C2 /* HTTPSFirstModeTests.swift in Sources */,
 				AEC0FF0400000000000000D2 /* HTTPSTimeoutServer.swift in Sources */,
 				AEC0FF0500000000000000E2 /* UntrustedHTTPSServer.swift in Sources */,
