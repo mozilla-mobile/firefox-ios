@@ -37,6 +37,11 @@ final class TabCell: UICollectionViewCell,
     var isSelectedTab: Bool { return tabModel?.isSelected ?? false }
     var animator: SwipeAnimator?
     weak var delegate: TabCellDelegate?
+    private lazy var closeAccessibilityAction = UIAccessibilityCustomAction(
+        name: .TabsTray.TabTrayCloseAccessibilityCustomAction,
+        target: animator,
+        selector: #selector(SwipeAnimator.closeWithoutGesture)
+    )
 
     private lazy var smallFaviconView: FaviconImageView = .build()
     private lazy var favicon: FaviconImageView = .build()
@@ -76,6 +81,9 @@ final class TabCell: UICollectionViewCell,
     }
 
     private var borderGradientColors: [CGColor]?
+    private var selectedGroupColor: UIColor?
+    private var selectedGroupGradient: Gradient?
+    private var hidesSelectedBorder = false
 
     // MARK: - Initializer
 
@@ -89,11 +97,7 @@ final class TabCell: UICollectionViewCell,
         faviconBG.addSubview(smallFaviconView)
         backgroundHolder.addSubviews(screenshotView, faviconBG, headerView)
 
-        accessibilityCustomActions = [
-            UIAccessibilityCustomAction(name: .TabsTray.TabTrayCloseAccessibilityCustomAction,
-                                        target: animator,
-                                        selector: #selector(SwipeAnimator.closeWithoutGesture))
-        ]
+        accessibilityCustomActions = [closeAccessibilityAction]
 
         headerView.translatesAutoresizingMaskIntoConstraints = false
         headerView.contentView.addSubview(closeButton)
@@ -111,10 +115,14 @@ final class TabCell: UICollectionViewCell,
         theme: Theme?,
         delegate: TabCellDelegate,
         a11yId: String,
-        newTabTitle: String?
+        newTabTitle: String?,
+        selectedGroupColor: UIColor? = nil,
+        selectedGroupGradient: Gradient? = nil
     ) {
         self.tabModel = tabModel
         self.delegate = delegate
+        self.selectedGroupColor = selectedGroupColor
+        self.selectedGroupGradient = selectedGroupGradient
 
         if let swipeAnimatorDelegate = delegate as? SwipeAnimatorDelegate {
             animator?.delegate = swipeAnimatorDelegate
@@ -130,7 +138,8 @@ final class TabCell: UICollectionViewCell,
         }
 
         isAccessibilityElement = true
-        accessibilityHint = .TabsTray.TabTraySwipeToCloseAccessibilityHint
+        accessibilityHint = hidesSelectedBorder ? nil : .TabsTray.TabTraySwipeToCloseAccessibilityHint
+        accessibilityCustomActions = hidesSelectedBorder ? nil : [closeAccessibilityAction]
         accessibilityIdentifier = a11yId
 
         if !tabModel.isFxHomeTab, let tabURL = tabModel.url?.absoluteString {
@@ -173,14 +182,20 @@ final class TabCell: UICollectionViewCell,
 
     private func updateBorder(theme: Theme, isSelected: Bool, isPrivate: Bool) {
         borderGradientColors = nil
-        layer.borderWidth = isSelected ? UX.borderWidth : 0
+        let showsSelectedBorder = isSelected && !hidesSelectedBorder
+        layer.borderWidth = showsSelectedBorder ? UX.borderWidth : 0
 
-        guard isSelected else {
+        guard showsSelectedBorder else {
             layer.borderColor = UIColor.clear.cgColor
             return
         }
 
-        if theme.isNova {
+        if let selectedGroupGradient {
+            borderGradientColors = selectedGroupGradient.cgColors
+            setNeedsLayout()
+        } else if let selectedGroupColor {
+            layer.borderColor = selectedGroupColor.cgColor
+        } else if theme.isNova {
             borderGradientColors = theme.colors.gradientAccent.cgColors
             setNeedsLayout()
         } else {
@@ -261,6 +276,22 @@ final class TabCell: UICollectionViewCell,
         updateBorder(theme: theme, isSelected: selected, isPrivate: isPrivate)
     }
 
+    func setSelectedGroupColor(_ color: UIColor?, gradient: Gradient? = nil, theme: Theme?) {
+        selectedGroupColor = color
+        selectedGroupGradient = gradient
+        guard let theme else { return }
+        updateBorder(theme: theme, isSelected: isSelectedTab, isPrivate: tabModel?.isPrivate ?? false)
+    }
+
+    func setTabSelectionMode(_ isSelectingTabs: Bool, theme: Theme?) {
+        hidesSelectedBorder = isSelectingTabs
+        accessibilityHint = isSelectingTabs ? nil : .TabsTray.TabTraySwipeToCloseAccessibilityHint
+        accessibilityCustomActions = isSelectingTabs ? nil : [closeAccessibilityAction]
+        closeButton.isHidden = isSelectingTabs
+        guard let theme else { return }
+        updateBorder(theme: theme, isSelected: isSelectedTab, isPrivate: tabModel?.isPrivate ?? false)
+    }
+
     // MARK: - UICollectionViewCell
 
     override func layoutSubviews() {
@@ -280,6 +311,9 @@ final class TabCell: UICollectionViewCell,
         backgroundHolder.alpha = 1
         faviconBG.isHidden = true
         borderGradientColors = nil
+        selectedGroupColor = nil
+        selectedGroupGradient = nil
+        hidesSelectedBorder = false
         layer.borderColor = UIColor.clear.cgColor
         layer.borderWidth = 0
         layer.shadowOffset = .zero

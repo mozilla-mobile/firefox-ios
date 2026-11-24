@@ -115,6 +115,8 @@ final class TabDisplayView: UIView,
     var onToggleSelection: ((TabUUID) -> Void)?
     var showsOnlySelectedTabs = false
     var onSelectionChange: (() -> Void)?
+    var onCreateGroupForTab: ((TabUUID) -> Void)?
+    var onMoveTabToGroup: ((TabUUID, UUID?) -> Void)?
     private var performingChainedOperations = false
     private var tabsSectionManager: TabsSectionManager
     private let windowUUID: WindowUUID
@@ -151,7 +153,9 @@ final class TabDisplayView: UIView,
                            theme: theme,
                            delegate: self,
                            a11yId: a11yId,
-                           newTabTitle: newTabTitle)
+                           newTabTitle: newTabTitle,
+                           selectedGroupColor: selectedGroupColor,
+                           selectedGroupGradient: selectedGroupGradient)
             configureSelectionAppearance(cell, for: tab.tabUUID)
             if tab.tabUUID == minimizingTabUUID {
                 cell.isHidden = true
@@ -168,7 +172,9 @@ final class TabDisplayView: UIView,
                        theme: theme,
                        delegate: self,
                        a11yId: a11yId,
-                       newTabTitle: newTabTitle)
+                       newTabTitle: newTabTitle,
+                       selectedGroupColor: selectedGroupColor,
+                       selectedGroupGradient: selectedGroupGradient)
         configureSelectionAppearance(cell, for: tab.tabUUID)
         return cell
     }
@@ -317,7 +323,21 @@ final class TabDisplayView: UIView,
         return TabGroupColorPalette.color(for: group.color, theme: theme)
     }
 
+    private var selectedGroupGradient: Gradient? {
+        guard let group = selectedGroup, let theme else { return nil }
+        return TabGroupColorPalette.borderGradient(for: group.color, theme: theme)
+    }
+
     private func configureSelectionAppearance(_ cell: UICollectionViewCell, for tabID: TabUUID) {
+        let color = selectedGroupColor
+        let gradient = selectedGroupGradient
+        if let cell = cell as? TabCell {
+            cell.setSelectedGroupColor(color, gradient: gradient, theme: theme)
+            cell.setTabSelectionMode(isSelectingTabs, theme: theme)
+        } else if let cell = cell as? ExperimentTabCell {
+            cell.setSelectedGroupColor(color, gradient: gradient, theme: theme)
+            cell.setTabSelectionMode(isSelectingTabs, theme: theme)
+        }
         let isSelected = (selectionProvider?() ?? selectedTabIDs).contains(tabID)
         let selectionColor = selectedGroupColor ?? theme?.colors.actionPrimary ?? .systemBlue
         let isDefaultGroup = selectedGroup.map { TabGroupColorPalette.isDefault($0.color) } == true
@@ -484,6 +504,7 @@ final class TabDisplayView: UIView,
                     toggleTabSelection(tabUUID)
                     return
                 }
+                tabGroupsController?.recordSelectedTab(tabUUID, normalTabIDs: sourceState.tabs.map(\.tabUUID))
                 let action = TabPanelViewAction(panelType: panelType,
                                                 tabUUID: tabUUID,
                                                 selectedTabIndex: indexPath.item,
@@ -525,13 +546,86 @@ final class TabDisplayView: UIView,
     func collectionView(_ collectionView: UICollectionView,
                         contextMenuConfigurationForItemAt indexPath: IndexPath,
                         point: CGPoint) -> UIContextMenuConfiguration? {
-        guard !isSelectingTabs, getSection(for: indexPath.section) == .tabs else { return nil }
+        guard !isSelectingTabs, getSection(for: indexPath.section) == .tabs
+        else { return nil }
+
         guard let item = dataSource.itemIdentifier(for: indexPath),
               case .tab(let tab) = item else { return nil }
         let tabVC = TabPeekViewController(tab: tab, windowUUID: windowUUID)
         return UIContextMenuConfiguration(identifier: nil,
                                           previewProvider: { return tabVC },
-                                          actionProvider: tabVC.contextActions)
+                                          actionProvider: { [weak self] defaultActions in
+                                            let menu = tabVC.contextActions(defaultActions: defaultActions)
+                                            return self?.tabContextMenu(menu, for: tab.tabUUID) ?? menu
+                                          })
+    }
+
+    func tabContextMenu(_ menu: UIMenu, for tabID: TabUUID) -> UIMenu {
+        guard let groupAction = tabGroupMoveAction(for: tabID) else { return menu }
+        var children = menu.children
+        let closeIndex = children.firstIndex {
+            ($0 as? UIAction)?.title == String.TabPeekCloseTab
+        } ?? children.endIndex
+        children.insert(groupAction, at: closeIndex)
+        return menu.replacingChildren(children)
+    }
+
+    func tabGroupMoveAction(for tabID: TabUUID) -> UIMenuElement? {
+        guard canPresentTabGroupActions(for: tabID), let controller = tabGroupsController else { return nil }
+        guard !controller.state.groups.isEmpty else {
+            return newTabGroupAction(for: tabID, title: String.TabGroups.MoveTabToNewGroup)
+        }
+        let currentGroupID = controller.groupManager.groupID(for: tabID)
+        let ungroupedCount = sourceState.tabs.filter {
+            !$0.isPrivate && controller.groupManager.groupID(for: $0.tabUUID) == nil
+        }.count
+        let ungroupedTitle = ungroupedCount == 1 ? "1 Tab"
+            : String(format: "%@ Tabs", ungroupedCount.formatted())
+        let ungrouped = UIAction(title: ungroupedTitle,
+                                 image: UIImage(named: StandardImageIdentifiers.Large.deviceMobileGradient)?
+                                    .withRenderingMode(.alwaysOriginal),
+                                 state: currentGroupID == nil ? .on : .off) { [weak self] _ in
+            self?.moveTabFromCard(tabID, to: nil)
+        }
+        let groups = controller.state.groups.map { group in
+            UIAction(title: group.title,
+                     image: group.icon.badgeImage(color: group.color.uiColor),
+                     attributes: controller.canMoveTabs(to: group.id) ? [] : .disabled,
+                     state: currentGroupID == group.id ? .on : .off) { [weak self] _ in
+                self?.moveTabFromCard(tabID, to: group.id)
+            }
+        }
+        return UIMenu(title: String.TabGroups.MoveTab,
+                      image: UIImage(systemName: "arrow.right"),
+                      children: [
+                        UIMenu(options: .displayInline, children: [ungrouped]),
+                        UIMenu(options: .displayInline, children: groups),
+                        UIMenu(options: .displayInline,
+                               children: [newTabGroupAction(for: tabID, title: String.TabGroups.NewTabGroupMenu)])
+                      ])
+    }
+
+    private func canPresentTabGroupActions(for tabID: TabUUID) -> Bool {
+        TabGroupsFeatureFlag.isEnabled && panelType == .tabs && !isSelectingTabs
+            && tabGroupsController != nil
+            && sourceState.tabs.contains { $0.tabUUID == tabID && !$0.isPrivate }
+    }
+
+    private func newTabGroupAction(for tabID: TabUUID, title: String) -> UIAction {
+        let hasGroups = tabGroupsController?.state.groups.isEmpty == false
+        let image = hasGroups
+            ? UIImage.templateImageNamed(StandardImageIdentifiers.Large.newTabGroup)
+            : UIImage(systemName: "arrow.right")
+        return UIAction(title: title, image: image) { [weak self] _ in
+            guard let self, self.canPresentTabGroupActions(for: tabID) else { return }
+            self.onCreateGroupForTab?(tabID)
+        }
+    }
+
+    private func moveTabFromCard(_ tabID: TabUUID, to groupID: TabGroupID?) {
+        guard canPresentTabGroupActions(for: tabID), let controller = tabGroupsController,
+              controller.canMoveTabs(to: groupID), controller.groupManager.groupID(for: tabID) != groupID else { return }
+        onMoveTabToGroup?(tabID, groupID)
     }
 
     // MARK: - TabCellDelegate

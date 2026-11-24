@@ -49,6 +49,21 @@ final class TabTrayCoordinator: BaseCoordinator,
         self.tabTrayViewController = tabTrayViewController
         tabTrayViewController.childPanelControllers = makeChildPanels(dragAndDropDelegate: tabTrayViewController)
         tabTrayViewController.childPanelThemes = makeChildPanelThemes()
+        if TabGroupsFeatureFlag.isEnabled {
+            let controller = TabGroupsSessionStore.controller(for: tabManager.windowUUID, tabManager: tabManager)
+            tabTrayViewController.tabGroupsController = controller
+            tabTrayViewController.tabManager = tabManager
+            for panel in tabTrayViewController.childPanelControllers {
+                guard let normalPanel = panel.topViewController as? TabDisplayPanelViewController,
+                      normalPanel.panelType == .tabs else {
+                    continue
+                }
+                normalPanel.tabGroupsController = controller
+            }
+            if tabTrayViewController.isViewLoaded {
+                tabTrayViewController.setupTabGroupsUI()
+            }
+        }
         tabTrayViewController.delegate = self
         tabTrayViewController.navigationHandler = self
     }
