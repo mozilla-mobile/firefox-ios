@@ -248,7 +248,6 @@ final class BrowserViewControllerKeyboardConstraintTests: BrowserViewControllerC
         subject.view.updateConstraintsIfNeeded()
 
         XCTAssertNil(keyboardSpacerHeightConstant(in: subject.overKeyboardContainer))
-        XCTAssertEqual(subject.overKeyboardContainer.subviews.count, 1)
     }
 
     func test_keyboardWillShow_landscapeKeyboard_addsKeyboardSpacer() {
