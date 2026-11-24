@@ -165,7 +165,7 @@ workflows:
         - destination: $IPHONE_DESTINATION
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_SmokeTest_iphonesimulator27.1-arm64.xctestrun
         - xcodebuild_options: $XCODEBUILD_OPTIONS
-    - xcode-test-without-building@0:
+    - xcode-test-without-building@1:
         title: Focus Full Functional Tests - iPhone
         is_always_run: true
         run_if: '{{getenv "BITRISE_TEST_BUNDLE_PATH" | ne ""}}'
