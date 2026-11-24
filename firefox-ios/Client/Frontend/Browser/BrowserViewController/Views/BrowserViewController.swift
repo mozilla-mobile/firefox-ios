@@ -4250,6 +4250,10 @@ class BrowserViewController: UIViewController,
         navigationHandler?.showSearchEngineSelection(forSourceView: searchEngineView)
     }
 
+    func addressToolbarDidChangeMinimizedState() {
+        updateBlurViews()
+    }
+
     // MARK: - Relay Additions
 
     private func handleEmailFieldDetected(for tab: Tab?) {
