@@ -91,6 +91,35 @@ final class TabGroupsSelectionTests: XCTestCase {
         XCTAssertEqual(subject.tabsState.tabs.map(\.tabUUID), ["tab-1"])
     }
 
+    func testSelectedTabsReview_readsAndUpdatesOriginalSelection() {
+        let source = createSubject()
+        source.isSelectingTabs = true
+        source.toggleTabSelection("tab-0")
+        source.toggleTabSelection("tab-2")
+        let review = createSubject()
+        review.isSelectingTabs = true
+        review.showsOnlySelectedTabs = true
+        review.selectionProvider = { [weak source] in source?.selectedTabIDs ?? [] }
+        review.onToggleSelection = { [weak source] in source?.toggleTabSelection($0) }
+        source.onSelectionChange = { [weak source, weak review] in
+            guard let source else { return }
+            review?.newState(state: source.tabsState)
+        }
+        review.newState(state: source.tabsState)
+        XCTAssertEqual(review.tabsState.tabs.map(\.tabUUID), ["tab-0", "tab-2"])
+
+        review.toggleTabSelection("tab-0")
+
+        XCTAssertEqual(source.selectedTabIDs, ["tab-2"])
+        XCTAssertEqual(review.tabsState.tabs.map(\.tabUUID), ["tab-2"])
+        XCTAssertTrue(review.selectedTabIDs.isEmpty)
+
+        review.toggleTabSelection("tab-2")
+
+        XCTAssertTrue(source.selectedTabIDs.isEmpty)
+        XCTAssertTrue(review.tabsState.tabs.isEmpty)
+    }
+
     func testSelectionMode_disablesDraggingImmediately() {
         let subject = createSubject()
         XCTAssertTrue(subject.collectionView.dragInteractionEnabled)
@@ -197,6 +226,29 @@ final class TabGroupsSelectionTests: XCTestCase {
         }
     }
 
+    func testSelectedReview_usesSharedSelectionIndicatorAndClearBackground() throws {
+        let source = createSubject()
+        let theme = NovaLightTheme()
+        source.applyTheme(theme: theme)
+        source.isSelectingTabs = true
+        source.toggleTabSelection("tab-0")
+        let review = createSubject()
+        review.selectionProvider = { [weak source] in source?.selectedTabIDs ?? [] }
+        review.showsOnlySelectedTabs = true
+        review.isSelectingTabs = true
+        review.updateSelectedTabsPreview(from: source.tabsState)
+        review.applyTheme(theme: theme)
+
+        let cell = try realizedCell(in: review)
+        let indicator = try selectionSubview("tabGroupsSelection.indicator", in: cell)
+
+        XCTAssertEqual(source.collectionView.backgroundColor, theme.colors.layer1)
+        XCTAssertEqual(review.collectionView.backgroundColor, .clear)
+        XCTAssertEqual(indicator.backgroundColor, theme.colors.actionPrimary)
+        XCTAssertFalse(try selectionSubview("tabGroupsSelection.checkmark", in: indicator).isHidden)
+        XCTAssertTrue(review.selectedTabIDs.isEmpty)
+    }
+
     func testSelection_synchronizesAllSelectedCellsAndAccessibilityTraits() throws {
         let subject = createSubject()
         let cells = try (0..<3).map { try realizedCell(in: subject, at: $0) }
@@ -222,6 +274,34 @@ final class TabGroupsSelectionTests: XCTestCase {
             XCTAssertFalse(cell.isSelected, "Source card \(index) after selection ends")
             XCTAssertFalse(cell.accessibilityTraits.contains(.selected), "Source card \(index) traits after selection ends")
         }
+    }
+
+    func testSelectedReview_synchronizesProviderSelectedCellsAndTraits() throws {
+        let source = createSubject()
+        source.isSelectingTabs = true
+        source.toggleTabSelection("tab-0")
+        source.toggleTabSelection("tab-1")
+        let review = createSubject()
+        review.selectionProvider = { [weak source] in source?.selectedTabIDs ?? [] }
+        review.showsOnlySelectedTabs = true
+        review.isSelectingTabs = true
+        review.updateSelectedTabsPreview(from: source.tabsState)
+
+        let cells = try (0..<2).map { try realizedCell(in: review, at: $0) }
+
+        for (index, cell) in cells.enumerated() {
+            XCTAssertTrue(cell.isSelected, "Review card \(index) selection")
+            XCTAssertTrue(cell.accessibilityTraits.contains(.selected), "Review card \(index) traits")
+        }
+        XCTAssertTrue(review.selectedTabIDs.isEmpty)
+
+        review.isSelectingTabs = false
+
+        for (index, cell) in cells.enumerated() {
+            XCTAssertFalse(cell.isSelected, "Review card \(index) after selection ends")
+            XCTAssertFalse(cell.accessibilityTraits.contains(.selected), "Review card \(index) traits after selection ends")
+        }
+        XCTAssertEqual(source.selectedTabIDs, ["tab-0", "tab-1"])
     }
 
     func testNormalMode_keepsExistingUIKitSelectionWithoutBulkIndicator() throws {

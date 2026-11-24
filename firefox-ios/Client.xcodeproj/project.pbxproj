@@ -2587,6 +2587,7 @@
 		55EBB7718ABDD8B91B668150 /* TabGroupsTabActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE9110B09488F42C4FE72C6 /* TabGroupsTabActions.swift */; };
 		F044C1BE7A3F4BF0B2B1034A /* TabGroupIconImageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D034D885E9764642A0E80188 /* TabGroupIconImageTests.swift */; };
 		7C9A1EA8F1BF4ECE2AE232A5 /* TabGroupsDestinationMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF2D69EEB18F80D4F4993F8 /* TabGroupsDestinationMenuView.swift */; };
+		03105DCB1DB884167FDC263C /* TabGroupsSelectedTabsSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D16AB229F3161EBC151DB3D2 /* TabGroupsSelectedTabsSheet.swift */; };
 		D9EE8644F1EB1E952F8B4584 /* TabGroupsTrayNativeToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 324B65977A82E98077294ED4 /* TabGroupsTrayNativeToolbar.swift */; };
 		F891DE8A307711D8C141383D /* TabGroupEditorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AC0C871A5511CA2BD071B69 /* TabGroupEditorTests.swift */; };
 		C010A110B200C300D4000003 /* TabGroupColorPaletteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C010A110B200C300D4000004 /* TabGroupColorPaletteTests.swift */; };
@@ -13063,6 +13064,7 @@
 		6EE9110B09488F42C4FE72C6 /* TabGroupsTabActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsTabActions.swift; sourceTree = "<group>"; };
 		D034D885E9764642A0E80188 /* TabGroupIconImageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupIconImageTests.swift; sourceTree = "<group>"; };
 		4AF2D69EEB18F80D4F4993F8 /* TabGroupsDestinationMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsDestinationMenuView.swift; sourceTree = "<group>"; };
+		D16AB229F3161EBC151DB3D2 /* TabGroupsSelectedTabsSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsSelectedTabsSheet.swift; sourceTree = "<group>"; };
 		324B65977A82E98077294ED4 /* TabGroupsTrayNativeToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsTrayNativeToolbar.swift; sourceTree = "<group>"; };
 		6AC0C871A5511CA2BD071B69 /* TabGroupEditorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupEditorTests.swift; sourceTree = "<group>"; };
 		C010A110B200C300D4000004 /* TabGroupColorPaletteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupColorPaletteTests.swift; sourceTree = "<group>"; };
@@ -18905,6 +18907,7 @@
 				B71ED6CA127640B0BCE23F99 /* TabGroupsTrayBarView.swift */,
 				6C19206DB930423C8595D66C /* TabGroupsTrayBarViewModel.swift */,
 				324B65977A82E98077294ED4 /* TabGroupsTrayNativeToolbar.swift */,
+				D16AB229F3161EBC151DB3D2 /* TabGroupsSelectedTabsSheet.swift */,
 				50A54EA7015F4D4E9414B291 /* TabGroupsTrayBarPreview.swift */,
 			);
 			path = TabGroupsTrayBars;
@@ -20913,6 +20916,7 @@
 				9E215E5FDA2D4E13AF65691A /* TabGroupsTrayBarView.swift in Sources */,
 				5BD223A469704526975D563D /* TabGroupsTrayBarViewModel.swift in Sources */,
 				D9EE8644F1EB1E952F8B4584 /* TabGroupsTrayNativeToolbar.swift in Sources */,
+				03105DCB1DB884167FDC263C /* TabGroupsSelectedTabsSheet.swift in Sources */,
 				F81030D895E54226B944783A /* TabGroupsTrayBarPreview.swift in Sources */,
 				8C1953322B85EAB500761B20 /* AutofillHeaderView.swift in Sources */,
 				8A7AE4442BAB510B0072DAEC /* LibraryPanelCoordinatorDelegate.swift in Sources */,
