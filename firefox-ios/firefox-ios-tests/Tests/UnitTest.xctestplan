@@ -153,8 +153,8 @@
         },
         {
           "containerPath" : "container:..\/MozillaRustComponents",
-          "identifier" : "MozillaRustComponents",
-          "name" : "MozillaRustComponents"
+          "identifier" : "MozillaRustComponentsTests",
+          "name" : "MozillaRustComponentsTests"
         }
       ]
     },
