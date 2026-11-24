@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Collect what the AI review reads about a pull request into a directory.
 
-Runs before Claude, with a read-only token, so Claude needs no GitHub access.
+Runs before the model, with a read-only token, so the model needs no GitHub access.
 The diff is taken at --commit, the head commit from the workflow's event, so it
-matches the code checked out for Claude even if someone pushes during the run.
+matches the code checked out for the model even if someone pushes during the run.
 
     pr.md         title, author, branches, description
     diff.patch    the changes, file by file

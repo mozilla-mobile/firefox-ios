@@ -1,14 +1,15 @@
 name: AI code review
 
-# Adding the `ai-review` label to a pull request runs a Claude review of it and
+# Adding the `ai-review` label to a pull request runs an AI review of it and
 # posts the findings as one review. The label is removed when the run ends, so
 # adding it again reviews the latest commit.
 # How it works: scripts/ci/ai-review/README.md
 #
 # pull_request_target, so that pull requests from forks get the API key. That
 # makes the pull request's code untrusted here: it is checked out only for
-# Claude to read, never built or run, and Claude can only read files in the
-# workspace: the tools are limited to ./**, and dontAsk denies anything els. Only
+# the model to read, never built or run, and the model can only read files in
+# the workspace: the tools are limited to ./**, and dontAsk denies anything
+# else. Only
 # people with write access can add the label and start a run. The workflow
 # and its scripts always come from the default branch, whatever branch the
 # pull request targets.
@@ -91,10 +92,10 @@ jobs:
           path: pr-head
           persist-credentials: false
 
-      # Claude Code loads these as trusted instructions, skills, subagents and
+      # The agent loads these as trusted instructions, skills, subagents and
       # commands, so the pull request could use them to steer its own review.
       # The model still sees changes to them in the diff, as material to review.
-      - name: Remove the pull request's Claude instructions
+      - name: Remove the pull request's agent instructions
         run: |
           find pr-head -path pr-head/.git -prune -o \
             \( -iname CLAUDE.md -o -iname CLAUDE.local.md -o -iname AGENTS.md \) ! -type d -print -exec rm -f {} + \
@@ -127,7 +128,7 @@ jobs:
           --files pr-context/files.json --out review-guidance.md
 
       - name: Review
-        id: claude
+        id: review
         uses: anthropics/claude-code-action@f431adaf77e0fecf918431e75a2b5b45b85af002 # v1.0.283
         with:
           anthropic_api_key: ${{ secrets.TEMP_CLAUDE_PR_KEY }}
@@ -146,22 +147,22 @@ jobs:
             --add-dir pr-head
             --json-schema '{"type":"object","additionalProperties":false,"required":["summary","findings","followups"],"properties":{"summary":{"type":"string"},"followups":{"type":"array","items":{"type":"object","additionalProperties":false,"required":["comment_id","status","note"],"properties":{"comment_id":{"type":"integer"},"status":{"type":"string","enum":["fixed","partly_fixed","not_fixed"]},"note":{"type":"string"}}}},"findings":{"type":"array","items":{"type":"object","additionalProperties":false,"required":["severity","path","line","title","description","fix"],"properties":{"severity":{"type":"string","enum":["P0","P1","P2","P3"]},"path":{"type":"string"},"line":{"type":"integer","minimum":1},"start_line":{"type":"integer","minimum":1},"title":{"type":"string"},"description":{"type":"string"},"fix":{"type":"string"},"repro":{"type":"object","additionalProperties":false,"properties":{"steps":{"type":"array","items":{"type":"string"}},"expected":{"type":"string"},"actual":{"type":"string"}}}}}}}}'
 
-      # Only numbers, never text Claude wrote, go into the run's summary page.
+      # Only numbers, never text the model wrote, go into the run's summary page.
       - name: Summarize the run's cost
-        if: always() && steps.claude.outputs.execution_file != ''
+        if: always() && steps.review.outputs.execution_file != ''
         env:
-          EXECUTION_FILE: ${{ steps.claude.outputs.execution_file }}
+          EXECUTION_FILE: ${{ steps.review.outputs.execution_file }}
         run: |
           jq -r '[.[] | select(.type == "result")] | last | select(. != null) |
-            "### AI review cost\n\n| Estimated cost | Turns | Duration | Input tokens | Output tokens |\n|---|---|---|---|---|\n| $\(.total_cost_usd * 100 | round / 100) | \(.num_turns) | \(.duration_ms / 1000 | round)s | \(.usage.input_tokens + .usage.cache_read_input_tokens + .usage.cache_creation_input_tokens) | \(.usage.output_tokens) |\n\nEstimated by Claude Code from list prices."' \
+            "### AI review cost\n\n| Estimated cost | Turns | Duration | Input tokens | Output tokens |\n|---|---|---|---|---|\n| $\(.total_cost_usd * 100 | round / 100) | \(.num_turns) | \(.duration_ms / 1000 | round)s | \(.usage.input_tokens + .usage.cache_read_input_tokens + .usage.cache_creation_input_tokens) | \(.usage.output_tokens) |\n\nEstimated from list prices."' \
             "$EXECUTION_FILE" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Save the review
         env:
-          REVIEW: ${{ steps.claude.outputs.structured_output }}
+          REVIEW: ${{ steps.review.outputs.structured_output }}
         run: |
           if [ -z "$REVIEW" ]; then
-            echo "::error::Claude returned no review."
+            echo "::error::The model returned no review."
             exit 1
           fi
           printf '%s' "$REVIEW" > pr-context/review.json
@@ -176,7 +177,7 @@ jobs:
             pr-context/notes.json
           retention-days: 7
 
-  # A separate job, so the token that can comment is never in the job running Claude.
+  # A separate job, so the token that can comment is never in the job running the model.
   post:
     needs: [check, review]
     if: always() && github.event.label.name == 'ai-review'

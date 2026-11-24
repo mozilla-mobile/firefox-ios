@@ -4,7 +4,7 @@
 Follows bugbug's review helper (bugbug/tools/code_review/review_context.py):
 the rules are parsed and validated by bugbug's schema module, rules run in
 priority order, and each file is loaded once however many rules match it. Only
-the matched guidance reaches Claude, so Claude never reads the rules itself.
+the matched guidance reaches the model, so it never reads the rules itself.
 
 The guidance comes from the default branch commit the workflow runs on, never
 from the pull request. Bugzilla, review and patch predicates never match here:

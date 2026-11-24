@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Post Claude's review findings to the pull request as one GitHub review.
+"""Post the model's review findings to the pull request as one GitHub review.
 
 A finding becomes an inline comment when its lines are in the diff; GitHub
 rejects the whole review otherwise, so the rest are listed in the review body.
