@@ -391,6 +391,6 @@ workflows:
         stack: osx-xcode-26.2.x
         machine_type_id: g2.mac.large
 
-  # Firefox_Unit_Tests_iOS_Versions ensures all unit tests pass on the supported iOS versions.
+  # firefox_unit_tests_ios_versions ensures all unit tests pass on the supported iOS versions.
   # This workflow runs weekly on Tuesday.
   # The results are reported to #tmp-firefox-ios-unit-tests.
