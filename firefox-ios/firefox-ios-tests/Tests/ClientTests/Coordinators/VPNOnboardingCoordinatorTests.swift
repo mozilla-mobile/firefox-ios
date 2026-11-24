@@ -10,7 +10,7 @@ import TestKit
 @testable import Client
 @testable import ComponentLibrary
 
-@available(iOS 27.2, *)
+@available(iOS 17.0, *)
 @MainActor
 final class VPNOnboardingCoordinatorTests: XCTestCase {
     private var router: MockRouter!

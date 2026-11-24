@@ -12,7 +12,7 @@ protocol VPNOnboardingCoordinatorDelegate: AnyObject {
     func vpnOnboardingDidTapCTA(from coordinator: Coordinator)
 }
 
-@available(iOS 27.2, *)
+@available(iOS 17.0, *)
 @MainActor
 final class VPNOnboardingCoordinator: BaseCoordinator {
     private enum UX {
@@ -67,7 +67,7 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
         let controller = OnboardingSheetViewController(
             windowUUID: windowUUID,
             themeManager: themeManager,
-            viewModel: makeViewModel(),
+            configuration: makeConfiguration(),
             onCTA: { [weak self] in
                 self?.didTapCTA()
             },
@@ -96,7 +96,7 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
     }
 
     private func didTapCTA() {
-        telemetry.recordOnboardingCTATapped()
+        telemetry.recordOnboardingPrimaryButtonTapped()
         router.dismiss(animated: true) { [weak self] in
             guard let self else { return }
             self.delegate?.vpnOnboardingDidTapCTA(from: self)
@@ -118,9 +118,9 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
         finish()
     }
 
-    private func makeViewModel() -> OnboardingSheetViewModel {
+    private func makeConfiguration() -> OnboardingSheetConfiguration {
         let appName = AppName.shortName.rawValue
-        return OnboardingSheetViewModel(
+        return OnboardingSheetConfiguration(
             heroImageName: StandardImageIdentifiers.Large.globe,
             heroGradient: .accent,
             title: String(format: .VPN.Onboarding.Title, appName),

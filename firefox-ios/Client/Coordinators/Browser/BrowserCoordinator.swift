@@ -78,7 +78,7 @@ final class BrowserCoordinator: BaseCoordinator,
     /// Whether a child owns a sheet that is on screen or about to be, so no other sheet is shown over it.
     private var isShowingBlockingSheet: Bool {
         return childCoordinators.contains { child in
-            if #available(iOS 27.2, *), child is VPNOnboardingCoordinator { return true }
+            if #available(iOS 17.0, *), child is VPNOnboardingCoordinator { return true }
             return child is TermsOfUseCoordinator || child is WallpaperEngagementCoordinator
         }
     }
@@ -228,7 +228,7 @@ final class BrowserCoordinator: BaseCoordinator,
         guard !isShowingBlockingSheet,
               !router.isPresenting else { return }
 
-        guard #available(iOS 27.2, *) else { return }
+        guard #available(iOS 17.0, *) else { return }
         let coordinator = VPNOnboardingCoordinator(
             router: router,
             windowUUID: windowUUID,
@@ -805,7 +805,7 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     func presentVPNSettings() {
-        guard #available(iOS 27.2, *) else { return }
+        guard #available(iOS 17.0, *) else { return }
         let vpnSettings = VPNSettingsViewController(windowUUID: windowUUID)
         let navigationController = DismissableNavigationViewController(rootViewController: vpnSettings)
         setupSettingsSheetDetents(for: navigationController)
