@@ -829,7 +829,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let searchState = state.searchBarState
         let containerWidth = normalizedDimension(environment.container.contentSize.width)
         let measurementKey = HomepageLayoutMeasurementCache.SearchBarMeasurement.Key(
-            shouldShowSearchBar: searchState.shouldShowSearchBar,
+            shouldShowSearchBar: searchState.isShowingCenterSearchBar,
             containerWidth: containerWidth,
             contentSizeCategory: environment.traitCollection.preferredContentSizeCategory
         )
@@ -839,7 +839,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             return cachedHeight
         }
 
-        guard searchState.shouldShowSearchBar else {
+        guard searchState.isShowingCenterSearchBar else {
             measurementsCache.setHeight(0, for: measurementKey)
             return 0
         }

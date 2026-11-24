@@ -361,16 +361,21 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
     func test_tapOnHomepageSearchBarAction_withBVCState_triggersGeneralBrowserAction() throws {
         let subject = createSubject()
+        let navigationAction = NavigationBrowserAction(
+            navigationDestination: NavigationDestination(.homepageZeroSearch),
+            windowUUID: .XCTestDefaultUUID,
+            actionType: NavigationBrowserActionType.tapOnHomepageSearchBar
+        )
 
         let newState = BrowserViewControllerState.reducer.legacyReducer(
             BrowserViewControllerState(windowUUID: .XCTestDefaultUUID),
-            NavigationBrowserAction(
-                navigationDestination: NavigationDestination(.homepageZeroSearch),
-                windowUUID: .XCTestDefaultUUID,
-                actionType: NavigationBrowserActionType.tapOnHomepageSearchBar
-            )
+            navigationAction
         )
-        subject.newState(state: newState)
+        let lens = BrowserViewControllerLens(
+            browserViewControllerState: newState,
+            homepageSearchBarState: SearchBarState(windowUUID: .XCTestDefaultUUID)
+        )
+        subject.newState(state: lens)
 
         let actionCalled = try XCTUnwrap(
             mockStore.dispatchedActions.first(where: { $0 is GeneralBrowserAction }) as? GeneralBrowserAction
@@ -392,7 +397,11 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
                 actionType: ToolbarMiddlewareActionType.didTapButton
             )
         )
-        subject.newState(state: newState)
+        let lens = BrowserViewControllerLens(
+            browserViewControllerState: newState,
+            homepageSearchBarState: SearchBarState(windowUUID: .XCTestDefaultUUID)
+        )
+        subject.newState(state: lens)
 
         let actionCalled = try XCTUnwrap(
             mockStore.dispatchedActions.first(where: { $0 is GeneralBrowserAction }) as? GeneralBrowserAction
@@ -413,7 +422,11 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
                 actionType: ToolbarMiddlewareActionType.didTapButton
             )
         )
-        subject.newState(state: newState)
+        let lens = BrowserViewControllerLens(
+            browserViewControllerState: newState,
+            homepageSearchBarState: SearchBarState(windowUUID: .XCTestDefaultUUID)
+        )
+        subject.newState(state: lens)
 
         let didEnteredZeroSearchScreenDispatched = mockStore.dispatchedActions.contains { action in
             guard let action = action as? GeneralBrowserAction,
@@ -438,7 +451,11 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
                 actionType: ToolbarMiddlewareActionType.didTapButton
             )
         )
-        subject.newState(state: newState)
+        let lens = BrowserViewControllerLens(
+            browserViewControllerState: newState,
+            homepageSearchBarState: SearchBarState(windowUUID: .XCTestDefaultUUID)
+        )
+        subject.newState(state: lens)
 
         let didEnteredZeroSearchScreenDispatched = mockStore.dispatchedActions.contains { action in
             guard let action = action as? GeneralBrowserAction,
@@ -462,7 +479,11 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
                 actionType: ToolbarMiddlewareActionType.didTapButton
             )
         )
-        subject.newState(state: newState)
+        let lens = BrowserViewControllerLens(
+            browserViewControllerState: newState,
+            homepageSearchBarState: SearchBarState(windowUUID: .XCTestDefaultUUID)
+        )
+        subject.newState(state: lens)
 
         let didEnteredZeroSearchScreenDispatched = mockStore.dispatchedActions.contains { action in
             guard let action = action as? GeneralBrowserAction,
@@ -487,7 +508,11 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
                 actionType: GeneralBrowserActionType.showSummarizer
             )
         )
-        subject.newState(state: newState)
+        let lens = BrowserViewControllerLens(
+            browserViewControllerState: newState,
+            homepageSearchBarState: SearchBarState(windowUUID: .XCTestDefaultUUID)
+        )
+        subject.newState(state: lens)
 
         XCTAssertEqual(browserCoordinator.showSummarizePanelCalled, 1)
     }
@@ -583,7 +608,11 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
                                           actionType: GeneralBrowserActionType.addNewTab)
         let newState = BrowserViewControllerState.reducer.legacyReducer(
             BrowserViewControllerState(windowUUID: .XCTestDefaultUUID), action)
-        subject.newState(state: newState)
+        let lens = BrowserViewControllerLens(
+            browserViewControllerState: newState,
+            homepageSearchBarState: SearchBarState(windowUUID: .XCTestDefaultUUID)
+        )
+        subject.newState(state: lens)
 
         XCTAssertEqual(recordVisitManager.resetVisitCalled, 1)
         XCTAssertNil(recordVisitManager.lastVisitObservation)
@@ -655,7 +684,11 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         setupSelectedTabWithReaderMode(url: URL(string: "https://example.com/article"), readerModeState: .active)
         subject.readerModeBar = ReaderModeBarView(frame: .zero)
 
-        subject.newState(state: BrowserViewControllerState(windowUUID: .XCTestDefaultUUID))
+        let lens = BrowserViewControllerLens(
+            browserViewControllerState: BrowserViewControllerState(windowUUID: .XCTestDefaultUUID),
+            homepageSearchBarState: SearchBarState(windowUUID: .XCTestDefaultUUID)
+        )
+        subject.newState(state: lens)
 
         XCTAssertNil(subject.readerModeBar)
     }
@@ -666,7 +699,11 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
             .encodeReaderModeURL(ReaderModeSchemeHandler.baseURL)
         setupSelectedTabWithReaderMode(url: readerModeURL, readerModeState: .available)
 
-        subject.newState(state: BrowserViewControllerState(windowUUID: .XCTestDefaultUUID))
+        let lens = BrowserViewControllerLens(
+            browserViewControllerState: BrowserViewControllerState(windowUUID: .XCTestDefaultUUID),
+            homepageSearchBarState: SearchBarState(windowUUID: .XCTestDefaultUUID)
+        )
+        subject.newState(state: lens)
 
         XCTAssertNotNil(subject.readerModeBar)
     }

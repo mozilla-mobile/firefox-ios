@@ -214,9 +214,7 @@ public class NimbusBuilder {
                 nimbus.isFetchEnabled()
             }
 
-            if let args = ArgumentProcessor.createCommandLineArgs(args: commandLineArgs) {
-                ArgumentProcessor.initializeTooling(nimbus: nimbus, args: args)
-            } else if let file = initialExperiments, isFirstRun || isLocalBuild() {
+            if let file = initialExperiments, isFirstRun || isLocalBuild() {
                 let job = nimbus.applyLocalExperiments(fileURL: file)
                 _ = job.joinOrTimeout(timeout: timeoutLoadingExperiment)
             } else {

@@ -159,6 +159,7 @@
         "PrintTests",
         "PrivateBrowsingTest",
         "PrivateBrowsingTestIpad",
+        "QuickAnswersTests",
         "ReadingListTests\/testReaderViewMainMenuButton()",
         "ReportSiteTests",
         "ScreenGraphTest",

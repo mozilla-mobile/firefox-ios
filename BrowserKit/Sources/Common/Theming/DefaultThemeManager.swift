@@ -24,6 +24,15 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     // MARK: - Variables
 
+    /// A single instance is used for the appearance proxies so their value never changes on a theme switch.
+    /// Below iOS 26, changing the proxy tint while the system find navigator exists makes the keyboard
+    /// re-apply it on every render config update and recurse until the stack overflows.
+    private static let novaSelectedTextTint: UIColor = {
+        let light = NovaLightTheme().colors.actionPrimary
+        let dark = NovaDarkTheme().colors.actionPrimary
+        return UIColor { traits in traits.userInterfaceStyle == .dark ? dark : light }
+    }()
+
     private var windows: [WindowUUID: UIWindow] = [:]
     private var privateBrowsingState: [WindowUUID: Bool] = [:]
     private var allWindowUUIDs: [WindowUUID] { return Array(windows.keys) }
@@ -197,7 +206,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         let style = theme.type.getInterfaceStyle()
         self.windows[window]?.overrideUserInterfaceStyle = style
         // Nova only: highlighted text purple tint.
-        let selectedTextTint = theme.isNova ? theme.colors.actionPrimary : nil
+        let selectedTextTint = theme.isNova ? Self.novaSelectedTextTint : nil
         UITextField.appearance().tintColor = selectedTextTint
         UITextView.appearance().tintColor = selectedTextTint
         notifyCurrentThemeDidChange(for: window)

@@ -64,6 +64,8 @@ protocol SettingsSelectorsSet {
 
     // Page Summaries
     var SUMMARIZE_CELL: Selector { get }
+    var QUICK_ANSWERS_CELL: Selector { get }
+    func quickAnswersCellStatus(_ status: String) -> Selector
     var GENERAL_SECTION_HEADER: Selector { get }
 
     var NO_IMAGE_MODE_STATUS_SWITCH: Selector { get }
@@ -106,6 +108,7 @@ struct SettingsSelectors: SettingsSelectorsSet {
         static let noImageModeStatus = "NoImageModeStatus"
         static let translationCellTitle = AccessibilityIdentifiers.Settings.Translation.title
         static let summarizeCell = AccessibilityIdentifiers.Settings.Summarize.title
+        static let quickAnswersCell = AccessibilityIdentifiers.Settings.QuickAnswers.title
         static let generalSectionHeader = "GENERAL"
         static let sendData = "settings.sendUsageData"
         static let sendCrashReports = "settings.sendCrashReports"
@@ -365,6 +368,21 @@ struct SettingsSelectors: SettingsSelectorsSet {
         groups: ["settings", "summarizer"]
     )
 
+    let QUICK_ANSWERS_CELL = Selector.tableCellById(
+        IDs.quickAnswersCell,
+        description: "Quick Answers settings cell",
+        groups: ["settings", "quick_answers"]
+    )
+
+    func quickAnswersCellStatus(_ status: String) -> Selector {
+        Selector.staticTextByExactLabel(
+            status,
+            in: QUICK_ANSWERS_CELL,
+            description: "'\(status)' status on the right of the Quick Answers settings cell",
+            groups: ["settings", "quick_answers"]
+        )
+    }
+
     let GENERAL_SECTION_HEADER = Selector.staticTextInTablesByLabel(
         IDs.generalSectionHeader,
         description: "General section header in Settings",
@@ -475,7 +493,7 @@ struct SettingsSelectors: SettingsSelectorsSet {
          NAVIGATIONBAR, CONNECT_SETTING, BLOCK_POPUPS_SWITCH, TOOLBAR_CELL, BOTTOM_TOOLBAR_BUTTON, TOP_TOOLBAR_BUTTON,
          HOMEPAGE_CELL, NAVIGATION_TOOLBAR_HOME_BUTTON, NAVIGATION_TOOLBAR_NEW_TAB_BUTTON, DEFAULT_BROWSER_CELL,
          SEARCH_CELL, BROWSING_CELL_TITLE, BLOCK_IMAGES_SWITCH_TITLE, AD_BLOCKER_SWITCH, NO_IMAGE_MODE_STATUS_SWITCH,
-         TRANSLATION_CELL_TITLE, SUMMARIZE_CELL, GENERAL_SECTION_HEADER, SEND_DATA_CELL, SEND_CRASH_REPORTS_CELL,
-         APPEARANCE_NAVIGATION_BAR]
+         TRANSLATION_CELL_TITLE, SUMMARIZE_CELL, QUICK_ANSWERS_CELL, GENERAL_SECTION_HEADER, SEND_DATA_CELL,
+         SEND_CRASH_REPORTS_CELL, APPEARANCE_NAVIGATION_BAR]
     }
 }

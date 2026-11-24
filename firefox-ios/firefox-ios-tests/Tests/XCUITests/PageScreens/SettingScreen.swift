@@ -31,6 +31,7 @@ final class SettingScreen {
     private var bottomToolbarButton: XCUIElement { sel.BOTTOM_TOOLBAR_BUTTON.element(in: app) }
     private var topToolbarButton: XCUIElement { sel.TOP_TOOLBAR_BUTTON.element(in: app) }
     private var summarizeCell: XCUIElement { sel.SUMMARIZE_CELL.element(in: app) }
+    private var quickAnswersCell: XCUIElement { sel.QUICK_ANSWERS_CELL.element(in: app) }
 
     func closeSettingsWithDoneButton() {
         let doneButton = sel.DONE_BUTTON.element(in: app)
@@ -382,7 +383,23 @@ final class SettingScreen {
     }
 
     func assertSummarizeSettingsIsInGeneralSection(timeout: TimeInterval = TIMEOUT) {
-        let cell = summarizeCell
+        assertCellIsInGeneralSection(sel.SUMMARIZE_CELL, timeout: timeout)
+    }
+
+    /// Asserts the Quick Answers row is under the General header and shows "On" or "Off" on its right.
+    func assertQuickAnswersSettingsIsInGeneralSection(isOn: Bool, timeout: TimeInterval = TIMEOUT) {
+        assertCellIsInGeneralSection(sel.QUICK_ANSWERS_CELL, timeout: timeout)
+        let status: String = isOn ? .QuickAnswers.Settings.StatusOn : .QuickAnswers.Settings.StatusOff
+        BaseTestCase().mozWaitForElementToExist(sel.quickAnswersCellStatus(status).element(in: app))
+    }
+
+    func openQuickAnswersSettings() {
+        BaseTestCase().scrollToElement(quickAnswersCell)
+        quickAnswersCell.waitAndTap()
+    }
+
+    private func assertCellIsInGeneralSection(_ cellSelector: Selector, timeout: TimeInterval) {
+        let cell = cellSelector.element(in: app)
         let header = sel.GENERAL_SECTION_HEADER.element(in: app)
         BaseTestCase().mozWaitForElementToExist(sel.SETTINGS_TABLE.element(in: app))
         BaseTestCase().mozWaitForElementToExist(cell)
@@ -394,7 +411,7 @@ final class SettingScreen {
         XCTAssertEqual(
             XCTWaiter().wait(for: [expectation], timeout: timeout),
             .completed,
-            "'\(sel.SUMMARIZE_CELL.description)' (\(cell.frame)) is not below the General header (\(header.frame))"
+            "'\(cellSelector.description)' (\(cell.frame)) is not below the General header (\(header.frame))"
         )
     }
 

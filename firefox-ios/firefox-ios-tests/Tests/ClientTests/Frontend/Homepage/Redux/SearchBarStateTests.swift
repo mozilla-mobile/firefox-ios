@@ -13,7 +13,7 @@ final class SearchBarStateTests: XCTestCase {
         let initialState = createSubject()
 
         XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertFalse(initialState.shouldShowSearchBar)
+        XCTAssertFalse(initialState.isShowingCenterSearchBar)
     }
 
     @MainActor
@@ -33,7 +33,7 @@ final class SearchBarStateTests: XCTestCase {
             )
         )
 
-        XCTAssertTrue(newState.shouldShowSearchBar)
+        XCTAssertTrue(newState.isShowingCenterSearchBar)
     }
 
     @MainActor
@@ -49,7 +49,7 @@ final class SearchBarStateTests: XCTestCase {
             )
         )
 
-        XCTAssertFalse(newState.shouldShowSearchBar)
+        XCTAssertFalse(newState.isShowingCenterSearchBar)
     }
 
     @MainActor
@@ -73,7 +73,7 @@ final class SearchBarStateTests: XCTestCase {
             HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.viewWillDisappear)
         )
 
-        XCTAssertFalse(newState.shouldShowSearchBar)
+        XCTAssertFalse(newState.isShowingCenterSearchBar)
         XCTAssertFalse(newState.isHomepageVisible)
     }
 
@@ -92,7 +92,7 @@ final class SearchBarStateTests: XCTestCase {
         )
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertFalse(newState.shouldShowSearchBar)
+        XCTAssertFalse(newState.isShowingCenterSearchBar)
     }
 
     @MainActor
@@ -109,7 +109,7 @@ final class SearchBarStateTests: XCTestCase {
         )
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertFalse(newState.shouldShowSearchBar)
+        XCTAssertFalse(newState.isShowingCenterSearchBar)
     }
 
     // MARK: - Private

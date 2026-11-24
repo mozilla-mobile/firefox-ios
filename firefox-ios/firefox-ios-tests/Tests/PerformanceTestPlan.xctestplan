@@ -134,6 +134,7 @@
         "PrivateBrowsingTest",
         "PrivateBrowsingTestIpad",
         "PrivateBrowsingTestIphone",
+        "QuickAnswersTests",
         "ReadingListTests",
         "ReportSiteTests",
         "ScreenGraphTest",
