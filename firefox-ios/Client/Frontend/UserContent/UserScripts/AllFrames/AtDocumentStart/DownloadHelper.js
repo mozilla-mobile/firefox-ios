@@ -65,6 +65,7 @@ Object.defineProperty(window.__firefox__, "download", {
 
 // Listen on window, not document: a click listener on document makes WebKit treat every tap as
 // landing on a click-responding root node, which disables double-tap smart zoom (see #25710).
+// Use the capture phase so pages delegating clicks on document cannot stopPropagation() past us.
 window.addEventListener("click", (event) => {
   if (event.target.localName == "a" && event.target.hasAttribute("download")) {
     event.preventDefault();
@@ -72,4 +73,4 @@ window.addEventListener("click", (event) => {
     // (not JS on the web) is calling into them.
     window.__firefox__.download(event.target.href, APP_ID_TOKEN, event.target.download)
   }
-})
+}, true)
