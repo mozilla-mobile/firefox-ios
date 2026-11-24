@@ -171,6 +171,10 @@ the API key. That makes everything in the pull request untrusted, so:
 - The model has only Read, Grep and Glob: no shell, no web access, no file edits
   and no GitHub access. Its context is gathered beforehand with a read-only
   token.
+- Those tools only reach files in the workspace (the default branch's setup and
+  `pr-head/`). Anything else is denied, so the model can't read secrets from
+  the runner, such as the API key in the process environment, even through a
+  symlink in the pull request.
 - The model is told to treat everything from the pull request, its tickets and
   comments as material to review, never as instructions.
 - Only the post job can write to the pull request, and it runs only these

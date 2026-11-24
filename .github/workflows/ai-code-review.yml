@@ -7,7 +7,8 @@ name: AI code review
 #
 # pull_request_target, so that pull requests from forks get the API key. That
 # makes the pull request's code untrusted here: it is checked out only for
-# Claude to read, never built or run, and Claude can only read files. Only
+# Claude to read, never built or run, and Claude can only read files in the
+# workspace: the tools are limited to ./**, and dontAsk denies anything els. Only
 # people with write access can add the label and start a run. The workflow
 # and its scripts always come from the default branch, whatever branch the
 # pull request targets.
@@ -130,8 +131,8 @@ jobs:
             --model claude-opus-5-5
             --effort high
             --max-turns 80
-            --permission-mode default
-            --allowedTools "Read,Grep,Glob"
+            --permission-mode dontAsk
+            --allowedTools "Read(./**),Grep(./**),Glob(./**)"
             --disallowedTools "Bash,Edit,Write,NotebookEdit,WebFetch,WebSearch"
             --add-dir pr-head
             --json-schema '{"type":"object","additionalProperties":false,"required":["summary","findings","followups"],"properties":{"summary":{"type":"string"},"followups":{"type":"array","items":{"type":"object","additionalProperties":false,"required":["comment_id","status","note"],"properties":{"comment_id":{"type":"integer"},"status":{"type":"string","enum":["fixed","partly_fixed","not_fixed"]},"note":{"type":"string"}}}},"findings":{"type":"array","items":{"type":"object","additionalProperties":false,"required":["severity","path","line","title","description","fix"],"properties":{"severity":{"type":"string","enum":["P0","P1","P2","P3"]},"path":{"type":"string"},"line":{"type":"integer","minimum":1},"start_line":{"type":"integer","minimum":1},"title":{"type":"string"},"description":{"type":"string"},"fix":{"type":"string"},"repro":{"type":"object","additionalProperties":false,"properties":{"steps":{"type":"array","items":{"type":"string"}},"expected":{"type":"string"},"actual":{"type":"string"}}}}}}}}'
