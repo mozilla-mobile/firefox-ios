@@ -950,6 +950,21 @@ class BrowserViewController: UIViewController,
 
     func sceneDidActivateNotification() {
         privacyWindowHelper.removeWindow()
+        discardKeyboardStateIfKeyboardIsGone()
+    }
+
+    /// The keyboard can be dismissed while the app is in the background without a hide notification
+    /// reaching us, which would leave the keyboard spacer pushing the bottom address bar up the screen.
+    private func discardKeyboardStateIfKeyboardIsGone() {
+        guard keyboardState != nil, !containsFirstResponder(view.window ?? view) else { return }
+
+        updateKeyboardState(nil)
+        adjustBottomSearchBarForKeyboard()
+        updateBottomContentStackViewConstraints()
+    }
+
+    private func containsFirstResponder(_ view: UIView) -> Bool {
+        return view.isFirstResponder || view.subviews.contains { containsFirstResponder($0) }
     }
 
     func appWillResignActiveNotification() {
@@ -5190,6 +5205,8 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {
         updateKeyboardState(nil)
+        adjustBottomSearchBarForKeyboard()
+        updateBottomContentStackViewConstraints()
         let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID)
         let isEditing = toolbarState?.addressToolbar.isEditing == true
         if !isEditing {
