@@ -13,6 +13,8 @@ protocol TabGroupMembershipLookup: AnyObject {
 
 @MainActor
 final class TabGroupManager: TabGroupMembershipLookup {
+    static let didChange = Notification.Name("TabGroupManager.didChange")
+
     enum GroupError: Error {
         case notLoaded
         case closedWindow
@@ -57,6 +59,7 @@ final class TabGroupManager: TabGroupMembershipLookup {
                 removeTab(tabID)
             }
             pendingRemovedTabIDs.removeAll()
+            NotificationCenter.default.post(name: Self.didChange, object: self)
         } catch {
             loadTask = nil
             lastPersistenceError = error
@@ -98,20 +101,27 @@ final class TabGroupManager: TabGroupMembershipLookup {
     }
 
     @discardableResult
-    func createGroup(title: String,
-                     color: CodableColor = TabGroup.defaultColor) throws -> TabGroupID {
+    func createGroup(
+        title: String,
+        color: CodableColor = TabGroup.defaultColor,
+        icon: TabGroupIcon = TabGroup.defaultIcon
+    ) throws -> TabGroupID {
         guard isLoaded else { throw GroupError.notLoaded }
-        let group = TabGroup(title: title, color: color)
+        let group = TabGroup(title: title, color: color, icon: icon)
         groups.append(group)
         saveChanges()
         return group.id
     }
 
-    func updateGroup(_ groupID: TabGroupID, title: String, color: CodableColor) throws {
+    func updateGroup(_ groupID: TabGroupID,
+                     title: String,
+                     color: CodableColor,
+                     icon: TabGroupIcon) throws {
         try requireGroup(groupID)
         guard let index = groups.firstIndex(where: { $0.id == groupID }) else { return }
         groups[index].title = title
         groups[index].color = color
+        groups[index].icon = icon
         saveChanges()
     }
 
@@ -145,6 +155,36 @@ final class TabGroupManager: TabGroupMembershipLookup {
     }
 
     func moveTab(_ tab: Tab, to groupID: TabGroupID?) throws {
+        try moveTabs([tab], to: groupID)
+    }
+
+    func moveTabs(_ tabs: [Tab], to groupID: TabGroupID?) throws {
+        guard Set(tabs.map(\.windowUUID)).count <= 1 else { throw GroupError.invalidTab }
+        for tab in tabs {
+            try validateMove(tab, to: groupID)
+        }
+        var seenIDs = Set<TabUUID>()
+        var moving: [Tab] = []
+        for tab in tabs where !seenIDs.contains(tab.tabUUID) && membership[tab.tabUUID] != groupID {
+            seenIDs.insert(tab.tabUUID)
+            moving.append(tab)
+        }
+        guard !moving.isEmpty else { return }
+        let movingIDs = Set(moving.map(\.tabUUID))
+        for index in groups.indices {
+            groups[index].tabIDs.removeAll { movingIDs.contains($0) }
+        }
+        if let groupID, let index = groups.firstIndex(where: { $0.id == groupID }) {
+            activeWindows[groupID] = moving[0].windowUUID
+            for tab in moving {
+                groups[index].tabIDs.append(tab.tabUUID)
+            }
+        }
+        rebuildMembership()
+        saveChanges()
+    }
+
+    private func validateMove(_ tab: Tab, to groupID: TabGroupID?) throws {
         guard isLoaded else { throw GroupError.notLoaded }
         guard !tab.isPrivate, tab.isBound(to: self), UUID(uuidString: tab.tabUUID) != nil else {
             throw GroupError.invalidTab
@@ -161,16 +201,6 @@ final class TabGroupManager: TabGroupMembershipLookup {
                 throw GroupError.tabsNotLoaded
             }
         }
-        guard membership[tab.tabUUID] != groupID else { return }
-        for index in groups.indices {
-            groups[index].tabIDs.removeAll { $0 == tab.tabUUID }
-        }
-        if let groupID, let index = groups.firstIndex(where: { $0.id == groupID }) {
-            activeWindows[groupID] = tab.windowUUID
-            groups[index].tabIDs.append(tab.tabUUID)
-        }
-        rebuildMembership()
-        saveChanges()
     }
 
     func bind(_ tab: Tab) {
@@ -245,6 +275,7 @@ final class TabGroupManager: TabGroupMembershipLookup {
     }
 
     private func saveChanges() {
+        NotificationCenter.default.post(name: Self.didChange, object: self)
         pendingSave = TabGroupSnapshot(groups: groups)
         if saveTask == nil { startSaveTask() }
     }

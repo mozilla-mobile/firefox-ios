@@ -392,7 +392,9 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
         // TODO: Legacy class has a guard to cancel adding new tab if dragging was enabled,
         // check if change is still needed
         guard let tabManager = tabManager(for: uuid) else { return }
-        let tab = tabManager.addTab(urlRequest, isPrivate: isPrivate)
+        let groupID = TabGroupsFeatureFlag.isEnabled && !isPrivate
+            ? TabGroupsSessionStore.controller(for: uuid, tabManager: tabManager).state.selectedGroupID : nil
+        let tab = tabManager.addTab(urlRequest, isPrivate: isPrivate, groupID: groupID)
         tabManager.selectTab(tab)
 
         let dismissAction = TabTrayAction(windowUUID: uuid,
@@ -447,7 +449,13 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
         let isLastActiveTab = isPrivate
                             ? tabManager.privateTabs.count == 1
                             : tabManager.normalTabs.count == 1
-        tabManager.removeTab(tabUUID)
+        if TabGroupsFeatureFlag.isEnabled, !isPrivate,
+           let tab = tabManager.normalTabs.first(where: { $0.tabUUID == tabUUID }) {
+            let controller = TabGroupsSessionStore.controller(for: uuid, tabManager: tabManager)
+            TabGroupsTabActions(controller: controller, tabManager: tabManager).closeTabs([tab])
+        } else {
+            tabManager.removeTab(tabUUID)
+        }
         return isLastActiveTab
     }
 
