@@ -102,7 +102,8 @@ links to it.
    prompt, `review-context.toml`, `AGENTS.md` and `.claude/`. A pull request
    can't change the reviewer that reviews it.
 2. Checks out the pull request's head commit into `pr-head/`, only for the
-   model to read. It's never built or run.
+   model to read. It's never built or run. Its `CLAUDE.md`, `CLAUDE.local.md`,
+   `AGENTS.md` and `.claude/` files are removed first to avoid prompt injection.
 3. `gather_context.py` writes what the reviewer reads into `pr-context/`:
    - `pr.md`: the title, author, branches and description.
    - `diff.patch` and `files.json`: the diff.
@@ -176,7 +177,11 @@ the API key. That makes everything in the pull request untrusted, so:
   the runner, such as the API key in the process environment, even through a
   symlink in the pull request.
 - The model is told to treat everything from the pull request, its tickets and
-  comments as material to review, never as instructions.
+  comments as material to review, never as instructions. The pull request's own
+  `CLAUDE.md`, `AGENTS.md` and `.claude/` files are deleted from `pr-head/`
+  before the review, so they can't reach it as trusted instructions, skills,
+  subagents or commands. Hooks and MCP servers there never ran in testing;
+  Agents only reads settings from the working directory, which is `main`'s.
 - Only the post job can write to the pull request, and it runs only these
   scripts from the default branch. It has `contents: write` to resolve threads.
 - The model proposes follow-ups, but the post job replies only on unresolved

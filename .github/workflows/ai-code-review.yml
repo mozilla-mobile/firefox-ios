@@ -91,6 +91,15 @@ jobs:
           path: pr-head
           persist-credentials: false
 
+      # Claude Code loads these as trusted instructions, skills, subagents and
+      # commands, so the pull request could use them to steer its own review.
+      # The model still sees changes to them in the diff, as material to review.
+      - name: Remove the pull request's Claude instructions
+        run: |
+          find pr-head -path pr-head/.git -prune -o \
+            \( -iname CLAUDE.md -o -iname CLAUDE.local.md -o -iname AGENTS.md \) ! -type d -print -exec rm -f {} + \
+            -o -name .claude -print -prune -exec rm -rf {} +
+
       # The same schema module, at the same commit, as validate-review-context.yml.
       - name: Check out bugbug's review context schema
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
@@ -133,7 +142,7 @@ jobs:
             --max-turns 80
             --permission-mode dontAsk
             --allowedTools "Read(./**),Grep(./**),Glob(./**)"
-            --disallowedTools "Bash,Edit,Write,NotebookEdit,WebFetch,WebSearch"
+            --disallowedTools "Bash,Edit,Write,NotebookEdit,WebFetch,WebSearch,Agent,Skill"
             --add-dir pr-head
             --json-schema '{"type":"object","additionalProperties":false,"required":["summary","findings","followups"],"properties":{"summary":{"type":"string"},"followups":{"type":"array","items":{"type":"object","additionalProperties":false,"required":["comment_id","status","note"],"properties":{"comment_id":{"type":"integer"},"status":{"type":"string","enum":["fixed","partly_fixed","not_fixed"]},"note":{"type":"string"}}}},"findings":{"type":"array","items":{"type":"object","additionalProperties":false,"required":["severity","path","line","title","description","fix"],"properties":{"severity":{"type":"string","enum":["P0","P1","P2","P3"]},"path":{"type":"string"},"line":{"type":"integer","minimum":1},"start_line":{"type":"integer","minimum":1},"title":{"type":"string"},"description":{"type":"string"},"fix":{"type":"string"},"repro":{"type":"object","additionalProperties":false,"properties":{"steps":{"type":"array","items":{"type":"string"}},"expected":{"type":"string"},"actual":{"type":"string"}}}}}}}}'
 
