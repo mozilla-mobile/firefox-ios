@@ -10,7 +10,7 @@ struct BrowserViewControllerLens: StateLens {
     let browserViewControllerState: BrowserViewControllerState
     /// State regarding the homepage's embedded search bar
     let homepageSearchBarState: SearchBarState
-    /// Whether the address bar is minimized, which drives the toolbar blur views and bottom container visibility
+    /// Whether the address bar is minimized
     let isAddressBarMinimized: Bool
 
     // MARK: - Lens initialization

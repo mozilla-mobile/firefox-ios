@@ -1080,8 +1080,6 @@ class BrowserViewController: UIViewController,
         let previousLens = browserViewControllerLens
         browserViewControllerLens = state
 
-        // The blur views and bottom container visibility are derived from `isAddressBarMinimized`, so refresh
-        // them whenever that state lands, which can be after a toolbar show / hide queued behind another action.
         if let previousLens, previousLens.isAddressBarMinimized != state.isAddressBarMinimized {
             updateBlurViews()
         }
