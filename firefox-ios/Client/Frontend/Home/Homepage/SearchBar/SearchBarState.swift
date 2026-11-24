@@ -24,7 +24,7 @@ struct SearchBarState: StateType, Equatable {
         )
     }
 
-    private init(
+    init(
         windowUUID: WindowUUID,
         isShowingCenterSearchBar: Bool,
         isHomepageVisible: Bool

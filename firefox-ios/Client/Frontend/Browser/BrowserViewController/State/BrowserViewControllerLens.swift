@@ -13,23 +13,19 @@ struct BrowserViewControllerLens: StateLens {
 
     // MARK: - Lens initialization
     init(appState: AppState, uuid: WindowUUID) {
-        guard let browserViewControllerState = appState.componentState(
+        // On launch, theres a chance one or both of BrowserViewControllerState and HomepageState may not yet have been
+        // created and added to the global Redux store.
+        let browserViewControllerState = appState.componentState(
             BrowserViewControllerState.self,
             for: .browserViewController,
             window: uuid
-        ) else {
-            self.init(windowUUID: uuid)
-            return
-        }
+        ) ?? BrowserViewControllerState(windowUUID: uuid)
 
-        guard let homepageState = appState.componentState(
+        let homepageState = appState.componentState(
             HomepageState.self,
             for: .homepage,
             window: uuid
-        ) else {
-            self.init(windowUUID: uuid)
-            return
-        }
+        ) ?? HomepageState(windowUUID: uuid)
 
         self.init(browserViewControllerState: browserViewControllerState,
                   homepageSearchBarState: homepageState.searchBarState)

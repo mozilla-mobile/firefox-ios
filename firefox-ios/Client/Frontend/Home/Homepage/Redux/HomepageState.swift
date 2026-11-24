@@ -68,7 +68,7 @@ struct HomepageState: ScreenState, Equatable {
         )
     }
 
-    private init(
+    init(
         windowUUID: WindowUUID,
         headerState: HeaderState,
         privacyNoticeState: PrivacyNoticeState,
