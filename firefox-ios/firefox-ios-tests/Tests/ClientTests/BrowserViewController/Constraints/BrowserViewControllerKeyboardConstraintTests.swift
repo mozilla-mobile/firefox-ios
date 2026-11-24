@@ -230,6 +230,27 @@ final class BrowserViewControllerKeyboardConstraintTests: BrowserViewControllerC
         XCTAssertEqual(subject.overKeyboardContainer.subviews.count, 1)
     }
 
+    /// In iPhone landscape the address bar is at the top, so a rotated frame kept there doesn't show a spacer
+    /// until the app is back in portrait with the bottom address bar.
+    func test_keyboardWillShow_rotatedFrameInLandscape_doesNotAddKeyboardSpacerBackInPortrait() {
+        let subject = createSubject(isBottomSearchBar: false)
+        selectTabWithFindInPage()
+        subject.view.frame = CGRect(x: 0, y: 0, width: 874, height: 402)
+        subject.view.layoutIfNeeded()
+        let rotatedState = KeyboardState(keyboardEndFrame: CGRect(x: 238, y: -472, width: 164, height: 874),
+                                         keyboardAnimationDuration: 0,
+                                         keyboardAnimationCurveValue: 0)
+        subject.keyboardHelper(createKeyboardHelper(), keyboardWillShowWithState: rotatedState)
+
+        subject.isBottomSearchBar = true
+        subject.view.frame = CGRect(x: 0, y: 0, width: 402, height: 874)
+        subject.view.setNeedsUpdateConstraints()
+        subject.view.updateConstraintsIfNeeded()
+
+        XCTAssertNil(keyboardSpacerHeightConstant(in: subject.overKeyboardContainer))
+        XCTAssertEqual(subject.overKeyboardContainer.subviews.count, 1)
+    }
+
     func test_keyboardWillShow_landscapeKeyboard_addsKeyboardSpacer() {
         let subject = createSubject()
         selectTabWithFindInPage()
