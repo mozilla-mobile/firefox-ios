@@ -191,7 +191,7 @@ struct ToolbarState: ScreenState, Sendable {
                 .copy(canGoBack: canGoBack ?? state.canGoBack)
                 .copy(canGoForward: canGoForward ?? state.canGoForward)
 
-        case .didKeyboardRequestChange, .cancelEdit, .cancelEditOnHomepage, .searchTermDidSet, .lockIconChanged,
+        case .didKeyboardRequestChange, .cancelEdit, .searchTermDidSet, .lockIconChanged,
              .searchTermDidChange, .searchTermDidClear, .websiteLoadingStateDidChange:
             // AddressBarState is a nested sub-state, forwards modern call to AddressBarState
             return state.copy(addressToolbar: AddressBarState.reducer.modernReducer(state.addressToolbar,
