@@ -7,6 +7,7 @@ import Foundation
 public struct QuickAnswersViewConfiguration: Sendable {
     public let optIn: OptInStrings
     public let optInRedesign: OptInRedesignStrings
+    public let optInAccessibilityIdentifiers: OptInAccessibilityIdentifiers
     public let contentView: ContentViewStrings
     public let privacyBanner: PrivacyBannerStrings
     public let errors: ErrorStrings
@@ -61,6 +62,18 @@ public struct QuickAnswersViewConfiguration: Sendable {
             self.noTrainingDescription = noTrainingDescription
             self.learnMore = learnMore
             self.continueButton = continueButton
+        }
+    }
+
+    public struct OptInAccessibilityIdentifiers: Sendable {
+        public let continueButton: String
+        public let learnMoreButton: String
+        public let closeButton: String
+
+        public init(continueButton: String, learnMoreButton: String, closeButton: String) {
+            self.continueButton = continueButton
+            self.learnMoreButton = learnMoreButton
+            self.closeButton = closeButton
         }
     }
 
@@ -151,6 +164,7 @@ public struct QuickAnswersViewConfiguration: Sendable {
     public init(
         optIn: OptInStrings,
         optInRedesign: OptInRedesignStrings,
+        optInAccessibilityIdentifiers: OptInAccessibilityIdentifiers,
         contentView: ContentViewStrings,
         privacyBanner: PrivacyBannerStrings,
         errors: ErrorStrings,
@@ -159,6 +173,7 @@ public struct QuickAnswersViewConfiguration: Sendable {
     ) {
         self.optIn = optIn
         self.optInRedesign = optInRedesign
+        self.optInAccessibilityIdentifiers = optInAccessibilityIdentifiers
         self.contentView = contentView
         self.privacyBanner = privacyBanner
         self.errors = errors

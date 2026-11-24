@@ -35,6 +35,14 @@ enum AccessibilityIdentifiers {
         static let topBorder = "TabToolbar.toolbarTopBorderView"
     }
 
+    enum QuickAnswers {
+        enum OptIn {
+            static let continueButton = "QuickAnswers.OptIn.continueButton"
+            static let learnMoreButton = "QuickAnswers.OptIn.learnMoreButton"
+            static let closeButton = "QuickAnswers.OptIn.closeButton"
+        }
+    }
+
     enum Browser {
         enum QuickAnswers {
             static let returnPill = "Browser.QuickAnswers.ReturnPill"
