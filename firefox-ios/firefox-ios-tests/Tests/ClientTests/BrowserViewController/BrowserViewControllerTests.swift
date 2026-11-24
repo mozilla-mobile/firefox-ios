@@ -849,6 +849,48 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(tab2.tabDelegate === subject)
     }
 
+    // MARK: - UI changes from Redux State updates
+
+    func testSearchBarState_setsCenterSearchVisibility_whenTrue() {
+        let isShowingCenterSearchBar = true
+        let homepageSearchBarState = SearchBarState(
+            windowUUID: .XCTestDefaultUUID,
+            isShowingCenterSearchBar: isShowingCenterSearchBar,
+            isHomepageVisible: true
+        )
+
+        let lens = BrowserViewControllerLens(
+            browserViewControllerState: BrowserViewControllerState(windowUUID: .XCTestDefaultUUID),
+            homepageSearchBarState: homepageSearchBarState
+        )
+
+        let subject = createSubject()
+
+        subject.newState(state: lens)
+
+        XCTAssertEqual(subject.addressToolbarContainer.isHidden, isShowingCenterSearchBar)
+    }
+
+    func testSearchBarState_setsCenterSearchVisibility_whenFalse() {
+        let isShowingCenterSearchBar = false
+        let homepageSearchBarState = SearchBarState(
+            windowUUID: .XCTestDefaultUUID,
+            isShowingCenterSearchBar: isShowingCenterSearchBar,
+            isHomepageVisible: true
+        )
+
+        let lens = BrowserViewControllerLens(
+            browserViewControllerState: BrowserViewControllerState(windowUUID: .XCTestDefaultUUID),
+            homepageSearchBarState: homepageSearchBarState
+        )
+
+        let subject = createSubject()
+
+        subject.newState(state: lens)
+
+        XCTAssertEqual(subject.addressToolbarContainer.isHidden, isShowingCenterSearchBar)
+    }
+
     // MARK: - Private
 
     private func createSubject(gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
