@@ -18,7 +18,7 @@ final class ProxyLeakGuardHelper: TabContentScript {
         var allowedKinds: Set<String> {
             switch self {
             case .webAuthnRelatedOrigin: return ["get", "create"]
-            case .directConnection: return ["RTCPeerConnection", "webkitRTCPeerConnection", "WebTransport"]
+            case .directConnection: return ["RTCPeerConnection", "webkitRTCPeerConnection"]
             }
         }
     }

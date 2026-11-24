@@ -12,7 +12,7 @@ const report = (api, kind) => {
   try { post?.({ api, kind, token: APP_ID_TOKEN }); } catch (e) {}
 };
 
-["RTCPeerConnection", "webkitRTCPeerConnection", "WebTransport"].forEach(name => {
+["RTCPeerConnection", "webkitRTCPeerConnection"].forEach(name => {
   if (!(name in window)) return;
   let reported = false;
   const get = () => {

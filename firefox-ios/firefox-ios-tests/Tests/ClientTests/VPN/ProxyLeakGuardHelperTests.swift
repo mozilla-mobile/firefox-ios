@@ -42,7 +42,7 @@ final class ProxyLeakGuardHelperTests: XCTestCase {
 
         subject.handle(body: connectionBody, origin: "https://a.example")
         subject.handle(body: body("DirectConnection", "webkitRTCPeerConnection"), origin: "https://b.example")
-        subject.handle(body: body("DirectConnection", "WebTransport"), origin: "https://c.example")
+        subject.handle(body: body("DirectConnection"), origin: "https://c.example")
 
         XCTAssertEqual(reported.values, [
             .init(api: .directConnection, origin: "https://a.example"),
