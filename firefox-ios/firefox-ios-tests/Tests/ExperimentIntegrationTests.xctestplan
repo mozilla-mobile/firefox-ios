@@ -206,7 +206,6 @@
         "ToolbarTests\/testGoogleLensIconHiddenWhenGoogleIsNotDefaultSearchEngine()",
         "ToolbarTests\/testGoogleLensIconReplacedByClearIconWhenTyping()",
         "ToolbarTests\/testReEnablingGoogleLensToggleRestoresLensIcon()",
-        "TopTabsTestIpad",
         "TrackingProtectionTests",
         "TranslationsTests",
         "TranslationsTests\/testAddLanguageHiddenInEditMode_translationExperimentOn()",

@@ -471,8 +471,6 @@
         "PrivateBrowsingTest\/testPrivateBrowserPanelView_tabTrayExperimentOff()",
         "PrivateBrowsingTest\/testPrivateTabCounterIsUpdated()",
         "PrivateBrowsingTest\/testPrivateTabDoesNotTrackHistory()",
-        "PrivateBrowsingTest\/testPrivateTabDoesNotTrackHistory_tabTrayExperimentOff()",
-        "PrivateBrowsingTest\/testPrivateTabDoesNotTrackHistory_tabTrayExperimentOn()",
         "PrivateBrowsingTest\/testTabCountShowsOnlyNormalOrPrivateTabCount()",
         "PrivateBrowsingTest\/testTabCountShowsOnlyNormalOrPrivateTabCount_tabTrayExperimentOff()",
         "PrivateBrowsingTest\/testTabCountShowsOnlyNormalOrPrivateTabCount_tabTrayExperimentOn()",
