@@ -25,7 +25,7 @@ workflows:
             cp "$SOURCE_FILE" "$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator18.6-arm64.xctestrun"
     - xcode-test-without-building@1:
         title: "Unit Tests - iPhone 18 Pro (iOS 27.0), 3 repetitions"
-        timeout: 1200
+        timeout: 2400
         is_always_run: true
         inputs:
         - project_path: firefox-ios/Client.xcodeproj
@@ -36,6 +36,22 @@ workflows:
         - test_repetition_mode: until_failure
         - maximum_test_repetitions: "3"
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -collect-test-diagnostics never'
+    - script@1:
+        title: "Export unit test coverage (iOS 27.0)"
+        is_always_run: true
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -euo pipefail
+
+            # Line coverage per target, file and function, read by the Mobile feature health dashboard
+            # (mozilla-mobile/testops-tools, mobile-feature-health) so it doesn't need Xcode to open the .xcresult.
+            if [ -z "${BITRISE_XCRESULT_PATH:-}" ] || [ ! -d "$BITRISE_XCRESULT_PATH" ]; then
+              echo "No .xcresult from the iOS 27.0 unit tests, skipping the coverage export"
+              exit 0
+            fi
+            xcrun xccov view --report --json "$BITRISE_XCRESULT_PATH" > "$BITRISE_DEPLOY_DIR/unit-test-coverage.json"
+            ls -lh "$BITRISE_DEPLOY_DIR/unit-test-coverage.json"
     - xcode-test-without-building@1:
         title: "Unit Tests - iPhone 17 (iOS 26.5)"
         timeout: 6000
