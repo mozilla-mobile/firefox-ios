@@ -128,8 +128,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     ) -> NSCollectionLayoutSection {
         let traitCollection = environment.traitCollection
         switch section {
-        case .header:
-            return createHeaderSectionLayout(for: environment)
+        case .header(let params):
+            return createHeaderSectionLayout(for: environment, withParams: params)
         case .privacyNotice:
             return createSingleItemSectionLayout(
                 for: traitCollection,
@@ -171,6 +171,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         case .bookmarks:
             return createBookmarksSectionLayout(for: environment)
         case .spacer:
+            // IHC TODO We have to pass the params through sections spacer to calculate the fake header height too
             return createSpacerSectionLayout(for: environment)
         }
     }
@@ -204,7 +205,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     }
 
     private func createHeaderSectionLayout(
-        for environment: NSCollectionLayoutEnvironment
+        for environment: NSCollectionLayoutEnvironment,
+        withParams params: HomepageDiffableDataSource.HeaderSpacingLayoutParams
     ) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                               heightDimension: .estimated(UX.standardSingleItemHeight))
@@ -225,7 +227,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         section.contentInsets = NSDirectionalEdgeInsets(
             top: UX.topSpacing,
             leading: horizontalInset,
-            bottom: headerBottomInset(),
+            bottom: headerBottomInset(), // IHC use params to decide here
             trailing: horizontalInset)
 
         return section

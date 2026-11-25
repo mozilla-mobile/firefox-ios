@@ -613,6 +613,7 @@ final class HomepageViewController: UIViewController,
     private func createLayout() -> UICollectionViewCompositionalLayout {
         let layout = UICollectionViewCompositionalLayout { [weak self, sectionProvider] (sectionIndex, environment)
             -> NSCollectionLayoutSection? in
+
             guard let section = self?.dataSource?.snapshot().sectionIdentifiers[safe: sectionIndex] else {
                 self?.logger.log(
                     "Section should not have been nil, something went wrong",
@@ -628,6 +629,7 @@ final class HomepageViewController: UIViewController,
                 return sectionProvider.makeEmptyLayoutSection()
             }
 
+            // IHC Can we pass in homepageState?
             let layoutSection = sectionProvider.createLayoutSection(
                 for: section,
                 with: environment

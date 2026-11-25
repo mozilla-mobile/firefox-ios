@@ -21,9 +21,16 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         let shouldShowSectionHeader: ShouldShowSectionHeader
     }
 
+    // IHC Example, please name better
+    struct HeaderSpacingLayoutParams: Equatable, Hashable {
+        let isShowingCenterSearchBar: Bool
+        let isShowingPrivacyNotice: Bool
+        let isShowingMessageCard: Bool // Simplifies state.messageState.messageCardConfiguration == nil
+    }
+
     enum HomeSection: Hashable {
         case privacyNotice
-        case header
+        case header(HeaderSpacingLayoutParams)
         case messageCard
         case topSites(TextColor?, NumberOfTilesPerRow, ShouldShowSectionHeader)
         case notificationCard
@@ -127,8 +134,15 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
                                          state.wallpaperState.wallpaperConfiguration.logoTextColor,
                                          showiPadSetup)
 
-        snapshot.appendSections([.header])
-        snapshot.appendItems([headerItem], toSection: .header)
+        // TODO get from homepage state actually
+        let headerParams = HomepageDiffableDataSource.HeaderSpacingLayoutParams(
+            isShowingCenterSearchBar: true,
+            isShowingPrivacyNotice: true,
+            isShowingMessageCard: true
+        )
+        let headerSection = HomepageSection.header(headerParams)
+        snapshot.appendSections([headerSection])
+        snapshot.appendItems([headerItem], toSection: headerSection)
 
         if state.privacyNoticeState.shouldShowPrivacyNotice {
             snapshot.appendSections([.privacyNotice])
