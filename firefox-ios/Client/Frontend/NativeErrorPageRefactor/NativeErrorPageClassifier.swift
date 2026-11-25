@@ -31,19 +31,17 @@ struct NativeErrorPageClassifier {
 
     func type(for error: NSError) -> NativeErrorPageType {
         let code = error.code
-        switch true {
-        case noInternetErrorCodes.contains(code):
+        if noInternetErrorCodes.contains(code) {
             return .noInternet
-        case isVPNEnabled && vpnErrorCodes.contains(code):
+        } else if isVPNEnabled && vpnErrorCodes.contains(code) {
             return .vpn
-        case noResponseErrorCodes.contains(code):
+        } else if noResponseErrorCodes.contains(code) {
             return .noResponse
-        case certErrorCodes.contains(code):
+        } else if certErrorCodes.contains(code) {
             return .badCert
-        case isWaybackEnabled && WaybackCodes.isWaybackCode(code):
+        } else if isWaybackEnabled && WaybackCodes.isWaybackCode(code) {
             return .wayback
-        default:
-            return .generic
         }
+        return .generic
     }
 }
