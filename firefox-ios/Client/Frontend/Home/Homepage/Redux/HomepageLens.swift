@@ -11,22 +11,13 @@ struct HomepageLens: StateLens {
 
     // MARK: - Lens initialization
     init(appState: AppState, uuid: WindowUUID) {
-        guard let homepageState = appState.componentState(
+        let homepageState = appState.componentState(
             HomepageState.self,
             for: .homepage,
             window: uuid
-        ) else {
-            self.init(windowUUID: uuid)
-            return
-        }
+        ) ?? HomepageState(windowUUID: uuid)
 
         self.init(homepageState: homepageState)
-    }
-
-    init(windowUUID: WindowUUID) {
-        self.init(
-            homepageState: HomepageState(windowUUID: windowUUID)
-        )
     }
 
     init(homepageState: HomepageState) {
