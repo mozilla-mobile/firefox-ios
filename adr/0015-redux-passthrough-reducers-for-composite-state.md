@@ -45,6 +45,9 @@ In the future, any `StateType` "parent" structs having at least one  `StateType`
 When a state grows too large, developers should pull out related responsibilities into a new child `StateType` with its own reducer. But once a state has a child `StateType`, its remaining non-`StateType` properties should also move into their own child state(s). This saves the parent state's reducer from implementing a confusing mix of handling some actions itself and forwarding others (as in the `HomepageState` example above).
 
 #### Example:
+
+After making `HomepageState` a parent state, we bundled up all related non-`StateType` properties into a few separate child sub-states. Once that was done, we simply implemented the parent `HomepageState`'s passthrough action handling as follows:
+
 ``` 
 @MainActor
     private static func passthroughState(from state: HomepageState, action: Action) -> HomepageState {
