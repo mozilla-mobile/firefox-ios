@@ -99,8 +99,12 @@ final class DefaultImageHandler: ImageHandler {
 
     func fetchHeroImage(imageModel: SiteImageModel) async throws -> UIImage {
         do {
-            return try await imageCache.getImage(cacheKey: imageModel.cacheKey, type: imageModel.imageType)
+            let image = try await imageCache.getImage(cacheKey: imageModel.cacheKey, type: imageModel.imageType)
+            // TODO: Remove [HeroDebug] logging
+            logger.log("[HeroDebug] Cache hit (\(image.size)) for \(imageModel.cacheKey)", level: .warning, category: .images)
+            return image
         } catch {
+            logger.log("[HeroDebug] Cache miss for \(imageModel.cacheKey)", level: .warning, category: .images)
             return try await fetchHeroImageFromFetcher(imageModel: imageModel)
         }
     }

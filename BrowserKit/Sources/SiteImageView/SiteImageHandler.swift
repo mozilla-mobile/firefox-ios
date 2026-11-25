@@ -44,8 +44,13 @@ public final class DefaultSiteImageHandler: SiteImageHandler {
             do {
                 return try await getHeroImage(imageModel: model)
             } catch {
-                // If hero image fails, we return a favicon image
-                return await getFaviconImage(imageModel: model)
+                // If hero image fails, we return a favicon image.
+                // Use a favicon model so the fallback isn't cached under the hero image key.
+                let faviconModel = SiteImageModel(id: model.id,
+                                                  imageType: .favicon,
+                                                  siteURL: model.siteURL,
+                                                  siteResource: model.siteResource)
+                return await getFaviconImage(imageModel: faviconModel)
             }
         case .favicon:
             return await getFaviconImage(imageModel: model)
