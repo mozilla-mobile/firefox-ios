@@ -38,9 +38,11 @@ class ClearHistorySheetProvider: FeatureFlaggable {
     }
 
     func createAlertAndConfigureWithArrowIfNeeded(from viewController: UIViewController) -> UIAlertController {
-        let title: String = usesUpdatedSyncStrings
-            ? String(format: .LibraryPanel.History.ClearHistorySheet.TitleV2, AppName.shortName.rawValue)
-            : .LibraryPanel.History.ClearHistorySheet.Title
+        let title: String = if usesUpdatedSyncStrings {
+            String(format: .LibraryPanel.History.ClearHistorySheet.TitleV2, AppName.shortName.rawValue)
+        } else {
+            .LibraryPanel.History.ClearHistorySheet.Title
+        }
         let alert = UIAlertController(title: title,
                                       message: nil,
                                       preferredStyle: .actionSheet)
