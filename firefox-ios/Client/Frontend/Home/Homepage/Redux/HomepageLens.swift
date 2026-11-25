@@ -20,6 +20,12 @@ struct HomepageLens: StateLens {
         self.init(homepageState: homepageState)
     }
 
+    init(windowUUID: WindowUUID) {
+        self.init(
+            homepageState: HomepageState(windowUUID: windowUUID)
+        )
+    }
+
     init(homepageState: HomepageState) {
         self.homepageState = homepageState
     }

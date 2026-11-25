@@ -2379,6 +2379,7 @@
 		ED07C0EF2CCAE856006C0627 /* SearchEngineSelectionMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED07C0EE2CCAE856006C0627 /* SearchEngineSelectionMiddleware.swift */; };
 		ED07C0F22CCAFED1006C0627 /* SearchEngineSelectionStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED07C0F02CCAFEC2006C0627 /* SearchEngineSelectionStateTests.swift */; };
 		ED07C0F52CCB020B006C0627 /* SearchEngineSelectionMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED07C0F32CCB0200006C0627 /* SearchEngineSelectionMiddlewareTests.swift */; };
+		ED08F2FC30B7951300E4A100 /* HomepageLensTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED08F2FB30B7951300E4A100 /* HomepageLensTests.swift */; };
 		ED232EA02DFA3BF30046DA47 /* UserTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED232E9F2DFA3BF00046DA47 /* UserTelemetry.swift */; };
 		ED26BFD72DE5260700FB2B3F /* glean_index.yaml in Resources */ = {isa = PBXBuildFile; fileRef = ED26BFD62DE5260700FB2B3F /* glean_index.yaml */; };
 		ED287B752E4D4C0500527204 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = ED287B722E4D4C0500527204 /* AppIcon.icon */; };
@@ -12728,6 +12729,7 @@
 		ED07C0EE2CCAE856006C0627 /* SearchEngineSelectionMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineSelectionMiddleware.swift; sourceTree = "<group>"; };
 		ED07C0F02CCAFEC2006C0627 /* SearchEngineSelectionStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineSelectionStateTests.swift; sourceTree = "<group>"; };
 		ED07C0F32CCB0200006C0627 /* SearchEngineSelectionMiddlewareTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineSelectionMiddlewareTests.swift; sourceTree = "<group>"; };
+		ED08F2FB30B7951300E4A100 /* HomepageLensTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageLensTests.swift; sourceTree = "<group>"; };
 		ED232E9F2DFA3BF00046DA47 /* UserTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTelemetry.swift; sourceTree = "<group>"; };
 		ED264785844AD63AD616A882 /* cy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cy; path = cy.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		ED26BFD62DE5260700FB2B3F /* glean_index.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = glean_index.yaml; sourceTree = "<group>"; };
@@ -15307,6 +15309,7 @@
 				8AEF41612D15EDBA0013925D /* TopSitesMiddlewareTests.swift */,
 				8A552AC62CB43AB300564C98 /* HeaderStateTests.swift */,
 				8A552AC52CB43AB300564C98 /* HomepageStateTests.swift */,
+				ED08F2FB30B7951300E4A100 /* HomepageLensTests.swift */,
 				8A552AD12CB43AB400564C98 /* HomepageTelemetryStateTests.swift */,
 				8A454D332CB85C7D009436D9 /* MerinoStateTests.swift */,
 				8A87B42E2CC1A3AA003A9239 /* MerinoMiddlewareTests.swift */,
@@ -21974,6 +21977,7 @@
 				21ED80B32AF2E43A0065D4C7 /* TabDisplayDiffableDataSourceTests.swift in Sources */,
 				A1B2C3D12F0000010000AA01 /* TabDisplayViewGeometryTests.swift in Sources */,
 				8C3A17792E68390000341A01 /* OnboardingLaunchScreenViewControllerTests.swift in Sources */,
+				ED08F2FC30B7951300E4A100 /* HomepageLensTests.swift in Sources */,
 				C29B64872AD69D0200F3244B /* QRCodeCoordinatorTests.swift in Sources */,
 				8A4880802E68AF8400AD43D5 /* GleanHttpUploaderTests.swift in Sources */,
 				8CA4E80F2D22D2C7007207C1 /* GleanUsageReportingLifecycleObserverTest.swift in Sources */,
