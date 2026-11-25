@@ -627,11 +627,10 @@ public protocol FirefoxAccountProtocol: AnyObject, Sendable {
      *
      * **💾 This method alters the persisted account state.**
      *
-     * Applications may call this method to check with the FxA server about the status
-     * of their authentication tokens. It returns an [`AuthorizationInfo`] struct
-     * with details about whether the tokens are still active.
+     * Call this method to validate the current auth tokens. This checks that all expected tokens
+     * are present and also validates the refresh token with the FxA server.
      */
-    func checkAuthorizationStatus() throws  -> AuthorizationInfo
+    func checkAuthorizationStatus()  -> AuthorizationStatus
     
     /**
      * Disconnect from the user's account.
@@ -1305,12 +1304,11 @@ open func matchesServer(server: FxaServer)throws  -> Bool  {
      *
      * **💾 This method alters the persisted account state.**
      *
-     * Applications may call this method to check with the FxA server about the status
-     * of their authentication tokens. It returns an [`AuthorizationInfo`] struct
-     * with details about whether the tokens are still active.
+     * Call this method to validate the current auth tokens. This checks that all expected tokens
+     * are present and also validates the refresh token with the FxA server.
      */
-open func checkAuthorizationStatus()throws  -> AuthorizationInfo  {
-    return try  FfiConverterTypeAuthorizationInfo_lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
+open func checkAuthorizationStatus() -> AuthorizationStatus  {
+    return try!  FfiConverterTypeAuthorizationStatus_lift(try! rustCall() {
         uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_check_authorization_status(
             self.uniffiCloneHandle(),uniffiCallStatus
@@ -2268,62 +2266,6 @@ public func FfiConverterTypeAttachedClient_lift(_ buf: RustBuffer) throws -> Att
 #endif
 public func FfiConverterTypeAttachedClient_lower(_ value: AttachedClient) -> RustBuffer {
     return FfiConverterTypeAttachedClient.lower(value)
-}
-
-
-/**
- * Information about the authorization state of the application.
- *
- * This struct represents metadata about whether the application is currently
- * connected to the user's account.
- */
-public struct AuthorizationInfo: Equatable, Hashable {
-    public var active: Bool
-
-    // Default memberwise initializers are never public by default, so we
-    // declare one manually.
-    public init(active: Bool) {
-        self.active = active
-    }
-
-    
-
-    
-}
-
-#if compiler(>=6)
-extension AuthorizationInfo: Sendable {}
-#endif
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public struct FfiConverterTypeAuthorizationInfo: FfiConverterRustBuffer {
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> AuthorizationInfo {
-        return
-            try AuthorizationInfo(
-                active: FfiConverterBool.read(from: &buf)
-        )
-    }
-
-    public static func write(_ value: AuthorizationInfo, into buf: inout [UInt8]) {
-        FfiConverterBool.write(value.active, into: &buf)
-    }
-}
-
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeAuthorizationInfo_lift(_ buf: RustBuffer) throws -> AuthorizationInfo {
-    return try FfiConverterTypeAuthorizationInfo.lift(buf)
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeAuthorizationInfo_lower(_ value: AuthorizationInfo) -> RustBuffer {
-    return FfiConverterTypeAuthorizationInfo.lower(value)
 }
 
 
@@ -3401,6 +3343,85 @@ public func FfiConverterTypeAccountEvent_lift(_ buf: RustBuffer) throws -> Accou
 #endif
 public func FfiConverterTypeAccountEvent_lower(_ value: AccountEvent) -> RustBuffer {
     return FfiConverterTypeAccountEvent.lower(value)
+}
+
+
+
+/**
+ * Result of the `check_authorization_status()` method.
+ */
+
+public enum AuthorizationStatus: Equatable, Hashable {
+    
+    case valid
+    case invalid
+    /**
+     * The request failed, we don't know if the refresh token is good or bad
+     */
+    case unknown
+
+
+
+
+
+}
+
+#if compiler(>=6)
+extension AuthorizationStatus: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeAuthorizationStatus: FfiConverterRustBuffer {
+    typealias SwiftType = AuthorizationStatus
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> AuthorizationStatus {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .valid
+        
+        case 2: return .invalid
+        
+        case 3: return .unknown
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: AuthorizationStatus, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case .valid:
+            writeInt(&buf, Int32(1))
+        
+        
+        case .invalid:
+            writeInt(&buf, Int32(2))
+        
+        
+        case .unknown:
+            writeInt(&buf, Int32(3))
+        
+        }
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeAuthorizationStatus_lift(_ buf: RustBuffer) throws -> AuthorizationStatus {
+    return try FfiConverterTypeAuthorizationStatus.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeAuthorizationStatus_lower(_ value: AuthorizationStatus) -> RustBuffer {
+    return FfiConverterTypeAuthorizationStatus.lower(value)
 }
 
 
@@ -4611,7 +4632,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_fxa_client_checksum_method_firefoxaccount_matches_server() != 28649) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_check_authorization_status() != 62263) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_check_authorization_status() != 50705) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_fxa_client_checksum_method_firefoxaccount_disconnect() != 44105) {
