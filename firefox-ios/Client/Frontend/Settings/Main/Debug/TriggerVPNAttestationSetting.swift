@@ -216,8 +216,8 @@ final class ShowVPNFailureAlertSetting: HiddenSetting {
 
 /// Shows the VPN data limit alert through the same Redux path `VPNMiddleware` uses.
 final class ShowVPNDataLimitAlertSetting: HiddenSetting {
-    // Arbitrary 50 GB limit, only used for the alert copy
-    private let dataLimitBytes: Int64 = 50_000_000_000
+    // Arbitrary 5 GB limit
+    private let dataLimitBytes: Int64 = 5 * 1024 * 1024 * 1024
 
     override var title: NSAttributedString? {
         guard let theme else { return nil }
