@@ -113,7 +113,7 @@ final class SiteImageHandlerTests: XCTestCase {
         XCTAssertEqual(imageHandler.fetchFaviconCalledCount, 1, "fetchFavicon should be called once as fallback")
     }
 
-    func testGetImage_heroImage_vpnProxyActive_skipsHeroImageAndReturnsFavicon() async throws {
+    func testGetImage_heroImage_vpnProxyActive_fetchesHeroImage() async throws {
         guard #available(iOS 17.0, *) else { throw XCTSkip("Requires iOS 17.0") }
         VPNProxySessionProvider.shared.update([makeProxyConfiguration()])
         imageHandler.heroImage = UIImage()
@@ -124,8 +124,8 @@ final class SiteImageHandlerTests: XCTestCase {
 
         _ = await subject.getImage(model: model)
 
-        XCTAssertEqual(imageHandler.fetchHeroImageCalled, 0, "fetchHeroImage should not be called while proxied")
-        XCTAssertEqual(imageHandler.fetchFaviconCalledCount, 1, "fetchFavicon should be called instead")
+        XCTAssertEqual(imageHandler.fetchHeroImageCalled, 1, "fetchHeroImage should be called while proxied")
+        XCTAssertEqual(imageHandler.fetchFaviconCalledCount, 0, "fetchFavicon should not be called")
     }
 
     // Test cache

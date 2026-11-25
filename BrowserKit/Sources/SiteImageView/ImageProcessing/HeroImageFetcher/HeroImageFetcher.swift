@@ -2,6 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
+import Fuzi
 import LinkPresentation
 import UIKit
 
@@ -28,9 +30,29 @@ extension HeroImageFetcher {
 }
 
 final class DefaultHeroImageFetcher: HeroImageFetcher {
+    /// Checked in priority order. `og:` tags use `property`, `twitter:` tags use `name`, but sites mix them up.
+    private static let imageMetaKeys = [
+        "og:image", "og:image:url", "og:image:secure_url", "twitter:image", "twitter:image:src"
+    ]
+
+    private let network: HTMLDataRequest
+
+    private static var isVPNProxyActive: Bool {
+        guard #available(iOS 17.0, *) else { return false }
+        return VPNProxySessionProvider.shared.isProxyActive
+    }
+
+    init(network: HTMLDataRequest = DefaultHTMLDataRequest()) {
+        self.network = network
+    }
+
     func fetchHeroImage(from siteURL: URL,
                         metadataProvider: LPMetadataProvider = LPMetadataProvider()
     ) async throws -> UIImage {
+        // LPMetadataProvider fetches outside the app's URLSessions, so scrape meta tags through the proxy instead.
+        if Self.isVPNProxyActive {
+            return try await fetchHeroImageFromMetaTags(siteURL: siteURL)
+        }
         do {
             // `startFetchingMetadata` needs to be called on the main thread on older devices. See PRs #12694 and #27951
             let metadata = try await Task { @MainActor in
@@ -62,5 +84,31 @@ final class DefaultHeroImageFetcher: HeroImageFetcher {
         } catch {
             throw error
         }
+    }
+
+    func heroImageURL(from data: Data, siteURL: URL) -> URL? {
+        guard let root = try? HTMLDocument(data: data) else { return nil }
+        let metas = root.xpath("//head/meta")
+        for key in Self.imageMetaKeys {
+            for meta in metas where [meta["property"], meta["name"]].contains(where: { $0?.lowercased() == key }) {
+                guard let content = meta["content"]?.trimmingCharacters(in: .whitespacesAndNewlines),
+                      let url = URL(string: content, relativeTo: siteURL)?.absoluteURL,
+                      url.scheme == "https" || url.scheme == "http"
+                else { continue }
+                return url
+            }
+        }
+        return nil
+    }
+
+    // MARK: - Private
+
+    private func fetchHeroImageFromMetaTags(siteURL: URL) async throws -> UIImage {
+        let data = try await network.fetchDataForURL(siteURL)
+        guard let imageURL = heroImageURL(from: data, siteURL: siteURL) else {
+            throw SiteImageError.noHeroImage
+        }
+        // Created per fetch so it picks up the current proxy stack.
+        return try await DefaultSiteImageDownloader().downloadImage(with: imageURL).image
     }
 }
