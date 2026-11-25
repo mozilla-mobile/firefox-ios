@@ -6,6 +6,8 @@ import XCTest
 
 protocol HistorySelectorsSet {
     var HISTORY_ENTRY_EXAMPLE: Selector { get }
+    var HISTORY_ENTRY_MOZILLA: Selector { get }
+    var HISTORY_TABLE: Selector { get }
     var DELETE_BUTTON: Selector { get }
     var EMPTY_RECENTLY_CLOSED_MSG: Selector { get }
     var all: [Selector] { get }
@@ -14,6 +16,7 @@ protocol HistorySelectorsSet {
 struct HistorySelectors: HistorySelectorsSet {
     private enum IDs {
         static let exampleEntry = "https://example.com/"
+        static let mozillaEntry = "Internet for people, not profit"
         static let deleteButton = "Delete"
         static let emptyMsg     = emptyRecentlyClosedMesg
         static let tableViewId  = AccessibilityIdentifiers.LibraryPanels.HistoryPanel.tableView
@@ -22,6 +25,18 @@ struct HistorySelectors: HistorySelectorsSet {
     let HISTORY_ENTRY_EXAMPLE = Selector.staticTextByExactLabel(
         IDs.exampleEntry,
         description: "History entry for example.com",
+        groups: ["library", "history"]
+    )
+
+    let HISTORY_ENTRY_MOZILLA = Selector.cellStaticTextLabelContains(
+        IDs.mozillaEntry,
+        description: "History entry for mozilla.org",
+        groups: ["library", "history"]
+    )
+
+    let HISTORY_TABLE = Selector.tableIdOrLabel(
+        IDs.tableViewId,
+        description: "History panel table",
         groups: ["library", "history"]
     )
 
@@ -37,5 +52,7 @@ struct HistorySelectors: HistorySelectorsSet {
         groups: ["library", "history"]
     )
 
-    var all: [Selector] { [HISTORY_ENTRY_EXAMPLE, DELETE_BUTTON, EMPTY_RECENTLY_CLOSED_MSG] }
+    var all: [Selector] {
+        [HISTORY_ENTRY_EXAMPLE, HISTORY_ENTRY_MOZILLA, HISTORY_TABLE, DELETE_BUTTON, EMPTY_RECENTLY_CLOSED_MSG]
+    }
 }

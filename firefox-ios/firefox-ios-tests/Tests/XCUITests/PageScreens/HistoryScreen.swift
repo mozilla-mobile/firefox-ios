@@ -23,6 +23,13 @@ final class HistoryScreen {
         historyEntryExample.firstMatch.swipeLeft()
     }
 
+    func longPressMozillaEntry() {
+        let entry = sel.HISTORY_TABLE.element(in: app).staticTexts
+            .elementContainingText(sel.HISTORY_ENTRY_MOZILLA.value)
+        BaseTestCase().mozWaitForElementToExist(entry)
+        entry.press(forDuration: 1.0)
+    }
+
     func tapDeleteButton() {
         let delete = sel.DELETE_BUTTON.element(in: app)
         BaseTestCase().mozWaitForElementToExist(delete)
