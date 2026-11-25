@@ -158,19 +158,32 @@ final class CreditCardInputViewModel: ObservableObject, FeatureFlaggable, @unche
         featureFlagsProvider.isEnabled(.syncStringUpdates)
     }
 
+    private var removeCardAlertTitle: String {
+        usesUpdatedSyncStrings ? CreditCardText.DeleteCardTitle : CreditCardText.RemoveCardTitle
+    }
+
+    private var removeCardAlertBody: String {
+        usesUpdatedSyncStrings
+            ? String(format: CreditCardText.DeleteCardSublabel, AppName.shortName.rawValue)
+            : CreditCardText.RemoveCardSublabel
+    }
+
+    private var removeCardAlertButton: Alert.Button {
+        let buttonTitle = usesUpdatedSyncStrings
+            ? CreditCardText.DeleteCardButtonTitle
+            : CreditCardText.RemovedCardLabel
+        return .destructive(Text(buttonTitle)) { [unowned self] in
+            self.removeCreditCard(creditCard: creditCard) { status, successVal in
+                self.dismiss?(status, successVal)
+            }
+        }
+    }
+
     var signInRemoveButtonDetails: RemoveCardButton.AlertDetails {
         return RemoveCardButton.AlertDetails(
-            alertTitle: Text(usesUpdatedSyncStrings ? CreditCardText.DeleteCardTitle : CreditCardText.RemoveCardTitle),
-            alertBody: Text(usesUpdatedSyncStrings
-                ? String(format: CreditCardText.DeleteCardSublabel, AppName.shortName.rawValue)
-                : CreditCardText.RemoveCardSublabel),
-            primaryButtonStyleAndText: .destructive(Text(usesUpdatedSyncStrings
-                ? CreditCardText.DeleteCardButtonTitle
-                : CreditCardText.RemovedCardLabel)) { [unowned self] in
-                self.removeCreditCard(creditCard: creditCard) { status, successVal in
-                    self.dismiss?(status, successVal)
-                }
-            },
+            alertTitle: Text(removeCardAlertTitle),
+            alertBody: Text(removeCardAlertBody),
+            primaryButtonStyleAndText: removeCardAlertButton,
             secondaryButtonStyleAndText: .cancel(),
             primaryButtonAction: {},
             secondaryButtonAction: {})
@@ -178,15 +191,9 @@ final class CreditCardInputViewModel: ObservableObject, FeatureFlaggable, @unche
 
     var regularRemoveButtonDetails: RemoveCardButton.AlertDetails {
         return RemoveCardButton.AlertDetails(
-            alertTitle: Text(usesUpdatedSyncStrings ? CreditCardText.DeleteCardTitle : CreditCardText.RemoveCardTitle),
+            alertTitle: Text(removeCardAlertTitle),
             alertBody: nil,
-            primaryButtonStyleAndText: .destructive(Text(usesUpdatedSyncStrings
-                ? CreditCardText.DeleteCardButtonTitle
-                : CreditCardText.RemovedCardLabel)) { [unowned self] in
-                self.removeCreditCard(creditCard: creditCard) { status, successVal in
-                    self.dismiss?(status, successVal)
-                }
-            },
+            primaryButtonStyleAndText: removeCardAlertButton,
             secondaryButtonStyleAndText: .cancel(),
             primaryButtonAction: {},
             secondaryButtonAction: {}
