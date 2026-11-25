@@ -588,6 +588,8 @@
         "TabsTests\/testSwitchBetweenTabs_tabTrayExperimentOff()",
         "TabsTests\/testSwitchBetweenTabs_tabTrayExperimentOn()",
         "TabsTestsIpad",
+        "TelemetryTabsPanelTests",
+        "TelemetryTestCase",
         "ThirdPartySearchTest",
         "TodayWidgetTests",
         "ToolbarMenuTests\/testMainMenuPasswordsOption()",

@@ -27,6 +27,9 @@ public enum LaunchArguments {
     public static let FxAChinaServer = "FIREFOX_USE_FXA_CHINA_SERVER"
     public static let DeviceName = "DEVICE_NAME"
     public static let ServerPort = "GCDWEBSERVER_PORT:"
+    /// Endpoint Glean uploads pings to while running UI tests, e.g.
+    /// `GLEAN_TEST_SERVER_ENDPOINT:http://localhost:8080`. Without it, UI test pings never leave the device.
+    public static let GleanTestServerEndpoint = "GLEAN_TEST_SERVER_ENDPOINT:"
     public static let SkipAddingGoogleTopSite = "SKIP_ADDING_GOOGLE_TOP_SITE"
     public static let SkipDefaultBrowserOnboarding = "SKIP_DEFAULT_BROWSER_ONBOARDING"
     /// Forces the "is default browser" state to false and prevents the iOS 18.2+ system API from

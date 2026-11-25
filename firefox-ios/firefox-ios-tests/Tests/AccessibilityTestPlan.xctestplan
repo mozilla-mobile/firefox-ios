@@ -442,6 +442,8 @@
         "TabsTestsIphone\/testCloseTabFromLongPressTabsButton()",
         "TabsTestsIphone\/testSwitchBetweenTabsNoPrivatePrivateToastButton()",
         "TabsTestsIphone\/testSwitchBetweenTabsToastButton()",
+        "TelemetryTabsPanelTests",
+        "TelemetryTestCase",
         "ThirdPartySearchTest",
         "ThirdPartySearchTest\/testCustomEngineFromIncorrectTemplate()",
         "ThirdPartySearchTest\/testCustomSearchEngineAsDefault()",

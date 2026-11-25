@@ -12,12 +12,15 @@ struct GleanPingUploader: PingUploader {
     private let logger: Logger
     private let ohttpUploader: GleanOhttpUploader
     private let httpUploader: GleanHttpUploader
+    private let isOhttpEnabled: Bool
 
     private enum PingCapabilities: String {
         case ohttp, http
     }
 
-    init?(logger: Logger = DefaultLogger.shared) {
+    /// - Parameter isOhttpEnabled: When `false`, pings requiring OHTTP are rejected instead of being sent
+    ///   through the production OHTTP relay. Used while running UI tests.
+    init?(isOhttpEnabled: Bool = true, logger: Logger = DefaultLogger.shared) {
         let environment = OhttpEnvironment.prod
         guard let configURL = environment.config,
               let relayUrl = environment.relay else {
@@ -28,6 +31,7 @@ struct GleanPingUploader: PingUploader {
         let manager = OhttpManager(configUrl: configURL, relayUrl: relayUrl)
         self.ohttpUploader = GleanOhttpUploader(manager: manager)
         self.httpUploader = GleanHttpUploader()
+        self.isOhttpEnabled = isOhttpEnabled
         self.logger = logger
     }
 
@@ -35,7 +39,7 @@ struct GleanPingUploader: PingUploader {
                 callback: @escaping @Sendable (UploadResult) -> Void) {
         if let capableRequest = request.capable([PingCapabilities.http.rawValue]) {
             httpUploader.uploadHttpRequest(request: capableRequest, callback: callback)
-        } else if let capableRequest = request.capable([PingCapabilities.ohttp.rawValue]) {
+        } else if isOhttpEnabled, let capableRequest = request.capable([PingCapabilities.ohttp.rawValue]) {
             ohttpUploader.uploadOhttpRequest(request: capableRequest, callback: callback)
         } else {
             logger.log("Rejected ping upload due to unsupported capabilities", level: .info, category: .telemetry)

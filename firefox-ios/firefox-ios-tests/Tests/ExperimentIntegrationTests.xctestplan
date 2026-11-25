@@ -192,6 +192,8 @@
         "TabTrayTests",
         "TabTrayTests\/testAccessibility()",
         "TabsTests",
+        "TelemetryTabsPanelTests",
+        "TelemetryTestCase",
         "ThirdPartySearchTest",
         "TodayWidgetTests",
         "ToolbarMenuTests\/testMainMenuPasswordsOption()",
