@@ -19,6 +19,7 @@ class L10nBaseSnapshotTests: XCTestCase {
                 LaunchArguments.SkipWhatsNew,
                 LaunchArguments.SkipETPCoverSheet,
                 LaunchArguments.SkipIntro,
+                LaunchArguments.SkipTermsOfUse,
                 LaunchArguments.SkipContextualHints,
                 LaunchArguments.DisableAnimations,
                 // Turn off the microsurvey so its "Help us make Firefox better" prompt isn't in the screenshots
