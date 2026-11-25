@@ -4500,6 +4500,7 @@ extension BrowserViewController: LegacyTabDelegate {
                 guard let self,
                       let tab,
                       tab === self.tabManager.selectedTab,
+                      self.featureFlagsProvider.isEnabled(.vpnLeakGuardToast),
                       ProxyLeakGuardNoticeTracker.shared.shouldShowNotice()
                 else { return }
                 self.showProxyLeakGuardToast(isPrivate: tab.isPrivate)
