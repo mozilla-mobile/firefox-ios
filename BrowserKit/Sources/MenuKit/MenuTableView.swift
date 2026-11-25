@@ -24,6 +24,10 @@ final class MenuTableView: UIView, UITableViewDelegate, UITableViewDataSource, U
         tableView.contentSize.height
     }
 
+    private var isAccessibilityCategory: Bool {
+        return UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory
+    }
+
     override init(frame: CGRect) {
         tableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.layoutMargins = UIEdgeInsets(top: 0, left: UX.tableViewMargin, bottom: 0, right: UX.tableViewMargin)
@@ -57,13 +61,25 @@ final class MenuTableView: UIView, UITableViewDelegate, UITableViewDataSource, U
                            forCellReuseIdentifier: MenuSquaresViewContentCell.cellIdentifier)
     }
 
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
+            tableHelper.updateLayout(isAccessibilityCategory: isAccessibilityCategory)
+        }
+    }
+
     func setupAccessibilityIdentifiers(menuA11yId: String, menuA11yLabel: String) {
         tableView.accessibilityIdentifier = menuA11yId
         tableView.accessibilityLabel = menuA11yLabel
     }
 
     public func reloadTableView(with data: [MenuSection], isBannerVisible: Bool) {
-        tableHelper.updateData(data, theme: theme, isBannerVisible: isBannerVisible)
+        tableHelper.updateData(
+            data,
+            theme: theme,
+            isBannerVisible: isBannerVisible,
+            isAccessibilityCategory: isAccessibilityCategory
+        )
         tableHelper.reload()
     }
 
@@ -110,7 +126,7 @@ final class MenuTableView: UIView, UITableViewDelegate, UITableViewDataSource, U
 
     // MARK: - UIScrollViewDelegate
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if tableHelper.isHomepage, !UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory {
+        if tableHelper.isHomepage, !isAccessibilityCategory {
             scrollView.contentOffset = .zero
             scrollView.showsVerticalScrollIndicator = false
         }
