@@ -47,7 +47,7 @@ In the future `State` structs with one or more sub-reducer will have the followi
 
 1. The `State` will now have a single passthrough reducer to forward actions on to the sub-reducers.
 
-####Example:
+#### Example:
 ``` 
 @MainActor
     private static func passthroughState(from state: HomepageState, action: Action) -> HomepageState {
