@@ -138,7 +138,8 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions[0] as? GeneralBrowserAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? GeneralBrowserActionType)
 
-        XCTAssertEqual(mockStore.dispatchedActions.count, 5)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 4)
+        XCTAssertEqual(mockStore.dispatchedModernActions.count, 1)
         XCTAssertEqual(actionType, GeneralBrowserActionType.didSelectedTabChangeToHomepage)
     }
 
