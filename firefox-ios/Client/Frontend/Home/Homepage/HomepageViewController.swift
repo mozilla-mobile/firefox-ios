@@ -19,7 +19,7 @@ final class HomepageViewController: UIViewController,
                                     FeatureFlaggable,
                                     StoreSubscriber {
     // MARK: - Typealiases
-    typealias SubscriberStateType = HomepageState
+    typealias SubscriberStateType = HomepageLens
 
     // MARK: - ContentContainable variables
     var contentType: ContentType = .homepage
@@ -54,7 +54,7 @@ final class HomepageViewController: UIViewController,
 
     private let jumpBackInContextualHintViewController: ContextualHintViewController
     private let syncTabContextualHintViewController: ContextualHintViewController
-    private var homepageState: HomepageState
+    private var homepageLens: HomepageLens
     private var lastContentOffsetY: CGFloat = 0
     private var didFinishFirstLayout = false
     private var wallpaperTopConstraint: NSLayoutConstraint?
@@ -140,7 +140,7 @@ final class HomepageViewController: UIViewController,
             windowUUID: windowUUID
         )
 
-        homepageState = HomepageState(windowUUID: windowUUID)
+        homepageLens = HomepageLens(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
 
         subscribeToRedux()
@@ -231,7 +231,9 @@ final class HomepageViewController: UIViewController,
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        updateWallpaperConstraints(availableWallpaperHeight: homepageState.wallpaperState.availableWallpaperHeight)
+        updateWallpaperConstraints(
+            availableWallpaperHeight: homepageLens.homepageState.wallpaperState.availableWallpaperHeight
+        )
 
         /// FXIOS-13970: Legacy homepage layout was appearing blank on iOS 15. The root cause was from applying the diffable
         /// data source snapshot before the view had finished it's first layout pass, causing the snapshot to be ignored.
@@ -248,7 +250,7 @@ final class HomepageViewController: UIViewController,
         }
 
         let numberOfTilesPerRow = numberOfTilesPerRow(for: availableWidth)
-        guard homepageState.topSitesState.numberOfTilesPerRow != numberOfTilesPerRow else {
+        guard homepageLens.homepageState.topSitesState.numberOfTilesPerRow != numberOfTilesPerRow else {
             return
         }
 
@@ -364,7 +366,7 @@ final class HomepageViewController: UIViewController,
         updateNewsTransitionHeaderProgress()
 
         // We only handle status bar overlay alpha if there's a wallpaper applied on the homepage
-        if homepageState.wallpaperState.wallpaperConfiguration.hasImage {
+        if homepageLens.homepageState.wallpaperState.wallpaperConfiguration.hasImage {
             let theme = themeManager.getCurrentTheme(for: windowUUID)
             statusBarScrollDelegate?.scrollViewDidScroll(
                 scrollView,
@@ -431,7 +433,7 @@ final class HomepageViewController: UIViewController,
         let uuid = windowUUID
         store.subscribe(self, transform: {
             return $0.select({ appState in
-                return HomepageState(
+                return HomepageLens(
                     appState: appState,
                     uuid: uuid
                 )
@@ -439,17 +441,17 @@ final class HomepageViewController: UIViewController,
         })
     }
 
-    func newState(state: HomepageState) {
-        wallpaperView.wallpaperState = state.wallpaperState
+    func newState(state: HomepageLens) {
+        wallpaperView.wallpaperState = state.homepageState.wallpaperState
 
         // TODO: - FXIOS-13346 / FXIOS-13343 - fix collection view being reloaded all the time also when data don't change
         // this is a quick workaround to avoid blocking the main thread by calling apply snapshot many times.
-        if homepageState != state {
-            let animatingDifferences = state.wallpaperState.availableContentHeight
-                                        == homepageState.wallpaperState.availableContentHeight
-            self.homepageState = state
+        if homepageLens.homepageState != state.homepageState {
+            let animatingDifferences = state.homepageState.wallpaperState.availableContentHeight
+                                     == homepageLens.homepageState.wallpaperState.availableContentHeight
+            self.homepageLens = state
 
-            embeddedAddressBarView.isHidden = !state.searchBarState.isShowingCenterSearchBar
+            embeddedAddressBarView.isHidden = !state.homepageState.searchBarState.isShowingCenterSearchBar
 
             refreshHomepageDataSourceSnapshot(
                 animatingDifferences: animatingDifferences
@@ -457,11 +459,11 @@ final class HomepageViewController: UIViewController,
                 self?.collectionView?.layoutIfNeeded()
                 self?.updateNewsTransitionHeaderProgress()
             }
-            updateWallpaperConstraints(availableWallpaperHeight: state.wallpaperState.availableWallpaperHeight)
+            updateWallpaperConstraints(availableWallpaperHeight: state.homepageState.wallpaperState.availableWallpaperHeight)
         }
 
         // FXIOS-11523 - Trigger impression when user opens homepage view new tab + scroll to top
-        if state.telemetryState.shouldTriggerImpression {
+        if state.homepageState.telemetryState.shouldTriggerImpression {
             resetTrackedObjects()
             trackVisibleItemImpressions()
         }
@@ -489,7 +491,7 @@ final class HomepageViewController: UIViewController,
         view.addSubview(wallpaperView)
 
         let heightConstraint = wallpaperView.heightAnchor.constraint(
-            equalToConstant: homepageState.wallpaperState.availableWallpaperHeight
+            equalToConstant: homepageLens.homepageState.wallpaperState.availableWallpaperHeight
         )
         let topConstraint = wallpaperView.topAnchor.constraint(equalTo: view.topAnchor)
 
@@ -872,10 +874,10 @@ final class HomepageViewController: UIViewController,
         let transitionEnabled = isNewsTransitionEnabled()
         newsTransitionHeaderCell.configure(
             sectionHeaderConfiguration: SectionHeaderConfiguration.merino,
-            textColor: homepageState.wallpaperState.wallpaperConfiguration.textColor,
+            textColor: homepageLens.homepageState.wallpaperState.wallpaperConfiguration.textColor,
             theme: currentTheme,
             transitionEnabled: transitionEnabled,
-            categories: homepageState.merinoState.availableCategories,
+            categories: homepageLens.homepageState.merinoState.availableCategories,
             selectedNewsfeedCategoryID: currentHomepageTabState.selectedNewsfeedCategoryID,
             newsfeedCategoryPickerOffsetX: currentHomepageTabState.newsfeedCategoryPickerOffsetX,
             onCategoryPickerScroll: { [weak self] offsetX in
@@ -954,7 +956,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private func embeddedAddressBarOverlap(with headerView: UIView) -> CGFloat {
-        guard homepageState.searchBarState.isShowingCenterSearchBar,
+        guard homepageLens.homepageState.searchBarState.isShowingCenterSearchBar,
               embeddedAddressBarView.superview != nil
         else { return 0 }
 
@@ -1196,7 +1198,10 @@ final class HomepageViewController: UIViewController,
     }
 
     private func dispatchOpenPocketAction(at index: Int, actionType: ActionType) {
-        let config = OpenPocketTelemetryConfig(isZeroSearch: homepageState.telemetryState.isZeroSearch, position: index)
+        let config = OpenPocketTelemetryConfig(
+            isZeroSearch: homepageLens.homepageState.telemetryState.isZeroSearch,
+            position: index
+        )
         store.dispatch(
             MerinoAction(
                 telemetryConfig: config,
@@ -1208,7 +1213,7 @@ final class HomepageViewController: UIViewController,
 
     private func dispatchTopSitesAction(at index: Int, config: TopSiteConfiguration, actionType: ActionType) {
         let config = TopSitesTelemetryConfig(
-            isZeroSearch: homepageState.telemetryState.isZeroSearch,
+            isZeroSearch: homepageLens.homepageState.telemetryState.isZeroSearch,
             position: index,
             topSiteConfiguration: config
         )
@@ -1281,7 +1286,7 @@ final class HomepageViewController: UIViewController,
     private func refreshHomepageDataSourceSnapshot(animatingDifferences: Bool = true,
                                                    completion: (() -> Void)? = nil) {
         dataSource?.updateSnapshot(
-            state: homepageState,
+            state: homepageLens.homepageState,
             selectedNewsfeedCategoryID: currentHomepageTabState.selectedNewsfeedCategoryID,
             jumpBackInDisplayConfig: getJumpBackInDisplayConfig(),
             showiPadSetup: shouldUseiPadSetup(),
@@ -1640,7 +1645,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private var canContextHintBePresented: Bool {
-        return presentedViewController == nil && homepageState.telemetryState.isZeroSearch
+        return presentedViewController == nil && homepageLens.homepageState.telemetryState.isZeroSearch
     }
 
     @objc

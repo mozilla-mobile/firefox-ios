@@ -20,7 +20,6 @@ struct HomepageLens: StateLens {
             return
         }
 
-
         self.init(homepageState: homepageState)
     }
 
