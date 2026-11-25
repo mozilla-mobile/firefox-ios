@@ -34,3 +34,5 @@
 .github/workflows @mozilla-mobile/fxios-automation-1
 /test-fixtures @mozilla-mobile/fxios-automation-1
 /test-fixtures/generate-metrics.sh @mozilla-mobile/fxios-general-owners
+
+/.github/CODEOWNERS @mozilla-mobile/firefox-ios-codeowners
