@@ -23,11 +23,11 @@ features:
     defaults:
       - channel: beta
         value:
-          enabled: false
-          onboarding-sheet: false
+          enabled: true
+          onboarding-sheet: true
           leak-guard-toast: true
       - channel: developer
         value:
           enabled: true
-          onboarding-sheet: false
+          onboarding-sheet: true
           leak-guard-toast: true
