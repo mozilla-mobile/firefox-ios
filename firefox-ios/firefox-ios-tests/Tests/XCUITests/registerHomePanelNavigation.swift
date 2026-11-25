@@ -61,10 +61,6 @@ func registerHomePanelNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAp
             app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).waitAndTap()
         }
 
-        screenState.gesture(forAction: Action.ToggleRecentlySaved) { userState in
-            app.tables.cells.switches["Bookmarks"].waitAndTap()
-        }
-
         screenState.gesture(forAction: Action.ToggleJumpBackIn) { userState in
             app.tables.cells.switches["Jump Back In"].waitAndTap()
         }

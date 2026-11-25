@@ -150,7 +150,7 @@ class SettingsTests: FeatureFlaggedTestBase {
         validateSettingsUIOptions()
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2875583
+    // https://mozilla.testrail.io/index.php?/cases/view/4035813
     func testSettingsCrashReportsOption() {
         launchIntoSettings()
         let crashReportToggle = app.switches["settings.sendCrashReports"]

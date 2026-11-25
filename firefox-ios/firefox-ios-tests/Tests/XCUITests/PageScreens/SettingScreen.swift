@@ -424,26 +424,6 @@ final class SettingScreen {
         BaseTestCase().mozWaitForElementToNotExist(translationCell)
     }
 
-    func assertSendTechicalDataIsOn() {
-        let toggle = sel.SEND_DATA_CELL.element(in: app)
-        BaseTestCase().mozWaitForElementToExist(toggle)
-
-        let value = toggle.value as? String
-        XCTAssertEqual(value,
-                       "1",
-                       "Expected 'Technical Data' switch to be ON (value = 1), but got \(String(describing: value))")
-    }
-
-    func assertSendCrashReportsIsOn() {
-        let toggle = sel.SEND_CRASH_REPORTS_CELL.element(in: app)
-        BaseTestCase().mozWaitForElementToExist(toggle)
-
-        let value = toggle.value as? String
-        XCTAssertEqual(value,
-                       "1",
-                       "Expected 'Crash reports' switch to be ON (value = 1), but got \(String(describing: value))")
-    }
-
     private var closePrivateTabsSwitch: XCUIElement {
         let settingTable = sel.SETTINGS_TABLE.element(in: app)
         let toggle = sel.CLOSE_PRIVATE_TABS_SWITCH.value

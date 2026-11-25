@@ -56,8 +56,6 @@ protocol SettingsSelectorsSet {
     var AD_BLOCKER_SWITCH: Selector { get }
 
     // Send Data
-    var SEND_DATA_CELL: Selector { get }
-    var SEND_CRASH_REPORTS_CELL: Selector { get }
 
     // Translation
     var TRANSLATION_CELL_TITLE: Selector { get }
@@ -110,8 +108,6 @@ struct SettingsSelectors: SettingsSelectorsSet {
         static let summarizeCell = AccessibilityIdentifiers.Settings.Summarize.title
         static let quickAnswersCell = AccessibilityIdentifiers.Settings.QuickAnswers.title
         static let generalSectionHeader = "GENERAL"
-        static let sendData = "settings.sendUsageData"
-        static let sendCrashReports = "settings.sendCrashReports"
     }
 
     // Core Element Selector
@@ -389,18 +385,6 @@ struct SettingsSelectors: SettingsSelectorsSet {
         groups: ["settings"]
     )
 
-    let SEND_DATA_CELL = Selector.switchById(
-        IDs.sendData,
-        description: "Send Technical Data settings cell",
-        groups: ["settings", "send data"]
-    )
-
-    let SEND_CRASH_REPORTS_CELL = Selector.switchById(
-        IDs.sendCrashReports,
-        description: "Send Crash Reports settings cell",
-        groups: ["settings", "send data"]
-    )
-
     func ALL_CELLS() -> [Selector] {
         let s = AccessibilityIdentifiers.Settings.self
         return [
@@ -493,7 +477,6 @@ struct SettingsSelectors: SettingsSelectorsSet {
          NAVIGATIONBAR, CONNECT_SETTING, BLOCK_POPUPS_SWITCH, TOOLBAR_CELL, BOTTOM_TOOLBAR_BUTTON, TOP_TOOLBAR_BUTTON,
          HOMEPAGE_CELL, NAVIGATION_TOOLBAR_HOME_BUTTON, NAVIGATION_TOOLBAR_NEW_TAB_BUTTON, DEFAULT_BROWSER_CELL,
          SEARCH_CELL, BROWSING_CELL_TITLE, BLOCK_IMAGES_SWITCH_TITLE, AD_BLOCKER_SWITCH, NO_IMAGE_MODE_STATUS_SWITCH,
-         TRANSLATION_CELL_TITLE, SUMMARIZE_CELL, QUICK_ANSWERS_CELL, GENERAL_SECTION_HEADER, SEND_DATA_CELL,
-         SEND_CRASH_REPORTS_CELL, APPEARANCE_NAVIGATION_BAR]
+         TRANSLATION_CELL_TITLE, SUMMARIZE_CELL, QUICK_ANSWERS_CELL, GENERAL_SECTION_HEADER, APPEARANCE_NAVIGATION_BAR]
     }
 }
