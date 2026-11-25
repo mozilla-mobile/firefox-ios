@@ -10,6 +10,12 @@
 /* This is the swipe action title for closing an inactive tab by swiping, located in the Inactive Tabs section of the Tabs Tray */
 "InactiveTabs.TabTray.CloseSwipeActionTitle.v115" = "ਬੰਦ ਕਰੋ";
 
+/* Button in the synced tabs panel of the tab tray. Tapping it refreshes the list of tabs from the user's other devices. */
+"TabsTray.Sync.RefreshButton.Title.v162" = "ਤਾਜ਼ਾ ਕਰੋ";
+
+/* Description shown in the synced tabs panel when the user is signed out. Signing in lets the user view tabs open on their other devices. */
+"TabsTray.Sync.SignIn.Description.v162" = "ਆਪਣੇ ਹੋਰ ਡਿਵਾਈਸਾਂ 'ਤੇ ਖੁੱਲ੍ਹੀਆਂ ਟੈਬਾਂ ਨੂੰ ਵੇਖਣ ਲਈ ਸਾਇਨ ਇਨ ਕਰੋ।";
+
 /* Users can disable syncing tabs from other devices. In the Sync Tabs panel of the Tab Tray, we inform the user tab syncing can be switched back on to view those tabs. */
 "TabsTray.Sync.SyncTabsDisabled.v116" = "ਆਪਣੇ ਹੋਰ ਡਿਵਾਈਸਾਂ ਤੋਂ ਟੈਬਾਂ ਦੀ ਸੂਚੀ ਵੇਖਣ ਲਈ ਟੈਬਾਂ ਨੂੰ ਸਿੰਕ ਕਰਨ ਨੂੰ ਚਾਲੂ ਕਰੋ।";
 

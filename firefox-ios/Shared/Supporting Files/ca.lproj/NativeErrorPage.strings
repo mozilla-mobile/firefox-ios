@@ -37,21 +37,78 @@
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "Actualitza";
 
+/* On error page, this is the text on a button that will try to load the page again. */
+"NativeErrorPage.ButtonLabel.v155" = "Torna-ho a provar";
+
+/* On error page, message shown when the app can't connect because cellular data is turned off for the app and explaining to the user how to troubleshoot. %@ is the app name (e.g. Firefox). */
+"NativeErrorPage.CellularDataRestricted.Description.v156" = "Connecteu-vos a la Wi-Fi o aneu a la configuració d’iOS i activei les dades mòbils per al %@.";
+
+/* On error page, title shown when the app can't connect because cellular data is turned off for this specific app in iOS settings. %@ is the app name (e.g. Firefox). */
+"NativeErrorPage.CellularDataRestricted.TitleLabel.v156" = "Les dades mòbils estan desactivades per al %@.";
+
 /* On error page, this is the description for a generic error. %@ is the site url. */
 "NativeErrorPage.GenericError.Description.v134" = "El propietari del lloc %@ no l’ha configurat correctament i no s’ha pogut crear una connexió segura.";
 
+/* Additional explanation displayed on the native error page for the generic error. Lists possible causes and advises the user to check their connection settings and try again. */
+"NativeErrorPage.GenericError.Description.v158" = "Pot ser que el lloc no estigui disponible temporalment, que s’hagi traslladat a una adreça diferent o que el tallafoc o el servidor intermediari estiguin blocant la connexió.\n\nComproveu els paràmetres de connexió i torneu-ho a provar.";
+
+/* First sentence of the generic error description when the requested URL is not available. %1$@ is the app name. */
+"NativeErrorPage.GenericError.Description.v158.withoutURL" = "El %1$@ no ha pogut accedir a l’URL sol·licitada.";
+
+/* First sentence of the generic error description when the requested URL is known. %1$@ is the app name and %2$@ is the requested URL. */
+"NativeErrorPage.GenericError.Description.v158.withURL" = "El %1$@ no s’ha pogut connectar a %2$@.";
+
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Aneu amb compte: sembla que hi ha algun problema.";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v158" = "Sembla que hi ha un problema amb aquest lloc";
 
 /* On error page, this is the text on a button that will go back to the previous page. Recommended action. */
 "NativeErrorPage.GoBackButton.v149" = "Vés enrere (recomanat)";
 
 /* On error page, this is the description for no internet connection. */
-"NativeErrorPage.NoInternetConnection.Description.v131" = "Proveu de connectar-vos en un altre dispositiu. Reviseu el mòdem o l'encaminador. Desconnecteu-vos de la Wi-Fi i torneu-vos-hi a connectar.";
+"NativeErrorPage.NoInternetConnection.Description.v131" = "Proveu de connectar-vos en un altre dispositiu. Reviseu el mòdem o l’encaminador. Desconnecteu-vos de la Wi-Fi i torneu-vos-hi a connectar.";
 
 /* On error page, this is the title for no internet connection */
 "NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "Sembla que hi ha un problema amb la connexió a Internet.";
 
+/* Label of the button on the connection error page - displayed if the user clicks on the button to requested an earlier version of the page and the search is in progress. */
+"NativeErrorPage.Wayback.Error.Checking.v155" = "S’està comprovant l’arxiu…";
+
+/* Label shown when the app fails to reach the Wayback Machine while searching for an earlier version of a page. */
+"NativeErrorPage.Wayback.Error.CouldNotReach.v155" = "No s’ha pogut connectar amb el servei d’arxivament.";
+
+/* Description of the error page when the app is unable to connect to the server and will show a wayback fallback. %@ is the app name (e.g. Firefox). */
+"NativeErrorPage.Wayback.Error.Description.v154" = "Pot ser que el lloc estigui ocupat o no estigui disponible. Torneu-ho a provar més tard. Si hi ha altres pàgines que no es carreguen, comproveu la connexió Wi-Fi o de dades. El %@ també pot cercar a Wayback Machine una versió anterior d’aquesta pàgina.";
+
+/* Footer text below the wayback button/card, explaining that the app can look for an archived version of the page via the Internet Archive's Wayback Machine. %1$@ is the app name (e.g. Firefox). %2$@ is the link text (Wayback Machine), which is a tappable link that opens web.archive.org. */
+"NativeErrorPage.Wayback.Error.FooterDescription.v155" = "El %1$@ pot cercar una versió anterior d’aquesta pàgina a %2$@ d’Internet Archive.";
+
+/* The tappable link text within the Wayback footer description, opens web.archive.org. */
+"NativeErrorPage.Wayback.Error.LinkText.v155" = "Wayback Machine";
+
+/* Label shown when wayback responds and says no snapshot was found. */
+"NativeErrorPage.Wayback.Error.NotFound.v155" = "No s’ha trobat cap versió arxivada.";
+
+/* Button label allowing the user to retry searching the Wayback Machine after a failed attempt. */
+"NativeErrorPage.Wayback.Error.Retry.v154" = "Reintenta";
+
+/* Button label displayed when there is no archived version of a webpage, allowing the user to search for the page URL using their default search engine. */
+"NativeErrorPage.Wayback.Error.Search.v155" = "Cerca al web";
+
+/* Button label on the error page when the app is unable to connect to the server - clicking on the button launches a search for an earlier version of the page on the Wayback Machine. */
+"NativeErrorPage.Wayback.Error.SearchWayback.v155" = "Mostra la versió arxivada";
+
 /* Title of the error page when the app is unable to connect to the server and will show a wayback fallback. */
-"NativeErrorPage.Wayback.Error.Title.v154" = "No s'ha pogut connectar";
+"NativeErrorPage.Wayback.Error.Title.v154" = "No s’ha pogut connectar";
+
+/* Accessibility hint read by VoiceOver describing what happens when the 'Check for earlier version' button is clicked. */
+"NativeErrorPage.Wayback.Error.WaybackButtonA11yHint.v154" = "Cerca a Wayback Machine una versió arxivada d’aquesta pàgina.";
+
+/* Body text of the error page shown when a website fails to load while the VPN is on. Suggests turning off the VPN first, then refreshing the page or checking the internet connection if that doesn't help. */
+"VPN.ErrorPage.Body.v160" = "Proveu de desactivar la VPN. Si el lloc encara no es carrega, actualitzeu la pàgina o comproveu la connexió a Internet.";
+
+/* Title of an error page shown when a website fails to load while the VPN is on and the exact cause is unknown. “Can't be reached” means the website couldn't be loaded. */
+"VPN.ErrorPage.Title.v160" = "No es pot accedir a aquest lloc.";
 

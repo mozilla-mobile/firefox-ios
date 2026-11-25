@@ -16,6 +16,15 @@
 /* Label for the button used to delete the current login. */
 "Delete" = "Dzēst";
 
+/* Primary button in the password deletion confirmation dialog. Tapping it deletes the saved password. */
+"DeleteLoginAlert.DeleteButton.Title.v162" = "Izdzēst";
+
+/* Message in the password deletion confirmation dialog when the user has a sync account. %@ is the app name (e.g. Firefox). Deleting the password also deletes it from the user's synced devices. */
+"DeleteLoginAlert.Message.Synced.v162" = "Tas izdzēsīs paroli no %@ visās Tavās vienādotajās ierīcēs.";
+
+/* Title of the confirmation dialog shown when the user deletes a saved password. */
+"DeleteLoginAlert.Title.v162" = "Izdzēst paroli?";
+
 /* Label for the button used to deselect all logins. */
 "Deselect All" = "Noņemt visu";
 

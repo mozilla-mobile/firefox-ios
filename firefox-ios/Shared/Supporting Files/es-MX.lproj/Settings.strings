@@ -454,3 +454,9 @@
 /* This is the title for the setting that toggles the Translation feature that allows users to translate web pages under the Translation settings section. */
 "Settings.Translation.ToggleTitle.v145" = "Habilitar traducciones";
 
+/* Subtitle text shown on the VPN location picker screen when the app fails to load a list of locations. Suggests the user try loading the list of locations again soon. “Locations” here means the locations of VPN servers the user can connect to. */
+"VPN.LocationPicker.NoLocationsSubtitle.v162" = "Inténtalo de nuevo en unos minutos.";
+
+/* Title shown on the VPN location picker screen when the app fails to load a list of locations. “Locations” here means the locations of VPN servers the user can connect to. */
+"VPN.LocationPicker.NoLocationsTitle.v162" = "No se pudo cargar la lista de ubicaciones";
+

@@ -472,3 +472,9 @@
 /* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Title.v114" = "Te damos la bienvenida a un internet independiente";
 
+/* Subtitle text on the VPN onboarding card. Explains that the VPN helps hide where the user is from the websites they visit. */
+"VPN.Onboarding.Subheading.v162" = "Evita que los sitios web que visitas conozcan tu ubicación al navegar.";
+
+/* Text on a button on the VPN onboarding card. Tapping it turns on the VPN. */
+"VPN.Onboarding.TurnOnVPNButton.v162" = "Activar VPN";
+

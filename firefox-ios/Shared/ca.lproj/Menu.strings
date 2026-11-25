@@ -2,10 +2,10 @@
 "Menu.CloseAllTabsAction.Title" = "Tanca totes les pestanyes";
 
 /* Label for the button, displayed in the menu, used to copy the current page link to the clipboard. */
-"Menu.CopyLink.Title" = "Copia l'enllaç";
+"Menu.CopyLink.Title" = "Copia l’enllaç";
 
 /* Toast displayed to user after downlaod pdf was pressed. */
-"Menu.DownloadPDF.Confirm.v129" = "El PDF s'ha baixat correctament";
+"Menu.DownloadPDF.Confirm.v129" = "El PDF s’ha baixat correctament";
 
 /* Label for the button, displayed in the menu, downloads a pdf when pressed. */
 "Menu.DownloadPDF.Label.v129" = "Baixa el PDF";
@@ -20,7 +20,7 @@
 "Menu.NewTabAction.Title" = "Obre una pestanya nova";
 
 /* Accessibility label for the button, displayed in the menu, used to open the Bookmarks home panel. */
-"Menu.OpenBookmarksAction.AccessibilityLabel.v2" = "Adreces d'interès";
+"Menu.OpenBookmarksAction.AccessibilityLabel.v2" = "Adreces d’interès";
 
 /* Accessibility label for the button, displayed in the menu, used to open the Downloads home panel. */
 "Menu.OpenDownloadsAction.AccessibilityLabel.v2" = "Baixades";
@@ -38,7 +38,7 @@
 "Menu.OpenSyncedTabsAction.AccessibilityLabel.v2" = "Pestanyes sincronitzades";
 
 /* Label for the button, displayed in the menu, used to report a compatibility issue with the current page. */
-"Menu.ReportSiteIssueAction.Title" = "Informa d'un problema amb el lloc";
+"Menu.ReportSiteIssueAction.Title" = "Informa d’un problema amb el lloc";
 
 /* Label for the button, displayed in Firefox Home, used to see all Library panels. */
 "Menu.SeeAllAction.Title" = "Mostra-ho tot";
@@ -47,11 +47,11 @@
 "Menu.SharePageAction.Title" = "Comparteix la pàgina amb…";
 
 /* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
-"Menu.ViewDekstopSiteAction.Title" = "Mostra el lloc d'escriptori";
+"Menu.ViewDekstopSiteAction.Title" = "Mostra el lloc d’escriptori";
 
 /* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
 "Menu.ViewMobileSiteAction.Title" = "Mostra la versió mòbil";
 
 /* Label for the button, displayed in the menu, used to navigate to the home page. */
-"SettingsMenu.OpenHomePageAction.Title" = "Pàgina d'inici";
+"SettingsMenu.OpenHomePageAction.Title" = "Pàgina d’inici";
 

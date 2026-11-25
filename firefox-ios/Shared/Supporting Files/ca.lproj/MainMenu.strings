@@ -46,8 +46,11 @@
 /* On the main menu, at the top, when the user is signed out. The title for the sign in action */
 "MainMenu.Account.SignedOut.Title.v131" = "Inicia la sessió";
 
+/* On the main menu account header, shown transiently while the user is being signed out of their account. */
+"MainMenu.Account.SigningOut.Title.v154" = "S’està tancant la sessió…";
+
 /* On the main menu, at the top, when the user is signed in but there was an error syncing. The description subtitle for the sync error state. */
-"MainMenu.Account.SyncError.Description.v131" = "S'ha posat en pausa la sincronització";
+"MainMenu.Account.SyncError.Description.v131" = "S’ha posat en pausa la sincronització";
 
 /* On the main menu, at the top, when the user is signed in but there was an error syncing. The title for this state. */
 "MainMenu.Account.SyncError.Title.v131" = "Torneu a iniciar la sessió per sincronitzar";
@@ -68,7 +71,7 @@
 "MainMenu.HeaderBanner.Title.v142" = "Feu que el %@ sigui el navegador per defecte";
 
 /* On the main menu, the accessibility label for the action that will take the user to the Bookmarks panel. */
-"MainMenu.PanelLinkSection.AccessibilityLabels.Bookmarks.v132" = "Adreces d'interès";
+"MainMenu.PanelLinkSection.AccessibilityLabels.Bookmarks.v132" = "Adreces d’interès";
 
 /* On the main menu, the accessibility label for the action that will take the user to the Downloads panel. */
 "MainMenu.PanelLinkSection.AccessibilityLabels.Downloads.v132" = "Baixades";
@@ -80,7 +83,7 @@
 "MainMenu.PanelLinkSection.AccessibilityLabels.Passwords.v132" = "Contrasenyes";
 
 /* On the main menu, the title for the action that will take the user to the Bookmarks panel. */
-"MainMenu.PanelLinkSection.Bookmarks.Title.v131" = "Adreces d'interès";
+"MainMenu.PanelLinkSection.Bookmarks.Title.v131" = "Adreces d’interès";
 
 /* On the main menu, the title for the action that will take the user to the Downloads panel. */
 "MainMenu.PanelLinkSection.Downloads.Title.v131" = "Baixades";
@@ -121,6 +124,9 @@
 /* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the connection is not secure. */
 "MainMenu.SiteProtection.ConnectionNotSecure.Title.v141" = "La connexió no és segura";
 
+/* On the main menu, this is the subtitle shown under the site title when the current page is displayed in Reader Mode. */
+"MainMenu.SiteProtection.Protections.ReaderModeSubtitle.v162" = "Vista de lectura";
+
 /* On the main menu, at the top, title for a badge that opens site protection settings. */
 "MainMenu.SiteProtection.Protections.Title.v153" = "Proteccions";
 
@@ -130,11 +136,14 @@
 /* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the protections are ON. */
 "MainMenu.SiteProtection.ProtectionsOn.Title.v141" = "Les proteccions estan activades";
 
+/* On the main menu, at the top, title for a badge next to Protections that opens the VPN settings. */
+"MainMenu.SiteProtection.VPN.Title.v162" = "VPN";
+
 /* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Add to Home screen tool for iOS Home screen. */
 "MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Subtitle.v132" = "Inici";
 
 /* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to add a website to the iOS home screen. */
-"MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Title.v132" = "Afegeix a la pantalla d'inici";
+"MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Title.v132" = "Afegeix a la pantalla d’inici";
 
 /* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Shortcuts tool. */
 "MainMenu.Submenus.Save.AccessibilityLabels.AddToShortcuts.Subtitle.v132" = "Drecera";
@@ -143,13 +152,13 @@
 "MainMenu.Submenus.Save.AccessibilityLabels.AddToShortcuts.Title.v132" = "Afegeix a les dreceres";
 
 /* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Bookmarks tool. */
-"MainMenu.Submenus.Save.AccessibilityLabels.BookmarkThisPage.Subtitle.v132" = "Afegeix a les adreces d'interès";
+"MainMenu.Submenus.Save.AccessibilityLabels.BookmarkThisPage.Subtitle.v132" = "Afegeix a les adreces d’interès";
 
 /* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to save a bookmark for this particular page.. */
-"MainMenu.Submenus.Save.AccessibilityLabels.BookmarkThisPage.Title.v132" = "Afegeix la pàgina a les adreces d'interès";
+"MainMenu.Submenus.Save.AccessibilityLabels.BookmarkThisPage.Title.v132" = "Afegeix la pàgina a les adreces d’interès";
 
 /* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to edit the bookmark for this particular page. */
-"MainMenu.Submenus.Save.AccessibilityLabels.EditBookmark.Title.v132" = "Edita l'adreça d'interès";
+"MainMenu.Submenus.Save.AccessibilityLabels.EditBookmark.Title.v132" = "Edita l’adreça d’interès";
 
 /* On the main menu, in the Save submenu, the accessibility label for the menu component that allows the user to remove this site from the reading list. */
 "MainMenu.Submenus.Save.AccessibilityLabels.RemoveFromReadingList.Title.v132" = "Elimina de la llista de lectura";
@@ -173,7 +182,7 @@
 "MainMenu.Submenus.Save.AddToHomeScreen.Subtitle.v131" = "Inici";
 
 /* On the main menu, in the Save submenu, the title for the menu component that allows a user to add a website to the home screen. */
-"MainMenu.Submenus.Save.AddToHomeScreen.Title.v131" = "Afegeix a la pantalla d'inici";
+"MainMenu.Submenus.Save.AddToHomeScreen.Title.v131" = "Afegeix a la pantalla d’inici";
 
 /* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Shortcuts tool. */
 "MainMenu.Submenus.Save.AddToShortcuts.Subtitle.v131" = "Drecera";
@@ -182,13 +191,13 @@
 "MainMenu.Submenus.Save.AddToShortcuts.Title.v131" = "Afegeix a les dreceres";
 
 /* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Bookmarks tool. */
-"MainMenu.Submenus.Save.BookmarkThisPage.Subtitle.v131" = "Afegeix a les adreces d'interès";
+"MainMenu.Submenus.Save.BookmarkThisPage.Subtitle.v131" = "Afegeix a les adreces d’interès";
 
 /* On the main menu, in the Save submenu, the title for the menu component that allows a user to save a bookmark for this particular page.. */
-"MainMenu.Submenus.Save.BookmarkThisPage.Title.v131" = "Afegeix la pàgina a les adreces d'interès";
+"MainMenu.Submenus.Save.BookmarkThisPage.Title.v131" = "Afegeix la pàgina a les adreces d’interès";
 
 /* On the main menu, in the Save submenu, the title for the menu component that allows a user to edit the bookmark for this particular page. */
-"MainMenu.Submenus.Save.EditBookmark.Title.v131" = "Edita l'adreça d'interès";
+"MainMenu.Submenus.Save.EditBookmark.Title.v131" = "Edita l’adreça d’interès";
 
 /* On the main menu, in the Save submenu, the title for the menu component that allows the user to remove this site from the reading list. */
 "MainMenu.Submenus.Save.RemoveFromReadingList.Title.v131" = "Elimina de la llista de lectura";
@@ -374,7 +383,7 @@
 "MainMenu.ToolsSection.AccessibilityLabels.Tools.v132" = "Eines";
 
 /* On the main menu, the accessibility label for the action that will take the user to the Tools submenu in the menu. */
-"MainMenu.ToolsSection.AccessibilityLabels.Tools.v133" = "Submenú d'eines";
+"MainMenu.ToolsSection.AccessibilityLabels.Tools.v133" = "Submenú d’eines";
 
 /* On the main menu, the accessibility label for the action that will switch dark mode to on or off. */
 "MainMenu.ToolsSection.AccessibilityLabels.WebsiteDarkMode.Title.v142" = "Mode fosc dels llocs web";
@@ -413,7 +422,7 @@
 "MainMenu.ToolsSection.SummarizePage.Title.v142" = "Resumeix la pàgina";
 
 /* On the main menu, the title for the action that will switch a site from mobile version to the desktop version, if available. */
-"MainMenu.ToolsSection.SwitchToDesktopSite.Title.v131" = "Canvia al lloc d'escriptori";
+"MainMenu.ToolsSection.SwitchToDesktopSite.Title.v131" = "Canvia al lloc d’escriptori";
 
 /* On the main menu, the title for the action that will switch a site from the desktop version to the mobile version. */
 "MainMenu.ToolsSection.SwitchToMobileSite.Title.v131" = "Canvia al lloc mòbil";

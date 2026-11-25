@@ -1555,6 +1555,9 @@
 /* Footer information for tracker protection level. */
 "Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Ako web-stranica ne radi prema očekivanjima, dodirni lokot u adresnoj traci i isključi poboljšanu zaštitu od praćenja za tu stranicu.";
 
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Strict.v161" = "Ako web-stranica ne radi, otvori izbornik i pokušaj isključiti postavku „Poboljšana zaštita od praćenja”.";
+
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Dopušta neke programe za praćenje, kako bi web-stranice mogle ispravno funkcionirati.";
 

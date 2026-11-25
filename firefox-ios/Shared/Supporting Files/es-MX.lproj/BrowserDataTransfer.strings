@@ -1,0 +1,15 @@
+/* Button that dismisses the alert shown when Firefox could not finish importing data from another browser. */
+"BrowserDataTransfer.ImportFailure.DismissButton.v160" = "Ignorar";
+
+/* Message of the alert shown when Firefox could not finish importing data from another browser. */
+"BrowserDataTransfer.ImportFailure.Message.v160" = "Intenta de nuevo más tarde.";
+
+/* Title of the alert shown when Firefox could not finish importing data from another browser. %@ is the name of the other browser, for example Safari. Data imported before the error is kept. */
+"BrowserDataTransfer.ImportFailure.Title.v160" = "No se pudo importar desde %@";
+
+/* Button that dismisses the alert shown after Firefox finishes importing data from another browser. */
+"BrowserDataTransfer.ImportSuccess.GotItButton.v160" = "OK";
+
+/* Message of the alert shown after Firefox finishes importing data from another browser. %@ is the app name (e.g. Firefox). */
+"BrowserDataTransfer.ImportSuccess.Message.v160" = "Tus datos importados ya están disponibles en %@.";
+

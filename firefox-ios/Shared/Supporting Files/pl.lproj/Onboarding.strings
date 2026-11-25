@@ -518,8 +518,14 @@ Secondary button on the onboarding card that prompts users to enable syncing for
 /* Subheading on the VPN onboarding card. Explains that the user can choose which country their browsing appears to come from. */
 "VPN.Onboarding.LocationsSubheading.v160" = "Przeglądaj Internet z różnych krajów";
 
+/* Subtitle text on the VPN onboarding card. Explains that the VPN helps hide where the user is from the websites they visit. */
+"VPN.Onboarding.Subheading.v162" = "Ukryj swoje położenie przed odwiedzanymi witrynami.";
+
 /* Title of an onboarding card that introduces the built-in VPN. %1$@ is the app name (for example, Firefox). */
 "VPN.Onboarding.Title.v160" = "Wypróbuj wbudowaną sieć VPN przeglądarki %1$@";
+
+/* Text on a button on the VPN onboarding card. Tapping it turns on the VPN. */
+"VPN.Onboarding.TurnOnVPNButton.v162" = "Włącz VPN";
 
 /* Body text below the “More Privacy On Public Wi-Fi” (VPN.Onboarding.WifiSubheading.v160) subheading on the VPN onboarding card. %1$@ is the app name (for example, Firefox). */
 "VPN.Onboarding.WifiBody.v160" = "Korzystaj z dodatkowej ochrony w przeglądarce %1$@ podczas przeglądania Internetu poza domem.";

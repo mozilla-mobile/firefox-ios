@@ -2,5 +2,5 @@
 "WebView.DocumentLoadingAccessibilityLabel.v137" = "S’està carregant el document";
 
 /* The label shown while loading a document in the web view's custom document loading UI */
-"WebView.DocumentLoadingLabel.v137" = "S'està carregant…";
+"WebView.DocumentLoadingLabel.v137" = "S’està carregant…";
 
