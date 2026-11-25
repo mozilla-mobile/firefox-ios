@@ -2443,6 +2443,7 @@
 		EDDF340B2CDD1B7C008BB6A4 /* SearchEngineModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDDF34092CDD159F008BB6A4 /* SearchEngineModel.swift */; };
 		EDE3E24830ACFEBC004EB277 /* StateLens.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE3E24730ACFEBA004EB277 /* StateLens.swift */; };
 		EDE3E24B30ACFFA4004EB277 /* BrowserViewControllerLens.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE3E24A30ACFF9E004EB277 /* BrowserViewControllerLens.swift */; };
+		EDE3E57530AE2141004EB277 /* HomepageLens.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE3E57430AE213E004EB277 /* HomepageLens.swift */; };
 		EDE77479304B4D250082408E /* MockTabsPanelTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE77478304B4D250082408E /* MockTabsPanelTelemetry.swift */; };
 		EDF2C0562D693A7300723609 /* AppIconSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF2C0552D693A7300723609 /* AppIconSetting.swift */; };
 		EDF2C0582D693B7D00723609 /* AppIconSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF2C0572D693B7C00723609 /* AppIconSelectionView.swift */; };
@@ -12793,6 +12794,7 @@
 		EDDF34092CDD159F008BB6A4 /* SearchEngineModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineModel.swift; sourceTree = "<group>"; };
 		EDE3E24730ACFEBA004EB277 /* StateLens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateLens.swift; sourceTree = "<group>"; };
 		EDE3E24A30ACFF9E004EB277 /* BrowserViewControllerLens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerLens.swift; sourceTree = "<group>"; };
+		EDE3E57430AE213E004EB277 /* HomepageLens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageLens.swift; sourceTree = "<group>"; };
 		EDE77478304B4D250082408E /* MockTabsPanelTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTabsPanelTelemetry.swift; sourceTree = "<group>"; };
 		EDEE4CC7BD65892525632A4E /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Today.strings; sourceTree = "<group>"; };
 		EDF2C0552D693A7300723609 /* AppIconSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconSetting.swift; sourceTree = "<group>"; };
@@ -16051,6 +16053,7 @@
 		8AF347DC2CADD0E100624036 /* Redux */ = {
 			isa = PBXGroup;
 			children = (
+				EDE3E57430AE213E004EB277 /* HomepageLens.swift */,
 				8AF347DD2CADD1B200624036 /* HomepageState.swift */,
 				8AF347DF2CADD1B200624036 /* HomepageTelemetryState.swift */,
 				8AF347DF2CADD1C300624036 /* HomepageAction.swift */,
@@ -21592,6 +21595,7 @@
 				1DDE3DB32AC34E1E0039363B /* TabCell.swift in Sources */,
 				5A1947152B8FA9E0009C7A6C /* BrowserViewType.swift in Sources */,
 				8A454D412CB9B8AA009436D9 /* TopSitesAction.swift in Sources */,
+				EDE3E57530AE2141004EB277 /* HomepageLens.swift in Sources */,
 				8C4B0F5D2C076B12008B3E74 /* UpdatableAddressFields+Decodable.swift in Sources */,
 				ED67B2962D0C921600BDC599 /* ShareTelemetry.swift in Sources */,
 				63B2132A2CCA797400A466DB /* NativeErrorPageState.swift in Sources */,
