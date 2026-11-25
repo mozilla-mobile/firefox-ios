@@ -49,16 +49,24 @@ workflows:
         - key: l10n-screenshots-dd-$GIT_CLONE_COMMIT_HASH
         - paths: l10n-screenshots-dd
     - deploy-to-bitrise-io@2:
+        is_always_run: true
         inputs:
         - deploy_path: l10n-screenshots/en-US/en-US
         - is_compress: 'true'
     - script@1:
         title: Upload screenshots to Google Cloud Storage
+        is_always_run: true
         run_if: '{{getenv "BITRISEIO_GCP_L10N_SCREENSHOTS_KEY_URL" | ne ""}}'
         inputs:
         - content: |-
             #!/usr/bin/env bash
             set -euo pipefail
+            shopt -s nullglob
+
+            if [ -z "$(echo l10n-screenshots/en-US/en-US/*.png)" ]; then
+                echo "No screenshots to upload"
+                exit 0
+            fi
 
             curl -sfo /tmp/gcs-key.json "$BITRISEIO_GCP_L10N_SCREENSHOTS_KEY_URL"
             gcloud auth activate-service-account -q --key-file /tmp/gcs-key.json
@@ -73,6 +81,28 @@ workflows:
             URL="https://storage.googleapis.com/${DEST#gs://}"
             echo "Screenshots uploaded to $URL"
             envman add --key L10N_SCREENSHOTS_URL --value "$URL"
+    - script@1:
+        title: Fail the build if l10n tests failed
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -euo pipefail
+            shopt -s nullglob
+
+            XCRESULTS=(l10n-screenshots-dd/Logs/Test/*.xcresult)
+            if [ ${#XCRESULTS[@]} -eq 0 ]; then
+                echo "No xcresult found in l10n-screenshots-dd/Logs/Test"
+                exit 1
+            fi
+
+            FAILED=0
+            for XCRESULT in "${XCRESULTS[@]}"; do
+                COUNT=$(xcrun xcresulttool get --path "$XCRESULT" --format json --legacy | jq -r '.metrics.testsFailedCount._value // 0')
+                echo "$XCRESULT: $COUNT failed tests"
+                FAILED=$((FAILED + COUNT))
+            done
+
+            [ "$FAILED" -eq 0 ]
     - slack@4:
         title: Notify Slack that screenshots are ready
         run_if: '{{and (not .IsBuildFailed) (getenv "L10N_SCREENSHOTS_URL" | ne "") (getenv "NOTIFY_L10N_SLACK" | eq "true")}}'
@@ -129,7 +159,8 @@ workflows:
             set -x
             gem install fastlane -v 2.241.1
             fastlane -version
-            ./firefox-ios/l10n-screenshots.sh --test-without-building $MOZ_LOCALES
+            STATUS=0
+            ./firefox-ios/l10n-screenshots.sh --test-without-building $MOZ_LOCALES || STATUS=$?
 
             mkdir -p artifacts
 
@@ -137,8 +168,11 @@ workflows:
               zip -9 -j "$locale.zip" "l10n-screenshots/$locale/$locale/"*
               mv "$locale.zip" artifacts/
             done
+
+            exit $STATUS
         title: Generate screenshots
     - deploy-to-bitrise-io@2:
+        is_always_run: true
         inputs:
         - deploy_path: artifacts/
     envs:
