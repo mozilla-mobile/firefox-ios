@@ -85,6 +85,7 @@ enum FeatureFlagID: String, CaseIterable {
     case unifiedSearch
     case videoIntroOnboarding
     case vpnFeature
+    case vpnLeakGuardToast
     case vpnOnboardingSheet
     case wallpaperEngagementSheet
     case waybackMachine
@@ -174,6 +175,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .trendingSearches,
                 .unifiedSearch,
                 .vpnFeature,
+                .vpnLeakGuardToast,
                 .vpnOnboardingSheet,
                 .waybackMachine,
                 .webViewDocumentFetchRefactor:

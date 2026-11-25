@@ -446,6 +446,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .vpnLeakGuardToast,
+                titleText: format(string: "VPN Leak Guard Toast"),
+                statusText: format(string: "Toggle to show a toast when the proxy leak guard blocks content")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .vpnOnboardingSheet,
                 titleText: format(string: "VPN Onboarding Sheet"),
                 statusText: format(string: "Toggle to show the VPN onboarding sheet on websites")
