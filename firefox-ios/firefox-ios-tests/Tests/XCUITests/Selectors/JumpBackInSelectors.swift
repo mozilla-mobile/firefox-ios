@@ -5,7 +5,6 @@
 import XCTest
 
 protocol JumpBackInSelectorsSet {
-    var COLLECTION_VIEW: Selector { get }
     var SECTION_TITLE: Selector { get }
     var ITEM_CELL: Selector { get }
     var CONTEXT_MENU_TABLE: Selector { get }
@@ -14,17 +13,10 @@ protocol JumpBackInSelectorsSet {
 
 struct JumpBackInSelectors: JumpBackInSelectorsSet {
     private enum IDs {
-        static let collectionView = AccessibilityIdentifiers.FirefoxHomepage.collectionView
         static let sectionTitle = AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.jumpBackIn
         static let itemCell = AccessibilityIdentifiers.FirefoxHomepage.JumpBackIn.itemCell
         static let contextMenu = "Context Menu"
     }
-
-    let COLLECTION_VIEW = Selector.collectionViewIdOrLabel(
-        IDs.collectionView,
-        description: "Firefox Home main collection view",
-        groups: ["jumpBackIn"]
-    )
 
     let SECTION_TITLE = Selector.staticTextId(
         IDs.sectionTitle,
@@ -44,5 +36,5 @@ struct JumpBackInSelectors: JumpBackInSelectorsSet {
         groups: ["jumpBackIn", "contextMenu"]
     )
 
-    var all: [Selector] { [COLLECTION_VIEW, SECTION_TITLE, ITEM_CELL, CONTEXT_MENU_TABLE] }
+    var all: [Selector] { [SECTION_TITLE, ITEM_CELL, CONTEXT_MENU_TABLE] }
 }

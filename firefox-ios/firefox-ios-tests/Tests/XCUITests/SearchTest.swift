@@ -880,7 +880,7 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     // MARK: - Pre Search (Trending Searches + Recent Searches)
-    // https://mozilla.testrail.io/index.php?/cases/view/3296489
+    // https://mozilla.testrail.io/index.php?/cases/view/4467172
     func testTrendingSearches_trendingSearchesExperimentOn() throws {
         throw XCTSkip("Pre Search experiment (Trending + Recent Searches) is on hold")
         /*
@@ -910,7 +910,7 @@ class SearchTests: FeatureFlaggedTestBase {
         */
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/3296488
+    // https://mozilla.testrail.io/index.php?/cases/view/4467171
     func testTrendingSearchesSettingsToggleOn_trendingSearchesExperimentOn() throws {
         throw XCTSkip("Pre Search experiment (Trending + Recent Searches) is on hold")
         /*
@@ -941,7 +941,7 @@ class SearchTests: FeatureFlaggedTestBase {
         */
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/3296487
+    // https://mozilla.testrail.io/index.php?/cases/view/4467170
     func testTrendingSearchesSettingsToggleOff_trendingSearchesExperimentOn() throws {
         throw XCTSkip("Pre Search experiment (Trending + Recent Searches) is on hold")
         /*
@@ -972,7 +972,7 @@ class SearchTests: FeatureFlaggedTestBase {
         */
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/3296486
+    // https://mozilla.testrail.io/index.php?/cases/view/4467169
     func testTrendingSearches_afterClearingURL_trendingSearchesExperimentOn() throws {
         throw XCTSkip("Pre Search experiment (Trending + Recent Searches) is on hold")
         /*
@@ -1004,7 +1004,7 @@ class SearchTests: FeatureFlaggedTestBase {
         */
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/3296485
+    // https://mozilla.testrail.io/index.php?/cases/view/4467168
     func testRecentSearches_recentSearchesExperimentOn()  throws {
         throw XCTSkip("Pre Search experiment (Trending + Recent Searches) is on hold")
         /*
@@ -1033,7 +1033,7 @@ class SearchTests: FeatureFlaggedTestBase {
         */
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/3296482
+    // https://mozilla.testrail.io/index.php?/cases/view/4467167
     func testRecentSearchesWithNoRecentSearches_recentSearchesExperimentOn() throws {
         throw XCTSkip("Pre Search experiment (Trending + Recent Searches) is on hold")
         /*
@@ -1054,7 +1054,7 @@ class SearchTests: FeatureFlaggedTestBase {
         */
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/3296480
+    // https://mozilla.testrail.io/index.php?/cases/view/4467166
     func testRecentSearchesSettingsToggleOn_recentSearchesExperimentOn() throws {
         throw XCTSkip("Pre Search experiment (Trending + Recent Searches) is on hold")
         /*
@@ -1087,7 +1087,7 @@ class SearchTests: FeatureFlaggedTestBase {
         */
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/3296479
+    // https://mozilla.testrail.io/index.php?/cases/view/4467165
     func testRecentSearchesSettingsToggleOff_recentSearchesExperimentOn() throws {
         throw XCTSkip("Pre Search experiment (Trending + Recent Searches) is on hold")
         /*
@@ -1119,7 +1119,7 @@ class SearchTests: FeatureFlaggedTestBase {
         */
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/3296478
+    // https://mozilla.testrail.io/index.php?/cases/view/4467164
     func testTrendingSearchesAndRecentSearchesSettingsToggleOn_trendingSearchesAndRecentSearchesExperimentOn() throws {
         throw XCTSkip("Pre Search experiment (Trending + Recent Searches) is on hold")
         /*

@@ -246,56 +246,6 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn])
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2307034
-    func testRecentlySaved() throws {
-        throw XCTSkip("Moved out of the full functional test suite")
-        /*
-        addLaunchArgument(jsonFileName: "homepageRedesignOff", featureName: "homepage-redesign-feature")
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
-        app.launch()
-        // Preconditons: Create 6 bookmarks & add 1 items to reading list
-        enableBookmarksInSettings()
-        bookmarkPages()
-        // iOS 15 does not have the Reader View button available (when experiment Off)
-        if #available(iOS 16, *) {
-            addContentToReaderView(isHomePageOn: false)
-            if iPad() {
-                app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
-                app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
-            } else {
-                navigator.performAction(Action.GoToHomePage)
-                browserScreen.dismissURLBarOverlay()
-            }
-            mozWaitForElementToExist(app.staticTexts["Bookmarks"])
-            navigator.nowAt(NewTabScreen)
-            navigator.performAction(Action.ToggleRecentlySaved)
-            navigator.nowAt(HomeSettings)
-            navigator.performAction(Action.OpenNewTabFromTabTray)
-            navigator.nowAt(NewTabScreen)
-            navigator.performAction(Action.ToggleRecentlySaved)
-            navigator.nowAt(HomeSettings)
-            navigator.performAction(Action.OpenNewTabFromTabTray)
-            checkBookmarks()
-            if iPad() {
-                navigator.performAction(Action.CloseURLBarOpen)
-            }
-            app.scrollViews
-                .cells[AccessibilityIdentifiers.FirefoxHomepage.Bookmarks.itemCell]
-                .staticTexts[urlExampleLabel].waitAndTap()
-            navigator.nowAt(BrowserTab)
-            waitForTabsButton()
-            unbookmark(url: urlLabelExample_3)
-            removeContentFromReaderView()
-            navigator.nowAt(LibraryPanel_ReadingList)
-            navigator.performAction(Action.CloseReadingListPanel)
-            navigator.nowAt(BrowserTab)
-            navigator.performAction(Action.OpenNewTabFromTabTray)
-            checkBookmarksUpdated()
-        }
-        */
-    }
-
     // https://mozilla.testrail.io/index.php?/cases/view/2307032
     func testShortcutsRows() {
         app.launch()
