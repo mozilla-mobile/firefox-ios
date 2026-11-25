@@ -451,16 +451,33 @@ final class HomepageViewController: UIViewController,
 
             let isCenterSearchBarReturning = embeddedAddressBarView.isHidden
                                              && state.searchBarState.isShowingCenterSearchBar
+            let isCenterSearchBarVisibilityChanging = embeddedAddressBarView.isHidden
+                                                      == state.searchBarState.isShowingCenterSearchBar
             embeddedAddressBarView.isHidden = !state.searchBarState.isShowingCenterSearchBar
             if isCenterSearchBarReturning {
                 animateCenterSearchBarBackDown()
             }
 
-            refreshHomepageDataSourceSnapshot(
-                animatingDifferences: animatingDifferences
-            ) { [weak self] in
-                self?.collectionView?.layoutIfNeeded()
-                self?.updateNewsTransitionHeaderProgress()
+            let refreshSnapshot = { [weak self] in
+                self?.refreshHomepageDataSourceSnapshot(
+                    animatingDifferences: animatingDifferences
+                ) { [weak self] in
+                    self?.collectionView?.layoutIfNeeded()
+                    self?.updateNewsTransitionHeaderProgress()
+                }
+            }
+
+            if isCenterSearchBarVisibilityChanging && !UIAccessibility.isReduceMotionEnabled {
+                UIView.animate(
+                    withDuration: HomepageUX.centerSearchBarTapAnimationDuration,
+                    delay: 0,
+                    usingSpringWithDamping: HomepageUX.centerSearchBarSpringDamping,
+                    initialSpringVelocity: 0
+                ) {
+                    refreshSnapshot()
+                }
+            } else {
+                refreshSnapshot()
             }
             updateWallpaperConstraints(availableWallpaperHeight: state.wallpaperState.availableWallpaperHeight)
         }
@@ -480,18 +497,14 @@ final class HomepageViewController: UIViewController,
             translationX: 0,
             y: window.safeAreaInsets.top - frameInWindow.minY
         )
-        embeddedAddressBarView.alpha = 0
 
         UIView.animate(
             withDuration: HomepageUX.centerSearchBarTapAnimationDuration,
             delay: 0,
-            options: .curveEaseInOut
+            usingSpringWithDamping: HomepageUX.centerSearchBarSpringDamping,
+            initialSpringVelocity: 0
         ) {
             self.embeddedAddressBarView.transform = .identity
-        }
-
-        UIView.animate(withDuration: HomepageUX.centerSearchBarSwapFadeDuration) {
-            self.embeddedAddressBarView.alpha = 1
         }
     }
 
@@ -639,16 +652,10 @@ final class HomepageViewController: UIViewController,
         UIView.animate(
             withDuration: HomepageUX.centerSearchBarTapAnimationDuration,
             delay: 0,
-            options: .curveEaseInOut
+            usingSpringWithDamping: HomepageUX.centerSearchBarSpringDamping,
+            initialSpringVelocity: 0
         ) {
             snapshot.frame.origin.y = window.safeAreaInsets.top
-        }
-
-        UIView.animate(
-            withDuration: HomepageUX.centerSearchBarSwapFadeDuration,
-            delay: HomepageUX.centerSearchBarTapAnimationDuration - HomepageUX.centerSearchBarSwapFadeDuration
-        ) {
-            snapshot.alpha = 0
         } completion: { _ in
             snapshot.removeFromSuperview()
         }

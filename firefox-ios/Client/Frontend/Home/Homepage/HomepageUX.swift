@@ -20,6 +20,6 @@ enum HomepageUX {
     static let fallbackFaviconSize = CGSize(width: 36, height: 36)
 
     // Center search bar
-    static let centerSearchBarTapAnimationDuration: TimeInterval = 0.3
-    static let centerSearchBarSwapFadeDuration: TimeInterval = 0.15
+    static let centerSearchBarTapAnimationDuration: TimeInterval = 0.15
+    static let centerSearchBarSpringDamping: CGFloat = 1.0
 }

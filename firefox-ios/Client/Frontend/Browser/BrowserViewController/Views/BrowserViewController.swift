@@ -1112,8 +1112,10 @@ class BrowserViewController: UIViewController,
         }
 
         dismissModalsIfStartAtHome()
+        let isWaitingForFirstContent = isHomepageSearchBarReplacingAddressBar
+                                       && contentContainer.contentController == nil
         updateAddressToolbarVisibility(
-            isCenterSearchBarShowing: state.homepageSearchBarState.isShowingCenterSearchBar
+            isCenterSearchBarShowing: state.homepageSearchBarState.isShowingCenterSearchBar || isWaitingForFirstContent
         )
     }
 
@@ -1123,9 +1125,18 @@ class BrowserViewController: UIViewController,
             for: .toolbar,
             window: windowUUID
         )?.addressToolbar.isEditing == true
-        defer { wasEditingAddressBar = isEditing }
+
+        if isEditing {
+            wasEditingAddressBar = true
+        }
+        defer {
+            if isCenterSearchBarShowing || !contentContainer.hasHomepage {
+                wasEditingAddressBar = false
+            }
+        }
 
         guard addressToolbarContainer.isHidden != isCenterSearchBarShowing,
+              contentContainer.hasHomepage,
               !UIAccessibility.isReduceMotionEnabled,
               !isCenterSearchBarShowing || wasEditingAddressBar else {
             addressToolbarContainer.isHidden = isCenterSearchBarShowing
@@ -1146,28 +1157,23 @@ class BrowserViewController: UIViewController,
         UIView.animate(
             withDuration: HomepageUX.centerSearchBarTapAnimationDuration,
             delay: 0,
-            options: .curveEaseInOut
+            usingSpringWithDamping: HomepageUX.centerSearchBarSpringDamping,
+            initialSpringVelocity: 0
         ) {
             self.view.layoutIfNeeded()
-        }
-
-        UIView.animate(
-            withDuration: HomepageUX.centerSearchBarSwapFadeDuration,
-            delay: HomepageUX.centerSearchBarTapAnimationDuration - HomepageUX.centerSearchBarSwapFadeDuration
-        ) {
+        } completion: { _ in
             self.addressToolbarContainer.alpha = 1
         }
     }
 
     private func animateAddressToolbarOut() {
-        UIView.animate(withDuration: HomepageUX.centerSearchBarSwapFadeDuration) {
-            self.addressToolbarContainer.alpha = 0
-        }
+        addressToolbarContainer.alpha = 0
 
         UIView.animate(
             withDuration: HomepageUX.centerSearchBarTapAnimationDuration,
             delay: 0,
-            options: .curveEaseInOut
+            usingSpringWithDamping: HomepageUX.centerSearchBarSpringDamping,
+            initialSpringVelocity: 0
         ) {
             self.addressToolbarContainer.isHidden = true
             self.view.layoutIfNeeded()
