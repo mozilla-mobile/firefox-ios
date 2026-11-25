@@ -55,12 +55,18 @@ final class VPNOnboardingCoordinator: BaseCoordinator {
     }
 
     func shouldShow() -> Bool {
-        guard let selectedTab = tabManager.selectedTab,
-              !selectedTab.isFxHomeTab,
-              featureFlagsProvider.isEnabled(.vpnFeature),
-              featureFlagsProvider.isEnabled(.vpnOnboardingSheet)
-        else { return false }
+        guard isEligible() else { return false }
+        FxNimbus.shared.features.vpnFeature.recordExposure()
+        return areFlagsEnabled()
+    }
+
+    private func isEligible() -> Bool {
+        guard let selectedTab = tabManager.selectedTab, !selectedTab.isFxHomeTab else { return false }
         return prefs.boolForKey(PrefsKeys.VPNSettings.onboardingSheetShown) != true
+    }
+
+    private func areFlagsEnabled() -> Bool {
+        featureFlagsProvider.isEnabled(.vpnFeature) && featureFlagsProvider.isEnabled(.vpnOnboardingSheet)
     }
 
     func start() {
