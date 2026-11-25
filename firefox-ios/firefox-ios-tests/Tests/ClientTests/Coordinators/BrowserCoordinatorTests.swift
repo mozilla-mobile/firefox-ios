@@ -573,7 +573,7 @@ final class BrowserCoordinatorTests: XCTestCase,
         let subject = createSubject()
         subject.browserViewController = browserViewController
 
-        subject.showVPNDataLimitAlert(dataLimitBytes: 50_000_000_000)
+        subject.showVPNDataLimitAlert(dataLimitBytes: 50 * 1024 * 1024 * 1024)
 
         let alert = try XCTUnwrap(browserViewController.viewControllerToPresent as? UIAlertController)
         XCTAssertEqual(alert.title, .VPN.ReachedDataLimitPopup.Title)

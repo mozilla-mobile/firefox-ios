@@ -1477,7 +1477,7 @@ final class BrowserCoordinator: BaseCoordinator,
     func showVPNDataLimitAlert(dataLimitBytes: Int64) {
         guard vpnAlert == nil else { return }
         let dataLimitGB = Measurement(value: Double(dataLimitBytes), unit: UnitInformationStorage.bytes)
-            .converted(to: .gigabytes).value
+            .converted(to: .gibibytes).value
         let alert = UIAlertController(
             title: .VPN.ReachedDataLimitPopup.Title,
             message: String(
