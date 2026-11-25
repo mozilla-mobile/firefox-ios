@@ -37,15 +37,12 @@ There was also a mix of the `State` struct handling actions itself and its sub-s
 
 ## Decision
 
-In the future `State` structs with one or more sub-reducer will have the following rules:
+In the future, any `StateType` "parent" structs having at least one  `StateType` "child" struct must abide by the following rules:
 
-1. A top level `State` will function as a parent state that hold multiple `StateType` classes that handle Redux Actions.
+1. A parent `StateType` may only contain `StateType` properties. It may not contain properties of any other type.
+2. A parent `StateType`'s reducer should not handle any actions. It only "passes through" (i.e. forwards) actions to its `StateType` children's reducers.
 
-1. The parent `State` should not have action handling itself and instead delgate to child `State`
-
-1. Every property that could theoretically belong to `State` should instead belong to a sub-state. It is fine to create a new sub-state to handle a set of responsibilities for the screen if one doesn't already exist.
-
-1. The `State` will now have a single passthrough reducer to forward actions on to the sub-reducers.
+When a state grows too large, developers should pull out related responsibilities into a new child `StateType` with its own reducer. But once a state has a child `StateType`, its remaining non-`StateType` properties should also move into their own child state(s). This saves the parent state's reducer from implementing a confusing mix of handling some actions itself and forwarding others (as in the `HomepageState` example above).
 
 #### Example:
 ``` 
