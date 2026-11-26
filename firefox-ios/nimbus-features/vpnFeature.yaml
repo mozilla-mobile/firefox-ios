@@ -23,9 +23,9 @@ features:
     defaults:
       - channel: beta
         value:
-          enabled: true
-          onboarding-sheet: true
-          leak-guard-toast: true
+          enabled: false
+          onboarding-sheet: false
+          leak-guard-toast: false
       - channel: developer
         value:
           enabled: true
