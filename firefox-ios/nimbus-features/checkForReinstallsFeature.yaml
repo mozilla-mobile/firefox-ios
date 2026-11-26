@@ -9,11 +9,11 @@ features:
         description: >
           Whether app reinstallation checks are enabled.
         type: Boolean
-        default: false
+        default: true
     defaults:
       - channel: beta
         value:
-          enabled: false
+          enabled: true
       - channel: developer
         value:
-          enabled: false
+          enabled: true
