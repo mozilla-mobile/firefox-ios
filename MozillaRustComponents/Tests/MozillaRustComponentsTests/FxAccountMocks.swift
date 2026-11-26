@@ -72,8 +72,11 @@ class MockFxAccount: PersistedFirefoxAccount {
         case .cancelOAuthFlow:
             return .disconnected
         case .checkAuthorizationStatus:
-            let info = try checkAuthorizationStatus()
-            return info.active ? .connected : .authIssues
+            switch checkAuthorizationStatus() {
+            case .valid: return .connected
+            case .invalid: return .authIssues
+            case .unknown: return currentState
+            }
         case .disconnect:
             return .disconnected
         case .callGetProfile, .webChannelPasswordChange:
@@ -98,9 +101,9 @@ class MockFxAccount: PersistedFirefoxAccount {
         queue.sync { invocations.append(.ensureCapabilities) }
     }
 
-    override func checkAuthorizationStatus() throws -> AuthorizationInfo {
+    override func checkAuthorizationStatus() -> AuthorizationStatus {
         queue.sync { invocations.append(.checkAuthorizationStatus) }
-        return AuthorizationInfo(active: true)
+        return .valid
     }
 
     override func clearAccessTokenCache() {
