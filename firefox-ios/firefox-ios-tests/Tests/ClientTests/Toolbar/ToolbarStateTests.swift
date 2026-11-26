@@ -287,21 +287,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(newState.isScrolled)
     }
 
-    func test_searchEngineDidChangeAction_returnsExpectedState() {
-        let initialState = createSubject()
-        let reducer = toolbarReducer()
-
-        let newState = reducer.legacyReducer(
-            initialState,
-            ToolbarAction(
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.searchEngineDidChange)
-        )
-
-        XCTAssertEqual(newState.addressToolbar, initialState.addressToolbar)
-        XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
-    }
-
     func test_googleLensAvailabilityDidChangeAction_updatesAddressToolbarGoogleLensAvailability() {
         let initialState = createSubject()
         let reducer = toolbarReducer()

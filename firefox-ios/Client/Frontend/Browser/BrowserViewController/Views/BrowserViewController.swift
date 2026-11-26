@@ -4734,8 +4734,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
 
     func updateForDefaultSearchEngineDidChange() {
         // Update search icon when the search engine changes
-        let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.searchEngineDidChange)
-        store.dispatch(action)
+        store.dispatch(SearchSettingsModernAction.searchEngineDidChange, forWindowUUID: windowUUID)
         searchController?.reloadSearchEngines()
         searchController?.reloadData()
     }

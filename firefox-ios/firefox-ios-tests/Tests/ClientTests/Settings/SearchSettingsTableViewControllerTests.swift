@@ -45,11 +45,9 @@ final class SearchSettingsTableViewControllerTests: XCTestCase, StoreTestUtility
 
         subject.didToggleGoogleLens(toggle)
 
-        let action = try XCTUnwrap(mockStore.dispatchedActions.last as? ToolbarAction)
-        let actionType = try XCTUnwrap(action.actionType as? ToolbarActionType)
+        let action = try XCTUnwrap(mockStore.dispatchedModernActions.last as? SearchSettingsModernAction)
 
-        XCTAssertEqual(action.windowUUID, .XCTestDefaultUUID)
-        XCTAssertEqual(actionType, ToolbarActionType.googleLensSettingDidChange)
+        XCTAssertEqual(action, .googleLensSettingDidChange)
         XCTAssertEqual(userPreferences.boolPreferences[.googleLens], false)
     }
 

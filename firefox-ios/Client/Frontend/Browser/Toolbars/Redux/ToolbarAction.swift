@@ -156,8 +156,6 @@ enum ToolbarActionType: ActionType {
     case urlDidChange
     case didStartEditingUrl
     case readerModeStateChanged
-    case searchEngineDidChange
-    case googleLensSettingDidChange
     case didSummarizeSettingsChange
     // User submitted a search term to load the search request
     case didSubmitSearchTerm
