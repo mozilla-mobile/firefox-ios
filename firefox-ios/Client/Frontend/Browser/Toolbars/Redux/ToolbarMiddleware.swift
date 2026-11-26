@@ -78,7 +78,6 @@ final class ToolbarMiddleware {
         }
     }
 
-    @MainActor
     private func handleToolbarModernAction(_ action: ToolbarModernAction, windowUUID: WindowUUID) {
         switch action {
         case .cancelEdit:
@@ -94,7 +93,6 @@ final class ToolbarMiddleware {
         }
     }
 
-    @MainActor
     private func handleSearchSettingsAction(_ action: SearchSettingsModernAction, windowUUID: WindowUUID) {
         switch action {
         case .searchEngineDidChange, .googleLensSettingDidChange:
