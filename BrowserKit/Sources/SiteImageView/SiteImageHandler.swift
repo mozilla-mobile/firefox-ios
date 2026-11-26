@@ -41,13 +41,16 @@ public final class DefaultSiteImageHandler: SiteImageHandler {
     public func getImage(model: SiteImageModel) async -> UIImage {
         switch model.imageType {
         case .heroImage:
-            // LPMetadataProvider fetches outside the app's URLSessions, so it can't be routed through the VPN proxy.
-            guard !isVPNProxyActive else { return await getFaviconImage(imageModel: model) }
             do {
                 return try await getHeroImage(imageModel: model)
             } catch {
-                // If hero image fails, we return a favicon image
-                return await getFaviconImage(imageModel: model)
+                // If hero image fails, we return a favicon image.
+                // Use a favicon model so the fallback isn't cached under the hero image key.
+                let faviconModel = SiteImageModel(id: model.id,
+                                                  imageType: .favicon,
+                                                  siteURL: model.siteURL,
+                                                  siteResource: model.siteResource)
+                return await getFaviconImage(imageModel: faviconModel)
             }
         case .favicon:
             return await getFaviconImage(imageModel: model)
@@ -70,11 +73,6 @@ public final class DefaultSiteImageHandler: SiteImageHandler {
     }
 
     // MARK: - Private
-
-    private var isVPNProxyActive: Bool {
-        guard #available(iOS 17.0, *) else { return false }
-        return VPNProxySessionProvider.shared.isProxyActive
-    }
 
     private func getHeroImage(imageModel: SiteImageModel) async throws -> UIImage {
         do {
