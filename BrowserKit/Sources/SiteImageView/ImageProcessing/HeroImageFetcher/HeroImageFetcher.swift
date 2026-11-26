@@ -17,15 +17,19 @@ protocol HeroImageFetcher: Sendable {
     /// - Parameters:
     ///   - siteURL: the url to fetch the hero image with
     ///   - metadataProvider: LPMetadataProvider
+    ///   - network: Fetches the page HTML when the VPN proxy is active
     /// - Returns: the hero image
-    func fetchHeroImage(from siteURL: URL, metadataProvider: LPMetadataProvider) async throws -> UIImage
+    func fetchHeroImage(from siteURL: URL,
+                        metadataProvider: LPMetadataProvider,
+                        network: HTMLDataRequest) async throws -> UIImage
 }
 
 extension HeroImageFetcher {
     func fetchHeroImage(from siteURL: URL,
-                        metadataProvider: LPMetadataProvider = LPMetadataProvider()
+                        metadataProvider: LPMetadataProvider = LPMetadataProvider(),
+                        network: HTMLDataRequest = DefaultHTMLDataRequest()
     ) async throws -> UIImage {
-        try await fetchHeroImage(from: siteURL, metadataProvider: metadataProvider)
+        try await fetchHeroImage(from: siteURL, metadataProvider: metadataProvider, network: network)
     }
 }
 
@@ -35,23 +39,18 @@ final class DefaultHeroImageFetcher: HeroImageFetcher {
         "og:image", "og:image:url", "og:image:secure_url", "twitter:image", "twitter:image:src"
     ]
 
-    private let network: HTMLDataRequest
-
     private static var isVPNProxyActive: Bool {
         guard #available(iOS 17.0, *) else { return false }
         return VPNProxySessionProvider.shared.isProxyActive
     }
 
-    init(network: HTMLDataRequest = DefaultHTMLDataRequest()) {
-        self.network = network
-    }
-
     func fetchHeroImage(from siteURL: URL,
-                        metadataProvider: LPMetadataProvider = LPMetadataProvider()
+                        metadataProvider: LPMetadataProvider = LPMetadataProvider(),
+                        network: HTMLDataRequest = DefaultHTMLDataRequest()
     ) async throws -> UIImage {
         // LPMetadataProvider fetches outside the app's URLSessions, so scrape meta tags through the proxy instead.
         if Self.isVPNProxyActive {
-            return try await fetchHeroImageFromMetaTags(siteURL: siteURL)
+            return try await fetchHeroImageFromMetaTags(siteURL: siteURL, network: network)
         }
         do {
             // `startFetchingMetadata` needs to be called on the main thread on older devices. See PRs #12694 and #27951
@@ -88,23 +87,18 @@ final class DefaultHeroImageFetcher: HeroImageFetcher {
 
     func heroImageURL(from data: Data, siteURL: URL) -> URL? {
         guard let root = try? HTMLDocument(data: data) else { return nil }
-        let metas = root.xpath("//head/meta")
-        for key in Self.imageMetaKeys {
-            for meta in metas where [meta["property"], meta["name"]].contains(where: { $0?.lowercased() == key }) {
-                guard let content = meta["content"]?.trimmingCharacters(in: .whitespacesAndNewlines),
-                      let url = URL(string: content, relativeTo: siteURL)?.absoluteURL,
-                      url.scheme == "https" || url.scheme == "http"
-                else { continue }
-                return url
-            }
-        }
-        return nil
+        return Self.imageMetaKeys.lazy
+            .compactMap { root.firstChild(xpath: "//head/meta[@property='\($0)' or @name='\($0)']")?["content"] }
+            .compactMap { URL(string: $0.trimmingCharacters(in: .whitespacesAndNewlines), relativeTo: siteURL)?.absoluteURL }
+            .first { $0.scheme == "https" || $0.scheme == "http" }
     }
 
     // MARK: - Private
 
-    private func fetchHeroImageFromMetaTags(siteURL: URL) async throws -> UIImage {
+    private func fetchHeroImageFromMetaTags(siteURL: URL, network: HTMLDataRequest) async throws -> UIImage {
         let data = try await network.fetchDataForURL(siteURL)
+        // The site URL may point directly at an image rather than an HTML page.
+        if let image = UIImage(data: data) { return image }
         guard let imageURL = heroImageURL(from: data, siteURL: siteURL) else {
             throw SiteImageError.noHeroImage
         }

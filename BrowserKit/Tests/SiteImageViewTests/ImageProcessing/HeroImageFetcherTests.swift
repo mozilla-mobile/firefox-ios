@@ -6,6 +6,7 @@ import LinkPresentation
 import Network
 import TestKit
 import XCTest
+import Common
 @testable import SiteImageView
 
 @MainActor
@@ -36,7 +37,8 @@ final class HeroImageFetcherTests: XCTestCase {
         let subject = createSubject()
         do {
             _ = try await subject.fetchHeroImage(from: URL(string: "www.example.com")!,
-                                                 metadataProvider: metadataProvider)
+                                                 metadataProvider: metadataProvider,
+                                                 network: network)
             XCTFail("Should have failed")
         } catch let error as TestError {
             XCTAssertEqual("A test error",
@@ -50,7 +52,8 @@ final class HeroImageFetcherTests: XCTestCase {
         let subject = createSubject()
         do {
             _ = try await subject.fetchHeroImage(from: URL(string: "www.example.com")!,
-                                                 metadataProvider: metadataProvider)
+                                                 metadataProvider: metadataProvider,
+                                                 network: network)
             XCTFail("Should have failed")
         } catch let error as SiteImageError {
             XCTAssertEqual("Unable to download image with reason: Metadata image provider could not be retrieved.",
@@ -68,7 +71,8 @@ final class HeroImageFetcherTests: XCTestCase {
         let subject = createSubject()
         do {
             _ = try await subject.fetchHeroImage(from: URL(string: "www.example.com")!,
-                                                 metadataProvider: metadataProvider)
+                                                 metadataProvider: metadataProvider,
+                                                 network: network)
             XCTFail("Should have failed")
         } catch let error as SiteImageError {
             XCTAssertEqual("Unable to download image with reason: Optional(A test error)",
@@ -83,7 +87,8 @@ final class HeroImageFetcherTests: XCTestCase {
         let subject = createSubject()
         do {
             let image = try await subject.fetchHeroImage(from: URL(string: "www.example.com")!,
-                                                         metadataProvider: metadataProvider)
+                                                         metadataProvider: metadataProvider,
+                                                         network: network)
             XCTAssertNotNil(image)
             XCTAssertEqual(network.fetchDataForURLCount, 0)
         } catch {
@@ -100,7 +105,9 @@ final class HeroImageFetcherTests: XCTestCase {
         let subject = createSubject()
 
         do {
-            _ = try await subject.fetchHeroImage(from: siteURL, metadataProvider: metadataProvider)
+            _ = try await subject.fetchHeroImage(from: siteURL,
+                                                 metadataProvider: metadataProvider,
+                                                 network: network)
             XCTFail("Should have failed")
         } catch let error as SiteImageError {
             XCTAssertEqual(error, .noHeroImage)
@@ -117,13 +124,29 @@ final class HeroImageFetcherTests: XCTestCase {
         let subject = createSubject()
 
         do {
-            _ = try await subject.fetchHeroImage(from: siteURL, metadataProvider: metadataProvider)
+            _ = try await subject.fetchHeroImage(from: siteURL,
+                                                 metadataProvider: metadataProvider,
+                                                 network: network)
             XCTFail("Should have failed")
         } catch let error as SiteImageError {
             XCTAssertEqual(error, .invalidHTML)
         } catch {
             XCTFail("Should have failed with SiteImageError type")
         }
+    }
+
+    func testHeroImageLoads_whenProxyActiveAndURLIsImage_returnsImage() async throws {
+        guard #available(iOS 17.0, *) else { throw XCTSkip("Requires iOS 17.0") }
+        VPNProxySessionProvider.shared.update([makeProxyConfiguration()])
+        network.data = pngData(size: CGSize(width: 4, height: 2))
+        let subject = createSubject()
+
+        let image = try await subject.fetchHeroImage(from: URL(string: "https://www.example.com/photo.png")!,
+                                                     metadataProvider: metadataProvider,
+                                                     network: network)
+
+        XCTAssertEqual(image.size, CGSize(width: 4, height: 2))
+        XCTAssertEqual(network.fetchDataForURLCount, 1)
     }
 
     // MARK: - heroImageURL
@@ -201,9 +224,18 @@ final class HeroImageFetcherTests: XCTestCase {
     // MARK: - Helpers
 
     private func createSubject(file: StaticString = #filePath, line: UInt = #line) -> DefaultHeroImageFetcher {
-        let subject = DefaultHeroImageFetcher(network: network)
+        let subject = DefaultHeroImageFetcher()
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
+    }
+
+    private func pngData(size: CGSize) -> Data {
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = 1
+        return UIGraphicsImageRenderer(size: size, format: format).pngData { context in
+            UIColor.red.setFill()
+            context.fill(CGRect(origin: .zero, size: size))
+        }
     }
 
     private func html(head: String) -> Data {
