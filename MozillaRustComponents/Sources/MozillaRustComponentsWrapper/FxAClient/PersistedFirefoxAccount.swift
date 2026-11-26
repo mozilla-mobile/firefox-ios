@@ -72,11 +72,9 @@ class PersistedFirefoxAccount {
         return try URL(string: inner.getPairingAuthorityUrl())!
     }
 
-    func checkAuthorizationStatus() throws -> AuthorizationInfo {
+    func checkAuthorizationStatus() -> AuthorizationStatus {
         defer { tryPersistState() }
-        return try notifyAuthErrors {
-            try self.inner.checkAuthorizationStatus()
-        }
+        return inner.checkAuthorizationStatus()
     }
 
     func disconnect() {
