@@ -30,16 +30,16 @@ final class BrowserDataImportSessionTests: XCTestCase {
 
         XCTAssertTrue(result.apiCompleted)
         XCTAssertEqual(result.outcome, .success)
-        XCTAssertEqual(result.sourceBrowserName, "Safari")
+        XCTAssertNil(result.sourceBrowserName)
     }
 
-    func testRun_noSourceName_fallsBackToSafari() async throws {
+    func testRun_noSourceName_isNil() async throws {
         let result = try await run(stream([
             item(nil, .unsupported),
             item("  ", .unsupported)
         ]))
 
-        XCTAssertEqual(result.sourceBrowserName, "Safari")
+        XCTAssertNil(result.sourceBrowserName)
     }
 
     func testRun_sourceName_ignoresMissingAndBlankNames() async throws {
@@ -52,14 +52,24 @@ final class BrowserDataImportSessionTests: XCTestCase {
         XCTAssertEqual(result.sourceBrowserName, "Chrome")
     }
 
-    func testRun_sourceName_usesFirstName() async throws {
+    func testRun_differentSourceNames_isNil() async throws {
         let result = try await run(stream([
             item("Chrome", .unsupported),
+            item(nil, .unsupported),
             item("Safari", .unsupported)
         ]))
 
-        XCTAssertEqual(result.sourceBrowserName, "Chrome")
+        XCTAssertNil(result.sourceBrowserName)
         XCTAssertEqual(result.outcome, .success)
+    }
+
+    func testRun_sameSourceNameWithSurroundingWhitespace_isKept() async throws {
+        let result = try await run(stream([
+            item("Chrome", .unsupported),
+            item(" Chrome ", .unsupported)
+        ]))
+
+        XCTAssertEqual(result.sourceBrowserName, "Chrome")
     }
 
     func testRun_errorBeforeAnyRecord_failsWithoutAPICompletion() async throws {
