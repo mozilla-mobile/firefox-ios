@@ -28,8 +28,15 @@ public final class BrowserDataImporter {
         token: UUID,
         onAPICompletion: @escaping @Sendable () -> Void = {}
     ) async -> BrowserTransferResult? {
+        return await Self.importData(from: manager.importBrowserData(token: token), onAPICompletion: onAPICompletion)
+    }
+
+    static func importData(
+        from records: AsyncThrowingStream<BEBrowserData, Error>,
+        onAPICompletion: @escaping @Sendable () -> Void
+    ) async -> BrowserTransferResult? {
         let session = BrowserDataImportSession(onAPICompletion: onAPICompletion)
-        return await session.run(manager.importBrowserData(token: token).map(Self.item(for:)))
+        return await session.run(records.map(Self.item(for:)))
     }
 
     nonisolated static func item(for record: BEBrowserData) -> BrowserDataImportItem {

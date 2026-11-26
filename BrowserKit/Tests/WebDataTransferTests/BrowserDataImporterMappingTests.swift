@@ -50,4 +50,27 @@ final class BrowserDataImporterMappingTests: XCTestCase {
         XCTAssertNil(BrowserDataImporter.token(from: [:]))
         XCTAssertNil(BrowserDataImporter.token(from: [key: UUID().uuidString]))
     }
+
+    @MainActor
+    func testImportData_recordStream_completesWithSourceName() async throws {
+        guard #available(iOS 26.4, *) else { throw XCTSkip("Requires iOS 26.4") }
+        let records = AsyncThrowingStream<BEBrowserData, Error> { continuation in
+            continuation.yield(BEBrowserData(
+                sourceApplicationBundleIdentifier: "com.apple.mobilesafari",
+                sourceApplicationLocalizedName: "Safari"
+            ))
+            continuation.yield(BEBrowserDataExtension(
+                displayName: "Blocker", developerName: "Dev", identifier: "x", storeIdentifier: "1"
+            ))
+            continuation.finish()
+        }
+
+        let imported = await BrowserDataImporter.importData(from: records, onAPICompletion: {})
+        let result = try XCTUnwrap(imported)
+
+        XCTAssertTrue(result.apiCompleted)
+        XCTAssertEqual(result.outcome, .success)
+        XCTAssertEqual(result.recordCount, 0)
+        XCTAssertEqual(result.sourceBrowserName, "Safari")
+    }
 }
