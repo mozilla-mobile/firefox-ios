@@ -1,6 +1,7 @@
 # The configuration for the wallpaperEngagementSheetFeature feature
 features:
   wallpaper-engagement-sheet-feature:
+    no-lint: [MISSING_CONTACTS]
     description: >
       Controls the wallpaper engagement bottom sheet shown on the homepage
       when new wallpapers are available. Only meant to be used with rollouts.

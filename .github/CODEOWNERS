@@ -20,6 +20,9 @@
 # owners will be requested for a review.
 /firefox-ios/firefox-ios-tests/Tests/UITests @mozilla-mobile/fxios-automation-1
 /firefox-ios/firefox-ios-tests/Tests/XCUITests @mozilla-mobile/fxios-automation-1
+/firefox-ios/firefox-ios-tests/Tests/*.xctestplan @mozilla-mobile/fxios-automation-1
+/firefox-ios/firefox-ios-tests/Tests/UnitTest.xctestplan @mozilla-mobile/fxios-general-owners
+/firefox-ios/Client.xcodeproj/project.pbxproj @mozilla-mobile/fxios-general-owners @mozilla-mobile/fxios-automation-1
 /focus-ios/focus-ios-tests @mozilla-mobile/fxios-automation-1
 /focus-ios/focus-ios-tests/ClientTests @mozilla-mobile/fxios-general-owners
 /bitrise.yml @mozilla-mobile/fxios-automation-1 @mozilla-mobile/releng
@@ -31,3 +34,5 @@
 .github/workflows @mozilla-mobile/fxios-automation-1
 /test-fixtures @mozilla-mobile/fxios-automation-1
 /test-fixtures/generate-metrics.sh @mozilla-mobile/fxios-general-owners
+
+/.github/CODEOWNERS @mozilla-mobile/firefox-ios-codeowners

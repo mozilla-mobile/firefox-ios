@@ -1,6 +1,7 @@
 # The configuration for the adBlocker feature
 features:
   ad-blocker-feature:
+    no-lint: [MISSING_CONTACTS]
     description: >
       The feature flag to manage the roll out of the Ad Blocker badge in the
       Site Menu and the corresponding Block Ads toggle in Browsing settings.

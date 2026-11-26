@@ -1,6 +1,8 @@
 # The configuration for the webViewDocumentFetchRefactorFeature feature
 features:
   web-view-document-fetch-refactor-feature:
+    contacts:
+      - mreagan@mozilla.com
     description: >
       Determines whether we read PDF and document data for sharing directly from the authenticated WebView, rather than re-downloading via URLSession.
     variables:

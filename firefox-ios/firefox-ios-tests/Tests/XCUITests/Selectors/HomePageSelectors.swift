@@ -11,6 +11,8 @@ protocol HomePageSelectorsSet {
     var TRACKER_BLOCKER_SHEET_WEEKLY_COUNT: Selector { get }
     var TRACKER_BLOCKER_SHEET_TOTAL: Selector { get }
     var TRACKER_BLOCKER_SHEET_CLOSE_BUTTON: Selector { get }
+    var QUICK_ANSWERS_BUTTON: Selector { get }
+    var QUICK_ANSWERS_TIP_TITLE: Selector { get }
     func trackerBlockerSheetCategoryRow(_ index: Int) -> Selector
     var all: [Selector] { get }
 }
@@ -26,6 +28,8 @@ struct HomePageSelectors: HomePageSelectorsSet {
             AccessibilityIdentifiers.FirefoxHomepage.TrackerBlockerModule.Sheet.weeklyCountLabel
         static let trackerBlockerTotal = AccessibilityIdentifiers.FirefoxHomepage.TrackerBlockerModule.Sheet.totalPill
         static let trackerBlockerClose = AccessibilityIdentifiers.FirefoxHomepage.TrackerBlockerModule.Sheet.closeButton
+        static let quickAnswersButton = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons.quickAnswersButton
+        static let quickAnswersTipTitle = String.QuickAnswers.Tip.Title
     }
 
     let COLLECTION_VIEW = Selector.collectionViewIdOrLabel(
@@ -76,6 +80,17 @@ struct HomePageSelectors: HomePageSelectorsSet {
         groups: ["homepage", "tracker_blocker"]
     )
 
+    let QUICK_ANSWERS_BUTTON = Selector.buttonId(
+        IDs.quickAnswersButton,
+        description: "Quick Answers voice wave button in the Firefox Home header",
+        groups: ["homepage", "quick_answers"]
+    )
+
+    let QUICK_ANSWERS_TIP_TITLE = Selector.staticTextByLabel(
+        IDs.quickAnswersTipTitle,
+        description: "Title of the one-time Quick Answers tip pointing at the voice wave button",
+        groups: ["homepage", "quick_answers"]
+    )
     func trackerBlockerSheetCategoryRow(_ index: Int) -> Selector {
         Selector.anyElementById(
             AccessibilityIdentifiers.FirefoxHomepage.TrackerBlockerModule.Sheet.categoryRow(index),
@@ -93,7 +108,9 @@ struct HomePageSelectors: HomePageSelectorsSet {
             TRACKER_BLOCKER_PILL,
             TRACKER_BLOCKER_SHEET_WEEKLY_COUNT,
             TRACKER_BLOCKER_SHEET_TOTAL,
-            TRACKER_BLOCKER_SHEET_CLOSE_BUTTON
+            TRACKER_BLOCKER_SHEET_CLOSE_BUTTON,
+            QUICK_ANSWERS_BUTTON,
+            QUICK_ANSWERS_TIP_TITLE
         ]
     }
 }

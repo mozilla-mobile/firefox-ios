@@ -39,10 +39,8 @@ final class VPNMiddleware {
 
     /// Only returns a manager where `ProxyConfiguration` is available and the feature is enabled.
     /// Resolved from the container so the middleware and VPN settings share the same connection.
-    static func makeVPNManager(
-        featureFlags: FeatureFlagProviding = AppContainer.shared.resolve()
-    ) -> VPNRunnable? {
-        guard #available(iOS 17.0, *), featureFlags.isEnabled(.vpnFeature) else { return nil }
+    static func makeVPNManager() -> VPNRunnable? {
+        guard #available(iOS 17.0, *) else { return nil }
         return AppContainer.shared.resolve() as VPNRunnable
     }
 
@@ -71,9 +69,11 @@ final class VPNMiddleware {
             dispatchAlert(.showFailureAlert)
         case .quotaExceeded(let usage):
             dispatchAlert(.showDataLimitAlert(dataLimitBytes: usage.max))
+        case .connectionFailed:
+            userPreferences.setPreferenceFor(.vpnFeature, to: vpnManager?.isRunning ?? false)
+            dispatchAlert(.showConnectionFailedAlert)
         case .selectedLocationUnavailable:
-            // TODO: FXIOS-17347 wire up location selection errors
-            break
+            dispatchAlert(.showLocationUnavailableAlert)
         }
     }
 
@@ -99,7 +99,8 @@ final class VPNMiddleware {
             await startVPN(source: .settings)
         case .stop:
             await stopVPN(source: .settings)
-        case .continueWithoutVPN:
+        case .continueWithoutVPN(let alertType):
+            telemetry.recordAlertOptionSelected(.continueWithoutVPN, alertType: alertType)
             await stopVPN(source: .continueWithoutVPN)
         case .changeLocation(let countryCode):
             await changeVPNLocation(countryCode)
@@ -109,18 +110,33 @@ final class VPNMiddleware {
             await refreshVPNUsage()
         case .refreshUsageIfResetDue:
             await refreshVPNUsageIfResetDue()
-        case .closeThisTab:
+        case .appDidEnterBackground:
+            vpnManager?.pauseRotation()
+        case .appDidBecomeActive:
+            vpnManager?.resumeRotation()
+        case .closeThisTab(let alertType):
+            telemetry.recordAlertOptionSelected(.closeThisTab, alertType: alertType)
             let tabManager = windowManager.tabManager(for: windowUUID)
             if let selectedTab = tabManager?.selectedTab {
                 tabManager?.removeTab(selectedTab.tabUUID)
             }
             await stopVPN(source: .closeThisTab)
-        case .closeAllTabs:
-            for tabManager in windowManager.allWindowTabManagers() {
+        case .closeAllTabs(let alertType):
+            telemetry.recordAlertOptionSelected(.closeAllTabs, alertType: alertType)
+            let tabManagers = windowManager.allWindowTabManagers()
+            let closedTabsCount = tabManagers.reduce(0) { $0 + $1.tabs.count }
+            for tabManager in tabManagers {
                 tabManager.removeAllTabs(isPrivateMode: true)
                 tabManager.removeAllTabs(isPrivateMode: false)
             }
             await stopVPN(source: .closeAllTabs)
+            store.dispatch(
+                GeneralBrowserAction(
+                    toastType: .vpnClosedTabs(count: closedTabsCount),
+                    windowUUID: windowUUID,
+                    actionType: GeneralBrowserActionType.showToast
+                )
+            )
         }
     }
 
@@ -134,6 +150,7 @@ final class VPNMiddleware {
             return
         }
         let telemetryCountryCode = selectedCountryCode ?? VPNServerManager.recommendedCountryCode
+        let wasRunning = vpnManager.isRunning
         do {
             try await vpnManager.start(countryCode: selectedCountryCode)
             telemetry.recordConnectionSucceeded(
@@ -141,6 +158,9 @@ final class VPNMiddleware {
                 countryCode: telemetryCountryCode,
                 isUsingFallback: vpnManager.isUsingFallback
             )
+            if source == .settings, !wasRunning {
+                telemetry.recordVPNSettingChanged(isEnabled: true)
+            }
             userPreferences.setPreferenceFor(.vpnFeature, to: vpnManager.isRunning)
             UIAccessibility.post(notification: .announcement, argument: String.VPN.Settings.Connected)
         } catch {
@@ -162,11 +182,20 @@ final class VPNMiddleware {
         vpnManager.selectedCountryCodeDidChange(countryCode: countryCode)
 
         // if the VPN is running when the selected location changes, start a new connection
-        guard vpnManager.isRunning else { return }
+        guard vpnManager.isRunning else {
+            telemetry.recordLocationSelected(countryCode: countryCode, isVPNConnected: false, isUsingFallback: nil)
+            return
+        }
         do {
             try await vpnManager.start(countryCode: countryCode)
+            telemetry.recordLocationSelected(
+                countryCode: countryCode,
+                isVPNConnected: true,
+                isUsingFallback: vpnManager.isUsingFallback
+            )
         } catch {
             logger.log("VPN location change failed: \(error)", level: .warning, category: .vpn)
+            telemetry.recordLocationSelected(countryCode: countryCode, isVPNConnected: true, isUsingFallback: nil)
         }
     }
 
@@ -193,8 +222,12 @@ final class VPNMiddleware {
             logger.log("VPN stop with no VPNManager registered", level: .warning, category: .vpn)
             return
         }
+        let wasRunning = vpnManager.isRunning
         await vpnManager.stop()
         telemetry.recordConnectionStopped(source: source)
+        if source == .settings, wasRunning {
+            telemetry.recordVPNSettingChanged(isEnabled: false)
+        }
         userPreferences.setPreferenceFor(.vpnFeature, to: false)
     }
 }

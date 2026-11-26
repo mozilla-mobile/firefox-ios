@@ -186,7 +186,12 @@ struct ToolbarState: ScreenState, Sendable {
         case .didSetTabScreenshot(let previousTabScreenshot, let nextTabScreenshot):
             return handleDidSetTabScreenshot(state: state, previous: previousTabScreenshot, next: nextTabScreenshot)
 
-        case .didKeyboardRequestChange, .cancelEdit, .cancelEditOnHomepage, .searchTermDidSet, .lockIconChanged,
+        case .backForwardButtonStateChanged(let canGoBack, let canGoForward):
+            return state
+                .copy(canGoBack: canGoBack ?? state.canGoBack)
+                .copy(canGoForward: canGoForward ?? state.canGoForward)
+
+        case .didKeyboardRequestChange, .cancelEdit, .searchTermDidSet, .lockIconChanged,
              .searchTermDidChange, .searchTermDidClear, .websiteLoadingStateDidChange:
             // AddressBarState is a nested sub-state, forwards modern call to AddressBarState
             return state.copy(addressToolbar: AddressBarState.reducer.modernReducer(state.addressToolbar,
@@ -227,8 +232,10 @@ struct ToolbarState: ScreenState, Sendable {
         case ToolbarActionType.didLoadToolbars:
             return handleDidLoadToolbars(state: state, action: action)
 
+        case ToolbarActionType.didStartEditingUrl:
+            return handleDidStartEditingUrl(state: state, action: action)
+
         case ToolbarActionType.urlDidChange,
-            ToolbarActionType.didStartEditingUrl,
             ToolbarMiddlewareActionType.googleLensAvailabilityDidChange,
             ToolbarActionType.didStartTyping,
             ToolbarActionType.readerModeStateChanged,
@@ -247,9 +254,6 @@ struct ToolbarState: ScreenState, Sendable {
         case GeneralBrowserMiddlewareActionType.websiteDidScroll,
             ToolbarMiddlewareActionType.urlDidChange:
             return handleScrollOffsetChanged(state: state, action: action)
-
-        case ToolbarActionType.backForwardButtonStateChanged:
-            return handleBackForwardButtonStateChanged(state: state, action: action)
 
         case SearchEngineSelectionActionType.didTapSearchEngine,
             SearchEngineSelectionMiddlewareActionType.didClearAlternativeSearchEngine:
@@ -310,6 +314,12 @@ struct ToolbarState: ScreenState, Sendable {
     }
 
     @MainActor
+    private static func handleDidStartEditingUrl(state: Self, action: Action) -> ToolbarState {
+        return handleToolbarUpdates(state: state, action: action)
+            .copy(isAddressBarMinimized: false)
+    }
+
+    @MainActor
     private static func handleShowToast(state: Self, action: Action) -> ToolbarState {
         guard let browserAction = action as? GeneralBrowserAction,
               browserAction.toastType == .shakeToSummarizeNotAvailable
@@ -318,16 +328,6 @@ struct ToolbarState: ScreenState, Sendable {
         // Update to use isAddressBarMinimized so the address bar is shown and the toast isn't presented a minimized bar.
         return state
             .copy(isAddressBarMinimized: false)
-    }
-
-    @MainActor
-    private static func handleBackForwardButtonStateChanged(state: Self, action: Action) -> ToolbarState {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-        return state
-            .copy(addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, toolbarAction))
-            .copy(navigationToolbar: NavigationBarState.reducer.legacyReducer(state.navigationToolbar, toolbarAction))
-            .copy(canGoBack: toolbarAction.canGoBack ?? state.canGoBack)
-            .copy(canGoForward: toolbarAction.canGoForward ?? state.canGoForward)
     }
 
     @MainActor

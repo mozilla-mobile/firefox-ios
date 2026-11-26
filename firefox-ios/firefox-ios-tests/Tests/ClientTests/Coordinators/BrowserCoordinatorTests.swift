@@ -269,6 +269,18 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertEqual(mockRouter.popViewControllerCalled, 1)
     }
 
+    func testShowWebview_whenVPNOnboardingIsEligible_addsVPNOnboardingChild() throws {
+        guard #available(iOS 17.0, *) else { throw XCTSkip("The VPN onboarding sheet requires iOS 17") }
+        featureFlags.enabledFlags = [.vpnFeature, .vpnOnboardingSheet]
+        tabManager.selectedTab = MockTab(profile: profile, windowUUID: windowUUID, isHomePage: false)
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+
+        subject.show(webView: WKWebView())
+
+        XCTAssertTrue(subject.childCoordinators.contains { $0 is VPNOnboardingCoordinator })
+    }
+
     // MARK: - BrowserNavigationHandler
 
     func testShowSettings() throws {
@@ -561,7 +573,7 @@ final class BrowserCoordinatorTests: XCTestCase,
         let subject = createSubject()
         subject.browserViewController = browserViewController
 
-        subject.showVPNDataLimitAlert(dataLimitBytes: 50_000_000_000)
+        subject.showVPNDataLimitAlert(dataLimitBytes: 50 * 1024 * 1024 * 1024)
 
         let alert = try XCTUnwrap(browserViewController.viewControllerToPresent as? UIAlertController)
         XCTAssertEqual(alert.title, .VPN.ReachedDataLimitPopup.Title)
@@ -572,6 +584,27 @@ final class BrowserCoordinatorTests: XCTestCase,
             .VPN.ReachedDataLimitPopup.CloseThisTab
         ])
         XCTAssertEqual(alert.actions.first?.style, .destructive)
+    }
+
+    func testShowVPNLocationUnavailableAlert_presentsAlertWithSingleAction() throws {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+
+        subject.showVPNLocationUnavailableAlert()
+
+        let alert = try XCTUnwrap(browserViewController.viewControllerToPresent as? UIAlertController)
+        XCTAssertEqual(alert.actions.count, 1)
+    }
+
+    func testShowVPNConnectionFailedAlert_presentsAlertWithPreferredCloseAndRetry() throws {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+
+        subject.showVPNConnectionFailedAlert()
+
+        let alert = try XCTUnwrap(browserViewController.viewControllerToPresent as? UIAlertController)
+        XCTAssertEqual(alert.actions.map(\.style), [.default, .default])
+        XCTAssertIdentical(alert.preferredAction, alert.actions.first)
     }
 
     func testShowVPNAlert_whileVPNAlertStillAlive_doesNotPresentAnother() throws {
@@ -1620,6 +1653,28 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertTrue(subject.childCoordinators.first is SettingsCoordinator)
         XCTAssertEqual(mockRouter.presentCalled, 1)
+    }
+
+    // MARK: - VPNOnboardingCoordinatorDelegate
+
+    func testVPNOnboardingDidTapCTA_removesChildAndPresentsVPNSettings() throws {
+        guard #available(iOS 17.0, *) else { throw XCTSkip("VPN settings require iOS 17") }
+        let subject = createSubject()
+        let vpnOnboardingCoordinator = VPNOnboardingCoordinator(
+            router: mockRouter,
+            windowUUID: windowUUID,
+            tabManager: tabManager,
+            prefs: profile.prefs,
+            onOpenURL: { _ in }
+        )
+        subject.add(child: vpnOnboardingCoordinator)
+
+        subject.vpnOnboardingDidTapCTA(from: vpnOnboardingCoordinator)
+
+        XCTAssertTrue(subject.childCoordinators.isEmpty)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        let navigationController = try XCTUnwrap(mockRouter.presentedViewController as? UINavigationController)
+        XCTAssertTrue(navigationController.viewControllers.first is VPNSettingsViewController)
     }
 
     // MARK: - Report broken site

@@ -20,6 +20,7 @@ final class VPNManagerTests: XCTestCase {
     private var mockServerManager: MockVPNServerManager!
     private var mockProxyConfigurator: MockProxyConfigurator!
     private var mockAuthCreator: MockVPNAuthCreator!
+    private var leakNoticeTracker: ProxyLeakGuardNoticeTracker!
 
     override func setUp() async throws {
         try await super.setUp()
@@ -35,6 +36,7 @@ final class VPNManagerTests: XCTestCase {
         mockServerManager = MockVPNServerManager()
         mockProxyConfigurator = MockProxyConfigurator()
         mockAuthCreator = MockVPNAuthCreator()
+        leakNoticeTracker = ProxyLeakGuardNoticeTracker()
         DependencyHelperMock().bootstrapDependencies(
             injectedProfile: mockProfile,
             injectedWindowManager: mockWindowManager
@@ -51,6 +53,7 @@ final class VPNManagerTests: XCTestCase {
         mockServerManager = nil
         mockProxyConfigurator = nil
         mockAuthCreator = nil
+        leakNoticeTracker = nil
         try await super.tearDown()
     }
 
@@ -232,6 +235,16 @@ final class VPNManagerTests: XCTestCase {
         XCTAssertEqual(subject.selectedCountryCode, "DE")
     }
 
+    func testStart_whenSelectionFallsBack_savesFallbackCountry() async throws {
+        mockServerManager.didFallBack = true
+        let subject = createSubject()
+
+        try await subject.start(countryCode: "DE")
+
+        XCTAssertEqual(subject.selectedCountryCode, "US")
+        XCTAssertEqual(mockProfile.prefs.stringForKey(PrefsKeys.VPNSettings.selectedCountryCode), "US")
+    }
+
     // MARK: - events
 
     func testStart_emitsPassUpdated() async throws {
@@ -245,6 +258,17 @@ final class VPNManagerTests: XCTestCase {
             return XCTFail("Expected passUpdated, got \(String(describing: event))")
         }
         XCTAssertEqual(pass.bearerToken, "initial-token")
+    }
+
+    func testStart_whenStartFails_emitsConnectionFailed() async {
+        mockGuardian.passResult = .failure(URLError(.notConnectedToInternet))
+        let subject = createSubject()
+        var iterator = subject.events.makeAsyncIterator()
+
+        await assertStartThrows(subject)
+
+        let event = await iterator.next()
+        XCTAssertEqual(event, .connectionFailed)
     }
 
     func testPassRotation_emitsPassUpdated() async throws {
@@ -307,6 +331,26 @@ final class VPNManagerTests: XCTestCase {
         let stopCall = try XCTUnwrap(mockProxyConfigurator.params.last)
         XCTAssertTrue(stopCall.configs.isEmpty)
         XCTAssertTrue(stopCall.forcingSessionReset)
+    }
+
+    func testStop_resetsLeakNoticeForNextSession() async throws {
+        let subject = createSubject()
+        try await subject.start(countryCode: nil)
+        XCTAssertTrue(leakNoticeTracker.shouldShowNotice())
+
+        await subject.stop()
+
+        XCTAssertTrue(leakNoticeTracker.shouldShowNotice())
+    }
+
+    func testStart_whenRunning_keepsLeakNoticeShown() async throws {
+        let subject = createSubject()
+        try await subject.start(countryCode: nil)
+        XCTAssertTrue(leakNoticeTracker.shouldShowNotice())
+
+        try await subject.start(countryCode: "DE")
+
+        XCTAssertFalse(leakNoticeTracker.shouldShowNotice())
     }
 
     // MARK: - refreshUsage
@@ -398,7 +442,8 @@ final class VPNManagerTests: XCTestCase {
             guardian: injectGuardian ? mockGuardian : nil,
             authCreator: mockAuthCreator,
             serverManager: mockServerManager,
-            proxyApplier: mockProxyConfigurator
+            proxyApplier: mockProxyConfigurator,
+            leakNoticeTracker: leakNoticeTracker
         )
         trackForMemoryLeaks(subject)
         return subject

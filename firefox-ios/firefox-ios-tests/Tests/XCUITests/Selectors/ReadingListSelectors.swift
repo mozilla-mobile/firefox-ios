@@ -18,6 +18,9 @@ protocol ReadingListSelectorsSet {
     var EMPTY_READING_LIST_3: Selector { get }
     var MARK_AS_UNREAD_BUTTON: Selector { get }
     var REMOVE_BUTTON: Selector { get }
+    var OPEN_IN_NEW_TAB_OPTION: Selector { get }
+    var REMOVE_OPTION: Selector { get }
+    var SHARE_OPTION: Selector { get }
 }
 
 struct ReadingListSelectors: ReadingListSelectorsSet {
@@ -34,6 +37,9 @@ struct ReadingListSelectors: ReadingListSelectorsSet {
         static let emptyReadingList3 = AccessibilityIdentifiers.LibraryPanels.ReadingListPanel.emptyReadingList3
         static let markUnread = "Mark as  Unread"
         static let removeButton = "Remove"
+        static let openInNewTabOption = AccessibilityIdentifiers.LibraryPanels.ReadingListPanel.ContextMenu.openInNewTab
+        static let removeOption = AccessibilityIdentifiers.LibraryPanels.ReadingListPanel.ContextMenu.remove
+        static let shareOption = AccessibilityIdentifiers.LibraryPanels.ReadingListPanel.ContextMenu.share
     }
 
     let READER_VIEW_BUTTON = Selector.buttonByLabel(
@@ -125,8 +131,27 @@ struct ReadingListSelectors: ReadingListSelectorsSet {
         groups: ["reader"]
     )
 
+    let OPEN_IN_NEW_TAB_OPTION = Selector.buttonId(
+        IDs.openInNewTabOption,
+        description: "Open in New Tab option in the Reading List context menu",
+        groups: ["reader"]
+    )
+
+    let REMOVE_OPTION = Selector.buttonId(
+        IDs.removeOption,
+        description: "Remove option in the Reading List context menu",
+        groups: ["reader"]
+    )
+
+    let SHARE_OPTION = Selector.buttonId(
+        IDs.shareOption,
+        description: "Share option in the Reading List context menu",
+        groups: ["reader"]
+    )
+
     var all: [Selector] { [READER_VIEW_BUTTON, ADD_TO_READING_LIST_BUTTON,
                            DISPLAY_SETTINGS_BUTTON, FENNEC_ALERT_TEXT, READING_TABLE,
                            DONE_BUTTON_READING_LIST, READERMODE_SETTINGS_BUTTON, EMPTY_READING_LIST_1, EMPTY_READING_LIST_2,
-                           EMPTY_READING_LIST_3, MARK_AS_UNREAD_BUTTON, REMOVE_BUTTON] }
+                           EMPTY_READING_LIST_3, MARK_AS_UNREAD_BUTTON, REMOVE_BUTTON,
+                           OPEN_IN_NEW_TAB_OPTION, REMOVE_OPTION, SHARE_OPTION] }
 }

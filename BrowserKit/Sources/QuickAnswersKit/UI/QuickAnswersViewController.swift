@@ -298,12 +298,48 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
             contentView.showOptIn()
             return
         }
-        let controller = OptInViewController(
+        present(makeOptInController(), animated: true) { [weak self] in
+            self?.revealBackdrop()
+        }
+    }
+
+    func makeOptInController() -> OnboardingSheetViewController {
+        let strings = stringsConfiguration.optInRedesign
+        let accessibilityIdentifiers = stringsConfiguration.optInAccessibilityIdentifiers
+        let sheetConfiguration = OnboardingSheetConfiguration(
+            heroImageName: StandardImageIdentifiers.Large.audioWave,
+            heroGradient: .aiStrong,
+            title: strings.title,
+            description: strings.description,
+            rows: [
+                OnboardingSheetRow(
+                    imageName: StandardImageIdentifiers.ExtraLarge.saveArrow,
+                    title: strings.nothingGetsSavedTitle,
+                    subtitle: strings.nothingGetsSavedDescription
+                ),
+                OnboardingSheetRow(
+                    imageName: StandardImageIdentifiers.ExtraLarge.personSpeaking,
+                    title: strings.privateByDesignTitle,
+                    subtitle: strings.privateByDesignDescription
+                ),
+                OnboardingSheetRow(
+                    imageName: StandardImageIdentifiers.ExtraLarge.database,
+                    title: strings.noTrainingTitle,
+                    subtitle: strings.noTrainingDescription
+                )
+            ],
+            learnMoreTitle: strings.learnMore,
+            ctaTitle: strings.continueButton,
+            closeAccessibilityLabel: stringsConfiguration.closeAccessibilityLabel,
+            ctaAccessibilityIdentifier: accessibilityIdentifiers.continueButton,
+            learnMoreAccessibilityIdentifier: accessibilityIdentifiers.learnMoreButton,
+            closeAccessibilityIdentifier: accessibilityIdentifiers.closeButton
+        )
+        let controller = OnboardingSheetViewController(
             windowUUID: windowUUID,
             themeManager: themeManager,
-            strings: stringsConfiguration.optInRedesign,
-            closeAccessibilityLabel: stringsConfiguration.closeAccessibilityLabel,
-            onContinue: { [weak self] in
+            configuration: sheetConfiguration,
+            onCTA: { [weak self] in
                 self?.presentedViewController?.dismiss(animated: true)
                 self?.viewModel.completeOptIn()
             },
@@ -314,9 +350,10 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
                 self?.dismiss(with: nil)
             }
         )
-        present(controller, animated: true) { [weak self] in
-            self?.revealBackdrop()
-        }
+        controller.modalPresentationStyle = .formSheet
+        // The choice has to be made through the buttons, so the sheet can't be dragged away.
+        controller.isModalInPresentation = true
+        return controller
     }
 
     /// Fades in this screen, which the presentation transition keeps hidden while the opt-in sheet slides up.

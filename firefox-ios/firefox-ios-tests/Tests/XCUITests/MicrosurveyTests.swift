@@ -32,7 +32,7 @@ final class MicrosurveyTests: BaseTestCase {
         */
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2776931
+    // https://mozilla.testrail.io/index.php?/cases/view/4467152
     func testShowMicrosurvey() {
         generateTriggerForMicrosurvey()
         microsurveyScreen.tapTakeSurveyButton()
@@ -43,7 +43,7 @@ final class MicrosurveyTests: BaseTestCase {
         microsurveyScreen.assertSurveyOptionUnselected(label: "Neutral")
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2776934
+    // https://mozilla.testrail.io/index.php?/cases/view/4467155
     func testCloseButtonDismissesSurveyAndPrompt() {
         generateTriggerForMicrosurvey()
         microsurveyScreen.tapTakeSurveyButton()
@@ -54,7 +54,7 @@ final class MicrosurveyTests: BaseTestCase {
         microsurveyScreen.assertPromptDismissed()
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2776933
+    // https://mozilla.testrail.io/index.php?/cases/view/4467154
     func testCloseButtonDismissesMicrosurveyPrompt() {
         // Workaround: The microsurvey prompt may not appear on the first run due to retained app
         // state or missing triggers.
@@ -68,7 +68,7 @@ final class MicrosurveyTests: BaseTestCase {
         microsurveyScreen.assertPromptDismissed()
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2776932
+    // https://mozilla.testrail.io/index.php?/cases/view/4467153
     // [Config] nav:bottombar
     func testURLBorderHiddenWhenMicrosurveyPromptShown() throws {
         guard !iPad() else {

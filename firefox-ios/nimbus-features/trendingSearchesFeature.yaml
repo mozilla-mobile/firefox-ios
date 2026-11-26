@@ -2,6 +2,7 @@
 
 features:
   trending-searches-feature:
+    no-lint: [MISSING_CONTACTS]
     description: >
       Enables trending searches.
     variables:

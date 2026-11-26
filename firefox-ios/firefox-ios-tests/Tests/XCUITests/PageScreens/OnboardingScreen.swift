@@ -162,19 +162,6 @@ final class OnboardingScreen {
         }
     }
 
-    func assertContinueButtonIsOnTheBottom() {
-        if flowType.isModernFlow {
-            // Get the last description text and make sure the button is below that
-            let lastDescriptionBlock = sel.LAST_TOS_DESCRIPTION_TEXT.element(in: app)
-            XCTAssertTrue(tosContinueButton.isBelow(element: lastDescriptionBlock),
-                          "Continue button is not displayed at the bottom of The ToS card")
-        } else {
-            let manageButton = sel.MANAGE_TEXT_BUTTON.element(in: app)
-            XCTAssertTrue(tosContinueButton.isBelow(element: manageButton),
-                          "Continue button is not displayed at the bottom of The ToS card")
-        }
-    }
-
     func assertTextsOnCurrentScreen(expectedTitle: String,
                                     expectedDescription: String,
                                     expectedPrimary: String,

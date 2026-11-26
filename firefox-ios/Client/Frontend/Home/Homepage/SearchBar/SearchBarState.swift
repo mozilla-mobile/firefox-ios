@@ -12,24 +12,25 @@ import Shared
 @Copyable
 struct SearchBarState: StateType, Equatable {
     var windowUUID: WindowUUID
-    let shouldShowSearchBar: Bool
+    // FIXME: FXIOS-17392 UI state should be moved to a homepage lens
+    let isShowingCenterSearchBar: Bool
     let isHomepageVisible: Bool
 
     init(windowUUID: WindowUUID) {
         self.init(
             windowUUID: windowUUID,
-            shouldShowSearchBar: false,
+            isShowingCenterSearchBar: false,
             isHomepageVisible: false
         )
     }
 
-    private init(
+    init(
         windowUUID: WindowUUID,
-        shouldShowSearchBar: Bool,
+        isShowingCenterSearchBar: Bool,
         isHomepageVisible: Bool
     ) {
         self.windowUUID = windowUUID
-        self.shouldShowSearchBar = shouldShowSearchBar
+        self.isShowingCenterSearchBar = isShowingCenterSearchBar
         self.isHomepageVisible = isHomepageVisible
     }
 
@@ -55,7 +56,7 @@ struct SearchBarState: StateType, Equatable {
 
         case HomepageActionType.viewWillDisappear:
             return state
-                .copy(shouldShowSearchBar: false)
+                .copy(isShowingCenterSearchBar: false)
                 .copy(isHomepageVisible: false)
 
         // Hide homepage search bar when entering zero search state or editing
@@ -73,20 +74,20 @@ struct SearchBarState: StateType, Equatable {
         }
 
         return state.copy(
-            shouldShowSearchBar: isCenterSearchEnabled && state.isHomepageVisible
+            isShowingCenterSearchBar: isCenterSearchEnabled && state.isHomepageVisible
         )
     }
 
     private static func handleHidingSearchBar(action: Action, state: Self) -> SearchBarState {
         return state.copy(
-            shouldShowSearchBar: false
+            isShowingCenterSearchBar: false
         )
     }
 
     static func defaultState(from state: SearchBarState) -> SearchBarState {
         return SearchBarState(
             windowUUID: state.windowUUID,
-            shouldShowSearchBar: state.shouldShowSearchBar,
+            isShowingCenterSearchBar: state.isShowingCenterSearchBar,
             isHomepageVisible: state.isHomepageVisible
         )
     }

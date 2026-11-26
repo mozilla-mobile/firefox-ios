@@ -421,7 +421,8 @@ private final class MockHeroImageFetcher: HeroImageFetcher, @unchecked Sendable 
     var fetchHeroImageFailedCalled = 0
 
     func fetchHeroImage(from siteURL: URL,
-                        metadataProvider: LPMetadataProvider = LPMetadataProvider()
+                        metadataProvider: LPMetadataProvider = LPMetadataProvider(),
+                        network: HTMLDataRequest = DefaultHTMLDataRequest()
     ) async throws -> UIImage {
         if let image = image {
             fetchHeroImageSucceedCalled += 1

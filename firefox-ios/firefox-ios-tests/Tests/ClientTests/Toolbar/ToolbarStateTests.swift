@@ -133,6 +133,28 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
     }
 
+    func test_didStartEditingUrlAction_whenAddressBarMinimized_restoresAddressBar() {
+        let initialState = createSubject()
+        let reducer = toolbarReducer()
+
+        let minimizedState = reducer.modernReducer(
+            initialState,
+            ToolbarModernAction.userDidScroll(minimizeAddressBar: true),
+            windowUUID
+        )
+        XCTAssertTrue(minimizedState.isAddressBarMinimized)
+
+        let newState = reducer.legacyReducer(
+            minimizedState,
+            ToolbarAction(
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.didStartEditingUrl)
+        )
+
+        XCTAssertTrue(newState.addressToolbar.isEditing)
+        XCTAssertFalse(newState.isAddressBarMinimized)
+    }
+
     func test_cancelEditAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = toolbarReducer()
@@ -140,20 +162,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         let newState = reducer.modernReducer(
             initialState,
             ToolbarModernAction.cancelEdit(url: nil),
-            windowUUID
-        )
-
-        XCTAssertEqual(newState.addressToolbar, initialState.addressToolbar)
-        XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
-    }
-
-    func test_cancelEditOnHomepageAction_returnsExpectedState() {
-        let initialState = createSubject()
-        let reducer = toolbarReducer()
-
-        let newState = reducer.modernReducer(
-            initialState,
-            ToolbarModernAction.cancelEditOnHomepage,
             windowUUID
         )
 
@@ -589,19 +597,45 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         let reducer = toolbarReducer()
 
         let urlDidChangeState = loadWebsiteAction(state: initialState, reducer: reducer)
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             urlDidChangeState,
-            ToolbarAction(
-                canGoBack: true,
-                canGoForward: false,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.backForwardButtonStateChanged
-            )
+            ToolbarModernAction.backForwardButtonStateChanged(canGoBack: false, canGoForward: true),
+            windowUUID
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertTrue(newState.canGoBack)
-        XCTAssertFalse(newState.canGoForward)
+        XCTAssertFalse(newState.canGoBack)
+        XCTAssertTrue(newState.canGoForward)
+    }
+
+    func test_backForwardButtonStateChangedAction_withOnlyCanGoBack_keepsCanGoForward() {
+        let initialState = createSubject()
+        let reducer = toolbarReducer()
+
+        let urlDidChangeState = loadWebsiteAction(state: initialState, reducer: reducer)
+        let newState = reducer.modernReducer(
+            urlDidChangeState,
+            ToolbarModernAction.backForwardButtonStateChanged(canGoBack: false, canGoForward: nil),
+            windowUUID
+        )
+
+        XCTAssertFalse(newState.canGoBack)
+        XCTAssertEqual(newState.canGoForward, urlDidChangeState.canGoForward)
+    }
+
+    func test_backForwardButtonStateChangedAction_withOnlyCanGoForward_keepsCanGoBack() {
+        let initialState = createSubject()
+        let reducer = toolbarReducer()
+
+        let urlDidChangeState = loadWebsiteAction(state: initialState, reducer: reducer)
+        let newState = reducer.modernReducer(
+            urlDidChangeState,
+            ToolbarModernAction.backForwardButtonStateChanged(canGoBack: nil, canGoForward: true),
+            windowUUID
+        )
+
+        XCTAssertTrue(newState.canGoForward)
+        XCTAssertEqual(newState.canGoBack, urlDidChangeState.canGoBack)
     }
 
     func test_traitCollectionDidChangeAction_returnsExpectedState() {
@@ -721,14 +755,10 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         let reducer = toolbarReducer()
 
         let urlDidChangeState = loadWebsiteAction(state: initialState, reducer: reducer)
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             urlDidChangeState,
-            ToolbarAction(
-                canGoBack: true,
-                canGoForward: false,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.backForwardButtonStateChanged
-            )
+            ToolbarModernAction.backForwardButtonStateChanged(canGoBack: true, canGoForward: false),
+            windowUUID
         )
 
         XCTAssertTrue(newState.shouldAnimate)

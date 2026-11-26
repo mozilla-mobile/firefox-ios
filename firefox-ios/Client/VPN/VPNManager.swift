@@ -18,6 +18,7 @@ enum VPNEvent: Equatable {
     case rotationFailed
     /// Guardian refused a pass because the monthly bandwidth quota is used up.
     case quotaExceeded(VPNProxyUsage)
+    case connectionFailed
     /// The selected location had no usable server, so a fallback server was used instead.
     case selectedLocationUnavailable
 }
@@ -45,6 +46,10 @@ protocol VPNRunnable {
     func refreshUsage() async throws
     /// Redraws views reading `selectedCountryCode` after its pref changes.
     func selectedCountryCodeDidChange(countryCode: String)
+    /// Stops pass rotation while the app is backgrounded.
+    func pauseRotation()
+    /// Restarts pass rotation if the VPN is running, rotating right away if the pass is due.
+    func resumeRotation()
 }
 
 enum VPNError: Error {
@@ -64,6 +69,7 @@ protocol ProxyConfigurator {
 struct DefaultProxyConfigurator: ProxyConfigurator {
     func applyProxyConfigurations(_ configs: [ProxyConfiguration], forcingSessionReset: Bool) {
         DefaultWKEngineConfigurationProvider.applyProxyConfigurations(configs, forcingSessionReset: forcingSessionReset)
+        VPNProxySessionProvider.shared.update(configs)
     }
 }
 
@@ -77,6 +83,7 @@ final class VPNManager: VPNRunnable {
     private let windowManager: WindowManager
     private let proxyApplier: ProxyConfigurator
     private let prefs: Prefs
+    private let leakNoticeTracker: ProxyLeakGuardNoticeTracker
     private let eventsContinuation: AsyncStream<VPNEvent>.Continuation
     let events: AsyncStream<VPNEvent>
 
@@ -124,6 +131,9 @@ final class VPNManager: VPNRunnable {
     }
 
     private var rotationTask: Task<Void, Never>?
+    /// Most recently applied pass, used to resume rotation when returning to the foreground.
+    private var latestPass: VPNProxyPass?
+    private var isRotationPaused = false
 
     init(
         logger: Logger = DefaultLogger.shared,
@@ -132,7 +142,8 @@ final class VPNManager: VPNRunnable {
         guardian: VPNGuardianProviding? = nil,
         authCreator: VPNAuthCreating = VPNAuthCreator(telemetry: DefaultVPNTelemetry()),
         serverManager: VPNServerManaging? = nil,
-        proxyApplier: ProxyConfigurator = DefaultProxyConfigurator()
+        proxyApplier: ProxyConfigurator = DefaultProxyConfigurator(),
+        leakNoticeTracker: ProxyLeakGuardNoticeTracker = .shared
     ) {
         self.logger = logger
         self.environment = VPNEnvironment(prefs: profile.prefs)
@@ -144,6 +155,7 @@ final class VPNManager: VPNRunnable {
         self.windowManager = windowManager
         self.proxyApplier = proxyApplier
         self.prefs = profile.prefs
+        self.leakNoticeTracker = leakNoticeTracker
         let (events, eventsContinuation) = AsyncStream<VPNEvent>.makeStream()
         self.events = events
         self.eventsContinuation = eventsContinuation
@@ -154,6 +166,20 @@ final class VPNManager: VPNRunnable {
     func start(countryCode: String?) async throws {
         isConnecting = true
         defer { isConnecting = false }
+        do {
+            try await connect(countryCode: countryCode)
+        } catch VPNAuthError.quotaExceeded(let usage) {
+            throw VPNAuthError.quotaExceeded(usage)
+        } catch {
+            eventsContinuation.yield(.connectionFailed)
+            throw error
+        }
+    }
+
+    private func connect(countryCode: String?) async throws {
+        // TODO: FXIOS-17399 Remove simulated VPN failure debug hooks after testing
+        try throwIfSimulatingFailure()
+
         guard let guardian = self.guardian else {
             throw VPNError.tokenProviderUnavailable
         }
@@ -167,8 +193,13 @@ final class VPNManager: VPNRunnable {
             throw VPNAuthError.quotaExceeded(usage)
         }
 
-        guard let selection = await serverManager.selectServer(countryCode: countryCode, environment: environment) else {
+        guard var selection = await serverManager.selectServer(countryCode: countryCode, environment: environment) else {
             throw VPNError.noServerFound
+        }
+        // TODO: FXIOS-17399 Remove simulated VPN failure hooks after testing
+        if consumeSimulatedLocationFallback(),
+           let fallback = await serverManager.selectServer(countryCode: nil, environment: environment) {
+            selection = VPNServerSelection(server: fallback.server, didFallBack: true)
         }
         let server = selection.server
 
@@ -193,9 +224,11 @@ final class VPNManager: VPNRunnable {
     func stop() async {
         self.rotationTask?.cancel()
         self.rotationTask = nil
+        self.latestPass = nil
         await self.applyProxyAndRebuildWebViews(configs: [])
         self.activeServer = nil
         self.isUsingFallback = false
+        self.leakNoticeTracker.vpnSessionDidEnd()
     }
 
     func listCountries() async -> [VPNServerManager.Country] {
@@ -216,13 +249,49 @@ final class VPNManager: VPNRunnable {
         }
     }
 
+    /// A rotation started during a background wake can be suspended mid-request, which exhausts
+    /// `VPNGuardian.rotationTimeout` and fails the rotation on resume, so rotation only runs in the foreground.
+    func pauseRotation() {
+        isRotationPaused = true
+        rotationTask?.cancel()
+        rotationTask = nil
+    }
+
+    /// An overdue pass rotates almost immediately, since `passRotation` floors its delay at `minRotationInterval`.
+    func resumeRotation() {
+        isRotationPaused = false
+        guard rotationTask == nil, isRunning, let latestPass else { return }
+        startPassRotation(after: latestPass)
+    }
+
+    // TODO: FXIOS-17399 Remove simulated VPN failure debug hooks after testing
+    /// One-shot debug hook: fails the next connection or location switch.
+    private func throwIfSimulatingFailure() throws {
+        let key = PrefsKeys.VPNSettings.simulateConnectionFailure
+        guard prefs.boolForKey(key) == true else { return }
+        prefs.removeObjectForKey(key)
+        throw VPNError.noServerFound
+    }
+
+    // TODO: FXIOS-17399 Remove simulated VPN failure debug hooks after testing
+    /// One-shot debug hook: returns true once if the next location switch should fall back.
+    private func consumeSimulatedLocationFallback() -> Bool {
+        let key = PrefsKeys.VPNSettings.simulateLocationFallback
+        guard isRunning, prefs.boolForKey(key) == true else { return false }
+        prefs.removeObjectForKey(key)
+        return true
+    }
+
     /// Consumes `VPNGuardian.passRotation` and reapplies the proxy configuration with the new
     /// bearer token. The endpoint is unchanged, so this rotates without forcing a session
     /// reset: WebKit keeps its existing connection pool, in-flight requests finish under the
     /// proxy's grace period, and new requests pick up the rotated header. Forcing the reset
     /// here would tear down sessions out from under webviews that are still loading.
     private func startPassRotation(after initial: VPNProxyPass) {
+        latestPass = initial
         rotationTask?.cancel()
+        rotationTask = nil
+        guard !isRotationPaused else { return }
         rotationTask = Task { [weak self] in
             guard let stream = self?.guardian?.passRotation(after: initial) else { return }
             do {
@@ -231,6 +300,7 @@ final class VPNManager: VPNRunnable {
                           let server = self.activeServer else { return }
                     let config = try self.buildProxyConfig(server: server, pass: new)
                     self.proxyApplier.applyProxyConfigurations([config], forcingSessionReset: false)
+                    self.latestPass = new
                     self.currentUsage = new.usage
                     self.eventsContinuation.yield(.passUpdated(new))
                     self.logger.log(

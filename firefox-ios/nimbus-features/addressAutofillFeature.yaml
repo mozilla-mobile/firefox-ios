@@ -1,6 +1,7 @@
 # The configuration for the addressAutofillFeature feature
 features:
   address-autofill-edit:
+    no-lint: [MISSING_CONTACTS]
     description: This property defines if the address editing is enabled in Settings
     variables:
       status:

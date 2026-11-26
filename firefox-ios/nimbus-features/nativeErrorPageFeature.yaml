@@ -1,6 +1,7 @@
 # The configuration for the nativeErrorPageFeature feature
 features:
   native-error-page-feature:
+    no-lint: [MISSING_CONTACTS]
     description: >
       This feature is for managing the roll out of the native error page feature
     variables:

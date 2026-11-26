@@ -5,6 +5,8 @@
 import Foundation
 import MozillaAppServices
 import Storage
+import Shared
+import SwiftUI
 import XCTest
 
 @testable import Client
@@ -34,6 +36,44 @@ class CreditCardInputViewModelTests: XCTestCase {
         profile = nil
         autofill = nil
         super.tearDown()
+    }
+
+    @MainActor
+    func testRemoveCardAlert_WithUpdatedStringsEnabled() {
+        let featureFlags = MockNimbusFeatureFlags()
+        featureFlags.enabledFlags = [.syncStringUpdates]
+        DependencyHelperMock().bootstrapDependencies(injectedFeatureFlagProvider: featureFlags)
+        defer { DependencyHelperMock().reset() }
+
+        let details = viewModel.signInRemoveButtonDetails
+
+        XCTAssertEqual(details.alertTitle, Text(String.CreditCard.Alert.DeleteCardTitle))
+        XCTAssertEqual(details.alertBody,
+                       Text(String(format: .CreditCard.Alert.DeleteCardSublabel, AppName.shortName.rawValue)))
+    }
+
+    @MainActor
+    func testRemoveCardAlert_WithUpdatedStringsDisabled() {
+        DependencyHelperMock().bootstrapDependencies(injectedFeatureFlagProvider: MockNimbusFeatureFlags())
+        defer { DependencyHelperMock().reset() }
+
+        let details = viewModel.signInRemoveButtonDetails
+
+        XCTAssertEqual(details.alertTitle, Text(String.CreditCard.Alert.RemoveCardTitle))
+        XCTAssertEqual(details.alertBody, Text(String.CreditCard.Alert.RemoveCardSublabel))
+    }
+
+    @MainActor
+    func testRemoveCardAlert_WithoutSyncAccountHasNoBody() {
+        let featureFlags = MockNimbusFeatureFlags()
+        featureFlags.enabledFlags = [.syncStringUpdates]
+        DependencyHelperMock().bootstrapDependencies(injectedFeatureFlagProvider: featureFlags)
+        defer { DependencyHelperMock().reset() }
+
+        let details = viewModel.regularRemoveButtonDetails
+
+        XCTAssertEqual(details.alertTitle, Text(String.CreditCard.Alert.DeleteCardTitle))
+        XCTAssertNil(details.alertBody)
     }
 
     func testEditViewModel_SavingCard() {

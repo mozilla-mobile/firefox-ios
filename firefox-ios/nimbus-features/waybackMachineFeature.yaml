@@ -1,6 +1,7 @@
 # The configuration for the waybackMachineFeature feature
 features:
   wayback-machine-feature:
+    no-lint: [MISSING_CONTACTS]
     description: >
       This property determines whether we show the wayback entry point on the native error pages
     variables:

@@ -154,9 +154,9 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
 
     func testAlertChoices_recordMatchingSource() async {
         let cases: [(VPNModernAction, VPNConnectionStopSource)] = [
-            (.continueWithoutVPN, .continueWithoutVPN),
-            (.closeThisTab, .closeThisTab),
-            (.closeAllTabs, .closeAllTabs)
+            (.continueWithoutVPN(alertType: .sessionError), .continueWithoutVPN),
+            (.closeThisTab(alertType: .sessionError), .closeThisTab),
+            (.closeAllTabs(alertType: .sessionError), .closeAllTabs)
         ]
         let subject = createSubject()
 
@@ -221,7 +221,7 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         mockUserPreferences.boolPreferences[.vpnFeature] = true
         let subject = createSubject()
 
-        await dispatchAndWaitForPreference(.continueWithoutVPN, to: subject)
+        await dispatchAndWaitForPreference(.continueWithoutVPN(alertType: .sessionError), to: subject)
 
         XCTAssertEqual(mockUserPreferences.boolPreferences[.vpnFeature], false)
     }
@@ -229,7 +229,7 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
     func testContinueWithoutVPN_stopsVPNWithoutClosingTabs() async {
         let subject = createSubject()
 
-        await dispatch(.continueWithoutVPN, to: subject)
+        await dispatch(.continueWithoutVPN(alertType: .sessionError), to: subject)
 
         XCTAssertEqual(mockVPNManager.stopCalled, 1)
         XCTAssertTrue(firstTabManager.removeTabCalledWith.isEmpty)
@@ -243,7 +243,7 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         secondTabManager.selectedTab = MockTab(profile: mockProfile, windowUUID: secondWindowUUID)
         let subject = createSubject()
 
-        await dispatch(.closeThisTab, to: subject)
+        await dispatch(.closeThisTab(alertType: .sessionError), to: subject)
 
         XCTAssertEqual(firstTabManager.removeTabCalledWith, [tab.tabUUID])
         XCTAssertTrue(secondTabManager.removeTabCalledWith.isEmpty)
@@ -253,7 +253,7 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
     func testCloseThisTab_withNoSelectedTab_stillStopsVPN() async {
         let subject = createSubject()
 
-        await dispatch(.closeThisTab, to: subject)
+        await dispatch(.closeThisTab(alertType: .sessionError), to: subject)
 
         XCTAssertTrue(firstTabManager.removeTabCalledWith.isEmpty)
         XCTAssertEqual(mockVPNManager.stopCalled, 1)
@@ -262,7 +262,7 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
     func testCloseAllTabs_closesPrivateAndNormalTabsInAllWindowsAndStopsVPN() async {
         let subject = createSubject()
 
-        await dispatch(.closeAllTabs, to: subject)
+        await dispatch(.closeAllTabs(alertType: .sessionError), to: subject)
 
         XCTAssertEqual(firstTabManager.removeAllTabsCalledWith, [true, false])
         XCTAssertEqual(secondTabManager.removeAllTabsCalledWith, [true, false])
@@ -279,9 +279,32 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         }
         let subject = createSubject()
 
-        await dispatch(.closeAllTabs, to: subject)
+        await dispatch(.closeAllTabs(alertType: .sessionError), to: subject)
 
         XCTAssertEqual(tabCountsClosedAtStop, [2, 2])
+    }
+
+    func testCloseAllTabs_dispatchesClosedTabsToastWithTotalTabCount() async throws {
+        firstTabManager.tabs = [
+            MockTab(profile: mockProfile, windowUUID: firstWindowUUID),
+            MockTab(profile: mockProfile, isPrivate: true, windowUUID: firstWindowUUID)
+        ]
+        secondTabManager.tabs = [MockTab(profile: mockProfile, windowUUID: secondWindowUUID)]
+        let toastDispatched = expectation(description: "Toast dispatched")
+        mockStore.dispatchCalled = { toastDispatched.fulfill() }
+        let subject = createSubject()
+
+        subject.vpnProvider.modernMiddleware(
+            AppState(),
+            VPNModernAction.closeAllTabs(alertType: .monthlyLimit),
+            firstWindowUUID
+        )
+        await fulfillment(of: [toastDispatched], timeout: 1)
+
+        let action = try XCTUnwrap(mockStore.dispatchedActions.first as? GeneralBrowserAction)
+        XCTAssertEqual(action.actionType as? GeneralBrowserActionType, .showToast)
+        XCTAssertEqual(action.toastType, .vpnClosedTabs(count: 3))
+        XCTAssertEqual(action.windowUUID, firstWindowUUID)
     }
 
     func testAlertAction_isIgnored() async {
@@ -372,6 +395,40 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         guard case .showFailureAlert = action else {
             return XCTFail("Expected showFailureAlert, got \(action)")
         }
+    }
+
+    func testSelectedLocationUnavailable_dispatchesLocationUnavailableAlert() async throws {
+        let subject = createSubject()
+
+        try await yieldAndWaitForDispatch(.selectedLocationUnavailable, subject: subject)
+
+        let action = try XCTUnwrap(mockStore.dispatchedModernActions.first as? VPNAlertModernAction)
+        guard case .showLocationUnavailableAlert = action else {
+            return XCTFail("Expected showLocationUnavailableAlert, got \(action)")
+        }
+    }
+
+    func testConnectionFailed_whenNotRunning_clearsPreferenceAndDispatchesAlert() async throws {
+        mockUserPreferences.setPreferenceFor(.vpnFeature, to: true)
+        let subject = createSubject()
+
+        try await yieldAndWaitForDispatch(.connectionFailed, subject: subject)
+
+        XCTAssertEqual(mockUserPreferences.boolPreferences[.vpnFeature], false)
+        let action = try XCTUnwrap(mockStore.dispatchedModernActions.first as? VPNAlertModernAction)
+        guard case .showConnectionFailedAlert = action else {
+            return XCTFail("Expected showConnectionFailedAlert, got \(action)")
+        }
+    }
+
+    func testConnectionFailed_whenStillRunning_keepsPreference() async throws {
+        mockUserPreferences.setPreferenceFor(.vpnFeature, to: true)
+        mockVPNManager.isRunning = true
+        let subject = createSubject()
+
+        try await yieldAndWaitForDispatch(.connectionFailed, subject: subject)
+
+        XCTAssertEqual(mockUserPreferences.boolPreferences[.vpnFeature], true)
     }
 
     // MARK: - Helpers
@@ -478,39 +535,5 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
         }
         subject.vpnProvider.modernMiddleware(AppState(), action, firstWindowUUID)
         await fulfillment(of: [stopped], timeout: 1)
-    }
-}
-
-private final class MockVPNClientTelemetry: VPNClientTelemetry {
-    struct Success {
-        let source: VPNConnectionStartSource
-        let countryCode: String
-        let isUsingFallback: Bool
-    }
-
-    struct Failure {
-        let source: VPNConnectionStartSource
-        let countryCode: String
-        let error: VPNConnectionFailureReason
-    }
-
-    var successes: [Success] = []
-    var failures: [Failure] = []
-    var stops: [VPNConnectionStopSource] = []
-    var onRecord: (() -> Void)?
-
-    func recordConnectionSucceeded(source: VPNConnectionStartSource, countryCode: String, isUsingFallback: Bool) {
-        successes.append(Success(source: source, countryCode: countryCode, isUsingFallback: isUsingFallback))
-        onRecord?()
-    }
-
-    func recordConnectionFailed(source: VPNConnectionStartSource, countryCode: String, error: VPNConnectionFailureReason) {
-        failures.append(Failure(source: source, countryCode: countryCode, error: error))
-        onRecord?()
-    }
-
-    func recordConnectionStopped(source: VPNConnectionStopSource) {
-        stops.append(source)
-        onRecord?()
     }
 }

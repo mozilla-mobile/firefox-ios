@@ -85,6 +85,8 @@ enum FeatureFlagID: String, CaseIterable {
     case unifiedSearch
     case videoIntroOnboarding
     case vpnFeature
+    case vpnLeakGuardToast
+    case vpnOnboardingSheet
     case wallpaperEngagementSheet
     case waybackMachine
     case webViewDocumentFetchRefactor
@@ -173,6 +175,8 @@ enum FeatureFlagID: String, CaseIterable {
                 .trendingSearches,
                 .unifiedSearch,
                 .vpnFeature,
+                .vpnLeakGuardToast,
+                .vpnOnboardingSheet,
                 .waybackMachine,
                 .webViewDocumentFetchRefactor:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey

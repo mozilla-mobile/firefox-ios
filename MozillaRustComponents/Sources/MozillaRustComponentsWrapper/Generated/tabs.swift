@@ -1243,6 +1243,7 @@ public struct ClientRemoteTabs: Equatable, Hashable {
     public var remoteTabs: [RemoteTabRecord]
     public var tabGroups: [String: TabGroup]
     public var windows: [String: Window]
+    public var tabsDisabled: Bool
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
@@ -1252,7 +1253,7 @@ public struct ClientRemoteTabs: Equatable, Hashable {
          */clientId: String, clientName: String, deviceType: DeviceType, 
         /**
          * Number of ms since the unix epoch (as reported by the server's clock)
-         */lastModified: Int64, remoteTabs: [RemoteTabRecord], tabGroups: [String: TabGroup], windows: [String: Window]) {
+         */lastModified: Int64, remoteTabs: [RemoteTabRecord], tabGroups: [String: TabGroup], windows: [String: Window], tabsDisabled: Bool = false) {
         self.clientId = clientId
         self.clientName = clientName
         self.deviceType = deviceType
@@ -1260,6 +1261,7 @@ public struct ClientRemoteTabs: Equatable, Hashable {
         self.remoteTabs = remoteTabs
         self.tabGroups = tabGroups
         self.windows = windows
+        self.tabsDisabled = tabsDisabled
     }
 
     
@@ -1284,7 +1286,8 @@ public struct FfiConverterTypeClientRemoteTabs: FfiConverterRustBuffer {
                 lastModified: FfiConverterInt64.read(from: &buf), 
                 remoteTabs: FfiConverterSequenceTypeRemoteTabRecord.read(from: &buf), 
                 tabGroups: FfiConverterDictionaryStringTypeTabGroup.read(from: &buf), 
-                windows: FfiConverterDictionaryStringTypeWindow.read(from: &buf)
+                windows: FfiConverterDictionaryStringTypeWindow.read(from: &buf), 
+                tabsDisabled: FfiConverterBool.read(from: &buf)
         )
     }
 
@@ -1296,6 +1299,7 @@ public struct FfiConverterTypeClientRemoteTabs: FfiConverterRustBuffer {
         FfiConverterSequenceTypeRemoteTabRecord.write(value.remoteTabs, into: &buf)
         FfiConverterDictionaryStringTypeTabGroup.write(value.tabGroups, into: &buf)
         FfiConverterDictionaryStringTypeWindow.write(value.windows, into: &buf)
+        FfiConverterBool.write(value.tabsDisabled, into: &buf)
     }
 }
 
@@ -1319,13 +1323,15 @@ public struct LocalTabsInfo: Equatable, Hashable {
     public var tabs: [RemoteTabRecord]
     public var tabGroups: [String: TabGroup]
     public var windows: [String: Window]
+    public var tabsDisabled: Bool
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(tabs: [RemoteTabRecord], tabGroups: [String: TabGroup], windows: [String: Window]) {
+    public init(tabs: [RemoteTabRecord], tabGroups: [String: TabGroup], windows: [String: Window], tabsDisabled: Bool = false) {
         self.tabs = tabs
         self.tabGroups = tabGroups
         self.windows = windows
+        self.tabsDisabled = tabsDisabled
     }
 
     
@@ -1346,7 +1352,8 @@ public struct FfiConverterTypeLocalTabsInfo: FfiConverterRustBuffer {
             try LocalTabsInfo(
                 tabs: FfiConverterSequenceTypeRemoteTabRecord.read(from: &buf), 
                 tabGroups: FfiConverterDictionaryStringTypeTabGroup.read(from: &buf), 
-                windows: FfiConverterDictionaryStringTypeWindow.read(from: &buf)
+                windows: FfiConverterDictionaryStringTypeWindow.read(from: &buf), 
+                tabsDisabled: FfiConverterBool.read(from: &buf)
         )
     }
 
@@ -1354,6 +1361,7 @@ public struct FfiConverterTypeLocalTabsInfo: FfiConverterRustBuffer {
         FfiConverterSequenceTypeRemoteTabRecord.write(value.tabs, into: &buf)
         FfiConverterDictionaryStringTypeTabGroup.write(value.tabGroups, into: &buf)
         FfiConverterDictionaryStringTypeWindow.write(value.windows, into: &buf)
+        FfiConverterBool.write(value.tabsDisabled, into: &buf)
     }
 }
 

@@ -1,5 +1,6 @@
 features:
   search:
+    no-lint: [MISSING_CONTACTS]
     description: >
       Configuring the functionality to do with search.
       This will be separated into smaller sub-features in later releases.

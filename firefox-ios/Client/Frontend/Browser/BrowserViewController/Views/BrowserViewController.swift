@@ -67,7 +67,7 @@ class BrowserViewController: UIViewController,
         case abandoned
     }
 
-    typealias SubscriberStateType = BrowserViewControllerState
+    typealias SubscriberStateType = BrowserViewControllerLens
 
     private let KVOs: [KVOConstants] = [
         .estimatedProgress,
@@ -449,7 +449,7 @@ class BrowserViewController: UIViewController,
     let contextMenuTelemetry: ContextMenuTelemetry
     let crashTracker: CrashTracker
     let ratingPromptManager: RatingPromptManager
-    private(set) var browserViewControllerState: BrowserViewControllerState?
+    private(set) var browserViewControllerLens: BrowserViewControllerLens?
     var appAuthenticator: AppAuthenticationProtocol
     let searchEnginesManager: SearchEnginesManager
     private let summarizerNimbusUtils: SummarizerNimbusUtils
@@ -1029,7 +1029,11 @@ class BrowserViewController: UIViewController,
     }
 
     private func dismissModalsIfStartAtHome() {
-        guard browserViewControllerState?.shouldStartAtHome ?? false, presentedViewController != nil else { return }
+        guard browserViewControllerLens?.browserViewControllerState.shouldStartAtHome ?? false,
+              presentedViewController != nil else {
+            return
+        }
+
         dismissVC()
     }
 
@@ -1050,7 +1054,7 @@ class BrowserViewController: UIViewController,
         let uuid = self.windowUUID
         store.subscribe(self, transform: {
             $0.select({ appState in
-                return BrowserViewControllerState(appState: appState, uuid: uuid)
+                return BrowserViewControllerLens(appState: appState, uuid: uuid)
             })
         })
     }
@@ -1063,28 +1067,28 @@ class BrowserViewController: UIViewController,
         // Note: actual `store.unsubscribe()` is not strictly needed; Redux uses weak subscribers
     }
 
-    func newState(state: BrowserViewControllerState) {
-        browserViewControllerState = state
+    func newState(state: BrowserViewControllerLens) {
+        browserViewControllerLens = state
 
-        if state.reloadWebView {
-            updateContentInHomePanel(state.browserViewType)
+        if state.browserViewControllerState.reloadWebView {
+            updateContentInHomePanel(state.browserViewControllerState.browserViewType)
         }
 
-        if let toast = state.toast {
+        if let toast = state.browserViewControllerState.toast {
             self.showToastType(toast: toast)
         }
 
-        if state.showOverlay == true {
+        if state.browserViewControllerState.showOverlay == true {
             overlayManager.openNewTab(url: nil, newTabSettings: newTabSettings)
-        } else if state.showOverlay == false {
+        } else if state.browserViewControllerState.showOverlay == false {
             overlayManager.cancelEditing(shouldCancelLoading: false)
         }
 
         executeNavigationAndDisplayActions()
 
-        handleMicrosurvey(state: state)
+        handleMicrosurvey(state: state.browserViewControllerState)
         if featureFlagsProvider.isEnabled(.translationLanguagePicker) {
-            handleAutoTranslatePrompt(state: state)
+            handleAutoTranslatePrompt(state: state.browserViewControllerState)
         }
 
         if let selectedTab = tabManager.selectedTab,
@@ -1097,14 +1101,15 @@ class BrowserViewController: UIViewController,
         }
 
         dismissModalsIfStartAtHome()
-        addressToolbarContainer.isHidden = state.isCenterSearchBarShowing
+        addressToolbarContainer.isHidden = state.homepageSearchBarState.isShowingCenterSearchBar
     }
 
     private func showToastType(toast: ToastType) {
         // This toast is generated from GeneralBrowserActionType.showToast
         switch toast {
         case .clearCookies,
-                .shakeToSummarizeNotAvailable:
+                .shakeToSummarizeNotAvailable,
+                .vpnClosedTabs:
             showPlainToast(message: toast.title)
         case .addBookmark(let urlString):
             showBookmarkToast(urlString: urlString, action: .add)
@@ -2781,7 +2786,7 @@ class BrowserViewController: UIViewController,
     // MARK: - Handle navigation
 
     private func executeNavigationAndDisplayActions() {
-        guard let state = browserViewControllerState else { return }
+        guard let state = browserViewControllerLens?.browserViewControllerState else { return }
 
         switch state {
         case _ where state.navigateTo != nil:
@@ -2806,12 +2811,12 @@ class BrowserViewController: UIViewController,
     private func dispatchBackForwardToolbarAction(canGoBack: Bool? = nil,
                                                   canGoForward: Bool? = nil,
                                                   windowUUID: UUID) {
+        // Skip when both values are nil, there is nothing to update. If only one is set, the
+        // reducer keeps the current state for the other.
         guard canGoBack != nil || canGoForward != nil else { return }
-        let action = ToolbarAction(canGoBack: canGoBack,
-                                   canGoForward: canGoForward,
-                                   windowUUID: windowUUID,
-                                   actionType: ToolbarActionType.backForwardButtonStateChanged)
-        store.dispatch(action)
+
+        let action = ToolbarModernAction.backForwardButtonStateChanged(canGoBack: canGoBack, canGoForward: canGoForward)
+        store.dispatch(action, forWindowUUID: windowUUID)
     }
 
     /// Used to handle general navigation for views that can be presented from multiple places
@@ -2950,6 +2955,10 @@ class BrowserViewController: UIViewController,
             navigationHandler?.showVPNFailureAlert()
         case .vpnDataLimitAlert(let dataLimitBytes):
             navigationHandler?.showVPNDataLimitAlert(dataLimitBytes: dataLimitBytes)
+        case .vpnLocationUnavailableAlert:
+            navigationHandler?.showVPNLocationUnavailableAlert()
+        case .vpnConnectionFailedAlert:
+            navigationHandler?.showVPNConnectionFailedAlert()
         }
     }
 
@@ -3092,7 +3101,7 @@ class BrowserViewController: UIViewController,
     }
 
     func didTapOnHome() {
-        guard browserViewControllerState?.navigateTo == .home else { return }
+        guard browserViewControllerLens?.browserViewControllerState.navigateTo == .home else { return }
 
         let page = NewTabAccessors.getHomePage(self.profile.prefs)
         if page == .homePage, let homePageURL = HomeButtonHomePageAccessors.getHomePage(self.profile.prefs) {
@@ -3230,7 +3239,7 @@ class BrowserViewController: UIViewController,
 
     func dispatchAvailableContentHeightChangedAction() {
         // Avoid redundant state updates when neither calculated value changed.
-        guard let browserViewControllerState,
+        guard let browserViewControllerState = browserViewControllerLens?.browserViewControllerState,
            browserViewControllerState.browserViewType == .normalHomepage || contentContainer.hasHomepage,
            let homepageState = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID)
         else { return }
@@ -3912,7 +3921,8 @@ class BrowserViewController: UIViewController,
     // MARK: Overlay View
     // Disable search suggests view only if user is in private mode and setting is enabled
     private var shouldDisableSearchSuggestsForPrivateMode: Bool {
-        let alwaysShowSearchSuggestionsView = browserViewControllerState?
+        let alwaysShowSearchSuggestionsView = browserViewControllerLens?
+            .browserViewControllerState
             .searchScreenState
             .showSearchSugestionsView ?? false
 
@@ -4475,6 +4485,20 @@ extension BrowserViewController: LegacyTabDelegate {
         let printHelper = PrintHelper(tab: tab)
         tab.addContentScriptToPage(printHelper, name: PrintHelper.name())
 
+        if DefaultWKEngineConfigurationProvider.isProxyEnabled {
+            let proxyLeakGuardHelper = ProxyLeakGuardHelper()
+            proxyLeakGuardHelper.onBlockedRequest = { [weak self, weak tab] _, _ in
+                guard let self,
+                      let tab,
+                      tab === self.tabManager.selectedTab,
+                      self.featureFlagsProvider.isEnabled(.vpnLeakGuardToast),
+                      ProxyLeakGuardNoticeTracker.shared.shouldShowNotice()
+                else { return }
+                self.showProxyLeakGuardToast(isPrivate: tab.isPrivate)
+            }
+            tab.addContentScriptToPage(proxyLeakGuardHelper, name: ProxyLeakGuardHelper.name())
+        }
+
         let nightModeHelper = NightModeHelper()
         tab.addContentScriptToCustomWorld(nightModeHelper, name: NightModeHelper.name())
 
@@ -4958,6 +4982,18 @@ extension BrowserViewController: TabManagerDelegate {
         updateTabCountUsingTabManager(tabManager)
     }
 
+    private func showProxyLeakGuardToast(isPrivate: Bool) {
+        let viewModel = ButtonToastViewModel(labelText: .VPN.ProxyLeakGuard.BlockedContentToast,
+                                             buttonText: .VPN.ProxyLeakGuard.LearnMoreButton)
+        let toast = ButtonToast(viewModel: viewModel,
+                                theme: currentTheme(),
+                                completion: { [weak self] buttonPressed in
+            guard buttonPressed else { return }
+            self?.openURLInNewTab(ProxyLeakGuardHelper.learnMoreURL, isPrivate: isPrivate)
+        })
+        show(toast: toast)
+    }
+
     func showPlainToast(message: String) {
         let viewModel = PlainToastViewModel(labelText: message)
         let toast = PlainToast(viewModel: viewModel, theme: currentTheme(), completion: nil)
@@ -5056,7 +5092,7 @@ extension BrowserViewController {
                       failure: @escaping @MainActor @Sendable () -> Void) {
         makeURLSession(
             userAgent: UserAgent.fxaUserAgent,
-            configuration: URLSessionConfiguration.defaultMPTCP).dataTask(with: url
+            configuration: URLSessionConfiguration.defaultMPTCP.withVPNProxy()).dataTask(with: url
             ) { (data, response, error) in
             if validatedHTTPResponse(response, statusCode: 200..<300) != nil,
                let data = data {

@@ -139,10 +139,12 @@ public enum StandardImageIdentifiers {
 
     // Icon size 30x30
     public enum ExtraLarge {
+        public static let checkmarkBadge = "checkmarkBadgeExtraLarge"
         public static let crossCircleFill = "crossCircleFillExtraLarge"
         public static let database = "databaseExtraLarge"
         public static let personSpeaking = "personSpeakingExtraLarge"
         public static let saveArrow = "saveArrowExtraLarge"
+        public static let wifi = "wifiExtraLarge"
     }
 
     // Icon size 72x72

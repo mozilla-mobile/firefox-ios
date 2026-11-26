@@ -57,7 +57,7 @@ final class NovaTabGroupTokenTests: XCTestCase {
             (\.gradientTabBorderCyan, [NovaColors.Cyan40, NovaColors.Cyan50]),
             (\.gradientTabBorderGreen, [NovaColors.Green40, NovaColors.Green50])
         ]
-        let lightNeutralStop = UIColor(rgb: 0x14092b).withAlphaComponent(0.7)
+        let lightNeutralStop = NovaColors.VioletDesaturated90.withAlphaComponent(0.7)
         let darkNeutralStop = NovaColors.VioletDesaturated0.withAlphaComponent(0.7)
         let themeSpecific = [
             GradientMapping(key: \.gradientTabBorderGrey,

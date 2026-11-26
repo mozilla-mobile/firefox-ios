@@ -5,6 +5,7 @@
 import AppAttestKit
 import Foundation
 import Glean
+import Shared
 import VPNKit
 
 enum VPNConnectionFailureReason: String {
@@ -73,12 +74,31 @@ enum VPNConnectionStopSource: String {
     case closeAllTabs = "close_all_tabs"
 }
 
+enum VPNAlertType: String {
+    case monthlyLimit = "monthly_limit"
+    case sessionError = "session_error"
+}
+
+enum VPNAlertOption: String {
+    case continueWithoutVPN = "continue_without_vpn"
+    case closeThisTab = "close_this_tab"
+    case closeAllTabs = "close_all_tabs"
+}
+
 /// Records VPN events that originate in the client rather than in VPNKit.
 protocol VPNClientTelemetry {
     /// `countryCode` is the selected location, or `VPNServerManager.recommendedCountryCode`.
     func recordConnectionSucceeded(source: VPNConnectionStartSource, countryCode: String, isUsingFallback: Bool)
     func recordConnectionFailed(source: VPNConnectionStartSource, countryCode: String, error: VPNConnectionFailureReason)
     func recordConnectionStopped(source: VPNConnectionStopSource)
+    func recordVPNSettingChanged(isEnabled: Bool)
+    /// `isUsingFallback` is only known when the VPN was connected and reconnected successfully.
+    func recordLocationSelected(countryCode: String, isVPNConnected: Bool, isUsingFallback: Bool?)
+    func recordAlertOptionSelected(_ option: VPNAlertOption, alertType: VPNAlertType)
+    func recordOnboardingShown()
+    func recordOnboardingCancelled()
+    func recordOnboardingPrimaryButtonTapped()
+    func recordOnboardingLearnMoreLinkTapped()
 }
 
 struct DefaultVPNTelemetry: VPNTelemetry, VPNClientTelemetry {
@@ -119,5 +139,46 @@ struct DefaultVPNTelemetry: VPNTelemetry, VPNClientTelemetry {
     func recordConnectionStopped(source: VPNConnectionStopSource) {
         let extras = GleanMetrics.Vpn.ConnectionStoppedExtra(source: source.rawValue)
         gleanWrapper.recordEvent(for: GleanMetrics.Vpn.connectionStopped, extras: extras)
+    }
+
+    func recordVPNSettingChanged(isEnabled: Bool) {
+        SettingsTelemetry(gleanWrapper: gleanWrapper).changedSetting(
+            PrefsKeys.Settings.vpnFeature,
+            to: String(isEnabled),
+            from: String(!isEnabled)
+        )
+    }
+
+    func recordLocationSelected(countryCode: String, isVPNConnected: Bool, isUsingFallback: Bool?) {
+        let extras = GleanMetrics.SettingsVpnLocationList.LocationSelectedExtra(
+            countryCode: countryCode,
+            isUsingFallback: isUsingFallback,
+            isVpnConnected: isVPNConnected
+        )
+        gleanWrapper.recordEvent(for: GleanMetrics.SettingsVpnLocationList.locationSelected, extras: extras)
+    }
+
+    func recordAlertOptionSelected(_ option: VPNAlertOption, alertType: VPNAlertType) {
+        let extras = GleanMetrics.VpnSessionErrorAlert.OptionSelectedExtra(
+            errorType: alertType.rawValue,
+            option: option.rawValue
+        )
+        gleanWrapper.recordEvent(for: GleanMetrics.VpnSessionErrorAlert.optionSelected, extras: extras)
+    }
+
+    func recordOnboardingShown() {
+        gleanWrapper.recordEvent(for: GleanMetrics.Vpn.onboardingShown)
+    }
+
+    func recordOnboardingCancelled() {
+        gleanWrapper.recordEvent(for: GleanMetrics.Vpn.onboardingCancelled)
+    }
+
+    func recordOnboardingPrimaryButtonTapped() {
+        gleanWrapper.recordEvent(for: GleanMetrics.Vpn.onboardingPrimaryButtonTapped)
+    }
+
+    func recordOnboardingLearnMoreLinkTapped() {
+        gleanWrapper.recordEvent(for: GleanMetrics.Vpn.onboardingLearnMoreLinkTapped)
     }
 }

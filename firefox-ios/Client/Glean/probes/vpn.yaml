@@ -80,3 +80,75 @@ vpn:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
+  onboarding_shown:
+    type: event
+    description: |
+      Recorded when the VPN onboarding sheet is presented.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-17440
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/36773
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  onboarding_cancelled:
+    type: event
+    description: |
+      Recorded when the user dismisses the VPN onboarding sheet with the close
+      button or by swiping it down.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-17440
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/36773
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  onboarding_primary_button_tapped:
+    type: event
+    description: |
+      Recorded when the user taps "Turn On VPN" on the VPN onboarding sheet.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-17440
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/36773
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  onboarding_learn_more_link_tapped:
+    type: event
+    description: |
+      Recorded when the user taps the "Learn more" link on the VPN onboarding
+      sheet.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-17440
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/36773
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+
+vpn.session_error_alert:
+  option_selected:
+    type: event
+    description: |
+      Recorded when the user picks an option on a VPN alert shown mid-session,
+      either because the monthly data limit was reached or because of a
+      session error.
+    extra_keys:
+      error_type:
+        type: string
+        description: |
+          Why the alert was shown. One of `monthly_limit` or `session_error`
+          (see `VPNAlertType`).
+      option:
+        type: string
+        description: |
+          The option the user picked. One of `continue_without_vpn`,
+          `close_this_tab` or `close_all_tabs` (see `VPNAlertOption`).
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/VPN-7852
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/36694
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never

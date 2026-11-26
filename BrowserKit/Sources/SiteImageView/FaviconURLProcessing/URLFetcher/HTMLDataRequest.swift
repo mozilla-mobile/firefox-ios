@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 
 protocol HTMLDataRequest: Sendable {
@@ -19,7 +20,7 @@ struct DefaultHTMLDataRequest: HTMLDataRequest {
     }
 
     func fetchDataForURL(_ url: URL) async throws -> Data {
-        let configuration = URLSessionConfiguration.ephemeral
+        let configuration = URLSessionConfiguration.ephemeral.withVPNProxy()
         // Some websites (e.g. crates.io as a search engine) respond with 404 if we are missing the Accept header
         configuration.httpAdditionalHeaders = [
             "User-Agent": RequestConstants.userAgent,

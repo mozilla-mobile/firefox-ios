@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import WebKit
 
@@ -60,9 +61,12 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
     private static let defaultDataDetectorTypes: WKDataDetectorTypes = [.phoneNumber]
     public private(set) static var isProxyEnabled = false
     private let configuration: WKWebViewConfiguration
+    private let logger: Logger
 
-    public init(configuration: WKWebViewConfiguration = WKWebViewConfiguration()) {
+    public init(configuration: WKWebViewConfiguration = WKWebViewConfiguration(),
+                logger: Logger = DefaultLogger.shared) {
         self.configuration = configuration
+        self.logger = logger
     }
 
     /// Inert OHTTP config appended to every stack, to make WebKit drop its existing sessions
@@ -105,6 +109,33 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
         isProxyEnabled = !configs.isEmpty
     }
 
+    /// Before iOS 27.2 WebTransport bypasses the built-in relay proxy. The guard in user scripts hides it from pages,
+    /// but (raw, shared and service) workers can still use it, and user scripts never run there.
+    /// WebKit has no public API to turn it off, so this uses the private feature flag. This is the only switch that
+    /// covers every context. It is off from launch rather than only while the VPN is on, because a service or shared
+    /// worker started earlier might keep the preferences it started with.
+    ///
+    /// Turning it off costs little: WebKit only supports WebTransport from iOS 26.4+, its usage on the web is still
+    /// very low (Chrome usage stats: https://chromestatus.com/metrics/feature/timeline/popularity/3472), 
+    /// and few sites serve HTTP/3 over QUIC at all. Users who need the API can update to iOS 27.2+.
+    ///
+    /// If Apple renames the key or removes interface, WebTransport silently stays on, so that case is logged.
+    func disableWebTransport(on preferences: WKPreferences, featureKey: String = "WebTransportEnabled") {
+        let featuresSelector = NSSelectorFromString("_features")
+        let setEnabledSelector = NSSelectorFromString("_setEnabled:forFeature:")
+        guard (WKPreferences.self as AnyObject).responds(to: featuresSelector),
+              preferences.responds(to: setEnabledSelector),
+              let features = (WKPreferences.self as AnyObject).value(forKey: "_features") as? [NSObject],
+              let webTransport = features.first(where: { $0.value(forKey: "key") as? String == featureKey })
+        else {
+            logger.log("Couldn't disable WebTransport: WebKit's feature flag or the \(featureKey) key is missing",
+                       level: .warning,
+                       category: .webview)
+            return
+        }
+        preferences.perform(setEnabledSelector, with: nil, with: webTransport)
+    }
+
     public func endPrivateBrowsingSession() {
         if #available(iOS 17.0, *) {
             let currentProxyConfigs = Self.nonPersistentStore.proxyConfigurations
@@ -122,6 +153,9 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
         configuration.userContentController = WKUserContentController()
         configuration.allowsInlineMediaPlayback = true
         configuration.dataDetectorTypes = DefaultWKEngineConfigurationProvider.defaultDataDetectorTypes
+        if #unavailable(iOS 27.2) {
+            disableWebTransport(on: configuration.preferences)
+        }
 
         // TODO: FXIOS-8086 - Evaluate if ignoresViewportScaleLimits is still needed
         // We do this to go against the configuration of the <meta name="viewport">

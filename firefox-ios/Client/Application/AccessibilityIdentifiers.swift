@@ -35,6 +35,14 @@ enum AccessibilityIdentifiers {
         static let topBorder = "TabToolbar.toolbarTopBorderView"
     }
 
+    enum QuickAnswers {
+        enum OptIn {
+            static let continueButton = "QuickAnswers.OptIn.continueButton"
+            static let learnMoreButton = "QuickAnswers.OptIn.learnMoreButton"
+            static let closeButton = "QuickAnswers.OptIn.closeButton"
+        }
+    }
+
     enum Browser {
         enum QuickAnswers {
             static let returnPill = "Browser.QuickAnswers.ReturnPill"
@@ -300,6 +308,17 @@ enum AccessibilityIdentifiers {
                 static let view = "TopSites.AddShortcutAlert"
                 static let urlTextField = "TopSites.AddShortcutAlert.URLTextField"
             }
+
+            enum ContextMenu {
+                static let pin = "TopSites.ContextMenu.Pin"
+                static let unpin = "TopSites.ContextMenu.Unpin"
+                static let remove = "TopSites.ContextMenu.Remove"
+                static let settings = "TopSites.ContextMenu.Settings"
+                static let sponsoredContent = "TopSites.ContextMenu.SponsoredContent"
+                static let openInNewTab = "TopSites.ContextMenu.OpenInNewTab"
+                static let openInPrivateTab = "TopSites.ContextMenu.OpenInPrivateTab"
+                static let share = "TopSites.ContextMenu.Share"
+            }
         }
 
         enum SearchBar {
@@ -483,11 +502,24 @@ enum AccessibilityIdentifiers {
             static let emptyReadingList1 = "Welcome to your Reading List"
             static let emptyReadingList2 = "Open articles in Reader View by tapping the book icon when it appears in the title bar."
             static let emptyReadingList3 = "Save pages to your Reading List by tapping the book plus icon in the Reader View controls."
+
+            enum ContextMenu {
+                static let openInNewTab = "ReadingListPanel.ContextMenu.OpenInNewTab"
+                static let openInPrivateTab = "ReadingListPanel.ContextMenu.OpenInPrivateTab"
+                static let remove = "ReadingListPanel.ContextMenu.Remove"
+                static let share = "ReadingListPanel.ContextMenu.Share"
+            }
         }
 
         enum DownloadsPanel {
             static let tableView = "DownloadsTable"
         }
+    }
+
+    enum VPNOnboardingSheet {
+        static let closeButton = "VPNOnboardingSheet.closeButton"
+        static let ctaButton = "VPNOnboardingSheet.ctaButton"
+        static let learnMoreButton = "VPNOnboardingSheet.learnMoreButton"
     }
 
     enum WallpaperEngagementSheet {

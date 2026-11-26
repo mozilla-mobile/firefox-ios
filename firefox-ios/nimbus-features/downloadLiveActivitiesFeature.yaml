@@ -1,6 +1,9 @@
 # The configuration for the downloadLiveActivitiesFeature feature
 features:
   download-live-activities-feature:
+    no-lint:
+      - MISSING_CONTACTS
+      - TERSE_DESCRIPTION
     description: >
       Download Live Activities Feature
     variables:

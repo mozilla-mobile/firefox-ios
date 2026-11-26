@@ -1,6 +1,7 @@
 # The configuration for the automatic https upgrade feature
 features:
   https-upgrade-feature:
+    no-lint: [MISSING_CONTACTS]
     description: >
       This feature enables automatic https upgrade. This is only available for 18.2+.
     variables:

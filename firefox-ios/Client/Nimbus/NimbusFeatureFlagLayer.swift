@@ -259,6 +259,12 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .vpnFeature:
             return checkVPNFeature()
 
+        case .vpnLeakGuardToast:
+            return checkVPNLeakGuardToastFeature()
+
+        case .vpnOnboardingSheet:
+            return checkVPNOnboardingSheetFeature()
+
         case .wallpaperEngagementSheet:
             return checkWallpaperEngagementSheetFeature()
 
@@ -589,6 +595,14 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkVPNFeature() -> Bool {
         return nimbus.features.vpnFeature.value().enabled
+    }
+
+    private func checkVPNLeakGuardToastFeature() -> Bool {
+        return nimbus.features.vpnFeature.value().leakGuardToast
+    }
+
+    private func checkVPNOnboardingSheetFeature() -> Bool {
+        return nimbus.features.vpnFeature.value().onboardingSheet
     }
 
     private func checkWallpaperEngagementSheetFeature() -> Bool {

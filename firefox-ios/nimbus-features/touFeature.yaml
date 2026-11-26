@@ -1,6 +1,7 @@
 # The configuration for the touFeature feature
 features:
   tou-feature:
+    no-lint: [MISSING_CONTACTS]
     description: >
       This feature is for managing the rollout of the Terms of Use (ToU) implementation.
     variables:

@@ -143,6 +143,12 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     func showVPNDataLimitAlert(dataLimitBytes: Int64)
 
     @MainActor
+    func showVPNLocationUnavailableAlert()
+
+    @MainActor
+    func showVPNConnectionFailedAlert()
+
+    @MainActor
     func searchGoogleLens(with image: UIImage,
                           source: GoogleLensTelemetry.Source,
                           searchTimerId: GleanTimerId?)
