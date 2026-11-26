@@ -6,7 +6,7 @@
 "use strict";
 
 import "Assets/CC_Script/Helpers.ios.mjs";
-import { Logic } from "Assets/CC_Script/LoginManager.shared.sys.mjs";
+import { LoginHelperDOM } from "Assets/CC_Script/LoginHelperDOM.sys.mjs";
 import { PasswordGenerator } from "resource://gre/modules/PasswordGenerator.sys.mjs";
 import { LoginFormFactory } from "resource://gre/modules/shared/LoginFormFactory.sys.mjs";
 import { PasswordRulesParser } from "Assets/CC_Script/PasswordRulesParser.sys.mjs"
@@ -101,7 +101,7 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
       if (!(element instanceof HTMLInputElement))
         return false;
 
-      if (!Logic.inputTypeIsCompatibleWithUsername(element)) {
+      if (!LoginHelperDOM.inputTypeIsCompatibleWithUsername(element)) {
         return false;
       }
       return true;
@@ -458,7 +458,7 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
       const domainRules = PasswordRulesParser.parsePasswordRules(
         rules["password-rules"] ?? ""
       );
-      mapOfRules = Logic.transformRulesToMap(domainRules);
+      mapOfRules = PasswordRulesParser.transformRulesToMap(domainRules);
     }
 
     const generatedPassword = PasswordGenerator.generatePassword({
@@ -474,7 +474,7 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
     this.yieldFocusBackToField();
     const passwordField = LoginManagerContent.activeField;
     passwordField?.setUserInput(password);
-    const confirmationField = Logic.findConfirmationField(passwordField, LoginFormFactory);
+    const confirmationField = LoginHelperDOM.findConfirmationField(passwordField, LoginFormFactory);
     confirmationField?.setUserInput(password);
     LoginManagerContent.fromFill = false
   }
@@ -529,10 +529,10 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
     const field = event.target;
     let [username, password] = getUsernameAndPassword(field, false);
     const formHasNewPassword =
-      password && Logic.isProbablyANewPasswordField(password);
+      password && LoginHelperDOM.isProbablyANewPasswordField(password);
     const isPasswordField = field === password;
     const isLoginField = field === username || isPasswordField;
-    let isEmail = Logic.isInferredEmailField(field);
+    let isEmail = LoginHelperDOM.isInferredEmailField(field);
 
     if(!isLoginField && !isEmail) {
       return ;
