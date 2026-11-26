@@ -40,6 +40,7 @@ final class BrowserCoordinator: BaseCoordinator,
                           WebCompatReportCoordinatorNavigationDelegate,
                           BrowsingSettingsDelegate,
                           WallpaperEngagementCoordinatorDelegate,
+                          VPNOnboardingCoordinatorDelegate,
                           FeatureFlaggable {
     private enum UX {
         static let searchEnginePopoverSize = CGSize(width: 250, height: 536)
@@ -74,6 +75,13 @@ final class BrowserCoordinator: BaseCoordinator,
     private var pendingOnboardingCardAction: OnboardingCardButtonAction = .none
     private let quickAnswersSessionStorage: QuickAnswersSessionStorage
     private let quickAnswersPillTelemetry: QuickAnswersReturnPillTelemetry
+    /// Whether a child owns a sheet that is on screen or about to be, so no other sheet is shown over it.
+    private var isShowingBlockingSheet: Bool {
+        return childCoordinators.contains { child in
+            if #available(iOS 17.0, *), child is VPNOnboardingCoordinator { return true }
+            return child is TermsOfUseCoordinator || child is WallpaperEngagementCoordinator
+        }
+    }
 
     override var isDismissible: Bool { false }
 
@@ -197,10 +205,7 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     private func showWallpaperEngagementIfNeeded() {
-        let hasBlockingChild = childCoordinators.contains {
-            $0 is TermsOfUseCoordinator || $0 is WallpaperEngagementCoordinator
-        }
-        guard !hasBlockingChild,
+        guard !isShowingBlockingSheet,
               !router.isPresenting else { return }
 
         let coordinator = WallpaperEngagementCoordinator(
@@ -208,6 +213,31 @@ final class BrowserCoordinator: BaseCoordinator,
             windowUUID: windowUUID,
             tabManager: tabManager,
             prefs: profile.prefs
+        )
+        guard coordinator.shouldShow() else { return }
+        coordinator.parentCoordinator = self
+        coordinator.delegate = self
+        add(child: coordinator)
+        browserViewController.view.endEditing(true)
+        DispatchQueue.main.async {
+            coordinator.start()
+        }
+    }
+
+    private func showVPNOnboardingIfNeeded() {
+        guard !isShowingBlockingSheet,
+              !router.isPresenting else { return }
+
+        guard #available(iOS 17.0, *) else { return }
+        let coordinator = VPNOnboardingCoordinator(
+            router: router,
+            windowUUID: windowUUID,
+            tabManager: tabManager,
+            prefs: profile.prefs,
+            traitCollectionProvider: { [weak self] in self?.browserViewController.traitCollection ?? .current },
+            onOpenURL: { [weak self] url in
+                self?.navigateFromHomePanel(to: url, visitType: .link, isGoogleTopSite: false)
+            }
         )
         guard coordinator.shouldShow() else { return }
         coordinator.parentCoordinator = self
@@ -314,6 +344,7 @@ final class BrowserCoordinator: BaseCoordinator,
         homepageViewController?.view.accessibilityElementsHidden = true
         UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
         screenshotService.screenshotableView = webviewController
+        showVPNOnboardingIfNeeded()
     }
 
     func browserHasLoaded() {
@@ -1446,7 +1477,7 @@ final class BrowserCoordinator: BaseCoordinator,
     func showVPNDataLimitAlert(dataLimitBytes: Int64) {
         guard vpnAlert == nil else { return }
         let dataLimitGB = Measurement(value: Double(dataLimitBytes), unit: UnitInformationStorage.bytes)
-            .converted(to: .gigabytes).value
+            .converted(to: .gibibytes).value
         let alert = UIAlertController(
             title: .VPN.ReachedDataLimitPopup.Title,
             message: String(
@@ -1756,6 +1787,13 @@ final class BrowserCoordinator: BaseCoordinator,
     func wallpaperEngagementDidTapCTA(from coordinator: WallpaperEngagementCoordinator) {
         remove(child: coordinator)
         show(settings: .wallpaper)
+    }
+
+    // MARK: - VPNOnboardingCoordinatorDelegate
+
+    func vpnOnboardingDidTapCTA(from coordinator: Coordinator) {
+        remove(child: coordinator)
+        presentVPNSettings()
     }
 
     // MARK: - ParentCoordinatorDelegate

@@ -30,8 +30,6 @@ protocol OnboardingSelectorsSet {
     var MANAGE_SHEET_CRASH_REPORTS_SWITCH: Selector { get }
     var MANAGE_SHEET_CRASH_REPORTS_DESCRIPTION: Selector { get }
     var CONTINUE_BUTTON: Selector { get }
-    var MANAGE_TEXT_BUTTON: Selector { get }
-    var LAST_TOS_DESCRIPTION_TEXT: Selector { get }
     var QR_SIGN_IN_BUTTON: Selector { get }
     var EMAIL_SIGN_IN_BUTTON: Selector { get }
     var DONE_BUTTON: Selector { get }
@@ -63,7 +61,6 @@ struct OnboardingSelectors: OnboardingSelectorsSet {
         static let manageSheet_CrashReportsSwitch = PrivacyNotice.CrashReports.actionSwitch
         static let manageSheet_CrashReportsDescription = PrivacyNotice.CrashReports.actionDescriptionLabel
         static let continueButton = "Continue"
-        static let manage_Text = "TermsOfService.ManageDataCollectionAgreement"
         static let QRCode_SignIn = "QRCodeSignIn.button"
         static let emailSignIn = "EmailSignIn.button"
         static let doneButton = "Done"
@@ -165,18 +162,6 @@ struct OnboardingSelectors: OnboardingSelectorsSet {
     let TOS_PAGE_DONE_BUTTON = Selector.buttonId(
         IDs.termsOfService_DoneButton,
         description: "Done button dismissing the Terms of Use pop up",
-        groups: ["onboarding"]
-    )
-
-    let MANAGE_TEXT_BUTTON = Selector.buttonId(
-        IDs.manage_Text,
-        description: "Help improve button on first onboarding screen",
-        groups: ["onboarding"]
-    )
-
-    let LAST_TOS_DESCRIPTION_TEXT = Selector.staticTextByLabel(
-        "To help improve the browser, Firefox sends diagnostic and interaction data to Mozilla. Manage",
-        description: "The last set of text on the ToS card with the Manage hyperlink.",
         groups: ["onboarding"]
     )
 
@@ -327,7 +312,7 @@ struct OnboardingSelectors: OnboardingSelectorsSet {
     )
 
     var all: [Selector] {
-        [AGREE_AND_CONTINUE_BUTTON, CONTINUE_BUTTON, MANAGE_TEXT_BUTTON, QR_SIGN_IN_BUTTON, EMAIL_SIGN_IN_BUTTON,
+        [AGREE_AND_CONTINUE_BUTTON, CONTINUE_BUTTON, QR_SIGN_IN_BUTTON, EMAIL_SIGN_IN_BUTTON,
          DONE_BUTTON, CLOSE_BUTTON, NAVBAR_SYNC_AND_SAVE, CLOSE_TOUR_BUTTON, PAGE_CONTROL,
          TERMS_OF_USE_LINK, PRIVACY_NOTICE_LINK, MANAGE_LINK, TOS_PAGE_DONE_BUTTON, MANAGE_SHEET_DONE_BUTTON,
          MANAGE_SHEET_TITLE, MANAGE_SHEET_TECHNICAL_DATA_TITLE, MANAGE_SHEET_TECHNICAL_DATA_SWITCH,

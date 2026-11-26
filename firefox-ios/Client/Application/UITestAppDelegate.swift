@@ -91,6 +91,7 @@ class UITestAppDelegate: AppDelegate {
         // Skip the intro when requested by for example tests or automation
         if launchArguments.contains(LaunchArguments.SkipIntro) {
             IntroScreenManager(prefs: profile.prefs).didSeeIntroScreen()
+            profile.prefs.setBool(true, forKey: PrefsKeys.VPNSettings.onboardingSheetShown)
         }
 
         if launchArguments.contains(LaunchArguments.StageServer) {

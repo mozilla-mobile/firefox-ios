@@ -9,7 +9,7 @@ import Common
 let pdfUrl = "https://storage.googleapis.com/mobile_test_assets/public/lorem_ipsum.pdf"
 
 class ShareMenuTests: FeatureFlaggedTestBase {
-    // https://mozilla.testrail.io/index.php?/cases/view/2863631
+    // https://mozilla.testrail.io/index.php?/cases/view/4466738
     func testShareNormalWebsiteTabViaReminders() throws {
         throw XCTSkip("Moved out of the full functional test suite")
         /*
@@ -52,7 +52,7 @@ class ShareMenuTests: FeatureFlaggedTestBase {
         )
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2864048
+    // https://mozilla.testrail.io/index.php?/cases/view/4466746
     func testShareNormalWebsiteMarkup() throws {
         throw XCTSkip("Moved out of the full functional test suite")
         /*
@@ -70,7 +70,7 @@ class ShareMenuTests: FeatureFlaggedTestBase {
         openNewTabAndValidateURLisPaste(url: url_3)
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2864073
+    // https://mozilla.testrail.io/index.php?/cases/view/4466769
     func testShareWebsiteReaderModeReminders() throws {
         throw XCTSkip("Moved out of the full functional test suite")
         /*
@@ -92,7 +92,7 @@ class ShareMenuTests: FeatureFlaggedTestBase {
         */
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2864082
+    // https://mozilla.testrail.io/index.php?/cases/view/4466778
     func testShareWebsiteReaderModePrint() throws {
         throw XCTSkip("Moved out of the full functional test suite")
         /*
@@ -105,7 +105,7 @@ class ShareMenuTests: FeatureFlaggedTestBase {
         */
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2864079
+    // https://mozilla.testrail.io/index.php?/cases/view/4466775
     func testShareWebsiteReaderModeCopy() throws {
         throw XCTSkip("Moved out of the full functional test suite")
         /*
@@ -118,7 +118,7 @@ class ShareMenuTests: FeatureFlaggedTestBase {
         */
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2864080
+    // https://mozilla.testrail.io/index.php?/cases/view/4466776
     func testShareWebsiteReaderModeSendLink() throws {
         throw XCTSkip("Moved out of the full functional test suite")
         /*
@@ -138,7 +138,7 @@ class ShareMenuTests: FeatureFlaggedTestBase {
         */
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2864081
+    // https://mozilla.testrail.io/index.php?/cases/view/4466777
     func testShareWebsiteReaderModeMarkup() throws {
         throw XCTSkip("Moved out of the full functional test suite")
         /*
@@ -159,7 +159,7 @@ class ShareMenuTests: FeatureFlaggedTestBase {
         validatePrintLayout()
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2864064
+    // https://mozilla.testrail.io/index.php?/cases/view/4466760
     func testSharePdfFileMarkup() throws {
         throw XCTSkip("Moved out of the full functional test suite")
         /*

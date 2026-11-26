@@ -123,6 +123,15 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Notifi
     // One-way opt-in: WebKit exposes no reset to automatic obscured insets after an explicit value.
     // Keep updating insets after the vertical bar disappears.
     private var usesVerticalBarInsets = false
+    private var underPageBackgroundObservation: NSKeyValueObservation?
+    /// Paints the page background under a horizontal obscured inset (the folded iPhone Duo's vertical bar).
+    /// Since iOS 27.3 WebKit covers that inset with its own color extension view filled with the system
+    /// background, so this view is kept above it.
+    private let obscuredEdgeBackgroundView: UIView = {
+        let view = UIView()
+        view.isUserInteractionEnabled = false
+        return view
+    }()
 
     override func safeAreaInsetsDidChange() {
         super.safeAreaInsetsDidChange()
@@ -147,6 +156,15 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Notifi
             // WebKit needs an opaque web view to paint the page background into the vertical bar.
             isOpaque = true
             underPageBackgroundColor = nil
+            addSubview(obscuredEdgeBackgroundView)
+            underPageBackgroundObservation = observe(
+                \.underPageBackgroundColor, options: [.initial, .new]
+            ) { [weak self] _, _ in
+                ensureMainThread {
+                    guard let self else { return }
+                    self.obscuredEdgeBackgroundView.backgroundColor = self.underPageBackgroundColor
+                }
+            }
         }
 
         var obscuredInsets = safeAreaInsets
@@ -160,6 +178,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Notifi
             // Expanded mode handles the bottom safe area outside the web view's obscured region.
             obscuredInsets.bottom = 0
         }
+        updateObscuredEdgeBackgroundFrame(for: obscuredInsets)
         guard obscuredContentInsets != obscuredInsets else { return }
         // iOS 26+: these insets mark edges covered by native UI in the web view's coordinates.
         // WebKit shrinks the layout viewport and adjusts fixed/sticky elements around that UI.
@@ -167,6 +186,19 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Notifi
         // dev note: CSS 100vw can still include the vertical bar's width and overflow the unobscured viewport.
         // Most likely a WKWebView viewport-sizing issue specifically on Duo.
         obscuredContentInsets = obscuredInsets
+    }
+
+    private func updateObscuredEdgeBackgroundFrame(for obscuredInsets: UIEdgeInsets) {
+        var frame = bounds
+        if obscuredInsets.left > 0 {
+            frame.size.width = obscuredInsets.left
+        } else {
+            frame.origin.x = bounds.maxX - obscuredInsets.right
+            frame.size.width = obscuredInsets.right
+        }
+        obscuredEdgeBackgroundView.frame = frame
+        // WebKit can add its color extension views after this view.
+        bringSubviewToFront(obscuredEdgeBackgroundView)
     }
     #endif
 

@@ -5,6 +5,7 @@
 @testable import QuickAnswersKit
 import XCTest
 import Common
+import ComponentLibrary
 import Shared
 import TestKit
 
@@ -100,6 +101,16 @@ final class QuickAnswersViewControllerTests: XCTestCase {
         XCTAssertTrue(dismissal is ReturnToBrowserTransitionAnimator)
     }
 
+    // MARK: - makeOptInController
+    func test_makeOptInController_isPresentedAsNonDismissableFormSheet() {
+        let subject = createSubject()
+
+        let controller = subject.makeOptInController()
+
+        XCTAssertEqual(controller.modalPresentationStyle, .formSheet)
+        XCTAssertTrue(controller.isModalInPresentation)
+    }
+
     // MARK: - Helper
     private func createSubject(
         transitionType: QuickAnswersTransitionType = .sourceReveal(sourceRect: .zero),
@@ -161,6 +172,11 @@ extension QuickAnswersViewConfiguration {
             continueButton: "Continue"
         ),
         optInRedesign: .mock,
+        optInAccessibilityIdentifiers: .init(
+            continueButton: "continueButton",
+            learnMoreButton: "learnMoreButton",
+            closeButton: "closeButton"
+        ),
         contentView: .init(
             placeholder: "Listening, ask anything",
             followUpPlaceholder: "Listening, ask a follow-up",

@@ -23,11 +23,11 @@ struct BrowserViewControllerLens: StateLens {
             window: uuid
         ) ?? BrowserViewControllerState(windowUUID: uuid)
 
-        let homepageState = appState.componentState(
+        let homepageStateSearchBarState = appState.componentState(
             HomepageState.self,
             for: .homepage,
             window: uuid
-        ) ?? HomepageState(windowUUID: uuid)
+        )?.searchBarState ?? SearchBarState(windowUUID: uuid)
 
         let isAddressBarMinimized = appState.componentState(
             ToolbarState.self,
@@ -36,15 +36,8 @@ struct BrowserViewControllerLens: StateLens {
         )?.isAddressBarMinimized ?? false
 
         self.init(browserViewControllerState: browserViewControllerState,
-                  homepageSearchBarState: homepageState.searchBarState,
+                  homepageSearchBarState: homepageStateSearchBarState,
                   isAddressBarMinimized: isAddressBarMinimized)
-    }
-
-    private init(windowUUID: WindowUUID) {
-        self.init(
-            browserViewControllerState: BrowserViewControllerState(windowUUID: windowUUID),
-            homepageSearchBarState: SearchBarState(windowUUID: windowUUID)
-        )
     }
 
     init(browserViewControllerState: BrowserViewControllerState,

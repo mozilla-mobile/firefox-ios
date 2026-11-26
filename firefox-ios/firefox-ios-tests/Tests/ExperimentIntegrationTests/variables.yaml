@@ -13,7 +13,6 @@ smoke_tests:
   - NewTabSettings
   - SearchTest
   - ToolbarTest
-  - TopTabsTest
   - ClipBoardTests
   - CreditCardsTests
   - DownloadsTests

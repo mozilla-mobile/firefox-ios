@@ -8,11 +8,15 @@ import Common
 class ShareLongPressTests: FeatureFlaggedTestBase {
     private var topSitesScreen: TopSitesScreen!
     private var readingListScreen: ReadingListScreen!
+    private var historyScreen: HistoryScreen!
+    private var browserScreen: BrowserScreen!
 
     override func setUp() async throws {
         try await super.setUp()
         topSitesScreen = TopSitesScreen(app: app)
         readingListScreen = ReadingListScreen(app: app)
+        historyScreen = HistoryScreen(app: app)
+        browserScreen = BrowserScreen(app: app)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864317
@@ -250,10 +254,11 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
         // Go to a webpage and navigate to history
         navigator.openURL("mozilla.org")
         waitUntilPageLoad()
+        browserScreen.assertAddressBarContains(value: "mozilla.org", timeout: TIMEOUT_LONG)
         navigator.nowAt(BrowserTab)
-        navigator.goto(HistoryRecentlyClosed)
+        navigator.goto(LibraryPanel_History)
         // Long-press on a website
-        app.tables.cells.staticTexts.element(boundBy: 1).press(forDuration: 1.0)
+        historyScreen.longPressMozillaEntry()
         // Tap the Share button in the context menu
         app.tables["Context Menu"].buttons["shareAppleLarge"].waitAndTap()
         // Tap the Reminders button in the menu

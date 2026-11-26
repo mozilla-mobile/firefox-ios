@@ -113,7 +113,22 @@ final class SiteImageHandlerTests: XCTestCase {
         XCTAssertEqual(imageHandler.fetchFaviconCalledCount, 1, "fetchFavicon should be called once as fallback")
     }
 
-    func testGetImage_heroImage_vpnProxyActive_skipsHeroImageAndReturnsFavicon() async throws {
+    func testGetImage_heroImage_noHeroImage_fallsBackWithFaviconModel() async {
+        let siteURL = URL(string: "https://www.mozilla.com/some/page")!
+        let subject = createSubject(urlHandler: urlHandler, imageHandler: imageHandler)
+        let model = SiteImageModel(id: UUID(),
+                                   imageType: .heroImage,
+                                   siteURL: siteURL)
+
+        _ = await subject.getImage(model: model)
+
+        let faviconModel = imageHandler.fetchFaviconImageModel
+        XCTAssertEqual(faviconModel?.imageType, .favicon, "Fallback must not be cached as a hero image")
+        XCTAssertEqual(faviconModel?.cacheKey, SiteImageModel.generateCacheKey(siteURL: siteURL, type: .favicon))
+        XCTAssertEqual(faviconModel?.id, model.id)
+    }
+
+    func testGetImage_heroImage_vpnProxyActive_fetchesHeroImage() async throws {
         guard #available(iOS 17.0, *) else { throw XCTSkip("Requires iOS 17.0") }
         VPNProxySessionProvider.shared.update([makeProxyConfiguration()])
         imageHandler.heroImage = UIImage()
@@ -124,8 +139,8 @@ final class SiteImageHandlerTests: XCTestCase {
 
         _ = await subject.getImage(model: model)
 
-        XCTAssertEqual(imageHandler.fetchHeroImageCalled, 0, "fetchHeroImage should not be called while proxied")
-        XCTAssertEqual(imageHandler.fetchFaviconCalledCount, 1, "fetchFavicon should be called instead")
+        XCTAssertEqual(imageHandler.fetchHeroImageCalled, 1, "fetchHeroImage should be called while proxied")
+        XCTAssertEqual(imageHandler.fetchFaviconCalledCount, 0, "fetchFavicon should not be called")
     }
 
     // Test cache
@@ -263,6 +278,7 @@ private final class MockImageHandler: ImageHandler, @unchecked Sendable {
     var faviconImage = UIImage()
     var heroImage: UIImage?
     var fetchFaviconCalledCount = 0
+    var fetchFaviconImageModel: SiteImageModel?
     var fetchHeroImageCalled = 0
     var clearCacheCalledCount = 0
 
@@ -271,6 +287,7 @@ private final class MockImageHandler: ImageHandler, @unchecked Sendable {
 
     func fetchFavicon(imageModel: SiteImageModel) async -> UIImage {
         fetchFaviconCalledCount += 1
+        fetchFaviconImageModel = imageModel
         return faviconImage
     }
 

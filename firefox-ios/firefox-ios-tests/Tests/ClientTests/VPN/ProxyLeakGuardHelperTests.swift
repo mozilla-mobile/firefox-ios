@@ -42,12 +42,10 @@ final class ProxyLeakGuardHelperTests: XCTestCase {
 
         subject.handle(body: connectionBody, origin: "https://a.example")
         subject.handle(body: body("DirectConnection", "webkitRTCPeerConnection"), origin: "https://b.example")
-        subject.handle(body: body("DirectConnection", "WebTransport"), origin: "https://c.example")
 
         XCTAssertEqual(reported.values, [
             .init(api: .directConnection, origin: "https://a.example"),
-            .init(api: .directConnection, origin: "https://b.example"),
-            .init(api: .directConnection, origin: "https://c.example")
+            .init(api: .directConnection, origin: "https://b.example")
         ])
     }
 
@@ -56,6 +54,7 @@ final class ProxyLeakGuardHelperTests: XCTestCase {
 
         subject.handle(body: body("RTCPeerConnection", "get"), origin: "https://a.example")
         subject.handle(body: body("DirectConnection", "get"), origin: "https://a.example")
+        subject.handle(body: body("DirectConnection", "WebTransport"), origin: "https://a.example")
         subject.handle(body: body("WebAuthnRelatedOrigin", "RTCPeerConnection"), origin: "https://a.example")
         subject.handle(body: body("WebRTC", "RTCPeerConnection"), origin: "https://a.example")
         subject.handle(body: body("WebAuthnRelatedOrigin", "delete"), origin: "https://a.example")

@@ -2825,12 +2825,12 @@ class BrowserViewController: UIViewController,
     private func dispatchBackForwardToolbarAction(canGoBack: Bool? = nil,
                                                   canGoForward: Bool? = nil,
                                                   windowUUID: UUID) {
+        // Skip when both values are nil, there is nothing to update. If only one is set, the
+        // reducer keeps the current state for the other.
         guard canGoBack != nil || canGoForward != nil else { return }
-        let action = ToolbarAction(canGoBack: canGoBack,
-                                   canGoForward: canGoForward,
-                                   windowUUID: windowUUID,
-                                   actionType: ToolbarActionType.backForwardButtonStateChanged)
-        store.dispatch(action)
+
+        let action = ToolbarModernAction.backForwardButtonStateChanged(canGoBack: canGoBack, canGoForward: canGoForward)
+        store.dispatch(action, forWindowUUID: windowUUID)
     }
 
     /// Used to handle general navigation for views that can be presented from multiple places
@@ -4505,6 +4505,7 @@ extension BrowserViewController: LegacyTabDelegate {
                 guard let self,
                       let tab,
                       tab === self.tabManager.selectedTab,
+                      self.featureFlagsProvider.isEnabled(.vpnLeakGuardToast),
                       ProxyLeakGuardNoticeTracker.shared.shouldShowNotice()
                 else { return }
                 self.showProxyLeakGuardToast(isPrivate: tab.isPrivate)

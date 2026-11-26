@@ -15,24 +15,10 @@ final class JumpBackInScreen {
         self.sel = selectors
     }
 
-    private var collectionView: XCUIElement { sel.COLLECTION_VIEW.element(in: app) }
     private var sectionTitle: XCUIElement { sel.SECTION_TITLE.element(in: app) }
     private var itemCells: XCUIElementQuery { sel.ITEM_CELL.query(in: app) }
     private var firstItemCell: XCUIElement { itemCells.firstMatch }
     private var contextMenuTable: XCUIElement { sel.CONTEXT_MENU_TABLE.element(in: app) }
-
-    private func itemTitle(_ title: String) -> XCUIElement {
-        itemCells.staticTexts[title].firstMatch
-    }
-
-    func scrollToJumpBackInSection() {
-        if UIDevice.current.userInterfaceIdiom != .pad {
-            BaseTestCase().mozWaitForElementToExist(collectionView)
-            while app.staticTexts["Switch Your Default Browser"].exists || app.buttons["Learn How"].exists {
-                collectionView.swipeUp()
-            }
-        }
-    }
 
     func assertSectionExists(timeout: TimeInterval = TIMEOUT) {
         BaseTestCase().mozWaitForElementToExist(sectionTitle, timeout: timeout)
@@ -40,20 +26,6 @@ final class JumpBackInScreen {
 
     func assertSectionNotExists(timeout: TimeInterval = TIMEOUT) {
         BaseTestCase().mozWaitForElementToNotExist(sectionTitle, timeout: timeout)
-    }
-
-    func assertItemExists(title: String, timeout: TimeInterval = TIMEOUT) {
-        BaseTestCase().mozWaitForElementToExist(itemTitle(title), timeout: timeout)
-    }
-
-    func assertItemNotExists(title: String, timeout: TimeInterval = TIMEOUT) {
-        BaseTestCase().mozWaitForElementToNotExist(itemTitle(title), timeout: timeout)
-    }
-
-    func tapItem(title: String, timeout: TimeInterval = TIMEOUT) {
-        let item = itemTitle(title)
-        BaseTestCase().mozWaitForElementToExist(item, timeout: timeout)
-        item.waitAndTap()
     }
 
     func longPressFirstItem(duration: TimeInterval = 2, timeout: TimeInterval = TIMEOUT) {

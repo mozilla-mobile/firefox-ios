@@ -384,15 +384,6 @@ class BaseTestCase: XCTestCase {
         }
     }
 
-    func bookmarkPages() {
-        let listWebsitesToBookmark = [page1, page2]
-        for site in listWebsitesToBookmark {
-            navigator.openURL(site)
-            waitUntilPageLoad()
-            bookmark()
-        }
-    }
-
     func bookmark(isLockIconOff: Bool = true) {
         let browserScreen = BrowserScreen(app: app)
         let toolbarScreen = ToolbarScreen(app: app)
@@ -443,38 +434,6 @@ class BaseTestCase: XCTestCase {
         app.buttons["Done"].waitAndTap()
     }
 
-    func checkBookmarks() {
-        waitForTabsButton()
-        let numberOfRecentlyVisitedBookmarks = app.scrollViews
-            .cells[AccessibilityIdentifiers.FirefoxHomepage.Bookmarks.itemCell]
-            .otherElements
-            .otherElements
-            .otherElements
-            .otherElements
-            .count
-        let numberOfExpectedRecentlyVisitedBookmarks = 2
-        mozWaitForElementToExist(app.scrollViews
-            .cells[AccessibilityIdentifiers.FirefoxHomepage.Bookmarks.itemCell].firstMatch)
-        XCTAssertEqual(numberOfRecentlyVisitedBookmarks, numberOfExpectedRecentlyVisitedBookmarks)
-    }
-
-    func checkBookmarksUpdated() {
-        waitForTabsButton()
-        let bookmarksCell = app.scrollViews
-            .cells[AccessibilityIdentifiers.FirefoxHomepage.Bookmarks.itemCell]
-        scrollToElement(bookmarksCell)
-        let numberOfRecentlyVisitedBookmarks = bookmarksCell
-            .otherElements
-            .otherElements
-            .otherElements
-            .otherElements
-            .count
-        let numberOfExpectedRecentlyVisitedBookmarks = 1
-        mozWaitForElementToExist(app.scrollViews
-            .cells[AccessibilityIdentifiers.FirefoxHomepage.Bookmarks.itemCell].firstMatch)
-        XCTAssertEqual(numberOfRecentlyVisitedBookmarks, numberOfExpectedRecentlyVisitedBookmarks)
-    }
-
     // TODO: Fine better way to update screen graph when necessary
     func updateScreenGraph() {
         navigator = createScreenGraph(for: self, with: app).navigator()
@@ -499,17 +458,6 @@ class BaseTestCase: XCTestCase {
         app.buttons["Reader View"].waitAndTap()
         mozWaitForElementToExist(app.buttons["Add to Reading List"])
         app.buttons["Add to Reading List"].waitAndTap()
-    }
-
-    func removeContentFromReaderView() {
-        app.segmentedControls["librarySegmentControl"].buttons.element(boundBy: 3).waitAndTap()
-        let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
-        mozWaitForElementToExist(savedToReadingList)
-
-        // Remove the item from reading list
-        savedToReadingList.swipeLeft()
-        mozWaitForElementToExist(app.buttons["Remove"])
-        app.buttons["Remove"].waitAndTap()
     }
 
     func loadWebPage(_ url: String, waitForLoadToFinish: Bool = true) {

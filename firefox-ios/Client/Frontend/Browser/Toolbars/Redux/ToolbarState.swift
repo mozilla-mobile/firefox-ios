@@ -186,6 +186,11 @@ struct ToolbarState: ScreenState, Sendable {
         case .didSetTabScreenshot(let previousTabScreenshot, let nextTabScreenshot):
             return handleDidSetTabScreenshot(state: state, previous: previousTabScreenshot, next: nextTabScreenshot)
 
+        case .backForwardButtonStateChanged(let canGoBack, let canGoForward):
+            return state
+                .copy(canGoBack: canGoBack ?? state.canGoBack)
+                .copy(canGoForward: canGoForward ?? state.canGoForward)
+
         case .didKeyboardRequestChange, .cancelEdit, .searchTermDidSet, .lockIconChanged,
              .searchTermDidChange, .searchTermDidClear, .websiteLoadingStateDidChange:
             // AddressBarState is a nested sub-state, forwards modern call to AddressBarState
@@ -249,9 +254,6 @@ struct ToolbarState: ScreenState, Sendable {
         case GeneralBrowserMiddlewareActionType.websiteDidScroll,
             ToolbarMiddlewareActionType.urlDidChange:
             return handleScrollOffsetChanged(state: state, action: action)
-
-        case ToolbarActionType.backForwardButtonStateChanged:
-            return handleBackForwardButtonStateChanged(state: state, action: action)
 
         case SearchEngineSelectionActionType.didTapSearchEngine,
             SearchEngineSelectionMiddlewareActionType.didClearAlternativeSearchEngine:
@@ -326,16 +328,6 @@ struct ToolbarState: ScreenState, Sendable {
         // Update to use isAddressBarMinimized so the address bar is shown and the toast isn't presented a minimized bar.
         return state
             .copy(isAddressBarMinimized: false)
-    }
-
-    @MainActor
-    private static func handleBackForwardButtonStateChanged(state: Self, action: Action) -> ToolbarState {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-        return state
-            .copy(addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, toolbarAction))
-            .copy(navigationToolbar: NavigationBarState.reducer.legacyReducer(state.navigationToolbar, toolbarAction))
-            .copy(canGoBack: toolbarAction.canGoBack ?? state.canGoBack)
-            .copy(canGoForward: toolbarAction.canGoForward ?? state.canGoForward)
     }
 
     @MainActor

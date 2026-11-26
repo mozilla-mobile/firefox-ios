@@ -5,6 +5,7 @@
 import Foundation
 import SwiftUI
 import Common
+import Shared
 import Storage
 
 import struct MozillaAppServices.CreditCard
@@ -94,7 +95,7 @@ enum CreditCardModifiedStatus {
 }
 
 // TODO: FXIOS-14112 - Fix CreditCardInputViewModel @unchecked Sendable
-final class CreditCardInputViewModel: ObservableObject, @unchecked Sendable {
+final class CreditCardInputViewModel: ObservableObject, FeatureFlaggable, @unchecked Sendable {
     typealias CreditCardText = String.CreditCard.Alert
     let logger: Logger
     let profile: Profile
@@ -153,15 +154,36 @@ final class CreditCardInputViewModel: ObservableObject, @unchecked Sendable {
 
     @Published var isRightBarButtonEnabled = false
 
+    private var usesUpdatedSyncStrings: Bool {
+        featureFlagsProvider.isEnabled(.syncStringUpdates)
+    }
+
+    private var removeCardAlertTitle: String {
+        usesUpdatedSyncStrings ? CreditCardText.DeleteCardTitle : CreditCardText.RemoveCardTitle
+    }
+
+    private var removeCardAlertBody: String {
+        usesUpdatedSyncStrings
+            ? String(format: CreditCardText.DeleteCardSublabel, AppName.shortName.rawValue)
+            : CreditCardText.RemoveCardSublabel
+    }
+
+    private var removeCardAlertButton: Alert.Button {
+        let buttonTitle = usesUpdatedSyncStrings
+            ? CreditCardText.DeleteCardButtonTitle
+            : CreditCardText.RemovedCardLabel
+        return .destructive(Text(buttonTitle)) { [unowned self] in
+            self.removeCreditCard(creditCard: creditCard) { status, successVal in
+                self.dismiss?(status, successVal)
+            }
+        }
+    }
+
     var signInRemoveButtonDetails: RemoveCardButton.AlertDetails {
         return RemoveCardButton.AlertDetails(
-            alertTitle: Text(CreditCardText.RemoveCardTitle),
-            alertBody: Text(CreditCardText.RemoveCardSublabel),
-            primaryButtonStyleAndText: .destructive(Text(CreditCardText.RemovedCardLabel)) { [unowned self] in
-                self.removeCreditCard(creditCard: creditCard) { status, successVal in
-                    self.dismiss?(status, successVal)
-                }
-            },
+            alertTitle: Text(removeCardAlertTitle),
+            alertBody: Text(removeCardAlertBody),
+            primaryButtonStyleAndText: removeCardAlertButton,
             secondaryButtonStyleAndText: .cancel(),
             primaryButtonAction: {},
             secondaryButtonAction: {})
@@ -169,13 +191,9 @@ final class CreditCardInputViewModel: ObservableObject, @unchecked Sendable {
 
     var regularRemoveButtonDetails: RemoveCardButton.AlertDetails {
         return RemoveCardButton.AlertDetails(
-            alertTitle: Text(CreditCardText.RemoveCardTitle),
+            alertTitle: Text(removeCardAlertTitle),
             alertBody: nil,
-            primaryButtonStyleAndText: .destructive(Text(CreditCardText.RemovedCardLabel)) { [unowned self] in
-                self.removeCreditCard(creditCard: creditCard) { status, successVal in
-                    self.dismiss?(status, successVal)
-                }
-            },
+            primaryButtonStyleAndText: removeCardAlertButton,
             secondaryButtonStyleAndText: .cancel(),
             primaryButtonAction: {},
             secondaryButtonAction: {}

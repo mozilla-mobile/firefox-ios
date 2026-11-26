@@ -175,9 +175,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
         case ToolbarActionType.urlDidChange:
             return handleUrlDidChangeAction(state: state, action: action)
 
-        case ToolbarActionType.backForwardButtonStateChanged:
-            return handleBackForwardButtonStateChangedAction(state: state, action: action)
-
         case ToolbarActionType.didStartEditingUrl:
             return handleDidStartEditingUrlAction(state: state, action: action)
 
@@ -280,14 +277,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
         // (see `Tab.translationConfiguration`). Inheriting the existing Redux state here would leak
         // the previous tab's icon onto a new tab whose own state is nil (FXIOS-15606).
         return action.translationConfiguration ?? existingConfig
-    }
-
-    @MainActor
-    private static func handleBackForwardButtonStateChangedAction(state: Self, action: Action) -> Self {
-        guard action is ToolbarAction else { return defaultState(from: state) }
-
-        return state
-            .copy(searchTerm: nil)
     }
 
     @MainActor

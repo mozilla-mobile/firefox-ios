@@ -138,7 +138,8 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions[0] as? GeneralBrowserAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? GeneralBrowserActionType)
 
-        XCTAssertEqual(mockStore.dispatchedActions.count, 5)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 4)
+        XCTAssertEqual(mockStore.dispatchedModernActions.count, 1)
         XCTAssertEqual(actionType, GeneralBrowserActionType.didSelectedTabChangeToHomepage)
     }
 
@@ -847,6 +848,48 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
         XCTAssertTrue(tab1.tabDelegate === subject)
         XCTAssertTrue(tab2.tabDelegate === subject)
+    }
+
+    // MARK: - UI changes from Redux State updates
+
+    func testSearchBarState_setsCenterSearchVisibility_whenTrue() {
+        let isShowingCenterSearchBar = true
+        let homepageSearchBarState = SearchBarState(
+            windowUUID: .XCTestDefaultUUID,
+            isShowingCenterSearchBar: isShowingCenterSearchBar,
+            isHomepageVisible: true
+        )
+
+        let lens = BrowserViewControllerLens(
+            browserViewControllerState: BrowserViewControllerState(windowUUID: .XCTestDefaultUUID),
+            homepageSearchBarState: homepageSearchBarState
+        )
+
+        let subject = createSubject()
+
+        subject.newState(state: lens)
+
+        XCTAssertEqual(subject.addressToolbarContainer.isHidden, isShowingCenterSearchBar)
+    }
+
+    func testSearchBarState_setsCenterSearchVisibility_whenFalse() {
+        let isShowingCenterSearchBar = false
+        let homepageSearchBarState = SearchBarState(
+            windowUUID: .XCTestDefaultUUID,
+            isShowingCenterSearchBar: isShowingCenterSearchBar,
+            isHomepageVisible: true
+        )
+
+        let lens = BrowserViewControllerLens(
+            browserViewControllerState: BrowserViewControllerState(windowUUID: .XCTestDefaultUUID),
+            homepageSearchBarState: homepageSearchBarState
+        )
+
+        let subject = createSubject()
+
+        subject.newState(state: lens)
+
+        XCTAssertEqual(subject.addressToolbarContainer.isHidden, isShowingCenterSearchBar)
     }
 
     // MARK: - Private

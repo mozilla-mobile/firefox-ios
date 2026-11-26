@@ -226,7 +226,6 @@ enum Action {
 
     static let ToggleStoriesInNewTab = "ToggleStoriesInNewTab"
     static let ToggleHistoryInNewTab = "ToggleHistoryInNewTab"
-    static let ToggleRecentlySaved = "ToggleRecentlySaved"
     static let ToggleJumpBackIn = "ToggleJumpBackIn"
 
     static let SelectNewTabAsBlankPage = "SelectNewTabAsBlankPage"

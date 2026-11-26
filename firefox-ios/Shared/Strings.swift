@@ -518,6 +518,24 @@ extension String {
                 value: "Address for %@",
                 comment: "Accessibility label for an address list item in autofill settings screen. The %@ parameter is the address of the user that will read the name, street, city, state, postal code if available.")
             public enum Edit {
+                public static let DeleteAddressTitle = MZLocalizedString(
+                    key: "Addresses.EditAddress.Alert.DeleteTitle.v162",
+                    tableName: "EditAddress",
+                    value: "Delete Address?",
+                    comment: "Title of the confirmation dialog shown when the user deletes a saved address."
+                )
+                public static let DeleteAddressMessage = MZLocalizedString(
+                    key: "Addresses.EditAddress.Alert.DeleteMessage.v162",
+                    tableName: "EditAddress",
+                    value: "This will delete the address from %@ on all of your synced devices.",
+                    comment: "Message in the address deletion confirmation dialog when the user has a sync account. %@ is the app name (e.g. Firefox). Deleting the address also deletes it from the user's synced devices."
+                )
+                public static let DeleteButtonTitle = MZLocalizedString(
+                    key: "Addresses.EditAddress.Alert.DeleteButton.v162",
+                    tableName: "EditAddress",
+                    value: "Delete",
+                    comment: "Primary button in the address deletion confirmation dialog. Tapping it deletes the saved address."
+                )
                 public static let AddressRemoveError = MZLocalizedString(
                     key: "Addresses.Toast.AddressSaveError.v130",
                     tableName: "EditAddress",
@@ -1063,6 +1081,22 @@ extension String {
 
         // System alert actions and descriptions
         public enum Alert {
+            public static let DeleteCardTitle = MZLocalizedString(
+                key: "CreditCard.Alert.DeleteCard.Title.v162",
+                tableName: "Alert",
+                value: "Delete Card?",
+                comment: "Title of the confirmation dialog shown when the user deletes a saved credit card.")
+            public static let DeleteCardSublabel = MZLocalizedString(
+                key: "CreditCard.Alert.DeleteCard.Message.v162",
+                tableName: "Alert",
+                value: "This will delete the card from %@ on all of your synced devices.",
+                comment: "Message in the card deletion confirmation dialog when the user has a sync account. %@ is the app name (e.g. Firefox). Deleting the card also deletes it from the user's synced devices.")
+            public static let DeleteCardButtonTitle = MZLocalizedString(
+                key: "CreditCard.Alert.DeleteCard.Button.Title.v162",
+                tableName: "Alert",
+                value: "Delete",
+                comment: "Primary button in the card deletion confirmation dialog. Tapping it deletes the saved credit card.")
+
             public static let RemoveCardTitle = MZLocalizedString(
                 key: "CreditCard.SnackBar.RemoveCardTitle.v122",
                 tableName: "Alert",
@@ -1568,6 +1602,11 @@ extension String {
                 comment: "Within the history panel, a user can navigate into a screen with only grouped history items. Within that screen, a user can now swipe to delete a single item in the list. This label informs the user of a deletion action on the item.")
 
             public enum ClearHistorySheet {
+                public static let TitleV2 = MZLocalizedString(
+                    key: "LibraryPanel.History.ClearHistorySheet.Title.v162",
+                    tableName: "HistoryPanel",
+                    value: "Delete history, cookies, and other browsing data from %@, including history synced with other devices.",
+                    comment: "Message of the confirmation dialogue to clear browsing data. Explains what data will be deleted, including history synced with other devices. %@ is the app name (e.g. Firefox).")
                 public static let Title = MZLocalizedString(
                     key: "LibraryPanel.History.Title.v138",
                     tableName: "HistoryPanel",
@@ -3751,6 +3790,37 @@ extension String {
                 comment: "A label indicating the action that a user can rate the Firefox app in the App store.")
         }
 
+        public enum DataManagement {
+            public static let SyncedHistoryDeletionMessage = MZLocalizedString(
+                key: "Settings.DataManagement.SyncedHistoryDeletion.Message.v162",
+                tableName: "ClearHistoryConfirm",
+                value: "This deletes the selected data from this device, including browsing history synced from other devices. It won’t delete data on those devices.",
+                comment: "Message of confirmation dialogue in Data Management. Displayed when browsing history is selected for deletion and the user has a sync account. Explains that selected data is deleted only from the current device and does not impact any other devices connected to the same account.")
+            public static let DeleteButtonTitle = MZLocalizedString(
+                key: "Settings.DataManagement.SyncedHistoryDeletion.Button.Title.v162",
+                tableName: "ClearHistoryConfirm",
+                value: "Delete",
+                comment: "Primary button in the Data Management confirmation dialog. Tapping it deletes the selected browsing data.")
+        }
+
+        public enum Disconnect {
+            public static let AlertTitle = MZLocalizedString(
+                key: "Settings.Disconnect.Alert.Title.v162",
+                tableName: "Settings",
+                value: "Disconnect?",
+                comment: "Title of the confirmation dialog to disconnect the device from the user's account.")
+            public static let AlertBody = MZLocalizedString(
+                key: "Settings.Disconnect.Alert.Body.v162",
+                tableName: "Settings",
+                value: "%@ will stop syncing this device with your account. Your browsing data stays on this device.",
+                comment: "Body of the disconnect confirmation dialog. Explains that syncing stops but local browsing data is preserved on the device. %@ is the app name (e.g. Firefox).")
+            public static let ButtonTitle = MZLocalizedString(
+                key: "Settings.Disconnect.Button.Title.v162",
+                tableName: "Settings",
+                value: "Disconnect?",
+                comment: "Button in account settings that opens a confirmation dialog to disconnect the device and no longer sync it with the user's account.")
+        }
+
         public enum General {
             public enum ScrollToHideTabAndAddressBar {
                 public static let Title = MZLocalizedString(
@@ -4839,6 +4909,24 @@ extension String {
                     tableName: nil,
                     value: "Sync and Save Data",
                     comment: "Title for the page where the user sign in to their Firefox Sync account.")
+            }
+
+            public enum UpdateBanner {
+                public static let Title = MZLocalizedString(
+                    key: "Settings.Sync.UpdateBanner.Title.v162",
+                    tableName: "Settings",
+                    value: "Sync Update",
+                    comment: "Title of the dismissible banner above Manage Account & Devices in account settings, announcing that sync choices now apply only to this device.")
+                public static let Body = MZLocalizedString(
+                    key: "Settings.Sync.UpdateBanner.Body.v162",
+                    tableName: "Settings",
+                    value: "Your sync choices now apply only to this device.",
+                    comment: "Body of the sync update banner in account settings. Explains that the user's sync preferences affect only the current device.")
+                public static let LearnMore = MZLocalizedString(
+                    key: "Settings.Sync.UpdateBanner.LearnMore.v162",
+                    tableName: "Settings",
+                    value: "Learn more…",
+                    comment: "Link in the sync update banner in account settings that opens more information about sync choices applying only to the current device.")
             }
         }
 

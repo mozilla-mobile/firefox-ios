@@ -1072,8 +1072,11 @@ final class HomepageViewController: UIViewController,
     }
 
     @objc
-    private func dismissKeyboard() {
-        store.dispatch(ToolbarModernAction.cancelEdit(url: nil), forWindowUUID: windowUUID)
+    func dismissKeyboard() {
+        // Leaving overlay mode also removes the homepage when it is shown over a website
+        guard overlayManager.inOverlayMode else { return }
+
+        overlayManager.cancelEditing(shouldCancelLoading: false)
     }
 
     // MARK: Long Press (Photon Action Sheet)
