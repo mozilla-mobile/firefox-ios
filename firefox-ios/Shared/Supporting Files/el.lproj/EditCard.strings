@@ -26,7 +26,7 @@
 "CreditCard.EditCard.ExpiredDateTitle.v112" = "Λήξη: %@";
 
 /* Title label for user to input their name printed on their credit card in the text box below. */
-"CreditCard.EditCard.NameOnCardTitle.v112" = "Όνομα στην κάρτα";
+"CreditCard.EditCard.NameOnCardTitle.v112" = "Όνομα κατόχου κάρτας";
 
 /* Button title which, when tapped, will allow the user to save valid credit card details. */
 "CreditCard.EditCard.NavButtonSaveTitle.v112" = "Αποθήκευση";

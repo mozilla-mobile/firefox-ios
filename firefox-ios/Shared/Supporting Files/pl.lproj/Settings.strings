@@ -457,6 +457,12 @@
 /* Text displayed on the locations screen when the app loads a list of locations for the user to pick from. “Locations” here means the locations of VPN servers the user can connect to. */
 "VPN.LocationPicker.FindingLocationsText.v160" = "Wyszukiwanie położeń…";
 
+/* Subtitle text shown on the VPN location picker screen when the app fails to load a list of locations. Suggests the user try loading the list of locations again soon. “Locations” here means the locations of VPN servers the user can connect to. */
+"VPN.LocationPicker.NoLocationsSubtitle.v162" = "Spróbuj ponownie za kilka minut.";
+
+/* Title shown on the VPN location picker screen when the app fails to load a list of locations. “Locations” here means the locations of VPN servers the user can connect to. */
+"VPN.LocationPicker.NoLocationsTitle.v162" = "Nie można wczytać położeń";
+
 /* Option in the VPN server location list. Choosing it lets the app pick the server with the fastest connection. */
 "VPN.LocationPicker.RecommendedMainText.v160" = "Zalecane";
 
@@ -464,7 +470,7 @@
 "VPN.LocationPicker.RecommendedSubText.v160" = "%1$@ znajduje najszybsze położenie.";
 
 /* Announced by VoiceOver on the VPN settings screen when the VPN finishes connecting after the user turns on the VPN switch. */
-"VPN.Settings.Connected.v161" = "Połączono z VPN";
+"VPN.Settings.Connected.v161" = "Połączono z VPN";
 
 /* Shown next to the VPN switch on the VPN settings screen while the VPN is connecting, right after the user turns it on. */
 "VPN.Settings.Connecting.v160" = "Łączenie…";

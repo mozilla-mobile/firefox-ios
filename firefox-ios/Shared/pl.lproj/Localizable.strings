@@ -1555,6 +1555,9 @@
 /* Footer information for tracker protection level. */
 "Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Jeśli witryna nie działa jak powinna, stuknij kłódkę na pasku adresu i wyłącz wzmocnioną ochronę przed śledzeniem dla tej strony.";
 
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Strict.v161" = "Jeśli witryna nie działa prawidłowo, otwórz menu i spróbuj wyłączyć wzmocnioną ochronę przed śledzeniem.";
+
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Dopuszcza pewne reklamy śledzące, by strony działały prawidłowo.";
 

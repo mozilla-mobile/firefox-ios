@@ -22,6 +22,9 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Això permet desar fotos.";
 
+/* Privacy - Speech Recognition Usage Description */
+"NSSpeechRecognitionUsageDescription" = "Això permet al Firefox transcriure el vostre àudio.";
+
 /* (No Comment) */
 "Scan QR Code" = "Escaneja un codi QR";
 

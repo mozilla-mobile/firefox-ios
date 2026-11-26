@@ -161,7 +161,7 @@
 "ContextMenu.BookmarkLinkButtonTitle" = "Agregar enlace a marcadores";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
-"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Nueva Pestaña Privada abierta";
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Nueva pestaña privada abierta";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText.v113" = "Nueva pestaña privada abierta";
@@ -215,7 +215,7 @@
 "Could not add page to Reading List. Maybe it’s already there?" = "No se pudo agregar la página a la lista de lectura. ¿Ya estará ahí?";
 
 /* Error message that is shown in settings when there was a problem loading */
-"Could not load page." = "No se pudo cargar la página";
+"Could not load page." = "No se pudo cargar la página.";
 
 /* Description for the new ETP mode i.e. standard vs strict */
 "CoverSheet.v24.ETP.Description" = "La protección de rastreo mejorada integrada ayuda a detener a la publicidad que te sigue por todas partes. Activa el modo estricto para bloquear incluso más rastreadores, publicidades y ventanas emergentes.";
@@ -1554,6 +1554,9 @@
 
 /* Footer information for tracker protection level. */
 "Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Si un sitio no funciona como se esperaba, toca el candado en la barra de direcciones y desactiva la protección mejorada contra el rastreo para esa página.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Strict.v161" = "Si un sitio no funciona correctamente, intenta desactivar la Protección de rastreo mejorada en el menú principal.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Permitir algo de publicidad para que los sitios web funcionen adecuadamente.";

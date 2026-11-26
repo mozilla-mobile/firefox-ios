@@ -11,7 +11,7 @@
 "QuickAnswers.ContentView.Answering.v158" = "Elaborazione della risposta…";
 
 /* Button shown below a Quick Answers result that the user taps to ask a follow-up question about the answer. */
-"QuickAnswers.ContentView.FollowUpButton.v160" = "Fai un’altra domanda";
+"QuickAnswers.ContentView.FollowUpButton.v160" = "Fai una domanda di approfondimento";
 
 /* Footer text displayed below the Quick Answers result. %@ is the name of the AI model providing the answer, for example Liner or Exa. */
 "QuickAnswers.ContentView.Footer.v158" = "Basato su %@ · Le risposte potrebbero contenere errori.";
@@ -20,10 +20,10 @@
 "QuickAnswers.ContentView.Listening.v158" = "In ascolto, chiedi qualsiasi cosa…";
 
 /* Placeholder text shown in the Quick Answers view while the microphone is active and waiting for the user to ask a follow-up question about the previous answer. */
-"QuickAnswers.ContentView.ListeningFollowUp.v160" = "In ascolto, fai un’altra domanda…";
+"QuickAnswers.ContentView.ListeningFollowUp.v160" = "In ascolto, fai una domanda di approfondimento…";
 
 /* Button shown below a Quick Answers result that the user taps to ask a new, unrelated question. */
-"QuickAnswers.ContentView.NewQuestionButton.v161" = "Fai un’altra domanda";
+"QuickAnswers.ContentView.NewQuestionButton.v161" = "Fai una nuova domanda";
 
 /* Placeholder text shown in the Quick Answers view before the user starts speaking. */
 "QuickAnswers.ContentView.Placeholder.v158" = "Chiedi qualsiasi cosa…";

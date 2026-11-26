@@ -124,6 +124,9 @@
 /* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the connection is not secure. */
 "MainMenu.SiteProtection.ConnectionNotSecure.Title.v141" = "Tenging er ekki örugg";
 
+/* On the main menu, this is the subtitle shown under the site title when the current page is displayed in Reader Mode. */
+"MainMenu.SiteProtection.Protections.ReaderModeSubtitle.v162" = "Leshamur";
+
 /* On the main menu, at the top, title for a badge that opens site protection settings. */
 "MainMenu.SiteProtection.Protections.Title.v153" = "Verndun";
 
@@ -132,6 +135,9 @@
 
 /* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the protections are ON. */
 "MainMenu.SiteProtection.ProtectionsOn.Title.v141" = "Varnir eru VIRKAR";
+
+/* On the main menu, at the top, title for a badge next to Protections that opens the VPN settings. */
+"MainMenu.SiteProtection.VPN.Title.v162" = "VPN";
 
 /* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Add to Home screen tool for iOS Home screen. */
 "MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Subtitle.v132" = "Heim";

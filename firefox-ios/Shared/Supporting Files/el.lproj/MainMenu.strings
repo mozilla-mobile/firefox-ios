@@ -136,6 +136,9 @@
 /* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the protections are ON. */
 "MainMenu.SiteProtection.ProtectionsOn.Title.v141" = "Η προστασία είναι ΕΝΕΡΓΗ";
 
+/* On the main menu, at the top, title for a badge next to Protections that opens the VPN settings. */
+"MainMenu.SiteProtection.VPN.Title.v162" = "VPN";
+
 /* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Add to Home screen tool for iOS Home screen. */
 "MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Subtitle.v132" = "Αρχική";
 

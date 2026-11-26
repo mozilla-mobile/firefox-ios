@@ -1555,6 +1555,9 @@
 /* Footer information for tracker protection level. */
 "Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "اگر وبگاهی آن‌طور که انتظار دارید کار نمی‌کند، روی قفل نوار نشانی ضربه بزنید و محافظت پیشرفته در برابر ردیابی را برای آن صفحه خاموش کنید.";
 
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Strict.v161" = "اگر وبگاهی درست کار نمی‌کند، منو را باز کنید و خاموش کردن محافظت پیشرفته در برابر ردیابی را امتحان کنید.";
+
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "جهت عملکرد مناسب پایگاه‌ها به چند دنبال کننده اجازه فعالیت داده می‌شود.";
 

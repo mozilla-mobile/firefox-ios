@@ -41,22 +41,22 @@
 "Hide" = "Amaga";
 
 /* This message appears briefly as a notification (toast) to inform the user that a password has been successfully removed. */
-"LoginList.DeleteToast.v135" = "S'ha eliminat la contrasenya";
+"LoginList.DeleteToast.v135" = "S’ha eliminat la contrasenya";
 
 /* Prompt message warning the user that deleting non-synced logins will permanently remove them */
-"Logins will be permanently removed." = "Les dades d'inici de sessió s'eliminaran permanentment.";
+"Logins will be permanently removed." = "Les dades d’inici de sessió s’eliminaran permanentment.";
 
 /* Prompt message warning the user that deleted logins will remove logins from all connected devices */
-"Logins will be removed from all connected devices." = "Les dades d'inici de sessió s'eliminaran de tots els dispositius connectats.";
+"Logins will be removed from all connected devices." = "Les dades d’inici de sessió s’eliminaran de tots els dispositius connectats.";
 
 /* Label describing when the current login was last modified. %@ is the timestamp. */
 "Modified %@" = "Modificat: %@";
 
 /* Label displayed when no logins are found after searching. */
-"No logins found" = "No s'ha trobat cap inici de sessió";
+"No logins found" = "No s’ha trobat cap inici de sessió";
 
 /* Label displayed when no logins are found after searching. */
-"NoLoginsFound.Title.v122" = "No s'ha trobat cap contrasenya";
+"NoLoginsFound.Title.v122" = "No s’ha trobat cap contrasenya";
 
 /* Open and Fill website text selection menu item */
 "Open & Fill" = "Obre i emplena";
@@ -71,7 +71,7 @@
 "Search" = "Cerca";
 
 /* Accessibility label for the search input field in the Logins list */
-"Search Input Field" = "Camp d'entrada de la cerca";
+"Search Input Field" = "Camp d’entrada de la cerca";
 
 /* Title for the search field at the top of the Logins list screen */
 "SearchInput.Title.Search.v106" = "Cerca";
@@ -80,7 +80,7 @@
 "Select All" = "Marca-ho tot";
 
 /* Label displayed above the username row in Login Detail View. */
-"Username" = "Nom d'usuari";
+"Username" = "Nom d’usuari";
 
 /* Label displayed above the website row in Login Detail View. */
 "Website" = "Lloc web";

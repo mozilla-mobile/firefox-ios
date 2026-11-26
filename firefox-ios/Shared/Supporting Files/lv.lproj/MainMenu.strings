@@ -31,6 +31,9 @@
 /* On the main menu, this is the subtitle shown under the site title when the current page is displayed in Reader Mode. */
 "MainMenu.SiteProtection.Protections.ReaderModeSubtitle.v162" = "Lasītāja skats";
 
+/* On the main menu, at the top, title for a badge next to Protections that opens the VPN settings. */
+"MainMenu.SiteProtection.VPN.Title.v162" = "VPN";
+
 /* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to add a website to the iOS home screen. */
 "MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Title.v132" = "Pievienot sākuma ekrānam";
 

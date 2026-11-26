@@ -457,6 +457,12 @@
 /* Text displayed on the locations screen when the app loads a list of locations for the user to pick from. “Locations” here means the locations of VPN servers the user can connect to. */
 "VPN.LocationPicker.FindingLocationsText.v160" = "Stejnišća so pytaja…";
 
+/* Subtitle text shown on the VPN location picker screen when the app fails to load a list of locations. Suggests the user try loading the list of locations again soon. “Locations” here means the locations of VPN servers the user can connect to. */
+"VPN.LocationPicker.NoLocationsSubtitle.v162" = "Spytajće za mało mjeńšin hišće raz.";
+
+/* Title shown on the VPN location picker screen when the app fails to load a list of locations. “Locations” here means the locations of VPN servers the user can connect to. */
+"VPN.LocationPicker.NoLocationsTitle.v162" = "Stejnišća njedadźa so začitać";
+
 /* Option in the VPN server location list. Choosing it lets the app pick the server with the fastest connection. */
 "VPN.LocationPicker.RecommendedMainText.v160" = "Doporučeny";
 

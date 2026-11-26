@@ -185,10 +185,10 @@
 "Onboarding.Modern.BrandRefresh.Welcome.Title.v148" = "Dweud ffarwel wrth dracwyr annymunol";
 
 /* Title for the welcome card in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.Welcome.Title.v148.v2" = "Agor eich dolenni gyda phreifatrwydd cynhenid";
+"Onboarding.Modern.BrandRefresh.Welcome.Title.v148.v2" = "Agor eich dolenni gyda phreifatrwydd mewnol";
 
 /* Title for the welcome card in the v149 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.Welcome.TitleV3.v149" = "Agorwch eich holl ddolenni gyda phreifatrwydd cynhenid";
+"Onboarding.Modern.BrandRefresh.Welcome.TitleV3.v149" = "Agorwch eich holl ddolenni gyda phreifatrwydd mewnol";
 
 /* Option for the automatic theme. */
 "Onboarding.Modern.Customization.Theme.Automatic.v145" = "Awtomatig";
@@ -518,8 +518,14 @@ Secondary button on the onboarding card that prompts users to enable syncing for
 /* Subheading on the VPN onboarding card. Explains that the user can choose which country their browsing appears to come from. */
 "VPN.Onboarding.LocationsSubheading.v160" = "Pori o Nifer o Leoliadau";
 
+/* Subtitle text on the VPN onboarding card. Explains that the VPN helps hide where the user is from the websites they visit. */
+"VPN.Onboarding.Subheading.v162" = "Yn helpu i guddio'ch lleoliad rhag gwefannau wrth i chi bori.";
+
 /* Title of an onboarding card that introduces the built-in VPN. %1$@ is the app name (for example, Firefox). */
-"VPN.Onboarding.Title.v160" = "Rhowch gynnig ar VPN cynhenid %1$@";
+"VPN.Onboarding.Title.v160" = "Rhowch gynnig ar VPN mewnol %1$@";
+
+/* Text on a button on the VPN onboarding card. Tapping it turns on the VPN. */
+"VPN.Onboarding.TurnOnVPNButton.v162" = "Troi'r VPN ymlaen";
 
 /* Body text below the “More Privacy On Public Wi-Fi” (VPN.Onboarding.WifiSubheading.v160) subheading on the VPN onboarding card. %1$@ is the app name (for example, Firefox). */
 "VPN.Onboarding.WifiBody.v160" = "Ychwanegu amddiffyniad ychwanegol yn %1$@ pan fyddwch yn pori wrth fynd.";

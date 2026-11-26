@@ -46,6 +46,12 @@
 /* Title of the popup shown when the VPN server the user picked can’t be used right now. “Location” means the VPN server’s location. */
 "VPN.LocationPicker.LocationUnavailableTitle.v162" = "Stejnišćo k dispoziciji njeje";
 
+/* Short notification (toast) shown at the bottom of the screen while the VPN is on, when a website tries to use a feature that would connect directly without the VPN, such as video or voice calls, live features, or some sign-in requests. Firefox blocks that part of the page because it could reveal the user’s real location. */
+"VPN.ProxyLeakGuard.BlockedContentToast.v163" = "VPN je dźěl tuteje strony zablokował, zo by waše stejnišćo škitał";
+
+/* Button on the short notification (toast) displayed when the VPN is on and Firefox blocks a website feature that would bypass the VPN and could reveal the user’s real location. Tapping it opens a support article explaining why the feature was blocked. */
+"VPN.ProxyLeakGuard.LearnMoreButton.v163" = "Dalše informacije";
+
 /* Alternative body text for the popup shown when the user has used all of their free monthly VPN data. Explains that their VPN data resets at the start of next month. %1$@ is the monthly data limit in gigabytes (for example, 5). “GB” stands for gigabytes. */
 "VPN.ReachedDataLimitPopup.AltPopupBody.v160" = "Wšě %1$@ GB datow VPN su so přetrjebali. Přistup so w přichodnym měsacu wróćo staji.";
 

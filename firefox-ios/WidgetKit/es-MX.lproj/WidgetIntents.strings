@@ -5,7 +5,7 @@
 "ctDNmu" = "Atajos a varias acciones de Firefox";
 
 /* (No Comment) */
-"eHmH1H" = "Limpiar Pestañas Privadas";
+"eHmH1H" = "Cerrar pestañas privadas";
 
 /* (No Comment) */
 "eqyNJg" = "Acción Rápida";
@@ -17,7 +17,7 @@
 "fi3W24-2GqvPe" = "Hay ${count} opciones que coinciden con ‘Ir al Enlace Copiado’.";
 
 /* (No Comment) */
-"fi3W24-eHmH1H" = "Hay ${count} opciones que coinciden con ‘Borrar Pestañas Privadas’.";
+"fi3W24-eHmH1H" = "Hay ${count} opciones que coinciden con ‘Cerrar pestañas privadas’.";
 
 /* (No Comment) */
 "fi3W24-scEmjs" = "Hay ${count} opciones que coinciden con ‘Nueva Búsqueda Privada’.";
@@ -29,10 +29,10 @@
 "PzSrmZ-2GqvPe" = "Sólo para confirmar, ¿querías ‘Ir al Enlace Copiado’?";
 
 /* (No Comment) */
-"PzSrmZ-eHmH1H" = "Sólo para confirmar, ¿querías \"Limpiar Pestañas Privadas\"?";
+"PzSrmZ-eHmH1H" = "Sólo para confirmar, ¿querías ‘Cerrar pestañas privadas’?";
 
 /* (No Comment) */
-"PzSrmZ-scEmjs" = "Sólo para confirmar, ¿querías \"Nueva búsqueda privada\"?";
+"PzSrmZ-scEmjs" = "Sólo para confirmar, ¿querías ‘Nueva búsqueda privada’?";
 
 /* (No Comment) */
 "PzSrmZ-xRJbBP" = "Sólo para confirmar, ¿querías una ‘Nueva Búsqueda’?";

@@ -10,6 +10,12 @@
 /* This is the swipe action title for closing an inactive tab by swiping, located in the Inactive Tabs section of the Tabs Tray */
 "InactiveTabs.TabTray.CloseSwipeActionTitle.v115" = "Cerrar";
 
+/* Button in the synced tabs panel of the tab tray. Tapping it refreshes the list of tabs from the user's other devices. */
+"TabsTray.Sync.RefreshButton.Title.v162" = "Actualizar";
+
+/* Description shown in the synced tabs panel when the user is signed out. Signing in lets the user view tabs open on their other devices. */
+"TabsTray.Sync.SignIn.Description.v162" = "Inicia sesión para ver pestañas abiertas en tus otros dispositivos.";
+
 /* Users can disable syncing tabs from other devices. In the Sync Tabs panel of the Tab Tray, we inform the user tab syncing can be switched back on to view those tabs. */
 "TabsTray.Sync.SyncTabsDisabled.v116" = "Habilita la sincronización de pestañas para ver una lista de las mismas de tus otros dispositivos.";
 

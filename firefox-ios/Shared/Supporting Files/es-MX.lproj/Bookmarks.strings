@@ -23,7 +23,7 @@
 "Bookmarks.Menu.ClearTextFieldButtonA11yLabel.v139" = "Borrar";
 
 /* The title for the Delete Bookmark button, in the Edit Bookmark popup screen which is summoned from the main menu's Save submenu, which will delete the currently bookmarked site from the user's bookmarks. */
-"Bookmarks.Menu.DeleteBookmark.v132" = "Eliminar Marcador";
+"Bookmarks.Menu.DeleteBookmark.v132" = "Eliminar marcador";
 
 /* Label of toast displayed after a bookmark is deleted in the Bookmarks menu. %@ is the name of the bookmark. */
 "Bookmarks.Menu.DeletedBookmark.v131" = "Eliminado “%@”";

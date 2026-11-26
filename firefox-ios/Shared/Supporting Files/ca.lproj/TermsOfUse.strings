@@ -23,7 +23,7 @@
 "TermsOfUse.Link.PrivacyNotice.v142" = "Avís de privadesa";
 
 /* Hyperlink label for the Terms of Use document. %@ is replaced with the app name (e.g., Firefox). */
-"TermsOfUse.Link.TermsOfUse.v142" = "Condicions d'ús del %@";
+"TermsOfUse.Link.TermsOfUse.v142" = "Condicions d’ús del %@";
 
 /* Label for the button that allows the user to postpone accepting the Terms of Use. */
 "TermsOfUse.RemindMeLaterButton.v142" = "Recorda-m’ho més tard";
@@ -32,7 +32,7 @@
 "TermsOfUse.ReviewAndAcceptText.v142" = "Dediqueu un moment per revisar-ho i acceptar-ho. Més informació";
 
 /* Accessibility notification that is triggered when the Terms of Use sheet is presented. */
-"TermsOfUse.TermsOfUseHasOpened.v142" = "Full de condicions d'ús obert";
+"TermsOfUse.TermsOfUseHasOpened.v142" = "Full de condicions d’ús obert";
 
 /* Title shown at the top of the Terms of Use bottom sheet, indicating that there is an update to terms of use. */
 "TermsOfUse.Title.v142" = "Hi ha una actualització";
