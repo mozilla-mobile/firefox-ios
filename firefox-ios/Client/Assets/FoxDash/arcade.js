@@ -1,5 +1,5 @@
 // Plumbing for Fox Dash: themed palette, canvas sizing, the frame loop,
-// synthesized sound effects, particles and the in-memory best score.
+// synthesized sound effects, particles and the best score persisted by the app.
 (function () {
   'use strict';
 
@@ -30,11 +30,7 @@
   const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
   const fmt = (n) => n.toLocaleString();
 
-  const memory = new Map();
-  const store = {
-    get: (key) => memory.get(key) ?? null,
-    set: (key, value) => memory.set(key, value),
-  };
+  let best = Number(window.__FOX_DASH_BEST_SCORE__) || 0;
 
   function bindPlay(buttons, start) {
     buttons.forEach((b) => b.addEventListener('click', () => start({ seed: Math.floor(Math.random() * 2 ** 32) })));
@@ -162,14 +158,17 @@
     sync();
   }
 
-  function bestScore(game) {
-    return Number(store.get('arcade:best:' + game)) || 0;
+  function bestScore() {
+    return best;
   }
 
-  function reportScore(game, score) {
-    const prev = bestScore(game);
-    if (score > prev) store.set('arcade:best:' + game, String(score));
-    return { best: Math.max(prev, score), isNewBest: prev > 0 && score > prev };
+  function reportScore(score) {
+    const prev = best;
+    if (score > prev) {
+      best = score;
+      window.webkit?.messageHandlers?.foxDashBestScore?.postMessage(score);
+    }
+    return { best, isNewBest: prev > 0 && score > prev };
   }
 
   // Bursts of dots and floating score text, drawn in whatever units the

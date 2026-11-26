@@ -4,7 +4,6 @@
   'use strict';
 
   const { C, TAU, rand, lerp, clamp, fmt, theme } = Arcade;
-  const GAME = 'fox-dash';
   // Everything is measured in world units. The screen is at least VIEW_W units
   // wide and MIN_VIEW_H units tall, so landscape sees farther ahead instead of zooming.
   const VIEW_W = 430;
@@ -117,6 +116,7 @@
   let clock = 0;
   let shake = 0;
   let shownScore = -1;
+  let reportedPlaying = false;
 
   // Seeded gameplay random in [min, max). Arcade.rand is for cosmetics only.
   const srand = (min, max) => min + rng() * (max - min);
@@ -555,7 +555,7 @@
   function gameOver() {
     state = 'over';
     const final = score();
-    const { best, isNewBest } = Arcade.reportScore(GAME, final);
+    const { best, isNewBest } = Arcade.reportScore(final);
     ui.overCause.dataset.icon = cause;
     ui.overScore.textContent = fmt(final);
     ui.overBestScore.textContent = fmt(best);
@@ -780,12 +780,27 @@
     }
   }
 
+  function syncPlaying() {
+    const playing = state === 'playing';
+    if (playing === reportedPlaying) return;
+    reportedPlaying = playing;
+    window.webkit?.messageHandlers?.foxDashPlaying?.postMessage(playing);
+  }
+
   // ---------------------------------------------------------------- input --
 
   canvas.addEventListener('pointerdown', (e) => {
     e.preventDefault();
     jump();
   });
+
+  // While a round runs the app catches taps natively, because a tap handled by
+  // WebKit holds back the next frame, and forwards them here in CSS pixels.
+  window.foxDashTap = (x, y) => {
+    const button = document.elementFromPoint(x, y)?.closest('button');
+    if (button) button.click();
+    else jump();
+  };
 
   window.addEventListener('keydown', (e) => {
     if (e.repeat) return;
@@ -812,7 +827,7 @@
   // ------------------------------------------------------------------ run --
 
   reset();
-  showBest(Arcade.bestScore(GAME));
+  showBest(Arcade.bestScore());
   Sprites.paintIcons();
 
   Arcade.loop((dt) => {
@@ -839,5 +854,6 @@
     if (!covered || needsRender) render();
     needsRender = !covered;
     syncHud();
+    syncPlaying();
   });
 })();
