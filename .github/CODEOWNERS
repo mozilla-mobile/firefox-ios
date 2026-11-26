@@ -20,6 +20,9 @@
 # owners will be requested for a review.
 /firefox-ios/firefox-ios-tests/Tests/UITests @mozilla-mobile/fxios-automation-1
 /firefox-ios/firefox-ios-tests/Tests/XCUITests @mozilla-mobile/fxios-automation-1
+/firefox-ios/firefox-ios-tests/Tests/L10nSnapshotTests @mozilla-mobile/fxios-automation-1
+/firefox-ios/firefox-ios-tests/Tests/ExperimentIntegrationTests @mozilla-mobile/fxios-automation-1
+/firefox-ios/firefox-ios-tests/Tests/SyncIntegrationTests @mozilla-mobile/fxios-automation-1
 /firefox-ios/firefox-ios-tests/Tests/*.xctestplan @mozilla-mobile/fxios-automation-1
 /firefox-ios/firefox-ios-tests/Tests/UnitTest.xctestplan @mozilla-mobile/fxios-general-owners
 /firefox-ios/Client.xcodeproj/project.pbxproj @mozilla-mobile/fxios-general-owners @mozilla-mobile/fxios-automation-1
