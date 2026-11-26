@@ -457,6 +457,12 @@
 /* Text displayed on the locations screen when the app loads a list of locations for the user to pick from. “Locations” here means the locations of VPN servers the user can connect to. */
 "VPN.LocationPicker.FindingLocationsText.v160" = "Dod o Hyd i Leoliadau…";
 
+/* Subtitle text shown on the VPN location picker screen when the app fails to load a list of locations. Suggests the user try loading the list of locations again soon. “Locations” here means the locations of VPN servers the user can connect to. */
+"VPN.LocationPicker.NoLocationsSubtitle.v162" = "Ceisiwch eto mewn ychydig funudau.";
+
+/* Title shown on the VPN location picker screen when the app fails to load a list of locations. “Locations” here means the locations of VPN servers the user can connect to. */
+"VPN.LocationPicker.NoLocationsTitle.v162" = "Yn Methu Llwytho Lleoliadau";
+
 /* Option in the VPN server location list. Choosing it lets the app pick the server with the fastest connection. */
 "VPN.LocationPicker.RecommendedMainText.v160" = "Cymeradwy";
 
@@ -506,7 +512,7 @@
 "VPN.Settings.StatusPaused.v160" = "Wedi'i oedi";
 
 /* Name of the VPN row in the Privacy section of Settings. Also used as the title of the VPN settings screen. */
-"VPN.Settings.Title.v160" = "VPN cynhenid";
+"VPN.Settings.Title.v160" = "VPN mewnol";
 
 /* Used in two places: as the label for the toggle switch on the VPN settings screen that turns the VPN on or off, and as the label on the small capsule-shaped VPN status indicator, where it appears together with the current status (On, Off or Paused). */
 "VPN.Settings.ToggleTitle.v160" = "VPN";

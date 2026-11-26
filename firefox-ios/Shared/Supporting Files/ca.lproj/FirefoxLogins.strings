@@ -1,5 +1,5 @@
 /* Prompt for saving the username in the Save Logins prompt. */
-"LoginsHelper.PromptSaveLogin.Title.v122" = "Voleu desar el nom d'usuari?";
+"LoginsHelper.PromptSaveLogin.Title.v122" = "Voleu desar el nom d’usuari?";
 
 /* Prompt for saving a password in the Save Logins prompt. */
 "LoginsHelper.PromptSavePassword.Title.v122" = "Voleu desar la contrasenya?";

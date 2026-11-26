@@ -26,13 +26,13 @@
 "Bookmarks.Menu.DeleteBookmark.v132" = "Suprimeix l’adreça d’interès";
 
 /* Label of toast displayed after a bookmark is deleted in the Bookmarks menu. %@ is the name of the bookmark. */
-"Bookmarks.Menu.DeletedBookmark.v131" = "S'ha suprimit «%@»";
+"Bookmarks.Menu.DeletedBookmark.v131" = "S’ha suprimit «%@»";
 
 /* When a folder is longpressed in the bookmarks menu, a `Delete Folder` button is present. */
 "Bookmarks.Menu.DeleteFolder.v131" = "Suprimeix la carpeta";
 
 /* When a bookmark is longpressed in the bookmarks menu, an `Edit Bookmark` button is present. */
-"Bookmarks.Menu.EditBookmark.v131" = "Edita l'adreça d'interès";
+"Bookmarks.Menu.EditBookmark.v131" = "Edita l’adreça d’interès";
 
 /* Caption shown above the first collapsible folder group in the New/Edit Folder location picker. */
 "Bookmarks.Menu.EditBookmarkAllFoldersLabel.v154" = "Totes les carpetes";
@@ -71,7 +71,7 @@
 "Bookmarks.Menu.EditBookmarkSaveIn.v131" = "Desa a";
 
 /* Label on the top of the `Edit Bookmarks` screen. */
-"Bookmarks.Menu.EditBookmarkTitle.v131" = "Edita l'adreça d'interès";
+"Bookmarks.Menu.EditBookmarkTitle.v131" = "Edita l’adreça d’interès";
 
 /* When a folder is longpressed in the bookmarks menu, an `Edit Folder` button is present. */
 "Bookmarks.Menu.EditFolder.v131" = "Edita la carpeta";
@@ -83,7 +83,7 @@
 "Bookmarks.Menu.RemoveFromShortcutsTitle.v139" = "Elimina de les dreceres";
 
 /* The label displayed in the toast notification when saving a bookmark via the menu to the default folder. "Bookmarks" is the name of the default folder where the bookmark will be saved to. */
-"Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel.v136" = "S'ha desat a «Marcadors»";
+"Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel.v136" = "S’ha desat a «Marcadors»";
 
 /* The label displayed in the toast notification when saving a bookmark via the menu to a custom folder. %@ represents the custom name of the folder, created by the user, where the bookmark will be saved to. */
 "Bookmarks.Menu.SavedBookmarkToastLabel.v136" = "S’ha desat a «%@»";

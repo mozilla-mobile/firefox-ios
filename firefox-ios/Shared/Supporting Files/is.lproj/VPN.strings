@@ -37,6 +37,21 @@
 /* Title of a popup shown when the app fails to connect to the VPN. */
 "VPN.ErrorConnectingPopup.Title.v160" = "Tókst ekki að tengjast VPN";
 
+/* Body text of the popup shown when the VPN server the user picked can’t be used right now. Explains that the VPN has connected through the recommended location instead. The recommended location is the one with the fastest connection. “Location” means the VPN server’s location. */
+"VPN.LocationPicker.LocationUnavailableBody.v162" = "Við höfum skipt þér yfir á ráðlagða staðsetningu.";
+
+/* Button on the popup shown when the VPN server location the user picked can’t be used right now. Indicates the user understands and acknowledges the location has changed. Tapping it closes the popup. */
+"VPN.LocationPicker.LocationUnavailableButtonText.v162" = "Í lagi";
+
+/* Title of the popup shown when the VPN server the user picked can’t be used right now. “Location” means the VPN server’s location. */
+"VPN.LocationPicker.LocationUnavailableTitle.v162" = "Staðsetning ekki tiltæk";
+
+/* Short notification (toast) shown at the bottom of the screen while the VPN is on, when a website tries to use a feature that would connect directly without the VPN, such as video or voice calls, live features, or some sign-in requests. Firefox blocks that part of the page because it could reveal the user’s real location. */
+"VPN.ProxyLeakGuard.BlockedContentToast.v163" = "VPN lokaði fyrir hluta af þessari síðu til að vernda staðsetningu þína";
+
+/* Button on the short notification (toast) displayed when the VPN is on and Firefox blocks a website feature that would bypass the VPN and could reveal the user’s real location. Tapping it opens a support article explaining why the feature was blocked. */
+"VPN.ProxyLeakGuard.LearnMoreButton.v163" = "Frekari upplýsingar";
+
 /* Alternative body text for the popup shown when the user has used all of their free monthly VPN data. Explains that their VPN data resets at the start of next month. %1$@ is the monthly data limit in gigabytes (for example, 5). “GB” stands for gigabytes. */
 "VPN.ReachedDataLimitPopup.AltPopupBody.v160" = "Öll %1$@ GB af VPN-gögnum notuð. Aðgangur verður endurstilltur í næsta mánuði.";
 

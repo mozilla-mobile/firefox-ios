@@ -4,6 +4,15 @@
 /* Button on the popup shown when the VPN stops working while the user is browsing. Tapping it closes only the tab the user is currently viewing. */
 "VPN.ErrorBrowsingPopup.CloseThisTab.v160" = "Пӯшидани варақаи ҷорӣ";
 
+/* Button on the popups shown when the VPN stops working while the user is browsing, or when the user runs out of free monthly VPN data. Tapping it closes the popup so the user can keep browsing without the VPN. */
+"VPN.ErrorBrowsingPopup.Continue.v160" = "Идома додан бе истифодаи «VPN»";
+
+/* Title of a popup shown when the VPN stops working while the user is browsing with it on. Asks if the user wants to keep browsing without the VPN. */
+"VPN.ErrorBrowsingPopup.Title.v160" = "Бе «VPN» идома медиҳед?";
+
+/* Body text of the popup shown when the app fails to connect to the VPN. “Try again” means try connecting to the VPN again. */
+"VPN.ErrorConnectingPopup.Body.v160" = "Пас аз чанд дақиқа аз нав кӯшиш кунед.";
+
 /* Button on the popup shown when the app fails to connect to the VPN. Tapping it closes the popup. */
 "VPN.ErrorConnectingPopup.CloseButtonText.v160" = "Пӯшидан";
 
@@ -12,6 +21,12 @@
 
 /* Title of a popup shown when the app fails to connect to the VPN. */
 "VPN.ErrorConnectingPopup.Title.v160" = "Ба «VPN» пайваст шуда натавонист";
+
+/* Button on the popup shown when the VPN server location the user picked can’t be used right now. Indicates the user understands and acknowledges the location has changed. Tapping it closes the popup. */
+"VPN.LocationPicker.LocationUnavailableButtonText.v162" = "ХУБ";
+
+/* Title of the popup shown when the VPN server the user picked can’t be used right now. “Location” means the VPN server’s location. */
+"VPN.LocationPicker.LocationUnavailableTitle.v162" = "Ҷойгиршавӣ дастнорас аст";
 
 /* Button on the popup shown when the user runs out of free monthly VPN data. Tapping it closes all of the user's open tabs. */
 "VPN.ReachedDataLimitPopup.CloseAllTabs.v160" = "Пӯшидани ҳамаи варақаҳо";

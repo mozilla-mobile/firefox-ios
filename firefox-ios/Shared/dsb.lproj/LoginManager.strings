@@ -22,11 +22,20 @@
 /* Label for the button used to delete the current login. */
 "DeleteLoginAlert.DeleteButton.Title.v122" = "Wótwónoźeś";
 
+/* Primary button in the password deletion confirmation dialog. Tapping it deletes the saved password. */
+"DeleteLoginAlert.DeleteButton.Title.v162" = "Lašowaś";
+
 /* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
 "DeleteLoginAlert.Message.Local.v122" = "Njamóžośo toś tu akciju anulěrowaś.";
 
 /* Prompt message warning the user that deleted logins will remove logins from all connected devices */
 "DeleteLoginAlert.Message.Synced.v122" = "To gronidło ze wšych wašych synchronizěrowanych rědow wótwónoźijo.";
+
+/* Message in the password deletion confirmation dialog when the user has a sync account. %@ is the app name (e.g. Firefox). Deleting the password also deletes it from the user's synced devices. */
+"DeleteLoginAlert.Message.Synced.v162" = "To gronidło z %@ na wšych wašych synchronizěrowanych rědach wulašujo.";
+
+/* Title of the confirmation dialog shown when the user deletes a saved password. */
+"DeleteLoginAlert.Title.v162" = "Gronidło lašowaś?";
 
 /* Title for the prompt that appears when the user deletes a login. */
 "DeleteLoginsAlert.Title.v122" = "Gronidło wótwónoźeś?";

@@ -521,6 +521,9 @@ Secondary button on the onboarding card that prompts users to enable syncing for
 /* Title of an onboarding card that introduces the built-in VPN. %1$@ is the app name (for example, Firefox). */
 "VPN.Onboarding.Title.v160" = "Prøv %1$@ sin innebygde VPN";
 
+/* Text on a button on the VPN onboarding card. Tapping it turns on the VPN. */
+"VPN.Onboarding.TurnOnVPNButton.v162" = "Slå på VPN";
+
 /* Body text below the “More Privacy On Public Wi-Fi” (VPN.Onboarding.WifiSubheading.v160) subheading on the VPN onboarding card. %1$@ is the app name (for example, Firefox). */
 "VPN.Onboarding.WifiBody.v160" = "Få ekstra beskyttelse i %1$@ når du surfer på farten.";
 

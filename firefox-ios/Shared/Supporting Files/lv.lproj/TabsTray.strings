@@ -1,0 +1,6 @@
+/* Button in the synced tabs panel of the tab tray. Tapping it refreshes the list of tabs from the user's other devices. */
+"TabsTray.Sync.RefreshButton.Title.v162" = "Atsvaidzināt";
+
+/* Description shown in the synced tabs panel when the user is signed out. Signing in lets the user view tabs open on their other devices. */
+"TabsTray.Sync.SignIn.Description.v162" = "Piesakies, lai apskatītu citu ierīču cilnes!";
+

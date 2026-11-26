@@ -518,8 +518,14 @@ Secondary button on the onboarding card that prompts users to enable syncing for
 /* Subheading on the VPN onboarding card. Explains that the user can choose which country their browsing appears to come from. */
 "VPN.Onboarding.LocationsSubheading.v160" = "從多個不同地點上網";
 
+/* Subtitle text on the VPN onboarding card. Explains that the VPN helps hide where the user is from the websites they visit. */
+"VPN.Onboarding.Subheading.v162" = "協助於瀏覽網站時，隱藏您實際所在的位置。";
+
 /* Title of an onboarding card that introduces the built-in VPN. %1$@ is the app name (for example, Firefox). */
 "VPN.Onboarding.Title.v160" = "試用 %1$@ 內建的 VPN 功能";
+
+/* Text on a button on the VPN onboarding card. Tapping it turns on the VPN. */
+"VPN.Onboarding.TurnOnVPNButton.v162" = "開啟 VPN";
 
 /* Body text below the “More Privacy On Public Wi-Fi” (VPN.Onboarding.WifiSubheading.v160) subheading on the VPN onboarding card. %1$@ is the app name (for example, Firefox). */
 "VPN.Onboarding.WifiBody.v160" = "外出上網時，使用 %1$@ 增添一層防護。";
