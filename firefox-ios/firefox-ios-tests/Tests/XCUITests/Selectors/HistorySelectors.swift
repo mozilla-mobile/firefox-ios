@@ -28,11 +28,16 @@ struct HistorySelectors: HistorySelectorsSet {
         groups: ["library", "history"]
     )
 
-    let HISTORY_ENTRY_MOZILLA = Selector.cellStaticTextLabelContains(
-        IDs.mozillaEntry,
-        description: "History entry for mozilla.org",
-        groups: ["library", "history"]
-    )
+    var HISTORY_ENTRY_MOZILLA: Selector {
+        Selector.element(
+            .staticText,
+            in: HISTORY_TABLE,
+            matching: NSPredicate(format: "label CONTAINS %@", IDs.mozillaEntry),
+            value: IDs.mozillaEntry,
+            description: "History entry for mozilla.org",
+            groups: ["library", "history"]
+        )
+    }
 
     let HISTORY_TABLE = Selector.tableIdOrLabel(
         IDs.tableViewId,

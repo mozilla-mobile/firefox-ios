@@ -9,12 +9,14 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
     private var topSitesScreen: TopSitesScreen!
     private var readingListScreen: ReadingListScreen!
     private var historyScreen: HistoryScreen!
+    private var browserScreen: BrowserScreen!
 
     override func setUp() async throws {
         try await super.setUp()
         topSitesScreen = TopSitesScreen(app: app)
         readingListScreen = ReadingListScreen(app: app)
         historyScreen = HistoryScreen(app: app)
+        browserScreen = BrowserScreen(app: app)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864317
@@ -252,6 +254,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
         // Go to a webpage and navigate to history
         navigator.openURL("mozilla.org")
         waitUntilPageLoad()
+        browserScreen.assertAddressBarContains(value: "mozilla.org", timeout: TIMEOUT_LONG)
         navigator.nowAt(BrowserTab)
         navigator.goto(LibraryPanel_History)
         // Long-press on a website

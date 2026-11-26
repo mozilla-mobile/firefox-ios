@@ -24,8 +24,7 @@ final class HistoryScreen {
     }
 
     func longPressMozillaEntry() {
-        let entry = sel.HISTORY_TABLE.element(in: app).staticTexts
-            .elementContainingText(sel.HISTORY_ENTRY_MOZILLA.value)
+        let entry = sel.HISTORY_ENTRY_MOZILLA.element(in: app)
         BaseTestCase().mozWaitForElementToExist(entry)
         entry.press(forDuration: 1.0)
     }
