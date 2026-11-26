@@ -411,6 +411,8 @@
 		26CC5468CF3075C7FDB5E4E1 /* TabGroupsFeatureFlag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6490D091AB3E3ED2BDDF36EF /* TabGroupsFeatureFlag.swift */; };
 		2703CEDB30ADFBB700831691 /* ReaderNativeMenuHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2703CEDA30ADFBA900831691 /* ReaderNativeMenuHelper.swift */; };
 		2703CEDD30AE1F5100831691 /* ReaderNativeMenuHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2703CEDC30AE1F4700831691 /* ReaderNativeMenuHelperTests.swift */; };
+		2703E69630B09A9F00831691 /* HistoryNativeMenuHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2703E69530B09A9800831691 /* HistoryNativeMenuHelper.swift */; };
+		2703E69830B0A1F300831691 /* HistoryNativeMenuHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2703E69730B0A1EC00831691 /* HistoryNativeMenuHelperTests.swift */; };
 		2731333C3087B0BA00C904B2 /* WallpaperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2731333B3087B0AF00C904B2 /* WallpaperTests.swift */; };
 		274A36CC239EB99400A21587 /* LibraryPanelContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274A36CB239EB99400A21587 /* LibraryPanelContextMenu.swift */; };
 		274A36CE239EB9EC00A21587 /* LibraryViewController+LibraryPanelDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274A36CD239EB9EC00A21587 /* LibraryViewController+LibraryPanelDelegate.swift */; };
@@ -3492,6 +3494,8 @@
 		26F9438EAC1F1D7449D42BB2 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/LoginManager.strings"; sourceTree = "<group>"; };
 		2703CEDA30ADFBA900831691 /* ReaderNativeMenuHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderNativeMenuHelper.swift; sourceTree = "<group>"; };
 		2703CEDC30AE1F4700831691 /* ReaderNativeMenuHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderNativeMenuHelperTests.swift; sourceTree = "<group>"; };
+		2703E69530B09A9800831691 /* HistoryNativeMenuHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryNativeMenuHelper.swift; sourceTree = "<group>"; };
+		2703E69730B0A1EC00831691 /* HistoryNativeMenuHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryNativeMenuHelperTests.swift; sourceTree = "<group>"; };
 		272F476F88D45C79446A586A /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		2731333B3087B0AF00C904B2 /* WallpaperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperTests.swift; sourceTree = "<group>"; };
 		274A36CB239EB99400A21587 /* LibraryPanelContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryPanelContextMenu.swift; sourceTree = "<group>"; };
@@ -15973,6 +15977,7 @@
 		8AED868128CA3A1F00351A50 /* Library */ = {
 			isa = PBXGroup;
 			children = (
+				2703E69730B0A1EC00831691 /* HistoryNativeMenuHelperTests.swift */,
 				0B7CF8852CAC1BFB00DC02F8 /* Bookmarks */,
 				8AF3B15D2AF99D2F009BB262 /* DownloadsPanelTests.swift */,
 				2137786029802B7000D01309 /* DownloadsPanelViewModelTests.swift */,
@@ -16250,6 +16255,7 @@
 		96EB6C3627D821A400A9D159 /* HistoryPanel */ = {
 			isa = PBXGroup;
 			children = (
+				2703E69530B09A9800831691 /* HistoryNativeMenuHelper.swift */,
 				59A6825233896FC846499289 /* HistoryPanel.swift */,
 				211F00AB27F4D918001D9189 /* HistoryPanel+Search.swift */,
 				96EB6C3727D821B800A9D159 /* HistoryPanelViewModel.swift */,
@@ -21700,6 +21706,7 @@
 				CAC458F1249429C20042561A /* PasswordManagerSelectionHelper.swift in Sources */,
 				C8656D75270F834600E199EA /* FlaggableFeatureOptions.swift in Sources */,
 				1BE7A4922C636AEA00460798 /* URLSessionConfiguration+Extension.swift in Sources */,
+				2703E69630B09A9F00831691 /* HistoryNativeMenuHelper.swift in Sources */,
 				C8CD80D82A1E31C20097C3AE /* NimbusOnboardingTestingConfigUtility.swift in Sources */,
 				033A62002E77FE9900A84E8A /* ResetTermsOfServiceAcceptancePage.swift in Sources */,
 				D3C744CD1A687D6C004CE85D /* URIFixup.swift in Sources */,
@@ -22523,6 +22530,7 @@
 				EE39C1A830990B3000EB3C7C /* VPNSettingsViewModelTests.swift in Sources */,
 				E1390FB828B42EF200C9EF3E /* WallpaperManagerMock.swift in Sources */,
 				C2886E0C2EC60E63007AE6C3 /* TranslationsSchemeHandlerTests.swift in Sources */,
+				2703E69830B0A1F300831691 /* HistoryNativeMenuHelperTests.swift in Sources */,
 				21FA8FB22AE856EB0013B815 /* MockTabTrayCoordinatorDelegate.swift in Sources */,
 				8A87B4382CC1A92D003A9239 /* MockPocketManager.swift in Sources */,
 				C8699152289177F5007ACC5C /* WallpaperNetworkingTests.swift in Sources */,

@@ -13,7 +13,6 @@ import SiteImageView
 @objcMembers
 class HistoryPanel: UIViewController,
                     LibraryPanel,
-                    LibraryPanelContextMenu,
                     Themeable,
                     Notifiable {
     enum UX {
@@ -44,6 +43,11 @@ class HistoryPanel: UIViewController,
     var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
     var logger: Logger
+
+    private lazy var nativeMenuHelper = HistoryNativeMenuHelper(
+        libraryPanelDelegate: libraryPanelDelegate,
+        historyCoordinatorDelegate: historyCoordinatorDelegate
+    )
 
     // We'll be able to prefetch more often the higher this number is. But remember, it's expensive!
     private let historyPanelPrefetchOffset = 8
@@ -106,7 +110,6 @@ class HistoryPanel: UIViewController,
     private lazy var tableView: UITableView = .build({ [weak self] tableView in
         guard let self = self else { return }
         tableView.dataSource = self.diffableDataSource
-        tableView.addGestureRecognizer(self.longPressRecognizer)
         tableView.accessibilityIdentifier = a11yIds.tableView
         tableView.prefetchDataSource = self
         tableView.delegate = self
@@ -123,10 +126,6 @@ class HistoryPanel: UIViewController,
     }, {
         UITableView(frame: .zero, style: .libraryPanel)
     })
-
-    lazy var longPressRecognizer: UILongPressGestureRecognizer = {
-        UILongPressGestureRecognizer(target: self, action: #selector(onLongPressGestureRecognized))
-    }()
 
     lazy var emptyStateOverlayView: UIView = createEmptyStateOverlayView()
     private weak var emptyStateOverlayBackgroundColorView: UIView?
@@ -651,48 +650,6 @@ class HistoryPanel: UIViewController,
                                      object: .selectedHistoryItem,
                                      value: .historyPanelNonGroupItem)
     }
-
-    // MARK: - LibraryPanelContextMenu - override default extension methods
-
-    func presentContextMenu(
-        for site: Site,
-        with indexPath: IndexPath,
-        completionHandler: @escaping () -> PhotonActionSheet?
-    ) {
-        guard let contextMenu = completionHandler() else { return }
-
-        present(contextMenu, animated: true, completion: nil)
-    }
-
-    func getSiteDetails(for indexPath: IndexPath) -> Site? {
-        return siteAt(indexPath: indexPath)
-    }
-
-    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowActions]? {
-        guard var actions = getDefaultContextMenuActions(
-            for: site,
-            libraryPanelDelegate: libraryPanelDelegate
-        ) else { return nil }
-
-        let removeAction = SingleActionViewModel(title: .DeleteFromHistoryContextMenuTitle,
-                                                 iconString: StandardImageIdentifiers.Large.delete,
-                                                 tapHandler: { _ in
-            self.removeHistoryItem(at: indexPath)
-        })
-
-        let pinTopSite = SingleActionViewModel(title: .AddToShortcutsActionTitle,
-                                               iconString: StandardImageIdentifiers.Large.pin,
-                                               tapHandler: { _ in
-            self.pinToTopSites(site)
-        })
-
-        actions.append(PhotonRowActions(pinTopSite))
-        actions.append(PhotonRowActions(removeAction))
-
-        let cell = tableView.cellForRow(at: indexPath)
-        actions.append(getShareAction(site: site, sourceView: cell ?? self.view, delegate: historyCoordinatorDelegate))
-        return actions
-    }
 }
 
 // MARK: - UITableViewDelegate related helpers
@@ -792,6 +749,46 @@ extension HistoryPanel: UITableViewDelegate {
 
         return UITableView.automaticDimension
     }
+
+    func tableView(
+        _ tableView: UITableView,
+        previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration
+    ) -> UITargetedPreview? {
+        guard let indexPath = configuration.identifier as? IndexPath else { return nil }
+        return targetedPreview(for: indexPath)
+    }
+
+    func tableView(
+        _ tableView: UITableView,
+        previewForDismissingContextMenuWithConfiguration configuration: UIContextMenuConfiguration
+    ) -> UITargetedPreview? {
+        guard let indexPath = configuration.identifier as? IndexPath else { return nil }
+        return targetedPreview(for: indexPath)
+    }
+
+    private func targetedPreview(for indexPath: IndexPath) -> UITargetedPreview? {
+        guard let cell = tableView.cellForRow(at: indexPath) else { return nil }
+
+        let parameters = UIPreviewParameters()
+        parameters.shadowPath = UIBezierPath()
+        return UITargetedPreview(view: cell, parameters: parameters)
+    }
+
+    func tableView(_ tableView: UITableView,
+                   contextMenuConfigurationForRowAt indexPath: IndexPath,
+                   point: CGPoint) -> UIContextMenuConfiguration? {
+        guard let site = siteAt(indexPath: indexPath),
+              let cell = tableView.cellForRow(at: indexPath),
+              let menu = nativeMenuHelper.menu(
+                  for: site,
+                  sourceView: cell,
+                  onPin: { [weak self] in self?.pinToTopSites(site) },
+                  onRemove: { [weak self] in self?.removeHistoryItem(at: indexPath) }
+              )
+        else { return nil }
+
+        return UIContextMenuConfiguration(identifier: indexPath as NSCopying, previewProvider: nil) { _ in menu }
+    }
 }
 
 /// Refresh controls helpers
@@ -875,18 +872,6 @@ extension HistoryPanel {
                     }
                 }
             }
-    }
-
-    @objc
-    private func onLongPressGestureRecognized(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
-        guard longPressGestureRecognizer.state == .began else { return }
-        let touchPoint = longPressGestureRecognizer.location(in: tableView)
-        guard let indexPath = tableView.indexPathForRow(at: touchPoint),
-              let item = diffableDataSource?.itemIdentifier(for: indexPath),
-              case HistoryItem.site = item
-        else { return }
-
-        presentContextMenu(for: indexPath)
     }
 
     @objc

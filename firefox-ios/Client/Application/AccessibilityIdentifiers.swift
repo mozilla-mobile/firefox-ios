@@ -491,6 +491,14 @@ enum AccessibilityIdentifiers {
         enum HistoryPanel {
             static let tableView = "History List"
             static let recentlyClosedCell = "HistoryPanel.recentlyClosedCell"
+
+            enum ContextMenu {
+                static let openInNewTab = "HistoryPanel.ContextMenu.OpenInNewTab"
+                static let openInPrivateTab = "HistoryPanel.ContextMenu.OpenInPrivateTab"
+                static let addToShortcuts = "HistoryPanel.ContextMenu.AddToShortcuts"
+                static let deleteFromHistory = "HistoryPanel.ContextMenu.DeleteFromHistory"
+                static let share = "HistoryPanel.ContextMenu.Share"
+            }
         }
 
         enum GroupedList {
