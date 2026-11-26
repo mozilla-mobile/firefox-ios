@@ -157,6 +157,9 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     func showQuickAnswers(transitionType: QuickAnswersTransitionType)
 
     @MainActor
+    func showFoxDash()
+
+    @MainActor
     func showPrivacyNoticeLink(url: URL)
 
     @MainActor

@@ -14,18 +14,21 @@ struct HeaderState: StateType, Equatable, Hashable {
     var isPrivate: Bool
     var showQuickAnswersButton: Bool
     var shouldStartQuickAnswersButtonGlow: Bool
+    var isFoxDashEnabled: Bool
 
     init(
         windowUUID: WindowUUID,
         isPrivate: Bool = false,
-        quickAnswersStore: QuickAnswersStore = QuickAnswersMiddleware()
+        quickAnswersStore: QuickAnswersStore = QuickAnswersMiddleware(),
+        featureFlagsProvider: FeatureFlagProviding = AppContainer.shared.resolve()
     ) {
         let showQuickAnswersButton = isPrivate ? false : quickAnswersStore.isQuickAnswersEnabled
         self.init(
             windowUUID: windowUUID,
             isPrivate: isPrivate,
             showQuickAnswersButton: showQuickAnswersButton,
-            shouldStartQuickAnswersButtonGlow: quickAnswersStore.shouldStartEntryPointButtonGlow
+            shouldStartQuickAnswersButtonGlow: quickAnswersStore.shouldStartEntryPointButtonGlow,
+            isFoxDashEnabled: !isPrivate && featureFlagsProvider.isEnabled(.foxDash)
         )
     }
 
@@ -33,12 +36,14 @@ struct HeaderState: StateType, Equatable, Hashable {
         windowUUID: WindowUUID,
         isPrivate: Bool,
         showQuickAnswersButton: Bool,
-        shouldStartQuickAnswersButtonGlow: Bool
+        shouldStartQuickAnswersButtonGlow: Bool,
+        isFoxDashEnabled: Bool
     ) {
         self.windowUUID = windowUUID
         self.isPrivate = isPrivate
         self.showQuickAnswersButton = showQuickAnswersButton
         self.shouldStartQuickAnswersButtonGlow = shouldStartQuickAnswersButtonGlow
+        self.isFoxDashEnabled = isFoxDashEnabled
     }
 
     static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
@@ -87,7 +92,8 @@ struct HeaderState: StateType, Equatable, Hashable {
             windowUUID: state.windowUUID,
             isPrivate: state.isPrivate,
             showQuickAnswersButton: state.showQuickAnswersButton,
-            shouldStartQuickAnswersButtonGlow: state.shouldStartQuickAnswersButtonGlow
+            shouldStartQuickAnswersButtonGlow: state.shouldStartQuickAnswersButtonGlow,
+            isFoxDashEnabled: state.isFoxDashEnabled
         )
     }
 }

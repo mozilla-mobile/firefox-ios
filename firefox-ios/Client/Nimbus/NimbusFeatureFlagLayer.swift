@@ -93,6 +93,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .firefoxSuggestFeature:
             return checkFirefoxSuggestFeature()
 
+        case .foxDash:
+            return checkFoxDashFeature()
+
         case .googleLens:
             return checkGoogleLensFeature()
 
@@ -433,6 +436,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkFirefoxJpGuideDefaultSiteFeature() -> Bool {
         return nimbus.features.firefoxJpGuideDefaultSite.value().enabled
+    }
+
+    private func checkFoxDashFeature() -> Bool {
+        return nimbus.features.foxDashFeature.value().enabled
     }
 
     private func checkFirefoxSuggestFeature() -> Bool {

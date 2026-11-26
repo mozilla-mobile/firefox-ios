@@ -10,14 +10,17 @@ import XCTest
 @MainActor
 final class HeaderStateTests: XCTestCase {
     private var mockQuickAnswersStore: MockQuickAnswersStore!
+    private var mockFeatureFlags: MockNimbusFeatureFlags!
 
     override func setUp() async throws {
         try await super.setUp()
         mockQuickAnswersStore = MockQuickAnswersStore()
+        mockFeatureFlags = MockNimbusFeatureFlags()
     }
 
     override func tearDown() async throws {
         mockQuickAnswersStore = nil
+        mockFeatureFlags = nil
         try await super.tearDown()
     }
 
@@ -184,12 +187,35 @@ final class HeaderStateTests: XCTestCase {
         XCTAssertFalse(newState.showQuickAnswersButton)
     }
 
+    func test_init_foxDashFlagEnabled_setsIsFoxDashEnabledTrue() {
+        mockFeatureFlags.enabledFlags = [.foxDash]
+
+        let state = createSubject()
+
+        XCTAssertTrue(state.isFoxDashEnabled)
+    }
+
+    func test_init_foxDashFlagDisabled_setsIsFoxDashEnabledFalse() {
+        let state = createSubject()
+
+        XCTAssertFalse(state.isFoxDashEnabled)
+    }
+
+    func test_init_foxDashFlagEnabledInPrivateMode_setsIsFoxDashEnabledFalse() {
+        mockFeatureFlags.enabledFlags = [.foxDash]
+
+        let state = createSubject(isPrivate: true)
+
+        XCTAssertFalse(state.isFoxDashEnabled)
+    }
+
     // MARK: - Private
     private func createSubject(isPrivate: Bool = false) -> HeaderState {
         return HeaderState(
             windowUUID: .XCTestDefaultUUID,
             isPrivate: isPrivate,
-            quickAnswersStore: mockQuickAnswersStore
+            quickAnswersStore: mockQuickAnswersStore,
+            featureFlagsProvider: mockFeatureFlags
         )
     }
 

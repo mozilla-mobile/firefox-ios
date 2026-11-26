@@ -2897,24 +2897,12 @@ class BrowserViewController: UIViewController,
             navigationHandler?.showShortcutsLibrary()
         case .quickAnswers(let transitionType):
             navigationHandler?.showQuickAnswers(transitionType: transitionType)
+        case .foxDash:
+            navigationHandler?.showFoxDash()
         case .privacyNoticeLink(let url):
             navigationHandler?.showPrivacyNoticeLink(url: url)
         case .certificatesFromErrorPage:
-            guard let errorPageURL = type.errorPageURL,
-                  let originalURL = type.url,
-                  let title = type.certificateTitle else {
-                logger.log(
-                    "errorPageURL, url or certificateTitle should not be nil when navigating for certificatesFromErrorPage",
-                    level: .warning,
-                    category: .coordinator
-                )
-                return
-            }
-            navigationHandler?.showCertificatesFromErrorPage(
-                errorPageURL: errorPageURL,
-                originalURL: originalURL,
-                title: title
-            )
+            handleCertificatesFromErrorPage(for: type)
         case .nativeErrorPageLearnMore:
             guard let url = type.url else {
                 logger.log(
@@ -2928,6 +2916,24 @@ class BrowserViewController: UIViewController,
         case .readerMode:
             toggleReaderMode()
         }
+    }
+
+    private func handleCertificatesFromErrorPage(for type: NavigationDestination) {
+        guard let errorPageURL = type.errorPageURL,
+              let originalURL = type.url,
+              let title = type.certificateTitle else {
+            logger.log(
+                "errorPageURL, url or certificateTitle should not be nil when navigating for certificatesFromErrorPage",
+                level: .warning,
+                category: .coordinator
+            )
+            return
+        }
+        navigationHandler?.showCertificatesFromErrorPage(
+            errorPageURL: errorPageURL,
+            originalURL: originalURL,
+            title: title
+        )
     }
 
     private func handleDisplayActions(for state: BrowserViewControllerState) {

@@ -40,6 +40,7 @@ enum NavigationBrowserActionType: ActionType {
     case tapOnHomepageSearchBar
     case tapOnShortcutsShowAllButton
     case tapOnQuickAnswersButton
+    case longPressOnHomepageLogo
     case tapOnPrivacyNoticeLink
     case tapOnShowCertificatesFromErrorPage
     case tapOnNativeErrorPageLearnMore

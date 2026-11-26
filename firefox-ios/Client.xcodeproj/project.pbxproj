@@ -2556,6 +2556,7 @@
 		FB16062200000000000000B2 /* CameraCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB16062200000000000000B1 /* CameraCoordinatorTests.swift */; };
 		FBADD1700000000000000002 /* LaunchPairingFromURLSettingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBADD1700000000000000001 /* LaunchPairingFromURLSettingTests.swift */; };
 		FC16179B00000000000000B1 /* WebCompatReportViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC16179B00000000000000B2 /* WebCompatReportViewControllerTests.swift */; };
+		FD0A00000000000000000003 /* FoxDash in Resources */ = {isa = PBXBuildFile; fileRef = FD0A00000000000000000004 /* FoxDash */; };
 		FEED00022F00000100000002 /* ThemeManagerResolveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEED00012F00000100000001 /* ThemeManagerResolveTests.swift */; };
 		FEED00042F00000100000004 /* SettingsThemeableViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEED00032F00000100000003 /* SettingsThemeableViewTests.swift */; };
 		FEEDFACE000000000000FB01 /* ChangeVPNEndpointSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEEDFACE000000000000FA01 /* ChangeVPNEndpointSetting.swift */; };
@@ -12976,6 +12977,7 @@
 		FC5142049E673D8E348CE7A5 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Today.strings; sourceTree = "<group>"; };
 		FC9E41DEBDA3C4945EFC2DEA /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		FCA14DC9810D573511E1CA5E /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
+		FD0A00000000000000000004 /* FoxDash */ = {isa = PBXFileReference; lastKnownFileType = folder; path = FoxDash; sourceTree = "<group>"; };
 		FD3845BBA6E359A2667D1F72 /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		FD444D4589CCBBD6E1741575 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/Intro.strings"; sourceTree = "<group>"; };
 		FD5447F394A8151ADC8C32C1 /* hsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hsb; path = hsb.lproj/Storage.strings; sourceTree = "<group>"; };
@@ -13032,6 +13034,8 @@
 		BD7A00000000000000000002 /* BrowserDataTransfer */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = BrowserDataTransfer; sourceTree = "<group>"; };
 		ED85DD2C2DE669FF00487807 /* probes */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = probes; sourceTree = "<group>"; };
 		FC16179A00000000000000A1 /* WebCompat */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = WebCompat; sourceTree = "<group>"; };
+		FD0A00000000000000000001 /* FoxDash */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = FoxDash; sourceTree = "<group>"; };
+		FD0A00000000000000000002 /* FoxDash */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = FoxDash; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -17732,6 +17736,7 @@
 				C714D6382E46575D00FC02E6 /* ShortcutsLibrary */,
 				4331D3EE2A059C1C00542BDD /* SyncContentSettingsViewControllerTests.swift */,
 				8AD54D3128FD9E2C0070D4B3 /* Theme */,
+				FD0A00000000000000000002 /* FoxDash */,
 				21292E6A2E7896910001AC06 /* RecordVisitObservationManagerTests.swift */,
 			);
 			path = Frontend;
@@ -18645,6 +18650,7 @@
 		F84B21EB1A0910F600AAB793 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				FD0A00000000000000000004 /* FoxDash */,
 				C2F335322ECE33720071588A /* translations-engine.worker.js */,
 				C2F335332ECE33720071588A /* TranslationsEngine.js */,
 				ED287B732E4D4C0500527204 /* LiquidGlassAppIcons */,
@@ -18680,6 +18686,7 @@
 			children = (
 				A874ED2427431BDF172B74F3 /* VPN */,
 				BD7A00000000000000000001 /* BrowserDataTransfer */,
+				FD0A00000000000000000001 /* FoxDash */,
 				ECD8E56A2FF7EB5B002092C6 /* Wayback */,
 				0B78DC6C2E3C9CDA00804872 /* Summarizer */,
 				AA5E81452EB12BAB00919E60 /* Translations */,
@@ -19269,6 +19276,7 @@
 				BD7A00000000000000000001 /* BrowserDataTransfer */,
 				ED85DD2C2DE669FF00487807 /* probes */,
 				FC16179A00000000000000A1 /* WebCompat */,
+				FD0A00000000000000000001 /* FoxDash */,
 			);
 			name = Client;
 			packageProductDependencies = (
@@ -19318,6 +19326,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				BD7A00000000000000000002 /* BrowserDataTransfer */,
+				FD0A00000000000000000002 /* FoxDash */,
 			);
 			name = ClientTests;
 			packageProductDependencies = (
@@ -19878,6 +19887,7 @@
 				A5C9C991308A99330016CA78 /* searchTermInAddressBarOn.json in Resources */,
 				C2F335352ECE33720071588A /* TranslationsEngine.js in Resources */,
 				D4AFAB0E2AFA8F9A000BFEAA /* SyncIntegrationTests in Resources */,
+				FD0A00000000000000000003 /* FoxDash in Resources */,
 				EDF2C05C2D6CDB6F00723609 /* AppIcons.xcassets in Resources */,
 				43F92B3829E9F52B000C0F17 /* AutofillAllFramesAtDocumentStart.js in Resources */,
 				8C29376A2BF79EE000146613 /* AddressFormManager.css in Resources */,
