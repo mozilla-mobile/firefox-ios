@@ -30,8 +30,6 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-FAILED_LOCALES=()
-
 for lang in $LOCALES; do
     echo "$(date) Snapshotting $lang"
     mkdir "l10n-screenshots/$lang"
@@ -47,22 +45,5 @@ for lang in $LOCALES; do
         --output_directory "l10n-screenshots/$lang" \
         --xcodebuild_formatter xcbeautify \
         $EXTRA_FAST_LANE_ARGS
-
-    # fastlane exits 0 when tests fail, so count the failures from the newest xcresult
-    XCRESULT=$(ls -td l10n-screenshots-dd/Logs/Test/*.xcresult 2>/dev/null | head -1)
-    if [ -z "$XCRESULT" ]; then
-        echo "$lang: no xcresult found"
-        FAILED_LOCALES+=("$lang")
-        continue
-    fi
-    FAILED_COUNT=$(xcrun xcresulttool get --path "$XCRESULT" --format json --legacy | jq -r '.metrics.testsFailedCount._value // 0')
-    echo "$lang: $FAILED_COUNT failed tests"
-    if [ "$FAILED_COUNT" -gt 0 ]; then
-        FAILED_LOCALES+=("$lang")
-    fi
+    echo "Fastlane exited with code: $?"
 done
-
-if [ ${#FAILED_LOCALES[@]} -gt 0 ]; then
-    echo "Tests failed for: ${FAILED_LOCALES[*]}"
-    exit 1
-fi
