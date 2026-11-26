@@ -6,26 +6,41 @@ import Common
 import UIKit
 import WebDataTransfer
 
+@available(iOS 26.4, *)
+@MainActor
+protocol BrowserDataImporting {
+    func importData(token: UUID, onAPICompletion: @escaping @Sendable () -> Void) async -> BrowserTransferResult?
+}
+
+@available(iOS 26.4, *)
+extension BrowserDataImporter: BrowserDataImporting {}
+
 /// Receives browser data imports for one window scene.
 @available(iOS 26.4, *)
 @MainActor
 final class BrowserDataImportHandler {
-    private let importer: BrowserDataImporter
+    private let importer: BrowserDataImporting
     private let logger: Logger
 
-    init(windowScene: UIWindowScene, logger: Logger = DefaultLogger.shared) {
-        self.importer = BrowserDataImporter(scene: windowScene)
+    convenience init(windowScene: UIWindowScene, logger: Logger = DefaultLogger.shared) {
+        self.init(importer: BrowserDataImporter(scene: windowScene), logger: logger)
+    }
+
+    init(importer: BrowserDataImporting, logger: Logger = DefaultLogger.shared) {
+        self.importer = importer
         self.logger = logger
     }
 
-    func receiveImport(from userActivity: NSUserActivity) {
+    /// Returns the task that receives the data, or `nil` when the activity has no import token.
+    @discardableResult
+    func receiveImport(from userActivity: NSUserActivity) -> Task<Void, Never>? {
         guard let token = BrowserDataImporter.token(from: userActivity.userInfo) else {
             logger.log("Browser data import activity has no valid token", level: .warning, category: .lifecycle)
-            return
+            return nil
         }
 
-        Task {
-            guard let result = await importer.importData(token: token) else { return }
+        return Task {
+            guard let result = await importer.importData(token: token, onAPICompletion: {}) else { return }
             logger.log("Browser data import finished: \(result.outcome)", level: .info, category: .lifecycle)
         }
     }
