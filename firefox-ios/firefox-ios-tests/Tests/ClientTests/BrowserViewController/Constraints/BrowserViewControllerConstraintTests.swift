@@ -244,6 +244,81 @@ final class BrowserViewControllerConstraintTests: BrowserViewControllerConstrain
         XCTAssertGreaterThan(searchIndex, contentIndex)
     }
 
+    func test_showSearchController_bottomToolbar_extendsUnderStatusBar() throws {
+        let subject = createSubject(isBottomSearchBar: true)
+        let searchController = createSearchController()
+        subject.searchController = searchController
+        defer { subject.destroySearchController() }
+
+        subject.showSearchController()
+
+        let topConstraint = try XCTUnwrap(searchControllerTopConstraint(in: subject, searchView: searchController.view))
+        XCTAssertTrue(topConstraint.secondItem === subject.view)
+        XCTAssertEqual(topConstraint.secondAttribute, .top)
+    }
+
+    func test_showThenHideSearchController_bottomToolbar_keepsViewOrder() {
+        let subject = createSubject(isBottomSearchBar: true)
+        let searchController = createSearchController()
+        subject.searchController = searchController
+        defer { subject.destroySearchController() }
+        let subviewsBefore = subject.view.subviews
+
+        subject.showSearchController()
+        subject.hideSearchController()
+
+        XCTAssertEqual(subject.view.subviews, subviewsBefore)
+    }
+
+    func test_showSearchController_topToolbar_startsBelowHeader() throws {
+        let subject = createSubject(isBottomSearchBar: false)
+        let searchController = createSearchController()
+        subject.searchController = searchController
+        defer { subject.destroySearchController() }
+
+        subject.showSearchController()
+
+        let topConstraint = try XCTUnwrap(searchControllerTopConstraint(in: subject, searchView: searchController.view))
+        XCTAssertTrue(topConstraint.secondItem === subject.header)
+        XCTAssertEqual(topConstraint.secondAttribute, .bottom)
+    }
+
+    func test_searchBarPositionDidChange_toTop_whileShowingSearch_movesSearchBelowHeader() throws {
+        // Rotating an iPhone to landscape moves the bottom address bar to the top.
+        let subject = createSubject(isBottomSearchBar: true)
+        let searchController = createSearchController()
+        subject.searchController = searchController
+        defer { subject.destroySearchController() }
+        subject.showSearchController()
+
+        subject.searchBarPositionDidChange(newSearchBarPosition: .top)
+
+        let topConstraint = try XCTUnwrap(searchControllerTopConstraint(in: subject, searchView: searchController.view))
+        XCTAssertTrue(topConstraint.secondItem === subject.header)
+        XCTAssertEqual(topConstraint.secondAttribute, .bottom)
+        drainMainQueue()
+    }
+
+    func test_searchBarPositionDidChange_toBottom_whileShowingSearch_extendsSearchUnderStatusBar() throws {
+        guard #available(iOS 17.0, *) else {
+            throw XCTSkip("traitOverrides requires iOS 17+")
+        }
+        // Rotating an iPhone back to portrait moves the address bar to the bottom again.
+        let subject = createSubject(isBottomSearchBar: false)
+        setDuoClosedTraits(on: subject)
+        let searchController = createSearchController()
+        subject.searchController = searchController
+        defer { subject.destroySearchController() }
+        subject.showSearchController()
+
+        subject.searchBarPositionDidChange(newSearchBarPosition: .bottom)
+
+        let topConstraint = try XCTUnwrap(searchControllerTopConstraint(in: subject, searchView: searchController.view))
+        XCTAssertTrue(topConstraint.secondItem === subject.view)
+        XCTAssertEqual(topConstraint.secondAttribute, .top)
+        drainMainQueue()
+    }
+
     func test_readerModeBar_hasConstraintsWhenPresent() {
         let subject = createSubject()
 
@@ -466,6 +541,13 @@ final class BrowserViewControllerConstraintTests: BrowserViewControllerConstrain
             [.leading, .trailing, .bottom, .height].contains($0.firstAttribute)
         }
         return relevantConstraints.count
+    }
+
+    private func searchControllerTopConstraint(in subject: BrowserViewController,
+                                               searchView: UIView) -> NSLayoutConstraint? {
+        return subject.view.constraints.first {
+            $0.isActive && $0.firstItem === searchView && $0.firstAttribute == .top
+        }
     }
 
     private func createSearchController() -> SearchViewController {

@@ -104,6 +104,9 @@ class BrowserViewController: UIViewController,
     /// Bottom constraint of `searchController.view`. The anchor it targets depends on the search bar
     /// position (`overKeyboardContainer.top` for bottom bar, `view.bottom` for top bar)
     private var searchControllerBottomConstraint: NSLayoutConstraint?
+    /// Top constraint of `searchController.view`. The anchor it targets depends on the search bar
+    /// position (`view.top` for bottom bar, `header.bottom` for top bar)
+    private var searchControllerTopConstraint: NSLayoutConstraint?
     var searchSessionState: SearchSessionState?
     /// The SAP to associate with the next address bar search, for search-config-v3.
     /// Set when a widget search opens the address bar (cleared when editing session ends)
@@ -436,6 +439,14 @@ class BrowserViewController: UIViewController,
         return isBottomSearchBar ? overKeyboardContainer.topAnchor : view.bottomAnchor
     }
 
+    /// The anchor `searchController.view`'s top is pinned to, based on the current search bar position.
+    /// - Bottom search bar: `view.top`, so the suggestions also cover the status bar and the content
+    ///   behind them (e.g. homepage shortcuts) doesn't show through above them.
+    /// - Top search bar: `header.bottom`, below the address bar
+    private var searchControllerTopAnchor: NSLayoutYAxisAnchor {
+        return isBottomSearchBar ? view.topAnchor : header.bottomAnchor
+    }
+
     // MARK: Data management
 
     let profile: Profile
@@ -746,17 +757,8 @@ class BrowserViewController: UIViewController,
             return isScrollAlphaZero && webView.scrollView.contentSize.height > view.bounds.height
         }()
 
-        if isBottomSearchBar {
-            header.isClearBackground = false
-
-            let isFxHomeTab = tabManager.selectedTab?.isFxHomeTab ?? false
-            let offset = scrollOffset ?? statusBarOverlay.scrollOffset
-            topBlurView.alpha = isFxHomeTab ? offset : 1
-        } else {
-            header.isClearBackground = true
-            topBlurView.alpha = 1
-        }
-
+        header.isClearBackground = !isBottomSearchBar
+        topBlurView.alpha = 1
         overKeyboardContainer.isClearBackground = !isKeyboardShowing || shouldClearBackground
         bottomContainer.isClearBackground = true
         bottomBlurView.isHidden = isScrollAlphaZero
@@ -2278,7 +2280,7 @@ class BrowserViewController: UIViewController,
         guard let searchController = self.searchController else { return }
         searchController.searchAccessPoint = pendingSearchAccessPoint ?? .default
 
-        // If searchController is already presented only update the bottom anchor
+        // If searchController is already presented only update the top and bottom anchors
         // based in `bottomSearchBar` position
         guard searchController.view.superview == nil else {
             updateSearchControllerConstraints()
@@ -2289,10 +2291,12 @@ class BrowserViewController: UIViewController,
         view.addSubview(searchController.view)
         searchController.view.translatesAutoresizingMaskIntoConstraints = false
 
+        let topConstraint = searchController.view.topAnchor.constraint(equalTo: searchControllerTopAnchor)
         let bottomConstraint = searchController.view.bottomAnchor.constraint(equalTo: searchControllerBottomAnchor)
+        searchControllerTopConstraint = topConstraint
         searchControllerBottomConstraint = bottomConstraint
         NSLayoutConstraint.activate([
-            searchController.view.topAnchor.constraint(equalTo: header.bottomAnchor),
+            topConstraint,
             searchController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             searchController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             bottomConstraint
@@ -2310,9 +2314,15 @@ class BrowserViewController: UIViewController,
         contentContainer.accessibilityElementsHidden = true
     }
 
-    /// Updates `searchController.view`'s bottom constraint to match the current search bar position
+    /// Updates `searchController.view`'s top and bottom constraints to match the current search bar position.
     private func updateSearchControllerConstraints() {
         guard let searchController, searchController.view.superview != nil else { return }
+
+        searchControllerTopConstraint?.isActive = false
+        searchControllerTopConstraint = searchController.view.topAnchor.constraint(
+            equalTo: searchControllerTopAnchor
+        )
+        searchControllerTopConstraint?.isActive = true
 
         searchControllerBottomConstraint?.isActive = false
         searchControllerBottomConstraint = searchController.view.bottomAnchor.constraint(
@@ -2338,6 +2348,7 @@ class BrowserViewController: UIViewController,
         searchController.willMove(toParent: nil)
         searchController.view.removeFromSuperview()
         searchController.removeFromParent()
+        searchControllerTopConstraint = nil
         searchControllerBottomConstraint = nil
 
         contentContainer.accessibilityElementsHidden = false

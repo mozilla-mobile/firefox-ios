@@ -286,7 +286,8 @@ final class SearchViewController: SiteTableViewController,
         tableView.removeFromSuperview()
         view.addSubviews(tableView)
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            // With a bottom URL bar the view extends under the status bar, keep the rows below it.
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: searchEngineScrollView.topAnchor)
