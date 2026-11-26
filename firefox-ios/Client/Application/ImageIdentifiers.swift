@@ -92,6 +92,7 @@ enum ImageIdentifiers {
         public static let noInternetConnection = "noInternetConnection"
         public static let securityError = "securityError"
         public static let vpnConnectionError = "vpnConnectionError"
+        public static let kitErrorExclamationMark = "kitErrorExclamationMark"
     }
 
     public enum TrackingProtection {
