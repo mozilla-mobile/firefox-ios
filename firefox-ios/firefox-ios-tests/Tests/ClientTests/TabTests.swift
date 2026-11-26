@@ -712,6 +712,34 @@ class TabTests: XCTestCase {
         XCTAssertTrue(mockTabWebView.navigationDelegate === previousDelegate)
     }
 
+    @MainActor
+    func testLoadBlankPage_whenURLChangesDuringLoad_restoresPreviousURL() async throws {
+        let subject = createSubject()
+        let homeURL = try XCTUnwrap(URL(string: "internal://local/about/home"))
+        let navigationSourceWebView = WKWebView(frame: .zero)
+        let navigation = try XCTUnwrap(navigationSourceWebView.loadHTMLString("", baseURL: nil))
+        mockTabWebView.mockNavigation = navigation
+        let loadCalledExpectation = XCTestExpectation(description: "wait for load to be called")
+        mockTabWebView.loadCalledExpectation = loadCalledExpectation
+        subject.webView = mockTabWebView
+        subject.url = homeURL
+
+        let task = Task {
+            await subject.loadBlankPage()
+        }
+
+        await fulfillment(of: [loadCalledExpectation])
+        // Simulates the BVC URL KVO overwriting the tab URL
+        subject.url = URL(string: "about:blank")
+
+        let blankPageDelegate = try XCTUnwrap(mockTabWebView.navigationDelegate as? BlankPageNavigationDelegate)
+        blankPageDelegate.webView(mockTabWebView, didFinish: navigation)
+        await task.value
+        subject.webView = nil
+
+        XCTAssertEqual(subject.url, homeURL)
+    }
+
     // MARK: - Helpers
     @MainActor
     private func createSubject() -> Tab {

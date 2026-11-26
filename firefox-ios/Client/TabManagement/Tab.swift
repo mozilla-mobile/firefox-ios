@@ -679,6 +679,8 @@ class Tab: NSObject,
     func loadBlankPage() async {
         guard let webView, let blankURL = URL(string: "about:blank") else { return }
 
+        // The BVC's URL KVO can still overwrite `url` with about:blank (e.g. for internal:// home tabs)
+        let previousURL = url
         let previousDelegate = webView.navigationDelegate
         await withCheckedContinuation { continuation in
             let delegate = BlankPageNavigationDelegate(continuation: continuation)
@@ -691,6 +693,7 @@ class Tab: NSObject,
         }
         webView.navigationDelegate = previousDelegate
         blankLoadDelegate = nil
+        url = previousURL
     }
 
     func goBack() {
