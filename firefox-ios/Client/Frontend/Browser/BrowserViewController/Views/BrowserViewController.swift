@@ -1079,7 +1079,12 @@ class BrowserViewController: UIViewController,
     }
 
     func newState(state: BrowserViewControllerLens) {
+        let previousLens = browserViewControllerLens
         browserViewControllerLens = state
+
+        if let previousLens, previousLens.isAddressBarMinimized != state.isAddressBarMinimized {
+            updateBlurViews()
+        }
 
         if state.browserViewControllerState.reloadWebView {
             updateContentInHomePanel(state.browserViewControllerState.browserViewType)

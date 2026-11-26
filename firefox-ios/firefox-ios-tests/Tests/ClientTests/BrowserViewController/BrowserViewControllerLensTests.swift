@@ -68,6 +68,30 @@ final class BrowserViewControllerLensTests: XCTestCase {
         XCTAssertEqual(subject.homepageSearchBarState, homepageState.searchBarState)
     }
 
+    func testBrowserViewControllerLens_withMinimizedToolbarState_isAddressBarMinimized() {
+        let toolbarState = ToolbarState(windowUUID: .XCTestDefaultUUID).copy(isAddressBarMinimized: true)
+        let initialAppState = setupAppState(
+            bvcState: .hasState(createPopulatedBrowserViewControllerState()),
+            homepageState: .noState,
+            toolbarState: .hasState(toolbarState)
+        )
+
+        let subject = BrowserViewControllerLens(appState: initialAppState, uuid: .XCTestDefaultUUID)
+
+        XCTAssertTrue(subject.isAddressBarMinimized)
+    }
+
+    func testBrowserViewControllerLens_withMissingToolbarState_isNotAddressBarMinimized() {
+        let initialAppState = setupAppState(
+            bvcState: .hasState(createPopulatedBrowserViewControllerState()),
+            homepageState: .noState
+        )
+
+        let subject = BrowserViewControllerLens(appState: initialAppState, uuid: .XCTestDefaultUUID)
+
+        XCTAssertFalse(subject.isAddressBarMinimized)
+    }
+
     // MARK: - Private
     private func createPopulatedBrowserViewControllerState() -> BrowserViewControllerState {
         return BrowserViewControllerState(
@@ -126,7 +150,8 @@ final class BrowserViewControllerLensTests: XCTestCase {
 
     private func setupAppState(
         bvcState: StateArgument<BrowserViewControllerState>,
-        homepageState: StateArgument<HomepageState>
+        homepageState: StateArgument<HomepageState>,
+        toolbarState: StateArgument<ToolbarState> = .noState
     ) -> AppState {
         var componentState: [ComponentState] = []
 
@@ -140,6 +165,13 @@ final class BrowserViewControllerLensTests: XCTestCase {
         switch homepageState {
         case .hasState(let state):
             componentState.append(.homepage(state))
+        case .noState:
+            break
+        }
+
+        switch toolbarState {
+        case .hasState(let state):
+            componentState.append(.toolbar(state))
         case .noState:
             break
         }

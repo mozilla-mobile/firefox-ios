@@ -10,6 +10,8 @@ struct BrowserViewControllerLens: StateLens {
     let browserViewControllerState: BrowserViewControllerState
     /// State regarding the homepage's embedded search bar
     let homepageSearchBarState: SearchBarState
+    /// Whether the address bar is minimized
+    let isAddressBarMinimized: Bool
 
     // MARK: - Lens initialization
     init(appState: AppState, uuid: WindowUUID) {
@@ -27,13 +29,22 @@ struct BrowserViewControllerLens: StateLens {
             window: uuid
         )?.searchBarState ?? SearchBarState(windowUUID: uuid)
 
+        let isAddressBarMinimized = appState.componentState(
+            ToolbarState.self,
+            for: .toolbar,
+            window: uuid
+        )?.isAddressBarMinimized ?? false
+
         self.init(browserViewControllerState: browserViewControllerState,
-                  homepageSearchBarState: homepageStateSearchBarState)
+                  homepageSearchBarState: homepageStateSearchBarState,
+                  isAddressBarMinimized: isAddressBarMinimized)
     }
 
     init(browserViewControllerState: BrowserViewControllerState,
-         homepageSearchBarState: SearchBarState) {
+         homepageSearchBarState: SearchBarState,
+         isAddressBarMinimized: Bool = false) {
         self.browserViewControllerState = browserViewControllerState
         self.homepageSearchBarState = homepageSearchBarState
+        self.isAddressBarMinimized = isAddressBarMinimized
     }
 }
