@@ -282,7 +282,9 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
 
         // Step 1
         let pagesWhileHidden = [trackerPage, otherTrackerPage]
-        for page in pagesWhileHidden {
+        for (index, page) in pagesWhileHidden.enumerated() {
+            // In the same tab, the previous tracker page's text would pass the page check mid-navigation
+            if index > 0 { openNewTab() }
             browserScreen.openURLAndAssertPageText(page, text: TestLabels.trackers)
             assertBlockedTrackersInPanel(equals: trackersOnTrackerPage)
         }
