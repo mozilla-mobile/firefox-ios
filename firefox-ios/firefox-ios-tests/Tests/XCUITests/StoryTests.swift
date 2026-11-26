@@ -127,7 +127,7 @@ class StoryTests: FeatureFlaggedTestBase {
         )
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/XXXXXXX
+    // https://mozilla.testrail.io/index.php?/cases/view/4569812
     func testNewsStoryCategoriesFilterStories() throws {
         if !isFennec {
             throw XCTSkip("Skipping testNewsStoryCategoriesFilterStories on Firefox or FirefoxBeta schemas")
