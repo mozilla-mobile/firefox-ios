@@ -154,8 +154,6 @@
 	</array>
 	<key>NimbusURL</key>
 	<string>$(NIMBUS_URL)</string>
-	<key>PocketEnvironmentAPIKey</key>
-	<string>$(POCKET_API_KEY)</string>
 	<key>SentryCloudDSN</key>
 	<string>$(SENTRY_CLOUD_DSN)</string>
 	<key>UIApplicationSceneManifest</key>
