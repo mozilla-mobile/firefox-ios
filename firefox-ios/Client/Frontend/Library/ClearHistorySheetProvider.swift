@@ -5,11 +5,16 @@
 import Foundation
 import WebKit
 import Common
+import Shared
 
 @MainActor
-class ClearHistorySheetProvider {
+class ClearHistorySheetProvider: FeatureFlaggable {
     private let profile: Profile
     private let windowManager: WindowManager
+
+    private var usesUpdatedSyncStrings: Bool {
+        featureFlagsProvider.isEnabled(.syncStringUpdates)
+    }
 
     init(profile: Profile, windowManager: WindowManager = AppContainer.shared.resolve()) {
         self.profile = profile
@@ -33,7 +38,12 @@ class ClearHistorySheetProvider {
     }
 
     func createAlertAndConfigureWithArrowIfNeeded(from viewController: UIViewController) -> UIAlertController {
-        let alert = UIAlertController(title: .LibraryPanel.History.ClearHistorySheet.Title,
+        let title: String = if usesUpdatedSyncStrings {
+            String(format: .LibraryPanel.History.ClearHistorySheet.TitleV2, AppName.shortName.rawValue)
+        } else {
+            .LibraryPanel.History.ClearHistorySheet.Title
+        }
+        let alert = UIAlertController(title: title,
                                       message: nil,
                                       preferredStyle: .actionSheet)
 
