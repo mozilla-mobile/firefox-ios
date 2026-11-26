@@ -248,11 +248,11 @@ final class ErrorPageHandler: InternalSchemeResponse, FeatureFlaggable {
             && components.valueForQuery(ErrorPageCellularDataRestrictedParam) == "true"
         if isCellularDataRestricted {
             variables["error_title"] = String(
-                format: .NativeErrorPage.CellularDataRestricted.TitleLabel,
+                format: .NativeErrorPage.Legacy.CellularDataRestricted.TitleLabel,
                 AppName.shortName.rawValue
             )
             variables["short_description"] = String(
-                format: .NativeErrorPage.CellularDataRestricted.Description,
+                format: .NativeErrorPage.Legacy.CellularDataRestricted.Description,
                 AppName.shortName.rawValue
             )
         }

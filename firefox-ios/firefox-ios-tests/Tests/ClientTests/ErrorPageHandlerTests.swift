@@ -110,11 +110,11 @@ final class ErrorPageHandlerTests: XCTestCase {
         let response = ErrorPageHandler().responseForErrorWebPage(request: URLRequest(url: loadedURL))
         let html = try XCTUnwrap(response.flatMap { String(data: $0.1, encoding: .utf8) })
         XCTAssertTrue(html.contains(String(
-            format: .NativeErrorPage.CellularDataRestricted.TitleLabel,
+            format: .NativeErrorPage.Legacy.CellularDataRestricted.TitleLabel,
             AppName.shortName.rawValue
         )))
         XCTAssertTrue(html.contains(String(
-            format: .NativeErrorPage.CellularDataRestricted.Description,
+            format: .NativeErrorPage.Legacy.CellularDataRestricted.Description,
             AppName.shortName.rawValue
         )))
     }
@@ -130,8 +130,8 @@ final class ErrorPageHandlerTests: XCTestCase {
         let response = ErrorPageHandler().responseForErrorWebPage(request: URLRequest(url: errorURL))
         let html = try XCTUnwrap(response.flatMap { String(data: $0.1, encoding: .utf8) })
 
-        XCTAssertFalse(html.contains(String.NativeErrorPage.CellularDataRestricted.TitleLabel))
-        XCTAssertFalse(html.contains(String.NativeErrorPage.CellularDataRestricted.Description))
+        XCTAssertFalse(html.contains(String.NativeErrorPage.Legacy.CellularDataRestricted.TitleLabel))
+        XCTAssertFalse(html.contains(String.NativeErrorPage.Legacy.CellularDataRestricted.Description))
     }
 
     @MainActor

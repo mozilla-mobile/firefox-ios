@@ -308,8 +308,8 @@ final class NativeErrorPageHelperTests: XCTestCase {
     func testInternetConnectionModel_hasCorrectComputedProperties() {
         let model = ErrorPageModel.internetConnection
 
-        XCTAssertEqual(model.title, .NativeErrorPage.NoInternetConnection.TitleLabel)
-        XCTAssertEqual(model.description, .NativeErrorPage.NoInternetConnection.Description)
+        XCTAssertEqual(model.title, .NativeErrorPage.Legacy.NoInternetConnection.TitleLabel)
+        XCTAssertEqual(model.description, .NativeErrorPage.Legacy.NoInternetConnection.Description)
         XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.noInternetConnection)
         XCTAssertNil(model.url)
         XCTAssertNil(model.advancedSection)
@@ -330,8 +330,8 @@ final class NativeErrorPageHelperTests: XCTestCase {
             advancedSection: advancedSection
         ))
 
-        XCTAssertEqual(model.title, String.NativeErrorPage.BadCertDomain.TitleLabel)
-        XCTAssertEqual(model.description, String.NativeErrorPage.BadCertDomain.Description)
+        XCTAssertEqual(model.title, String.NativeErrorPage.Legacy.BadCertDomain.TitleLabel)
+        XCTAssertEqual(model.description, String.NativeErrorPage.Legacy.BadCertDomain.Description)
         XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.securityError)
         XCTAssertEqual(model.url, testURL)
         XCTAssertNotNil(model.advancedSection)
@@ -347,12 +347,12 @@ final class NativeErrorPageHelperTests: XCTestCase {
         let testURL = URL(string: "https://example.com")!
         let model = ErrorPageModel.generic(GenericErrorModel(url: testURL))
 
-        XCTAssertEqual(model.title, .NativeErrorPage.GenericError.TitleLabel)
-        XCTAssertEqual(model.description, String(format: .NativeErrorPage.GenericError.DescriptionPrefixWithURL,
+        XCTAssertEqual(model.title, .NativeErrorPage.Legacy.GenericError.TitleLabel)
+        XCTAssertEqual(model.description, String(format: .NativeErrorPage.Legacy.GenericError.DescriptionPrefixWithURL,
                                                  AppName.shortName.description,
                                                  testURL.host!)
                        + " " +
-                       String.NativeErrorPage.GenericError.DescriptionSuffix)
+                       String.NativeErrorPage.Legacy.GenericError.DescriptionSuffix)
         XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.noInternetConnection)
         XCTAssertEqual(model.url, testURL)
         XCTAssertNil(model.advancedSection)
@@ -375,11 +375,11 @@ final class NativeErrorPageHelperTests: XCTestCase {
     func testGenericErrorModel_withoutURL_hasNilURL() {
         let model = ErrorPageModel.generic(GenericErrorModel(url: nil))
 
-        XCTAssertEqual(model.title, .NativeErrorPage.GenericError.TitleLabel)
-        XCTAssertEqual(model.description, String(format: .NativeErrorPage.GenericError.DescriptionPrefixWithoutURL,
+        XCTAssertEqual(model.title, .NativeErrorPage.Legacy.GenericError.TitleLabel)
+        XCTAssertEqual(model.description, String(format: .NativeErrorPage.Legacy.GenericError.DescriptionPrefixWithoutURL,
                                                  AppName.shortName.description)
                        + " " +
-                       String.NativeErrorPage.GenericError.DescriptionSuffix)
+                       String.NativeErrorPage.Legacy.GenericError.DescriptionSuffix)
         XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.noInternetConnection)
         XCTAssertNil(model.url)
         XCTAssertNil(model.advancedSection)

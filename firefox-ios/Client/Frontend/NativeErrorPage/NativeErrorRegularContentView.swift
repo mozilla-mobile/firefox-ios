@@ -64,7 +64,7 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable, UITextViewDe
         label.adjustsFontForContentSizeCategory = true
         label.font = FXFontStyles.Regular.footnote.scaledFont()
         label.numberOfLines = 0
-        label.text = .NativeErrorPage.Wayback.CouldNotReachLabel
+        label.text = .NativeErrorPage.Legacy.Wayback.CouldNotReachLabel
         label.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.waybackErrorLabel
     }
 
@@ -176,7 +176,7 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable, UITextViewDe
         showsWayback = showWaybackButton
 
         let viewModel = PrimaryRoundedButtonViewModel(
-            title: .NativeErrorPage.ButtonLabel,
+            title: .NativeErrorPage.Legacy.ButtonLabel,
             a11yIdentifier: AccessibilityIdentifiers.NativeErrorPage.reloadButton
         )
         reloadButton.configure(viewModel: viewModel)
@@ -190,8 +190,10 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable, UITextViewDe
             return
         }
         waybackFooterTextView.isHidden = false
-        let linkText = String.NativeErrorPage.Wayback.LinkText
-        let fullText = String(format: String.NativeErrorPage.Wayback.FooterDescription, AppName.shortName.rawValue, linkText)
+        let linkText = String.NativeErrorPage.Legacy.Wayback.LinkText
+        let fullText = String(format: String.NativeErrorPage.Legacy.Wayback.FooterDescription,
+                              AppName.shortName.rawValue,
+                              linkText)
 
         let attributedString = NSMutableAttributedString(
             string: fullText,
@@ -218,11 +220,11 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable, UITextViewDe
         case .idle:
             waybackButton.isHidden = false
             waybackErrorCard.isHidden = true
-            applyWaybackTitle(.NativeErrorPage.Wayback.SearchLabel, enabled: true, showsSpinner: false)
+            applyWaybackTitle(.NativeErrorPage.Legacy.Wayback.SearchLabel, enabled: true, showsSpinner: false)
         case .loading:
             waybackButton.isHidden = false
             waybackErrorCard.isHidden = true
-            applyWaybackTitle(.NativeErrorPage.Wayback.CheckingLabel, enabled: false, showsSpinner: true)
+            applyWaybackTitle(.NativeErrorPage.Legacy.Wayback.CheckingLabel, enabled: false, showsSpinner: true)
         case .failed(let reason):
             waybackButton.isHidden = true
             waybackErrorCard.isHidden = false
@@ -242,7 +244,7 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable, UITextViewDe
         waybackButton.configure(viewModel: viewModel)
         waybackButton.makeButtonVisible()
         waybackButton.isEnabled = enabled
-        waybackButton.accessibilityHint = enabled ? .NativeErrorPage.Wayback.WaybackButtonA11yHint : nil
+        waybackButton.accessibilityHint = enabled ? .NativeErrorPage.Legacy.Wayback.WaybackButtonA11yHint : nil
         waybackButton.setShowsSpinner(showsSpinner)
     }
 
@@ -253,14 +255,14 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable, UITextViewDe
         ]
         switch reason {
         case .notFound:
-            let title = NSAttributedString(string: .NativeErrorPage.Wayback.SearchButton, attributes: attributes)
+            let title = NSAttributedString(string: .NativeErrorPage.Legacy.Wayback.SearchButton, attributes: attributes)
             waybackErrorButton.setAttributedTitle(title, for: .normal)
-            waybackErrorLabel.text = String.NativeErrorPage.Wayback.NotFoundLabel
+            waybackErrorLabel.text = String.NativeErrorPage.Legacy.Wayback.NotFoundLabel
             waybackErrorButton.addTarget(self, action: #selector(self.didTapSearchWeb), for: .touchUpInside)
         case .networkError:
-            let title = NSAttributedString(string: .NativeErrorPage.Wayback.RetryButton, attributes: attributes)
+            let title = NSAttributedString(string: .NativeErrorPage.Legacy.Wayback.RetryButton, attributes: attributes)
             waybackErrorButton.setAttributedTitle(title, for: .normal)
-            waybackErrorLabel.text = String.NativeErrorPage.Wayback.CouldNotReachLabel
+            waybackErrorLabel.text = String.NativeErrorPage.Legacy.Wayback.CouldNotReachLabel
             waybackErrorButton.addTarget(self, action: #selector(self.didTapWayback), for: .touchUpInside)
         }
     }

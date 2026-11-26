@@ -14,30 +14,30 @@ enum ErrorPageModel: Equatable {
 
     var title: String {
         switch self {
-        case .internetConnection: return .NativeErrorPage.NoInternetConnection.TitleLabel
-        case .badCertDomain: return String.NativeErrorPage.BadCertDomain.TitleLabel
-        case .generic: return .NativeErrorPage.GenericError.TitleLabel
-        case .wayback: return .NativeErrorPage.Wayback.TitleLabel
+        case .internetConnection: return .NativeErrorPage.Legacy.NoInternetConnection.TitleLabel
+        case .badCertDomain: return String.NativeErrorPage.Legacy.BadCertDomain.TitleLabel
+        case .generic: return .NativeErrorPage.Legacy.GenericError.TitleLabel
+        case .wayback: return .NativeErrorPage.Legacy.Wayback.TitleLabel
         case .vpnConnection: return .VPN.ErrorPage.Title
         }
     }
 
     var description: String {
         switch self {
-        case .internetConnection: return .NativeErrorPage.NoInternetConnection.Description
-        case .badCertDomain: return String.NativeErrorPage.BadCertDomain.Description
+        case .internetConnection: return .NativeErrorPage.Legacy.NoInternetConnection.Description
+        case .badCertDomain: return String.NativeErrorPage.Legacy.BadCertDomain.Description
         case .generic(let model):
             if let host = model.url?.host {
-                return String(format: .NativeErrorPage.GenericError.DescriptionPrefixWithURL,
+                return String(format: .NativeErrorPage.Legacy.GenericError.DescriptionPrefixWithURL,
                               AppName.shortName.description,
                               host) + " " +
-                       String.NativeErrorPage.GenericError.DescriptionSuffix
+                String.NativeErrorPage.Legacy.GenericError.DescriptionSuffix
             } else {
-                return String(format: .NativeErrorPage.GenericError.DescriptionPrefixWithoutURL,
+                return String(format: .NativeErrorPage.Legacy.GenericError.DescriptionPrefixWithoutURL,
                               AppName.shortName.description) + " " +
-                       String.NativeErrorPage.GenericError.DescriptionSuffix
+                String.NativeErrorPage.Legacy.GenericError.DescriptionSuffix
             }
-        case .wayback: return String(format: .NativeErrorPage.Wayback.Description, AppName.shortName.description)
+        case .wayback: return String(format: .NativeErrorPage.Legacy.Wayback.Description, AppName.shortName.description)
         case .vpnConnection: return .VPN.ErrorPage.Body
         }
     }
