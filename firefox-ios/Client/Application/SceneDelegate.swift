@@ -55,7 +55,7 @@ class SceneDelegate: UIResponder,
         self.sceneCoordinator = sceneCoordinator
         self.window = sceneCoordinator.window
         sceneCoordinator.start()
-        handle(connectionOptions: connectionOptions)
+        handle(connectionOptions: connectionOptions, in: scene)
         if !sessionManager.launchSessionProvider.openedFromExternalSource {
             shareTelemetry.cancelOpenURLTimeRecord()
         }
@@ -138,7 +138,7 @@ class SceneDelegate: UIResponder,
 
     /// Use this method to handle Handoff-related data or other activities.
     func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
-        guard !browserDataTransferActivityHandler.handle(userActivity) else { return }
+        guard !browserDataTransferActivityHandler.handle(userActivity, in: scene) else { return }
         guard let route = routeBuilder.makeRoute(userActivity: userActivity) else { return }
         handle(route: route)
     }
@@ -195,14 +195,15 @@ class SceneDelegate: UIResponder,
         return routeBuilder.parseURLHost(url)?.shouldRouteDeeplinkToSpecificIPadWindow ?? false
     }
 
-    private func handle(connectionOptions: UIScene.ConnectionOptions) {
+    private func handle(connectionOptions: UIScene.ConnectionOptions, in scene: UIScene) {
         if let context = connectionOptions.urlContexts.first,
            let route = routeBuilder.makeRoute(url: context.url) {
             handle(route: route)
         }
 
         let routableActivities = browserDataTransferActivityHandler.routableActivities(
-            from: connectionOptions.userActivities
+            from: connectionOptions.userActivities,
+            in: scene
         )
         if let activity = routableActivities.first,
            let route = routeBuilder.makeRoute(userActivity: activity) {

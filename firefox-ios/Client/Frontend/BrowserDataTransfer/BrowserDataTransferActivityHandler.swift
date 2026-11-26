@@ -6,11 +6,12 @@ import Common
 import UIKit
 
 /// Consumes browser data transfer activities before generic scene routing. Activities for a direction
-/// that is not available are dropped without any UI or transfer work.
+/// that is not available are dropped without any UI or transfer work. Owned by one scene.
 @MainActor
-struct BrowserDataTransferActivityHandler {
+final class BrowserDataTransferActivityHandler {
     private let availability: BrowserDataTransferAvailability
     private let logger: Logger
+    private var importHandler: AnyObject?
 
     init(
         availability: BrowserDataTransferAvailability = BrowserDataTransferAvailability(),
@@ -21,21 +22,39 @@ struct BrowserDataTransferActivityHandler {
     }
 
     /// Returns `true` when the activity is a browser data transfer activity, whether or not it was acted on.
-    func handle(_ userActivity: NSUserActivity) -> Bool {
+    func handle(_ userActivity: NSUserActivity, in scene: UIScene?) -> Bool {
         guard let direction = BrowserDataTransferDirection(activityType: userActivity.activityType) else {
             return false
         }
 
-        guard availability.isAvailable(direction) else {
+        guard availability.isAvailable(direction),
+              #available(iOS 26.4, *),
+              let windowScene = scene as? UIWindowScene else {
             logger.log("Ignoring unavailable browser data transfer activity", level: .info, category: .lifecycle)
             return true
         }
 
+        switch direction {
+        case .import:
+            importHandler(for: windowScene).receiveImport(from: userActivity)
+        case .export:
+            break
+        }
         return true
     }
 
     /// Handles every transfer activity in a cold-launch set and returns the activities left for generic routing.
-    func routableActivities(from userActivities: Set<NSUserActivity>) -> Set<NSUserActivity> {
-        return userActivities.filter { !handle($0) }
+    func routableActivities(from userActivities: Set<NSUserActivity>, in scene: UIScene?) -> Set<NSUserActivity> {
+        return userActivities.filter { !handle($0, in: scene) }
+    }
+
+    @available(iOS 26.4, *)
+    private func importHandler(for windowScene: UIWindowScene) -> BrowserDataImportHandler {
+        if let handler = importHandler as? BrowserDataImportHandler {
+            return handler
+        }
+        let handler = BrowserDataImportHandler(windowScene: windowScene)
+        importHandler = handler
+        return handler
     }
 }

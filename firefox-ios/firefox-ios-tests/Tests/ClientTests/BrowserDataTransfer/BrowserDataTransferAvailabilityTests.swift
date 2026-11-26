@@ -121,15 +121,21 @@ final class BrowserDataTransferAvailabilityTests: XCTestCase {
     func testHandle_unrelatedActivity_isNotConsumed() {
         let subject = BrowserDataTransferActivityHandler(availability: createSubject())
 
-        XCTAssertFalse(subject.handle(NSUserActivity(activityType: "org.mozilla.ios.firefox.browsing")))
+        XCTAssertFalse(subject.handle(NSUserActivity(activityType: "org.mozilla.ios.firefox.browsing"), in: nil))
     }
 
     func testHandle_disabledTransferActivities_areConsumed() {
         featureFlags.enabledFlags = []
         let subject = BrowserDataTransferActivityHandler(availability: createSubject())
 
-        XCTAssertTrue(subject.handle(NSUserActivity(activityType: "BEBrowserDataExchangeImportActivity")))
-        XCTAssertTrue(subject.handle(NSUserActivity(activityType: "BEBrowserDataExchangeExportActivity")))
+        XCTAssertTrue(subject.handle(NSUserActivity(activityType: "BEBrowserDataExchangeImportActivity"), in: nil))
+        XCTAssertTrue(subject.handle(NSUserActivity(activityType: "BEBrowserDataExchangeExportActivity"), in: nil))
+    }
+
+    func testHandle_availableTransferActivityWithoutWindowScene_isConsumed() {
+        let subject = BrowserDataTransferActivityHandler(availability: createSubject())
+
+        XCTAssertTrue(subject.handle(NSUserActivity(activityType: "BEBrowserDataExchangeImportActivity"), in: nil))
     }
 
     func testRoutableActivities_removesEveryTransferActivityFromColdLaunchSet() {
@@ -142,7 +148,7 @@ final class BrowserDataTransferAvailabilityTests: XCTestCase {
         ]
         let subject = BrowserDataTransferActivityHandler(availability: createSubject(implementedDirections: []))
 
-        XCTAssertEqual(subject.routableActivities(from: activities), [browsing])
+        XCTAssertEqual(subject.routableActivities(from: activities, in: nil), [browsing])
     }
 
     private func createSubject(
