@@ -1780,7 +1780,7 @@ extension String {
             key: "NativeErrorPage.ErrorCodeLabel.v162",
             tableName: "NativeErrorPage",
             value: "Error code: %@",
-            comment: "On error page, the label showing the error code. %@ is the error code (e.g. SSL_ERROR_BAD_CERT_DOMAIN).")
+            comment: "On error page, the label for the error code. %@ is the error code (e.g. SSL_ERROR_BAD_CERT_DOMAIN).")
         public enum Generic {
             public static let TitleLabel = MZLocalizedString(
                 key: "NativeErrorPage.Generic.TitleLabel.v162",
