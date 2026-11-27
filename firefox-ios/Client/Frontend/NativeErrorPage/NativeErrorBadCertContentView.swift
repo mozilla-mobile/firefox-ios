@@ -234,7 +234,7 @@ final class NativeErrorBadCertContentView: UIView, ThemeApplicable {
         advancedSectionContentStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
 
         advancedSectionTitleLabel.text = isAdvancedSectionExpanded
-            ? String.NativeErrorPage.BadCertDomain.HideAdvancedButton
+        ? String.NativeErrorPage.Legacy.BadCertDomain.HideAdvancedButton
             : advancedSection.buttonText
 
         let infoParagraph = createParagraph(
@@ -247,14 +247,14 @@ final class NativeErrorBadCertContentView: UIView, ThemeApplicable {
         advancedSectionContentStack.addArrangedSubview(warningParagraph)
 
         let viewCertLink = createLink(
-            text: String.NativeErrorPage.BadCertDomain.ViewCertificateLink,
+            text: String.NativeErrorPage.Legacy.BadCertDomain.ViewCertificateLink,
             action: #selector(didTapViewCertificate),
             accessibilityIdentifier: AccessibilityIdentifiers.NativeErrorPage.viewCertificateLink
         )
         advancedSectionContentStack.addArrangedSubview(viewCertLink)
 
         let learnMoreLink = createLink(
-            text: String.NativeErrorPage.BadCertDomain.LearnMoreLink,
+            text: String.NativeErrorPage.Legacy.BadCertDomain.LearnMoreLink,
             action: #selector(didTapLearnMore),
             accessibilityIdentifier: AccessibilityIdentifiers.NativeErrorPage.learnMoreLink
         )
@@ -264,7 +264,7 @@ final class NativeErrorBadCertContentView: UIView, ThemeApplicable {
             let host = url?.host ?? url?.absoluteString ?? ""
             let displayHost = Self.truncateHostInMiddle(host)
             let proceedTitle = String(
-                format: String.NativeErrorPage.BadCertDomain.ProceedButton,
+                format: String.NativeErrorPage.Legacy.BadCertDomain.ProceedButton,
                 displayHost
             )
             proceedButton.configure(viewModel: SecondaryRoundedButtonViewModel(
@@ -306,8 +306,8 @@ final class NativeErrorBadCertContentView: UIView, ThemeApplicable {
     private func toggleAdvancedSection() {
         isAdvancedSectionExpanded.toggle()
         advancedSectionTitleLabel.text = isAdvancedSectionExpanded
-            ? String.NativeErrorPage.BadCertDomain.HideAdvancedButton
-            : String.NativeErrorPage.BadCertDomain.AdvancedButton
+        ? String.NativeErrorPage.Legacy.BadCertDomain.HideAdvancedButton
+        : String.NativeErrorPage.Legacy.BadCertDomain.AdvancedButton
         if let theme = theme { applyHeaderTitleTheme(theme: theme) }
         UIView.animate(withDuration: 0.3) {
             self.advancedSectionContentStack.isHidden = !self.isAdvancedSectionExpanded
@@ -462,7 +462,7 @@ final class NativeErrorBadCertContentView: UIView, ThemeApplicable {
         dateFormatter.dateFormat = "EEE, dd MMM yyyy HH:mm:ss zzz"
         let dateString = dateFormatter.string(from: Date())
         let errorCodeText = String(
-            format: String.NativeErrorPage.BadCertDomain.ErrorCodeLabel, errorCode
+            format: String.NativeErrorPage.Legacy.BadCertDomain.ErrorCodeLabel, errorCode
         )
         let fullText = "\(errorCodeText)\n\(dateString)"
         let kern = UX.footnoteLetterSpacingEm * font.pointSize

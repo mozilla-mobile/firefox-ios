@@ -1766,180 +1766,391 @@ extension String {
 // MARK: - Native Error Page
 extension String {
     public enum NativeErrorPage {
-        public static let ButtonLabel = MZLocalizedString(
-            key: "NativeErrorPage.ButtonLabel.v155",
+        public static let TryAgainButton = MZLocalizedString(
+            key: "NativeErrorPage.TryAgainButton.v162",
             tableName: "NativeErrorPage",
             value: "Try Again",
-            comment: "On error page, this is the text on a button that will try to load the page again.")
+            comment: "On error page, button to try loading the page again.")
         public static let GoBackButton = MZLocalizedString(
-            key: "NativeErrorPage.GoBackButton.v149",
+            key: "NativeErrorPage.GoBackButton.v162",
             tableName: "NativeErrorPage",
             value: "Go Back (Recommended)",
-            comment: "On error page, this is the text on a button that will go back to the previous page. Recommended action.")
-        public enum NoInternetConnection {
+            comment: "On error page, button that takes the user back to the previous page. Displayed when Firefox stops a page from loading because of suspicious elements and displays an error page instead. This is the recommended action.")
+        public static let ErrorCodeLabel = MZLocalizedString(
+            key: "NativeErrorPage.ErrorCodeLabel.v162",
+            tableName: "NativeErrorPage",
+            value: "Error code: %@",
+            comment: "On error page, the label for the error code. %@ is the error code (e.g. SSL_ERROR_BAD_CERT_DOMAIN).")
+        public enum Generic {
             public static let TitleLabel = MZLocalizedString(
-                key: "NativeErrorPage.NoInternetConnection.TitleLabel.v131",
-                tableName: "NativeErrorPage",
-                value: "Looks like there’s a problem with your internet connection.",
-                comment: "On error page, this is the title for no internet connection")
-            public static let Description = MZLocalizedString(
-                key: "NativeErrorPage.NoInternetConnection.Description.v131",
-                tableName: "NativeErrorPage",
-                value: "Try connecting on a different device. Check your modem or router. Disconnect and reconnect to Wi-Fi.",
-                comment: "On error page, this is the description for no internet connection.")
-        }
-        public enum CellularDataRestricted {
-            public static let TitleLabel = MZLocalizedString(
-                key: "NativeErrorPage.CellularDataRestricted.TitleLabel.v156",
-                tableName: "NativeErrorPage",
-                value: "Cellular data is turned off for %@.",
-                comment: "On error page, title shown when the app can't connect because cellular data is turned off for this specific app in iOS settings. %@ is the app name (e.g. Firefox).")
-            public static let Description = MZLocalizedString(
-                key: "NativeErrorPage.CellularDataRestricted.Description.v156",
-                tableName: "NativeErrorPage",
-                value: "Connect to Wi-Fi or go to iOS Settings and turn on cellular data for %@.",
-                comment: "On error page, message shown when the app can't connect because cellular data is turned off for the app and explaining to the user how to troubleshoot. %@ is the app name (e.g. Firefox).")
-        }
-        public enum GenericError {
-            public static let TitleLabel = MZLocalizedString(
-                key: "NativeErrorPage.GenericError.TitleLabel.v158",
+                key: "NativeErrorPage.Generic.TitleLabel.v162",
                 tableName: "NativeErrorPage",
                 value: "Looks like there’s a problem with this site",
-                comment: "On error page, this is the title for generic error.")
-            public static let DescriptionSuffix = MZLocalizedString(
-                key: "NativeErrorPage.GenericError.Description.v158",
-                tableName: "NativeErrorPage",
-                value: "The site may be temporarily unavailable, it may have moved to a different address, or your firewall or proxy may be blocking the connection.\n\nCheck your connection settings and try again.",
-                comment: "Additional explanation displayed on the native error page for the generic error. Lists possible causes and advises the user to check their connection settings and try again.")
-            public static let DescriptionPrefixWithURL = MZLocalizedString(
-                key: "NativeErrorPage.GenericError.Description.v158.withURL",
-                tableName: "NativeErrorPage",
-                value: "%1$@ couldn’t connect to %2$@.",
-                comment: "First sentence of the generic error description when the requested URL is known. %1$@ is the app name and %2$@ is the requested URL.")
-            public static let DescriptionPrefixWithoutURL = MZLocalizedString(
-                key: "NativeErrorPage.GenericError.Description.v158.withoutURL",
-                tableName: "NativeErrorPage",
-                value: "%1$@ couldn’t reach the requested URL.",
-                comment: "First sentence of the generic error description when the requested URL is not available. %1$@ is the app name.")
-        }
-        public enum BadCertDomain {
-            public static let AdvancedButton = MZLocalizedString(
-                key: "NativeErrorPage.BadCertDomain.AdvancedButton.v149",
-                tableName: "NativeErrorPage",
-                value: "Advanced",
-                comment: "On certificate error page, this is the text on a button that will show advanced information about the certificate error.")
-            public static let AdvancedInfo = MZLocalizedString(
-                key: "NativeErrorPage.BadCertDomain.AdvancedInfo.v149",
-                tableName: "NativeErrorPage",
-                value: "%1$@ doesn’t trust this site because the certificate found isn’t valid for %2$@.",
-                comment: "On certificate error page, this is the advanced information explaining why the certificate is invalid. %1$@ is the app name (e.g. Firefox). %2$@ is the site URL.")
-            public static let AdvancedSecurityInfo = MZLocalizedString(
-                key: "NativeErrorPage.BadCertDomain.AdvancedSecurityInfo.v149",
-                tableName: "NativeErrorPage",
-                value: "This site doesn’t allow connections that aren’t secure.",
-                comment: "On certificate error page, this is the security information shown in the advanced section.")
-            public static let AdvancedWarning1 = MZLocalizedString(
-                key: "NativeErrorPage.BadCertDomain.AdvancedWarning1.v149",
-                tableName: "NativeErrorPage",
-                value: "You might need to sign in to your Wi-Fi network, or check your VPN settings.",
-                comment: "On certificate error page, this is the first warning message in the advanced section suggesting possible solutions.")
-            public static let AdvancedWarning2 = MZLocalizedString(
-                key: "NativeErrorPage.BadCertDomain.AdvancedWarning2.v149",
-                tableName: "NativeErrorPage",
-                value: "If you’re on a corporate network, your support team might have more info.",
-                comment: "On certificate error page, this is the second warning message in the advanced section for users on corporate networks.")
+                comment: "On error page, the title for a generic error when loading a webpage.")
             public static let Description = MZLocalizedString(
-                key: "NativeErrorPage.BadCertDomain.Description.v149",
+                key: "NativeErrorPage.Generic.Description.v162",
                 tableName: "NativeErrorPage",
-                value: "Someone pretending to be the site could try to steal your personal info. Your connection settings could also be set up incorrectly.",
-                comment: "On certificate error page, this is the description explaining the security risk.")
-            public static let HideAdvancedButton = MZLocalizedString(
-                key: "NativeErrorPage.BadCertDomain.HideAdvancedButton.v149",
-                tableName: "NativeErrorPage",
-                value: "Hide advanced",
-                comment: "On certificate error page, this is the text on a button that will hide the advanced information section.")
-            public static let LearnMoreLink = MZLocalizedString(
-                key: "NativeErrorPage.BadCertDomain.LearnMoreLink.v149",
-                tableName: "NativeErrorPage",
-                value: "Learn more",
-                comment: "On certificate error page, this is a link to learn more about certificate errors.")
-            public static let ProceedButton = MZLocalizedString(
-                key: "NativeErrorPage.BadCertDomain.ProceedButton.v149",
-                tableName: "NativeErrorPage",
-                value: "Proceed to %@ (Risky)",
-                comment: "On certificate error page, this is the text on a button that will proceed to the site despite the certificate error. %@ is the site URL. This is a risky action.")
-            public static let TitleLabel = MZLocalizedString(
-                key: "NativeErrorPage.BadCertDomain.TitleLabel.v149",
-                tableName: "NativeErrorPage",
-                value: "Be careful. Something doesn’t look right.",
-                comment: "On certificate error page, this is the title warning the user about a potential security issue.")
-            public static let ViewCertificateLink = MZLocalizedString(
-                key: "NativeErrorPage.BadCertDomain.ViewCertificateLink.v149",
-                tableName: "NativeErrorPage",
-                value: "View the site’s certificate",
-                comment: "On certificate error page, this is a link that will show the site’s certificate details.")
-            public static let ErrorCodeLabel = MZLocalizedString(
-                key: "NativeErrorPage.BadCertDomain.ErrorCodeLabel.v149",
-                tableName: "NativeErrorPage",
-                value: "Error code: %@",
-                comment: "On certificate error page, this is the label prefix for the error code. %@ is the error code (e.g. SSL_ERROR_BAD_CERT_DOMAIN).")
+                value: "%1$@ couldn’t connect to %2$@. The site may be temporarily unavailable, it may have moved to a different address, or your firewall or proxy may be blocking the connection. Check your connection settings and try again.",
+                comment: "On error page, the description for a generic error when loading a website. %1$@ is the app name (e.g. Firefox). %2$@ is the site address (e.g. example.com).")
         }
-        public enum Wayback {
+        public enum NoInternet {
             public static let TitleLabel = MZLocalizedString(
-                key: "NativeErrorPage.Wayback.Error.Title.v154",
+                key: "NativeErrorPage.NoInternet.TitleLabel.v162",
                 tableName: "NativeErrorPage",
-                value: "Unable to connect",
-                comment: "Title of the error page when the app is unable to connect to the server and will show a wayback fallback.")
+                value: "Looks like there’s a problem with your internet connection",
+                comment: "On error page, title shown when the requested website can't load because the device isn't connected to the internet.")
             public static let Description = MZLocalizedString(
-                key: "NativeErrorPage.Wayback.Error.Description.v154",
+                key: "NativeErrorPage.NoInternet.Description.v162",
                 tableName: "NativeErrorPage",
-                value: "The site may be busy or unavailable. Try again later. If other pages won’t load, check your Wi-Fi or data connection. %@ can also search the Wayback Machine for an earlier version of this page.",
-                comment: "Description of the error page when the app is unable to connect to the server and will show a wayback fallback. %@ is the app name (e.g. Firefox).")
-            public static let SearchLabel = MZLocalizedString(
-                key: "NativeErrorPage.Wayback.Error.SearchWayback.v155",
+                value: "Try connecting on a different device. Check your modem or router. Disconnect and reconnect to Wi-Fi.",
+                comment: "On error page, troubleshooting suggestions shown when websites can't load because the device isn't connected to the internet.")
+        }
+        public enum NoResponse {
+            public static let TitleLabel = MZLocalizedString(
+                key: "NativeErrorPage.NoResponse.TitleLabel.v162",
                 tableName: "NativeErrorPage",
-                value: "View Archived Version",
-                comment: "Button label on the error page when the app is unable to connect to the server - clicking on the button launches a search for an earlier version of the page on the Wayback Machine.")
-            public static let WaybackButtonA11yHint = MZLocalizedString(
-                key: "NativeErrorPage.Wayback.Error.WaybackButtonA11yHint.v154",
+                value: "Looks like there’s a problem with this site",
+                comment: "On error page, title shown when a site sends back an empty page.")
+            public static let Description = MZLocalizedString(
+                key: "NativeErrorPage.NoResponse.Description.v162",
                 tableName: "NativeErrorPage",
-                value: "Searches the Wayback Machine for an archived version of this page.",
-                comment: "Accessibility hint read by VoiceOver describing what happens when the 'Check for earlier version' button is clicked.")
-            public static let CheckingLabel = MZLocalizedString(
-                key: "NativeErrorPage.Wayback.Error.Checking.v155",
+                value: "%@ sent back an empty page. Check to make sure you’ve typed the website address correctly and try again in a few moments.",
+                comment: "On error page, message shown when a site sends back an empty page. %@ is the site address (e.g. example.com).")
+        }
+        public enum AccountSignIn {
+            public static let TitleLabel = MZLocalizedString(
+                key: "NativeErrorPage.AccountSignIn.TitleLabel.v162",
                 tableName: "NativeErrorPage",
-                value: "Checking the Archive…",
-                comment: "Label of the button on the connection error page - displayed if the user clicks on the button to requested an earlier version of the page and the search is in progress.")
-            public static let CouldNotReachLabel = MZLocalizedString(
-                key: "NativeErrorPage.Wayback.Error.CouldNotReach.v155",
+                value: "Looks like there’s a problem signing in",
+                comment: "On error page, the title shown when a site that uses a Mozilla account for sign in sends a bad request.")
+            public static let Description = MZLocalizedString(
+                key: "NativeErrorPage.AccountSignIn.Description.v162",
                 tableName: "NativeErrorPage",
-                value: "We couldn’t reach the archive service.",
-                comment: "Label shown when the app fails to reach the Wayback Machine while searching for an earlier version of a page.")
-            public static let RetryButton = MZLocalizedString(
-                key: "NativeErrorPage.Wayback.Error.Retry.v154",
+                value: "The URL %1$@ used for your Mozilla account isn’t working.\n\nYou can try to sign in and return to %1$@ after.",
+                comment: "On error page, the description shown when a site that uses a Mozilla account for sign in sends a bad request. %1$@ is the address of that site (e.g. example.com).")
+        }
+        public enum Security {
+            public static let TitleLabel = MZLocalizedString(
+                key: "NativeErrorPage.Security.TitleLabel.v162",
                 tableName: "NativeErrorPage",
-                value: "Retry",
-                comment: "Button label allowing the user to retry searching the Wayback Machine after a failed attempt.")
-            public static let NotFoundLabel = MZLocalizedString(
-                key: "NativeErrorPage.Wayback.Error.NotFound.v155",
+                value: "Be careful.\nSomething doesn’t look right.",
+                comment: "On error page, the title shown when Firefox blocks a website from loading because there may be a security issue with the site, such as a certificate error.")
+            public static let HSTSNotice = MZLocalizedString(
+                key: "NativeErrorPage.Security.HSTSNotice.v162",
                 tableName: "NativeErrorPage",
-                value: "No archived version found.",
-                comment: "Label shown when wayback responds and says no snapshot was found.")
-            public static let SearchButton = MZLocalizedString(
-                key: "NativeErrorPage.Wayback.Error.Search.v155",
+                value: "This site requires a secure connection, and you can’t add an exception to visit it.",
+                comment: "On error page, additional message displayed after the main description of the issue when loading the website. Only displayed when the site requires a secure connection (HSTS) and the requirement can't be bypassed.")
+            public enum Advanced {
+                public static let TitleLabel = MZLocalizedString(
+                    key: "NativeErrorPage.Security.Advanced.TitleLabel.v162",
+                    tableName: "NativeErrorPage",
+                    value: "Advanced",
+                    comment: "On error page, title of the section that shows more details about the error and additional advanced options for the user. Tapping it expands the section.")
+                public static let Summary = MZLocalizedString(
+                    key: "NativeErrorPage.Security.Advanced.Summary.v162",
+                    tableName: "NativeErrorPage",
+                    value: "This site doesn’t allow connections that aren’t secure.",
+                    comment: "On error page, summary of the issue displayed under the 'Advanced' title.")
+                public static let LearnMoreLink = MZLocalizedString(
+                    key: "NativeErrorPage.Security.Advanced.LearnMoreLink.v162",
+                    tableName: "NativeErrorPage",
+                    value: "Learn more…",
+                    comment: "On error page, in the expanded 'Advanced' section, a link to a support article about the error.")
+                public static let ViewCertificateButton = MZLocalizedString(
+                    key: "NativeErrorPage.Security.Advanced.ViewCertificateButton.v162",
+                    tableName: "NativeErrorPage",
+                    value: "View Site Certificate",
+                    comment: "On error page, in the 'Advanced' section, a button to display the site's certificate details.")
+                public static let ProceedButton = MZLocalizedString(
+                    key: "NativeErrorPage.Security.Advanced.ProceedButton.v162",
+                    tableName: "NativeErrorPage",
+                    value: "Proceed to %@ (Risky)",
+                    comment: "On error page, in the 'Advanced' section, a button to proceed with loading the suspicious site despite concerns. %@ is the site address (e.g. example.com). This is a risky/dangerous action.")
+            }
+            public enum BadCert {
+                public static let Description = MZLocalizedString(
+                    key: "NativeErrorPage.Security.BadCert.Description.v162",
+                    tableName: "NativeErrorPage",
+                    value: "Someone pretending to be the site could try to steal things like credit card info, passwords, or emails.",
+                    comment: "On certificate error page, the description explaining the security risk of visiting the site when the certificate can't be trusted.")
+                public static let NotValidForSite = MZLocalizedString(
+                    key: "NativeErrorPage.Security.BadCert.NotValidForSite.v162",
+                    tableName: "NativeErrorPage",
+                    value: "%1$@ doesn’t trust this site because the certificate found isn’t valid for %2$@.",
+                    comment: "On certificate error page, in the 'Advanced' section, explains why Firefox stopped the page from loading. %1$@ is the app name (e.g. Firefox). %2$@ is the site address (e.g. example.com).")
+                public static let NetworkTip = MZLocalizedString(
+                    key: "NativeErrorPage.Security.BadCert.NetworkTip.v162",
+                    tableName: "NativeErrorPage",
+                    value: "You might need to sign in to your Wi-Fi network, or check your VPN settings. If you’re on a corporate network, your support team might have more info.",
+                    comment: "On certificate error page, in the 'Advanced' section, suggests troubleshooting options.")
+                public static let DeviceClock = MZLocalizedString(
+                    key: "NativeErrorPage.Security.BadCert.DeviceClock.v162",
+                    tableName: "NativeErrorPage",
+                    value: "Your device’s clock is set to %1$@ %2$@. If this is right, the issue is likely with the site. If it’s wrong, change it in your device’s settings.",
+                    comment: "On certificate error page, in the 'Advanced' section, displayed when there are certificate date errors (date on device conflicts with validity date on certificate). %1$@ is the device's current time and %2$@ is the device's current date, displayed in the locale's format.")
+                public enum NotYetValid {
+                    public static let Summary = MZLocalizedString(
+                        key: "NativeErrorPage.Security.BadCert.NotYetValid.Summary.v162",
+                        tableName: "NativeErrorPage",
+                        value: "%1$@ doesn’t trust this site because it looks like the certificate provided isn’t valid until %2$@ on %3$@.",
+                        comment: "On certificate error page, in the 'Advanced' section, explains that Firefox doesn't trust the site because of the date mismatch between the device and the certificate (certificate validity start date appears to be in the future). %1$@ is the app name (e.g. Firefox). %2$@ is the time and %3$@ is the date the certificate becomes valid.")
+                }
+                public enum Expired {
+                    public static let Summary = MZLocalizedString(
+                        key: "NativeErrorPage.Security.BadCert.Expired.Summary.v162",
+                        tableName: "NativeErrorPage",
+                        value: "%1$@ doesn’t trust this site because it looks like the issuer of the certificate expired at %2$@ %3$@.",
+                        comment: "On certificate error page, in the 'Advanced' section, displayed when the certificate or its issuer has expired. %1$@ is the app name (e.g. Firefox). %2$@ is the time and %3$@ is the date the certificate expired.")
+                }
+                public enum ExpiredIssuer {
+                    public static let Description = MZLocalizedString(
+                        key: "NativeErrorPage.Security.BadCert.ExpiredIssuer.Description.v162",
+                        tableName: "NativeErrorPage",
+                        value: "Either the site isn’t set up right or your device’s clock is set to the wrong date/time.",
+                        comment: "On certificate error page, displayed when it seems like the certificate's issuer has expired, but it could be due to the device not being set to the correct time or date.")
+                }
+                public enum InvalidCertificate {
+                    public static let Summary = MZLocalizedString(
+                        key: "NativeErrorPage.Security.BadCert.InvalidCertificate.Summary.v162",
+                        tableName: "NativeErrorPage",
+                        value: "The owner of %@ hasn’t set it up properly and a secure connection can’t be created.",
+                        comment: "On certificate error page, in the 'Advanced' section, displayed when the site's certificate is invalid. %@ is the site address (e.g. example.com).")
+                }
+                public enum BadDomain {
+                    public static let Description = MZLocalizedString(
+                        key: "NativeErrorPage.Security.BadCert.BadDomain.Description.v162",
+                        tableName: "NativeErrorPage",
+                        value: "Someone pretending to be the site could try to steal your personal info. Your connection settings could also be set up incorrectly.",
+                        comment: "On certificate error page, displayed when the site's certificate doesn't match the site's address.")
+                }
+                public enum CertificateTransparency {
+                    public static let Summary = MZLocalizedString(
+                        key: "NativeErrorPage.Security.BadCert.CertificateTransparency.Summary.v162",
+                        tableName: "NativeErrorPage",
+                        value: "%1$@ doesn’t trust %2$@ because it couldn’t prove it meets public certificate transparency requirements.",
+                        comment: "On certificate error page, in the 'Advanced' section, displayed when the site's certificate doesn't meet Firefox's transparency requirements. %1$@ is the app name (e.g. Firefox). %2$@ is the site address (e.g. example.com).")
+                }
+            }
+            public enum BadECHConfig {
+                public static let Description = MZLocalizedString(
+                    key: "NativeErrorPage.Security.BadECHConfig.Description.v162",
+                    tableName: "NativeErrorPage",
+                    value: "This site isn’t set up correctly. Someone might be able to see that you are visiting %@.",
+                    comment: "On error page, the description shown when the site's Encrypted Client Hello (ECH) setup is broken, which could expose the user's activity to third parties. %@ is the site address (e.g. example.com).")
+            }
+            public enum NoCypherOverlap {
+                public static let Description = MZLocalizedString(
+                    key: "NativeErrorPage.Security.NoCypherOverlap.Description.v162",
+                    tableName: "NativeErrorPage",
+                    value: "%1$@ can’t create a secure connection to the server at %2$@.",
+                    comment: "On error page, the description shown when the app and the server don't share a supported way to encrypt the connection. %1$@ is the app name (e.g. Firefox). %2$@ is the site address (e.g. example.com).")
+                public static let HSTSNotice = MZLocalizedString(
+                    key: "NativeErrorPage.Security.NoCipherOverlap.HSTSNotice.v162",
+                    tableName: "NativeErrorPage",
+                    value: "This site requires a secure connection, and won’t allow an exception.",
+                    comment: "On error page, when the browser and site can't agree on an encryption method, additional message displayed if the site requires a secure connection (HSTS), which the browser can't create.")
+            }
+            public enum HTTPAuthDisabled {
+                public static let Description = MZLocalizedString(
+                    key: "NativeErrorPage.Security.HTTPAuthDisabled.Description.v162",
+                    tableName: "NativeErrorPage",
+                    value: "Someone pretending to be the site could try to steal things like your username, password, or email.",
+                    comment: "On error page, the description shown when a site asks for a username and password over a connection that isn't secure.")
+                public static let Summary = MZLocalizedString(
+                    key: "NativeErrorPage.Security.HTTPAuthDisabled.Summary.v162",
+                    tableName: "NativeErrorPage",
+                    value: "%1$@ doesn’t trust %2$@ because the connection isn’t secure. Try changing the URL to HTTPS.",
+                    comment: "On error page, shown under the 'Advanced' title when a site asks for a username and password over a connection that isn't secure. Suggestion to change the protocol in the URL from http:// to https:// and try again. %1$@ is the app name (e.g. Firefox). %2$@ is the site address (e.g. example.com).")
+            }
+            public enum CrossOriginPolicy {
+                public static let Description = MZLocalizedString(
+                    key: "NativeErrorPage.Security.CrossOriginPolicy.Description.v162",
+                    tableName: "NativeErrorPage",
+                    value: "%@ didn’t load this page because it looks like the security configuration doesn’t match the previous page. Sometimes websites set up protections for themselves and people like you from unwanted interactions with other sites.",
+                    comment: "On error page, the description shown when there is a mismatch between the cross-origin security policy (either COOP or COEP) of the previous page and the requested page. %@ is the app name (e.g. Firefox). These policies are set up to protect the site and it's users and therefore the error in connection is intended.")
+                public static let LearnMoreLink = MZLocalizedString(
+                    key: "NativeErrorPage.Security.CrossOriginPolicy.LearnMoreLink.v162",
+                    tableName: "NativeErrorPage",
+                    value: "Learn more about Cross Origin Opener Policies (COOP)…",
+                    comment: "On error page, a link to a support article about Cross Origin Opener Policies (COOP).")
+            }
+        }
+        public enum Legacy {
+            public static let ButtonLabel = MZLocalizedString(
+                key: "NativeErrorPage.ButtonLabel.v155",
                 tableName: "NativeErrorPage",
-                value: "Search the web",
-                comment: "Button label displayed when there is no archived version of a webpage, allowing the user to search for the page URL using their default search engine.")
-            public static let FooterDescription = MZLocalizedString(
-                key: "NativeErrorPage.Wayback.Error.FooterDescription.v155",
+                value: "Try Again",
+                comment: "On error page, this is the text on a button that will try to load the page again.")
+            public static let GoBackButton = MZLocalizedString(
+                key: "NativeErrorPage.GoBackButton.v149",
                 tableName: "NativeErrorPage",
-                value: "%@ can look for an earlier version of this page from the Internet Archive’s %@.",
-                comment: "Footer text below the wayback button/card, explaining that the app can look for an archived version of the page via the Internet Archive's Wayback Machine. %1$@ is the app name (e.g. Firefox). %2$@ is the link text (Wayback Machine), which is a tappable link that opens web.archive.org.")
-            public static let LinkText = MZLocalizedString(
-                key: "NativeErrorPage.Wayback.Error.LinkText.v155",
-                tableName: "NativeErrorPage",
-                value: "Wayback Machine",
-                comment: "The tappable link text within the Wayback footer description, opens web.archive.org.")
+                value: "Go Back (Recommended)",
+                comment: "On error page, this is the text on a button that will go back to the previous page. Recommended action.")
+            public enum NoInternetConnection {
+                public static let TitleLabel = MZLocalizedString(
+                    key: "NativeErrorPage.NoInternetConnection.TitleLabel.v131",
+                    tableName: "NativeErrorPage",
+                    value: "Looks like there’s a problem with your internet connection.",
+                    comment: "On error page, this is the title for no internet connection")
+                public static let Description = MZLocalizedString(
+                    key: "NativeErrorPage.NoInternetConnection.Description.v131",
+                    tableName: "NativeErrorPage",
+                    value: "Try connecting on a different device. Check your modem or router. Disconnect and reconnect to Wi-Fi.",
+                    comment: "On error page, this is the description for no internet connection.")
+            }
+            public enum CellularDataRestricted {
+                public static let TitleLabel = MZLocalizedString(
+                    key: "NativeErrorPage.CellularDataRestricted.TitleLabel.v156",
+                    tableName: "NativeErrorPage",
+                    value: "Cellular data is turned off for %@.",
+                    comment: "On error page, title shown when the app can't connect because cellular data is turned off for this specific app in iOS settings. %@ is the app name (e.g. Firefox).")
+                public static let Description = MZLocalizedString(
+                    key: "NativeErrorPage.CellularDataRestricted.Description.v156",
+                    tableName: "NativeErrorPage",
+                    value: "Connect to Wi-Fi or go to iOS Settings and turn on cellular data for %@.",
+                    comment: "On error page, message shown when the app can't connect because cellular data is turned off for the app and explaining to the user how to troubleshoot. %@ is the app name (e.g. Firefox).")
+            }
+            public enum GenericError {
+                public static let TitleLabel = MZLocalizedString(
+                    key: "NativeErrorPage.GenericError.TitleLabel.v158",
+                    tableName: "NativeErrorPage",
+                    value: "Looks like there’s a problem with this site",
+                    comment: "On error page, this is the title for generic error.")
+                public static let DescriptionSuffix = MZLocalizedString(
+                    key: "NativeErrorPage.GenericError.Description.v158",
+                    tableName: "NativeErrorPage",
+                    value: "The site may be temporarily unavailable, it may have moved to a different address, or your firewall or proxy may be blocking the connection.\n\nCheck your connection settings and try again.",
+                    comment: "Additional explanation displayed on the native error page for the generic error. Lists possible causes and advises the user to check their connection settings and try again.")
+                public static let DescriptionPrefixWithURL = MZLocalizedString(
+                    key: "NativeErrorPage.GenericError.Description.v158.withURL",
+                    tableName: "NativeErrorPage",
+                    value: "%1$@ couldn’t connect to %2$@.",
+                    comment: "First sentence of the generic error description when the requested URL is known. %1$@ is the app name and %2$@ is the requested URL.")
+                public static let DescriptionPrefixWithoutURL = MZLocalizedString(
+                    key: "NativeErrorPage.GenericError.Description.v158.withoutURL",
+                    tableName: "NativeErrorPage",
+                    value: "%1$@ couldn’t reach the requested URL.",
+                    comment: "First sentence of the generic error description when the requested URL is not available. %1$@ is the app name.")
+            }
+            public enum BadCertDomain {
+                public static let AdvancedButton = MZLocalizedString(
+                    key: "NativeErrorPage.BadCertDomain.AdvancedButton.v149",
+                    tableName: "NativeErrorPage",
+                    value: "Advanced",
+                    comment: "On certificate error page, this is the text on a button that will show advanced information about the certificate error.")
+                public static let AdvancedInfo = MZLocalizedString(
+                    key: "NativeErrorPage.BadCertDomain.AdvancedInfo.v149",
+                    tableName: "NativeErrorPage",
+                    value: "%1$@ doesn’t trust this site because the certificate found isn’t valid for %2$@.",
+                    comment: "On certificate error page, this is the advanced information explaining why the certificate is invalid. %1$@ is the app name (e.g. Firefox). %2$@ is the site URL.")
+                public static let AdvancedSecurityInfo = MZLocalizedString(
+                    key: "NativeErrorPage.BadCertDomain.AdvancedSecurityInfo.v149",
+                    tableName: "NativeErrorPage",
+                    value: "This site doesn’t allow connections that aren’t secure.",
+                    comment: "On certificate error page, this is the security information shown in the advanced section.")
+                public static let AdvancedWarning1 = MZLocalizedString(
+                    key: "NativeErrorPage.BadCertDomain.AdvancedWarning1.v149",
+                    tableName: "NativeErrorPage",
+                    value: "You might need to sign in to your Wi-Fi network, or check your VPN settings.",
+                    comment: "On certificate error page, this is the first warning message in the advanced section suggesting possible solutions.")
+                public static let AdvancedWarning2 = MZLocalizedString(
+                    key: "NativeErrorPage.BadCertDomain.AdvancedWarning2.v149",
+                    tableName: "NativeErrorPage",
+                    value: "If you’re on a corporate network, your support team might have more info.",
+                    comment: "On certificate error page, this is the second warning message in the advanced section for users on corporate networks.")
+                public static let Description = MZLocalizedString(
+                    key: "NativeErrorPage.BadCertDomain.Description.v149",
+                    tableName: "NativeErrorPage",
+                    value: "Someone pretending to be the site could try to steal your personal info. Your connection settings could also be set up incorrectly.",
+                    comment: "On certificate error page, this is the description explaining the security risk.")
+                public static let HideAdvancedButton = MZLocalizedString(
+                    key: "NativeErrorPage.BadCertDomain.HideAdvancedButton.v149",
+                    tableName: "NativeErrorPage",
+                    value: "Hide advanced",
+                    comment: "On certificate error page, this is the text on a button that will hide the advanced information section.")
+                public static let LearnMoreLink = MZLocalizedString(
+                    key: "NativeErrorPage.BadCertDomain.LearnMoreLink.v149",
+                    tableName: "NativeErrorPage",
+                    value: "Learn more",
+                    comment: "On certificate error page, this is a link to learn more about certificate errors.")
+                public static let ProceedButton = MZLocalizedString(
+                    key: "NativeErrorPage.BadCertDomain.ProceedButton.v149",
+                    tableName: "NativeErrorPage",
+                    value: "Proceed to %@ (Risky)",
+                    comment: "On certificate error page, this is the text on a button that will proceed to the site despite the certificate error. %@ is the site URL. This is a risky action.")
+                public static let TitleLabel = MZLocalizedString(
+                    key: "NativeErrorPage.BadCertDomain.TitleLabel.v149",
+                    tableName: "NativeErrorPage",
+                    value: "Be careful. Something doesn’t look right.",
+                    comment: "On certificate error page, this is the title warning the user about a potential security issue.")
+                public static let ViewCertificateLink = MZLocalizedString(
+                    key: "NativeErrorPage.BadCertDomain.ViewCertificateLink.v149",
+                    tableName: "NativeErrorPage",
+                    value: "View the site’s certificate",
+                    comment: "On certificate error page, this is a link that will show the site’s certificate details.")
+                public static let ErrorCodeLabel = MZLocalizedString(
+                    key: "NativeErrorPage.BadCertDomain.ErrorCodeLabel.v149",
+                    tableName: "NativeErrorPage",
+                    value: "Error code: %@",
+                    comment: "On certificate error page, this is the label prefix for the error code. %@ is the error code (e.g. SSL_ERROR_BAD_CERT_DOMAIN).")
+            }
+            public enum Wayback {
+                public static let TitleLabel = MZLocalizedString(
+                    key: "NativeErrorPage.Wayback.Error.Title.v154",
+                    tableName: "NativeErrorPage",
+                    value: "Unable to connect",
+                    comment: "Title of the error page when the app is unable to connect to the server and will show a wayback fallback.")
+                public static let Description = MZLocalizedString(
+                    key: "NativeErrorPage.Wayback.Error.Description.v154",
+                    tableName: "NativeErrorPage",
+                    value: "The site may be busy or unavailable. Try again later. If other pages won’t load, check your Wi-Fi or data connection. %@ can also search the Wayback Machine for an earlier version of this page.",
+                    comment: "Description of the error page when the app is unable to connect to the server and will show a wayback fallback. %@ is the app name (e.g. Firefox).")
+                public static let SearchLabel = MZLocalizedString(
+                    key: "NativeErrorPage.Wayback.Error.SearchWayback.v155",
+                    tableName: "NativeErrorPage",
+                    value: "View Archived Version",
+                    comment: "Button label on the error page when the app is unable to connect to the server - clicking on the button launches a search for an earlier version of the page on the Wayback Machine.")
+                public static let WaybackButtonA11yHint = MZLocalizedString(
+                    key: "NativeErrorPage.Wayback.Error.WaybackButtonA11yHint.v154",
+                    tableName: "NativeErrorPage",
+                    value: "Searches the Wayback Machine for an archived version of this page.",
+                    comment: "Accessibility hint read by VoiceOver describing what happens when the 'Check for earlier version' button is clicked.")
+                public static let CheckingLabel = MZLocalizedString(
+                    key: "NativeErrorPage.Wayback.Error.Checking.v155",
+                    tableName: "NativeErrorPage",
+                    value: "Checking the Archive…",
+                    comment: "Label of the button on the connection error page - displayed if the user clicks on the button to requested an earlier version of the page and the search is in progress.")
+                public static let CouldNotReachLabel = MZLocalizedString(
+                    key: "NativeErrorPage.Wayback.Error.CouldNotReach.v155",
+                    tableName: "NativeErrorPage",
+                    value: "We couldn’t reach the archive service.",
+                    comment: "Label shown when the app fails to reach the Wayback Machine while searching for an earlier version of a page.")
+                public static let RetryButton = MZLocalizedString(
+                    key: "NativeErrorPage.Wayback.Error.Retry.v154",
+                    tableName: "NativeErrorPage",
+                    value: "Retry",
+                    comment: "Button label allowing the user to retry searching the Wayback Machine after a failed attempt.")
+                public static let NotFoundLabel = MZLocalizedString(
+                    key: "NativeErrorPage.Wayback.Error.NotFound.v155",
+                    tableName: "NativeErrorPage",
+                    value: "No archived version found.",
+                    comment: "Label shown when wayback responds and says no snapshot was found.")
+                public static let SearchButton = MZLocalizedString(
+                    key: "NativeErrorPage.Wayback.Error.Search.v155",
+                    tableName: "NativeErrorPage",
+                    value: "Search the web",
+                    comment: "Button label displayed when there is no archived version of a webpage, allowing the user to search for the page URL using their default search engine.")
+                public static let FooterDescription = MZLocalizedString(
+                    key: "NativeErrorPage.Wayback.Error.FooterDescription.v155",
+                    tableName: "NativeErrorPage",
+                    value: "%@ can look for an earlier version of this page from the Internet Archive’s %@.",
+                    comment: "Footer text below the wayback button/card, explaining that the app can look for an archived version of the page via the Internet Archive's Wayback Machine. %1$@ is the app name (e.g. Firefox). %2$@ is the link text (Wayback Machine), which is a tappable link that opens web.archive.org.")
+                public static let LinkText = MZLocalizedString(
+                    key: "NativeErrorPage.Wayback.Error.LinkText.v155",
+                    tableName: "NativeErrorPage",
+                    value: "Wayback Machine",
+                    comment: "The tappable link text within the Wayback footer description, opens web.archive.org.")
+            }
         }
     }
 }

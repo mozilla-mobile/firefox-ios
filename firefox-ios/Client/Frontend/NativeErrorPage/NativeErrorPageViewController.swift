@@ -84,7 +84,7 @@ final class NativeErrorPageViewController: UIViewController,
         label.font = FXFontStyles.Bold.title2.scaledFont()
         label.numberOfLines = 0
         label.textAlignment = .left
-        label.text = .NativeErrorPage.NoInternetConnection.TitleLabel
+        label.text = .NativeErrorPage.Legacy.NoInternetConnection.TitleLabel
         label.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.titleLabel
         label.accessibilityTraits = .header
     }
@@ -94,7 +94,7 @@ final class NativeErrorPageViewController: UIViewController,
         label.font = FXFontStyles.Regular.subheadline.scaledFont()
         label.numberOfLines = 0
         label.textAlignment = .left
-        label.text = .NativeErrorPage.NoInternetConnection.Description
+        label.text = .NativeErrorPage.Legacy.NoInternetConnection.Description
         label.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.errorDescriptionLabel
     }
 
@@ -244,7 +244,7 @@ final class NativeErrorPageViewController: UIViewController,
             badCertContentView.configure(
                 advancedSection: advancedSection,
                 url: model.url,
-                goBackTitle: String.NativeErrorPage.GoBackButton
+                goBackTitle: String.NativeErrorPage.Legacy.GoBackButton
             )
         }
     }

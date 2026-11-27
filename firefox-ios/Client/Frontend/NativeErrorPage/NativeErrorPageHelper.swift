@@ -192,20 +192,20 @@ class NativeErrorPageHelper: FeatureFlaggable, UserFeaturePreferenceProvider {
         // errors instead of private APIs.
         if certStreamErrorCode(from: error) == NativeGeckoCode.badCertDomain.rawValue {
             let appName = AppName.shortName.description
-            let securityInfo = String.NativeErrorPage.BadCertDomain.AdvancedSecurityInfo
+            let securityInfo = String.NativeErrorPage.Legacy.BadCertDomain.AdvancedSecurityInfo
             let certificateInfo = String(
-                format: String.NativeErrorPage.BadCertDomain.AdvancedInfo,
+                format: String.NativeErrorPage.Legacy.BadCertDomain.AdvancedInfo,
                 appName,
                 url.absoluteString
             )
             let advancedInfo = "\(securityInfo)\n\n\(certificateInfo)"
             let warningText = """
-            \(String.NativeErrorPage.BadCertDomain.AdvancedWarning1)
-            \(String.NativeErrorPage.BadCertDomain.AdvancedWarning2)
+            \(String.NativeErrorPage.Legacy.BadCertDomain.AdvancedWarning1)
+            \(String.NativeErrorPage.Legacy.BadCertDomain.AdvancedWarning2)
             """
 
             let advancedSection = ErrorPageModel.AdvancedSectionConfig(
-                buttonText: String.NativeErrorPage.BadCertDomain.AdvancedButton,
+                buttonText: String.NativeErrorPage.Legacy.BadCertDomain.AdvancedButton,
                 infoText: advancedInfo,
                 warningText: warningText,
                 certificateErrorCode: NativeGeckoCode.badCertDomain.description,
