@@ -1810,7 +1810,7 @@ extension String {
                 key: "NativeErrorPage.NoResponse.TitleLabel.v162",
                 tableName: "NativeErrorPage",
                 value: "Looks like there’s a problem with this site",
-                comment: "On error page, the title shown when a site responds with an empty page.")
+                comment: "On error page, title shown when a site sends back an empty page.")
             public static let Description = MZLocalizedString(
                 key: "NativeErrorPage.NoResponse.Description.v162",
                 tableName: "NativeErrorPage",
