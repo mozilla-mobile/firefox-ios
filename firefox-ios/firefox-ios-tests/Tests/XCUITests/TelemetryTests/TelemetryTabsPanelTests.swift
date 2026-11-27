@@ -17,20 +17,15 @@ class TelemetryTabsPanelTests: TelemetryTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/4567972
     // Telemetry
     func testTabSelectedRecordsSelectedTabIndex() {
-        navigator.nowAt(NewTabScreen)
         toolBarScreen.assertTabsButtonExists()
-        navigator.goto(TabTray)
-        navigator.performAction(Action.OpenNewTabFromTabTray) // Tab 2
-        waitForTabsButton()
-        navigator.goto(TabTray)
-        navigator.performAction(Action.OpenNewTabFromTabTray) // Tab 3
-        waitForTabsButton()
-        navigator.goto(TabTray)
+        openNewTabFromTabTray() // Tab 2
+        openNewTabFromTabTray() // Tab 3
+        toolBarScreen.tapOnTabsButton()
         tabTrayScreen.assertTabCount(3)
 
         // The middle tab of three, so reporting the first or the last tab fails the assertion
         tabTrayScreen.tapTabAtIndex(index: 1)
-        waitForTabsButton()
+        toolBarScreen.assertTabsButtonExists()
 
         telemetry.assertEventRecorded(
             category: "tabs_panel",
@@ -43,5 +38,11 @@ class TelemetryTabsPanelTests: TelemetryTestCase {
             extras: ["mode": "normal"],
             count: 2
         )
+    }
+
+    private func openNewTabFromTabTray() {
+        toolBarScreen.tapOnTabsButton()
+        tabTrayScreen.tapOnNewTabButton()
+        toolBarScreen.assertTabsButtonExists()
     }
 }

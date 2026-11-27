@@ -105,18 +105,18 @@ class TelemetryWrapper: TelemetryWrapperProtocol,
     }
 
     /// Nothing listens there, so uploads fail and pings stay on the device.
-    static let unroutableGleanServerEndpoint = "http://localhost:1"
+    static let unroutableGleanTestServerEndpoint = "http://localhost:1"
 
     /// UI and performance tests must never upload pings to the production telemetry endpoint.
     /// - Returns: `nil` outside of UI tests, so Glean keeps its default endpoint. While running UI tests, the
-    ///   `LaunchArguments.GleanTestServerEndpoint` value, or `unroutableGleanServerEndpoint` if not provided.
-    static func gleanServerEndpoint(arguments: [String], isRunningUITest: Bool) -> String? {
+    ///   `LaunchArguments.GleanTestServerEndpoint` value, or `unroutableGleanTestServerEndpoint` if not provided.
+    static func gleanTestServerEndpoint(arguments: [String], isRunningUITest: Bool) -> String? {
         guard isRunningUITest else { return nil }
 
         let prefix = LaunchArguments.GleanTestServerEndpoint
         guard let argument = arguments.first(where: { $0.hasPrefix(prefix) }),
               argument.count > prefix.count else {
-            return unroutableGleanServerEndpoint
+            return unroutableGleanTestServerEndpoint
         }
         return String(argument.dropFirst(prefix.count))
     }
@@ -125,7 +125,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol,
     /// can't be uploaded to the current test's server.
     /// - Returns: A new temporary directory when `LaunchArguments.GleanTestServerEndpoint` is passed to a UI test,
     ///   otherwise `nil` so Glean keeps its default storage.
-    static func gleanDataPath(arguments: [String], isRunningUITest: Bool) -> String? {
+    static func gleanTestDataPath(arguments: [String], isRunningUITest: Bool) -> String? {
         guard isRunningUITest,
               arguments.contains(where: { $0.hasPrefix(LaunchArguments.GleanTestServerEndpoint) }) else { return nil }
         return FileManager.default.temporaryDirectory.appendingPathComponent("glean_data_\(UUID().uuidString)").path
@@ -170,25 +170,24 @@ class TelemetryWrapper: TelemetryWrapperProtocol,
         glean.registerPings(NimbusGleanPings.nimbusTargetingContext)
 
         // Initialize Glean telemetry
-        let arguments = ProcessInfo.processInfo.arguments
         let isRunningUITest = AppConstants.isRunningUITests || AppConstants.isRunningPerfTests
-        let serverEndpoint = TelemetryWrapper.gleanServerEndpoint(arguments: arguments, isRunningUITest: isRunningUITest)
-        let dataPath = TelemetryWrapper.gleanDataPath(arguments: arguments, isRunningUITest: isRunningUITest)
         let gleanConfig: Configuration
-        if let pingUploader = GleanPingUploader(isOhttpEnabled: serverEndpoint == nil) {
+        if isRunningUITest {
+            let arguments = ProcessInfo.processInfo.arguments
+            let pingUploader: PingUploader = GleanPingUploader(isOhttpEnabled: false) ?? HttpPingUploader()
             gleanConfig = Configuration(
                 channel: AppConstants.buildChannel.rawValue,
-                serverEndpoint: serverEndpoint,
-                dataPath: dataPath,
+                serverEndpoint: TelemetryWrapper.gleanTestServerEndpoint(arguments: arguments, isRunningUITest: true),
+                dataPath: TelemetryWrapper.gleanTestDataPath(arguments: arguments, isRunningUITest: true),
                 logLevel: .off,
                 httpClient: pingUploader
             )
         } else {
+            let pingUploader: PingUploader = GleanPingUploader() ?? HttpPingUploader()
             gleanConfig = Configuration(
                 channel: AppConstants.buildChannel.rawValue,
-                serverEndpoint: serverEndpoint,
-                dataPath: dataPath,
-                logLevel: .off
+                logLevel: .off,
+                httpClient: pingUploader
             )
         }
         glean.initialize(uploadEnabled: sendUsageData,

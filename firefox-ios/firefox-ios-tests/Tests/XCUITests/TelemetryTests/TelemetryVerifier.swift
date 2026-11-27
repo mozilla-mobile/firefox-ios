@@ -38,7 +38,9 @@ final class TelemetryVerifier {
         let server = server
         let received = XCTNSPredicateExpectation(
             predicate: NSPredicate { _, _ in
-                Self.events(in: server.pings).contains { $0.matches(category: category, name: name, extras: extras) }
+                Self.events(in: server.pings)
+                    .filter { $0.matches(category: category, name: name, extras: extras) }
+                    .count >= count
             },
             object: nil
         )
