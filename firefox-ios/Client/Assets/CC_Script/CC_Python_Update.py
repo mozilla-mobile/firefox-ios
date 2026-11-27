@@ -3,7 +3,7 @@ import filecmp
 import shutil
 import os
 
-MOZILLA_CENTRAL_URL = "https://hg.mozilla.org/mozilla-central/raw-file/tip/"
+MOZILLA_CENTRAL_URL = "https://hg.mozilla.org/mozilla-central/raw-file/default/"
 GITHUB_ACTIONS_PATH = "./firefox-ios/Client/Assets/CC_Script/"
 GITHUB_ACTIONS_TMP_PATH = f"{GITHUB_ACTIONS_PATH}tmp/"
 
