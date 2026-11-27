@@ -1855,7 +1855,7 @@ extension String {
                     key: "NativeErrorPage.Security.Advanced.LearnMoreLink.v162",
                     tableName: "NativeErrorPage",
                     value: "Learn more…",
-                    comment: "On error page, in the advanced section, a link to a support article about the error.")
+                    comment: "On error page, in the expanded 'Advanced' section, a link to a support article about the error.")
                 public static let ViewCertificateButton = MZLocalizedString(
                     key: "NativeErrorPage.Security.Advanced.ViewCertificateButton.v162",
                     tableName: "NativeErrorPage",
