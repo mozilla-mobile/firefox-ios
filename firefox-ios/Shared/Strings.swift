@@ -1826,7 +1826,7 @@ extension String {
             public static let Description = MZLocalizedString(
                 key: "NativeErrorPage.AccountSignIn.Description.v162",
                 tableName: "NativeErrorPage",
-                value: "The URL %1$@ used for your Mozilla account isn’t working. You can try to sign in and return to %1$@ after.",
+                value: "The URL %1$@ used for your Mozilla account isn’t working.\n\nYou can try to sign in and return to %1$@ after.",
                 comment: "On error page, the description shown when a site that uses a Mozilla account for sign in sends a bad request. %1$@ is the address of that site (e.g. example.com).")
         }
         public enum Security {
