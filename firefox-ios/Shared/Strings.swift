@@ -1770,7 +1770,7 @@ extension String {
             key: "NativeErrorPage.TryAgainButton.v162",
             tableName: "NativeErrorPage",
             value: "Try Again",
-            comment: "On error page, the button that tries to load the page again.")
+            comment: "On error page, button to try loading the page again.")
         public static let GoBackButton = MZLocalizedString(
             key: "NativeErrorPage.GoBackButton.v162",
             tableName: "NativeErrorPage",
