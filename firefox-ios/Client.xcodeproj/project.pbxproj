@@ -17668,7 +17668,6 @@
 		E15A8B2B286CFD48004BB2B8 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				2703151930B6689600831691 /* NativeErrorPageRefactorTests */,
 				78CD8C9D2D4150D700CA1BBF /* L10nSnapshotTests.xctestplan */,
 				2FA4360B1ABB83B4008031D1 /* AccountTests */,
 				F84B21D61A090F8100AAB793 /* ClientTests */,
@@ -18527,6 +18526,7 @@
 		F84B21D61A090F8100AAB793 /* ClientTests */ = {
 			isa = PBXGroup;
 			children = (
+				2703151930B6689600831691 /* NativeErrorPageRefactorTests */,
 				BD7A00000000000000000002 /* BrowserDataTransfer */,
 				EC405C123007DC820003DE07 /* WaybackTests */,
 				EECF6B623006864D006FD44E /* SwipeGestureFeatureFlagProviderTests.swift */,
