@@ -416,11 +416,17 @@
 		2703151B30B668B400831691 /* NativeErrorPageTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2703151A30B668AF00831691 /* NativeErrorPageTypeTests.swift */; };
 		2703151D30B668C800831691 /* NativeErrorPageClassiferTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2703151C30B668C000831691 /* NativeErrorPageClassiferTests.swift */; };
 		2703151F30B668F000831691 /* NativeErrorPageURLTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2703151E30B668EA00831691 /* NativeErrorPageURLTests.swift */; };
+		2703152D30B7C2D500831691 /* NativeErrorPageAdvancedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2703152C30B7C2CE00831691 /* NativeErrorPageAdvancedView.swift */; };
+		2703152F30B7C2F300831691 /* RefactoredNativeErrorPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2703152E30B7C2EB00831691 /* RefactoredNativeErrorPageViewController.swift */; };
+		2703153130B7C31900831691 /* RefactoredNativeErrorPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2703153030B7C30F00831691 /* RefactoredNativeErrorPageViewModel.swift */; };
 		2703CEDB30ADFBB700831691 /* ReaderNativeMenuHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2703CEDA30ADFBA900831691 /* ReaderNativeMenuHelper.swift */; };
 		2703CEDD30AE1F5100831691 /* ReaderNativeMenuHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2703CEDC30AE1F4700831691 /* ReaderNativeMenuHelperTests.swift */; };
 		2731333C3087B0BA00C904B2 /* WallpaperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2731333B3087B0AF00C904B2 /* WallpaperTests.swift */; };
 		274A36CC239EB99400A21587 /* LibraryPanelContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274A36CB239EB99400A21587 /* LibraryPanelContextMenu.swift */; };
 		274A36CE239EB9EC00A21587 /* LibraryViewController+LibraryPanelDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274A36CD239EB9EC00A21587 /* LibraryViewController+LibraryPanelDelegate.swift */; };
+		276617B530B9EBB000E96E5F /* RefactoredNativeErrorPageModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276617B430B9EBA900E96E5F /* RefactoredNativeErrorPageModelTests.swift */; };
+		276617B730B9EC8700E96E5F /* RefactoredNativeErrorPageViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276617B630B9EC7E00E96E5F /* RefactoredNativeErrorPageViewControllerTests.swift */; };
+		276617BB30B9ECC100E96E5F /* NativeErrorPageAdvancedViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276617BA30B9ECC000E96E5F /* NativeErrorPageAdvancedViewTests.swift */; };
 		27BD010C30645F330015306B /* WallpaperSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BD010730645F330015306B /* WallpaperSettingsViewController.swift */; };
 		27BD010D30645F330015306B /* WallpaperBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BD010630645F330015306B /* WallpaperBaseViewController.swift */; };
 		27BD010E30645F330015306B /* WallpaperSettingsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BD010930645F330015306B /* WallpaperSettingsHeaderView.swift */; };
@@ -3504,12 +3510,18 @@
 		2703151A30B668AF00831691 /* NativeErrorPageTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeErrorPageTypeTests.swift; sourceTree = "<group>"; };
 		2703151C30B668C000831691 /* NativeErrorPageClassiferTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeErrorPageClassiferTests.swift; sourceTree = "<group>"; };
 		2703151E30B668EA00831691 /* NativeErrorPageURLTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeErrorPageURLTests.swift; sourceTree = "<group>"; };
+		2703152C30B7C2CE00831691 /* NativeErrorPageAdvancedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeErrorPageAdvancedView.swift; sourceTree = "<group>"; };
+		2703152E30B7C2EB00831691 /* RefactoredNativeErrorPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefactoredNativeErrorPageViewController.swift; sourceTree = "<group>"; };
+		2703153030B7C30F00831691 /* RefactoredNativeErrorPageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefactoredNativeErrorPageViewModel.swift; sourceTree = "<group>"; };
 		2703CEDA30ADFBA900831691 /* ReaderNativeMenuHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderNativeMenuHelper.swift; sourceTree = "<group>"; };
 		2703CEDC30AE1F4700831691 /* ReaderNativeMenuHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderNativeMenuHelperTests.swift; sourceTree = "<group>"; };
 		272F476F88D45C79446A586A /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		2731333B3087B0AF00C904B2 /* WallpaperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperTests.swift; sourceTree = "<group>"; };
 		274A36CB239EB99400A21587 /* LibraryPanelContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryPanelContextMenu.swift; sourceTree = "<group>"; };
 		274A36CD239EB9EC00A21587 /* LibraryViewController+LibraryPanelDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryViewController+LibraryPanelDelegate.swift"; sourceTree = "<group>"; };
+		276617B430B9EBA900E96E5F /* RefactoredNativeErrorPageModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefactoredNativeErrorPageModelTests.swift; sourceTree = "<group>"; };
+		276617B630B9EC7E00E96E5F /* RefactoredNativeErrorPageViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefactoredNativeErrorPageViewControllerTests.swift; sourceTree = "<group>"; };
+		276617BA30B9ECC000E96E5F /* NativeErrorPageAdvancedViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeErrorPageAdvancedViewTests.swift; sourceTree = "<group>"; };
 		27A946B38B52715F82C426C0 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Today.strings; sourceTree = "<group>"; };
 		27BD010630645F330015306B /* WallpaperBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperBaseViewController.swift; sourceTree = "<group>"; };
 		27BD010730645F330015306B /* WallpaperSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperSettingsViewController.swift; sourceTree = "<group>"; };
@@ -13912,6 +13924,9 @@
 		2703151030B64D5400831691 /* NativeErrorPageRefactor */ = {
 			isa = PBXGroup;
 			children = (
+				2703153030B7C30F00831691 /* RefactoredNativeErrorPageViewModel.swift */,
+				2703152E30B7C2EB00831691 /* RefactoredNativeErrorPageViewController.swift */,
+				2703152C30B7C2CE00831691 /* NativeErrorPageAdvancedView.swift */,
 				2703151630B658E900831691 /* NativeErrorPageURL.swift */,
 				2703151430B654E000831691 /* NativeErrorPageClassifier.swift */,
 				2703151230B64DEB00831691 /* NativeErrorPageType.swift */,
@@ -13922,6 +13937,9 @@
 		2703151930B6689600831691 /* NativeErrorPageRefactorTests */ = {
 			isa = PBXGroup;
 			children = (
+				276617BA30B9ECC000E96E5F /* NativeErrorPageAdvancedViewTests.swift */,
+				276617B630B9EC7E00E96E5F /* RefactoredNativeErrorPageViewControllerTests.swift */,
+				276617B430B9EBA900E96E5F /* RefactoredNativeErrorPageModelTests.swift */,
 				2703151E30B668EA00831691 /* NativeErrorPageURLTests.swift */,
 				2703151C30B668C000831691 /* NativeErrorPageClassiferTests.swift */,
 				2703151A30B668AF00831691 /* NativeErrorPageTypeTests.swift */,
@@ -20818,6 +20836,7 @@
 				8A93F86D29D3A131004159D9 /* DefaultRouter.swift in Sources */,
 				B236204B2B851FE1000B1DE7 /* AddressAutoFillBottomSheetView.swift in Sources */,
 				219AEE4A2E5E38BD00BF5F6F /* TabProviderAdapter.swift in Sources */,
+				2703153130B7C31900831691 /* RefactoredNativeErrorPageViewModel.swift in Sources */,
 				8ADAE4262A33A13B007BF926 /* OpenSupportPageSetting.swift in Sources */,
 				8A590C6128C123100032F1AA /* OpenPassBookHelper.swift in Sources */,
 				BA4BB9A42D7FF754006BD137 /* DarkModeToggleView.swift in Sources */,
@@ -21295,6 +21314,7 @@
 				B2999FF52B194AB200F0FEC1 /* FormAutofillHelperError.swift in Sources */,
 				8AED23C527AC1F9500DE7E97 /* BaseAlphaStackView.swift in Sources */,
 				C8699131289176A5007ACC5C /* WallpaperNetworking.swift in Sources */,
+				2703152D30B7C2D500831691 /* NativeErrorPageAdvancedView.swift in Sources */,
 				5A271ABD2860B0D700471CE4 /* WebServerUtil.swift in Sources */,
 				964FA97528A1A8F20024BB3B /* ContextualHintEligibilityUtility.swift in Sources */,
 				439C489C29760575007C3DCD /* CreditCardValidator.swift in Sources */,
@@ -21704,6 +21724,7 @@
 				0B78DC6E2E3C9CE800804872 /* SummarizerNimbusUtils.swift in Sources */,
 				3B39EDCB1E16E1AA00EF029F /* CustomSearchViewController.swift in Sources */,
 				B2DFB7E12B619DF60004CEA5 /* AddressListView.swift in Sources */,
+				2703152F30B7C2F300831691 /* RefactoredNativeErrorPageViewController.swift in Sources */,
 				0AFF7F6D2C7C7BBA00265214 /* CertificatesViewController.swift in Sources */,
 				C2126EF82F4477EE001C01FE /* SummarizerLanguageExpansionConfiguration.swift in Sources */,
 				8A5D1CAC2A30D70B005AD35C /* OpenWithSetting.swift in Sources */,
@@ -21998,6 +22019,7 @@
 				EDC3D3552CB70A3F00C62DE3 /* OpenSearchEngineTests.swift in Sources */,
 				1F659438EC65428AC73592F9 /* OpenSearchEngineSearchConfigV3Tests.swift in Sources */,
 				2FCFA6753FBFD17A3CFE748D /* SearchPartnerResolverTests.swift in Sources */,
+				276617BB30B9ECC100E96E5F /* NativeErrorPageAdvancedViewTests.swift in Sources */,
 				E571EE7E28756A130051D9AA /* StoryProviderTests.swift in Sources */,
 				38BF9252302A306F008582D5 /* GroupedEditBookmarkDataSourceTests.swift in Sources */,
 				21219854300962F000E45CE9 /* ThemeableTests.swift in Sources */,
@@ -22102,6 +22124,7 @@
 				E153FBAC2DD492BD0040CE37 /* SearchBarLocationSaverTests.swift in Sources */,
 				C80C11EE28B3C8B80062922A /* WallpaperMetadataTrackerTests.swift in Sources */,
 				0A686B3C2CDB70DC0090E146 /* MainMenuTelemetryTests.swift in Sources */,
+				276617B730B9EC8700E96E5F /* RefactoredNativeErrorPageViewControllerTests.swift in Sources */,
 				C8E531CA29E5F7D300E03FEF /* URLScannerTests.swift in Sources */,
 				5AC7110729F822E60011ED11 /* MockTabSessionStore.swift in Sources */,
 				8AED23082D4012B8000FF624 /* MessageCardStateTests.swift in Sources */,
@@ -22151,6 +22174,7 @@
 				21872A232E3CFEA500241A8A /* TabScrollHandlerTests.swift in Sources */,
 				2703151B30B668B400831691 /* NativeErrorPageTypeTests.swift in Sources */,
 				39AF317429DAE37E00F8E6F7 /* NimbusMessagingMessageTests.swift in Sources */,
+				276617B530B9EBB000E96E5F /* RefactoredNativeErrorPageModelTests.swift in Sources */,
 				E14C78962C105488002AD3C7 /* AddressToolbarContainerModelTests.swift in Sources */,
 				C2A72A6B2A77AC10002ACCE2 /* ReadingListCoordinatorTests.swift in Sources */,
 				C2886BB42EC4AC61007AE6C3 /* MockRoute.swift in Sources */,
