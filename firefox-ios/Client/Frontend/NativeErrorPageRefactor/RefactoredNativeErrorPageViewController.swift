@@ -293,8 +293,6 @@ final class RefactoredNativeErrorPageViewController: UIViewController, ContentCo
     }
 
     private func showCertificate() {
-        guard !CertificateHelper.certificatesFromErrorURL(errorPage.url).isEmpty else { return }
-
         store.dispatch(NavigationBrowserAction(
             navigationDestination: NavigationDestination(
                 .certificatesFromErrorPage,
