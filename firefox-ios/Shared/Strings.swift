@@ -1859,7 +1859,7 @@ extension String {
                 public static let ViewCertificateButton = MZLocalizedString(
                     key: "NativeErrorPage.Security.Advanced.ViewCertificateButton.v162",
                     tableName: "NativeErrorPage",
-                    value: "View the site’s certificate",
+                    value: "View Site Certificate",
                     comment: "On error page, in the advanced section, a button that shows the site's certificate details.")
                 public static let ProceedButton = MZLocalizedString(
                     key: "NativeErrorPage.Security.Advanced.ProceedButton.v162",
