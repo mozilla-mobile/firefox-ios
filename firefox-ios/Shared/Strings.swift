@@ -1967,7 +1967,7 @@ extension String {
                     key: "NativeErrorPage.Security.CrossOriginPolicy.Description.v162",
                     tableName: "NativeErrorPage",
                     value: "%@ didn’t load this page because it looks like the security configuration doesn’t match the previous page. Sometimes websites set up protections for themselves and people like you from unwanted interactions with other sites.",
-                    comment: "On error page, the description shown when the page's cross-origin security policy (COOP or COEP) doesn't match the previous page. %@ is the app name (e.g. Firefox).")
+                    comment: "On error page, the description shown when there is a mismatch between the cross-origin security policy (either COOP or COEP) of the previous page and the requested page. %@ is the app name (e.g. Firefox). These policies are set up to protect the site and it's users and therefore the error in connection is intended.")
                 public static let LearnMoreLink = MZLocalizedString(
                     key: "NativeErrorPage.Security.CrossOriginPolicy.LearnMoreLink.v162",
                     tableName: "NativeErrorPage",
