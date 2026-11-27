@@ -1936,7 +1936,7 @@ extension String {
                     key: "NativeErrorPage.Security.BadECHConfig.Description.v162",
                     tableName: "NativeErrorPage",
                     value: "This site isn’t set up correctly. Someone might be able to see that you are visiting %@.",
-                    comment: "On error page, the description shown when the site's Encrypted Client Hello (ECH) setup is broken. %@ is the site address (e.g. example.com).")
+                    comment: "On error page, the description shown when the site's Encrypted Client Hello (ECH) setup is broken, which could expose the user's activity to third parties. %@ is the site address (e.g. example.com).")
             }
             public enum NoCypherOverlap {
                 public static let Description = MZLocalizedString(
