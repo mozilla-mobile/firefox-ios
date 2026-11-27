@@ -8,6 +8,7 @@ import Glean
 protocol TabLossTelemetryRecording {
     func recordTabLossDetected(withDetails details: TabLossTelemetry.TabLossDiagnostic)
     func recordTabCountDiscrepancy(withDetails details: TabLossTelemetry.TabLossDiagnostic)
+    func recordStaleSkipSessionRestoreCleared(diagnostics: String)
 }
 
 struct TabLossTelemetry: TabLossTelemetryRecording {
@@ -53,5 +54,10 @@ struct TabLossTelemetry: TabLossTelemetryRecording {
             windows: Int32(clamping: details.windows)
         )
         gleanWrapper.recordEvent(for: GleanMetrics.AppErrors.tabCountDiscrepancy, extras: extras)
+    }
+
+    func recordStaleSkipSessionRestoreCleared(diagnostics: String) {
+        let extras = GleanMetrics.AppErrors.StaleSkipSessionRestoreClearedExtra(diagnostics: diagnostics)
+        gleanWrapper.recordEvent(for: GleanMetrics.AppErrors.staleSkipSessionRestoreCleared, extras: extras)
     }
 }

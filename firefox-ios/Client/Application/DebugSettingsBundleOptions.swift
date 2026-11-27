@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 
 enum DebugSettingsBundleOptions {
@@ -19,6 +20,25 @@ enum DebugSettingsBundleOptions {
     /// Don't restore tabs on app launch
     static var skipSessionRestore: Bool {
         return UserDefaults.standard.bool(forKey: skipSessionRestoreKey)
+    }
+
+    /// Clears the skip session restore setting on release builds, which don't ship the settings bundle. A value found
+    /// there is left over from old builds that exposed the debug settings, and users have no way to turn it off.
+    /// Must run before tabs are restored.
+    /// - Returns: Whether a stale value was found and cleared.
+    @discardableResult
+    static func clearStaleSkipSessionRestoreIfNeeded(
+        userDefaults: UserDefaults = .standard,
+        buildChannel: AppBuildChannel = AppConstants.buildChannel,
+        tabLossTelemetry: TabLossTelemetryRecording = TabLossTelemetry()
+    ) -> Bool {
+        guard buildChannel == .release, userDefaults.bool(forKey: skipSessionRestoreKey) else { return false }
+
+        tabLossTelemetry.recordStaleSkipSessionRestoreCleared(
+            diagnostics: skipSessionRestoreDiagnostics(userDefaults: userDefaults)
+        )
+        userDefaults.removeObject(forKey: skipSessionRestoreKey)
+        return true
     }
 
     /// FXIOS-17319 Temporary extra diagnostics for debugging tab loss paths. We want to try to determine where this key

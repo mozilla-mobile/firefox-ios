@@ -458,8 +458,7 @@ final class TabManagerImplementation: NSObject,
         guard !AppConstants.isRunningUITests || AppConstants.isSessionRestoreEnabledForTests,
               !DebugSettingsBundleOptions.skipSessionRestore
         else {
-            ensureAtLeastOneSelectedTab()
-            signalTabRestorationSkipped()
+            finishSkippedRestore()
 
             // swiftlint:disable line_length
             logger.log("Skipping legacy tab restore; isTest: \(AppConstants.isRunningUITests), launchTest: \(AppConstants.isSessionRestoreEnabledForTests), debug: \(DebugSettingsBundleOptions.skipSessionRestore):  (\(DebugSettingsBundleOptions.skipSessionRestoreDiagnostics()))",
@@ -495,8 +494,7 @@ final class TabManagerImplementation: NSObject,
         guard !AppConstants.isRunningUITests || AppConstants.isSessionRestoreEnabledForTests,
               !DebugSettingsBundleOptions.skipSessionRestore
         else {
-            ensureAtLeastOneSelectedTab()
-            signalTabRestorationSkipped()
+            finishSkippedRestore()
 
             // swiftlint:disable line_length
             logger.log("Skipping tab restore; isTest: \(AppConstants.isRunningUITests), launchTest: \(AppConstants.isSessionRestoreEnabledForTests), debug: \(DebugSettingsBundleOptions.skipSessionRestore), \(DebugSettingsBundleOptions.skipSessionRestoreDiagnostics())",
@@ -528,6 +526,14 @@ final class TabManagerImplementation: NSObject,
                        level: .debug,
                        category: .tabs)
         }
+    }
+
+    /// Starts the window fresh when restore is skipped. The window must still persist its tabs afterwards,
+    /// otherwise every tab opened in this session is lost on the next launch.
+    private func finishSkippedRestore() {
+        ensureAtLeastOneSelectedTab()
+        tabRestoreHasFinished = true
+        signalTabRestorationSkipped()
     }
 
     /// Releases `AppEventQueue` waiters when no restore will run, otherwise deeplink routes are stranded.
