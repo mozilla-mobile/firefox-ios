@@ -1960,7 +1960,7 @@ extension String {
                     key: "NativeErrorPage.Security.HTTPAuthDisabled.Summary.v162",
                     tableName: "NativeErrorPage",
                     value: "%1$@ doesn’t trust %2$@ because the connection isn’t secure. Try changing the URL to HTTPS.",
-                    comment: "On error page, shown under the Advanced title when a site asks for a username and password over a connection that isn't secure. %1$@ is the app name (e.g. Firefox). %2$@ is the site address (e.g. example.com).")
+                    comment: "On error page, shown under the 'Advanced' title when a site asks for a username and password over a connection that isn't secure. Suggestion to change the protocol in the URL from http:// to https:// and try again. %1$@ is the app name (e.g. Firefox). %2$@ is the site address (e.g. example.com).")
             }
             public enum CrossOriginPolicy {
                 public static let Description = MZLocalizedString(
