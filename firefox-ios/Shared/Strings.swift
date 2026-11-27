@@ -1938,9 +1938,9 @@ extension String {
                     value: "This site isn’t set up correctly. Someone might be able to see that you are visiting %@.",
                     comment: "On error page, the description shown when the site's Encrypted Client Hello (ECH) setup is broken. %@ is the site address (e.g. example.com).")
             }
-            public enum NoCipherOverlap {
+            public enum NoCypherOverlap {
                 public static let Description = MZLocalizedString(
-                    key: "NativeErrorPage.Security.NoCipherOverlap.Description.v162",
+                    key: "NativeErrorPage.Security.NoCypherOverlap.Description.v162",
                     tableName: "NativeErrorPage",
                     value: "%1$@ can’t create a secure connection to the server at %2$@.",
                     comment: "On error page, the description shown when the app and the server don't share a supported way to encrypt the connection. %1$@ is the app name (e.g. Firefox). %2$@ is the site address (e.g. example.com).")
