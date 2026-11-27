@@ -1882,53 +1882,53 @@ extension String {
                     key: "NativeErrorPage.Security.BadCert.NetworkTip.v162",
                     tableName: "NativeErrorPage",
                     value: "You might need to sign in to your Wi-Fi network, or check your VPN settings. If you’re on a corporate network, your support team might have more info.",
-                    comment: "On certificate error page, in the advanced section, suggests network settings the user can check.")
+                    comment: "On certificate error page, in the 'Advanced' section, suggests troubleshooting options.")
                 public static let DeviceClock = MZLocalizedString(
                     key: "NativeErrorPage.Security.BadCert.DeviceClock.v162",
                     tableName: "NativeErrorPage",
                     value: "Your device’s clock is set to %1$@ %2$@. If this is right, the issue is likely with the site. If it’s wrong, change it in your device’s settings.",
-                    comment: "On certificate error page, in the advanced section, shown for certificate date errors. %1$@ is the device's current time and %2$@ is the device's current date.")
+                    comment: "On certificate error page, in the 'Advanced' section, displayed when there are certificate date errors (date on device conflicts with validity date on certificate). %1$@ is the device's current time and %2$@ is the device's current date, displayed in the locale's format.")
                 public enum NotYetValid {
                     public static let Summary = MZLocalizedString(
                         key: "NativeErrorPage.Security.BadCert.NotYetValid.Summary.v162",
                         tableName: "NativeErrorPage",
                         value: "%1$@ doesn’t trust this site because it looks like the certificate provided isn’t valid until %2$@ on %3$@.",
-                        comment: "On certificate error page, shown under the Advanced title when the site's certificate isn't valid yet. %1$@ is the app name (e.g. Firefox). %2$@ is the time and %3$@ is the date it becomes valid.")
+                        comment: "On certificate error page, in the 'Advanced' section, explains that Firefox doesn't trust the site because of the date mismatch between the device and the certificate (certificate validity start date appears to be in the future). %1$@ is the app name (e.g. Firefox). %2$@ is the time and %3$@ is the date the certificate becomes valid.")
                 }
                 public enum Expired {
                     public static let Summary = MZLocalizedString(
                         key: "NativeErrorPage.Security.BadCert.Expired.Summary.v162",
                         tableName: "NativeErrorPage",
                         value: "%1$@ doesn’t trust this site because it looks like the issuer of the certificate expired at %2$@ %3$@.",
-                        comment: "On certificate error page, shown under the Advanced title when the certificate or its issuer has expired. %1$@ is the app name (e.g. Firefox). %2$@ is the time and %3$@ is the date it expired.")
+                        comment: "On certificate error page, in the "Advanced" section, displayed when the certificate or its issuer has expired. %1$@ is the app name (e.g. Firefox). %2$@ is the time and %3$@ is the date the certificate expired.")
                 }
                 public enum ExpiredIssuer {
                     public static let Description = MZLocalizedString(
                         key: "NativeErrorPage.Security.BadCert.ExpiredIssuer.Description.v162",
                         tableName: "NativeErrorPage",
                         value: "Either the site isn’t set up right or your device’s clock is set to the wrong date/time.",
-                        comment: "On certificate error page, the description shown when the certificate's issuer has expired.")
+                        comment: "On certificate error page, displayed when it seems like the certificate's issuer has expired, but it could be due to the device not being set to the correct time or date.")
                 }
                 public enum InvalidCertificate {
                     public static let Summary = MZLocalizedString(
                         key: "NativeErrorPage.Security.BadCert.InvalidCertificate.Summary.v162",
                         tableName: "NativeErrorPage",
                         value: "The owner of %@ hasn’t set it up properly and a secure connection can’t be created.",
-                        comment: "On certificate error page, shown under the Advanced title when the certificate is invalid. %@ is the site address (e.g. example.com).")
+                        comment: "On certificate error page, in the 'Advanced' section, displayed when the site's certificate is invalid. %@ is the site address (e.g. example.com).")
                 }
                 public enum BadDomain {
                     public static let Description = MZLocalizedString(
                         key: "NativeErrorPage.Security.BadCert.BadDomain.Description.v162",
                         tableName: "NativeErrorPage",
                         value: "Someone pretending to be the site could try to steal your personal info. Your connection settings could also be set up incorrectly.",
-                        comment: "On certificate error page, the description shown when the certificate doesn't match the site's address.")
+                        comment: "On certificate error page, displayed when the site's certificate doesn't match the site's address.")
                 }
                 public enum CertificateTransparency {
                     public static let Summary = MZLocalizedString(
                         key: "NativeErrorPage.Security.BadCert.CertificateTransparency.Summary.v162",
                         tableName: "NativeErrorPage",
                         value: "%1$@ doesn’t trust %2$@ because it couldn’t prove it meets public certificate transparency requirements.",
-                        comment: "On certificate error page, shown under the Advanced title when the site doesn't meet certificate transparency requirements. %1$@ is the app name (e.g. Firefox). %2$@ is the site address (e.g. example.com).")
+                        comment: "On certificate error page, in the 'Advanced' section, displayed when the site's certificate doesn't meet Firefox's transparency requirements. %1$@ is the app name (e.g. Firefox). %2$@ is the site address (e.g. example.com).")
                 }
             }
             public enum BadECHConfig {
