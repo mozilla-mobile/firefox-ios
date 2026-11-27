@@ -1803,7 +1803,7 @@ extension String {
                 key: "NativeErrorPage.NoInternet.Description.v162",
                 tableName: "NativeErrorPage",
                 value: "Try connecting on a different device. Check your modem or router. Disconnect and reconnect to Wi-Fi.",
-                comment: "On error page, the description shown when the device isn't connected to the internet.")
+                comment: "On error page, troubleshooting suggestions shown when websites can't load because the device isn't connected to the internet.")
         }
         public enum NoResponse {
             public static let TitleLabel = MZLocalizedString(
