@@ -155,6 +155,8 @@
         "TabsTests",
         "TabsTestsIpad",
         "TabsTestsIphone",
+        "TelemetryTabsPanelTests",
+        "TelemetryTestCase",
         "ThirdPartySearchTest",
         "TodayWidgetTests",
         "ToolbarMenuTests",

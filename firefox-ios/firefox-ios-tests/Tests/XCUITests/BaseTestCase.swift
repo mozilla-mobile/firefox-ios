@@ -920,6 +920,9 @@ enum Deeplink {
     /// URL itself, so the target is fully percent-encoded and `private` goes first. `isPrivate: nil` leaves
     /// `private` out, so the app reuses the last browsing mode.
     case openURL(String, isPrivate: Bool?)
+    /// `glean?sendPing=<name>`: Glean debug option that submits the ping right away instead of waiting for
+    /// its regular schedule, e.g. the `events` ping that otherwise waits for 500 events or for backgrounding.
+    case gleanSendPing(String)
 
     func url(scheme: String) -> URL {
         URL(string: "\(scheme)://\(hostAndQuery)")!
@@ -938,6 +941,8 @@ enum Deeplink {
             let encodedTarget = webURL.addingPercentEncoding(withAllowedCharacters: allowed) ?? webURL
             let privateItem = isPrivate.map { "private=\($0)&" } ?? ""
             return "open-url?\(privateItem)url=\(encodedTarget)"
+        case .gleanSendPing(let ping):
+            return "glean?sendPing=\(ping)"
         }
     }
 }

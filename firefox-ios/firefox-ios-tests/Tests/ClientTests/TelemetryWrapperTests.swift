@@ -887,6 +887,68 @@ class TelemetryWrapperTests: XCTestCase {
 
         XCTAssertFalse(result)
     }
+
+    // MARK: - Glean server endpoint
+
+    func testGleanTestServerEndpoint_whenNotRunningUITest_keepsGleanDefault() {
+        let endpoint = TelemetryWrapper.gleanTestServerEndpoint(
+            arguments: ["\(LaunchArguments.GleanTestServerEndpoint)http://localhost:8080"],
+            isRunningUITest: false
+        )
+
+        XCTAssertNil(endpoint, "Outside of UI tests Glean must keep its default endpoint")
+    }
+
+    func testGleanTestServerEndpoint_whenRunningUITestWithoutArgument_isUnroutable() {
+        let endpoint = TelemetryWrapper.gleanTestServerEndpoint(arguments: [LaunchArguments.Test], isRunningUITest: true)
+
+        XCTAssertEqual(endpoint, TelemetryWrapper.unroutableGleanTestServerEndpoint)
+    }
+
+    func testGleanTestServerEndpoint_whenRunningUITestWithArgument_usesArgumentValue() {
+        let endpoint = TelemetryWrapper.gleanTestServerEndpoint(
+            arguments: [LaunchArguments.Test, "\(LaunchArguments.GleanTestServerEndpoint)http://localhost:8080"],
+            isRunningUITest: true
+        )
+
+        XCTAssertEqual(endpoint, "http://localhost:8080")
+    }
+
+    func testGleanTestServerEndpoint_whenArgumentHasNoValue_isUnroutable() {
+        let endpoint = TelemetryWrapper.gleanTestServerEndpoint(
+            arguments: [LaunchArguments.GleanTestServerEndpoint],
+            isRunningUITest: true
+        )
+
+        XCTAssertEqual(endpoint, TelemetryWrapper.unroutableGleanTestServerEndpoint)
+    }
+
+    // MARK: - Glean data path
+
+    func testGleanTestDataPath_whenNotRunningUITest_keepsGleanDefault() {
+        let dataPath = TelemetryWrapper.gleanTestDataPath(
+            arguments: ["\(LaunchArguments.GleanTestServerEndpoint)http://localhost:8080"],
+            isRunningUITest: false
+        )
+
+        XCTAssertNil(dataPath)
+    }
+
+    func testGleanTestDataPath_whenRunningUITestWithoutTestServer_keepsGleanDefault() {
+        let dataPath = TelemetryWrapper.gleanTestDataPath(arguments: [LaunchArguments.Test], isRunningUITest: true)
+
+        XCTAssertNil(dataPath, "Only telemetry UI tests need empty Glean storage")
+    }
+
+    func testGleanTestDataPath_whenRunningUITestWithTestServer_isNewOnEveryLaunch() {
+        let arguments = [LaunchArguments.Test, "\(LaunchArguments.GleanTestServerEndpoint)http://localhost:8080"]
+
+        let firstLaunch = TelemetryWrapper.gleanTestDataPath(arguments: arguments, isRunningUITest: true)
+        let secondLaunch = TelemetryWrapper.gleanTestDataPath(arguments: arguments, isRunningUITest: true)
+
+        XCTAssertNotNil(firstLaunch)
+        XCTAssertNotEqual(firstLaunch, secondLaunch)
+    }
 }
 
 // MARK: - Helper functions to test telemetry
