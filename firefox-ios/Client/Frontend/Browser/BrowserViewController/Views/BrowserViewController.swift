@@ -2186,8 +2186,8 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Native Error Page
 
-    func showEmbeddedNativeErrorPage() {
-        browserDelegate?.showNativeErrorPage(overlayManager: overlayManager)
+    func showEmbeddedNativeErrorPage(_ errorPage: NativeErrorPageURL) {
+        browserDelegate?.showNativeErrorPage(errorPage)
     }
 
     // MARK: - Update content
@@ -2220,12 +2220,15 @@ class BrowserViewController: UIViewController,
     func updateInContentHomePanel(_ url: URL?, focusUrlBar: Bool = false) {
         let isAboutHomeURL = url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
 
-        let isErrorURL = url.flatMap { InternalURL($0)?.isErrorPage } ?? false
+        var errorPage: NativeErrorPageURL?
+        if let url, let internalURL = InternalURL(url) {
+            errorPage = NativeErrorPageURL(internalURL: internalURL)
+        }
 
         if isAboutHomeURL {
             showEmbeddedHomepage(inline: true, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
-        } else if isErrorURL && featureFlagsProvider.isEnabled(.nativeErrorPage) {
-            showEmbeddedNativeErrorPage()
+        } else if let errorPage, featureFlagsProvider.isEnabled(.nativeErrorPage) {
+            showEmbeddedNativeErrorPage(errorPage)
         } else {
             showEmbeddedWebview()
         }
@@ -2622,14 +2625,6 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        // If the webview lands on an internal error page URL without going through a fresh
-        // navigation failure (e.g. back/forward navigation replaying it from history), rebuild
-        // the native error page state from the URL itself so it reflects what's actually on
-        // screen rather than stale data from whatever failure last occurred.
-        if let url, let internalURL = InternalURL(url), internalURL.isErrorPage {
-            rebuildNativeErrorPageStateIfNeeded(for: url)
-        }
-
         // To prevent spoofing, if the origins are equal update the UI always
         if tab.url?.origin == url?.origin {
             tab.url = url
@@ -2651,28 +2646,6 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    func rebuildNativeErrorPageStateIfNeeded(for errorPageURL: URL) {
-        guard
-            let components = URLComponents(url: errorPageURL, resolvingAgainstBaseURL: false),
-            let originalURLString = components.queryItems?.first(where: { $0.name == "url" })?.value,
-            let originalURL = URL(string: originalURLString),
-            let codeString = components.queryItems?.first(where: { $0.name == "code" })?.value,
-            let code = Int(codeString)
-        else { return }
-
-        let reconstitutedError = NSError(
-            domain: NSURLErrorDomain,
-            code: code,
-            userInfo: [NSURLErrorFailingURLErrorKey: originalURL]
-        )
-
-        let action = NativeErrorPageAction(
-            networkError: reconstitutedError,
-            windowUUID: windowUUID,
-            actionType: NativeErrorPageActionType.receivedError
-        )
-        store.dispatch(action)
-    }
     private func handleTitleChanged(tab: Tab) {
         // Ensure that the tab title *actually* changed to prevent repeated calls
         // to navigateInTab(tab:) except when ReaderModeState is active

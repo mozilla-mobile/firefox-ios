@@ -260,7 +260,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
         browserHasLoadedCalled += 1
     }
 
-    func showNativeErrorPage(overlayManager: any Client.OverlayModeManager) {
+    func showNativeErrorPage(_ errorPage: NativeErrorPageURL) {
         showNativeErrorPageCalled += 1
     }
 

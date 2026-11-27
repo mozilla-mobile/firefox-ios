@@ -1701,17 +1701,13 @@ final class BrowserCoordinator: BaseCoordinator,
         present(navigationController)
     }
 
-    func showNativeErrorPage(overlayManager: OverlayModeManager) {
-        if nativeErrorPageViewController != nil {
-            // Already showing a native error page, the existing instance will
-            // pick up the new error state via its Redux subscription.
-            return
-        }
+    func showNativeErrorPage(_ errorPage: NativeErrorPageURL) {
+        if nativeErrorPageViewController?.errorPage == errorPage { return }
 
         let errorPageController = NativeErrorPageViewController(
+            errorPage: errorPage,
             windowUUID: windowUUID,
-            tabManager: tabManager,
-            overlayManager: overlayManager
+            tabManager: tabManager
         )
         guard browserViewController.embedContent(errorPageController) else {
             logger.log("Unable to embed error page", level: .debug, category: .coordinator)

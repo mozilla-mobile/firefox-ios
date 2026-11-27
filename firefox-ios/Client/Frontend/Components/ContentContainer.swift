@@ -51,15 +51,14 @@ class ContentContainer: UIView {
     /// - Returns: True when we can add the view controller to the container
     func canAdd(content: ContentContainable) -> Bool {
         switch type {
-        case .nativeErrorPage:
-            return !(content is NativeErrorPageViewController)
         case .homepage:
             return !(content is HomepageViewController)
         case .privateHomepage:
             return !(content is PrivateHomepageViewController)
         case .webview:
             return !(content is WebviewViewController)
-        case .none:
+        case .nativeErrorPage, .none:
+            // A new error page replaces the current one, the coordinator skips duplicates
             return true
         }
     }
