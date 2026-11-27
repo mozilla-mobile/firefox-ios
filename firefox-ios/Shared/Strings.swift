@@ -1834,7 +1834,7 @@ extension String {
                 key: "NativeErrorPage.Security.TitleLabel.v162",
                 tableName: "NativeErrorPage",
                 value: "Be careful.\nSomething doesn’t look right.",
-                comment: "On error page, the title shown when there may be a security issue with the site, such as a certificate error.")
+                comment: "On error page, the title shown when Firefox blocks a website from loading because there may be a security issue with the site, such as a certificate error.")
             public static let HSTSNotice = MZLocalizedString(
                 key: "NativeErrorPage.Security.HSTSNotice.v162",
                 tableName: "NativeErrorPage",
