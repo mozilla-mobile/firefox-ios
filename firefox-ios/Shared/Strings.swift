@@ -1877,7 +1877,7 @@ extension String {
                     key: "NativeErrorPage.Security.BadCert.NotValidForSite.v162",
                     tableName: "NativeErrorPage",
                     value: "%1$@ doesn’t trust this site because the certificate found isn’t valid for %2$@.",
-                    comment: "On certificate error page, in the advanced section, explains why the certificate is invalid. %1$@ is the app name (e.g. Firefox). %2$@ is the site address (e.g. example.com).")
+                    comment: "On certificate error page, in the 'Advanced' section, explains why Firefox stopped the page from loading. %1$@ is the app name (e.g. Firefox). %2$@ is the site address (e.g. example.com).")
                 public static let NetworkTip = MZLocalizedString(
                     key: "NativeErrorPage.Security.BadCert.NetworkTip.v162",
                     tableName: "NativeErrorPage",
