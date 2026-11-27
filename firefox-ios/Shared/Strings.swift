@@ -1786,7 +1786,7 @@ extension String {
                 key: "NativeErrorPage.Generic.TitleLabel.v162",
                 tableName: "NativeErrorPage",
                 value: "Looks like there’s a problem with this site",
-                comment: "On error page, the title for a generic error.")
+                comment: "On error page, the title for a generic error when loading a webpage.")
             public static let Description = MZLocalizedString(
                 key: "NativeErrorPage.Generic.Description.v162",
                 tableName: "NativeErrorPage",
