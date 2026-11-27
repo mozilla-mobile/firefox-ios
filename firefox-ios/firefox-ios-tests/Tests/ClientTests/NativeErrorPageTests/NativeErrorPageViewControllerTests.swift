@@ -67,9 +67,9 @@ final class NativeErrorPageViewControllerTests: XCTestCase {
     private func createSubject(type: NativeErrorPageType) throws -> NativeErrorPageViewController {
         let errorPage = try XCTUnwrap(NativeErrorPageURL.make(type: type, originalURL: originalURL, errorCode: -1))
         let subject = NativeErrorPageViewController(errorPage: errorPage,
-                                                              windowUUID: .XCTestDefaultUUID,
-                                                              tabManager: MockTabManager(),
-                                                              themeManager: MockThemeManager())
+                                                    windowUUID: .XCTestDefaultUUID,
+                                                    tabManager: MockTabManager(),
+                                                    themeManager: MockThemeManager())
         subject.loadViewIfNeeded()
         trackForMemoryLeaks(subject)
         return subject
