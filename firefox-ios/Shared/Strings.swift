@@ -1850,7 +1850,7 @@ extension String {
                     key: "NativeErrorPage.Security.Advanced.Summary.v162",
                     tableName: "NativeErrorPage",
                     value: "This site doesn’t allow connections that aren’t secure.",
-                    comment: "On error page, the summary shown under the Advanced title.")
+                    comment: "On error page, summary of the issue displayed under the 'Advanced' title.")
                 public static let LearnMoreLink = MZLocalizedString(
                     key: "NativeErrorPage.Security.Advanced.LearnMoreLink.v162",
                     tableName: "NativeErrorPage",
