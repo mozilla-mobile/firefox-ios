@@ -150,19 +150,29 @@ extension XCUIElement {
         XCTAssertEqual(result, .completed, "Element did not become hittable in time.")
     }
 
+    /// Polls for the element to exist. Returns `true` once it exists, or `false` on timeout.
+    /// When `failOnTimeout` is `true` (default) a timeout records a test failure, with the poll
+    /// figures, the web view state and the host load, and attaches the hierarchy.
     @discardableResult
     func mozWaitForElementToExist(timeout: TimeInterval? = TIMEOUT, failOnTimeout: Bool = true) -> Bool {
-        let startTime = Date()
-        while !exists {
-            if let timeout = timeout, Date().timeIntervalSince(startTime) > timeout {
-                if failOnTimeout {
-                    XCTFail("Timed out waiting for element \(self) to exist in \(timeout) seconds")
-                }
-                return false
-            }
-            usleep(10000)
+        let outcome = pollUntil(timeout: timeout) { exists }
+        if !outcome.satisfied, failOnTimeout, let timeout = timeout {
+            XCTFail("Timed out waiting for element \(self) to exist in \(timeout) seconds "
+                    + "(\(timeoutDiagnostics(outcome.stats)))")
         }
-        return true
+        return outcome.satisfied
+    }
+
+    /// Polls for the element to stop existing. Returns `true` once it no longer exists, or `false`
+    /// on timeout; with `failOnTimeout` (default) a timeout records a test failure.
+    @discardableResult
+    func mozWaitForElementToNotExist(timeout: TimeInterval? = TIMEOUT, failOnTimeout: Bool = true) -> Bool {
+        let outcome = pollUntil(timeout: timeout) { !exists }
+        if !outcome.satisfied, failOnTimeout {
+            XCTFail("Timed out waiting for element \(self) to not exist "
+                    + "(\(timeoutDiagnostics(outcome.stats)))")
+        }
+        return outcome.satisfied
     }
 
     /// Waits for the UI element and then taps if it exists.
@@ -416,5 +426,107 @@ extension XCUIElement {
         guard XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed else { return nil }
         let number = label.dropFirst(prefix.count).prefix { $0.isNumber || $0.isPunctuation || $0.isWhitespace }
         return Int(String(number.filter(\.isNumber)))
+    }
+}
+
+// MARK: - Polling with the figures a timeout message needs
+
+/// Figures from one polling loop, for timeout messages.
+struct PollStats {
+    var polls = 0
+    var elapsed: TimeInterval = 0
+    var slowestPoll: TimeInterval = 0
+    var totalPollTime: TimeInterval = 0
+
+    var summary: String {
+        let mean = polls == 0 ? 0 : totalPollTime / Double(polls)
+        return String(
+            format: "%d polls in %.1f s, each %.0f ms on average and %.0f ms at worst",
+            polls,
+            elapsed,
+            mean * 1000,
+            slowestPoll * 1000
+        )
+    }
+}
+
+/// Polls `condition` every 10 ms until it holds or `timeout` elapses (never, when `timeout` is nil),
+/// timing each call.
+func pollUntil(timeout: TimeInterval?, _ condition: () -> Bool) -> (satisfied: Bool, stats: PollStats) {
+    var stats = PollStats()
+    let start = Date()
+    while true {
+        let pollStart = Date()
+        let satisfied = condition()
+        let pollTime = Date().timeIntervalSince(pollStart)
+        stats.polls += 1
+        stats.totalPollTime += pollTime
+        stats.slowestPoll = max(stats.slowestPoll, pollTime)
+        stats.elapsed = Date().timeIntervalSince(start)
+        if satisfied { return (true, stats) }
+        if let timeout = timeout, stats.elapsed > timeout { return (false, stats) }
+        usleep(10000)
+    }
+}
+
+/// A poll longer than this ran into XCTest's own 30 s query timeout: the automation session is not answering.
+let pollTimeThatMeansTheSessionIsNotAnswering: TimeInterval = 20
+
+/// Poll figures, web view state and host load for a timeout message, with the hierarchy attached;
+/// skips the snapshots when the session is not answering.
+@MainActor
+func timeoutDiagnostics(_ stats: PollStats, in app: XCUIApplication = XCUIApplication()) -> String {
+    guard stats.slowestPoll < pollTimeThatMeansTheSessionIsNotAnswering else {
+        return "\(stats.summary); hierarchy and web view not inspected because a poll took "
+            + String(format: "%.0f s: the automation session is not answering; ", stats.slowestPoll)
+            + hostLoadSummary()
+    }
+    attachHierarchyAtTimeout(of: app)
+    return "\(stats.summary); \(webContentSummary(in: app)); \(hostLoadSummary())"
+}
+
+/// Whether a web view is on screen and how many accessibility elements it exposes. Costs two snapshots.
+@MainActor
+func webContentSummary(in app: XCUIApplication = XCUIApplication()) -> String {
+    let webView = app.webViews.firstMatch
+    guard webView.exists else { return "no web view on screen" }
+    let count = webView.descendants(matching: .any).count
+    return "web view on screen exposing \(count) accessibility element\(count == 1 ? "" : "s")"
+}
+
+struct HostLoad {
+    let oneMinute: Double
+    let fiveMinutes: Double
+    let fifteenMinutes: Double
+}
+
+/// The Mac's load averages (the runner is a host process); nil if the call fails.
+func hostLoadAverages() -> HostLoad? {
+    var loads = [Double](repeating: 0, count: 3)
+    guard getloadavg(&loads, 3) == 3 else { return nil }
+    return HostLoad(oneMinute: loads[0], fiveMinutes: loads[1], fifteenMinutes: loads[2])
+}
+
+/// One line with the host's load averages and core count.
+func hostLoadSummary() -> String {
+    let cores = ProcessInfo.processInfo.activeProcessorCount
+    guard let loads = hostLoadAverages() else { return "host load unavailable" }
+    return String(
+        format: "host load %.1f/%.1f/%.1f on %d cores",
+        loads.oneMinute,
+        loads.fiveMinutes,
+        loads.fifteenMinutes,
+        cores
+    )
+}
+
+/// Attaches the hierarchy XCTest was seeing when a wait gave up, next to the automatic screenshot.
+@MainActor
+func attachHierarchyAtTimeout(of app: XCUIApplication = XCUIApplication()) {
+    XCTContext.runActivity(named: "Hierarchy at timeout") { activity in
+        let attachment = XCTAttachment(string: app.debugDescription)
+        attachment.name = "hierarchy at timeout"
+        attachment.lifetime = .keepAlways
+        activity.add(attachment)
     }
 }

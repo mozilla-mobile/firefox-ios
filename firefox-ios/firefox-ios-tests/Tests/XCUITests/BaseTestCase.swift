@@ -250,8 +250,19 @@ class BaseTestCase: XCTestCase {
         try await super.setUp()
         knownFailureNote = nil
         continueAfterFailure = false
+        try recordHostLoadAndSkipIfOverloaded()
         setUpApp()
         setUpScreenGraph()
+    }
+
+    /// Records the host load as an activity; with `XCUI_MAX_HOST_LOAD` set, skips the test above that 1-minute average.
+    func recordHostLoadAndSkipIfOverloaded() throws {
+        let summary = hostLoadSummary()
+        XCTContext.runActivity(named: "Host at setUp: \(summary)") { _ in }
+        if let limit = ProcessInfo.processInfo.environment["XCUI_MAX_HOST_LOAD"].flatMap(Double.init),
+           let load = hostLoadAverages()?.oneMinute, load > limit {
+            throw XCTSkip("Host 1-minute load average \(load) exceeds XCUI_MAX_HOST_LOAD=\(limit)")
+        }
     }
 
     /// Skips the current test when a third-party page it depends on is unreachable or answers with a
@@ -335,17 +346,7 @@ class BaseTestCase: XCTestCase {
         timeout: TimeInterval? = TIMEOUT,
         failOnTimeout: Bool = true
     ) -> Bool {
-        let startTime = Date()
-        while !element.exists {
-            if let timeout = timeout, Date().timeIntervalSince(startTime) > timeout {
-                if failOnTimeout {
-                    XCTFail("Timed out waiting for element \(element) to exist in \(timeout) seconds")
-                }
-                return false
-            }
-            usleep(10000)
-        }
-        return true
+        return element.mozWaitForElementToExist(timeout: timeout, failOnTimeout: failOnTimeout)
     }
 
     /// Polls for the element to stop existing. Returns `true` once it no longer exists, or `false`
@@ -357,30 +358,25 @@ class BaseTestCase: XCTestCase {
         timeout: TimeInterval? = TIMEOUT,
         failOnTimeout: Bool = true
     ) -> Bool {
-        let startTime = Date()
-        while element.exists {
-            if let timeout = timeout, Date().timeIntervalSince(startTime) > timeout {
-                if failOnTimeout {
-                    XCTFail("Timed out waiting for element \(element) to not exist")
-                }
-                return false
-            }
-            usleep(10000)
-        }
-        return true
+        return element.mozWaitForElementToNotExist(timeout: timeout, failOnTimeout: failOnTimeout)
     }
 
     func mozWaitForValueContains(_ element: XCUIElement, value: String, timeout: TimeInterval? = TIMEOUT) {
-        let startTime = Date()
-
-        while true {
-            if let elementValue = element.value as? String, elementValue.contains(value) {
-                break
-            } else if let timeout = timeout, Date().timeIntervalSince(startTime) > timeout {
-                XCTFail("Timed out waiting for element \(element) to contain value \(value)")
-                break
+        let outcome = pollUntil(timeout: timeout) {
+            (element.value as? String)?.contains(value) ?? false
+        }
+        if !outcome.satisfied {
+            let sessionAnswering = outcome.stats.slowestPoll < pollTimeThatMeansTheSessionIsNotAnswering
+            let lastValue: String
+            if !sessionAnswering {
+                lastValue = "not read"
+            } else if element.exists {
+                lastValue = element.value as? String ?? "nil"
+            } else {
+                lastValue = "element absent"
             }
-            usleep(10000) // waits for 0.01 seconds
+            XCTFail("Timed out waiting for element \(element) to contain value \(value) "
+                    + "(last value: \(lastValue); \(timeoutDiagnostics(outcome.stats, in: app)))")
         }
     }
 
