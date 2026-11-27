@@ -1865,7 +1865,7 @@ extension String {
                     key: "NativeErrorPage.Security.Advanced.ProceedButton.v162",
                     tableName: "NativeErrorPage",
                     value: "Proceed to %@ (Risky)",
-                    comment: "On error page, in the advanced section, a button that opens the site despite the error. %@ is the site address (e.g. example.com). This is a risky action.")
+                    comment: "On error page, in the 'Advanced' section, a button to proceed with loading the suspicious site despite concerns. %@ is the site address (e.g. example.com). This is a risky/dangerous action.")
             }
             public enum BadCert {
                 public static let Description = MZLocalizedString(
