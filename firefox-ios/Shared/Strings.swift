@@ -1839,7 +1839,7 @@ extension String {
                 key: "NativeErrorPage.Security.HSTSNotice.v162",
                 tableName: "NativeErrorPage",
                 value: "This site requires a secure connection, and you can’t add an exception to visit it.",
-                comment: "On error page, added after the description when the site requires a secure connection (HSTS), so the user can't proceed to it.")
+                comment: "On error page, additional message displayed after the main description of the issue when loading the website. Only displayed when the site requires a secure connection (HSTS) and the requirement can't be bypassed.")
             public enum Advanced {
                 public static let TitleLabel = MZLocalizedString(
                     key: "NativeErrorPage.Security.Advanced.TitleLabel.v162",
