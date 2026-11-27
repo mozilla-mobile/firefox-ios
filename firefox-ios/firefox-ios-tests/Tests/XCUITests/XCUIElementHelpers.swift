@@ -521,10 +521,15 @@ func hostLoadSummary() -> String {
 }
 
 /// Attaches the hierarchy XCTest was seeing when a wait gave up, next to the automatic screenshot.
+/// When the app is not in the foreground (widget and Springboard tests) its description holds no
+/// snapshot, so the Springboard hierarchy is attached instead, which is what was on screen.
 @MainActor
 func attachHierarchyAtTimeout(of app: XCUIApplication = XCUIApplication()) {
-    XCTContext.runActivity(named: "Hierarchy at timeout") { activity in
-        let attachment = XCTAttachment(string: app.debugDescription)
+    let inForeground = app.state == .runningForeground
+    let source = inForeground ? app : XCUIApplication(bundleIdentifier: "com.apple.springboard")
+    let name = inForeground ? "Hierarchy at timeout" : "Hierarchy at timeout (app state \(app.state.rawValue), Springboard shown)"
+    XCTContext.runActivity(named: name) { activity in
+        let attachment = XCTAttachment(string: source.debugDescription)
         attachment.name = "hierarchy at timeout"
         attachment.lifetime = .keepAlways
         activity.add(attachment)
