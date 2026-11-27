@@ -1798,7 +1798,7 @@ extension String {
                 key: "NativeErrorPage.NoInternet.TitleLabel.v162",
                 tableName: "NativeErrorPage",
                 value: "Looks like there’s a problem with your internet connection",
-                comment: "On error page, the title shown when the device isn't connected to the internet.")
+                comment: "On error page, title shown when the requested website can't load because the device isn't connected to the internet.")
             public static let Description = MZLocalizedString(
                 key: "NativeErrorPage.NoInternet.Description.v162",
                 tableName: "NativeErrorPage",
