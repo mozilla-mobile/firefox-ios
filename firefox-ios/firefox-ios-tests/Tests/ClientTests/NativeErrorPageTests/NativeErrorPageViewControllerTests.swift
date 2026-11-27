@@ -7,7 +7,7 @@ import XCTest
 @testable import Client
 
 @MainActor
-final class RefactoredNativeErrorPageViewControllerTests: XCTestCase {
+final class NativeErrorPageViewControllerTests: XCTestCase {
     private let originalURL = URL(string: "https://example.com")!
 
     override func setUp() async throws {
@@ -64,9 +64,9 @@ final class RefactoredNativeErrorPageViewControllerTests: XCTestCase {
 
     // MARK: - Helpers
 
-    private func createSubject(type: NativeErrorPageType) throws -> RefactoredNativeErrorPageViewController {
+    private func createSubject(type: NativeErrorPageType) throws -> NativeErrorPageViewController {
         let errorPage = try XCTUnwrap(NativeErrorPageURL.make(type: type, originalURL: originalURL, errorCode: -1))
-        let subject = RefactoredNativeErrorPageViewController(errorPage: errorPage,
+        let subject = NativeErrorPageViewController(errorPage: errorPage,
                                                               windowUUID: .XCTestDefaultUUID,
                                                               tabManager: MockTabManager(),
                                                               themeManager: MockThemeManager())

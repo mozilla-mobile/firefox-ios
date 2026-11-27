@@ -6,7 +6,7 @@ import XCTest
 
 @testable import Client
 
-final class RefactoredNativeErrorPageModelTests: XCTestCase {
+final class NativeErrorPageModelTests: XCTestCase {
     private let originalURL = URL(string: "https://example.com")!
 
     func testNoInternet_showsNoInternetPage() throws {
@@ -83,11 +83,11 @@ final class RefactoredNativeErrorPageModelTests: XCTestCase {
         type: NativeErrorPageType,
         errorCode: Int = -1,
         certificateData: Data? = nil
-    ) throws -> RefactoredNativeErrorPageModel {
+    ) throws -> NativeErrorPageModel {
         let errorPage = try XCTUnwrap(NativeErrorPageURL.make(type: type,
                                                               originalURL: originalURL,
                                                               errorCode: errorCode,
                                                               certificateData: certificateData))
-        return RefactoredNativeErrorPageModel(errorPage: errorPage)
+        return NativeErrorPageModel(errorPage: errorPage)
     }
 }

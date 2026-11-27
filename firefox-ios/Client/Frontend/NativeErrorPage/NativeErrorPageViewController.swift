@@ -6,7 +6,7 @@ import Common
 import ComponentLibrary
 import Shared
 
-final class RefactoredNativeErrorPageViewController: UIViewController, ContentContainable, Themeable {
+final class NativeErrorPageViewController: UIViewController, ContentContainable, Themeable {
     private enum UX {
         static let illustrationContentOverlap: CGFloat = 5
         static let contentHorizontalPadding: CGFloat = 40
@@ -32,7 +32,7 @@ final class RefactoredNativeErrorPageViewController: UIViewController, ContentCo
 
     private let windowUUID: WindowUUID
     private let tabManager: TabManager
-    private let model: RefactoredNativeErrorPageModel
+    private let model: NativeErrorPageModel
 
     // MARK: - Views
 
@@ -105,7 +105,7 @@ final class RefactoredNativeErrorPageViewController: UIViewController, ContentCo
         notificationCenter: NotificationProtocol = NotificationCenter.default
     ) {
         self.errorPage = errorPage
-        self.model = RefactoredNativeErrorPageModel(errorPage: errorPage)
+        self.model = NativeErrorPageModel(errorPage: errorPage)
         self.windowUUID = windowUUID
         self.tabManager = tabManager
         self.themeManager = themeManager
