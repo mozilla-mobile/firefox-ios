@@ -1815,7 +1815,7 @@ extension String {
                 key: "NativeErrorPage.NoResponse.Description.v162",
                 tableName: "NativeErrorPage",
                 value: "%@ sent back an empty page. Check to make sure you’ve typed the website address correctly and try again in a few moments.",
-                comment: "On error page, the description shown when a site responds with an empty page. %@ is the site address (e.g. example.com).")
+                comment: "On error page, message shown when a site sends back an empty page. %@ is the site address (e.g. example.com).")
         }
         public enum AccountSignIn {
             public static let TitleLabel = MZLocalizedString(
