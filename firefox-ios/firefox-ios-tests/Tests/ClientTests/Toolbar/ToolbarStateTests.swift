@@ -543,20 +543,37 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.toolbarPosition, initialState.toolbarPosition)
     }
 
-    func test_readerModeStateChangedAction_onHomepage_returnsExpectedState() {
-        let initialState = createSubject()
+    func test_canSummarizeDidChangeAction_setsCanSummarizeAndKeepsReaderModeState() {
+        let initialState = createSubject().copy(
+            addressToolbar: createSubject().addressToolbar.copy(readerModeState: .active)
+        )
         let reducer = toolbarReducer()
 
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             initialState,
-            ToolbarAction(
-                readerModeState: .available,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.readerModeStateChanged
-            )
+            ToolbarModernAction.canSummarizeDidChange(canSummarize: true),
+            windowUUID
         )
 
-        XCTAssertNotEqual(newState.addressToolbar, initialState.addressToolbar)
+        XCTAssertTrue(newState.addressToolbar.canSummarize)
+        XCTAssertEqual(newState.addressToolbar.readerModeState, .active)
+        XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
+    }
+
+    func test_readerModeStateDidChangeAction_setsReaderModeStateAndKeepsCanSummarize() {
+        let initialState = createSubject().copy(
+            addressToolbar: createSubject().addressToolbar.copy(canSummarize: true)
+        )
+        let reducer = toolbarReducer()
+
+        let newState = reducer.modernReducer(
+            initialState,
+            ToolbarModernAction.readerModeStateDidChange(readerModeState: .active),
+            windowUUID
+        )
+
+        XCTAssertEqual(newState.addressToolbar.readerModeState, .active)
+        XCTAssertTrue(newState.addressToolbar.canSummarize)
         XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
     }
 

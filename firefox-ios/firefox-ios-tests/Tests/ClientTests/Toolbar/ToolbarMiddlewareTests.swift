@@ -386,15 +386,39 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         setIsHostedSummaryEnabled(true)
         let subject = createSubject()
 
-        let action = ToolbarMiddlewareAction(readerModeState: .active,
-                                             windowUUID: .XCTestDefaultUUID,
+        let action = ToolbarMiddlewareAction(windowUUID: .XCTestDefaultUUID,
                                              actionType: ToolbarMiddlewareActionType.loadSummaryState)
         subject.toolbarProvider.legacyMiddleware(mockStore.state, action)
 
-        XCTAssertNil(mockStore.dispatchedActions.first as? ToolbarAction)
+        XCTAssertTrue(mockStore.dispatchedActions.isEmpty)
+        XCTAssertTrue(mockStore.dispatchedModernActions.isEmpty)
     }
 
-    func testLoadSummary_dispatchesToolbarAction() throws {
+    func testLoadSummary_whenCannotSummarize_dispatchesCanSummarizeFalse() throws {
+        setIsHostedSummaryEnabled(true)
+        let expectation = XCTestExpectation(description: "Store should dispatch an action")
+        let subject = createSubject()
+        let tab = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
+        tab.webView = MockTabWebView(tab: tab)
+        tabManager.selectedTab = tab
+        summarizerConfigFactory.returnedConfig = nil
+
+        let action = ToolbarMiddlewareAction(windowUUID: .XCTestDefaultUUID,
+                                             actionType: ToolbarMiddlewareActionType.loadSummaryState)
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+        subject.toolbarProvider.legacyMiddleware(mockStore.state, action)
+        wait(for: [expectation])
+
+        let result = try XCTUnwrap(mockStore.dispatchedModernActions.first as? ToolbarModernAction)
+        guard case let .canSummarizeDidChange(canSummarize) = result else {
+            return XCTFail("Unexpected action \(result)")
+        }
+        XCTAssertFalse(canSummarize)
+    }
+
+    func testLoadSummary_whenCanSummarize_dispatchesCanSummarizeTrue() throws {
         setIsHostedSummaryEnabled(true)
         let expectation = XCTestExpectation(description: "Store should dispatch an action")
         let subject = createSubject()
@@ -403,8 +427,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         tabManager.selectedTab = tab
         summarizerConfigFactory.returnedConfig = .defaultConfig
 
-        let action = ToolbarMiddlewareAction(readerModeState: .active,
-                                             windowUUID: .XCTestDefaultUUID,
+        let action = ToolbarMiddlewareAction(windowUUID: .XCTestDefaultUUID,
                                              actionType: ToolbarMiddlewareActionType.loadSummaryState)
         mockStore.dispatchCalled = {
             expectation.fulfill()
@@ -412,8 +435,11 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.toolbarProvider.legacyMiddleware(mockStore.state, action)
         wait(for: [expectation])
 
-        let result = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
-        XCTAssertTrue(result.canSummarize)
+        let result = try XCTUnwrap(mockStore.dispatchedModernActions.first as? ToolbarModernAction)
+        guard case let .canSummarizeDidChange(canSummarize) = result else {
+            return XCTFail("Unexpected action \(result)")
+        }
+        XCTAssertTrue(canSummarize)
     }
 
     // MARK: - ToolbarMiddlewareAction
