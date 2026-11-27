@@ -1775,7 +1775,7 @@ extension String {
             key: "NativeErrorPage.GoBackButton.v162",
             tableName: "NativeErrorPage",
             value: "Go Back (Recommended)",
-            comment: "On error page, the button that goes back to the previous page. This is the recommended action.")
+            comment: "On error page, button that takes the user back to the previous page. Displayed when Firefox stops a page from loading because of suspicious elements and displays an error page instead. This is the recommended action.")
         public static let ErrorCodeLabel = MZLocalizedString(
             key: "NativeErrorPage.ErrorCodeLabel.v162",
             tableName: "NativeErrorPage",
