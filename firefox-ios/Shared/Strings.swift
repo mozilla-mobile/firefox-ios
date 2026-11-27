@@ -1900,7 +1900,7 @@ extension String {
                         key: "NativeErrorPage.Security.BadCert.Expired.Summary.v162",
                         tableName: "NativeErrorPage",
                         value: "%1$@ doesn’t trust this site because it looks like the issuer of the certificate expired at %2$@ %3$@.",
-                        comment: "On certificate error page, in the "Advanced" section, displayed when the certificate or its issuer has expired. %1$@ is the app name (e.g. Firefox). %2$@ is the time and %3$@ is the date the certificate expired.")
+                        comment: "On certificate error page, in the \"Advanced\" section, displayed when the certificate or its issuer has expired. %1$@ is the app name (e.g. Firefox). %2$@ is the time and %3$@ is the date the certificate expired.")
                 }
                 public enum ExpiredIssuer {
                     public static let Description = MZLocalizedString(
