@@ -1872,7 +1872,7 @@ extension String {
                     key: "NativeErrorPage.Security.BadCert.Description.v162",
                     tableName: "NativeErrorPage",
                     value: "Someone pretending to be the site could try to steal things like credit card info, passwords, or emails.",
-                    comment: "On certificate error page, the description explaining the security risk.")
+                    comment: "On certificate error page, the description explaining the security risk of visiting the site when the certificate can't be trusted.")
                 public static let NotValidForSite = MZLocalizedString(
                     key: "NativeErrorPage.Security.BadCert.NotValidForSite.v162",
                     tableName: "NativeErrorPage",
