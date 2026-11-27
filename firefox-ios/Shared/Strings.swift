@@ -1845,7 +1845,7 @@ extension String {
                     key: "NativeErrorPage.Security.Advanced.TitleLabel.v162",
                     tableName: "NativeErrorPage",
                     value: "Advanced",
-                    comment: "On error page, the title of the section that shows more details about the error. Tapping it expands the section.")
+                    comment: "On error page, title of the section that shows more details about the error and additional advanced options for the user. Tapping it expands the section.")
                 public static let Summary = MZLocalizedString(
                     key: "NativeErrorPage.Security.Advanced.Summary.v162",
                     tableName: "NativeErrorPage",
