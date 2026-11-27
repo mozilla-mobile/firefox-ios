@@ -1948,7 +1948,7 @@ extension String {
                     key: "NativeErrorPage.Security.NoCipherOverlap.HSTSNotice.v162",
                     tableName: "NativeErrorPage",
                     value: "This site requires a secure connection, and won’t allow an exception.",
-                    comment: "On error page, added after the description when the site requires a secure connection (HSTS) and the app can't create one.")
+                    comment: "On error page, when the browser and site can't agree on an encryption method, additional message displayed if the site requires a secure connection (HSTS), which the browser can't create.")
             }
             public enum HTTPAuthDisabled {
                 public static let Description = MZLocalizedString(
