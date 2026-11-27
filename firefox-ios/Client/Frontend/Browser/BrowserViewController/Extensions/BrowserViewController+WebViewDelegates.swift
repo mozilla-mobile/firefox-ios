@@ -1217,13 +1217,9 @@ extension BrowserViewController: WKNavigationDelegate {
     private func showErrorPage(webView: WKWebView, error: Error) {
         guard let url = webView.url else { return }
         let nsError = error as NSError
-        if featureFlagsProvider.isEnabled(.nativeErrorPage) {
-            store.dispatch(NativeErrorPageAction(
-                networkError: nsError,
-                windowUUID: windowUUID,
-                actionType: NativeErrorPageActionType.receivedError
-            ))
-            webView.load(PrivilegedRequest(url: url) as URLRequest)
+        if featureFlagsProvider.isEnabled(.nativeErrorPage),
+           let errorPage = nativeErrorPage(for: nsError, url: url) {
+            webView.load(PrivilegedRequest(url: errorPage.url) as URLRequest)
         } else {
             ErrorPageHelper(certStore: profile.certStore).loadPage(nsError, forUrl: url, inWebView: webView)
         }
@@ -1336,40 +1332,35 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
-        if let url = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL {
-            guard var errorPageURLComponents = URLComponents(
-                string: "\(InternalURL.baseUrl)/\(ErrorPageHandler.path)") else {
-                ErrorPageHelper(certStore: profile.certStore).loadPage(error, forUrl: url, inWebView: webView)
-                return
-            }
+        guard let url = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL else { return }
 
-            errorPageURLComponents.queryItems = NativeErrorPageHelper.buildErrorPageQueryItems(
-                for: error,
-                url: url
-            )
-
-            if let errorPageURL = errorPageURLComponents.url {
-                let isBadCertError = NativeErrorPageHelper.isBadCertDomainError(error)
-
-                if featureFlagsProvider.isEnabled(.nativeErrorPage) {
-                    if isBadCertError {
-                        NativeErrorPageHelper.logCertificateErrorDetails(error: error, logger: logger)
-                    }
-
-                    let action = NativeErrorPageAction(
-                        networkError: error,
-                        windowUUID: windowUUID,
-                        actionType: NativeErrorPageActionType.receivedError
-                    )
-                    store.dispatch(action)
-                    webView.load(PrivilegedRequest(url: errorPageURL) as URLRequest)
-                } else {
-                    ErrorPageHelper(certStore: profile.certStore).loadPage(error, forUrl: url, inWebView: webView)
-                }
-            } else {
-                ErrorPageHelper(certStore: profile.certStore).loadPage(error, forUrl: url, inWebView: webView)
-            }
+        if featureFlagsProvider.isEnabled(.nativeErrorPage),
+           let errorPage = nativeErrorPage(for: error, url: url) {
+            webView.load(PrivilegedRequest(url: errorPage.url) as URLRequest)
+        } else {
+            ErrorPageHelper(certStore: profile.certStore).loadPage(error, forUrl: url, inWebView: webView)
         }
+    }
+
+    private func nativeErrorPage(for error: NSError, url: URL) -> NativeErrorPageURL? {
+        let classifier = NativeErrorPageClassifier(
+            isWaybackEnabled: featureFlagsProvider.isEnabled(.waybackMachine),
+            isVPNEnabled: userPreferences.getPreferenceFor(.vpnFeature)
+        )
+
+        // Proceed and View certificate need the site's certificate
+        var certificateData: Data?
+        if let certificateChain = error.userInfo["NSErrorPeerCertificateChainKey"] as? [SecCertificate],
+           let certificate = certificateChain.first {
+            certificateData = SecCertificateCopyData(certificate) as Data
+        }
+
+        return NativeErrorPageURL.make(
+            type: classifier.type(for: error),
+            originalURL: url,
+            errorCode: error.code,
+            certificateData: certificateData
+        )
     }
 
     func webView(

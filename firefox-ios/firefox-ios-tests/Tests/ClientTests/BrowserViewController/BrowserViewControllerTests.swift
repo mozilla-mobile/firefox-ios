@@ -619,55 +619,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertNil(recordVisitManager.lastVisitObservation)
     }
 
-    // MARK: - rebuildNativeErrorPageStateIfNeeded
-
-    func testRebuildNativeErrorPageStateIfNeeded_validWaybackURL_dispatchesReceivedError() {
-        let subject = createSubject()
-        let waybackCode = Int(CFNetworkErrors.cfurlErrorCannotFindHost.rawValue)
-        let errorPageURL = URL(
-            string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)"
-            + "?url=https%3A%2F%2Fexample.com&code=\(waybackCode)"
-        )!
-
-        subject.rebuildNativeErrorPageStateIfNeeded(for: errorPageURL)
-
-        guard let dispatchedAction = mockStore.dispatchedActions.last as? NativeErrorPageAction else {
-            XCTFail("Expected a NativeErrorPageAction to be dispatched")
-            return
-        }
-        XCTAssertEqual(dispatchedAction.actionType as? NativeErrorPageActionType, .receivedError)
-        XCTAssertEqual(dispatchedAction.networkError?.code, waybackCode)
-        XCTAssertEqual(
-            dispatchedAction.networkError?.userInfo[NSURLErrorFailingURLErrorKey] as? URL,
-            URL(string: "https://example.com")
-        )
-    }
-
-    func testRebuildNativeErrorPageStateIfNeeded_missingCodeParam_doesNotDispatch() {
-        let subject = createSubject()
-        let errorPageURL = URL(
-            string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)"
-            + "?url=https%3A%2F%2Fexample.com"
-        )!
-
-        subject.rebuildNativeErrorPageStateIfNeeded(for: errorPageURL)
-
-        XCTAssertTrue(mockStore.dispatchedActions.isEmpty)
-    }
-
-    func testRebuildNativeErrorPageStateIfNeeded_missingURLParam_doesNotDispatch() {
-        let subject = createSubject()
-        let waybackCode = Int(CFNetworkErrors.cfurlErrorCannotFindHost.rawValue)
-        let errorPageURL = URL(
-            string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)"
-            + "?code=\(waybackCode)"
-        )!
-
-        subject.rebuildNativeErrorPageStateIfNeeded(for: errorPageURL)
-
-        XCTAssertTrue(mockStore.dispatchedActions.isEmpty)
-    }
-
     // MARK: - ReaderMode
 
     func testReaderModeBar_didSelectSummarizeButton_dispatchesGeneralBrowserAction() throws {

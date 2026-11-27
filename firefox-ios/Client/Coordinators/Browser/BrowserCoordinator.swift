@@ -15,6 +15,7 @@ import Redux
 import PDFKit
 import SummarizeKit
 import QuickAnswersKit
+import X509
 
 import enum MozillaAppServices.VisitType
 import struct MozillaAppServices.CreditCard
@@ -1642,7 +1643,9 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     func showCertificatesFromErrorPage(errorPageURL: URL, originalURL: URL, title: String) {
-        let certificates = CertificateHelper.certificatesFromErrorURL(errorPageURL, logger: logger)
+        guard let internalURL = InternalURL(errorPageURL),
+              let certificateData = NativeErrorPageURL(internalURL: internalURL)?.certificateData else { return }
+        let certificates = certificates(from: certificateData)
         guard !certificates.isEmpty else { return }
 
         let topLevelDomain = originalURL.host ?? originalURL.absoluteString
@@ -1698,17 +1701,13 @@ final class BrowserCoordinator: BaseCoordinator,
         present(navigationController)
     }
 
-    func showNativeErrorPage(overlayManager: OverlayModeManager) {
-        if nativeErrorPageViewController != nil {
-            // Already showing a native error page, the existing instance will
-            // pick up the new error state via its Redux subscription.
-            return
-        }
+    func showNativeErrorPage(_ errorPage: NativeErrorPageURL) {
+        if nativeErrorPageViewController?.errorPage == errorPage { return }
 
         let errorPageController = NativeErrorPageViewController(
+            errorPage: errorPage,
             windowUUID: windowUUID,
-            tabManager: tabManager,
-            overlayManager: overlayManager
+            tabManager: tabManager
         )
         guard browserViewController.embedContent(errorPageController) else {
             logger.log("Unable to embed error page", level: .debug, category: .coordinator)
@@ -1998,6 +1997,16 @@ final class BrowserCoordinator: BaseCoordinator,
         let rootVC = (browserPresentedVC as? UINavigationController)?.viewControllers.first
         if rootVC === expectedCoordinator.router.rootViewController {
             action(expectedCoordinator)
+        }
+    }
+
+    private func certificates(from data: Data) -> [Certificate] {
+        do {
+            let certificate = try Certificate(derEncoded: Array(data))
+            return [certificate]
+        } catch {
+            logger.log("Failed to parse certificate from error page", level: .warning, category: .certificate)
+            return []
         }
     }
 }

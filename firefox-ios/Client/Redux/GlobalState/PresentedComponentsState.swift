@@ -20,7 +20,6 @@ enum ComponentState: Sendable, Equatable {
     case toolbar(ToolbarState)
     case searchEngineSelection(SearchEngineSelectionState)
     case passwordGenerator(PasswordGeneratorState)
-    case nativeErrorPage(NativeErrorPageState)
     case shortcutsLibrary(ShortcutsLibraryState)
     case translationSettings(TranslationSettingsState)
     case webCompatReporter(WebCompatReporterState)
@@ -56,8 +55,6 @@ enum ComponentState: Sendable, Equatable {
             return .searchEngineSelection(SearchEngineSelectionState.reducer.modernReducer(state, action, actionWindowUUID))
         case .passwordGenerator(let state):
             return .passwordGenerator(PasswordGeneratorState.reducer.modernReducer(state, action, actionWindowUUID))
-        case .nativeErrorPage(let state):
-            return .nativeErrorPage(NativeErrorPageState.reducer.modernReducer(state, action, actionWindowUUID))
         case .shortcutsLibrary(let state):
             return .shortcutsLibrary(ShortcutsLibraryState.reducer.modernReducer(state, action, actionWindowUUID))
         case .translationSettings(let state):
@@ -95,8 +92,6 @@ enum ComponentState: Sendable, Equatable {
             return .searchEngineSelection(SearchEngineSelectionState.reducer.legacyReducer(state, action))
         case .passwordGenerator(let state):
             return .passwordGenerator(PasswordGeneratorState.reducer.legacyReducer(state, action))
-        case .nativeErrorPage(let state):
-            return .nativeErrorPage(NativeErrorPageState.reducer.legacyReducer(state, action))
         case .shortcutsLibrary(let state):
             return .shortcutsLibrary(ShortcutsLibraryState.reducer.legacyReducer(state, action))
         case .translationSettings(let state):
@@ -123,7 +118,6 @@ enum ComponentState: Sendable, Equatable {
         case .toolbar: return .toolbar
         case .searchEngineSelection: return .searchEngineSelection
         case .passwordGenerator: return .passwordGenerator
-        case .nativeErrorPage: return .nativeErrorPage
         case .shortcutsLibrary: return .shortcutsLibrary
         case .translationSettings: return .translationSettings
         case .webCompatReporter: return .webCompatReporter
@@ -145,7 +139,6 @@ enum ComponentState: Sendable, Equatable {
         case .toolbar(let state): return state.windowUUID
         case .searchEngineSelection(let state): return state.windowUUID
         case .passwordGenerator(let state): return state.windowUUID
-        case .nativeErrorPage(let state): return state.windowUUID
         case .shortcutsLibrary(let state): return state.windowUUID
         case .translationSettings(let state): return state.windowUUID
         case .webCompatReporter(let state): return state.windowUUID
@@ -226,8 +219,6 @@ struct PresentedComponentsState: Sendable, Equatable {
                 components.append(.searchEngineSelection(SearchEngineSelectionState(windowUUID: uuid)))
             case .passwordGenerator:
                 components.append(.passwordGenerator(PasswordGeneratorState(windowUUID: uuid)))
-            case .nativeErrorPage:
-                components.append(.nativeErrorPage(NativeErrorPageState(windowUUID: uuid)))
             case .shortcutsLibrary:
                 components.append(.shortcutsLibrary(ShortcutsLibraryState(windowUUID: uuid)))
             case .translationSettings:

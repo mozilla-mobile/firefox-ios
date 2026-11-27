@@ -148,7 +148,7 @@ final class NativeErrorPageAdvancedView: UIView, ThemeApplicable {
 
     // MARK: - Content
 
-    func configure(with advanced: RefactoredNativeErrorPageModel.Advanced, errorCode: Int) {
+    func configure(with advanced: NativeErrorPageModel.Advanced, errorCode: Int) {
         updateHeader(summary: advanced.summary)
         updateDetails(advanced.details)
         updateCertificateButtons(proceedTitle: advanced.proceedTitle)

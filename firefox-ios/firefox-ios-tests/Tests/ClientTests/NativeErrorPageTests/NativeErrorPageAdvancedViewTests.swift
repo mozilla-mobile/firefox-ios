@@ -59,7 +59,7 @@ final class NativeErrorPageAdvancedViewTests: XCTestCase {
     ) -> NativeErrorPageAdvancedView {
         let subject = NativeErrorPageAdvancedView()
         subject.configure(
-            with: RefactoredNativeErrorPageModel.Advanced(summary: summary, details: details, proceedTitle: proceedTitle),
+            with: NativeErrorPageModel.Advanced(summary: summary, details: details, proceedTitle: proceedTitle),
             errorCode: errorCode
         )
         trackForMemoryLeaks(subject)

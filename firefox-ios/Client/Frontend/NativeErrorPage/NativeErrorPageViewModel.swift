@@ -4,7 +4,7 @@
 
 import Shared
 
-struct RefactoredNativeErrorPageModel {
+struct NativeErrorPageModel {
     enum Button {
         case tryAgain
         case goBack
@@ -24,7 +24,7 @@ struct RefactoredNativeErrorPageModel {
     let advanced: Advanced?
 }
 
-extension RefactoredNativeErrorPageModel {
+extension NativeErrorPageModel {
     init(errorPage: NativeErrorPageURL) {
         let appName = AppName.shortName.description
         let host = errorPage.originalURL.host ?? errorPage.originalURL.absoluteString
@@ -80,7 +80,7 @@ extension RefactoredNativeErrorPageModel {
         errorPage: NativeErrorPageURL,
         appName: String,
         host: String
-    ) -> RefactoredNativeErrorPageModel {
+    ) -> NativeErrorPageModel {
         let description: String
         let summary: String
         let details: [String]
@@ -96,7 +96,7 @@ extension RefactoredNativeErrorPageModel {
             ]
         }
 
-        return RefactoredNativeErrorPageModel(
+        return NativeErrorPageModel(
             imageName: ImageIdentifiers.NativeErrorPage.kitErrorExclamationMark,
             title: .NativeErrorPage.Security.TitleLabel,
             description: description,
