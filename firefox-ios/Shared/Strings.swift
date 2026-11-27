@@ -1791,7 +1791,7 @@ extension String {
                 key: "NativeErrorPage.Generic.Description.v162",
                 tableName: "NativeErrorPage",
                 value: "%1$@ couldn’t connect to %2$@. The site may be temporarily unavailable, it may have moved to a different address, or your firewall or proxy may be blocking the connection. Check your connection settings and try again.",
-                comment: "On error page, the description for a generic error. %1$@ is the app name (e.g. Firefox). %2$@ is the site address (e.g. example.com).")
+                comment: "On error page, the description for a generic error when loading a website. %1$@ is the app name (e.g. Firefox). %2$@ is the site address (e.g. example.com).")
         }
         public enum NoInternet {
             public static let TitleLabel = MZLocalizedString(
