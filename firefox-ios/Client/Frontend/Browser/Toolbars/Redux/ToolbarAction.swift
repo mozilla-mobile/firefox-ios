@@ -19,8 +19,6 @@ struct ToolbarAction: Action {
     let isShowingNavigationToolbar: Bool?
     let canGoBack: Bool?
     let canGoForward: Bool?
-    let canSummarize: Bool
-    let readerModeState: ReaderModeState?
     let hasOnlySecureContent: Bool?
     let isWebsiteMode: Bool?
     let safeListedURLImageName: String?
@@ -39,8 +37,6 @@ struct ToolbarAction: Action {
          isShowingNavigationToolbar: Bool? = nil,
          canGoBack: Bool? = nil,
          canGoForward: Bool? = nil,
-         canSummarize: Bool = false,
-         readerModeState: ReaderModeState? = nil,
          hasOnlySecureContent: Bool? = nil,
          isWebsiteMode: Bool? = nil,
          safeListedURLImageName: String? = nil,
@@ -63,11 +59,9 @@ struct ToolbarAction: Action {
         self.isShowingNavigationToolbar = isShowingNavigationToolbar
         self.canGoBack = canGoBack
         self.canGoForward = canGoForward
-        self.readerModeState = readerModeState
         self.hasOnlySecureContent = hasOnlySecureContent
         self.isWebsiteMode = isWebsiteMode
         self.safeListedURLImageName = safeListedURLImageName
-        self.canSummarize = canSummarize
         self.middleButton = middleButton
         self.isTranslationsEnabled = isTranslationsEnabled
         self.translationConfiguration = translationConfiguration
@@ -149,14 +143,18 @@ enum ToolbarModernAction: ModernAction {
     /// The selected tab's back or forward availability changed. Each value is `nil` when it did not change,
     /// so the state keeps its current value for it.
     case backForwardButtonStateChanged(canGoBack: Bool?, canGoForward: Bool?)
+
+    /// Whether the selected page can be summarized changed.
+    case canSummarizeDidChange(canSummarize: Bool)
+
+    /// The reader mode state of the selected tab changed.
+    case readerModeStateDidChange(readerModeState: ReaderModeState)
 }
 
 enum ToolbarActionType: ActionType {
     case didLoadToolbars
     case urlDidChange
     case didStartEditingUrl
-    case readerModeStateChanged
-    case didSummarizeSettingsChange
     // User submitted a search term to load the search request
     case didSubmitSearchTerm
     case didStartTyping
@@ -170,14 +168,12 @@ struct ToolbarMiddlewareAction: Action {
     let buttonTapped: UIButton?
     let gestureType: ToolbarButtonGesture?
     let scrollOffset: CGPoint?
-    let readerModeState: ReaderModeState?
     let isGoogleLensEnabled: Bool?
 
     init(buttonType: ToolbarActionConfiguration.ActionType? = nil,
          buttonTapped: UIButton? = nil,
          gestureType: ToolbarButtonGesture? = nil,
          scrollOffset: CGPoint? = nil,
-         readerModeState: ReaderModeState? = nil,
          isGoogleLensEnabled: Bool? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
@@ -185,7 +181,6 @@ struct ToolbarMiddlewareAction: Action {
         self.actionType = actionType
         self.buttonType = buttonType
         self.buttonTapped = buttonTapped
-        self.readerModeState = readerModeState
         self.gestureType = gestureType
         self.scrollOffset = scrollOffset
         self.isGoogleLensEnabled = isGoogleLensEnabled

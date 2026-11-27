@@ -398,15 +398,12 @@ final class ToolbarMiddleware {
               isSummarizerOn
         else { return }
 
+        let windowUUID = action.windowUUID
         Task { @MainActor in
             let canSummarize = await summarizerConfigFactory.makeConfiguration(from: webView) != nil
             store.dispatch(
-                ToolbarAction(
-                    canSummarize: canSummarize,
-                    readerModeState: action.readerModeState,
-                    windowUUID: action.windowUUID,
-                    actionType: ToolbarActionType.readerModeStateChanged
-                )
+                ToolbarModernAction.canSummarizeDidChange(canSummarize: canSummarize),
+                forWindowUUID: windowUUID
             )
         }
     }

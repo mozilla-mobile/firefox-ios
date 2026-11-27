@@ -142,6 +142,10 @@ struct AddressBarState: StateType, Sendable, Equatable {
             return handleSearchTermDidClearAction(state: state)
         case .websiteLoadingStateDidChange(let isLoading):
             return state.copy(isLoading: isLoading)
+        case .canSummarizeDidChange(let canSummarize):
+            return state.copy(canSummarize: canSummarize)
+        case .readerModeStateDidChange(let readerModeState):
+            return state.copy(readerModeState: readerModeState)
         default:
             return defaultState(from: state)
         }
@@ -165,12 +169,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
             TranslationsActionType.didReceiveErrorTranslating,
             TranslationsActionType.didTranslationSettingsChange:
             return handleLeadingPageTranslationAction(state: state, action: action)
-
-        case ToolbarActionType.didSummarizeSettingsChange:
-            return handleSummarizeStateChangedAction(state: state, action: action)
-
-        case ToolbarActionType.readerModeStateChanged:
-            return handleReaderModeStateChangedAction(state: state, action: action)
 
         case ToolbarActionType.urlDidChange:
             return handleUrlDidChangeAction(state: state, action: action)
@@ -227,28 +225,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
         let translationConfiguration = translationsAction.translationConfiguration
         return state
             .copy(translationConfiguration: translationConfiguration)
-    }
-
-    @MainActor
-    private static func handleSummarizeStateChangedAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else {
-            return defaultState(from: state)
-        }
-
-        return state
-            .copy(canSummarize: toolbarAction.canSummarize)
-    }
-
-    @MainActor
-    private static func handleReaderModeStateChangedAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-
-        let canSummarize = toolbarAction.canSummarize
-        let readerModeState = toolbarAction.readerModeState
-
-        return state
-            .copy(readerModeState: readerModeState)
-            .copy(canSummarize: canSummarize)
     }
 
     @MainActor
