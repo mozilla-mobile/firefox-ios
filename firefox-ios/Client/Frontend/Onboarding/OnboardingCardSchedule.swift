@@ -4,6 +4,11 @@
 
 import Foundation
 
+enum ContinuousOnboardingCardType {
+    case notifications
+    case sync
+}
+
 enum OnboardingCardButtonAction {
     case none
     case enableNotifications
@@ -15,6 +20,7 @@ enum OnboardingCardButtonAction {
 struct OnboardingCard {
     let title: String
     let body: String
+    let cardType: ContinuousOnboardingCardType
     let imageName: String?
     let primaryButtonTitle: String
     let primaryButtonAction: OnboardingCardButtonAction
@@ -24,6 +30,7 @@ struct OnboardingCard {
     init(
         title: String,
         body: String,
+        cardType: ContinuousOnboardingCardType,
         imageName: String? = nil,
         primaryButtonTitle: String = "Continue",
         primaryButtonAction: OnboardingCardButtonAction = .none,
@@ -32,6 +39,7 @@ struct OnboardingCard {
     ) {
         self.title = title
         self.body = body
+        self.cardType = cardType
         self.imageName = imageName
         self.primaryButtonTitle = primaryButtonTitle
         self.primaryButtonAction = primaryButtonAction
@@ -47,6 +55,7 @@ enum OnboardingCardSchedule {
         2: [OnboardingCard(
             title: String.Onboarding.MultiDay.NotificationCard.Title,
             body: String.Onboarding.MultiDay.NotificationCard.BodyText,
+            cardType: .notifications,
             imageName: ImageIdentifiers.Onboarding.ContinuousOnboarding.notification,
             primaryButtonTitle: String.Onboarding.MultiDay.NotificationCard.AcceptButtonText,
             primaryButtonAction: .enableNotifications,
@@ -55,6 +64,7 @@ enum OnboardingCardSchedule {
         7: [OnboardingCard(
             title: String.Onboarding.MultiDay.SyncCard.Title,
             body: String.Onboarding.MultiDay.SyncCard.BodyText,
+            cardType: .sync,
             imageName: ImageIdentifiers.Onboarding.ContinuousOnboarding.sync,
             primaryButtonTitle: String.Onboarding.MultiDay.SyncCard.AcceptButtonText,
             primaryButtonAction: .signIn,

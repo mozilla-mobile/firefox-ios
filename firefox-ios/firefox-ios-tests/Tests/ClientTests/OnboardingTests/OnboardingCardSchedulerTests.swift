@@ -147,7 +147,7 @@ final class OnboardingCardSchedulerTests: XCTestCase {
     }
 
     private func makeCard(title: String) -> OnboardingCard {
-        return OnboardingCard(title: title, body: "body")
+        return OnboardingCard(title: title, body: "body", cardType: .notifications)
     }
 
     private func makeDate(year: Int, month: Int, day: Int) -> Date {
