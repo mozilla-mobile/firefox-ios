@@ -87,6 +87,48 @@ final class SummarizeSettingsViewControllerTests: XCTestCase {
         XCTAssertEqual(sections.last?.children.count, 1)
     }
 
+    func test_toggleSummarizeContent_offThenOn_restoresSections() {
+        let mockSummarizeNimbusUtils = MockSummarizerNimbusUtils()
+        mockSummarizeNimbusUtils.shakeGestureFeatureFlagEnabled = true
+        mockSummarizeNimbusUtils.isLanguageExpansionEnabled = true
+
+        let subject = createSubject(with: mockSummarizeNimbusUtils)
+        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 390, height: 844))
+        window.rootViewController = subject
+        window.makeKeyAndVisible()
+        defer {
+            // Drain pending main-queue layout work before releasing the view
+            // hierarchy, otherwise the leak check still sees the subject retained.
+            RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.1))
+            window.rootViewController = nil
+            window.isHidden = true
+            RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.1))
+        }
+        subject.loadViewIfNeeded()
+        subject.viewWillAppear(false)
+        subject.tableView.layoutIfNeeded()
+
+        XCTAssertEqual(subject.tableView.numberOfSections, 3)
+
+        guard let setting = subject.settings.first?.children.first as? BoolSetting else {
+            XCTFail("Expected first setting to be a BoolSetting")
+            return
+        }
+        let switchView = setting.control.switchView
+
+        // The section update is deferred until the switch animation settles
+        // (and coalesced), so pump the main runloop past that delay.
+        switchView.isOn = false
+        switchView.sendActions(for: .valueChanged)
+        RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.5))
+        XCTAssertEqual(subject.tableView.numberOfSections, 1)
+
+        switchView.isOn = true
+        switchView.sendActions(for: .valueChanged)
+        RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.5))
+        XCTAssertEqual(subject.tableView.numberOfSections, 3)
+    }
+
     // MARK: - Helper
     private func createSubject(with summarizeNimbusUtils: MockSummarizerNimbusUtils) -> SummarizeSettingsViewController {
         let subject = SummarizeSettingsViewController(
