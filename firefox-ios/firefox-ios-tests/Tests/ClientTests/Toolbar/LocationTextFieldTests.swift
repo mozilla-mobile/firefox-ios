@@ -41,14 +41,23 @@ final class LocationTextFieldTests: XCTestCase {
         XCTAssertEqual(textField.text, "www.wikipedia.com")
     }
 
-    func testHandleInputModeDidChange_withLastMarkedText_updatesTextAndSetsMarkedText() {
+    func testHandleInputModeDidChange_withLastMarkedText_restoresSuggestionAsSelection() {
+        makeTextFieldEditing()
         textField.text = "www.wiki"
+        if let endPosition = textField.position(from: textField.beginningOfDocument, offset: textField.text!.count) {
+            textField.selectedTextRange = textField.textRange(from: endPosition, to: endPosition)
+        }
         textField.setMarkedText("pedia.com", selectedRange: NSRange())
 
         textField.handleInputModeDidChange()
 
-        XCTAssertTrue(textField.text?.contains("www.wiki") ?? false)
-        XCTAssertNotNil(textField.markedTextRange)
+        XCTAssertEqual(textField.text, "www.wikipedia.com")
+        XCTAssertNil(textField.markedTextRange)
+        if let selection = textField.selectedTextRange {
+            XCTAssertEqual(textField.text(in: selection), "pedia.com")
+        } else {
+            XCTFail("The suggestion should be restored as a text selection")
+        }
     }
 
     func testHandleInputModeDidChange_whenSuggestionNoLongerMatchesTypedText_doesNotRestoreIt() {
