@@ -952,6 +952,21 @@ class BrowserViewController: UIViewController,
 
     func sceneDidActivateNotification() {
         privacyWindowHelper.removeWindow()
+        discardKeyboardStateIfKeyboardIsGone()
+    }
+
+    /// The keyboard can be dismissed while the app is in the background without a hide notification
+    /// reaching us, which would leave the keyboard spacer pushing the bottom address bar up the screen.
+    private func discardKeyboardStateIfKeyboardIsGone() {
+        guard keyboardState != nil, !containsFirstResponder(view.window ?? view) else { return }
+
+        updateKeyboardState(nil)
+        adjustBottomSearchBarForKeyboard()
+        updateBottomContentStackViewConstraints()
+    }
+
+    private func containsFirstResponder(_ view: UIView) -> Bool {
+        return view.isFirstResponder || view.subviews.contains { containsFirstResponder($0) }
     }
 
     func appWillResignActiveNotification() {
@@ -5212,6 +5227,8 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {
         updateKeyboardState(nil)
+        adjustBottomSearchBarForKeyboard()
+        updateBottomContentStackViewConstraints()
         let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID)
         let isEditing = toolbarState?.addressToolbar.isEditing == true
         if !isEditing {
@@ -5253,12 +5270,21 @@ extension BrowserViewController: KeyboardHelperDelegate {
         let wasKeyboardShowing = keyboardState != nil
         // Show and frame change notifications can describe a hidden keyboard (e.g. on rotation),
         // so only keep the state while the keyboard is actually on screen.
-        keyboardState = state.flatMap { $0.intersectionHeightForView(view) > 0 ? $0 : nil }
+        keyboardState = state.flatMap { isKeyboardOnScreen($0) ? $0 : nil }
         guard (keyboardState != nil) != wasKeyboardShowing else { return }
 
         UIView.performWithoutAnimation {
             updateBlurViews()
         }
+    }
+
+    /// On iPhone the keyboard is always docked and spans the full width of the view. Frames sent while returning
+    /// from the background can be rotated for the other orientation and overlap the view without any keyboard there.
+    private func isKeyboardOnScreen(_ state: KeyboardState) -> Bool {
+        let overlap = state.intersectionForView(view)
+        guard overlap.size.height > 0 else { return false }
+        guard UIDevice.current.userInterfaceIdiom != .pad else { return true }
+        return overlap.size.width >= view.bounds.width - 1
     }
 
     private func cancelEditingMode() {

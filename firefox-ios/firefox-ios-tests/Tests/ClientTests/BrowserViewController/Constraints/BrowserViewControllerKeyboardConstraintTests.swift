@@ -148,6 +148,122 @@ final class BrowserViewControllerKeyboardConstraintTests: BrowserViewControllerC
         subject.keyboardHelper(keyboardHelper, keyboardWillHideWithState: hideState)
     }
 
+    // MARK: - Missed keyboard hide
+
+    func test_keyboardDidHide_withoutWillHide_removesKeyboardSpacer() {
+        let subject = createSubject()
+        selectTabWithFindInPage()
+        let keyboardHelper = createKeyboardHelper()
+        subject.keyboardHelper(keyboardHelper, keyboardWillShowWithState: createKeyboardState())
+        XCTAssertNotNil(keyboardSpacerHeightConstant(in: subject.overKeyboardContainer))
+
+        subject.keyboardHelper(keyboardHelper, keyboardDidHideWithState: createKeyboardState(keyboardHeight: 0))
+
+        XCTAssertNil(keyboardSpacerHeightConstant(in: subject.overKeyboardContainer))
+        XCTAssertEqual(subject.overKeyboardContainer.subviews.count, 1)
+    }
+
+    func test_keyboardDidHide_afterFrameChangeInterruptsHide_removesKeyboardSpacer() {
+        let subject = createSubject()
+        selectTabWithFindInPage()
+        let keyboardHelper = createKeyboardHelper()
+        subject.keyboardHelper(keyboardHelper, keyboardWillShowWithState: createKeyboardState())
+        subject.keyboardHelper(keyboardHelper, keyboardWillHideWithState: createKeyboardState(keyboardHeight: 0))
+        subject.keyboardHelper(keyboardHelper, keyboardWillChangeWithState: createKeyboardState())
+        XCTAssertNotNil(keyboardSpacerHeightConstant(in: subject.overKeyboardContainer))
+
+        subject.keyboardHelper(keyboardHelper, keyboardDidHideWithState: createKeyboardState(keyboardHeight: 0))
+
+        XCTAssertNil(keyboardSpacerHeightConstant(in: subject.overKeyboardContainer))
+        XCTAssertEqual(subject.overKeyboardContainer.subviews.count, 1)
+    }
+
+    /// The keyboard can go away while the app is in the background (e.g. the page blurs its input)
+    /// without a hide notification reaching us, so nothing is first responder when the scene returns.
+    func test_sceneDidActivate_keyboardGoneWithoutHideNotification_removesKeyboardSpacer() {
+        let subject = createSubject()
+        selectTabWithFindInPage()
+        let keyboardHelper = createKeyboardHelper()
+        subject.keyboardHelper(keyboardHelper, keyboardWillShowWithState: createKeyboardState())
+        XCTAssertNotNil(keyboardSpacerHeightConstant(in: subject.overKeyboardContainer))
+
+        subject.sceneDidActivateNotification()
+        subject.view.setNeedsUpdateConstraints()
+        subject.view.updateConstraintsIfNeeded()
+
+        XCTAssertNil(keyboardSpacerHeightConstant(in: subject.overKeyboardContainer))
+        XCTAssertEqual(subject.overKeyboardContainer.subviews.count, 1)
+    }
+
+    func test_sceneDidActivate_inputStillFocused_keepsKeyboardSpacer() {
+        let subject = createSubject()
+        selectTabWithFindInPage()
+        let keyboardHelper = createKeyboardHelper()
+        subject.view.addSubview(FirstResponderView())
+        subject.keyboardHelper(keyboardHelper, keyboardWillShowWithState: createKeyboardState())
+
+        subject.sceneDidActivateNotification()
+        subject.view.setNeedsUpdateConstraints()
+        subject.view.updateConstraintsIfNeeded()
+
+        XCTAssertNotNil(keyboardSpacerHeightConstant(in: subject.overKeyboardContainer))
+    }
+
+    // MARK: - Keyboard frames that aren't a docked keyboard
+
+    /// Returning from the background while rotating, iOS 26 can send a show notification whose end frame
+    /// is rotated for the other orientation. It overlaps the view but no keyboard is on screen there.
+    func test_keyboardWillShow_rotatedFrameFromBackground_doesNotAddKeyboardSpacer() {
+        let subject = createSubject()
+        selectTabWithFindInPage()
+        subject.view.frame = CGRect(x: 0, y: 0, width: 874, height: 402)
+        subject.view.layoutIfNeeded()
+        let rotatedState = KeyboardState(keyboardEndFrame: CGRect(x: 238, y: -472, width: 164, height: 874),
+                                         keyboardAnimationDuration: 0,
+                                         keyboardAnimationCurveValue: 0)
+
+        subject.keyboardHelper(createKeyboardHelper(), keyboardWillShowWithState: rotatedState)
+        subject.view.setNeedsUpdateConstraints()
+        subject.view.updateConstraintsIfNeeded()
+
+        XCTAssertNil(keyboardSpacerHeightConstant(in: subject.overKeyboardContainer))
+        XCTAssertEqual(subject.overKeyboardContainer.subviews.count, 1)
+    }
+
+    /// In iPhone landscape the address bar is at the top, so a rotated frame kept there doesn't show a spacer
+    /// until the app is back in portrait with the bottom address bar.
+    func test_keyboardWillShow_rotatedFrameInLandscape_doesNotAddKeyboardSpacerBackInPortrait() {
+        let subject = createSubject(isBottomSearchBar: false)
+        selectTabWithFindInPage()
+        subject.view.frame = CGRect(x: 0, y: 0, width: 874, height: 402)
+        subject.view.layoutIfNeeded()
+        let rotatedState = KeyboardState(keyboardEndFrame: CGRect(x: 238, y: -472, width: 164, height: 874),
+                                         keyboardAnimationDuration: 0,
+                                         keyboardAnimationCurveValue: 0)
+        subject.keyboardHelper(createKeyboardHelper(), keyboardWillShowWithState: rotatedState)
+
+        subject.isBottomSearchBar = true
+        subject.view.frame = CGRect(x: 0, y: 0, width: 402, height: 874)
+        subject.view.setNeedsUpdateConstraints()
+        subject.view.updateConstraintsIfNeeded()
+
+        XCTAssertNil(keyboardSpacerHeightConstant(in: subject.overKeyboardContainer))
+    }
+
+    func test_keyboardWillShow_landscapeKeyboard_addsKeyboardSpacer() {
+        let subject = createSubject()
+        selectTabWithFindInPage()
+        subject.view.frame = CGRect(x: 0, y: 0, width: 874, height: 402)
+        subject.view.layoutIfNeeded()
+        let landscapeState = KeyboardState(keyboardEndFrame: CGRect(x: 0, y: 94, width: 874, height: 308),
+                                           keyboardAnimationDuration: 0,
+                                           keyboardAnimationCurveValue: 0)
+
+        subject.keyboardHelper(createKeyboardHelper(), keyboardWillShowWithState: landscapeState)
+
+        XCTAssertNotNil(keyboardSpacerHeightConstant(in: subject.overKeyboardContainer))
+    }
+
     // MARK: - bottomContentStackView Position Tests
 
     func test_keyboardWillShow_TopToolbar_bottomContentNoUpdate() {
@@ -324,4 +440,9 @@ final class BrowserViewControllerKeyboardConstraintTests: BrowserViewControllerC
                              keyboardAnimationDuration: 0,
                              keyboardAnimationCurveValue: 0)
     }
+}
+
+/// Stands in for a focused input, since a real view can only become first responder inside a window.
+private final class FirstResponderView: UIView {
+    override var isFirstResponder: Bool { true }
 }
