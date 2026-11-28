@@ -2445,6 +2445,26 @@ app_errors:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
+  stale_skip_session_restore_cleared:
+    type: event
+    description: |
+      Recorded once on launch when a release build finds the debug "Skip Session Restore" setting enabled and
+      clears it. The setting can only be changed from the Settings app in developer builds, so on release builds
+      it is a leftover from old builds that exposed it, and it made every launch discard the user's tabs.
+    extra_keys:
+      diagnostics:
+        type: string
+        description: |
+          The stored value's type, value and the UserDefaults domains containing it,
+          e.g. "type: bool, val: 1, dom: app".
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-17319
+    data_reviews: []
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
 
 webview:
   did_fail_provisional:

@@ -100,6 +100,9 @@ class AppDelegate: UIResponder,
         appLaunchUtil = AppLaunchUtil(profile: profile)
         appLaunchUtil?.setUpPreLaunchDependencies()
 
+        // Needs to run after telemetry setup and before any window restores its tabs.
+        DebugSettingsBundleOptions.clearStaleSkipSessionRestoreIfNeeded()
+
         // Set up a web server that serves us static content.
         // Do this early so that it is ready when the UI is presented.
         webServerUtil = WebServerUtil(readerModeHandler: ReaderModeHandlers(), profile: profile)

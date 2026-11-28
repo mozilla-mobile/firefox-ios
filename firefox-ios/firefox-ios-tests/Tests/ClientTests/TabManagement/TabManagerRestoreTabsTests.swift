@@ -267,6 +267,79 @@ final class TabManagerRestoreTabsTests: TabManagerTestsBase {
         wait(for: [expectation], timeout: skippedRestoreTimeout)
     }
 
+    @MainActor
+    func testRestoreTabs_whenSessionRestoreIsSkipped_stillPreservesTabs() async throws {
+        setSkipSessionRestore(true)
+        let subject = createSubject()
+
+        subject.restoreTabs()
+        subject.preserveTabs(immediate: true)
+        try await Task.sleep(nanoseconds: sleepTime)
+
+        XCTAssertTrue(subject.tabRestoreHasFinished)
+        XCTAssertEqual(mockTabStore.fetchWindowDataCalledCount, 0)
+        XCTAssertGreaterThan(mockTabStore.saveWindowDataCalledCount, 0)
+    }
+
+    @MainActor
+    func testRestoreTabs_whenSessionRestoreIsSkippedWithDeeplinkFlagEnabled_stillPreservesTabs() async throws {
+        setIsDeeplinkOptimizationRefactorEnabled(true)
+        setSkipSessionRestore(true)
+        let subject = createSubject()
+
+        subject.restoreTabs()
+        subject.preserveTabs(immediate: true)
+        try await Task.sleep(nanoseconds: sleepTime)
+
+        XCTAssertTrue(subject.tabRestoreHasFinished)
+        XCTAssertEqual(mockTabStore.fetchWindowDataCalledCount, 0)
+        XCTAssertGreaterThan(mockTabStore.saveWindowDataCalledCount, 0)
+    }
+
+    // MARK: - Stale skip session restore cleanup
+
+    func testClearStaleSkipSessionRestore_onReleaseWithValueSet_clearsValueAndRecordsEvent() throws {
+        let (defaults, _) = makeIsolatedDefaults()
+        defaults.set(true, forKey: DebugSettingsBundleOptions.skipSessionRestoreKey)
+        let telemetry = MockTabLossTelemetry()
+
+        let didClear = DebugSettingsBundleOptions.clearStaleSkipSessionRestoreIfNeeded(userDefaults: defaults,
+                                                                                       buildChannel: .release,
+                                                                                       tabLossTelemetry: telemetry)
+
+        let diagnostics = try XCTUnwrap(telemetry.savedStaleSkipSessionRestoreDiagnostics)
+        XCTAssertTrue(didClear)
+        XCTAssertNil(defaults.object(forKey: DebugSettingsBundleOptions.skipSessionRestoreKey))
+        XCTAssertEqual(telemetry.recordStaleSkipSessionRestoreClearedCalled, 1)
+        XCTAssertTrue(diagnostics.hasPrefix("type: bool, val: 1"))
+    }
+
+    func testClearStaleSkipSessionRestore_onDeveloperBuild_keepsValue() {
+        let (defaults, _) = makeIsolatedDefaults()
+        defaults.set(true, forKey: DebugSettingsBundleOptions.skipSessionRestoreKey)
+        let telemetry = MockTabLossTelemetry()
+
+        let didClear = DebugSettingsBundleOptions.clearStaleSkipSessionRestoreIfNeeded(userDefaults: defaults,
+                                                                                       buildChannel: .developer,
+                                                                                       tabLossTelemetry: telemetry)
+
+        XCTAssertFalse(didClear)
+        XCTAssertTrue(defaults.bool(forKey: DebugSettingsBundleOptions.skipSessionRestoreKey))
+        XCTAssertEqual(telemetry.recordStaleSkipSessionRestoreClearedCalled, 0)
+    }
+
+    func testClearStaleSkipSessionRestore_onReleaseWithoutValue_doesNothing() {
+        let (defaults, _) = makeIsolatedDefaults()
+        let telemetry = MockTabLossTelemetry()
+
+        let didClear = DebugSettingsBundleOptions.clearStaleSkipSessionRestoreIfNeeded(userDefaults: defaults,
+                                                                                       buildChannel: .release,
+                                                                                       tabLossTelemetry: telemetry)
+
+        XCTAssertFalse(didClear)
+        XCTAssertEqual(telemetry.recordStaleSkipSessionRestoreClearedCalled, 0)
+    }
+
     // MARK: - Skip session restore diagnostics
 
     func testSkipSessionRestoreDiagnostics_whenKeyIsUnset_reportsNoDomains() {

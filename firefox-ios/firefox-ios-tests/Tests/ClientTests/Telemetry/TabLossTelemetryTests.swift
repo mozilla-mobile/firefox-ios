@@ -81,6 +81,21 @@ final class TabLossTelemetryTests: XCTestCase {
         XCTAssertTrue(windowsCount == expectedTabDiagnostic.windows)
     }
 
+    func testRecordStaleSkipSessionRestoreCleared_includesExtras() throws {
+        let event = GleanMetrics.AppErrors.staleSkipSessionRestoreCleared
+        typealias EventExtrasType = GleanMetrics.AppErrors.StaleSkipSessionRestoreClearedExtra
+        let diagnostics = "type: bool, val: 1, dom: app"
+
+        subject.recordStaleSkipSessionRestoreCleared(diagnostics: diagnostics)
+
+        let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
+
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertTrue(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+        XCTAssertEqual(savedExtras.diagnostics, diagnostics)
+    }
+
     func testRecordTabLossDetected_doesNotOverflowInt32Extra() throws {
         // Glean is using Int32 under the hood so we want to make sure no crashes due to type coercion from Int
         let expectedTabDiagnostic = TabLossTelemetry.TabLossDiagnostic(

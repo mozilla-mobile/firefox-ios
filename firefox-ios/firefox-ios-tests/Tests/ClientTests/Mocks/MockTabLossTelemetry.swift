@@ -9,6 +9,8 @@ final class MockTabLossTelemetry: TabLossTelemetryRecording {
     private(set) var recordTabCountDiscrepancyCalled = 0
     private(set) var savedTabLossDetectedDetails: TabLossTelemetry.TabLossDiagnostic?
     private(set) var savedTabCountDiscrepancyDetails: TabLossTelemetry.TabLossDiagnostic?
+    private(set) var recordStaleSkipSessionRestoreClearedCalled = 0
+    private(set) var savedStaleSkipSessionRestoreDiagnostics: String?
 
     func recordTabLossDetected(withDetails details: TabLossTelemetry.TabLossDiagnostic) {
         recordTabLossDetectedCalled += 1
@@ -18,5 +20,10 @@ final class MockTabLossTelemetry: TabLossTelemetryRecording {
     func recordTabCountDiscrepancy(withDetails details: TabLossTelemetry.TabLossDiagnostic) {
         recordTabCountDiscrepancyCalled += 1
         savedTabCountDiscrepancyDetails = details
+    }
+
+    func recordStaleSkipSessionRestoreCleared(diagnostics: String) {
+        recordStaleSkipSessionRestoreClearedCalled += 1
+        savedStaleSkipSessionRestoreDiagnostics = diagnostics
     }
 }
