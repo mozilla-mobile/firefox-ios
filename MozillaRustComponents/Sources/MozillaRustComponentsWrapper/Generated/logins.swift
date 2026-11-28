@@ -595,6 +595,13 @@ public protocol LoginStoreProtocol: AnyObject, Sendable {
      */
     func bridgedEngine() throws  -> LoginsBridgedEngine
     
+    /**
+     * Count the logins that do not decrypt with the current key, without returning or deleting
+     * anything. Fails with the key manager's error (e.g. `AuthenticationCanceled`, `MissingKey`)
+     * as soon as the key itself is unavailable, rather than asking for it once per login.
+     */
+    func checkDecryptability() throws  -> DecryptabilityReport
+    
     func count() throws  -> Int64
     
     func countByFormActionOrigin(formActionOrigin: String) throws  -> Int64
@@ -870,6 +877,20 @@ open func bridgedEngine()throws  -> LoginsBridgedEngine  {
     return try  FfiConverterTypeLoginsBridgedEngine_lift(try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
         uniffiCallStatus in
     uniffi_logins_fn_method_loginstore_bridged_engine(
+            self.uniffiCloneHandle(),uniffiCallStatus
+    )
+})
+}
+    
+    /**
+     * Count the logins that do not decrypt with the current key, without returning or deleting
+     * anything. Fails with the key manager's error (e.g. `AuthenticationCanceled`, `MissingKey`)
+     * as soon as the key itself is unavailable, rather than asking for it once per login.
+     */
+open func checkDecryptability()throws  -> DecryptabilityReport  {
+    return try  FfiConverterTypeDecryptabilityReport_lift(try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
+        uniffiCallStatus in
+    uniffi_logins_fn_method_loginstore_check_decryptability(
             self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
@@ -1525,6 +1546,63 @@ public func FfiConverterTypeLoginsBridgedEngine_lower(_ value: LoginsBridgedEngi
 }
 
 
+
+
+/**
+ * What `check_decryptability()` found, see there.
+ */
+public struct DecryptabilityReport: Equatable, Hashable {
+    public var total: UInt64
+    public var undecryptable: UInt64
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(total: UInt64, undecryptable: UInt64) {
+        self.total = total
+        self.undecryptable = undecryptable
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension DecryptabilityReport: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeDecryptabilityReport: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> DecryptabilityReport {
+        return
+            try DecryptabilityReport(
+                total: FfiConverterUInt64.read(from: &buf), 
+                undecryptable: FfiConverterUInt64.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: DecryptabilityReport, into buf: inout [UInt8]) {
+        FfiConverterUInt64.write(value.total, into: &buf)
+        FfiConverterUInt64.write(value.undecryptable, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeDecryptabilityReport_lift(_ buf: RustBuffer) throws -> DecryptabilityReport {
+    return try FfiConverterTypeDecryptabilityReport.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeDecryptabilityReport_lower(_ value: DecryptabilityReport) -> RustBuffer {
+    return FfiConverterTypeDecryptabilityReport.lower(value)
+}
 
 
 /**
@@ -2715,6 +2793,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_logins_checksum_method_loginstore_bridged_engine() != 17864) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_logins_checksum_method_loginstore_check_decryptability() != 21825) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_logins_checksum_method_loginstore_count() != 14902) {
