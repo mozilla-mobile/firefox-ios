@@ -152,6 +152,11 @@
           "name" : "WebDataTransfer"
         },
         {
+          "containerPath" : "container:..\/BrowserKit",
+          "identifier" : "WebDataTransferTests",
+          "name" : "WebDataTransferTests"
+        },
+        {
           "containerPath" : "container:..\/MozillaRustComponents",
           "identifier" : "MozillaRustComponentsTests",
           "name" : "MozillaRustComponentsTests"
