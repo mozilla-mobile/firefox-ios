@@ -41,11 +41,16 @@ public class RustSyncManager: NSObject, SyncManager, @unchecked Sendable {
     private var backgrounded = true
     private let logger: Logger
     private let fxaDeclinedEngines = "fxa.cwts.declinedSyncEngines"
+    private let engineEnablementsSavedPref = "engineEnablementsSaved"
     private var notificationCenter: NotificationProtocol
     private var syncBackOffTimer: Timer?
     private let syncBackOffDelay = 180.0 // 3 Minutes
 
     let fifteenMinutesInterval = TimeInterval(60 * 15)
+
+    private var isFirstSync: Bool {
+        return !(prefsForSync.boolForKey(engineEnablementsSavedPref) ?? false)
+    }
 
     public var lastSyncFinishTime: Timestamp? {
         get {
@@ -308,6 +313,28 @@ public class RustSyncManager: NSObject, SyncManager, @unchecked Sendable {
         return false
     }
 
+    public func getEnabledEnginesForDevice() -> [String]? {
+        var enabledEngines = [String]()
+
+        if isFirstSync {
+            // The first sync will only be of the clients engine so that we can retrieve the
+            // per-account selections from the sync server. So we're not sending enablements
+            // until after the first sync. When Choose What to Sync is implemented, we can set
+            // enablements based on the user's selections (i.e. fxaDeclinedEngines).
+            return nil
+        } else {
+            syncManagerAPI.rustTogglableEngines.forEach({
+                let engine = $0.rawValue
+                let enabledPref = "engine.\(engine).enabled"
+
+                if self.prefsForSync.boolForKey(enabledPref) ?? false {
+                    enabledEngines.append(engine)
+                }
+            })
+            return enabledEngines
+        }
+    }
+
     public func getEngineEnablementChangesForAccount(withStateChange: Bool = true) -> [String: Bool] {
         var engineEnablements: [String: Bool] = [:]
 
@@ -528,7 +555,9 @@ public class RustSyncManager: NSObject, SyncManager, @unchecked Sendable {
        return enginesToSync
     }
 
-    private func doSync(params: SyncParams, completion: @escaping @Sendable (SyncResult) -> Void) {
+    private func doSync(params: SyncParams,
+                        perDeviceSyncEnabled: Bool = false,
+                        completion: @escaping @Sendable (SyncResult) -> Void) {
         beginSyncing()
         syncManagerAPI.sync(params: params) { syncResult in
             // Save the persisted state
@@ -548,7 +577,12 @@ public class RustSyncManager: NSObject, SyncManager, @unchecked Sendable {
                             category: .sync,
                             extra: ["telemetry": telemetryMessage])
 
-            if let declined = syncResult.declined {
+            if perDeviceSyncEnabled {
+                if syncResult.status == .ok, let accountEngineChoices = syncResult.accountEngineChoices {
+                    self.updateEnginePrefs(declined: accountEngineChoices.declined,
+                                           perDeviceSyncEnabled: true)
+                }
+            } else if let declined = syncResult.declined {
                 self.updateEnginePrefs(declined: declined)
             }
 
@@ -557,36 +591,67 @@ public class RustSyncManager: NSObject, SyncManager, @unchecked Sendable {
         }
     }
 
-    func updateEnginePrefs(declined: [String]) {
-        // Save declined/enabled engines - we assume the engines
-        // not included in the returned `declined` property of the
-        // result of the sync manager `sync` are enabled.
+    func updateEnginePrefs(declined: [String],
+                           perDeviceSyncEnabled: Bool = false) {
+        if perDeviceSyncEnabled {
+            if isFirstSync {
+                // This is the first per-device sync so we only did a sync of the client engine
+                // in order retrieve the per-account selections from the sync server. The next
+                // full sync will sync the engines as we set them below.
+                syncManagerAPI.rustTogglableEngines.forEach({
+                    let engine = $0.rawValue
+                    let enabledPref = "engine.\(engine).enabled"
+                    let stateChangedPref = "engine.\(engine).enabledStateChanged"
 
-        let updateEnginePref: (String, Bool) -> Void = { engine, enabled in
-            let enabledPref = "engine.\(engine).enabled"
-            self.prefsForSync.setBool(enabled, forKey: enabledPref)
+                    let enabled = !declined.contains(engine)
+                    self.prefsForSync.setBool(enabled, forKey: enabledPref)
 
-            let stateChangedPref = "engine.\(engine).enabledStateChanged"
-            self.prefsForSync.setObject(nil, forKey: stateChangedPref)
+                    // These state change prefs aren't needed for per-device sync so we clear them.
+                    // When the legacy sync code is removed these can probably go with them.
+                    self.prefsForSync.setObject(nil, forKey: stateChangedPref)
+                })
+                self.prefsForSync.setBool(true, forKey: engineEnablementsSavedPref)
 
-            let enablementDetails = [enabledPref: String(enabled)]
-            self.logger.log("Finished setting \(engine) enablement prefs",
-                            level: .info,
-                            category: .sync,
-                            extra: enablementDetails)
-        }
+                // Clear the sign-up declined engines so checkCreditCardEngineEnablement reads the prefs set above
+                UserDefaults.standard.removeObject(forKey: fxaDeclinedEngines)
 
-        syncManagerAPI.rustTogglableEngines.forEach({
-            if declined.contains($0.rawValue) {
-                updateEnginePref($0.rawValue, false)
-            } else {
-                updateEnginePref($0.rawValue, true)
+                self.logger.log("Finished setting prefs after first per-device sync",
+                                level: .info,
+                                category: .sync)
             }
-        })
+        } else {
+            // Save declined/enabled engines - we assume the engines
+            // not included in the returned `declined` property of the
+            // result of the sync manager `sync` are enabled.
+
+            let updateEnginePref: (String, Bool) -> Void = { engine, enabled in
+                let enabledPref = "engine.\(engine).enabled"
+                self.prefsForSync.setBool(enabled, forKey: enabledPref)
+
+                let stateChangedPref = "engine.\(engine).enabledStateChanged"
+                self.prefsForSync.setObject(nil, forKey: stateChangedPref)
+
+                let enablementDetails = [enabledPref: String(enabled)]
+                self.logger.log("Finished setting \(engine) enablement prefs",
+                                level: .info,
+                                category: .sync,
+                                extra: enablementDetails)
+            }
+
+            syncManagerAPI.rustTogglableEngines.forEach({
+                if declined.contains($0.rawValue) {
+                    updateEnginePref($0.rawValue, false)
+                } else {
+                    updateEnginePref($0.rawValue, true)
+                }
+            })
+            prefsForSync.setBool(true, forKey: engineEnablementsSavedPref)
+        }
     }
 
     private func syncRustEngines(why: SyncReason,
-                                 engines: [String]) -> Deferred<Maybe<SyncResult>> {
+                                 engines: [String],
+                                 perDeviceSyncEnabled: Bool = false) -> Deferred<Maybe<SyncResult>> {
         let deferred = Deferred<Maybe<SyncResult>>()
 
         logger.log("Syncing \(engines)", level: .info, category: .sync)
@@ -623,10 +688,21 @@ public class RustSyncManager: NSObject, SyncManager, @unchecked Sendable {
                     self.getEnginesAndKeys(engines: engines.compactMap {
                         RustSyncManagerAPI.TogglableEngine(rawValue: $0)
                     }) { (rustEngines, localEncryptionKeys) in
+                        // The first sync should only sync the client engine so we can get the per-account
+                        // selections from the sync server. Once CWTS is implemented on account creation,
+                        // we will use those selections on the first sync instead.
+                        let isFirstPerDeviceSync = perDeviceSyncEnabled && self.isFirstSync
+                        let enginesToSync = SyncEngineSelection.some(engines: isFirstPerDeviceSync ? [] : rustEngines)
+
                         let params = SyncParams(
                             reason: why,
-                            engines: SyncEngineSelection.some(engines: rustEngines),
-                            engineChoicesModel: .account(enabledChanges: self.getEngineEnablementChangesForAccount()),
+                            engines: enginesToSync,
+                            engineChoicesModel: perDeviceSyncEnabled ?
+                                .device :
+                                .account(enabledChanges: self.getEngineEnablementChangesForAccount()),
+                            enabledEngines: perDeviceSyncEnabled ?
+                                self.getEnabledEnginesForDevice() :
+                                nil,
                             localEncryptionKeys: localEncryptionKeys,
                             authInfo: self.createSyncAuthInfo(key: key,
                                                               accessTokenInfo: accessTokenInfo,
@@ -638,7 +714,8 @@ public class RustSyncManager: NSObject, SyncManager, @unchecked Sendable {
                                 deviceId: deviceId,
                                 accountManager: accountManager))
 
-                        self.doSync(params: params) { syncResult in
+                        self.doSync(params: params,
+                                    perDeviceSyncEnabled: perDeviceSyncEnabled) { syncResult in
                             deferred.fill(Maybe(success: syncResult))
                         }
                     }
