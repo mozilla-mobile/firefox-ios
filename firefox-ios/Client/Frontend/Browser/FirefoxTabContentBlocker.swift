@@ -132,10 +132,25 @@ final class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript, Featu
     }
 
     override func notifiedTabSetupRequired() {
-        guard let tab = self.tab as? Tab else { return }
-        self.logger.log("Notified tab setup required", level: .info, category: .adblock)
-        self.setupForTab(completion: { tab.reload() })
-        TabEvent.post(.didChangeContentBlocking, for: tab)
+        guard let tab else { return }
+        logger.log("Notified tab setup required", level: .info, category: .adblock)
+        setupForTab(completion: { [weak self] in
+            self?.reloadTabToApplyRules()
+        })
+        if let tab = tab as? Tab {
+            TabEvent.post(.didChangeContentBlocking, for: tab)
+        }
+    }
+
+    /// Reloads the tab so the updated rules apply to the current page. A tab navigating to a new page is left alone,
+    /// since reloading would cancel that navigation, and the new page loads with the updated rules anyway.
+    private func reloadTabToApplyRules() {
+        guard let tab else { return }
+        guard !tab.hasUncommittedNavigation else {
+            logger.log("Skipped content blocker reload during a navigation", level: .info, category: .adblock)
+            return
+        }
+        tab.reload(bypassCache: false)
     }
 
     override func currentlyEnabledLists() -> [String] {

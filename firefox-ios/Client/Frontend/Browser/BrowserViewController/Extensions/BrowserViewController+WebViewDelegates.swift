@@ -597,6 +597,9 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation?) {
+        // Tracked for every tab, since the content blocker can reload tabs that aren't selected.
+        tabManager[webView]?.hasProvisionalNavigation = true
+
         if tabManager.selectedTab?.webView !== webView { return }
 
         // Note the main frame JSContext (i.e. document, window) is not available yet.
@@ -1289,6 +1292,8 @@ extension BrowserViewController: WKNavigationDelegate {
         didFailProvisionalNavigation navigation: WKNavigation?,
         withError error: Error
     ) {
+        tabManager[webView]?.hasProvisionalNavigation = false
+
         // The navigation won't present; make sure content hidden on a cross-origin popup commit is
         // not left stuck hidden.
         webView.isHidden = false
@@ -1425,6 +1430,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation?) {
         guard let tab = tabManager[webView] else { return }
+        tab.hasProvisionalNavigation = false
 
         // The main frame JSContext is available, and DOM parsing has begun.
         // Do not execute JS at this point that requires running prior to DOM parsing.
