@@ -15,7 +15,7 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      - uses: actions/stale@5bef64f19d7facfb25b37b414482c7164d639639 # v9
+      - uses: actions/stale@4391f3da665fdf50b6810c1a66712fb9ba21aa93 # v11.0.0
         with:
           ### GENERAL ###
           # Max number of operations per run
@@ -42,7 +42,7 @@ jobs:
           close-issue-reason: not_planned
 
           # Labels on issues exempted from stale
-          exempt-issue-labels: "do not stale,Feature-Request,Contributor OK"
+          exempt-issue-labels: "Do not stale,do-not-stale,Feature-Request,Contributor OK,contributor-ok"
 
           # Label to apply on staled issues
           stale-issue-label: "stale"
@@ -62,4 +62,4 @@ jobs:
           stale-pr-label: "stale"
 
           # Labels on PRs exempted from stale
-          exempt-pr-labels: "do not stale,weekly-release"
+          exempt-pr-labels: "Do not stale,do-not-stale,weekly-release"
