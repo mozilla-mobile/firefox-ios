@@ -449,6 +449,13 @@ class Tab: NSObject,
         }
     }
 
+    var isSecure: Bool {
+        if url?.isReaderModeURL == true {
+            return true
+        }
+        return currentWebView()?.hasOnlySecureContent ?? false
+    }
+
     fileprivate(set) var screenshot: UIImage?
 
     // If this tab has been opened from another, its parent will point to the tab from which it was opened

@@ -204,8 +204,19 @@ extension URL {
         return absoluteString.hasPrefix("internal://local/about/home")
     }
 
+    /// The page's real URL: unwraps error pages and reader-mode URLs to the original page.
+    /// Used by the main menu site-protection header and the ETP panel
     public var siteURL: URL {
-        InternalURL(self)?.originalURLFromErrorPage ?? self
+        InternalURL(self)?.originalURLFromErrorPage ?? decodeReaderModeURL ?? self
+    }
+
+    /// The URL to persist for bookmarks, pinned shortcuts and share items.
+    /// Same as `siteURL`, reader-mode pages keep their reader URL so they reopen in reader mode.
+    public var saveableURL: URL {
+        if isReaderModeURL {
+            return self
+        }
+        return siteURL
     }
 }
 
