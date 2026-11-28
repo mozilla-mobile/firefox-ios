@@ -21,18 +21,24 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         let shouldShowSectionHeader: ShouldShowSectionHeader
     }
 
+    struct CenterSearchBarLayoutConfiguration: Equatable, Hashable {
+        let isShowingCenterSearchBar: Bool
+        let isShowingPrivacyNotice: Bool
+        let isShowingMessageCard: Bool
+    }
+
     enum HomeSection: Hashable {
         case privacyNotice
-        case header
+        case header(CenterSearchBarLayoutConfiguration)
         case messageCard
         case topSites(TextColor?, NumberOfTilesPerRow, ShouldShowSectionHeader)
         case notificationCard
-        case searchBar
+        case centerSearchBar(CenterSearchBarLayoutConfiguration)
         case jumpBackIn(TextColor?, JumpBackInSectionLayoutConfiguration)
         case trackerBlockerModule
         case bookmarks(TextColor?)
         case pocket(TextColor?)
-        case spacer
+        case spacer(CenterSearchBarLayoutConfiguration)
 
         var canHandleLongPress: Bool {
             switch self {
@@ -127,8 +133,15 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
                                          state.wallpaperState.wallpaperConfiguration.logoTextColor,
                                          showiPadSetup)
 
-        snapshot.appendSections([.header])
-        snapshot.appendItems([headerItem], toSection: .header)
+        let centerSearchBarLayoutConfiguration = HomepageDiffableDataSource.CenterSearchBarLayoutConfiguration(
+            isShowingCenterSearchBar: state.searchBarState.isShowingCenterSearchBar,
+            isShowingPrivacyNotice: state.privacyNoticeState.shouldShowPrivacyNotice,
+            isShowingMessageCard: state.messageState.messageCardConfiguration != nil
+        )
+
+        let headerSection = HomepageSection.header(centerSearchBarLayoutConfiguration)
+        snapshot.appendSections([headerSection])
+        snapshot.appendItems([headerItem], toSection: headerSection)
 
         if state.privacyNoticeState.shouldShowPrivacyNotice {
             snapshot.appendSections([.privacyNotice])
@@ -141,8 +154,9 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         }
 
         if state.searchBarState.isShowingCenterSearchBar {
-            snapshot.appendSections([.searchBar])
-            snapshot.appendItems([.searchBar], toSection: .searchBar)
+            let centerSearchBarSection = HomepageSection.centerSearchBar(centerSearchBarLayoutConfiguration)
+            snapshot.appendSections([centerSearchBarSection])
+            snapshot.appendItems([.searchBar], toSection: centerSearchBarSection)
         }
 
         if let topSitesSnapshotData = getTopSites(with: state.topSitesState, and: textColor) {
@@ -177,8 +191,9 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
             snapshot.appendItems(bookmarks, toSection: .bookmarks(textColor))
         }
 
-        snapshot.appendSections([.spacer])
-        snapshot.appendItems([.spacer], toSection: .spacer)
+        let spacerSection = HomepageSection.spacer(centerSearchBarLayoutConfiguration)
+        snapshot.appendSections([spacerSection])
+        snapshot.appendItems([.spacer], toSection: spacerSection)
 
         if let stories = getMerinoStories(with: state.merinoState, selectedNewsfeedCategoryID: selectedNewsfeedCategoryID) {
             let pocketSection = HomeSection.pocket(textColor)

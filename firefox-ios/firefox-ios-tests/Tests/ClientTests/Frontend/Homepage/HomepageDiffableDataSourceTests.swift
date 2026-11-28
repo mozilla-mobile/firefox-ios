@@ -53,11 +53,12 @@ final class HomepageDiffableDataSourceTests: XCTestCase, FeatureFlagTestUtility 
             jumpBackInDisplayConfig: mockSectionConfig
         )
 
+        let config = centerSearchBarLayoutConfiguration()
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfSections, 3)
-        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, placeholderTopSitesSection, .spacer])
-        XCTAssertEqual(snapshot.numberOfItems(inSection: .header), 1)
-        XCTAssertEqual(snapshot.numberOfItems(inSection: .spacer), 1)
+        XCTAssertEqual(snapshot.sectionIdentifiers, [.header(config), placeholderTopSitesSection, .spacer(config)])
+        XCTAssertEqual(snapshot.numberOfItems(inSection: .header(config)), 1)
+        XCTAssertEqual(snapshot.numberOfItems(inSection: .spacer(config)), 1)
     }
 
     @MainActor
@@ -91,7 +92,8 @@ final class HomepageDiffableDataSourceTests: XCTestCase, FeatureFlagTestUtility 
 
         dataSource.updateSnapshot(state: state, jumpBackInDisplayConfig: mockSectionConfig)
 
-        XCTAssertEqual(dataSource.snapshot().sectionIdentifiers, [.header, .spacer])
+        let config = centerSearchBarLayoutConfiguration()
+        XCTAssertEqual(dataSource.snapshot().sectionIdentifiers, [.header(config), .spacer(config)])
     }
 
     @MainActor
@@ -126,16 +128,17 @@ final class HomepageDiffableDataSourceTests: XCTestCase, FeatureFlagTestUtility 
             jumpBackInDisplayConfig: mockSectionConfig
         )
 
+        let config = centerSearchBarLayoutConfiguration()
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(
-            snapshot.itemIdentifiers(inSection: .header).first,
+            snapshot.itemIdentifiers(inSection: .header(config)).first,
             HomepageItem.header(updatedState.headerState, .blue, false)
         )
         XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(.systemCyan)), 20)
         let expectedSections: [HomepageSection] = [
-            .header,
+            .header(config),
             .topSites(.systemCyan, TopSitesSectionLayoutProvider.UX.minCards, false),
-            .spacer,
+            .spacer(config),
             .pocket(.systemCyan)
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
@@ -169,10 +172,11 @@ final class HomepageDiffableDataSourceTests: XCTestCase, FeatureFlagTestUtility 
         let numberOfTilesPerRow = updatedState.topSitesState.numberOfTilesPerRow
         let displayedTopSitesCount = updatedState.topSitesState.numberOfRows * numberOfTilesPerRow
         XCTAssertEqual(snapshot.numberOfItems(inSection: .topSites(nil, numberOfTilesPerRow, true)), displayedTopSitesCount)
+        let config = centerSearchBarLayoutConfiguration()
         let expectedSections: [HomepageSection] = [
-            .header,
+            .header(config),
             .topSites(nil, numberOfTilesPerRow, true),
-            .spacer
+            .spacer(config)
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
@@ -206,10 +210,11 @@ final class HomepageDiffableDataSourceTests: XCTestCase, FeatureFlagTestUtility 
         let snapshot = dataSource.snapshot()
         let numberOfTilesPerRow = updatedState.topSitesState.numberOfTilesPerRow
         XCTAssertEqual(snapshot.numberOfItems(inSection: .topSites(nil, numberOfTilesPerRow, false)), topSitesCount)
+        let config = centerSearchBarLayoutConfiguration()
         let expectedSections: [HomepageSection] = [
-            .header,
+            .header(config),
             .topSites(nil, numberOfTilesPerRow, false),
-            .spacer
+            .spacer(config)
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
@@ -335,10 +340,11 @@ final class HomepageDiffableDataSourceTests: XCTestCase, FeatureFlagTestUtility 
 
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(nil)), 20)
+        let config = centerSearchBarLayoutConfiguration()
         let expectedSections: [HomepageSection] = [
-            .header,
+            .header(config),
             placeholderTopSitesSection,
-            .spacer,
+            .spacer(config),
             .pocket(nil)
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
@@ -485,11 +491,12 @@ final class HomepageDiffableDataSourceTests: XCTestCase, FeatureFlagTestUtility 
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .messageCard), 1)
         XCTAssertEqual(snapshot.itemIdentifiers(inSection: .messageCard).first, HomepageItem.messageCard(configuration))
+        let config = centerSearchBarLayoutConfiguration(isShowingMessageCard: true)
         let expectedSections: [HomepageSection] = [
-            .header,
+            .header(config),
             .messageCard,
             placeholderTopSitesSection,
-            .spacer
+            .spacer(config)
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
@@ -525,11 +532,12 @@ final class HomepageDiffableDataSourceTests: XCTestCase, FeatureFlagTestUtility 
 
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .bookmarks(nil)), 1)
+        let config = centerSearchBarLayoutConfiguration()
         let expectedSections: [HomepageSection] = [
-            .header,
+            .header(config),
             placeholderTopSitesSection,
             .bookmarks(nil),
-            .spacer
+            .spacer(config)
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
@@ -559,11 +567,12 @@ final class HomepageDiffableDataSourceTests: XCTestCase, FeatureFlagTestUtility 
 
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .jumpBackIn(nil, mockSectionConfig)), 1)
+        let config = centerSearchBarLayoutConfiguration()
         let expectedSections: [HomepageSection] = [
-            .header,
+            .header(config),
             placeholderTopSitesSection,
             .jumpBackIn(nil, mockSectionConfig),
-            .spacer
+            .spacer(config)
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
@@ -587,11 +596,12 @@ final class HomepageDiffableDataSourceTests: XCTestCase, FeatureFlagTestUtility 
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .trackerBlockerModule), 1)
         XCTAssertEqual(snapshot.itemIdentifiers(inSection: .trackerBlockerModule).first, .trackerBlockerModule(0))
+        let config = centerSearchBarLayoutConfiguration()
         let expectedSections: [HomepageSection] = [
-            .header,
+            .header(config),
             placeholderTopSitesSection,
             .trackerBlockerModule,
-            .spacer
+            .spacer(config)
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
@@ -635,12 +645,13 @@ final class HomepageDiffableDataSourceTests: XCTestCase, FeatureFlagTestUtility 
         )
         dataSource.updateSnapshot(state: state, jumpBackInDisplayConfig: mockSectionConfig)
 
+        let config = centerSearchBarLayoutConfiguration()
         let expectedSections: [HomepageSection] = [
-            .header,
+            .header(config),
             .topSites(nil, state.topSitesState.numberOfTilesPerRow, true),
             .trackerBlockerModule,
             .jumpBackIn(nil, mockSectionConfig),
-            .spacer
+            .spacer(config)
         ]
         XCTAssertEqual(dataSource.snapshot().sectionIdentifiers, expectedSections)
     }
@@ -659,13 +670,45 @@ final class HomepageDiffableDataSourceTests: XCTestCase, FeatureFlagTestUtility 
 
         dataSource.updateSnapshot(state: state, jumpBackInDisplayConfig: mockSectionConfig)
         let snapshot = dataSource.snapshot()
+        let config = centerSearchBarLayoutConfiguration(isShowingPrivacyNotice: true)
         let expectedSections: [HomepageSection] = [
-            .header,
+            .header(config),
             .privacyNotice,
             placeholderTopSitesSection,
-            .spacer
+            .spacer(config)
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
+    }
+
+    @MainActor
+    func test_updateSnapshot_withCenterSearchBarShowing_returnsCenterSearchBarSection() throws {
+        let dataSource = try XCTUnwrap(diffableDataSource)
+
+        let visibleState = HomepageState.reducer.legacyReducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.viewWillAppear)
+        )
+        let state = HomepageState.reducer.legacyReducer(
+            visibleState,
+            HomepageAction(
+                isCenterSearchEnabled: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: HomepageMiddlewareActionType.configuredSearchBar
+            )
+        )
+
+        dataSource.updateSnapshot(state: state, jumpBackInDisplayConfig: mockSectionConfig)
+
+        let snapshot = dataSource.snapshot()
+        let config = centerSearchBarLayoutConfiguration(isShowingCenterSearchBar: true)
+        let expectedSections: [HomepageSection] = [
+            .header(config),
+            .centerSearchBar(config),
+            placeholderTopSitesSection,
+            .spacer(config)
+        ]
+        XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
+        XCTAssertEqual(snapshot.itemIdentifiers(inSection: .centerSearchBar(config)), [.searchBar])
     }
 
     // MARK: - telemetryItemType
@@ -683,6 +726,18 @@ final class HomepageDiffableDataSourceTests: XCTestCase, FeatureFlagTestUtility 
 
     private var placeholderTopSitesSection: HomepageSection {
         .topSites(nil, TopSitesSectionLayoutProvider.UX.minCards, false)
+    }
+
+    private func centerSearchBarLayoutConfiguration(
+        isShowingCenterSearchBar: Bool = false,
+        isShowingPrivacyNotice: Bool = false,
+        isShowingMessageCard: Bool = false
+    ) -> HomepageDiffableDataSource.CenterSearchBarLayoutConfiguration {
+        HomepageDiffableDataSource.CenterSearchBarLayoutConfiguration(
+            isShowingCenterSearchBar: isShowingCenterSearchBar,
+            isShowingPrivacyNotice: isShowingPrivacyNotice,
+            isShowingMessageCard: isShowingMessageCard
+        )
     }
 
     private func headerState(showQuickAnswersButton: Bool) -> HeaderState {
