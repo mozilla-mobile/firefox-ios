@@ -281,18 +281,19 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         homePageScreen.assertTrackerBlockerPillDoesNotExist()
 
         // Step 1
-        let pagesWhileHidden = [trackerPage, otherTrackerPage]
-        for page in pagesWhileHidden {
-            browserScreen.openURLAndAssertPageText(page, text: TestLabels.trackers)
-            assertBlockedTrackersInPanel(equals: trackersOnTrackerPage)
-        }
+        browserScreen.openURLAndAssertPageText(trackerPage, text: TestLabels.trackers)
+        assertBlockedTrackersInPanel(equals: trackersOnTrackerPage)
+        // In the same tab, the previous tracker page's text would pass the page check mid-navigation
+        openNewTab()
+        browserScreen.openURLAndAssertPageText(otherTrackerPage, text: TestLabels.trackers)
+        assertBlockedTrackersInPanel(equals: trackersOnTrackerPage)
 
         // Step 2
         setHomepageSections(privacyReportIsOn: true)
 
         // Step 3: ClearProfile resets the lifetime count, so it only holds the tracker page loads. The pill
         // read in the precondition isn't used, it can be shown before the last page's trackers are stored
-        let pageLoads = 1 + pagesWhileHidden.count
+        let pageLoads = 3
         openNewTab()
         homePageScreen.assertTrackerBlockerPillIsBetweenShortcutsAndJumpBackIn()
         homePageScreen.assertTrackerBlockerCount(
