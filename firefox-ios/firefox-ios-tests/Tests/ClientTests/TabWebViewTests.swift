@@ -13,6 +13,7 @@ class TabWebViewTests: XCTestCaseRootViewController, UIGestureRecognizerDelegate
     private var navigationDelegate: MockNavigationDelegate!
     private var tabWebViewDelegate: MockTabWebViewDelegate!
     private let sleepTime: UInt64 = 1 * NSEC_PER_SEC
+    private let inputViewsReloadWaitTime: UInt64 = 300 * NSEC_PER_MSEC
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() async throws {
@@ -102,14 +103,73 @@ class TabWebViewTests: XCTestCaseRootViewController, UIGestureRecognizerDelegate
         XCTAssertTrue(tabWebView.hasOnlySecureContent)
     }
 
+    func testInputAccessoryView_onPadWithoutAutofillItem_isNil() async throws {
+        guard #available(iOS 26.0, *) else { throw XCTSkip("Only iOS 26+ drops the iPad navigation buttons") }
+        let accessoryView = AccessoryViewProvider(windowUUID: windowUUID, userInterfaceIdiom: .pad)
+        let subject = try await createSubject(accessoryView: accessoryView)
+
+        subject.accessoryView.reloadViewFor(.standard)
+
+        XCTAssertNil(subject.inputAccessoryView)
+    }
+
+    func testInputAccessoryView_onPadWithAutofillItem_isAccessoryView() async throws {
+        let accessoryView = AccessoryViewProvider(windowUUID: windowUUID, userInterfaceIdiom: .pad)
+        let subject = try await createSubject(accessoryView: accessoryView)
+
+        subject.accessoryView.reloadViewFor(.login)
+
+        XCTAssertIdentical(subject.inputAccessoryView, accessoryView)
+    }
+
+    func testInputAccessoryView_onPhoneWithoutAutofillItem_isAccessoryView() async throws {
+        let accessoryView = AccessoryViewProvider(windowUUID: windowUUID, userInterfaceIdiom: .phone)
+        let subject = try await createSubject(accessoryView: accessoryView)
+
+        subject.accessoryView.reloadViewFor(.standard)
+
+        XCTAssertIdentical(subject.inputAccessoryView, accessoryView)
+    }
+
+    func testContentAvailabilityChange_onPad_reloadsInputViewsOnFirstResponder() async throws {
+        guard #available(iOS 26.0, *) else { throw XCTSkip("Only iOS 26+ drops the iPad navigation buttons") }
+        let accessoryView = AccessoryViewProvider(windowUUID: windowUUID, userInterfaceIdiom: .pad)
+        let subject = try await createSubject(accessoryView: accessoryView)
+        let contentView = FirstResponderSpyView()
+        subject.scrollView.addSubview(contentView)
+
+        subject.accessoryView.reloadViewFor(.login)
+        try await Task.sleep(nanoseconds: inputViewsReloadWaitTime)
+
+        XCTAssertEqual(contentView.reloadInputViewsCallCount, 1)
+    }
+
+    func testContentAvailabilityChange_onPad_backToBackChangesReloadOnce() async throws {
+        guard #available(iOS 26.0, *) else { throw XCTSkip("Only iOS 26+ drops the iPad navigation buttons") }
+        let accessoryView = AccessoryViewProvider(windowUUID: windowUUID, userInterfaceIdiom: .pad)
+        let subject = try await createSubject(accessoryView: accessoryView)
+        subject.accessoryView.reloadViewFor(.passwordGenerator)
+        try await Task.sleep(nanoseconds: inputViewsReloadWaitTime)
+        let contentView = FirstResponderSpyView()
+        subject.scrollView.addSubview(contentView)
+
+        subject.accessoryView.reloadViewFor(.standard)
+        subject.accessoryView.reloadViewFor(.passwordGenerator)
+        try await Task.sleep(nanoseconds: inputViewsReloadWaitTime)
+
+        XCTAssertEqual(contentView.reloadInputViewsCallCount, 1)
+    }
+
     // MARK: - Helper methods
 
-    func createSubject(file: StaticString = #filePath,
+    func createSubject(accessoryView: AccessoryViewProvider? = nil,
+                       file: StaticString = #filePath,
                        line: UInt = #line) async throws -> TabWebView {
         let subject = TabWebView(frame: CGRect(origin: .zero, size: CGSize(width: 100, height: 100)),
                                  configuration: .init(),
                                  windowUUID: windowUUID,
                                  certStore: makeProfile().certStore)
+        if let accessoryView { subject.accessoryView = accessoryView }
         try await Task.sleep(nanoseconds: sleepTime)
         subject.configure(delegate: tabWebViewDelegate, navigationDelegate: navigationDelegate)
         trackForMemoryLeaks(subject)
@@ -132,3 +192,14 @@ class MockTabWebViewDelegate: TabWebViewDelegate {
 
 // MARK: - MockNavigationDelegate
 class MockNavigationDelegate: NSObject, WKNavigationDelegate {}
+
+// MARK: - FirstResponderSpyView
+class FirstResponderSpyView: UIView {
+    var reloadInputViewsCallCount = 0
+
+    override var isFirstResponder: Bool { true }
+
+    override func reloadInputViews() {
+        reloadInputViewsCallCount += 1
+    }
+}
