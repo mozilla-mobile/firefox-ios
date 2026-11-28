@@ -272,18 +272,16 @@ final class BookmarksViewController: SiteTableViewController,
         }
     }
 
+    var libraryTitle: String? {
+        guard !viewModel.isRootNode, let folder = viewModel.bookmarkFolder else { return nil }
+        return LocalizedRootBookmarkFolderStrings[folder.guid] ?? folder.title
+    }
+
     private func updateParentViewControllerTitle() {
-        if !viewModel.isRootNode, let folder = viewModel.bookmarkFolder {
-            let folderTitle = LocalizedRootBookmarkFolderStrings[folder.guid] ?? folder.title
-            notificationCenter.post(name: .LibraryPanelBookmarkTitleChanged,
-                                    withObject: nil,
-                                    withUserInfo: ["title": folderTitle])
-        } else {
-            // This will set the title to the default one
-            notificationCenter.post(name: .LibraryPanelBookmarkTitleChanged,
-                                    withObject: nil,
-                                    withUserInfo: nil)
-        }
+        // A nil title sets the library heading back to the default one
+        notificationCenter.post(name: .LibraryPanelBookmarkTitleChanged,
+                                withObject: nil,
+                                withUserInfo: libraryTitle.map { ["title": $0] })
     }
 
     // MARK: - Actions
