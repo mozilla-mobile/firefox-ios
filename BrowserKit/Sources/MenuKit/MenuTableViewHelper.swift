@@ -11,6 +11,9 @@ final class MenuTableViewHelper: NSObject {
     private var menuData: [MenuSection] = []
     private var theme: Theme?
     private var isBannerVisible = false
+    /// The horizontal tabs do not fit side by side at accessibility text sizes,
+    /// so each option of that section is shown as a regular row instead.
+    private var shouldStackHorizontalTabs = false
     var isHomepage = false
 
     init(tableView: UITableView) {
@@ -18,10 +21,24 @@ final class MenuTableViewHelper: NSObject {
         super.init()
     }
 
-    func updateData(_ data: [MenuSection], theme: Theme?, isBannerVisible: Bool) {
+    func updateData(
+        _ data: [MenuSection],
+        theme: Theme?,
+        isBannerVisible: Bool,
+        isAccessibilityCategory: Bool = false
+    ) {
         self.menuData = data
         self.theme = theme
         self.isBannerVisible = isBannerVisible
+        self.shouldStackHorizontalTabs = isAccessibilityCategory
+    }
+
+    /// Reloads the table when the text size moves in or out of the accessibility sizes,
+    /// as the horizontal tabs are laid out differently there.
+    func updateLayout(isAccessibilityCategory: Bool) {
+        guard shouldStackHorizontalTabs != isAccessibilityCategory else { return }
+        shouldStackHorizontalTabs = isAccessibilityCategory
+        reload()
     }
 
     func reload() {
@@ -34,7 +51,7 @@ final class MenuTableViewHelper: NSObject {
 
     func numberOfRowsInSection(_ section: Int) -> Int {
         if menuData[section].isHorizontalTabsSection {
-            return 1
+            return shouldStackHorizontalTabs ? menuData[section].options.count : 1
         } else if let isExpanded = menuData[section].isExpanded, isExpanded {
             return menuData[section].options.count
         } else {
@@ -53,7 +70,7 @@ final class MenuTableViewHelper: NSObject {
 
     @MainActor
     func cellForRowAt(_ tableView: UITableView, _ indexPath: IndexPath) -> UITableViewCell {
-        if menuData[indexPath.section].isHorizontalTabsSection {
+        if menuData[indexPath.section].isHorizontalTabsSection, !shouldStackHorizontalTabs {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: MenuSquaresViewContentCell.cellIdentifier,
                 for: indexPath) as? MenuSquaresViewContentCell else {
@@ -117,8 +134,9 @@ final class MenuTableViewHelper: NSObject {
         tableView.deselectRow(at: indexPath, animated: false)
         let section = menuData[indexPath.section]
 
-        // We handle the actions for horizontalTabs, in MenuSquaresViewContentCell
-        if !section.isHorizontalTabsSection {
+        // We handle the actions for horizontalTabs, in MenuSquaresViewContentCell,
+        // unless they are stacked as regular rows
+        if !section.isHorizontalTabsSection || shouldStackHorizontalTabs {
             if let action = section.options[indexPath.row].action {
                 action()
             }
