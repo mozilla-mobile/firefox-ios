@@ -2735,20 +2735,18 @@ class BrowserViewController: UIViewController,
     }
 
     func updateReaderModeState(for tab: Tab?, readerModeState: ReaderModeState) {
+        store.dispatch(ToolbarModernAction.readerModeStateDidChange(readerModeState: readerModeState),
+                       forWindowUUID: windowUUID)
+
         if isSummarizerToolbarFeatureEnabled {
             let action = ToolbarMiddlewareAction(
-                readerModeState: readerModeState,
                 windowUUID: windowUUID,
                 actionType: ToolbarMiddlewareActionType.loadSummaryState
             )
             store.dispatch(action)
         } else {
-            let action = ToolbarAction(
-                readerModeState: readerModeState,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.readerModeStateChanged
-            )
-            store.dispatch(action)
+            store.dispatch(ToolbarModernAction.canSummarizeDidChange(canSummarize: false),
+                           forWindowUUID: windowUUID)
         }
     }
 

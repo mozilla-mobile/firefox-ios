@@ -139,14 +139,16 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         let actionType = try XCTUnwrap(actionCalled.actionType as? GeneralBrowserActionType)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 4)
-        XCTAssertEqual(mockStore.dispatchedModernActions.count, 1)
+        XCTAssertEqual(mockStore.dispatchedModernActions.count, 2)
         XCTAssertEqual(actionType, GeneralBrowserActionType.didSelectedTabChangeToHomepage)
     }
 
-    func testUpdateReaderModeState_whenSummarizeFeatureOn_dispatchesToolbarMiddlewareAction() throws {
-        setIsHostedSummarizerEnabled(true)
+    func testUpdateReaderModeState_whenSummarizeFeatureOn_dispatchesReaderModeStateAndLoadSummaryState() throws {
         let expectation = XCTestExpectation(description: "expect mock store to dispatch an action")
-        let subject = createSubject()
+        expectation.expectedFulfillmentCount = 2
+        let nimbusUtils = MockSummarizerNimbusUtils()
+        nimbusUtils.isToolbarButtonEnabled = true
+        let subject = createSubject(summarizerNimbusUtils: nimbusUtils)
         let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
         tab.webView = MockTabWebView(tab: tab)
 
@@ -156,8 +158,44 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         subject.updateReaderModeState(for: tab, readerModeState: .active)
         wait(for: [expectation])
 
+        XCTAssertEqual(mockStore.dispatchedModernActions.count, 1)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+
+        let modernAction = try XCTUnwrap(mockStore.dispatchedModernActions.first as? ToolbarModernAction)
+        guard case .readerModeStateDidChange(.active) = modernAction else {
+            return XCTFail("Unexpected action \(modernAction)")
+        }
+
         let action = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
-        XCTAssertEqual(action.readerModeState, .active)
+        XCTAssertEqual(action.actionType as? ToolbarMiddlewareActionType, .loadSummaryState)
+    }
+
+    func testUpdateReaderModeState_whenSummarizeFeatureOff_dispatchesReaderModeStateAndCanSummarizeFalse() throws {
+        let expectation = XCTestExpectation(description: "expect mock store to dispatch an action")
+        expectation.expectedFulfillmentCount = 2
+        let nimbusUtils = MockSummarizerNimbusUtils()
+        nimbusUtils.isToolbarButtonEnabled = false
+        let subject = createSubject(summarizerNimbusUtils: nimbusUtils)
+        let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+        subject.updateReaderModeState(for: tab, readerModeState: .active)
+        wait(for: [expectation])
+
+        XCTAssertTrue(mockStore.dispatchedActions.isEmpty)
+        XCTAssertEqual(mockStore.dispatchedModernActions.count, 2)
+
+        let readerModeAction = try XCTUnwrap(mockStore.dispatchedModernActions.first as? ToolbarModernAction)
+        guard case .readerModeStateDidChange(.active) = readerModeAction else {
+            return XCTFail("Unexpected action \(readerModeAction)")
+        }
+
+        let canSummarizeAction = try XCTUnwrap(mockStore.dispatchedModernActions.last as? ToolbarModernAction)
+        guard case .canSummarizeDidChange(false) = canSummarizeAction else {
+            return XCTFail("Unexpected action \(canSummarizeAction)")
+        }
     }
 
     func testSearchEnginesDidUpdate_dispatchesSearchEngineDidChangeAction() throws {
@@ -168,22 +206,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         let action = try XCTUnwrap(mockStore.dispatchedModernActions.first as? SearchSettingsModernAction)
         XCTAssertEqual(action, .searchEngineDidChange)
     }
-
-    // TODO(FXIOS-13126): Fix and uncomment this test
-//    func testUpdateReaderModeState_whenSummarizeFeatureOff_dispatchesToolbarAction() throws {
-//        let expectation = XCTestExpectation(description: "expect mock store to dispatch an action")
-//        let subject = createSubject()
-//        let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
-//
-//        mockStore.dispatchCalled = {
-//            expectation.fulfill()
-//        }
-//        subject.updateReaderModeState(for: tab, readerModeState: .active)
-//        wait(for: [expectation])
-//
-//        let action = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
-//        XCTAssertEqual(action.readerModeState, .active)
-//    }
 
     func testHandle_withoutURL_withSelectedTab_notRestoring_opensBlankNewTab_ifTabHasURL_and_isNotHomepage() {
         let mockBVC = MockBrowserViewController(profile: profile, tabManager: tabManager)
@@ -895,12 +917,14 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     // MARK: - Private
 
     private func createSubject(gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
+                               summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
                                file: StaticString = #filePath,
                                line: UInt = #line) -> BrowserViewController {
         let subject = BrowserViewController(profile: profile,
                                             tabManager: tabManager,
                                             gleanWrapper: gleanWrapper,
                                             appStartupTelemetry: appStartupTelemetry,
+                                            summarizerNimbusUtils: summarizerNimbusUtils,
                                             recordVisitManager: recordVisitManager)
         screenshotHelper = MockScreenshotHelper(controller: subject)
         subject.screenshotHelper = screenshotHelper

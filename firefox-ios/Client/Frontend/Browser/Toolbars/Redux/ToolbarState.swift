@@ -192,7 +192,8 @@ struct ToolbarState: ScreenState, Sendable {
                 .copy(canGoForward: canGoForward ?? state.canGoForward)
 
         case .didKeyboardRequestChange, .cancelEdit, .searchTermDidSet, .lockIconChanged,
-             .searchTermDidChange, .searchTermDidClear, .websiteLoadingStateDidChange:
+             .searchTermDidChange, .searchTermDidClear, .websiteLoadingStateDidChange,
+             .canSummarizeDidChange, .readerModeStateDidChange:
             // AddressBarState is a nested sub-state, forwards modern call to AddressBarState
             return state.copy(addressToolbar: AddressBarState.reducer.modernReducer(state.addressToolbar,
                                                                                     action,
@@ -238,14 +239,12 @@ struct ToolbarState: ScreenState, Sendable {
         case ToolbarActionType.urlDidChange,
             ToolbarMiddlewareActionType.googleLensAvailabilityDidChange,
             ToolbarActionType.didStartTyping,
-            ToolbarActionType.readerModeStateChanged,
             ToolbarActionType.navigationMiddleButtonDidChange,
             TranslationsActionType.didStartTranslatingPage,
             TranslationsActionType.translationCompleted,
             TranslationsActionType.receivedTranslationLanguage,
             TranslationsActionType.didReceiveErrorTranslating,
-            TranslationsActionType.didTranslationSettingsChange,
-            ToolbarActionType.didSummarizeSettingsChange:
+            TranslationsActionType.didTranslationSettingsChange:
             return handleToolbarUpdates(state: state, action: action)
 
         case GeneralBrowserActionType.showToast:

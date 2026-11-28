@@ -65,11 +65,8 @@ final class SummarizeSettingsViewController: SettingsTableViewController {
             self.tableView.reloadData()
 
             store.dispatch(
-                ToolbarAction(
-                    canSummarize: isOn,
-                    windowUUID: self.windowUUID,
-                    actionType: ToolbarActionType.didSummarizeSettingsChange
-                )
+                SummarizeSettingsModernAction.summarizeSettingDidChange(isEnabled: isOn),
+                forWindowUUID: self.windowUUID
             )
         }
         return SettingSection(

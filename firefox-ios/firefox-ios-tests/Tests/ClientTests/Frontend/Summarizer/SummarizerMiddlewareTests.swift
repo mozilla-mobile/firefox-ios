@@ -265,57 +265,72 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
     }
 
-    // MARK: - didSummarizeSettingsChange
-    func test_didSummarizeSettingsChange_withCanSummarizeTrue_withValidConfig_dispatchesShowButtonAction() throws {
+    // MARK: - SummarizeSettingsModernAction
+    func test_summarizeSettingDidChange_whenEnabled_withValidConfig_dispatchesShowButtonAndCanSummarizeTrue() throws {
         setupWebViewForTabManager()
         setupSuccessSummarizerConfiguration()
         let subject = createSubject()
-
-        let action = ToolbarAction(
-            canSummarize: true,
-            windowUUID: .XCTestDefaultUUID,
-            actionType: ToolbarActionType.didSummarizeSettingsChange
-        )
         let expectation = XCTestExpectation(description: "Summarize settings change dispatched")
-
+        expectation.expectedFulfillmentCount = 2
         mockStore.dispatchCalled = {
             expectation.fulfill()
         }
 
-        subject.summarizerProvider.legacyMiddleware(AppState(), action)
+        subject.summarizerProvider.modernMiddleware(
+            AppState(),
+            SummarizeSettingsModernAction.summarizeSettingDidChange(isEnabled: true),
+            .XCTestDefaultUUID
+        )
 
         wait(for: [expectation], timeout: 1)
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? SummarizeAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? SummarizeMiddlewareActionType)
-
         XCTAssertEqual(actionType, .showReaderModeBarSummarizerButton)
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(canSummarizeAction(), true)
     }
 
-    func test_didSummarizeSettingsChange_withCanSummarizeFalse_dispatchesNotAvailableAction() throws {
+    func test_summarizeSettingDidChange_whenEnabled_withInvalidConfig_dispatchesNotAvailableAndCanSummarizeFalse() throws {
+        setupWebViewForTabManager()
+        mockSummarizerNimbusUtils.isSummarizeFeatureToggledOn = true
+        mockSummarizerNimbusUtils.isSummarizeFeatureEnabled = true
+        mockSummarizationChecker.overrideResponse = MockSummarizationChecker.failure
         let subject = createSubject()
-
-        let action = ToolbarAction(
-            canSummarize: false,
-            windowUUID: .XCTestDefaultUUID,
-            actionType: ToolbarActionType.didSummarizeSettingsChange
-        )
-        let expectation = XCTestExpectation(description: "Summarize not available dispatched")
-
+        let expectation = XCTestExpectation(description: "Summarize settings change dispatched")
+        expectation.expectedFulfillmentCount = 2
         mockStore.dispatchCalled = {
             expectation.fulfill()
         }
 
-        subject.summarizerProvider.legacyMiddleware(AppState(), action)
+        subject.summarizerProvider.modernMiddleware(
+            AppState(),
+            SummarizeSettingsModernAction.summarizeSettingDidChange(isEnabled: true),
+            .XCTestDefaultUUID
+        )
 
         wait(for: [expectation], timeout: 1)
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? SummarizeAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? SummarizeMiddlewareActionType)
+        XCTAssertEqual(actionType, .summaryNotAvailable)
+        XCTAssertEqual(canSummarizeAction(), false)
+    }
 
+    func test_summarizeSettingDidChange_whenDisabled_dispatchesNotAvailableAndCanSummarizeFalse() throws {
+        let subject = createSubject()
+
+        subject.summarizerProvider.modernMiddleware(
+            AppState(),
+            SummarizeSettingsModernAction.summarizeSettingDidChange(isEnabled: false),
+            .XCTestDefaultUUID
+        )
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? SummarizeAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? SummarizeMiddlewareActionType)
         XCTAssertEqual(actionType, .summaryNotAvailable)
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(canSummarizeAction(), false)
     }
 
     // MARK: - makeConfiguration
@@ -440,6 +455,15 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
         let tab = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID, isHomePage: isHomePage)
         tab.webView = MockTabWebView(tab: tab)
         mockTabManager.selectedTab = tab
+    }
+
+    private func canSummarizeAction() -> Bool? {
+        for case let action as ToolbarModernAction in mockStore.dispatchedModernActions {
+            if case let .canSummarizeDidChange(canSummarize) = action {
+                return canSummarize
+            }
+        }
+        return nil
     }
 
     private func setupSuccessSummarizerConfiguration() {

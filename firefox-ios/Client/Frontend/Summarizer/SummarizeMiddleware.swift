@@ -48,15 +48,18 @@ final class SummarizerMiddleware: SummarizerConfigFactory {
 
     lazy var summarizerProvider: Middleware<AppState> = (legacyProvider, modernProvider)
 
-    lazy var modernProvider: MiddlewareClosure<AppState> = { [self] state, action, windowUUID in
-        // Does not test any modern actions
+    lazy var modernProvider: MiddlewareClosure<AppState> = { [self] _, action, windowUUID in
+        guard let action = action as? SummarizeSettingsModernAction else { return }
+
+        switch action {
+        case .summarizeSettingDidChange(let isEnabled):
+            handleSummarizeSettingDidChange(isEnabled: isEnabled, windowUUID: windowUUID)
+        }
     }
 
     lazy var legacyProvider: LegacyMiddlewareClosure<AppState> = { [self] state, action in
         if let action = action as? GeneralBrowserAction {
             self.handleGeneralBrowserAction(action: action)
-        } else if let action = action as? ToolbarAction {
-            self.handleToolbarAction(action: action)
         } else if let action = action as? NavigationBrowserAction {
             self.handleNavigationBrowserAction(action: action)
         }
@@ -157,21 +160,26 @@ final class SummarizerMiddleware: SummarizerConfigFactory {
         )
     }
 
-    // MARK: - ToolbarAction
-    private func handleToolbarAction(action: ToolbarAction) {
-        switch action.actionType {
-        case ToolbarActionType.didSummarizeSettingsChange:
-            guard action.canSummarize else {
-                dispatchSummaryNotAvailable(windowUUID: action.windowUUID)
-                return
-            }
-            fetchSummarizerConfig(windowUUID: action.windowUUID) {
-                // The behavior is the same for show reader mode action
-                self.handleShowReaderMode(windowUUID: action.windowUUID, summarizerConfig: $0)
-            }
-        default:
-            break
+    // MARK: - SummarizeSettingsModernAction
+    private func handleSummarizeSettingDidChange(isEnabled: Bool, windowUUID: WindowUUID) {
+        guard isEnabled else {
+            dispatchSummaryNotAvailable(windowUUID: windowUUID)
+            dispatchCanSummarize(false, windowUUID: windowUUID)
+            return
         }
+
+        fetchSummarizerConfig(windowUUID: windowUUID) {
+            // The behavior is the same for show reader mode action
+            self.handleShowReaderMode(windowUUID: windowUUID, summarizerConfig: $0)
+            self.dispatchCanSummarize($0 != nil, windowUUID: windowUUID)
+        }
+    }
+
+    private func dispatchCanSummarize(_ canSummarize: Bool, windowUUID: WindowUUID) {
+        store.dispatch(
+            ToolbarModernAction.canSummarizeDidChange(canSummarize: canSummarize),
+            forWindowUUID: windowUUID
+        )
     }
 
     private func dispatchSummaryNotAvailable(windowUUID: WindowUUID) {
