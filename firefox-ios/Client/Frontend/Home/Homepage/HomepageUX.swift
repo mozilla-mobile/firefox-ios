@@ -18,4 +18,8 @@ enum HomepageUX {
     static let topSiteIconSize = CGSize(width: 36, height: 36)
     static let imageBackgroundSize = CGSize(width: 60, height: 60)
     static let fallbackFaviconSize = CGSize(width: 36, height: 36)
+
+    // Center search bar
+    static let centerSearchBarTapAnimationDuration: TimeInterval = 0.15
+    static let centerSearchBarSpringDamping: CGFloat = 1.0
 }

@@ -449,13 +449,35 @@ final class HomepageViewController: UIViewController,
                                         == homepageState.wallpaperState.availableContentHeight
             self.homepageState = state
 
+            let isCenterSearchBarReturning = embeddedAddressBarView.isHidden
+                                             && state.searchBarState.isShowingCenterSearchBar
+            let isCenterSearchBarVisibilityChanging = embeddedAddressBarView.isHidden
+                                                      == state.searchBarState.isShowingCenterSearchBar
             embeddedAddressBarView.isHidden = !state.searchBarState.isShowingCenterSearchBar
+            if isCenterSearchBarReturning {
+                animateCenterSearchBarBackDown()
+            }
 
-            refreshHomepageDataSourceSnapshot(
-                animatingDifferences: animatingDifferences
-            ) { [weak self] in
-                self?.collectionView?.layoutIfNeeded()
-                self?.updateNewsTransitionHeaderProgress()
+            let refreshSnapshot = { [weak self] in
+                self?.refreshHomepageDataSourceSnapshot(
+                    animatingDifferences: animatingDifferences
+                ) { [weak self] in
+                    self?.collectionView?.layoutIfNeeded()
+                    self?.updateNewsTransitionHeaderProgress()
+                }
+            }
+
+            if isCenterSearchBarVisibilityChanging && !UIAccessibility.isReduceMotionEnabled {
+                UIView.animate(
+                    withDuration: HomepageUX.centerSearchBarTapAnimationDuration,
+                    delay: 0,
+                    usingSpringWithDamping: HomepageUX.centerSearchBarSpringDamping,
+                    initialSpringVelocity: 0
+                ) {
+                    refreshSnapshot()
+                }
+            } else {
+                refreshSnapshot()
             }
             updateWallpaperConstraints(availableWallpaperHeight: state.wallpaperState.availableWallpaperHeight)
         }
@@ -464,6 +486,25 @@ final class HomepageViewController: UIViewController,
         if state.telemetryState.shouldTriggerImpression {
             resetTrackedObjects()
             trackVisibleItemImpressions()
+        }
+    }
+
+    private func animateCenterSearchBarBackDown() {
+        guard !UIAccessibility.isReduceMotionEnabled, let window = view.window else { return }
+
+        let frameInWindow = embeddedAddressBarView.convert(embeddedAddressBarView.bounds, to: window)
+        embeddedAddressBarView.transform = CGAffineTransform(
+            translationX: 0,
+            y: window.safeAreaInsets.top - frameInWindow.minY
+        )
+
+        UIView.animate(
+            withDuration: HomepageUX.centerSearchBarTapAnimationDuration,
+            delay: 0,
+            usingSpringWithDamping: HomepageUX.centerSearchBarSpringDamping,
+            initialSpringVelocity: 0
+        ) {
+            self.embeddedAddressBarView.transform = .identity
         }
     }
 
@@ -596,6 +637,28 @@ final class HomepageViewController: UIViewController,
         updateCollectionViewContentInset()
 
         view.addSubview(collectionView)
+    }
+
+    private func animateCenterSearchBarToTop() {
+        guard !embeddedAddressBarView.isHidden,
+              !UIAccessibility.isReduceMotionEnabled,
+              let window = view.window,
+              let snapshot = embeddedAddressBarView.snapshotView(afterScreenUpdates: false)
+        else { return }
+
+        snapshot.frame = embeddedAddressBarView.convert(embeddedAddressBarView.bounds, to: window)
+        window.addSubview(snapshot)
+
+        UIView.animate(
+            withDuration: HomepageUX.centerSearchBarTapAnimationDuration,
+            delay: 0,
+            usingSpringWithDamping: HomepageUX.centerSearchBarSpringDamping,
+            initialSpringVelocity: 0
+        ) {
+            snapshot.frame.origin.y = window.safeAreaInsets.top
+        } completion: { _ in
+            snapshot.removeFromSuperview()
+        }
     }
 
     private func updateCollectionViewContentInset() {
@@ -1406,6 +1469,7 @@ final class HomepageViewController: UIViewController,
                 actionType: TopSitesActionType.tapOnHomepageTopSitesCell
             )
         case .searchBar:
+            animateCenterSearchBarToTop()
             dispatchDidSelectCardItemAction(with: item)
             dispatchNavigationBrowserAction(
                 with: NavigationDestination(.homepageZeroSearch),
